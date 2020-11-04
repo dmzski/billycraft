@@ -1,0 +1,32 @@
+input:disabled {
+  background-color: var(--color-bg);
+  @extend .border-none, .shadow-none;
+}
+
+.autocomplete-input {
+  position: relative;
+}
+
+.autocomplete-container {
+  background-color: white;
+  @extend .border-gray-400, .border, .rounded;
+  max-height: 100px;
+  overflow-y: auto;
+  position: absolute;
+}
+
+.autocomplete-container.hide {
+  display: none;
+}
+
+.autocomplete-container.open {
+  display: block;
+}
+
+.autocomplete-container ul li {
+  @extend .p-3, .cursor-pointer;
+}
+
+.autocomplete-container ul li:hover {
+  background-color: var(--color-bg);
+}

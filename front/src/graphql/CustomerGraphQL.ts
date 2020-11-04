@@ -1,0 +1,85 @@
+import { request, gql } from "graphql-request";
+import { async } from "rxjs";
+import { GRAPHQL_URL } from "../constants/global";
+import { Customer } from "../models/Customer";
+import { graphQLClient } from "./GraphQLClient";
+
+export const CustomerGraphQL = {
+  getAllCustomers: async () => {
+    const { allCustomers } = await graphQLClient.request(
+      gql`
+        query {
+          allCustomers {
+            id
+            name
+            contact
+            phoneNumber
+            city
+            postalCode
+          }
+        }
+      `
+    );
+
+    return allCustomers;
+  },
+  createOrUpdateCustomer: async (customer: Customer) => {
+    const mutation = await graphQLClient.request(
+      gql`
+        mutation {
+          ${customer.id ? "updateCustomer" : "createCustomer"}(customer: {
+              id: ${customer.id || "null"}
+              name: "${customer.name}"
+              contact: "${customer.contact}"
+              phoneNumber: "${customer.phoneNumber}"
+              city: "${customer.city}"
+              postalCode: "${customer.postalCode}"
+          }) {
+            id
+            name
+            contact
+            phoneNumber
+            city
+            postalCode
+          }
+        }
+      `
+    );
+
+    return mutation;
+  },
+
+  getCustomer: async (_: any, id: number) => {
+    const { customerById } = await graphQLClient.request(
+      gql`
+        query {
+          customerById(id: ${id}) {
+            id
+            name
+            contact
+            phoneNumber
+            postalCode
+          }
+        }
+      `
+    );
+
+    return customerById;
+  },
+
+  getAllCustomersByNameContain: async (key: string, name: string) => {
+    const { allCustomersByNameContain } = await graphQLClient.request(
+      gql`
+      query {
+        allCustomersByNameContain(name: "${name}") {
+          id 
+          name
+        }
+
+      }
+      `
+    );
+
+    return allCustomersByNameContain;
+  },
+};

@@ -1,0 +1,8 @@
+{
+    "realm": "compta",
+    "auth-server-url": "http://localhost:8081/auth/",
+    "ssl-required": "external",
+    "resource": "compta",
+    "public-client": true,
+    "confidential-port": 0
+}
