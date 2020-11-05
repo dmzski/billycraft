@@ -28,7 +28,7 @@ const QuoteCustomizationForm: React.FC<any> = ({ quoteCustomization }) => {
   const editorChange = (setEditorState: any, property: any) => (newEditorState: any) => {
     setEditorState(newEditorState);
     const tmp = { ...newQuoteCustomization };
-    tmp[property] = draftToHtml(convertToRaw(newEditorState.getCurrentContent())).replaceAll("\n", "");
+    tmp[property] = draftToHtml(convertToRaw(newEditorState.getCurrentContent()));
     setNewQuoteCustomization(tmp);
   };
 
@@ -43,12 +43,10 @@ const QuoteCustomizationForm: React.FC<any> = ({ quoteCustomization }) => {
     if (quoteCustomization) {
       setNewQuoteCustomization(quoteCustomization);
       setAfterInformationEditor(
-        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.afterInformation || "<div></div>").contentBlocks))
+        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.afterInformation || "").contentBlocks))
       );
-      setAfterTableEditor(
-        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.afterTable || "<div></div>").contentBlocks))
-      );
-      setFooterEditor(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.footer || "<div></div>").contentBlocks)));
+      setAfterTableEditor(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.afterTable || "").contentBlocks)));
+      setFooterEditor(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(quoteCustomization.footer || "").contentBlocks)));
     }
   }, [quoteCustomization]);
 

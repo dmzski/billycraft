@@ -9,7 +9,7 @@ import { useToast } from "../providers/ToastProvider";
 
 const Settings = () => {
   const companyQuery = useQuery("my-company", CompanyGraphQL.getMyCompany);
-  const quoteCustomizationQuery = useQuery("quote-customization", QuoteCustomizationGraphQL.getMyInformation);
+  const quoteCustomizationQuery = useQuery("quote-customization", QuoteCustomizationGraphQL.getMyInformation, { refetchOnWindowFocus: false });
   const [company, setCompany] = React.useState<any>({});
 
   React.useEffect(() => {
