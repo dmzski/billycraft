@@ -114,12 +114,11 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
           }}
         />
       </td>
-      <td>{quote.title}</td>
-      <td>{quote.customer.name}</td>
-      <td>{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td>{quote.updatedAt ? format(parseJSON(quote.updatedAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-right">{getQuoteTotal(quote)} €</td>
-      <td className="status" ref={statusRef}>
+      <td className="text-left">{quote.title}</td>
+      <td className="text-center">{quote.customer.name}</td>
+      <td className="text-center">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
+      <td className="text-center">{getQuoteTotal(quote)} €</td>
+      <td className="text-center status" ref={statusRef}>
         {getStatus}
         {openStatusPopup && (
           <div className="popup">

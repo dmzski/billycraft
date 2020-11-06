@@ -39,7 +39,7 @@ public class PDFService {
     public byte[] generateQuote(String username, String quoteId) {
         Quote quote = this.quoteService.getQuoteById(username, quoteId);
         Company company = (Company) Company.findByIdOptional(quote.companyId).orElseThrow(EntityNotFoundException::new);
-        QuoteCustomization quoteCustomization = (QuoteCustomization) QuoteCustomization.find("company_id = ?1", company.id).singleResultOptional().orElseThrow();
+        QuoteCustomization quoteCustomization = (QuoteCustomization) QuoteCustomization.find("company_id = ?1", company.id).singleResultOptional().orElse(new QuoteCustomization());
         String html = Templates.quote().data("quote", quote).data("company",company).data("customization", quoteCustomization).render();
         try {
             Path indexPath = Files.createTempFile(quoteId, ".html");

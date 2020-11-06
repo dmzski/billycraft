@@ -15,8 +15,6 @@ public class QuoteCustomizationService {
     public QuoteCustomization findQuoteCustomizationCreatedBy(String email) {
         Company company = Company.find("createdBy = ?1", email).singleResult();
         if (company != null) {
-            System.out.println("Company id : " + company.id);
-
             Optional<QuoteCustomization> optionalQuoteCustomization = QuoteCustomization.find("company_id = ?1", company.id).firstResultOptional();
             if (optionalQuoteCustomization.isEmpty()) {
                 QuoteCustomization quoteCustomization = new QuoteCustomization(company);
@@ -41,9 +39,13 @@ public class QuoteCustomizationService {
         Company company = Company.find("createdBy = ?1", username).singleResult();
         if (company != null) {
             QuoteCustomization quoteCustomization = (QuoteCustomization) QuoteCustomization.find("company_id = ?1", company.id).firstResultOptional().orElse(new QuoteCustomization(company));
-            quoteCustomization.afterInformation = newQuoteCustomization.afterInformation;
             quoteCustomization.afterTable = newQuoteCustomization.afterTable;
             quoteCustomization.footer = newQuoteCustomization.footer;
+            quoteCustomization.displayCompanyEmail = newQuoteCustomization.displayCompanyEmail;
+            quoteCustomization.displayCompanyPhoneNumber = newQuoteCustomization.displayCompanyPhoneNumber;
+            quoteCustomization.displayCustomerEmail = newQuoteCustomization.displayCustomerEmail;
+            quoteCustomization.displayCustomerPhoneNumber = newQuoteCustomization.displayCustomerPhoneNumber;
+            quoteCustomization.mainColor = newQuoteCustomization.mainColor;
             quoteCustomization.persist();
             return quoteCustomization;
         } else {

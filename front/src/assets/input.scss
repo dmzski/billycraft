@@ -1,6 +1,7 @@
 input:disabled {
   background-color: var(--color-bg);
-  @extend .border-none, .shadow-none;
+  @extend .border-none,
+  .shadow-none;
 }
 
 .autocomplete-input {
@@ -9,7 +10,9 @@ input:disabled {
 
 .autocomplete-container {
   background-color: white;
-  @extend .border-gray-400, .border, .rounded;
+  @extend .border-gray-400,
+  .border,
+  .rounded;
   max-height: 100px;
   overflow-y: auto;
   position: absolute;
@@ -24,9 +27,30 @@ input:disabled {
 }
 
 .autocomplete-container ul li {
-  @extend .p-3, .cursor-pointer;
+  @extend .p-3,
+  .cursor-pointer;
 }
 
 .autocomplete-container ul li:hover {
   background-color: var(--color-bg);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:active {
+  outline: none;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

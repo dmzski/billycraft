@@ -52,7 +52,6 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
       line.quantity = parseFloat(line.quantity as any);
       return line;
     });
-    console.log("TMp", tmp);
     setQuote(tmp);
     onSubmit(e);
   };

@@ -54,10 +54,12 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal }) => {
       </div>
       <form className="mt-3" onSubmit={saveCustomer}>
         <BaseInput divClassName="mt-3" label="Nom" placeholder="Nom du client" value={newCustomer.name} onChange={inputChange("name")} />
-        <BaseInput divClassName="mt-3" label="Contact" placeholder="Nom complet" value={newCustomer.contact} onChange={inputChange("contact")} />
+        <BaseInput divClassName="mt-3" label="Adresse" placeholder="Adresse du client" value={newCustomer.address} onChange={inputChange("address")} />
+        <BaseInput divClassName="mt-3" label="Email" placeholder="Adresse email" value={newCustomer.email} onChange={inputChange("email")} />
         <BaseInput divClassName="mt-3" label="Téléphone" placeholder="Téléphone" value={newCustomer.phoneNumber} onChange={inputChange("phoneNumber")} />
         <BaseInput divClassName="mt-3" label="Ville" placeholder="Ville" value={newCustomer.city} onChange={inputChange("city")} />
         <BaseInput divClassName="mt-3" label="Code Postal" placeholder="Code Postal" value={newCustomer.postalCode} onChange={inputChange("postalCode")} />
+        <BaseInput divClassName="mt-3" label="Contact" placeholder="Nom complet" value={newCustomer.contact} onChange={inputChange("contact")} />
         <div className="mt-3 flex flex-row-reverse">
           <button className="primary" disabled={isLoading} type="submit">
             Enregistrer

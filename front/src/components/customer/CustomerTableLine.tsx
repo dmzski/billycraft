@@ -14,16 +14,14 @@ const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
   };
 
   return (
-    <tr className="quote-table-line" onClick={editCustomer}>
+    <tr className="quote-table-line hover " onClick={editCustomer}>
       <td className="px-2">
         <input type="checkbox" onChange={(e) => {}} />
       </td>
-      <td>{customer.name}</td>
-      <td>{customer.contact}</td>
-      <td>{customer.phoneNumber}</td>
-      <td>{customer.city}</td>
-      <td>{customer.postalCode}</td>
-      <td className="overflow-hidden">{customer.address}</td>
+      <td className="text-left">{customer.name}</td>
+      <td className="text-center">{customer.contact}</td>
+      <td className="text-center">{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</td>
+      <td className="text-center">{customer.email}</td>
       <Modal
         className="modal"
         overlayClassName="modal-overlay"

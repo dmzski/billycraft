@@ -28,6 +28,7 @@ public class Company extends PanacheEntityBase {
     public String phoneNumber;
     public String logo;
     public String siret;
+    public String email;
 
     @Version
     public Integer version;

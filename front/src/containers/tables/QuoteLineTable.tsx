@@ -1,8 +1,5 @@
-import { setMaxListeners } from "process";
 import React from "react";
 import QuoteLineTableLine from "../../components/quote/QuoteLineTableLine";
-import QuoteTableLine from "../../components/quote/QuoteTableLine";
-import { QuoteLine } from "../../models/Quote";
 
 const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
   function deleteLine(index: number) {

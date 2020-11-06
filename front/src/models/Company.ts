@@ -7,4 +7,5 @@ export class Company {
   postalCode: string = "";
   address: string = "";
   logo: string = "";
+  email: string = "";
 }

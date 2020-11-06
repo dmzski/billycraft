@@ -25,11 +25,10 @@ const CustomerTable: React.FC<any> = ({ data }) => {
       <thead>
         <tr>
           <th className="py-2"></th>
-          <QuoteTableHeader className="w-1/2 px-4 py-2" onClick={sortBy("name")} sort={sort["name"]} text="Nom" />
+          <QuoteTableHeader className="w-1/2 px-4 py-2 text-left" onClick={sortBy("name")} sort={sort["name"]} text="Nom" />
           <QuoteTableHeader className="w-1/6 px-4 py-2" onClick={sortBy("contact")} sort={sort["contact"]} text="Contact" />
           <QuoteTableHeader className="w-1/12 px-4 py-2" onClick={sortBy("phone")} sort={sort["phone"]} text="Téléphone" />
-          <QuoteTableHeader className="w-1/6 px-4 py-2" onClick={sortBy("city")} sort={sort["city"]} text="Ville" />
-          <QuoteTableHeader className="w-1/12 px-4 py-2" onClick={sortBy("postalCode")} sort={sort["postalCode"]} text="Code Postal" />
+          <QuoteTableHeader className="w-1/12 px-4 py-2" onClick={sortBy("email")} sort={sort["email"]} text="Email" />
         </tr>
       </thead>
       <tbody>
@@ -45,7 +44,7 @@ const QuoteTableHeader: React.FC<any> = ({ className, onClick, sort, text }) => 
   return (
     <th className={className} onClick={onClick}>
       <div className="flex w-full justify-between">
-        <div className="text-center flex-grow">{text}</div>
+        <div className="flex-grow">{text}</div>
         {((!sort && sort !== -1) || sort === 0) && <span className="material-icons"></span>}
         {sort === 1 && <span className="material-icons">expand_more</span>}
         {sort === -1 && <span className="material-icons">expand_less</span>}

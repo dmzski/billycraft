@@ -17,6 +17,7 @@ export const CompanyGraphQL = {
             address
             siret
             logo
+            email
           }
         }
       `
@@ -30,13 +31,6 @@ export const CompanyGraphQL = {
         mutation ($company: CompanyInput!) {
           ${company.id ? "updateCompany" : "createCompany"}(company: $company) {
             id
-            name
-            phoneNumber
-            city
-            postalCode
-            address
-            logo
-            siret
           }
         }
       `,

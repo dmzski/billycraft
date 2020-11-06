@@ -7,6 +7,8 @@ export class Customer {
   name: String = "";
   phoneNumber: String = "";
   postalCode: String = "";
+  email: String = "";
+  address: String = "";
   quotes: Quote[] = [];
   createdAt?: Date;
   updatedAt?: Date;

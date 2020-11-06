@@ -24,9 +24,14 @@ public class QuoteCustomization extends PanacheEntityBase {
     @OneToOne
     public Company company;
 
-    public String afterInformation;
     public String afterTable;
     public String footer;
+    public String mainColor;
+
+    public Boolean displayCompanyEmail;
+    public Boolean displayCompanyPhoneNumber;
+    public Boolean displayCustomerEmail;
+    public Boolean displayCustomerPhoneNumber;
 
     @Version
     public Integer version;

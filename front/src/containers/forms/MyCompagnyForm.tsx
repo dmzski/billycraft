@@ -38,6 +38,8 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
       <BaseInput divClassName="pt-2 w-full" placeholder="Nom" value={company.name} onChange={inputChange("name")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Adresse" value={company.address} onChange={inputChange("address")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Code Postal" value={company.postalCode} onChange={inputChange("postalCode")} />
+      <BaseInput divClassName="pt-2 w-full" placeholder="Téléphone" value={company.phoneNumber} onChange={inputChange("phoneNumber")} />
+      <BaseInput divClassName="pt-2 w-full" placeholder="Email" value={company.email} onChange={inputChange("email")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Ville" value={company.city} onChange={inputChange("city")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="SIRET" value={company.siret} onChange={inputChange("siret")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="URL du logo" value={company.logo} onChange={inputChange("logo")} />

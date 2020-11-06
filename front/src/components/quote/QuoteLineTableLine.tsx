@@ -16,7 +16,7 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
     switch (field) {
       case "price":
       case "quantity":
-        value = e.target.value;
+        value = parseFloat(e.target.value);
         break;
       default:
         value = e.target.value;
@@ -27,31 +27,40 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
 
   return (
     <tr className={"quote-table-line low-py"}>
-      <td>
+      <td className="text-left">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input disabled={disabled} className="w-full" value={line.description} onChange={handleChange("description")} />
         </div>
       </td>
-      <td>
+      <td className="text-center">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input
             disabled={disabled}
             className="text-right"
             placeholder="Quantité"
-            type="text"
+            type="number"
+            step="0.01"
             value={line.quantity || ""}
             onChange={handleChange("quantity")}
           />
         </div>
       </td>
-      <td>
+      <td className="text-center">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
-          <input disabled={disabled} className="text-right" placeholder="Prix" type="text" value={line.price || ""} onChange={handleChange("price")} />
+          <input
+            disabled={disabled}
+            className="text-right"
+            placeholder="Prix"
+            type="number"
+            step="0.01"
+            value={line.price || ""}
+            onChange={handleChange("price")}
+          />
         </div>
       </td>
       <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</td>
       <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</td>
-      <td>
+      <td className="text-center">
         {!disabled && (
           <button className="px-2" onClick={deleteLine}>
             <span className="material-icons">delete</span>

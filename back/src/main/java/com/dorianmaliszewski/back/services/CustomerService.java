@@ -20,7 +20,7 @@ public class CustomerService {
     }
 
     public Customer getCustomer(String username, Long id) {
-        return Customer.find("id = ?2 AND company_id = (SELECT u.company.id FROM User u WHERE u.email = ?2)", id, username).firstResult();
+        return Customer.find("id = ?1 AND company_id = (SELECT u.company.id FROM User u WHERE u.email = ?2)", id, username).firstResult();
     }
 
     @Transactional
@@ -40,10 +40,12 @@ public class CustomerService {
             customer.city = newCustomer.city;
             customer.phoneNumber = newCustomer.phoneNumber;
             customer.postalCode = newCustomer.postalCode;
+            customer.address = newCustomer.address;
+            customer.email = newCustomer.email;
             customer.persist();
             return customer;
         } else {
-            throw new NotFoundException("Enitity not found");
+            throw new NotFoundException("Entity not found");
         }
     }
 

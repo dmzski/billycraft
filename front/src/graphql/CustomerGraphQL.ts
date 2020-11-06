@@ -16,6 +16,8 @@ export const CustomerGraphQL = {
             phoneNumber
             city
             postalCode
+            email
+            address
           }
         }
       `
@@ -26,24 +28,15 @@ export const CustomerGraphQL = {
   createOrUpdateCustomer: async (customer: Customer) => {
     const mutation = await graphQLClient.request(
       gql`
-        mutation {
-          ${customer.id ? "updateCustomer" : "createCustomer"}(customer: {
-              id: ${customer.id || "null"}
-              name: "${customer.name}"
-              contact: "${customer.contact}"
-              phoneNumber: "${customer.phoneNumber}"
-              city: "${customer.city}"
-              postalCode: "${customer.postalCode}"
-          }) {
+        mutation ($customer: CustomerInput) {
+          ${customer.id ? "updateCustomer" : "createCustomer"}(customer: $customer) {
             id
-            name
-            contact
-            phoneNumber
-            city
-            postalCode
           }
         }
-      `
+      `,
+      {
+        customer,
+      }
     );
 
     return mutation;

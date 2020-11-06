@@ -1,6 +1,7 @@
 import { useKeycloak } from "@react-keycloak/web";
 import React from "react";
 import { Link } from "react-router-dom";
+import { VERSION } from "../../constants/global";
 import { useUser } from "../../providers/UserProvider";
 import SideBarMenu from "./SideBarMenu";
 
@@ -49,6 +50,7 @@ const SideBar = () => {
               <span className="material-icons">no_meeting_room</span>
               <span className="mx-4 font-medium">Déconnexion</span>
             </Link>
+            <div className="text-xs text-center">{VERSION}</div>
           </div>
         </div>
       </div>

@@ -7,9 +7,13 @@ export const QuoteCustomizationGraphQL = {
       gql`
         query {
           myQuoteCustomization {
-            afterInformation
             afterTable
             footer
+            mainColor
+            displayCustomerEmail
+            displayCompanyEmail
+            displayCustomerPhoneNumber
+            displayCompanyPhoneNumber
           }
         }
       `
@@ -22,9 +26,13 @@ export const QuoteCustomizationGraphQL = {
       gql`
         mutation($quoteCustomization: QuoteCustomizationInput!) {
           updateMyQuoteCustomization(quoteCustomization: $quoteCustomization) {
-            afterInformation
             afterTable
             footer
+            mainColor
+            displayCustomerEmail
+            displayCompanyEmail
+            displayCustomerPhoneNumber
+            displayCompanyPhoneNumber
           }
         }
       `,

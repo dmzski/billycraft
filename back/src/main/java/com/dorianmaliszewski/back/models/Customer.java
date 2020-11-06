@@ -26,6 +26,7 @@ public class Customer extends BaseEntity {
     public String city;
     public String postalCode;
     public String address;
+    public String email;
 
     @OneToMany(mappedBy = "customer")
     public List<Quote> quotes = new ArrayList<>();
