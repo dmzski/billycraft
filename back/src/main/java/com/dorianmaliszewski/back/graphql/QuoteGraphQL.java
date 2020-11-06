@@ -35,6 +35,12 @@ public class QuoteGraphQL {
         return this.quoteService.getAllQuotesNotArchived(username);
     }
 
+    @Query("allQuotesArchived")
+    @Description("Get all quotes without status ARCHIVED")
+    public List<Quote> getAllQuotesArchived () {
+        return this.quoteService.getAllQuotesArchived(username);
+    }
+
     @Query("quoteById")
     @Description("Get quote by id")
     public Quote getQuoteById(String id) {

@@ -27,8 +27,8 @@ const CustomerTable: React.FC<any> = ({ data }) => {
           <th className="py-2"></th>
           <QuoteTableHeader className="w-1/2 px-4 py-2 text-left" onClick={sortBy("name")} sort={sort["name"]} text="Nom" />
           <QuoteTableHeader className="w-1/6 px-4 py-2" onClick={sortBy("contact")} sort={sort["contact"]} text="Contact" />
-          <QuoteTableHeader className="w-1/12 px-4 py-2" onClick={sortBy("phone")} sort={sort["phone"]} text="Téléphone" />
-          <QuoteTableHeader className="w-1/12 px-4 py-2" onClick={sortBy("email")} sort={sort["email"]} text="Email" />
+          <QuoteTableHeader className="w-1/6 px-4 py-2" onClick={sortBy("phone")} sort={sort["phone"]} text="Téléphone" />
+          <QuoteTableHeader className="w-1/6 px-4 py-2" onClick={sortBy("email")} sort={sort["email"]} text="Email" />
         </tr>
       </thead>
       <tbody>

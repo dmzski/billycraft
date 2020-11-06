@@ -106,11 +106,6 @@ body {
   @extend .p-5,
   .rounded-lg,
   .shadow-lg;
-  transition: all 500ms ease-in-out;
-}
-
-.modal--after-open {
-  transform: translateY(-10%);
 }
 
 .modal-overlay {

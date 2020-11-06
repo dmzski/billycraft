@@ -61,6 +61,34 @@ export const QuoteGraphQL = {
 
     return allQuotesNotArchived;
   },
+  getAllQuotesArchived: async () => {
+    const { allQuotesArchived } = await graphQLClient.request(
+      gql`
+        query {
+          allQuotesArchived {
+            id
+            customer {
+              id
+              name
+            }
+            title
+            createdAt
+            updatedAt
+            version
+            status
+            lines {
+              line
+              description
+              price
+              quantity
+            }
+          }
+        }
+      `
+    );
+
+    return allQuotesArchived;
+  },
 
   createOrUpdateQuote: async (quote: Quote) => {
     const mutation = await graphQLClient.request(

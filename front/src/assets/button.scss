@@ -33,6 +33,22 @@
 }
 
 button.button {
+  @extend .flex,
+  .p-2,
+  .rounded-md,
+  .px-3,
+  .justify-center,
+  .items-center;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    outline: none;
+  }
+
   @include colorize($primary, primary);
   @include colorize($secondary, secondary);
   @include colorize($error, delete);

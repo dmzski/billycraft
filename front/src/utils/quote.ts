@@ -1,4 +1,4 @@
-import { compareAsc, isAfter } from "date-fns";
+import { compareAsc, format, isAfter, parseJSON } from "date-fns";
 import { QUOTE_STATUS } from "../constants/quote";
 import { Quote, QuoteLine } from "../models/Quote";
 
@@ -11,6 +11,25 @@ export function sortQuotes(array: any[]) {
       return statusA!.weight > statusB!.weight ? 1 : statusA!.weight < statusB!.weight ? -1 : 0;
     }
     return updateAtCompare;
+  });
+}
+
+export function filterQuotes(array: any[], filters: any) {
+  if (!array) return [];
+  if (!filters) return array;
+  const arrayFiltered = [...array];
+  return arrayFiltered.filter((quote: Quote) => {
+    let takeIt = true;
+    if (filters.customer && !quote.customer.name.includes(filters.customer)) {
+      takeIt = false;
+    }
+    if (filters.title && !quote.title.includes(filters.title)) {
+      takeIt = false;
+    }
+    if (filters.createdAt && quote.createdAt && !format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm").includes(filters.createdAt)) {
+      takeIt = false;
+    }
+    return takeIt;
   });
 }
 

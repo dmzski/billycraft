@@ -47,6 +47,7 @@ const Customer = () => {
       </div>
       <div>
         <CustomerTable data={customersQuery.data} />
+        {customersQuery.isLoading && <div>Chargement en cours...</div>}
       </div>
       <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} className="modal" overlayClassName="modal-overlay">
         <CustomerForm closeModal={() => setIsOpen(false)} />

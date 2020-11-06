@@ -62,4 +62,8 @@ public class QuoteService {
         quote.persist();
         return quote;
     }
+
+    public List<Quote> getAllQuotesArchived(String username) {
+        return Quote.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status = 'ARCHIVED'", username);
+    }
 }
