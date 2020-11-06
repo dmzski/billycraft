@@ -1,4 +1,5 @@
 import React from "react";
+import { VERSION } from "../../constants/global";
 import SideBar from "./SideBar";
 
 const Layout: React.FC<any> = (props) => {

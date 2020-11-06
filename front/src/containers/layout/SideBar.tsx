@@ -2,6 +2,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import React from "react";
 import { Link } from "react-router-dom";
 import { VERSION } from "../../constants/global";
+import { Company } from "../../models/Company";
 import { useUser } from "../../providers/UserProvider";
 import SideBarMenu from "./SideBarMenu";
 
@@ -27,14 +28,16 @@ const SideBar = () => {
     <div className="bg-gray-200 fixed sidebar">
       <div className="flex flex-col sm:flex-row sm:justify-around">
         <div className="w-64 bg-white h-screen relative">
-          <div className="flex items-center justify-center mt-10">
-            <p>Hello {user.data ? user.data.firstName : ""} </p>
+          <div className="flex flex-col items-center justify-center mt-3">
+            {user.data?.company.logo ? <img src={user.data?.company.logo} className="h-24 mb-2" alt="Logo" /> : <div className="h-24"></div>}
+            <p>Hello {user.data ? user.data.firstName : ""} 👋</p>
+            <p className="font-bold mt-1">{user.data?.company.name}</p>
           </div>
 
           <SideBarMenu />
 
           <div className="absolute bottom-0 mt-10 mb-3 w-full">
-            <Link className="mb-3 flex items-center py-2 px-8 text-gray-500 hover:text-purple-700" to="/support">
+            <Link className="mb-3 flex items-center py-2 px-8 text-green-600 hover:bg-green-200 border-r-4 border-white hover:border-green-600" to="/support">
               <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"
