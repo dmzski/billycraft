@@ -20,10 +20,10 @@ export function filterQuotes(array: any[], filters: any) {
   const arrayFiltered = [...array];
   return arrayFiltered.filter((quote: Quote) => {
     let takeIt = true;
-    if (filters.customer && !quote.customer.name.includes(filters.customer)) {
+    if (filters.customer && !quote.customer?.name.toLowerCase().trim().includes(filters.customer.toLowerCase().trim())) {
       takeIt = false;
     }
-    if (filters.title && !quote.title.includes(filters.title)) {
+    if (filters.title && !quote.title?.toLowerCase().trim().includes(filters.title.toLowerCase().trim())) {
       takeIt = false;
     }
     if (filters.createdAt && quote.createdAt && !format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm").includes(filters.createdAt)) {
