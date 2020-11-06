@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
 import { PdfApi } from "../../api/PdfApi";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
+import useLoadingState from "../../hooks/useLoadingState";
 import { Quote } from "../../models/Quote";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
@@ -12,6 +13,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   const [newQuote, setNewQuote] = React.useState<Quote>(new Quote());
   const queryCache = useQueryCache();
   const toast = useToast();
+  const pdfState = useLoadingState();
 
   function goBack(e: any) {
     onRequestClose();
@@ -58,10 +60,18 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
 
   const downloadPdf = async () => {
     try {
-      const html = await PdfApi.getPdf(quote.id);
-      window.open(URL.createObjectURL(new Blob([html], { type: "application/pdf" })), "_blank");
+      if (pdfState.isIdle) {
+        pdfState.update("loading");
+        const html = await PdfApi.getPdf(quote.id);
+        window.open(URL.createObjectURL(new Blob([html], { type: "application/pdf" })), "_blank");
+        pdfState.update("idle");
+      }
     } catch (e) {
       console.log("Error when downlaod pdf", e);
+      toast.show({ message: "Erreur lors de la génération du PDF", variant: "error" });
+      setTimeout(() => {
+        pdfState.update("idle");
+      }, 1000);
     }
   };
 
@@ -73,9 +83,9 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal" overlayClassName="modal-overlay" style={{ content: { minWidth: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
-        {quote && quote.id && quote.status !== QuoteStatusEnum.DRAFT && (
-          <button className="primary material-icons" onClick={downloadPdf} title="Télécharger le PDF">
-            picture_as_pdf
+        {quote && quote.id && (
+          <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
+            <span className="material-icons mr-3">picture_as_pdf</span> PDF
           </button>
         )}
       </div>

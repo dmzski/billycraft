@@ -1,5 +1,6 @@
 package com.dorianmaliszewski.back.models;
 
+import com.dorianmaliszewski.back.QuoteIdGenerator;
 import com.dorianmaliszewski.back.deserializers.CustomLocalDateTimeDeserializer;
 import com.dorianmaliszewski.back.enums.StatusEnum;
 import com.dorianmaliszewski.back.serializers.CustomLocalDateTimeSerializer;
@@ -25,11 +26,8 @@ import java.util.List;
 public class Quote extends PanacheEntityBase {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(generator = QuoteIdGenerator.GENERATOR_NAME)
+    @GenericGenerator(name = QuoteIdGenerator.GENERATOR_NAME, strategy = "com.dorianmaliszewski.back.QuoteIdGenerator")
     public String id;
 
     @ManyToOne
@@ -63,5 +61,11 @@ public class Quote extends PanacheEntityBase {
 
     @Column(name = "company_id")
     public Long companyId;
+
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
+    public LocalDateTime sentAt;
+
+    public String fileName;
 
 }

@@ -58,6 +58,16 @@ button.button {
   @include colorize($default, default);
 }
 
+button {
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    outline: none;
+  }
+}
+
 button.primary {
   @extend .flex,
   .p-2,

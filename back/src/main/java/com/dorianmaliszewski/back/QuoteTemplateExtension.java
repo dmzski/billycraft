@@ -8,17 +8,23 @@ import io.quarkus.qute.TemplateExtension;
 class QuoteTemplateExtension {
 
     static Double total(Quote quote) {
-        return quote.lines.stream().mapToDouble(quoteLine -> quoteLine.price + quoteLine.price * (quote.tva / 100)).sum();
+        return quote.lines.stream()
+                .mapToDouble(quoteLine ->
+                    priceTTC(quoteLine, quote.tva) * (quoteLine.quantity != null ? quoteLine.quantity : 0)
+                )
+                .sum();
     }
 
     static Double priceTTC(QuoteLine quoteLine, Integer tva) {
-        Double calculatedTva = 0D;
+        double calculatedTva = 0D;
+        if (quoteLine.price == null || quoteLine.quantity == null) return 0D;
         if (tva != null) calculatedTva = Double.valueOf(tva) / 100;
         return quoteLine.price + quoteLine.price * calculatedTva;
     }
 
     static Double subTotal(QuoteLine quoteLine) {
-        return quoteLine.price *quoteLine.quantity;
+        if (quoteLine.price == null || quoteLine.quantity == null) return 0D;
+        return quoteLine.price * quoteLine.quantity;
     }
 
     static String formatNumber(Double num) {

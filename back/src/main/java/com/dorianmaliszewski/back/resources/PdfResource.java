@@ -28,6 +28,14 @@ public class PdfResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getPdfByQuoteId (@PathParam String tenant, @PathParam String id) {
+        byte[] pdf = this.pdfService.getQuotePdf(username, id);
+        return Response.ok(pdf).build();
+    }
+
+    @GET
+    @Path("/{id}/renew")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response renewPdfOfQuoteById (@PathParam String tenant, @PathParam String id) {
         byte[] pdf = this.pdfService.generateQuote(username, id);
         return Response.ok(pdf).build();
     }

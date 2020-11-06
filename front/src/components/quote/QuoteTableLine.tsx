@@ -117,7 +117,7 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
       <td className="text-left">{quote.title}</td>
       <td className="text-center">{quote.customer.name}</td>
       <td className="text-center">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-center">{getQuoteTotal(quote)} €</td>
+      <td className="text-center">{Math.round(getQuoteTotal(quote) * 100) / 100} €</td>
       <td className="text-center status" ref={statusRef}>
         {getStatus}
         {openStatusPopup && (

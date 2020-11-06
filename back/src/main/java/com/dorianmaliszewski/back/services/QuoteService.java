@@ -8,6 +8,7 @@ import com.dorianmaliszewski.back.models.User;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ApplicationScoped
@@ -58,7 +59,19 @@ public class QuoteService {
                     throw new NotFoundException("Entity not found");
                 }
         );
+
+        // If the quote was refused and user want to put in draft again
+        if (quote.status != null && quote.status.equals(StatusEnum.REFUSED) && (newStatus == null || newStatus.equals(StatusEnum.DRAFT))){
+            quote.sentAt = null;
+        }
+
         quote.status = newStatus != null ? newStatus : StatusEnum.DRAFT;
+
+        // If the status is not Sent or More
+        if (quote.status.isGreaterThanOrEqualSent() && quote.sentAt == null) {
+            quote.sentAt = LocalDateTime.now();
+        }
+
         quote.persist();
         return quote;
     }

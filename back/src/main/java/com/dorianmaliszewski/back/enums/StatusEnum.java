@@ -7,5 +7,9 @@ public enum StatusEnum {
     ACCEPTED,
     DEPOSIT_ASK,
     DEPOSIT_PAID,
-    ARCHIVED
+    ARCHIVED;
+
+    public boolean isGreaterThanOrEqualSent() {
+        return !this.equals(DRAFT);
+    }
 }
