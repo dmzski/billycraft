@@ -40,10 +40,10 @@ public class QuoteService {
 
     @Transactional
     public Quote updateQuote(String username, String id, Quote newQuote) {
-        Quote quote = (Quote) Quote.findByIdOptional(id).orElseThrow(NotFoundException::new);
+        Quote quote = this.getQuoteById(username, id);
         quote.status = StatusEnum.DRAFT;
         quote.title = newQuote.title;
-        quote.title = newQuote.title;
+        quote.tva = newQuote.tva;
         quote.lines.clear();
         quote.persistAndFlush();
         quote.lines.addAll(newQuote.lines);
@@ -54,11 +54,7 @@ public class QuoteService {
 
     @Transactional
     public Quote updateQuoteStatus(String username, String id, StatusEnum newStatus) {
-        Quote quote = (Quote) Quote.findByIdOptional(id).orElseThrow(
-                () -> {
-                    throw new NotFoundException("Entity not found");
-                }
-        );
+        Quote quote = this.getQuoteById(username, id);
 
         // If the quote was refused and user want to put in draft again
         if (quote.status != null && quote.status.equals(StatusEnum.REFUSED) && (newStatus == null || newStatus.equals(StatusEnum.DRAFT))){

@@ -19,15 +19,13 @@ import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 @ApplicationScoped
-public class PDFService {
+public class QuotePDFService {
 
-    private final static Logger LOG = Logger.getLogger(PDFService.class);
+    private final static Logger LOG = Logger.getLogger(QuotePDFService.class);
 
     @Inject
     QuoteService quoteService;
@@ -36,7 +34,7 @@ public class PDFService {
     @RestClient
     PDFServiceRest pdfServiceRest;
 
-    @ConfigProperty(name = "quotes.pdf-dir", defaultValue = "/tmp")
+    @ConfigProperty(name = "compta.upload-dir", defaultValue = "/tmp/compta")
     String pdfDir;
 
     @CheckedTemplate

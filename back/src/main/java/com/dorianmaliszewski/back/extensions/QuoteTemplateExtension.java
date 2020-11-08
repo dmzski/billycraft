@@ -1,4 +1,4 @@
-package com.dorianmaliszewski.back;
+package com.dorianmaliszewski.back.extensions;
 
 import com.dorianmaliszewski.back.models.Quote;
 import com.dorianmaliszewski.back.models.QuoteLine;

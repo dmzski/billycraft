@@ -1,12 +1,15 @@
 import React from "react";
 import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
+import { useHistory } from "react-router-dom";
 import { PdfApi } from "../../api/PdfApi";
+import { BillGraphQL } from "../../graphql/BillGraphQL";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
 import useLoadingState from "../../hooks/useLoadingState";
 import { Quote } from "../../models/Quote";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
+import { ROUTES } from "../../routes";
 import QuoteForm from "../forms/QuoteForm";
 
 const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
@@ -14,6 +17,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   const queryCache = useQueryCache();
   const toast = useToast();
   const pdfState = useLoadingState();
+  const history = useHistory();
 
   function goBack(e: any) {
     onRequestClose();
@@ -23,6 +27,13 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     onSuccess: () => {
       onRequestClose();
       toast.show({ message: "Enregistrement effectué", variant: "success" });
+    },
+  });
+  const [createBillFormQuoteMutation, createBillFormQuoteMutationState] = useMutation(BillGraphQL.createFromQuote, {
+    onSuccess: () => {
+      onRequestClose();
+      history.push(ROUTES.BILLS.path);
+      toast.show({ message: "Facture créé", variant: "success" });
     },
   });
 
@@ -62,7 +73,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     try {
       if (pdfState.isIdle) {
         pdfState.update("loading");
-        const html = await PdfApi.getPdf(quote.id);
+        const html = await PdfApi.getQuotePdf(quote.id);
         window.open(URL.createObjectURL(new Blob([html], { type: "application/pdf" })), "_blank");
         pdfState.update("idle");
       }
@@ -75,6 +86,18 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
   };
 
+  const createBillFromQuote = async (e: any) => {
+    try {
+      if (!createBillFormQuoteMutationState.isLoading && quote.id) {
+        const result = createBillFormQuoteMutation(quote.id);
+        queryCache.invalidateQueries("bills");
+      }
+    } catch (error) {
+      console.log("Une erreur est survenue", error);
+      toast.show({ message: "Erreur lors de la génération de la facture", variant: "error" });
+    }
+  };
+
   React.useEffect(() => {
     setNewQuote(quote ? quote : new Quote());
   }, [quote, isOpen]);
@@ -83,6 +106,11 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal" overlayClassName="modal-overlay" style={{ content: { minWidth: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
+        {quote && quote.status === QuoteStatusEnum.ACCEPTED && quote.id && (
+          <button className="button primary mb-2" onClick={createBillFromQuote} title="Créer la facture" disabled={createBillFormQuoteMutationState.isLoading}>
+            <span className="material-icons mr-3">payment</span> Créer la facture
+          </button>
+        )}
         {quote && quote.id && (
           <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
             <span className="material-icons mr-3">picture_as_pdf</span> PDF

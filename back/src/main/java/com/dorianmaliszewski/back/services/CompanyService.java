@@ -1,20 +1,26 @@
 package com.dorianmaliszewski.back.services;
 
 import com.dorianmaliszewski.back.models.Company;
-import com.dorianmaliszewski.back.models.QuoteCustomization;
 import com.dorianmaliszewski.back.models.User;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 @ApplicationScoped
 public class CompanyService {
+
+    @ConfigProperty(name = "compta.upload-dir", defaultValue = "/tmp")
+    String uploadDir;
 
     @Inject
     UserService userService;
@@ -22,12 +28,15 @@ public class CompanyService {
     @Inject
     QuoteCustomizationService quoteCustomizationService;
 
+    @ConfigProperty(name = "compta.base-url", defaultValue = "http://localhost:8080/compta")
+    String baseUrl;
+
     public Company findMyCompany(String userId) {
         return Company.find("createdBy = ?1", userId).firstResult();
     }
 
     @Transactional
-    public Company createCompagny(String userId, Company company) {
+    public Company createCompany(String userId, Company company) {
         User user = this.userService.findByEmail(userId);
         if (user == null) throw new EntityNotFoundException();
 
@@ -47,7 +56,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company updateCompagny(String userId, Company newCompany) {
+    public Company updateCompany(String userId, Company newCompany) {
         Company company = (Company) Company.findByIdOptional(newCompany.id).orElseThrow(EntityNotFoundException::new);
         if (!company.createdBy.equals(userId)) {
             throw new ForbiddenException("You can't do that");
@@ -61,5 +70,41 @@ public class CompanyService {
         company.email = newCompany.email;
         company.persist();
         return company;
+    }
+
+
+    public String uploadLogo(String username, byte[] logo) {
+        Company company = (Company) Company.find("createdBy = ?1", username).firstResultOptional().orElseThrow();
+
+        if (logo == null) {
+            System.out.println("Logo is null");
+            return null;
+        }
+        //constructs upload file path
+        String fileName = uploadDir + "/" + company.id + "/logo.png";
+        try {
+            File f = new File(fileName);
+
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+            Files.write(f.toPath(), logo);
+            return  baseUrl + "/uploads/logo/" + company.id;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public byte[] getLogo(Long companyId) {
+        File file = new File(uploadDir + "/" + companyId + "/logo.png");
+        if (!file.exists()) {
+            return null;
+        }
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

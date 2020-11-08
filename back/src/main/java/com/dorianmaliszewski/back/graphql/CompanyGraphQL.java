@@ -30,13 +30,13 @@ public class CompanyGraphQL {
     @Mutation
     @Description("Create my company")
     public Company createCompany(Company company) {
-        return this.companyService.createCompagny(identity.getPrincipal().getName(), company);
+        return this.companyService.createCompany(identity.getPrincipal().getName(), company);
     }
 
     @Mutation
     @Description("Update my company")
     public Company updateCompany(Company company) {
-        return this.companyService.updateCompagny(identity.getPrincipal().getName(), company);
+        return this.companyService.updateCompany(identity.getPrincipal().getName(), company);
     }
 }
 

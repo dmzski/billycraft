@@ -1,6 +1,7 @@
 package com.dorianmaliszewski.back.resources;
 
-import com.dorianmaliszewski.back.services.PDFService;
+import com.dorianmaliszewski.back.services.BillPDFService;
+import com.dorianmaliszewski.back.services.QuotePDFService;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
@@ -12,31 +13,50 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 @Path("/{tenant}/pdfs")
 @Authenticated
 public class PdfResource {
 
     @Inject
-    PDFService pdfService;
+    QuotePDFService quotePdfService;
+
+    @Inject
+    BillPDFService billPDFService;
 
     @Claim(standard = Claims.preferred_username)
     String username;
 
     @GET
-    @Path("/{id}")
+    @Path("/quote/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getPdfByQuoteId (@PathParam String tenant, @PathParam String id) {
-        byte[] pdf = this.pdfService.getQuotePdf(username, id);
+        byte[] pdf = this.quotePdfService.getQuotePdf(username, id);
         return Response.ok(pdf).build();
     }
 
     @GET
-    @Path("/{id}/renew")
+    @Path("/quote/{id}/renew")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response renewPdfOfQuoteById (@PathParam String tenant, @PathParam String id) {
-        byte[] pdf = this.pdfService.generateQuote(username, id);
+        byte[] pdf = this.quotePdfService.generateQuote(username, id);
+        return Response.ok(pdf).build();
+    }
+
+
+    @GET
+    @Path("/bill/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getPdfByBillId (@PathParam String tenant, @PathParam String id) {
+        byte[] pdf = this.billPDFService.getBillPdf(username, id);
+        return Response.ok(pdf).build();
+    }
+
+    @GET
+    @Path("/bill/{id}/renew")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response renewPdfOfBillById (@PathParam String tenant, @PathParam String id) {
+        byte[] pdf = this.billPDFService.generateBill(username, id);
         return Response.ok(pdf).build();
     }
 }

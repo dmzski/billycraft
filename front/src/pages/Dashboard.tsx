@@ -29,7 +29,7 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold text-center pb-2 border-b-2 border-black">{VERSION} : What's new ? 🚀</h1>
           {newsQuery.isLoading && <div>Chargement en cours...</div>}
           <div id="news" className="mt-10"></div>
-          <div className="text-center mt-10 text-xs">Made with ❤ by Dorian Maliszewski</div>
+          <div className="text-center mt-10 text-sm font-bold">Made with ❤ by Dorian Maliszewski</div>
         </div>
       </div>
     </Layout>

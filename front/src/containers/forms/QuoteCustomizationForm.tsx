@@ -53,10 +53,7 @@ const QuoteCustomizationForm: React.FC<any> = ({ quoteCustomization }) => {
   }, [quoteCustomization]);
 
   return (
-    <form onSubmit={onSubmit} className="w-3/4 flex flex-col border-gray-400 border p-5 rounded bg-white shadow-lg mt-4">
-      <div className="flex justify-center items-center w-full">
-        <h2 className="text-xl font-bold text-center pb-2 px-8 border-b-2 border-gray-300">Customisation des devis</h2>
-      </div>
+    <form onSubmit={onSubmit} className="w-3/4 flex flex-col border-gray-400 border p-5 rounded bg-white shadow-lg">
       <div className="flex mt-3 w-full content-center items-center">
         <div className="w-10 h-10 mr-3 border-2 border-black" style={{ backgroundColor: newQuoteCustomization.mainColor || "white" }}></div>
         <BaseInput

@@ -15,6 +15,12 @@ export const ROUTES = {
     icon: "description",
     exact: true,
   },
+  BILLS: {
+    path: "/bills",
+    title: "Facture",
+    icon: "payment",
+    exact: true,
+  },
   QUOTE_FORM: {
     path: "/quotes/edit/:id",
     title: "Edition de devis",

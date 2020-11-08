@@ -1,15 +1,10 @@
-import { setDate, subDays, subHours } from "date-fns";
 import React from "react";
 import { useQuery } from "react-query";
-import { useHistory } from "react-router-dom";
 import Layout from "../containers/layout/Layout";
 import QuoteList from "../containers/lists/QuoteList";
 import { QuoteGraphQL } from "../graphql/QuoteGraphQL";
 import { Quote } from "../models/Quote";
-import { ROUTES } from "../routes";
 import { filterQuotes, sortQuotes } from "../utils/quote";
-import Modal from "react-modal";
-import QuoteForm from "../containers/forms/QuoteForm";
 import QuoteModal from "../containers/modals/QuoteModal";
 import QuoteFilterContainer from "../containers/QuoteFilterContainer";
 
@@ -31,7 +26,7 @@ const QuotePage = () => {
     return sortQuotes(filterQuotes(list, filters));
   }, [quotes, quotesArchivedQuery.data, showArchived, filters]);
 
-  const goToNewQuote = (e: any) => {
+  const goToNewQuote = () => {
     setIsModalOpen(true);
   };
 
@@ -41,13 +36,13 @@ const QuotePage = () => {
     }
   }, [quotesQuery]);
 
-  const handleShowArchived = (e: any) => {
+  const handleShowArchived = () => {
     setShowArchived(!showArchived);
     if (!showArchived) {
       quotesArchivedQuery.refetch();
     }
   };
-  const handleShowFilters = (e: any) => {
+  const handleShowFilters = () => {
     setShowFilters(!showFilters);
   };
 

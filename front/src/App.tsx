@@ -17,6 +17,7 @@ import CustomerForm from "./pages/CustomerForm";
 import Modal from "react-modal";
 import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Onboarding from "./pages/Onboarding";
+import BillPage from "./pages/Bill";
 
 Modal.setAppElement("#modal");
 
@@ -27,6 +28,7 @@ function App() {
         <Switch>
           <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
           <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />
+          <Route path={ROUTES.BILLS.path} exact={ROUTES.BILLS.exact} component={BillPage} />
           <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
           <Route path={ROUTES.CUSTOMERS.path} exact={ROUTES.CUSTOMERS.exact} component={Customer} />
           <Route path={ROUTES.CUSTOMER_FORM.path} component={CustomerForm} />
