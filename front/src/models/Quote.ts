@@ -1,4 +1,5 @@
 import { Customer } from "./Customer";
+import { LineTypeEnum } from "./LineTypeEnum";
 import { QuoteStatusEnum } from "./QuoteStatusEnum";
 
 export class Quote {
@@ -19,4 +20,5 @@ export class QuoteLine {
   quantity: number = 0;
   price: number = 0;
   line: number = 0;
+  type: LineTypeEnum = LineTypeEnum.SERVICE;
 }

@@ -37,7 +37,7 @@ const SideBar = () => {
           <SideBarMenu />
 
           <div className="absolute bottom-0 mt-10 mb-3 w-full">
-            <Link className="mb-3 flex items-center py-2 px-8 text-green-600 hover:bg-green-200 border-r-4 border-white hover:border-green-600" to="/support">
+            <Link className="mb-2 flex items-center py-2 px-8 text-green-600 hover:bg-green-200 border-r-4 border-white hover:border-green-600" to="/support">
               <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"
@@ -49,7 +49,7 @@ const SideBar = () => {
 
               <span className="mx-4 font-medium">Support</span>
             </Link>
-            <Link to="#" className="flex items-center py-2 px-8 text-gray-500 hover:text-red-700" onClick={logout}>
+            <Link to="#" className="border-r-4 border-white flex items-center py-2 px-8 text-red-700 hover:bg-red-200 hover:border-red-700" onClick={logout}>
               <span className="material-icons">no_meeting_room</span>
               <span className="mx-4 font-medium">Déconnexion</span>
             </Link>

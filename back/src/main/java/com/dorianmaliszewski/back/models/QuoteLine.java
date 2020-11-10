@@ -1,5 +1,6 @@
 package com.dorianmaliszewski.back.models;
 
+import com.dorianmaliszewski.back.enums.LineTypeEnum;
 import com.dorianmaliszewski.back.models.IdClasses.QuoteLinePK;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -24,4 +25,7 @@ public class QuoteLine {
     public Double price;
 
     public String description;
+
+    @Enumerated(value = EnumType.STRING)
+    public LineTypeEnum type;
 }

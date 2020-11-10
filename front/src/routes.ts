@@ -17,7 +17,7 @@ export const ROUTES = {
   },
   BILLS: {
     path: "/bills",
-    title: "Facture",
+    title: "Factures",
     icon: "payment",
     exact: true,
   },

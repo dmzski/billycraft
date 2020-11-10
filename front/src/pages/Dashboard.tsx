@@ -8,7 +8,9 @@ const Dashboard = () => {
   const newsQuery = useQuery(
     "news-query",
     async () => {
-      const { query, abort } = HttpClient.GET("/news.html");
+      const { query, abort } = HttpClient.GET("/news.html", {
+        cache: "no-cache",
+      });
       let promise = query.then((res: any) => res.text());
 
       promise.cancel = abort;

@@ -5,6 +5,7 @@ import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 @Path("/{tenant}/company")
 @Authenticated
+@RequestScoped
 public class CompanyResource {
 
     @Claim(standard = Claims.preferred_username)
@@ -28,6 +30,7 @@ public class CompanyResource {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Produces(MediaType.TEXT_PLAIN)
     public String uploadLogo (byte[] logo) throws IOException {
+        System.out.println(username);
         return this.companyService.uploadLogo(username, logo);
 
     }

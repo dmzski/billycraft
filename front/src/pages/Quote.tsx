@@ -14,8 +14,8 @@ const QuotePage = () => {
   const [filters, setFilters] = React.useState<any>({});
   const [showArchived, setShowArchived] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
-  const quotesArchivedQuery = useQuery("quotes-archived", QuoteGraphQL.getAllQuotesArchived, { enabled: false });
-  const quotesQuery = useQuery("quotes", QuoteGraphQL.getAllQuotesNotArchived);
+  const quotesArchivedQuery = useQuery("quotes-archived", QuoteGraphQL.getAllQuotesArchived, { enabled: false, refetchOnWindowFocus: false });
+  const quotesQuery = useQuery("quotes", QuoteGraphQL.getAllQuotesNotArchived, { refetchOnWindowFocus: false });
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const quoteSorted = React.useCallback(() => {

@@ -76,7 +76,7 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
       <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
       {!cantUpdate && (
         <div className="flex">
-          <button type="button" className="primary w-full" onClick={addLine} disabled={disabled}>
+          <button type="button" className="button transparent w-full" onClick={addLine} disabled={disabled}>
             Ajouter une ligne
           </button>
         </div>
@@ -84,37 +84,37 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
 
       <div className="flex pt-3 flex-row-reverse">
         {(!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status) && (
-          <button className="bg-gray-600 text-white p-3 rounded ml-4" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
+          <button className="button bg-gray-600 text-white p-3 rounded ml-4" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
             Enregistrer
           </button>
         )}
         {quote.id && quote.status === QuoteStatusEnum.DRAFT && (
-          <button className="bg-green-600 text-white p-3 rounded" type="button" onClick={onUpdateStatus(QuoteStatusEnum.SENT)} disabled={disabled}>
+          <button className="button bg-green-600 text-white p-3 rounded" type="button" onClick={onUpdateStatus(QuoteStatusEnum.SENT)} disabled={disabled}>
             Envoyer le devis
           </button>
         )}
         {quote.status === QuoteStatusEnum.SENT && (
           <>
-            <button type="button" className="button-success ml-3" onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}>
+            <button type="button" className="button success ml-3" onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}>
               Devis accepté
             </button>
-            <button type="button" className="button-error" onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}>
+            <button type="button" className="button error" onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}>
               Devis refusé
             </button>
           </>
         )}
         {quote.status === QuoteStatusEnum.ACCEPTED && (
-          <button type="button" className="primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
+          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
             Demander un accompte
           </button>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK && (
-          <button type="button" className="primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
+          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
             Accompte payé
           </button>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID && (
-          <button type="button" className="primary" onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}>
+          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}>
             Archiver le devis
           </button>
         )}

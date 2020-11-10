@@ -1,7 +1,9 @@
 import { format } from "date-fns";
 import React from "react";
+import { LINE_TYPE } from "../../constants/line";
 import { QUOTE_STATUS } from "../../constants/quote";
 import { calculatePriceTTC } from "../../utils/quote";
+import BaseSelect from "../inputs/BaseSelect";
 
 type QuoteLineTableLine = {
   line: any;
@@ -27,6 +29,14 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
 
   return (
     <tr className={"quote-table-line low-py"}>
+      <td className="text-left">
+        <BaseSelect
+          value={line.type}
+          onChange={handleChange("type")}
+          options={Object.values(LINE_TYPE).map((value: any, index: any) => ({ name: value.name, id: value.enum }))}
+          name={line.line + "-select"}
+        />
+      </td>
       <td className="text-left">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input disabled={disabled} className="w-full" value={line.description} onChange={handleChange("description")} />

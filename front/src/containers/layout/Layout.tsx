@@ -6,8 +6,8 @@ const Layout: React.FC<any> = (props) => {
   return (
     <div className="flex h-full w-full">
       <SideBar />
-      <div className="flex w-full flex-col fixed ml-64 h-10">
-        <div className="flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div">
+      <div className="flex w-full flex-col fixed ml-64 h-10 z-10">
+        <div className="flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div z-10">
           <div className="inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span className="text-gray-500 sm:leading-5 material-icons mr-3">search</span>
           </div>

@@ -8,6 +8,8 @@ import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Mutation;
 import org.eclipse.microprofile.graphql.Query;
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
 
 import javax.inject.Inject;
 
@@ -18,25 +20,25 @@ public class CompanyGraphQL {
     @Inject
     CompanyService companyService;
 
-    @Inject
-    SecurityIdentity identity;
+    @Claim(standard = Claims.preferred_username)
+    String username;
 
     @Query("myCompany")
     @Description("Find my company")
     public Company findMyCompany() {
-        return this.companyService.findMyCompany(identity.getPrincipal().getName());
+        return this.companyService.findMyCompany(username);
     }
 
     @Mutation
     @Description("Create my company")
     public Company createCompany(Company company) {
-        return this.companyService.createCompany(identity.getPrincipal().getName(), company);
+        return this.companyService.createCompany(username, company);
     }
 
     @Mutation
     @Description("Update my company")
     public Company updateCompany(Company company) {
-        return this.companyService.updateCompany(identity.getPrincipal().getName(), company);
+        return this.companyService.updateCompany(username, company);
     }
 }
 

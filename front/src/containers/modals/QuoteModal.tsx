@@ -107,7 +107,12 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
         {quote && quote.status === QuoteStatusEnum.ACCEPTED && quote.id && (
-          <button className="button primary mb-2" onClick={createBillFromQuote} title="Créer la facture" disabled={createBillFormQuoteMutationState.isLoading}>
+          <button
+            className="button success mb-2 mr-3"
+            onClick={createBillFromQuote}
+            title="Créer la facture"
+            disabled={createBillFormQuoteMutationState.isLoading}
+          >
             <span className="material-icons mr-3">payment</span> Créer la facture
           </button>
         )}

@@ -54,3 +54,11 @@ input:active {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.input-select {
+  outline: 0;
+  @extend .w-32;
+  box-shadow: none;
+  border: 0 !important;
+  background-image: none;
+}

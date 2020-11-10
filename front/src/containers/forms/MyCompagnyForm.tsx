@@ -50,6 +50,7 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
         const url = await CompanyApi.uploadLogo(e.target.files[0]);
         setCompany({ ...company, logo: url });
         uploadLogoState.update("idle");
+        toast.show({ message: "Logo téléchargé avec succes. Enregistrer les modifications", variant: "success" });
       }
     } catch (error) {
       toast.show({ message: "Erreur lors de l'upload de l'image", variant: "error" });
@@ -63,11 +64,18 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
   return (
     <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
       <BaseInput divClassName="pt-2 w-full" placeholder="Nom" value={company.name} onChange={inputChange("name")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Adresse" value={company.address} onChange={inputChange("address")} />
+      <textarea
+        className=" border border-gray-200 mt-2 p-3 w-full"
+        rows={3}
+        style={{ resize: "none" }}
+        placeholder="Adresse"
+        value={company.address}
+        onChange={inputChange("address")}
+      />
       <BaseInput divClassName="pt-2 w-full" placeholder="Code Postal" value={company.postalCode} onChange={inputChange("postalCode")} />
+      <BaseInput divClassName="pt-2 w-full" placeholder="Ville" value={company.city} onChange={inputChange("city")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Téléphone" value={company.phoneNumber} onChange={inputChange("phoneNumber")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Email" value={company.email} onChange={inputChange("email")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Ville" value={company.city} onChange={inputChange("city")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="SIRET" value={company.siret} onChange={inputChange("siret")} />
       <div className="flex w-full pt-2">
         <BaseInput divClassName=" w-4/5" placeholder="URL du logo" value={company.logo} onChange={inputChange("logo")} />

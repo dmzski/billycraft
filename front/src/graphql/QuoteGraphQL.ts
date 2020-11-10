@@ -25,6 +25,7 @@ export const QuoteGraphQL = {
               description
               price
               quantity
+              type
             }
           }
         }
@@ -53,6 +54,7 @@ export const QuoteGraphQL = {
               description
               price
               quantity
+              type
             }
           }
         }
@@ -81,6 +83,7 @@ export const QuoteGraphQL = {
               description
               price
               quantity
+              type
             }
           }
         }

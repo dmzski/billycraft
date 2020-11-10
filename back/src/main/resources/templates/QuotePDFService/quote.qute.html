@@ -55,15 +55,19 @@
 
     .footer {
         position: fixed;
-        bottom: 5mm;
+        bottom: 0mm;
         left: 5mm;
         right: 5mm;
+        word-break: break-word;
+        max-width: 230mm;
+        height: 20mm;
     }
 
     @page
     {
         size:  A4;   /* auto is the initial value */
-        margin: 0;  /* this affects the margin in the printer settings */
+        margin: 1cm;  /* this affects the margin in the printer settings */
+        margin-bottom: 5cm;  /* this affects the margin in the printer settings */
     }
 
     html, body {
@@ -73,21 +77,17 @@
     }
 
     @media print {
-
-
-         p {
+         * {
             page-break-inside: avoid;
-        }
+         }
 
         html, body {
             width: 210mm;
             height: 297mm;
-            margin:0;
-            padding: 0;
         }
 
         body {
-            padding: 15mm 15mm 15mm 15mm;
+            padding: 0mm;
         }
     }
 
@@ -108,7 +108,7 @@
     <div class="flex w-full" style="justify-content: space-between">
         <div style="display: flex; flex-direction: column">
             <span style="font-weight: bold">{company.name}</span>
-            <span>{company.address}</span>
+            <span>{company.address.replaceBreakLineToBr.raw}</span>
             <span>{company.postalCode}&nbsp;{company.city}</span>
             <span>SIRET : {company.siret}</span>
             {#if customization.displayCompanyEmail }
@@ -118,10 +118,10 @@
             <span>&#9990; : {company.phoneNumber ?: ""}</span>
             {/if}
         </div>
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column; margin-top: 5mm">
             {#if quote.customer}
                 <span>{quote.customer.name}</span>
-                <span>{quote.customer.address}</span>
+                <span>{quote.customer.address.replaceBreakLineToBr.raw}</span>
                 <span>{quote.customer.postalCode},&nbsp;{quote.customer.city}</span>
                 {#if customization.displayCustomerEmail }
                 <span>&#9993; : {quote.customer.email ?: ""}</span>
@@ -150,13 +150,31 @@
                 </tr>
             </thead>
             <tbody>
-                {#for line in quote.lines}
+                {#if articles.size > 0}
                     <tr>
-                        <td>{line.description}</td>
-                        <td>{line.quantity.formatNumber}</td>
-                        <td>{line.price.formatNumber} €</td>
-                        <td>{line.subTotal.formatNumber} €</td>
+                        <td colspan="4" style="text-align: center">MATERIELS</td>
                     </tr>
+                {/if}
+                {#for line in articles}
+                    <tr>
+                        <td>{line.description.replaceBreakLineToBr.raw}</td>
+                        <td>{line.quantity.formatNumber}</td>
+                        <td>{line.price.formatCurrency}</td>
+                        <td>{line.subTotal.formatCurrency}</td>
+                    </tr>
+                {/for}
+                {#if services.size > 0}
+                <tr>
+                    <td colspan="4" style="text-align: center">SERVICES</td>
+                </tr>
+                {/if}
+                {#for line in services}
+                <tr>
+                    <td>{line.description.replaceBreakLineToBr.raw}</td>
+                    <td>{line.quantity.formatNumber}</td>
+                    <td>{line.price.formatCurrency}</td>
+                    <td>{line.subTotal.formatCurrency}</td>
+                </tr>
                 {/for}
             </tbody>
             <tfoot>
@@ -178,19 +196,14 @@
                     <td style="border: none;"></td>
                     <td style="border: none;"></td>
                     <td class="total-header">TOTAL</td>
-                    <td style="text-align: center">{quote.total.formatNumber} €</td>
+                    <td style="text-align: center">{quote.total.formatCurrency}</td>
                 </tr>
             </tfoot>
         </table>
     </div>
         {#if customization.afterTable}
-            <div class="w-full">
-                {customization.afterTable.raw}
-            </div>
-        {/if}
-        {#if customization.footer}
-            <div class="footer w-full" style="display: flex; justify-content: center">
-                {customization.footer.raw}
+            <div class="w-full mt-5">
+                {customization.afterTable.replaceBreakLineToBr.raw}
             </div>
         {/if}
 </div>

@@ -108,7 +108,7 @@
     <div class="flex w-full" style="justify-content: space-between">
         <div style="display: flex; flex-direction: column">
             <span style="font-weight: bold">{company.name}</span>
-            <span>{company.address}</span>
+            <span>{company.address.replaceBreakLineToBr.raw}</span>
             <span>{company.postalCode}&nbsp;{company.city}</span>
             <span>SIRET : {company.siret}</span>
             {#if customization.displayCompanyEmail }
@@ -118,10 +118,10 @@
             <span>&#9990; : {company.phoneNumber ?: ""}</span>
             {/if}
         </div>
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column; margin-top: 5mm">
             {#if bill.customer}
                 <span>{bill.customer.name}</span>
-                <span>{bill.customer.address}</span>
+                <span>{bill.customer.address.replaceBreakLineToBr.raw}</span>
                 <span>{bill.customer.postalCode},&nbsp;{bill.customer.city}</span>
                 {#if customization.displayCustomerEmail }
                 <span>&#9993; : {bill.customer.email ?: ""}</span>
@@ -150,14 +150,32 @@
                 </tr>
             </thead>
             <tbody>
-                {#for line in bill.lines}
-                    <tr>
-                        <td>{line.description}</td>
-                        <td>{line.quantity.formatNumber}</td>
-                        <td>{line.price.formatNumber} €</td>
-                        <td>{line.subTotal.formatNumber} €</td>
-                    </tr>
-                {/for}
+            {#if articles.size > 0}
+            <tr>
+                <td colspan="4" style="text-align: center">MATERIELS</td>
+            </tr>
+            {/if}
+            {#for line in articles}
+            <tr>
+                <td>{line.description.replaceBreakLineToBr.raw}</td>
+                <td>{line.quantity.formatNumber}</td>
+                <td>{line.price.formatNumber} €</td>
+                <td>{line.subTotal.formatNumber} €</td>
+            </tr>
+            {/for}
+            {#if services.size > 0}
+            <tr>
+                <td colspan="4" style="text-align: center">SERVICES</td>
+            </tr>
+            {/if}
+            {#for line in services}
+            <tr>
+                <td>{line.description.replaceBreakLineToBr.raw}</td>
+                <td>{line.quantity.formatNumber}</td>
+                <td>{line.price.formatCurrency}</td>
+                <td>{line.subTotal.formatCurrency}</td>
+            </tr>
+            {/for}
             </tbody>
             <tfoot>
                 <tr style="height: 20px; background-color: white">
@@ -178,19 +196,14 @@
                     <td style="border: none;"></td>
                     <td style="border: none;"></td>
                     <td class="total-header">TOTAL</td>
-                    <td style="text-align: center">{bill.total.formatNumber} €</td>
+                    <td style="text-align: center">{bill.total.formatCurrency}</td>
                 </tr>
             </tfoot>
         </table>
     </div>
         {#if customization.afterTable}
             <div class="w-full">
-                {customization.afterTable.raw}
-            </div>
-        {/if}
-        {#if customization.footer}
-            <div class="footer w-full" style="display: flex; justify-content: center">
-                {customization.footer.raw}
+                {customization.afterTable.replaceBreakLineToBr.raw}
             </div>
         {/if}
 </div>

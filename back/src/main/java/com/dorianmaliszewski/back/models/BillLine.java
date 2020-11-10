@@ -1,5 +1,6 @@
 package com.dorianmaliszewski.back.models;
 
+import com.dorianmaliszewski.back.enums.LineTypeEnum;
 import com.dorianmaliszewski.back.models.IdClasses.BillLinePK;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -25,6 +26,10 @@ public class BillLine {
 
     public String description;
 
+
+    @Enumerated(value = EnumType.STRING)
+    public LineTypeEnum type;
+
     public BillLine() {
 
     }
@@ -35,5 +40,6 @@ public class BillLine {
         this.price = quoteLine.price;
         this.description = quoteLine.description;
         this.bill = bill;
+        this.type = quoteLine.type;
     }
 }
