@@ -2,6 +2,8 @@
 
 @import "./colors.scss";
 @import "./text.scss";
+
+@import "./loader.scss";
 @import "./button.scss";
 @import "./quote.scss";
 @import "./bill.scss";
@@ -110,6 +112,7 @@ body {
 }
 
 .modal-overlay {
+  z-index: 20;
   position: fixed;
   top: 0;
   left: 0;

@@ -29,9 +29,9 @@ const SideBar = () => {
       <div className="flex flex-col sm:flex-row sm:justify-around">
         <div className="w-64 bg-white h-screen relative">
           <div className="flex flex-col items-center justify-center mt-3">
-            {user.data?.company.logo ? <img src={user.data?.company.logo} className="h-24 mb-2" alt="Logo" /> : <div className="h-24"></div>}
+            {user.data?.company?.logo ? <img src={user.data?.company?.logo} className="h-24 mb-2" alt="Logo" /> : <div className="h-24"></div>}
             <p>Hello {user.data ? user.data.firstName : ""} 👋</p>
-            <p className="font-bold mt-1">{user.data?.company.name}</p>
+            <p className="font-bold mt-1">{user.data?.company?.name}</p>
           </div>
 
           <SideBarMenu />

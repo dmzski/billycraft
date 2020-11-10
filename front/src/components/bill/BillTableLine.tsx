@@ -1,6 +1,7 @@
 import { format, parse, parseJSON, toDate } from "date-fns";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
+import { useParams } from "react-router-dom";
 import { BILL_STATUS } from "../../constants/bill";
 import BillModal from "../../containers/modals/BillModal";
 import { BillGraphQL } from "../../graphql/BillGraphQL";
@@ -14,6 +15,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const queryCache = useQueryCache();
   const toast = useToast();
+  const { id } = useParams<any>();
 
   const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(BillGraphQL.updateBillStatus, {
     onSuccess: () => {
@@ -38,6 +40,12 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
   const editBill = (e: any) => {
     setIsModalOpen(true);
   };
+
+  React.useEffect(() => {
+    if (bill && id === bill.id) {
+      setIsModalOpen(true);
+    }
+  }, [id, bill]);
 
   const getStatus = React.useMemo(() => {
     const status = Object.values(BILL_STATUS).find((s) => s.enum === bill.status);

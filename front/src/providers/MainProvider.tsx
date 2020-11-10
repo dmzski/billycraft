@@ -28,7 +28,9 @@ const MainProvider: React.FC<any> = ({ children }) => {
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
       <ReactKeycloakProvider onTokens={onKeycloakTokens} initOptions={keycloakProviderInitConfig} authClient={keycloak}>
-        <ToastProvider>{isConnected ? <UserProvider>{children}</UserProvider> : <div>Chargement</div>}</ToastProvider>
+        <ToastProvider>
+          <UserProvider>{children}</UserProvider>
+        </ToastProvider>
       </ReactKeycloakProvider>
     </ReactQueryCacheProvider>
   );

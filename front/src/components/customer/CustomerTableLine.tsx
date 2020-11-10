@@ -1,17 +1,24 @@
 import { format } from "date-fns";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "../../routes";
 import Modal from "react-modal";
 import CustomerForm from "../../containers/forms/CustomerForm";
 
 const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const { id } = useParams<any>();
 
   const editCustomer = (e: any) => {
     e.stopPropagation();
     setIsOpen(true);
   };
+
+  React.useEffect(() => {
+    if (customer && id === customer.id) {
+      setIsOpen(true);
+    }
+  }, [id, customer]);
 
   return (
     <tr className="quote-table-line hover " onClick={editCustomer}>

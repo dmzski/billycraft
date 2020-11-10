@@ -7,6 +7,7 @@ import { Quote } from "../models/Quote";
 import { filterQuotes, sortQuotes } from "../utils/quote";
 import QuoteModal from "../containers/modals/QuoteModal";
 import QuoteFilterContainer from "../containers/QuoteFilterContainer";
+import { useParams } from "react-router-dom";
 
 const QuotePage = () => {
   const [selected, setSelected] = React.useState<number[]>([]);

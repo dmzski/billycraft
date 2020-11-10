@@ -18,8 +18,8 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
   const [updateCompanyMutation, updateCompanyMutationState] = useMutation(CompanyGraphQL.createOrUpdateMyCompany, {
     onSuccess: (data) => {
       toast.show({ message: "Enregistrement effectué", variant: "success" });
-      queryCache.setQueryData("my-company", data);
       queryCache.invalidateQueries("my-information");
+      queryCache.invalidateQueries("my-company");
     },
   });
 
@@ -77,13 +77,17 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
       <BaseInput divClassName="pt-2 w-full" placeholder="Téléphone" value={company.phoneNumber} onChange={inputChange("phoneNumber")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="Email" value={company.email} onChange={inputChange("email")} />
       <BaseInput divClassName="pt-2 w-full" placeholder="SIRET" value={company.siret} onChange={inputChange("siret")} />
-      <div className="flex w-full pt-2">
-        <BaseInput divClassName=" w-4/5" placeholder="URL du logo" value={company.logo} onChange={inputChange("logo")} />
-        <button className="w-1/5 button secondary ml-2" type="button" onClick={selectFileToUpload} disabled={uploadLogoState.isLoading}>
-          Télécharger une image
-        </button>
-        <input ref={fileInputRef} type="file" name="logo-upload" style={{ display: "none" }} onChange={uploadLogo} />
-      </div>
+      {company.id ? (
+        <div className="flex w-full pt-2">
+          <BaseInput divClassName=" w-4/5" placeholder="URL du logo" value={company.logo} onChange={inputChange("logo")} />
+          <button className="w-1/5 button secondary ml-2" type="button" onClick={selectFileToUpload} disabled={uploadLogoState.isLoading}>
+            Télécharger une image
+          </button>
+          <input ref={fileInputRef} type="file" name="logo-upload" style={{ display: "none" }} onChange={uploadLogo} />
+        </div>
+      ) : (
+        <div className="pt-2">Vous pourrez télécharger votre logo après la création de l'entreprise dans vos paramètres</div>
+      )}
       <button className="w-full primary mt-5" onClick={onSubmit}>
         Enregister
       </button>

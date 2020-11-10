@@ -1,6 +1,7 @@
 import { format, parse, parseJSON, toDate } from "date-fns";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
+import { useParams } from "react-router-dom";
 import { QUOTE_STATUS } from "../../constants/quote";
 import QuoteModal from "../../containers/modals/QuoteModal";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
@@ -14,6 +15,7 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const queryCache = useQueryCache();
   const toast = useToast();
+  const { id } = useParams<any>();
 
   const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(QuoteGraphQL.updateQuoteStatus, {
     onSuccess: () => {
@@ -38,6 +40,12 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
   const editQuote = (e: any) => {
     setIsModalOpen(true);
   };
+
+  React.useEffect(() => {
+    if (quote && id === quote.id) {
+      setIsModalOpen(true);
+    }
+  }, [id, quote]);
 
   const getStatus = React.useMemo(() => {
     const status = Object.values(QUOTE_STATUS).find((s) => s.enum === quote.status);

@@ -24,6 +24,7 @@ const Dashboard = () => {
       document.getElementById("news")!.innerHTML = newsQuery.data;
     }
   }, [newsQuery.data]);
+
   return (
     <Layout>
       <div className="flex justify-center items-center">

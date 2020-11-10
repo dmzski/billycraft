@@ -18,6 +18,7 @@ import Modal from "react-modal";
 import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Onboarding from "./pages/Onboarding";
 import BillPage from "./pages/Bill";
+import PrivateSwitch from "./containers/PrivateSwitch";
 
 Modal.setAppElement("#modal");
 
@@ -25,19 +26,7 @@ function App() {
   return (
     <BrowserRouter>
       <MainProvider>
-        <Switch>
-          <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
-          <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />
-          <Route path={ROUTES.BILLS.path} exact={ROUTES.BILLS.exact} component={BillPage} />
-          <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
-          <Route path={ROUTES.CUSTOMERS.path} exact={ROUTES.CUSTOMERS.exact} component={Customer} />
-          <Route path={ROUTES.CUSTOMER_FORM.path} component={CustomerForm} />
-          <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
-          <Route path={ROUTES.ONBOARDING_COMPANY.path} component={Onboarding} />
-          <Route>
-            <Redirect to={ROUTES.DASHBOARD.path} />
-          </Route>
-        </Switch>
+        <PrivateSwitch />
       </MainProvider>
     </BrowserRouter>
     // <div className="App">
