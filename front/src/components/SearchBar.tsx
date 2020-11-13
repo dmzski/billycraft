@@ -15,7 +15,7 @@ const SearchBar = () => {
     setSearch(e.target.value);
   };
 
-  const handleOptionClick = (option: any, header: any, event: any) => {
+  const handleOptionClick = (event: any, option: any, header?: any) => {
     switch (header) {
       case "QUOTE":
         history.push(ROUTES.QUOTES.path + "/" + option.id);
@@ -42,6 +42,7 @@ const SearchBar = () => {
         value={search}
         onChange={handleChange}
         onClickOption={handleOptionClick}
+        className="search-input"
       />
     </div>
   );

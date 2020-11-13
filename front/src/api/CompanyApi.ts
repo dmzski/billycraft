@@ -12,7 +12,6 @@ export const CompanyApi = {
     });
     let promise = query
       .then((res: any) => {
-        console.log("Response", res);
         if (res.status === 200) {
           return res.text();
         } else {

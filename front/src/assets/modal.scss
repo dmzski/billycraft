@@ -1,0 +1,39 @@
+.custom-modal-overlay {
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+.custom-modal-overlay .opened {
+    overflow: auto;
+}
+
+.custom-modal-container {
+    overflow-x: visible;
+    background-color: var(--color-bg);
+    position: absolute;
+    top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 7px;
+    transition: transform 200ms linear;
+
+    &.hide {
+        transform: translateY(100vh);
+    }
+
+    &.open {
+        transform: translateY(0%);
+    }
+}

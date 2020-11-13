@@ -38,7 +38,7 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
   };
 
   const editQuote = (e: any) => {
-    setIsModalOpen(true);
+    setIsModalOpen(!isModalOpen);
   };
 
   React.useEffect(() => {
@@ -142,9 +142,6 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
       <QuoteModal
         quote={quote}
         onRequestClose={(e: any) => {
-          if (e) {
-            e.stopPropagation();
-          }
           setIsModalOpen(false);
         }}
         isOpen={isModalOpen}

@@ -23,7 +23,7 @@ const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
       <thead>
         <tr>
           <th className="w-2 px-2 py-2">Type</th>
-          <th className="px-2 py-2">Description</th>
+          <th className="px-2 py-2 text-left">Description</th>
           <th className="w-1/12 px-2 py-2">Quantité</th>
           <th className="w-1/12 px-2 py-2">Prix H.T</th>
           <th className="w-1/12 px-2 py-2">Prix TTC</th>

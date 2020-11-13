@@ -1,10 +1,42 @@
 import React from "react";
 import Loader from "../Loader";
 
-const SelectInput: React.FC<any> = ({ id, data, isLoading, value, onChange, isError, onClickOption, defaultOpen }) => {
+type SelectInputProps = {
+  id: string;
+  data?: any;
+  isLoading?: boolean;
+  value: string;
+  onChange: (e: any) => any;
+  isError?: boolean;
+  onClickOption: (event: any, value: any, header?: any) => any;
+  defaultOpen?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
+};
+const SelectInput: React.FC<SelectInputProps> = ({
+  id,
+  data,
+  isLoading,
+  value,
+  onChange,
+  isError,
+  onClickOption,
+  defaultOpen,
+  disabled,
+  placeholder = "Rechercher",
+  className,
+}) => {
   let currentId = 0;
   const [focused, setFocused] = React.useState<any>(null);
   const [open, setOpen] = React.useState<any>(defaultOpen);
+
+  const handleClickOption = (event: any, option: any, header?: any) => {
+    onClickOption(event, option, header);
+    setTimeout(() => {
+      setOpen(false);
+    }, 100);
+  };
 
   React.useEffect(() => {
     function moveFocus(n: number) {
@@ -68,13 +100,25 @@ const SelectInput: React.FC<any> = ({ id, data, isLoading, value, onChange, isEr
         setOpen(true);
       }
     };
+
+    const handleFocusLeave = (e: any) => {
+      setOpen(false);
+    };
+    const preventHandleFocusLeave = (e: any) => {
+      if (e.target.id === id || e.target.id === id + "-result") {
+        e.stopPropagation();
+      }
+    };
+    document.addEventListener("click", handleFocusLeave);
     searchInput?.addEventListener("focus", handleFocus);
-    if (data || isLoading || isError) {
-      setOpen(true);
-    }
+    searchInput?.addEventListener("click", preventHandleFocusLeave);
+    document.getElementById(id + "-result")?.addEventListener("click", preventHandleFocusLeave);
 
     return () => {
       if (searchInput) searchInput.removeEventListener("focus", handleFocus);
+      document.getElementById(id + "-result")?.removeEventListener("click", preventHandleFocusLeave);
+      searchInput?.removeEventListener("click", preventHandleFocusLeave);
+      document.removeEventListener("click", handleFocusLeave);
     };
   }, [data, isLoading, isError, id]);
 
@@ -84,7 +128,7 @@ const SelectInput: React.FC<any> = ({ id, data, isLoading, value, onChange, isEr
         key={value.id}
         id={id + "-option-" + currentId++}
         className="py-2 px-2 hover:bg-primary-200 cursor-pointer"
-        onClick={(e: any) => onClickOption(value, header, e)}
+        onClick={(e: any) => handleClickOption(e, value, header)}
       >
         {value.id} - {value.description}
       </li>
@@ -92,12 +136,12 @@ const SelectInput: React.FC<any> = ({ id, data, isLoading, value, onChange, isEr
   };
 
   return (
-    <div>
-      <input id={id} className="search-input" placeholder="Rechercher" type="text" value={value} onChange={onChange} />
-      {open && value.length > 0 && (
+    <div className="relative">
+      <input disabled={disabled} id={id} className={className || "select-input"} placeholder={placeholder} type="text" value={value} onChange={onChange} />
+      {open && value && value.length > 0 && !disabled && (
         <div
           style={{ top: "100%" }}
-          id="search-result"
+          id={id + "-result"}
           className=" flex flex-col justify-center items-center border border-gray-200 absolute w-full bg-white shadow-md rounded-md"
         >
           {isLoading && <Loader />}

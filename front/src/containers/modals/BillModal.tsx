@@ -8,6 +8,7 @@ import { Bill } from "../../models/Bill";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import BillForm from "../forms/BillForm";
+import CustomModal from "./CustomModal";
 
 const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
   const [newBill, setNewBill] = React.useState<Bill>(new Bill());
@@ -80,7 +81,7 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
   }, [bill, isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal" overlayClassName="modal-overlay" style={{ content: { minWidth: "80%" } }}>
+    <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newBill.id ? "Nouvelle " : "Modifier une "}facture</h1>
         {bill && bill.id && (
@@ -96,7 +97,7 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
         disabled={createOrUpdateBillMutationState.isLoading || updateBillStatusMutationState.isLoading}
         onUpdateStatus={updateBillStatus}
       />
-    </Modal>
+    </CustomModal>
   );
 };
 

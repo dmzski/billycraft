@@ -3,6 +3,9 @@
 @import "./colors.scss";
 @import "./text.scss";
 
+@import "./layout.scss";
+@import "./modal.scss";
+
 @import "./loader.scss";
 @import "./button.scss";
 @import "./quote.scss";
@@ -10,6 +13,30 @@
 @import "./toast.scss";
 @import "./input.scss";
 @import "./switch.scss";
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px grey;
+  background-color: white;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $default;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: darken($default, 1);
+}
+
 
 *:focus {
   outline: none;

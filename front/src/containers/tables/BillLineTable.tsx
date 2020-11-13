@@ -22,12 +22,13 @@ const BillLineTable: React.FC<any> = ({ bill, setBill, disabled }) => {
     <table className="table-fixed bill-table w-auto">
       <thead>
         <tr>
-          <th className="w-1/3 px-4 py-2">Description</th>
-          <th className="w-1/6 px-4 py-2">Quantité</th>
-          <th className="w-1/6 px-4 py-2">Prix H.T</th>
-          <th className="w-1/6 px-4 py-2">Prix TTC</th>
-          <th className="w-1/6 px-4 py-2">Sous Total</th>
-          <th className="w-1/12 px-4 py-2"></th>
+          <th className="w-2 px-2 py-2">Type</th>
+          <th className="px-2 py-2 text-left">Description</th>
+          <th className="w-1/12 px-2 py-2">Quantité</th>
+          <th className="w-1/12 px-2 py-2">Prix H.T</th>
+          <th className="w-1/12 px-2 py-2">Prix TTC</th>
+          <th className="w-1/12 px-2 py-2">Sous Total</th>
+          <th className="w-5 px-4 py-2"></th>
         </tr>
       </thead>
       <tbody>

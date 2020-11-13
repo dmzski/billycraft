@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class BillService {
@@ -29,7 +31,11 @@ public class BillService {
     public Bill createBill(String username, Bill bill) {
         User user = (User) User.findByIdOptional(username).orElseThrow();
         bill.customer = Customer.findById(bill.customer.id);
-        bill.lines.forEach(billLine -> billLine.bill = bill);
+        AtomicInteger index = new AtomicInteger();
+        bill.lines.forEach(billLine -> {
+            billLine.line = index.getAndIncrement();
+            billLine.bill = bill;
+        });
         bill.status = BillStatusEnum.DRAFT;
         bill.companyId = user.company.id;
         bill.createdBy = username;
@@ -66,8 +72,12 @@ public class BillService {
         bill.lines.clear();
         bill.persistAndFlush();
 
-        bill.lines.addAll(newBill.lines);
-        bill.lines.forEach(billLine -> billLine.bill = bill);
+        AtomicInteger index = new AtomicInteger();
+        bill.lines.addAll(newBill.lines.stream().peek(billLine -> {
+            billLine.line = index.getAndIncrement();
+            billLine.bill = bill;
+        }).collect(Collectors.toList()));
+
         bill.persist();
         return bill;
     }

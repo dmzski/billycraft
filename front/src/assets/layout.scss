@@ -1,0 +1,74 @@
+.wave-container {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    height: 500px;
+    z-index: -1;
+
+    .wave {
+        position: absolute;
+        bottom: -27px;
+        right: -157px;
+        width: 500px;
+        transform: rotate(-50deg);
+        height: 300px;
+        // background-color: var(--color-primary);
+        background: url('./img/background.png');
+        background-size: 1000px 400px;
+    }
+
+    .wave0 {
+        animation: animate-wave 60s linear infinite;
+    }
+
+    .wave1 {
+        background-size: 1500px 300px;
+        animation: animate-wave-2 60s infinite ease-in-out;
+    }
+
+    .wave2 {
+        background-size: 1200px 300px;
+        animation: animate-reverse-wave 60s linear infinite;
+    }
+
+    .wave3 {
+        animation: animate-wave 30s linear infinite;
+    }
+
+}
+
+@keyframes animate-wave {
+    0% {
+        background-position-x: 0px;
+    }
+
+    100% {
+        background-position-x: 1000px;
+    }
+}
+
+@keyframes animate-wave {
+    0% {
+        background-position-x: 0px;
+    }
+
+    10% {
+        background-position-x: 800px;
+    }
+
+    50% {
+        background-position-x: 1000px;
+    }
+}
+
+@keyframes animate-reverse-wave {
+    0% {
+        background-position-x: 0px;
+    }
+
+    100% {
+        background-position-x: -1000px;
+    }
+}

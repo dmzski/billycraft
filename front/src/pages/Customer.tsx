@@ -7,6 +7,7 @@ import CustomerTable from "../containers/tables/CustomerTable";
 import { CustomerGraphQL } from "../graphql/CustomerGraphQL";
 import { ROUTES } from "../routes";
 import Modal from "react-modal";
+import CustomModal from "../containers/modals/CustomModal";
 
 const mockData = (nbLine: number) => {
   const array: any[] = [];
@@ -49,9 +50,9 @@ const Customer = () => {
         <CustomerTable data={customersQuery.data} />
         {customersQuery.isLoading && <div>Chargement en cours...</div>}
       </div>
-      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} className="modal" overlayClassName="modal-overlay">
+      <CustomModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} className="modal" overlayClassName="modal-overlay">
         <CustomerForm closeModal={() => setIsOpen(false)} />
-      </Modal>
+      </CustomModal>
     </Layout>
   );
 };

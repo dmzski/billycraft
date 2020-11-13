@@ -8,6 +8,12 @@
     <title>Document</title>
 </head>
 <style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+    }
     table {
         border-collapse: collapse;
     }
@@ -32,8 +38,14 @@
         background-color: #E9E9E9;
     }
     tbody tr td {
+        text-align: left;
+    }
+
+    tbody tr td {
         border-left: 1px solid black;
         border-right: 1px solid black;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     tbody tr:first-child td {
@@ -53,47 +65,34 @@
         width: 100%;
     }
 
-    .footer {
-        position: fixed;
-        bottom: 0mm;
-        left: 5mm;
-        right: 5mm;
-        word-break: break-word;
-        max-width: 230mm;
-        height: 20mm;
-    }
+
 
     @page
     {
         size:  A4;   /* auto is the initial value */
-        margin: 1cm;  /* this affects the margin in the printer settings */
-        margin-bottom: 5cm;  /* this affects the margin in the printer settings */
+        margin: 0.5cm 1cm 3cm 1cm;
+        page-break-after: avoid;
     }
 
     html, body {
         width: 210mm;
-        height: 297mm;
-        margin:0;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
     }
 
     @media print {
-         * {
-            page-break-inside: avoid;
-         }
-
-        html, body {
-            width: 210mm;
-            height: 297mm;
-        }
-
-        body {
-            padding: 0mm;
-        }
+        table { page-break-after:auto; }
+        table tr    { page-break-inside:avoid; page-break-after:auto; }
+        table td    { page-break-inside:avoid; page-break-after:auto; }
+        table thead {  }
+        table tfoot { page-break-inside: avoid; }
     }
 
 </style>
 <body>
-<div style="display: flex; flex-direction: column; width: 100%; justify-content: center; align-items: center;">
         <div class="flex w-full" style="flex-direction: row; justify-content: space-between; height: 100px; margin-bottom: 10px">
             <div>
                 {#if company.logo}
@@ -157,10 +156,10 @@
                 {/if}
                 {#for line in articles}
                     <tr>
-                        <td>{line.description.replaceBreakLineToBr.raw}</td>
-                        <td>{line.quantity.formatNumber}</td>
-                        <td>{line.price.formatCurrency}</td>
-                        <td>{line.subTotal.formatCurrency}</td>
+                        <td style="width: 13cm ">{line.description.replaceBreakLineToBr.raw}</td>
+                        <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
+                        <td style="text-align: center;width: 3cm">{line.price.formatCurrency}</td>
+                        <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
                     </tr>
                 {/for}
                 {#if services.size > 0}
@@ -170,10 +169,10 @@
                 {/if}
                 {#for line in services}
                 <tr>
-                    <td>{line.description.replaceBreakLineToBr.raw}</td>
-                    <td>{line.quantity.formatNumber}</td>
-                    <td>{line.price.formatCurrency}</td>
-                    <td>{line.subTotal.formatCurrency}</td>
+                    <td style="width: 13cm ">{line.description.replaceBreakLineToBr.raw}</td>
+                    <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
+                    <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
+                    <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
                 </tr>
                 {/for}
             </tbody>
@@ -192,7 +191,7 @@
                     <td>{quote.tva} %</td>
                 </tr>
                 {/if}
-                <tr class="background-color: white">
+                <tr class="background-color: white" style="font-weight: bold">
                     <td style="border: none;"></td>
                     <td style="border: none;"></td>
                     <td class="total-header">TOTAL</td>
@@ -200,12 +199,14 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
-        {#if customization.afterTable}
-            <div class="w-full mt-5">
+        <div>
+            {#if customization.afterTable}
+            <div class="w-full">
                 {customization.afterTable.replaceBreakLineToBr.raw}
             </div>
-        {/if}
-</div>
+            {/if}
+        </div>
+
+    </div>
 </body>
 </html>

@@ -19,8 +19,9 @@ import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Onboarding from "./pages/Onboarding";
 import BillPage from "./pages/Bill";
 import PrivateSwitch from "./containers/PrivateSwitch";
+import CustomModal from "./containers/modals/CustomModal";
 
-Modal.setAppElement("#modal");
+Modal.setAppElement("#modal-container");
 
 function App() {
   return (
@@ -28,6 +29,12 @@ function App() {
       <MainProvider>
         <PrivateSwitch />
       </MainProvider>
+      <div className="wave-container">
+        <div className="wave wave0"></div>
+        <div className="wave wave1"></div>
+        <div className="wave wave2"></div>
+        <div className="wave wave3"></div>
+      </div>
     </BrowserRouter>
     // <div className="App">
     //   <header className="App-header">

@@ -6,12 +6,11 @@ import BillLineTable from "../tables/BillLineTable";
 import AutoCompleteInput from "../../components/inputs/AutoCompleteInput";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
+import SelectInput from "../../components/inputs/SelectInput";
 
 const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
-  const customersByNameContainsQuery = useQuery(["customers-by-name-contains", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
-    enabled: customerInputValue.length >= 3,
-  });
+  const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
 
   function inputChange(property: keyof Bill) {
     return (event: any) => {
@@ -29,11 +28,12 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
     };
   }
 
-  function onCustomerOptionClick(option: any) {
+  function onCustomerOptionClick(event: any, option: any) {
     const tmp: any = { ...bill };
     tmp.customer = { id: option.id };
-    setCustomerInputValue(option.name);
+    setCustomerInputValue(option.description);
     setBill(tmp);
+    event.target.blur();
   }
 
   function addLine() {
@@ -52,25 +52,45 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
       return line;
     });
     setBill(tmp);
-    onSubmit(e);
+    if (tmp.customer.id) {
+      onSubmit(e);
+    } else {
+    }
   };
 
   const cantUpdate = React.useMemo(() => {
     return bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
 
+  const getSelectCustomerData = React.useCallback(() => {
+    const array: any[] = [{ header: undefined, values: [] }];
+    if (customersQuery.data) {
+      customersQuery.data.forEach((customer: any) => {
+        array[0].values.push({ id: customer.id + "", description: customer.name });
+      });
+    }
+    return array;
+  }, [customersQuery.data]);
+
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
       <BaseInput disabled={disabled || cantUpdate} label="Titre" placeholder="Titre de la facture" value={bill.title} onChange={inputChange("title")} />
-      <AutoCompleteInput
-        disabled={disabled || cantUpdate}
-        onOptionClick={onCustomerOptionClick}
-        options={customersByNameContainsQuery.data}
-        label="Client"
-        placeholder="Nom du client"
-        value={customerInputValue}
-        onChange={(e: any) => setCustomerInputValue(e.target.value)}
-      />
+      <div className="mt-2">
+        <label htmlFor="customer-select" className="block text-gray-700 text-sm font-bold mb-1 ml-1">
+          Sélectionner un client
+        </label>
+        <SelectInput
+          id="customer-select"
+          isLoading={customersQuery.isLoading}
+          disabled={disabled || cantUpdate}
+          onClickOption={onCustomerOptionClick}
+          data={getSelectCustomerData()}
+          placeholder="Nom du client"
+          value={customerInputValue}
+          onChange={(e: any) => setCustomerInputValue(e.target.value)}
+          className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
+        />
+      </div>
       <BaseInput disabled={disabled || cantUpdate} label="TVA" placeholder="TVA en %" type="numeric" value={bill.tva || ""} onChange={inputChange("tva")} />
       <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
       {!cantUpdate && (
@@ -103,11 +123,6 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
           </>
         )}
         {bill.status === BillStatusEnum.ACCEPTED && (
-          <button type="button" className="primary" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_ASK)}>
-            Paiement demandé
-          </button>
-        )}
-        {bill.status === BillStatusEnum.PAYMENT_ASK && (
           <button type="button" className="primary" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
             Payée
           </button>

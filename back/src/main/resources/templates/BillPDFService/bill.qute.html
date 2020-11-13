@@ -8,6 +8,12 @@
     <title>Document</title>
 </head>
 <style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+    }
     table {
         border-collapse: collapse;
     }
@@ -34,6 +40,9 @@
     tbody tr td {
         border-left: 1px solid black;
         border-right: 1px solid black;
+        text-align: left;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     tbody tr:first-child td {
@@ -53,47 +62,33 @@
         width: 100%;
     }
 
-    .footer {
-        position: fixed;
-        bottom: 5mm;
-        left: 5mm;
-        right: 5mm;
-    }
+
 
     @page
     {
         size:  A4;   /* auto is the initial value */
-        margin: 0;  /* this affects the margin in the printer settings */
+        margin: 0.5cm 1cm 2.5cm 1cm;
+        page-break-after: avoid;
     }
 
     html, body {
         width: 210mm;
-        height: 297mm;
-        margin:0;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
     }
 
     @media print {
-
-
-         p {
-            page-break-inside: avoid;
-        }
-
-        html, body {
-            width: 210mm;
-            height: 297mm;
-            margin:0;
-            padding: 0;
-        }
-
-        body {
-            padding: 15mm 15mm 15mm 15mm;
-        }
+        table { page-break-after:auto; }
+        table tr    { page-break-inside:avoid; page-break-after:auto; }
+        table td    { page-break-inside:avoid; page-break-after:auto; }
+        table thead {  }
+        table tfoot { page-break-inside: avoid; }
     }
 
 </style>
 <body>
-<div style="display: flex; flex-direction: column; width: 100%; justify-content: center; align-items: center;">
         <div class="flex w-full" style="flex-direction: row; justify-content: space-between; height: 100px; margin-bottom: 10px">
             <div>
                 {#if company.logo}
@@ -159,8 +154,8 @@
             <tr>
                 <td>{line.description.replaceBreakLineToBr.raw}</td>
                 <td>{line.quantity.formatNumber}</td>
-                <td>{line.price.formatNumber} €</td>
-                <td>{line.subTotal.formatNumber} €</td>
+                <td>{line.price.formatCurrency}</td>
+                <td>{line.subTotal.formatCurrency}</td>
             </tr>
             {/for}
             {#if services.size > 0}
@@ -200,12 +195,14 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
-        {#if customization.afterTable}
+        <div>
+            {#if customization.afterTable}
             <div class="w-full">
                 {customization.afterTable.replaceBreakLineToBr.raw}
             </div>
-        {/if}
-</div>
+            {/if}
+        </div>
+
+    </div>
 </body>
 </html>

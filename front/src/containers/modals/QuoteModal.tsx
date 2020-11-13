@@ -11,6 +11,7 @@ import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { ROUTES } from "../../routes";
 import QuoteForm from "../forms/QuoteForm";
+import CustomModal from "./CustomModal";
 
 const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   const [newQuote, setNewQuote] = React.useState<Quote>(new Quote());
@@ -103,7 +104,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   }, [quote, isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="modal" overlayClassName="modal-overlay" style={{ content: { minWidth: "80%" } }}>
+    <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
         {quote && quote.status === QuoteStatusEnum.ACCEPTED && quote.id && (
@@ -129,7 +130,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
         disabled={createOrUpdateQuoteMutationState.isLoading || updateQuoteStatusMutationState.isLoading}
         onUpdateStatus={updateQuoteStatus}
       />
-    </Modal>
+    </CustomModal>
   );
 };
 

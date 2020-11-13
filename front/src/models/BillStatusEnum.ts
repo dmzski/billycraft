@@ -3,7 +3,6 @@ export enum BillStatusEnum {
   SENT = "SENT",
   ACCEPTED = "ACCEPTED",
   REFUSED = "REFUSED",
-  PAYMENT_ASK = "PAYMENT_ASK",
   PAYMENT_PAID = "PAYMENT_PAID",
   ARCHIVED = "ARCHIVED",
 }

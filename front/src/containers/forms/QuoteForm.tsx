@@ -7,12 +7,12 @@ import QuoteLineTable from "../tables/QuoteLineTable";
 import AutoCompleteInput from "../../components/inputs/AutoCompleteInput";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
+import SelectInput from "../../components/inputs/SelectInput";
 
 const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
-  const customersByNameContainsQuery = useQuery(["customers-by-name-contains", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
-    enabled: customerInputValue.length >= 3,
-  });
+  const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
+  const lineTableRef = React.useRef<any>(null);
 
   function inputChange(property: keyof Quote) {
     return (event: any) => {
@@ -30,20 +30,24 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
     };
   }
 
-  function onCustomerOptionClick(option: any) {
+  function onCustomerOptionClick(event: any, option: any) {
     const tmp: any = { ...quote };
     tmp.customer = { id: option.id };
-    setCustomerInputValue(option.name);
+    setCustomerInputValue(option.description);
     setQuote(tmp);
   }
 
-  function addLine() {
+  const addLine = React.useCallback(() => {
     const tmp = { ...quote };
     const newLine = new QuoteLine();
-    newLine.line = tmp.lines.length + 1;
+    newLine.line = -1 * tmp.lines.length + 1;
     tmp.lines.push(newLine);
     setQuote(tmp);
-  }
+    setTimeout(() => {
+      console.log(document.getElementById(newLine.line + "-select"));
+      document.getElementById(newLine.line + "-select")?.focus();
+    }, 200);
+  }, [setQuote, quote]);
 
   const beforeOnSubmit = (e: any) => {
     const tmp = { ...quote };
@@ -53,34 +57,80 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
       return line;
     });
     setQuote(tmp);
-    onSubmit(e);
+    if (tmp.customer.id) {
+      onSubmit(e);
+    } else {
+    }
   };
 
   const cantUpdate = React.useMemo(() => {
     return quote.status !== QuoteStatusEnum.DRAFT;
   }, [quote]);
 
+  const getSelectCustomerData = React.useCallback(() => {
+    const array: any[] = [{ header: undefined, values: [] }];
+    if (customersQuery.data) {
+      customersQuery.data.forEach((customer: any) => {
+        array[0].values.push({ id: customer.id + "", description: customer.name });
+      });
+    }
+    return array;
+  }, [customersQuery.data]);
+
+  React.useEffect(() => {
+    const el = lineTableRef.current;
+    function handleCtrlEnter(e: KeyboardEvent) {
+      if (e.ctrlKey && e.key === "Enter" && !cantUpdate) {
+        addLine();
+      }
+    }
+    if (el) {
+      el.addEventListener("keydown", handleCtrlEnter);
+    }
+    return () => {
+      if (el) {
+        el.removeEventListener("keydown", handleCtrlEnter);
+      }
+    };
+  }, [lineTableRef, cantUpdate, addLine]);
+
   return (
     <form className="quote-form" onSubmit={beforeOnSubmit}>
       <BaseInput disabled={disabled || cantUpdate} label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
-      <AutoCompleteInput
+      <div className="mt-2">
+        <label htmlFor="customer-select" className="block text-gray-700 text-sm font-bold mb-1 ml-1">
+          Sélectionner un client
+        </label>
+        <SelectInput
+          id="customer-select"
+          disabled={disabled || cantUpdate}
+          onClickOption={onCustomerOptionClick}
+          data={getSelectCustomerData()}
+          placeholder="Nom du client"
+          value={customerInputValue}
+          onChange={(e: any) => setCustomerInputValue(e.target.value)}
+          className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <BaseInput
+        divClassName="mt-2"
         disabled={disabled || cantUpdate}
-        onOptionClick={onCustomerOptionClick}
-        options={customersByNameContainsQuery.data}
-        label="Client"
-        placeholder="Nom du client"
-        value={customerInputValue}
-        onChange={(e: any) => setCustomerInputValue(e.target.value)}
+        label="TVA"
+        placeholder="TVA en %"
+        type="numeric"
+        value={quote.tva || ""}
+        onChange={inputChange("tva")}
       />
-      <BaseInput disabled={disabled || cantUpdate} label="TVA" placeholder="TVA en %" type="numeric" value={quote.tva || ""} onChange={inputChange("tva")} />
-      <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
-      {!cantUpdate && (
-        <div className="flex">
-          <button type="button" className="button transparent w-full" onClick={addLine} disabled={disabled}>
-            Ajouter une ligne
-          </button>
-        </div>
-      )}
+      <div ref={lineTableRef}>
+        <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
+        {!cantUpdate && (
+          <div className="flex">
+            <button type="button" className="button transparent w-full focus:shadow-outline" onClick={addLine} disabled={disabled}>
+              Ajouter une ligne
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="flex pt-3 flex-row-reverse">
         {(!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status) && (

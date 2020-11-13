@@ -7,9 +7,10 @@ import com.dorianmaliszewski.back.models.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class QuoteService {
@@ -30,7 +31,11 @@ public class QuoteService {
     public Quote createQuote(String username, Quote quote) {
         User user = (User) User.findByIdOptional(username).orElseThrow();
         quote.customer = Customer.findById(quote.customer.id);
-        quote.lines.forEach(quoteLine -> quoteLine.quote = quote);
+        AtomicInteger index = new AtomicInteger();
+        quote.lines.forEach(quoteLine -> {
+            quoteLine.line = index.getAndIncrement();
+            quoteLine.quote = quote;
+        });
         quote.status = StatusEnum.DRAFT;
         quote.companyId = user.company.id;
         quote.createdBy = username;
@@ -46,8 +51,12 @@ public class QuoteService {
         quote.tva = newQuote.tva;
         quote.lines.clear();
         quote.persistAndFlush();
-        quote.lines.addAll(newQuote.lines);
-        quote.lines.forEach(quoteLine -> quoteLine.quote = quote);
+        AtomicInteger index = new AtomicInteger();
+        quote.lines.addAll(newQuote.lines.stream().peek(quoteLine -> {
+                quoteLine.line = index.getAndIncrement();
+                quoteLine.quote = quote;
+                }).collect(Collectors.toList())
+        );
         quote.persist();
         return quote;
     }

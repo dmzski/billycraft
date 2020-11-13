@@ -43,7 +43,6 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
   };
 
   const uploadLogo = async (e: any) => {
-    console.log(e.target.value);
     try {
       if (!uploadLogoState.isLoading) {
         uploadLogoState.update("loading");
