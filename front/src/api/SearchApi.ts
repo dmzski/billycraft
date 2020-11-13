@@ -4,7 +4,7 @@ import { HttpClient } from "./HttpClient";
 export const SEARCH_URL = API_URL + "/search";
 
 export const SearchApi = {
-  searchAll: async (search: String) => {
+  searchAll: async (_: any, search: String) => {
     const { query, abort } = HttpClient.GET(`${SEARCH_URL}/all?query=${search}`);
     let promise = query.then((res: any) => {
       if (res.status === 200) {

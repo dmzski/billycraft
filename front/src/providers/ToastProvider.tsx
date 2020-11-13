@@ -35,14 +35,16 @@ const ToastProvider: React.FC<any> = ({ children, duration = 5000, horizontal = 
 
   const onCloseToast = () => {
     if (nextToast) {
-      nextToast.open = false;
+      setNextToast({ ...nextToast, open: false });
       if (nextToast.callback) nextToast.callback();
     }
-    if (toasts.length > 0) {
-      setNextToast(toasts.shift());
-    } else {
-      setNextToast(undefined);
-    }
+    setTimeout(() => {
+      if (toasts.length > 0) {
+        setNextToast(toasts.shift());
+      } else {
+        setNextToast(undefined);
+      }
+    }, 1000);
   };
 
   React.useEffect(() => {

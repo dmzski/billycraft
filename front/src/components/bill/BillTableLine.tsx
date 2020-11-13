@@ -72,13 +72,10 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
     const array = [];
     switch (bill.status) {
       case BillStatusEnum.SENT:
-        array.push(BILL_STATUS.ACCEPTED, BILL_STATUS.REFUSED, BILL_STATUS.PAYMENT_PAID, BILL_STATUS.ARCHIVED);
+        array.push(BILL_STATUS.REFUSED, BILL_STATUS.PAYMENT_PAID, BILL_STATUS.ARCHIVED);
         break;
       case BillStatusEnum.REFUSED:
         array.push(BILL_STATUS.DRAFT, BILL_STATUS.ARCHIVED);
-        break;
-      case BillStatusEnum.ACCEPTED:
-        array.push(BILL_STATUS.PAYMENT_PAID, BILL_STATUS.ARCHIVED);
         break;
       case BillStatusEnum.PAYMENT_PAID:
         array.push(BILL_STATUS.ARCHIVED);

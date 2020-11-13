@@ -5,6 +5,7 @@ import com.dorianmaliszewski.back.services.ProductService;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
+import org.eclipse.microprofile.graphql.Mutation;
 import org.eclipse.microprofile.graphql.Query;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
@@ -30,8 +31,15 @@ public class ProductGraphQL {
 
     @Query("getAllProductsContains")
     @Description("Get all products that contains the string")
-    public List<Product> getAllProductsContains(String query) {
-        return this.productService.findAllOfMyCompanyContains(username, query);
+    public List<Product> getAllProductsContains(String search) {
+        return this.productService.findAllOfMyCompanyContains(username, search);
+    }
+
+
+    @Mutation("saveProduct")
+    @Description("Create or update a product (same description)")
+    public Product saveProduct(Product product) {
+        return this.productService.saveProduct(username, product);
     }
 
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-const MultiLineInput: React.FC<any> = ({ className, value, onChange, placeholder, wrap, disabled }) => {
+const MultiLineInput: React.FC<any> = ({ className, value, onChange, placeholder, wrap, disabled, style, maxLength }) => {
   const textAreaRef = React.useRef<any>(null);
   React.useEffect(() => {
     function resize() {
@@ -40,9 +40,9 @@ const MultiLineInput: React.FC<any> = ({ className, value, onChange, placeholder
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      style={{ resize: "none" }}
+      style={{ ...style, resize: "none" }}
       wrap={wrap}
-      maxLength={255}
+      maxLength={maxLength || 255}
       disabled={disabled}
       rows={1}
     ></textarea>

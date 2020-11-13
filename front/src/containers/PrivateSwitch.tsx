@@ -12,11 +12,13 @@ import CustomerForm from "../pages/CustomerForm";
 import Settings from "../pages/Settings";
 import Onboarding from "../pages/Onboarding";
 import Loader from "../components/Loader";
+import { useToast } from "../providers/ToastProvider";
 
 const PrivateSwitch = () => {
   const user = useUser();
   const { keycloak } = useKeycloak();
   const history = useHistory();
+  const toast = useToast();
 
   React.useEffect(() => {
     if (user.data && keycloak.authenticated) {

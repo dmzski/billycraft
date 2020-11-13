@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "../../routes";
 import Modal from "react-modal";
 import CustomerForm from "../../containers/forms/CustomerForm";
+import CustomerModal from "../../containers/modals/CustomerModal";
 
 const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -29,18 +30,14 @@ const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
       <td className="text-center">{customer.contact}</td>
       <td className="text-center">{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</td>
       <td className="text-center">{customer.email}</td>
-      <Modal
-        className="modal"
-        overlayClassName="modal-overlay"
+      <CustomerModal
         isOpen={modalIsOpen}
         onRequestClose={(e: any) => {
-          e.stopPropagation();
+          if (e) e.stopPropagation();
           setIsOpen(false);
         }}
-        contentLabel="Example Modal"
-      >
-        <CustomerForm customer={customer} closeModal={() => setIsOpen(false)} />
-      </Modal>
+        customer={customer}
+      />
     </tr>
   );
 };

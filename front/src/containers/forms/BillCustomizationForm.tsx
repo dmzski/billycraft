@@ -5,6 +5,7 @@ import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useMutation } from "react-query";
 import BaseInput from "../../components/inputs/BaseInput";
+import MultiLineInput from "../../components/inputs/MultiLineInput";
 import SwitchInput from "../../components/inputs/SwitchInput";
 import { BillCustomizationGraphQL } from "../../graphql/BillCustomizationGraphQL";
 import { useToast } from "../../providers/ToastProvider";
@@ -100,20 +101,24 @@ const BillCustomizationForm: React.FC<any> = ({ billCustomization }) => {
       </div>
       <div className="mt-3">
         <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">Après le tableau</h1>
-        <Editor
-          editorStyle={{ borderBottom: "1px solid black" }}
+        <MultiLineInput
+          style={{ borderBottom: "1px solid black" }}
           placeholder="En dessous du tableau"
-          editorState={afterTableEditor}
-          onEditorStateChange={editorChange(setAfterTableEditor, "afterTable")}
+          value={newBillCustomization.afterTable}
+          className="w-full"
+          maxLength={1000}
+          onChange={(e: any) => setNewBillCustomization({ ...newBillCustomization, afterTable: e.target.value })}
         />
       </div>
       <div className="mt-2">
         <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">Pied de page</h1>
-        <Editor
-          editorStyle={{ borderBottom: "1px solid black" }}
+        <MultiLineInput
+          className="w-full"
+          style={{ borderBottom: "1px solid black" }}
           placeholder="Pied de page"
-          editorState={footerEditor}
-          onEditorStateChange={editorChange(setFooterEditor, "footer")}
+          value={newBillCustomization.footer}
+          maxLength={1000}
+          onChange={(e: any) => setNewBillCustomization({ ...newBillCustomization, footer: e.target.value })}
         />
       </div>
       <button className="w-full primary mt-5" onClick={onSubmit}>

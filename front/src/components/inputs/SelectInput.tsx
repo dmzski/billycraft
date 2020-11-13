@@ -49,6 +49,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
         const nextFocus = document.getElementById(nextId);
         if (nextFocus) {
           setFocused(nextFocus);
+        } else {
+          setFocused(document.getElementById(id + "-option-0"));
         }
       }
     }

@@ -21,10 +21,10 @@ public class SearchService {
         List<SearchDTO> dtos = new ArrayList<>();
 
         Company company = (Company) Company.find("id = (SELECT u.company.id from User u WHERE u.email = ?1)", username).firstResultOptional().orElseThrow();
-
-        List<Quote> quotes = Quote.list("company_id = ?1", company.id);
-        List<Customer> customers = Customer.list("company_id = ?1", company.id);
-        List<Bill> bills = Bill.list("company_id = ?1", company.id);
+        String normalizedQuery = "%" + query.toLowerCase().replaceAll(" ", "") + "%";
+        List<Quote> quotes = Quote.list("company_id = ?1 AND (translate(lower(title), ' ', '') LIKE ?2 OR lower(id) LIKE ?2)", company.id, normalizedQuery);
+        List<Customer> customers = Customer.list("company_id = ?1 AND (translate(lower(name), ' ', '') LIKE ?2 OR cast(id as string) LIKE ?2)", company.id, normalizedQuery);
+        List<Bill> bills = Bill.list("company_id = ?1 AND (translate(lower(title), ' ', '') LIKE ?2 OR lower(id) LIKE ?2)", company.id, normalizedQuery);
 
         if (bills.size() > 0) {
             dtos.add(new SearchDTO(SearchCategoryEnum.BILL, bills.stream().map(bill -> new SearchResultDTO(bill.id, bill.title)).collect(Collectors.toList())));

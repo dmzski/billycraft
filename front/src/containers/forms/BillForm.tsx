@@ -114,18 +114,13 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
         )}
         {bill.status === BillStatusEnum.SENT && (
           <>
-            <button type="button" className="button success ml-3" onClick={onUpdateStatus(BillStatusEnum.ACCEPTED)}>
-              Facture accepté
+            <button type="button" className="button success ml-3" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
+              Facture payée
             </button>
             <button type="button" className="button error" onClick={onUpdateStatus(BillStatusEnum.REFUSED)}>
-              Facture refusé
+              Facture refusée
             </button>
           </>
-        )}
-        {bill.status === BillStatusEnum.ACCEPTED && (
-          <button type="button" className="primary" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
-            Payée
-          </button>
         )}
         {bill.status === BillStatusEnum.PAYMENT_PAID && (
           <button type="button" className="primary" onClick={onUpdateStatus(BillStatusEnum.ARCHIVED)}>
