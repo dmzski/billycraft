@@ -21,7 +21,7 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
   const toast = useToast();
   const productsContainDescription = useQuery(["products-contain", line.description], ProductGraphQL.getAllProductsContains, {
     refetchOnWindowFocus: false,
-    enabled: line.description && line.description.length > 3,
+    enabled: line.description && line.description.length >= 3,
     keepPreviousData: true,
   });
   const [productOptions, setProductOptions] = React.useState([]);

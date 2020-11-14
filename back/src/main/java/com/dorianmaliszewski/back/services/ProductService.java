@@ -43,5 +43,11 @@ public class ProductService {
             return product;
         }
     }
+
+    @Transactional
+    public boolean deleteProduct(String username, Long id) {
+        Product.find("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) AND id = ?2", username, id).singleResultOptional().ifPresent(PanacheEntityBase::delete);
+        return true;
+    }
 }
 

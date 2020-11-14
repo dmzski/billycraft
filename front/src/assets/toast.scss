@@ -14,7 +14,7 @@
 }
 
 .toast {
-    transition: transform 1s ease-in-out;
+    transition: transform 200ms ease-in-out;
     width: 100%;
     @extend .p-3,
     .rounded-lg,

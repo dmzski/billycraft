@@ -18,7 +18,7 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
   const toast = useToast();
   const productsContainDescription = useQuery(["products-contain", line.description], ProductGraphQL.getAllProductsContains, {
     refetchOnWindowFocus: false,
-    enabled: line.description && line.description.length > 3,
+    enabled: line.description && line.description.length >= 3,
     keepPreviousData: true,
   });
   const [productOptions, setProductOptions] = React.useState([]);
@@ -37,7 +37,7 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
     switch (field) {
       case "price":
       case "quantity":
-        value = parseFloat(e.target.value);
+        value = parseFloat(e.target.value) || e.target.value;
         break;
       default:
         value = e.target.value;

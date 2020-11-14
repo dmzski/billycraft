@@ -8,10 +8,7 @@ import org.eclipse.microprofile.jwt.Claims;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -39,5 +36,12 @@ public class ProductRessource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Product> getAllProductsContains(@QueryParam("q") String query) {
         return this.productService.findAllOfMyCompanyContains(username, query);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean deleteProduct(@PathParam("id") Long id) {
+        return this.productService.deleteProduct(username, id);
     }
 }

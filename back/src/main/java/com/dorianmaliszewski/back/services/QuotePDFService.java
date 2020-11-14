@@ -69,6 +69,9 @@ public class QuotePDFService {
         try {
             PdfMultipartForm form = new PdfMultipartForm();
             form.index = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
+            if (quote.id != null) {
+                form.resultFilename = quote.id;
+            }
             if (quoteCustomization.footer != null) {
                 String footerHtml = footer.data("footer", quoteCustomization.footer).render();
                 form.footer = new ByteArrayInputStream(footerHtml.getBytes(StandardCharsets.UTF_8));

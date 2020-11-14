@@ -5,7 +5,7 @@ const MultiLineInput: React.FC<any> = ({ className, value, onChange, placeholder
   React.useEffect(() => {
     function resize() {
       textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 2 + "px";
     }
     /* 0-timeout to get the already changed textAreaRef.current */
     function delayedResize() {

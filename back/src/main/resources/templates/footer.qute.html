@@ -1,14 +1,23 @@
 <style>
     .footer {
-        max-height: 2cm;
-        height: 2cm;
+        max-height: 2.5cm;
+        height: 2.5cm;
         overflow: hidden;
         padding: 0;
-        margin: 0 0.5cm;
+        margin-left: 0.5cm;
+        margin-right: 0.5cm;
         font-size: 6px !important;
         display: flex;
         justify-content: center;
         align-items: flex-end;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        page-break-before: avoid;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
     }
 
     @page

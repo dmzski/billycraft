@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 import { graphQLClient } from "./GraphQLClient";
 
 export const ProductGraphQL = {
-  getMyInformation: async () => {
+  getAllProducts: async () => {
     const { getAllProducts } = await graphQLClient.request(
       gql`
         query {

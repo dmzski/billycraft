@@ -20,7 +20,7 @@ type ToastProviderProps = {
   vertical?: string;
 };
 
-const ToastProvider: React.FC<any> = ({ children, duration = 5000, horizontal = "center", vertical = "bottom" }) => {
+const ToastProvider: React.FC<any> = ({ children, duration = 3000, horizontal = "center", vertical = "bottom" }) => {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
   const [nextToast, setNextToast] = React.useState<Toast>();
 

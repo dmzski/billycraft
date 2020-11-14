@@ -3,14 +3,16 @@ import { useRouteMatch } from "react-router-dom";
 import { ROUTES } from "../../routes";
 import MenuItem from "./MenuItem";
 
-const menuRoutes = [ROUTES.DASHBOARD, ROUTES.QUOTES, ROUTES.BILLS, ROUTES.CUSTOMERS, ROUTES.SETTINGS];
+const menuRoutes = [ROUTES.DASHBOARD, ROUTES.QUOTES, ROUTES.BILLS, ROUTES.CUSTOMERS, ROUTES.PRODUCTS, ROUTES.SETTINGS];
 
 const SideBarMenu = () => {
   return (
     <nav className="mt-10">
-      {menuRoutes.map((route) => (
-        <MenuItem key={route.path} text={route.title} icon={route.icon} path={route.path} />
-      ))}
+      {menuRoutes
+        .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
+        .map((route) => (
+          <MenuItem key={route.path} text={route.title} icon={route.icon} path={route.path} />
+        ))}
     </nav>
   );
 };

@@ -67,6 +67,9 @@ public class BillPDFService {
         try {
             PdfMultipartForm form = new PdfMultipartForm();
             form.index = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
+            if (bill.id != null) {
+                form.resultFilename = bill.id;
+            }
             if (billCustomization.footer != null) {
                 String footerHtml = footer.data("footer", billCustomization.footer).render();
                 form.footer = new ByteArrayInputStream(footerHtml.getBytes(StandardCharsets.UTF_8));

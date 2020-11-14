@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <style>
-    *{
+    * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
@@ -72,6 +72,7 @@
         size:  A4;   /* auto is the initial value */
         margin: 0.5cm 1cm 3cm 1cm;
         page-break-after: avoid;
+        padding: 0;
     }
 
     html, body {
@@ -81,6 +82,12 @@
         margin: 0;
         padding: 0;
         background-color: transparent;
+    }
+
+    div, p, span {
+        margin: 0;
+        padding: 0;
+        page-break-after: avoid;
     }
 
     @media print {
@@ -138,7 +145,6 @@
         <span>Objet :&nbsp;</span>
         <span>{quote.title}</span>
     </div>
-    <div class="w-full">
         <table style="width: 100%">
             <thead>
                 <tr>
@@ -199,14 +205,10 @@
                 </tr>
             </tfoot>
         </table>
-        <div>
-            {#if customization.afterTable}
-            <div class="w-full">
-                {customization.afterTable.replaceBreakLineToBr.raw}
-            </div>
-            {/if}
+        {#if customization.afterTable}
+        <div class="w-full" style="page-break-inside: avoid; page-break-after: avoid; page-break-before: avoid">
+            {customization.afterTable.replaceBreakLineToBr.raw}
         </div>
-
-    </div>
+        {/if}
 </body>
 </html>

@@ -45,4 +45,10 @@ export const ROUTES = {
     path: "/onboarding/create-company",
     title: "Créer mon entreprise",
   },
+  PRODUCTS: {
+    path: "/products",
+    title: "Articles",
+    exact: true,
+    icon: "widgets",
+  },
 };

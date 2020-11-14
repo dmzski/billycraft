@@ -21,4 +21,7 @@ public class PdfMultipartForm {
     @PartType(MediaType.TEXT_HTML)
     @PartFilename("header.html")
     public InputStream header;
+    @FormParam("resultFilename")
+    @PartType(MediaType.TEXT_PLAIN)
+    public String resultFilename;
 }

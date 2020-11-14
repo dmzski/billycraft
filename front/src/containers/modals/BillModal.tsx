@@ -64,7 +64,16 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
       if (pdfState.isIdle) {
         pdfState.update("loading");
         const html = await PdfApi.getBillPdf(bill.id);
-        window.open(URL.createObjectURL(new Blob([html], { type: "application/pdf" })), "_blank");
+        const fileLink = document.createElement("a");
+        fileLink.download = bill.id;
+        fileLink.target = "_blank";
+        const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
+        fileLink.href = url;
+        fileLink.style.display = "none";
+        document.body.appendChild(fileLink);
+        fileLink.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(fileLink);
         pdfState.update("idle");
       }
     } catch (e) {
