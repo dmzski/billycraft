@@ -81,7 +81,19 @@ const ProductTableLine: React.FC<ProductTableLineProps> = ({ product }) => {
         />
       </td>
       <td className="text-right">
-        <BaseInput divClassName="text-right" value={newProduct.price} disabled={!editMode} onChange={handleChange("price")} />
+        <div className="flex justify-center items-center">
+          <BaseInput
+            min={0}
+            type="number"
+            divClassName="flex w-full mr-1"
+            step={0.1}
+            className=" w-full text-right"
+            value={newProduct.price}
+            disabled={!editMode}
+            onChange={handleChange("price")}
+          />
+          <span>€</span>
+        </div>
         {deleteMode ? (
           <div className="actions">
             <span className="mr-2">Supprimer ? </span>

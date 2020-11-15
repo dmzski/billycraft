@@ -1,3 +1,39 @@
+.logo {
+    position: fixed;
+    z-index: -1;
+    height: 100px;
+    bottom: 0px;
+    overflow: hidden;
+    left: 230px;
+
+    & img {
+        margin-top: 20px;
+        height: 100px;
+        object-fit: cover;
+        animation: logo-move 4s infinite;
+        transform: rotate(35deg);
+        transition: transform 1s ease-in-out;
+    }
+}
+
+@keyframes logo-move {
+    0% {
+        transform: rotate(35deg);
+    }
+
+    30% {
+        transform: rotate(35deg);
+    }
+
+    60% {
+        transform: rotate(45deg);
+    }
+
+    100% {
+        transform: rotate(35deg);
+    }
+}
+
 .wave-container {
     overflow: hidden;
     position: fixed;
@@ -6,6 +42,7 @@
     width: 300px;
     height: 500px;
     z-index: -1;
+
 
     .wave {
         position: absolute;

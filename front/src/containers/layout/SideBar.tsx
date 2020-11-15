@@ -25,7 +25,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="bg-gray-200 fixed sidebar">
+    <div className="bg-gray-200 fixed sidebar z-10">
       <div className="flex flex-col sm:flex-row sm:justify-around">
         <div className="w-64 bg-white h-screen relative">
           <div className="flex flex-col items-center justify-center mt-3">
