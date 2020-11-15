@@ -1,46 +1,58 @@
+import { startOfMonth, startOfYear, addMinutes, formatISO, formatISO9075 } from "date-fns";
+import { subMinutes } from "date-fns/esm";
 import React from "react";
 import { useQuery } from "react-query";
 import { HttpClient } from "../api/HttpClient";
+import { ReportApi } from "../api/ReportApi";
+import Loader from "../components/Loader";
 import { VERSION } from "../constants/global";
+import DashboardCard from "../containers/cards/DashboardCard";
 import Layout from "../containers/layout/Layout";
-
-import happyLogo from "../assets/img/logo_happy.png";
+import ReportCards from "../containers/reports/ReportCards";
+import YearReportGraph from "../containers/reports/YearReportGraph";
+import CounterAnimated from "../containers/texts/CounterAnimated";
+import { ReportDTO } from "../models/dtos/Report";
 
 const Dashboard = () => {
-  const newsQuery = useQuery(
-    "news-query",
-    async () => {
-      const { query, abort } = HttpClient.GET("/news.html", {
-        cache: "no-cache",
-      });
-      let promise = query.then((res: any) => res.text());
+  const [dateTarget, setDateTarget] = React.useState(new Date());
+  const monthReportQuery = useQuery<ReportDTO>(["month-report", startOfMonth(dateTarget)], ReportApi.getMonthReport, {
+    refetchOnWindowFocus: false,
+  });
+  const yearReportQuery = useQuery<ReportDTO>(["year-report", startOfYear(dateTarget)], ReportApi.getYearReport, {
+    refetchOnWindowFocus: false,
+  });
 
-      promise.cancel = abort;
-      return promise;
-    },
-    { refetchOnWindowFocus: false }
-  );
+  if (monthReportQuery.isLoading || !monthReportQuery.data) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
 
-  React.useEffect(() => {
-    if (newsQuery.data) {
-      document.getElementById("news")!.innerHTML = newsQuery.data;
-    }
-  }, [newsQuery.data]);
+  const monthReport = monthReportQuery.data || new ReportDTO();
+  const yearReport = yearReportQuery.data || new ReportDTO();
 
   return (
-    <Layout>
-      <div className="flex justify-center items-center">
-        <div className="bg-white rounded-lg shadow-lg w-1/2 p-5" style={{ zIndex: 0 }}>
-          <h1 className="text-2xl font-bold text-center pb-2 border-b-2 border-black relative">
-            {VERSION} : What's new ? 🚀
-            <img src={happyLogo} className="absolute object-contain h-24" style={{ top: -25, right: 10, zIndex: -1 }} alt="happy_logo" />
-          </h1>
-          {newsQuery.isLoading && <div>Chargement en cours...</div>}
-          <div id="news" className="pt-10 bg-white" style={{ zIndex: 2 }}></div>
-          <div className="text-center mt-10 text-sm font-bold">Made with ❤ by Dorian Maliszewski</div>
+    <div className="px-10">
+      <div className="flex flex-col justify-center items-center">
+        <h2 className="text-center font-bold text-2xl">Mois en cours</h2>
+        {monthReportQuery.isLoading ? (
+          <div>
+            <Loader />
+          </div>
+        ) : (
+          <ReportCards report={monthReport} />
+        )}
+      </div>
+      <div className="mt-2 flex flex-col justify-center items-center">
+        <h2 className="text-center font-bold text-2xl">Année en cours</h2>
+        <ReportCards report={yearReport} />
+        <div className="w-full bg-white shadow-lg rounded-md mt-2">
+          <YearReportGraph report={yearReport} />
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

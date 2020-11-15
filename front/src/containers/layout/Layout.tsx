@@ -8,10 +8,10 @@ const Layout: React.FC<any> = (props) => {
   return (
     <div className="flex h-full w-full">
       <SideBar />
-      <div className="flex w-full flex-col fixed ml-64 h-10 z-10">
+      <div className="flex w-full flex-col fixed pl-64 h-10 z-10">
         <SearchBar />
       </div>
-      <div className="main pl-64 pt-10 w-full relative">{props.children}</div>
+      <div className="pl-64 pt-10 w-full relative">{props.children}</div>
       <div className="logo">
         <img src={logo} alt="Coco-erp" />
       </div>

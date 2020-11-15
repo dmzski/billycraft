@@ -138,15 +138,19 @@ const SelectInput: React.FC<SelectInputProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <input disabled={disabled} id={id} className={className || "select-input"} placeholder={placeholder} type="text" value={value} onChange={onChange} />
+      {isLoading && (
+        <div className="absolute top-0 flex w-auto h-full items-center" style={{ right: "1rem" }}>
+          <Loader size="small" />
+        </div>
+      )}
       {open && value && value.length > 0 && !disabled && (
         <div
           style={{ top: "100%" }}
           id={id + "-result"}
           className=" flex flex-col justify-center items-center border border-gray-200 absolute w-full bg-white shadow-md rounded-md"
         >
-          {isLoading && <Loader />}
           {isError && <span>Une erreur est survenue</span>}
           {data &&
             data.map((option: any, index: number) => (

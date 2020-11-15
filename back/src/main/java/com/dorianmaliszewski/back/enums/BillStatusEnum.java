@@ -12,4 +12,7 @@ public enum BillStatusEnum {
     public boolean isGreaterThanOrEqualSent() {
         return !this.equals(DRAFT);
     }
+    public boolean isPaid() {
+        return !this.equals(DRAFT) && !this.equals(SENT) && !this.equals(REFUSED);
+    }
 }

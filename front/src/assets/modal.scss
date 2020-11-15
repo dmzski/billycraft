@@ -1,3 +1,31 @@
+.modal {
+    position: absolute;
+    background-color: var(--color-bg);
+    min-width: 50%;
+    top: 20%;
+    overflow: auto;
+    padding-bottom: 10px;
+    @extend .p-5,
+    .rounded-lg,
+    .shadow-lg;
+}
+
+.modal-overlay {
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    padding-bottom: 100px;
+    @extend .flex,
+    .flex-col,
+    .items-center,
+    .justify-center;
+}
+
 .custom-modal-overlay {
     z-index: 10;
     position: absolute;

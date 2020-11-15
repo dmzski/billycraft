@@ -7,6 +7,7 @@ import { Bill } from "../models/Bill";
 import { filterBills, sortBills } from "../utils/bill";
 import BillModal from "../containers/modals/BillModal";
 import BillFilterContainer from "../containers/BillFilterContainer";
+import { useParams } from "react-router-dom";
 
 const BillPage = () => {
   const [selected, setSelected] = React.useState<number[]>([]);
@@ -17,6 +18,7 @@ const BillPage = () => {
   const billsArchivedQuery = useQuery("bills-archived", BillGraphQL.getAllBillsArchived, { enabled: false });
   const billsQuery = useQuery("bills", BillGraphQL.getAllBillsNotArchived);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const { id } = useParams<any>();
 
   const billSorted = React.useCallback(() => {
     const list = [...bills];
@@ -34,7 +36,11 @@ const BillPage = () => {
     if (billsQuery.data) {
       setBills(billsQuery.data);
     }
-  }, [billsQuery]);
+    if (id && billsQuery.data && !billsQuery.data.some((bill: any) => bill.id === id)) {
+      setShowArchived(true);
+      billsArchivedQuery.refetch();
+    }
+  }, [billsQuery, id]);
 
   const handleShowArchived = () => {
     setShowArchived(!showArchived);
@@ -47,7 +53,7 @@ const BillPage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="flex items-center justify-between">
         {showArchived ? (
           <button className="button" onClick={handleShowArchived}>
@@ -88,7 +94,7 @@ const BillPage = () => {
         overlayClassName="modal-overlay"
         style={{ content: { minWidth: "80%" } }}
       />
-    </Layout>
+    </>
   );
 };
 

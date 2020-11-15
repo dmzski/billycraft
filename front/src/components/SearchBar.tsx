@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import { SearchApi } from "../api/SearchApi";
+import { SearchDTO } from "../models/dtos/SearchDTO";
 import { ROUTES } from "../routes";
 import SelectInput from "./inputs/SelectInput";
 
@@ -9,7 +10,7 @@ const SearchBar = () => {
   const [search, setSearch] = React.useState("");
   const history = useHistory();
 
-  const searchQuery = useQuery(["search-all", search], SearchApi.searchAll, { enabled: search.length > 1, refetchOnWindowFocus: false });
+  const searchQuery = useQuery<SearchDTO[]>(["search-contains", search], SearchApi.searchContains, { enabled: search.length > 1, refetchOnWindowFocus: false });
 
   const handleChange = (e: any) => {
     setSearch(e.target.value);
@@ -30,7 +31,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div z-10 relative">
+    <div className="h-12 flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div z-10">
       <div className="inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <span className="text-gray-500 sm:leading-5 material-icons mr-3">search</span>
       </div>

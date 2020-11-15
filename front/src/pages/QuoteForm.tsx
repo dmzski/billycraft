@@ -52,34 +52,32 @@ const QuoteForm = () => {
   }, [id]);
 
   return (
-    <Layout>
-      <div>
-        <div className="flex items-center">
-          <button className="primary" onClick={goBack}>
-            Retour
-          </button>
-          <h1 className="ml-4 text-lg">
-            {!quote.id ? "Nouveau " : "Modifier un "}devis{quote.id ? " #" + quote.id : ""}
-          </h1>
-        </div>
-        <form className="quote-form">
-          <BaseInput label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
-          <BaseInput label="Client" placeholder="Nom du client" value={quote.customer} onChange={inputChange("customer")} />
-          <BaseInput label="TVA" placeholder="TVA en %" type="numeric" value={quote.tva || ""} onChange={inputChange("tva")} />
-          <QuoteLineTable quote={quote} setQuote={setQuote} />
-          <div className="flex">
-            <button type="button" className="primary w-full" onClick={addLine}>
-              Ajouter une ligne
-            </button>
-          </div>
-
-          <div className="flex pt-3 flex-row-reverse">
-            <button className="bg-gray-600 text-white p-3 rounded ml-4">Enregistrer</button>
-            <button className="bg-green-600 text-white p-3 rounded">Envoyer le devis</button>
-          </div>
-        </form>
+    <>
+      <div className="flex items-center">
+        <button className="primary" onClick={goBack}>
+          Retour
+        </button>
+        <h1 className="ml-4 text-lg">
+          {!quote.id ? "Nouveau " : "Modifier un "}devis{quote.id ? " #" + quote.id : ""}
+        </h1>
       </div>
-    </Layout>
+      <form className="quote-form">
+        <BaseInput label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
+        <BaseInput label="Client" placeholder="Nom du client" value={quote.customer} onChange={inputChange("customer")} />
+        <BaseInput label="TVA" placeholder="TVA en %" type="numeric" value={quote.tva || ""} onChange={inputChange("tva")} />
+        <QuoteLineTable quote={quote} setQuote={setQuote} />
+        <div className="flex">
+          <button type="button" className="primary w-full" onClick={addLine}>
+            Ajouter une ligne
+          </button>
+        </div>
+
+        <div className="flex pt-3 flex-row-reverse">
+          <button className="bg-gray-600 text-white p-3 rounded ml-4">Enregistrer</button>
+          <button className="bg-green-600 text-white p-3 rounded">Envoyer le devis</button>
+        </div>
+      </form>
+    </>
   );
 };
 

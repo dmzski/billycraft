@@ -114,7 +114,7 @@
     <div class="flex w-full" style="justify-content: space-between">
         <div style="display: flex; flex-direction: column">
             <span style="font-weight: bold">{company.name}</span>
-            <span>{company.address.replaceBreakLineToBr.raw}</span>
+            <span>{company.address.transformToHtml.raw}</span>
             <span>{company.postalCode}&nbsp;{company.city}</span>
             <span>SIRET : {company.siret}</span>
             {#if customization.displayCompanyEmail }
@@ -127,7 +127,7 @@
         <div style="display: flex; flex-direction: column; margin-top: 5mm">
             {#if quote.customer}
                 <span>{quote.customer.name}</span>
-                <span>{quote.customer.address.replaceBreakLineToBr.raw}</span>
+                <span>{quote.customer.address.transformToHtml.raw}</span>
                 <span>{quote.customer.postalCode},&nbsp;{quote.customer.city}</span>
                 {#if customization.displayCustomerEmail }
                 <span>&#9993; : {quote.customer.email ?: ""}</span>
@@ -162,7 +162,7 @@
                 {/if}
                 {#for line in articles}
                     <tr>
-                        <td style="width: 13cm ">{line.description.replaceBreakLineToBr.raw}</td>
+                        <td style="width: 13cm ">{line.description.transformToHtml.raw}</td>
                         <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
                         <td style="text-align: center;width: 3cm">{line.price.formatCurrency}</td>
                         <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
@@ -175,7 +175,7 @@
                 {/if}
                 {#for line in services}
                 <tr>
-                    <td style="width: 13cm ">{line.description.replaceBreakLineToBr.raw}</td>
+                    <td style="width: 13cm ">{line.description.transformToHtml.raw}</td>
                     <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
                     <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
                     <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
@@ -207,7 +207,7 @@
         </table>
         {#if customization.afterTable}
         <div class="w-full" style="page-break-inside: avoid; page-break-after: avoid; page-break-before: avoid">
-            {customization.afterTable.replaceBreakLineToBr.raw}
+            {customization.afterTable.transformToHtml.raw}
         </div>
         {/if}
 </body>

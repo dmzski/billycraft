@@ -98,11 +98,27 @@ public class BillService {
             bill.sentAt = LocalDateTime.now();
         }
 
+        if (bill.status.isPaid() && bill.paidAt == null) {
+            bill.paidAt = LocalDateTime.now();
+        }
+
+
         bill.persist();
         return bill;
     }
 
     public List<Bill> getAllBillsArchived(String username) {
         return Bill.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status = 'ARCHIVED'", username);
+    }
+
+    public Bill updateBillPaidAt(String username, String id, LocalDateTime paidAt) {
+        Bill bill = this.getBillById(username, id);
+
+        if (bill.status.isPaid()) {
+            bill.paidAt = paidAt;
+            bill.persist();
+        }
+
+        return bill;
     }
 }

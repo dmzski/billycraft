@@ -32,7 +32,7 @@ const Settings = () => {
     }
   }, [companyQuery]);
   return (
-    <Layout>
+    <>
       <div className="flex flex-col w-full justify-center items-center">
         <div className="flex justify-center items-center w-full bg-white mb-3">
           <div
@@ -82,7 +82,7 @@ const Settings = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

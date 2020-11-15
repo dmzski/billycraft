@@ -11,6 +11,7 @@ import org.eclipse.microprofile.graphql.Query;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @GraphQLApi
@@ -70,5 +71,10 @@ public class BillGraphQL {
     @Description("Change the bill's status")
     public Bill updateBillStatus(String id, BillStatusEnum statusEnum) {
         return this.billService.updateBillStatus(username, id, statusEnum);
+    }
+    @Mutation("updateBillPaidAt")
+    @Description("Change the bill's paid at")
+    public Bill updateBillPaidAt(String id, LocalDateTime paidAt) {
+        return this.billService.updateBillPaidAt(username, id, paidAt);
     }
 }

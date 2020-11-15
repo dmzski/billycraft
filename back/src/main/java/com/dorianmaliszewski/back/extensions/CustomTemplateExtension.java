@@ -36,8 +36,8 @@ public class CustomTemplateExtension {
         return String.format("%.2f €", num);
     }
 
-    static String replaceBreakLineToBr(String text) {
-        return text.replaceAll("\n", "<br/>");
+    static String transformToHtml(String text) {
+        return text.replaceAll("\n", "<br/>").replaceAll(" ", "nbps;");
     }
 
     static Double total(Bill bill) {

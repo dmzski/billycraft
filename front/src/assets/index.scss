@@ -15,6 +15,10 @@
 @import "./input.scss";
 @import "./switch.scss";
 
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 7px;
@@ -48,7 +52,7 @@
 }
 
 .main {
-  @extend .m-5;
+  @extend .p-5;
 }
 
 .menu-item {
@@ -71,50 +75,6 @@
   .border-purple-700;
 }
 
-.input {
-  transition: border 0.2s ease-in-out;
-  min-width: 280px;
-}
-
-.input:focus+.label,
-.input:active+.label,
-.input.filled+.label {
-  font-size: 0.75rem;
-  transition: all 0.2s ease-out;
-  top: -0.1rem;
-  color: #667eea;
-}
-
-.label {
-  transition: all 0.2s ease-out;
-  top: 0.4rem;
-  left: 0;
-}
-
-.search-div {
-  @extend .input,
-  .border-b,
-  .border-gray-400,
-  .appearance-none,
-  .rounded,
-  .w-full;
-}
-
-.search-div:focus-within {
-  @extend .outline-none,
-  .border-0,
-  .border-b-2,
-  .border-blue-400;
-}
-
-.search-input {
-  @extend .w-full;
-}
-
-.search-input:focus {
-  @extend .outline-none;
-}
-
 html,
 #root,
 body {
@@ -127,34 +87,44 @@ body {
   transition: 0.2s background-color, 0.2s color;
 }
 
-.modal {
-  position: absolute;
-  background-color: var(--color-bg);
-  min-width: 50%;
-  top: 20%;
-  overflow: auto;
-  padding-bottom: 10px;
-  @extend .p-5,
-  .rounded-lg,
-  .shadow-lg;
+
+.onboarding-background {
+  background: linear-gradient(45deg, #b83280 10%, #6b46c1 50%, #4c51bf 90%);
 }
 
-.modal-overlay {
-  z-index: 20;
-  position: fixed;
+.transition-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide-enter {
+  transform: translateX(10%);
+  opacity: 0.1;
+}
+
+.slide-enter.slide-enter-active {
+  transform: translateX(0%);
+  opacity: 1;
+  transition: transform 300ms ease-in, opacity 300ms ease-in;
+}
+
+.slide-exit {
+  opacity: 0;
+}
+
+.slide-exit.slide-exit-active {
+  transform: translateX(0%);
+  transition: transform 300ms ease-in;
+}
+
+.route {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  min-width: 100%;
   overflow: auto;
-  padding-bottom: 100px;
-  @extend .flex,
-  .flex-col,
-  .items-center,
-  .justify-center;
-}
-
-.onboarding-background {
-  background: linear-gradient(45deg, #b83280 10%, #6b46c1 50%, #4c51bf 90%);
 }

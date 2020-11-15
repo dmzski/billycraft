@@ -18,6 +18,7 @@ const QuotePage = () => {
   const quotesArchivedQuery = useQuery("quotes-archived", QuoteGraphQL.getAllQuotesArchived, { enabled: false, refetchOnWindowFocus: false });
   const quotesQuery = useQuery("quotes", QuoteGraphQL.getAllQuotesNotArchived, { refetchOnWindowFocus: false });
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const { id } = useParams<any>();
 
   const quoteSorted = React.useCallback(() => {
     const list = [...quotes];
@@ -35,7 +36,11 @@ const QuotePage = () => {
     if (quotesQuery.data) {
       setQuotes(quotesQuery.data);
     }
-  }, [quotesQuery]);
+    if (id && quotesQuery.data && !quotesQuery.data.some((quote: any) => quote.id === id)) {
+      setShowArchived(true);
+      quotesArchivedQuery.refetch();
+    }
+  }, [quotesQuery, id]);
 
   const handleShowArchived = () => {
     setShowArchived(!showArchived);
@@ -48,7 +53,7 @@ const QuotePage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="flex items-center justify-between">
         {showArchived ? (
           <button className="button" onClick={handleShowArchived}>
@@ -89,7 +94,7 @@ const QuotePage = () => {
         overlayClassName="modal-overlay"
         style={{ content: { minWidth: "80%" } }}
       />
-    </Layout>
+    </>
   );
 };
 

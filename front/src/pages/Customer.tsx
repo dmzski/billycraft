@@ -39,7 +39,7 @@ const Customer = () => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="flex flex-row-reverse">
         <button className="primary" onClick={goToNewCustomer}>
           <span className="material-icons">add</span>
@@ -53,7 +53,7 @@ const Customer = () => {
       <CustomModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} className="modal" overlayClassName="modal-overlay">
         <CustomerForm closeModal={() => setIsOpen(false)} />
       </CustomModal>
-    </Layout>
+    </>
   );
 };
 

@@ -68,6 +68,10 @@ public class Bill extends PanacheEntityBase {
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
     public LocalDateTime sentAt;
 
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
+    public LocalDateTime paidAt;
+
     public String fileName;
 
     public String quoteId;

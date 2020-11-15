@@ -109,3 +109,27 @@
         background-position-x: -1000px;
     }
 }
+
+.search-div {
+    @extend .input,
+    .border-b,
+    .border-gray-400,
+    .appearance-none,
+    .rounded,
+    .w-full;
+}
+
+.search-div:focus-within {
+    @extend .outline-none,
+    .border-0,
+    .border-b-2,
+    .border-blue-400;
+}
+
+.search-input {
+    @extend .w-full;
+}
+
+.search-input:focus {
+    @extend .outline-none;
+}

@@ -57,7 +57,7 @@ const CustomerForm: React.FC<any> = () => {
   }, [customerQuery]);
 
   return (
-    <Layout>
+    <>
       <div className="flex flex-col">
         <div className="flex items-center">
           <button className="primary" onClick={goBack}>
@@ -81,7 +81,7 @@ const CustomerForm: React.FC<any> = () => {
           {isError && <div className="mt-3">Une erreur est survenue</div>}
         </form>
       </div>
-    </Layout>
+    </>
   );
 };
 

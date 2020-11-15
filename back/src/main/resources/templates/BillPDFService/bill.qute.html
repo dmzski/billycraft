@@ -104,7 +104,7 @@
     <div class="flex w-full" style="justify-content: space-between">
         <div style="display: flex; flex-direction: column">
             <span style="font-weight: bold">{company.name}</span>
-            <span>{company.address.replaceBreakLineToBr.raw}</span>
+            <span>{company.address.transformToHtml.raw}</span>
             <span>{company.postalCode}&nbsp;{company.city}</span>
             <span>SIRET : {company.siret}</span>
             {#if customization.displayCompanyEmail }
@@ -117,7 +117,7 @@
         <div style="display: flex; flex-direction: column; margin-top: 5mm">
             {#if bill.customer}
                 <span>{bill.customer.name}</span>
-                <span>{bill.customer.address.replaceBreakLineToBr.raw}</span>
+                <span>{bill.customer.address.transformToHtml.raw}</span>
                 <span>{bill.customer.postalCode},&nbsp;{bill.customer.city}</span>
                 {#if customization.displayCustomerEmail }
                 <span>&#9993; : {bill.customer.email ?: ""}</span>
@@ -153,7 +153,7 @@
             {/if}
             {#for line in articles}
             <tr>
-                <td>{line.description.replaceBreakLineToBr.raw}</td>
+                <td>{line.description.transformToHtml.raw}</td>
                 <td>{line.quantity.formatNumber}</td>
                 <td>{line.price.formatCurrency}</td>
                 <td>{line.subTotal.formatCurrency}</td>
@@ -166,7 +166,7 @@
             {/if}
             {#for line in services}
             <tr>
-                <td>{line.description.replaceBreakLineToBr.raw}</td>
+                <td>{line.description.transformToHtml.raw}</td>
                 <td>{line.quantity.formatNumber}</td>
                 <td>{line.price.formatCurrency}</td>
                 <td>{line.subTotal.formatCurrency}</td>
@@ -199,7 +199,7 @@
         <div>
             {#if customization.afterTable}
             <div class="w-full">
-                {customization.afterTable.replaceBreakLineToBr.raw}
+                {customization.afterTable.transformToHtml.raw}
             </div>
             {/if}
         </div>
