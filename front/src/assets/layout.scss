@@ -40,38 +40,38 @@
     right: 0;
     bottom: 0;
     width: 300px;
-    height: 500px;
+    height: 400px;
     z-index: -1;
 
 
     .wave {
         position: absolute;
-        bottom: -27px;
-        right: -157px;
-        width: 500px;
+        bottom: -100px;
+        right: -550px;
+        width: 1000px;
         transform: rotate(-50deg);
-        height: 300px;
+        height: 450px;
         // background-color: var(--color-primary);
-        background: url('./img/background.png');
-        background-size: 1000px 400px;
+        background: url('./img/background.png') repeat-x;
+        background-size: 1000px 500px;
     }
 
     .wave0 {
-        animation: animate-wave 60s linear infinite;
+        animation: animate-wave 30s linear infinite;
     }
 
     .wave1 {
-        background-size: 1500px 300px;
-        animation: animate-wave-2 60s infinite ease-in-out;
+        animation-delay: 5s;
+        animation: animate-wave 30s infinite ease-in-out;
     }
 
     .wave2 {
-        background-size: 1200px 300px;
-        animation: animate-reverse-wave 60s linear infinite;
+        animation: animate-reverse-wave 30s linear infinite;
     }
 
     .wave3 {
-        animation: animate-wave 30s linear infinite;
+        animation-delay: 7s;
+        animation: animate-reverse-wave 30s linear infinite;
     }
 
 }
@@ -96,6 +96,10 @@
     }
 
     50% {
+        background-position-x: 1000px;
+    }
+
+    100% {
         background-position-x: 1000px;
     }
 }

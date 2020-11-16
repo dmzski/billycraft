@@ -19,6 +19,7 @@ const CustomModal: React.FC<any> = ({ isOpen, children, onRequestClose, style, c
           }
         });
         if (containerEl) {
+          containerEl.className = containerEl.className.replace(/\bopen\b/, "") + "";
           containerEl.className = containerEl.className.replace(/\bhide\b/, "") + " open";
         }
         timeout = setTimeout(() => {
@@ -28,6 +29,7 @@ const CustomModal: React.FC<any> = ({ isOpen, children, onRequestClose, style, c
         }, 200);
       } else {
         overlayRef.current.style.overflow = "hidden";
+        containerEl.className = containerEl.className.replace(/\hide\b/, "") + "";
         containerEl.className = containerEl.className.replace(/\bopen\b/, "") + " hide";
       }
     }

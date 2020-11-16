@@ -97,7 +97,7 @@
                 {/if}
             </div>
             <div style="display: flex; flex-direction: column">
-                <span>Date d'émission : {time:format(bill.createdAt, 'dd/MM/yyyy')}</span>
+                <span>Date d'émission : {time:format(bill.getPDFDate, 'dd/MM/yyyy')}</span>
                 <div style='font-size: 26px; margin-top: 20px; border: 2px solid black; text-align: center; background-color: {customization.mainColor ?: "white"};'>FACTURE</div>
             </div>
         </div>

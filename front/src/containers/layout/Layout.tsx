@@ -12,9 +12,6 @@ const Layout: React.FC<any> = (props) => {
         <SearchBar />
       </div>
       <div className="pl-64 pt-10 w-full relative">{props.children}</div>
-      <div className="logo">
-        <img src={logo} alt="Coco-erp" />
-      </div>
     </div>
   );
 };

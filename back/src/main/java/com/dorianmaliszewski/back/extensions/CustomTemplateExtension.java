@@ -6,6 +6,9 @@ import com.dorianmaliszewski.back.models.Quote;
 import com.dorianmaliszewski.back.models.QuoteLine;
 import io.quarkus.qute.TemplateExtension;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @TemplateExtension
 public class CustomTemplateExtension {
 
@@ -37,7 +40,7 @@ public class CustomTemplateExtension {
     }
 
     static String transformToHtml(String text) {
-        return text.replaceAll("\n", "<br/>").replaceAll(" ", "nbps;");
+        return text.replaceAll("\n", "<br/>").replaceAll(" ", "&nbsp;");
     }
 
     static Double total(Bill bill) {
@@ -65,5 +68,13 @@ public class CustomTemplateExtension {
             return "";
         }
         return String.format("%.2f", num);
+    }
+
+    static LocalDateTime getPDFDate(Bill bill) {
+        return bill.sentAt != null ? bill.sentAt : LocalDateTime.now();
+    }
+
+    static LocalDateTime getPDFDate(Quote quote) {
+        return quote.sentAt != null ? quote.sentAt :LocalDateTime.now();
     }
 }
