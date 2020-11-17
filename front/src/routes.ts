@@ -41,6 +41,13 @@ export const ROUTES = {
     title: "Paramètres",
     icon: "settings",
   },
+
+  SUPPORT: {
+    path: "/support",
+    exact: true,
+    title: "Support",
+    icon: "",
+  },
   ONBOARDING_COMPANY: {
     path: "/onboarding/create-company",
     title: "Créer mon entreprise",

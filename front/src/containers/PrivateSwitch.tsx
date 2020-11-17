@@ -17,6 +17,7 @@ import NewsModal from "./modals/NewsModal";
 import Layout from "./layout/Layout";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import SupportPage from "../pages/SupportPage";
 
 const PrivateSwitch = () => {
   const user = useUser();
@@ -45,6 +46,13 @@ const PrivateSwitch = () => {
             </div>
           </Route>
         </Switch>
+      ) : !user.data.company ? (
+        <Switch location={location}>
+          <Route path={ROUTES.ONBOARDING_COMPANY.path} component={Onboarding} />
+          <Route>
+            <Redirect to={ROUTES.ONBOARDING_COMPANY.path} />
+          </Route>
+        </Switch>
       ) : (
         <Layout>
           <TransitionGroup className="transition-group">
@@ -66,6 +74,9 @@ const PrivateSwitch = () => {
 
                   <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
                   <Route path={ROUTES.ONBOARDING_COMPANY.path} component={Onboarding} />
+
+                  <Route path={ROUTES.SUPPORT.path} exact={ROUTES.SUPPORT.exact} component={SupportPage} />
+
                   <Route>
                     <Redirect to={ROUTES.DASHBOARD.path} />
                   </Route>

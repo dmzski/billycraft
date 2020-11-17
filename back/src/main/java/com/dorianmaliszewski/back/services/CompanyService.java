@@ -68,6 +68,7 @@ public class CompanyService {
         company.postalCode = newCompany.postalCode;
         company.siret = newCompany.siret;
         company.email = newCompany.email;
+        company.name = newCompany.name;
         company.persist();
         return company;
     }

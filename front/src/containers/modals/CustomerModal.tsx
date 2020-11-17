@@ -34,7 +34,14 @@ const CustomerModal: React.FC<any> = ({ isOpen, onRequestClose, customer }) => {
 
   return (
     <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { minWidth: "80%" } }}>
-      <CustomerForm customer={newCustomer} closeModal={onRequestClose} isLoading={isLoading} onSubmit={saveCustomer} disabled={isLoading} />
+      <CustomerForm
+        setCustomer={setNewCustomer}
+        customer={newCustomer}
+        closeModal={onRequestClose}
+        isLoading={isLoading}
+        onSubmit={saveCustomer}
+        disabled={isLoading}
+      />
       {isError && <div className="mt-3">Une erreur est survenue</div>}
     </CustomModal>
   );

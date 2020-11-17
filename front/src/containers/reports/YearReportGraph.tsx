@@ -2,13 +2,14 @@ import React from "react";
 import { ReportDTO } from "../../models/dtos/Report";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { format, parseJSON } from "date-fns";
+import { getNormalizedDate } from "../../utils/date";
 
 const YearReportGraph: React.FC<{ report: ReportDTO }> = ({ report }) => {
   const data = React.useMemo(() => {
     if (report) {
       return report.details.map((monthReport) => {
         return {
-          name: format(parseJSON(monthReport.endDate), "MM-yyyy"),
+          name: format(getNormalizedDate(parseJSON(monthReport.startDate)), "MM-yyyy"),
           articleSales: monthReport.articleSales,
           serviceSales: monthReport.serviceSales,
           otherSales: monthReport.otherSales,

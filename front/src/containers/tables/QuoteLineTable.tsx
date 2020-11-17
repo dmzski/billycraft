@@ -19,7 +19,7 @@ const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
   }
 
   return (
-    <table className="table-fixed quote-table w-auto">
+    <table className="table-fixed quote-table w-full" style={{ overflowX: "auto" }}>
       <thead>
         <tr>
           <th className="w-2 px-2 py-2">Type</th>

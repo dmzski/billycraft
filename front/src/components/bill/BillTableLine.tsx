@@ -119,6 +119,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
       <td className="text-left">{bill.title}</td>
       <td className="text-center">{bill.customer.name}</td>
       <td className="text-center">{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
+      <td className="text-center">{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</td>
       <td className="text-center">{Math.round(getBillTotal(bill) * 100) / 100} €</td>
       <td className="text-center status" ref={statusRef}>
         {getStatus}

@@ -13,7 +13,7 @@ const BaseInput: React.FC<any> = ({ label, type, value, onChange, placeholder, i
         id={id}
         type={type}
         placeholder={placeholder}
-        value={value}
+        value={value || ""}
         onChange={onChange}
         disabled={disabled}
         {...props}

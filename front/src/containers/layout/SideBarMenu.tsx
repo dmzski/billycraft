@@ -7,13 +7,13 @@ const menuRoutes = [ROUTES.DASHBOARD, ROUTES.QUOTES, ROUTES.BILLS, ROUTES.CUSTOM
 
 const SideBarMenu = () => {
   return (
-    <nav className="mt-10">
+    <div className="h-full">
       {menuRoutes
         .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
         .map((route) => (
           <MenuItem key={route.path} text={route.title} icon={route.icon} path={route.path} />
         ))}
-    </nav>
+    </div>
   );
 };
 

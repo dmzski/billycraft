@@ -18,6 +18,7 @@ export const BillGraphQL = {
             title
             createdAt
             updatedAt
+            sentAt
             version
             status
             lines {
@@ -49,6 +50,7 @@ export const BillGraphQL = {
             updatedAt
             version
             status
+            sentAt
             lines {
               line
               description
@@ -78,6 +80,7 @@ export const BillGraphQL = {
             updatedAt
             version
             status
+            sentAt
             lines {
               line
               description

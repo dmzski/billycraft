@@ -8,6 +8,8 @@ import { CustomerGraphQL } from "../graphql/CustomerGraphQL";
 import { ROUTES } from "../routes";
 import Modal from "react-modal";
 import CustomModal from "../containers/modals/CustomModal";
+import CustomerModal from "../containers/modals/CustomerModal";
+import { Customer } from "../models/Customer";
 
 const mockData = (nbLine: number) => {
   const array: any[] = [];
@@ -29,7 +31,7 @@ const mockData = (nbLine: number) => {
   return array;
 };
 
-const Customer = () => {
+const CustomerPage = () => {
   const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers);
   const history = useHistory();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -50,11 +52,9 @@ const Customer = () => {
         <CustomerTable data={customersQuery.data} />
         {customersQuery.isLoading && <div>Chargement en cours...</div>}
       </div>
-      <CustomModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} className="modal" overlayClassName="modal-overlay">
-        <CustomerForm closeModal={() => setIsOpen(false)} />
-      </CustomModal>
+      <CustomerModal customer={new Customer()} isOpen={isOpen} onRequestClose={() => setIsOpen(false)} />
     </>
   );
 };
 
-export default Customer;
+export default CustomerPage;
