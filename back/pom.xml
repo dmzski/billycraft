@@ -154,6 +154,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
+        <additionalBuildArgs>-H:IncludeResourceBundles=sun.util.resources.TimeZoneNames</additionalBuildArgs>
       </properties>
     </profile>
   </profiles>

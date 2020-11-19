@@ -6,7 +6,7 @@ const SwitchInput: React.FC<any> = ({ onToggle, checked, id }) => {
   };
   return (
     <div className="input-switch-container flex justify-center">
-      <input type="checkbox" id={id} checked={checked} onClick={handleClick} />
+      <input type="checkbox" id={id} checked={checked || false} onChange={handleClick} />
       <label htmlFor={id}>Toggle</label>
     </div>
   );

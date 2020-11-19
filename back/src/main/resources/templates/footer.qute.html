@@ -1,29 +1,15 @@
 <style>
     .footer {
         max-height: 2.5cm;
-        height: 2.5cm;
         overflow: hidden;
+        word-wrap: break-word;         /* All browsers since IE 5.5+ */
+        overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
         padding: 0;
         margin-left: 0.5cm;
         margin-right: 0.5cm;
+        max-width: 20cm;
         font-size: 6px !important;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        page-break-after: avoid;
-        page-break-inside: avoid;
-        page-break-before: avoid;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    @page
-    {
-        size:  A4;   /* auto is the initial value */
-        margin: 0;
+        hyphens: auto;
     }
 </style>
 <div class="footer">
