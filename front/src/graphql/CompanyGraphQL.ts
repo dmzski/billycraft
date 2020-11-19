@@ -1,5 +1,4 @@
-import { request, gql } from "graphql-request";
-import { GRAPHQL_URL } from "../constants/global";
+import { gql } from "graphql-request";
 import { Company } from "../models/Company";
 import { graphQLClient } from "./GraphQLClient";
 

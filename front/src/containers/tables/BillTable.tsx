@@ -44,15 +44,15 @@ const BillList: React.FC<any> = ({ data, selected, setSelected, setData }) => {
   }, [sort, data]);
 
   return (
-    <table className="table-fixed bill-table">
+    <table className="table-fixed w-full bill-table">
       <thead>
         <tr>
-          <th className="px-4 py-2"></th>
-          <BillTableHeader className="w-4/12 px-4 py-2 text-left" onClick={sortBy("title")} sort={sort["title"]} text="Titre" />
-          <BillTableHeader className="w-2/12 px-4 py-2 text-center" onClick={sortBy("customer")} sort={sort["customer"]} text="Client" />
-          <BillTableHeader className="w-2/12 px-4 py-2 text-center" onClick={sortBy("createdAt")} sort={sort["createdAt"]} text="Création" />
-          <BillTableHeader className="w-2/12 px-4 py-2 text-center" onClick={sortBy("total")} sort={sort["total"]} text="Total" />
-          <BillTableHeader className="w-4/12 px-4 py-2 text-center" onClick={sortBy("status")} sort={sort["status"]} text="Status" />
+          <BillTableHeader className="w-auto px-4 py-2 text-left" onClick={sortBy("title")} sort={sort["title"]} text="Titre" />
+          <BillTableHeader className="w-64 px-4 py-2 text-center" onClick={sortBy("customer")} sort={sort["customer"]} text="Client" />
+          <BillTableHeader className="w-64 px-4 py-2 text-center" onClick={sortBy("createdAt")} sort={sort["createdAt"]} text="Création" />
+          <BillTableHeader className="w-64 px-4 py-2 text-center" onClick={sortBy("sentAt")} sort={sort["sentAt"]} text="Envoyé" />
+          <BillTableHeader className="w-32 px-4 py-2 text-center" onClick={sortBy("total")} sort={sort["total"]} text="Total" />
+          <BillTableHeader className="w-64 px-4 py-2 text-center" onClick={sortBy("status")} sort={sort["status"]} text="Status" />
         </tr>
       </thead>
       <tbody>

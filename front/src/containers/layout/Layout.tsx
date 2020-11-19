@@ -9,8 +9,6 @@ import MobileLayout from "./MobileLayout";
 const Layout: React.FC<any> = (props) => {
   const breakpoint = useBreakpoint();
 
-  console.log(breakpoint);
-
   if (!breakpoint.isMd) {
     return <MobileLayout {...props} />;
   }

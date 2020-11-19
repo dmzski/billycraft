@@ -1,6 +1,4 @@
-import { request, gql } from "graphql-request";
-import { async } from "rxjs";
-import { GRAPHQL_URL } from "../constants/global";
+import { gql } from "graphql-request";
 import { Customer } from "../models/Customer";
 import { graphQLClient } from "./GraphQLClient";
 

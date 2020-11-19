@@ -1,4 +1,4 @@
-import { format, parse, parseJSON, toDate } from "date-fns";
+import { format, parseJSON } from "date-fns";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
@@ -113,18 +113,10 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
 
   return (
     <tr className={"quote-table-line hover " + (isSelected ? "selected" : "")} onClick={editQuote}>
-      <td className="px-2 py-2">
-        <input
-          type="checkbox"
-          onClick={(e: any) => {
-            e.stopPropagation();
-            onSelect(quote.id);
-          }}
-        />
-      </td>
-      <td className="text-left">{quote.title}</td>
-      <td className="text-center">{quote.customer.name}</td>
+      <td className="pl-3 text-left truncate">{quote.title}</td>
+      <td className="text-center truncate">{quote.customer.name}</td>
       <td className="text-center">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
+      <td className="text-center">{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</td>
       <td className="text-center">{Math.round(getQuoteTotal(quote) * 100) / 100} €</td>
       <td className="text-center status" ref={statusRef}>
         {getStatus}

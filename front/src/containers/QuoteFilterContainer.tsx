@@ -24,6 +24,12 @@ const QuoteFilterContainer: React.FC<any> = ({ filters, setFilters }) => {
         value={filters.createdAt}
         onChange={(e: any) => setFilters({ ...filters, createdAt: e.target.value })}
       />
+      <BaseInput
+        placeholder="Filtrer par date d'envoi"
+        label="Date d'envoi"
+        value={filters.sentAt}
+        onChange={(e: any) => setFilters({ ...filters, sentAt: e.target.value })}
+      />
     </div>
   );
 };

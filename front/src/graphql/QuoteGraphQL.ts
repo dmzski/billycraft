@@ -4,29 +4,33 @@ import { Quote } from "../models/Quote";
 import { QuoteStatusEnum } from "../models/QuoteStatusEnum";
 import { graphQLClient } from "./GraphQLClient";
 
+const QUOTE_DTO = `
+id
+customer {
+  id
+  name
+}
+title
+createdAt
+updatedAt
+sentAt
+version
+status
+lines {
+  line
+  description
+  price
+  quantity
+  type
+}`;
+
 export const QuoteGraphQL = {
   getAllQuotes: async () => {
     const { allQuotes } = await graphQLClient.request(
       gql`
         query {
           allQuotes {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${QUOTE_DTO}
           }
         }
       `
@@ -39,23 +43,7 @@ export const QuoteGraphQL = {
       gql`
         query {
           allQuotesNotArchived {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${QUOTE_DTO}
           }
         }
       `
@@ -68,23 +56,7 @@ export const QuoteGraphQL = {
       gql`
         query {
           allQuotesArchived {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${QUOTE_DTO}
           }
         }
       `
@@ -98,15 +70,7 @@ export const QuoteGraphQL = {
       gql`
         mutation ($quote: QuoteInput!) {
           ${quote.id ? "updateQuote" : "createQuote"}(quote: $quote) {
-            id
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            customer {
-                id
-            }
+            ${QUOTE_DTO}
           }
         }
       `,
@@ -123,15 +87,7 @@ export const QuoteGraphQL = {
       gql`
         query {
             quoteById(id: "${id}") {
-            id
-            title
-            customer {
-              id
-              name
-            }
-            phoneNumber
-            postalCode
-            status
+            ${QUOTE_DTO}
           }
         }
       `

@@ -3,23 +3,21 @@ import { useQuery } from "react-query";
 import BillCustomizationForm from "../containers/forms/BillCustomizationForm";
 import MyCompagnyForm from "../containers/forms/MyCompagnyForm";
 import QuoteCustomizationForm from "../containers/forms/QuoteCustomizationForm";
+import QuoteEmailCustomizationForm from "../containers/forms/QuoteEmailCustomizationForm";
 import Layout from "../containers/layout/Layout";
+import BillTab from "../containers/settings/BillTab";
+import QuoteTab from "../containers/settings/QuoteTab";
 import { BillCustomizationGraphQL } from "../graphql/BillCustomizationGraphQL";
 import { CompanyGraphQL } from "../graphql/CompanyGraphQL";
 import { QuoteCustomizationGraphQL } from "../graphql/QuoteCustomizationGraphQL";
+import { QuoteEmailCustomizationGraphQL } from "../graphql/QuoteEmailCustomizationGraphQL";
+import { QuoteEmailCustomization } from "../models/QuoteEmailCustomization";
 import { useToast } from "../providers/ToastProvider";
 
 const Settings = () => {
   const [tab, setTab] = React.useState("company");
   const companyQuery = useQuery("my-company", CompanyGraphQL.getMyCompany, { enabled: tab === "company" });
-  const quoteCustomizationQuery = useQuery("quote-customization", QuoteCustomizationGraphQL.getMyInformation, {
-    refetchOnWindowFocus: false,
-    enabled: tab === "quote",
-  });
-  const billCustomizationQuery = useQuery("bill-customization", BillCustomizationGraphQL.getMyInformation, {
-    refetchOnWindowFocus: false,
-    enabled: tab === "bill",
-  });
+
   const [company, setCompany] = React.useState<any>({});
 
   const changeTab = (newTab: string) => (e: any) => {
@@ -32,7 +30,7 @@ const Settings = () => {
     }
   }, [companyQuery]);
   return (
-    <>
+    <div className="w-full">
       <div className="flex flex-col w-full justify-center items-center">
         <div className="flex justify-center items-center w-full bg-white mb-3">
           <div
@@ -66,23 +64,11 @@ const Settings = () => {
               {companyQuery.isError && <div>Une erreur est survenue</div>}
             </>
           )}
-          {tab === "quote" && (
-            <>
-              {quoteCustomizationQuery.data && <QuoteCustomizationForm quoteCustomization={quoteCustomizationQuery.data} />}
-              {quoteCustomizationQuery.isLoading && <div>Chargement de la personnalisation des devis</div>}
-              {quoteCustomizationQuery.isError && <div>Une erreur est survenue</div>}
-            </>
-          )}
-          {tab === "bill" && (
-            <>
-              {billCustomizationQuery.data && <BillCustomizationForm billCustomization={billCustomizationQuery.data} />}
-              {billCustomizationQuery.isLoading && <div>Chargement de la personnalisation des factures</div>}
-              {billCustomizationQuery.isError && <div>Une erreur est survenue</div>}
-            </>
-          )}
+          {tab === "quote" && <QuoteTab />}
+          {tab === "bill" && <BillTab />}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

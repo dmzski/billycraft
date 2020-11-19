@@ -16,12 +16,10 @@ const keycloakProviderInitConfig: any = {
 };
 
 const MainProvider: React.FC<any> = ({ children }) => {
-  const [isConnected, setIsConnected] = React.useState(false);
   const onKeycloakTokens = (tokens: any) => {
     if (tokens.idToken) {
       fetchRegister(tokens.idToken);
       graphQLClient.setHeader("Authorization", "Bearer " + tokens.idToken);
-      setIsConnected(true);
     }
   };
 

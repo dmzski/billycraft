@@ -1,8 +1,4 @@
-import { ContentState, convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
 import React from "react";
-import { Editor } from "react-draft-wysiwyg";
 import { useMutation } from "react-query";
 import BaseInput from "../../components/inputs/BaseInput";
 import MultiLineInput from "../../components/inputs/MultiLineInput";
@@ -39,7 +35,7 @@ const QuoteCustomizationForm: React.FC<any> = ({ quoteCustomization }) => {
   }, [quoteCustomization]);
 
   return (
-    <form onSubmit={onSubmit} className="w-3/4 flex flex-col border-gray-400 border p-5 rounded bg-white shadow-lg">
+    <form onSubmit={onSubmit} className="w-full">
       <div className="flex mt-3 w-full content-center items-center">
         <div className="w-10 h-10 mr-3 border-2 border-black" style={{ backgroundColor: newQuoteCustomization.mainColor || "white" }}></div>
         <BaseInput

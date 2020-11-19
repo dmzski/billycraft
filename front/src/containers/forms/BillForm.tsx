@@ -11,6 +11,7 @@ import SelectInput from "../../components/inputs/SelectInput";
 const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
   const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
+  const [errors, setErrors] = React.useState<any>({});
 
   function inputChange(property: keyof Bill) {
     return (event: any) => {
@@ -55,6 +56,8 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
     if (tmp.customer.id) {
       onSubmit(e);
     } else {
+      e.preventDefault();
+      setErrors({ customer: "Choisissez un client en le sélectionnant dans la liste" });
     }
   };
 
@@ -90,6 +93,7 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
           onChange={(e: any) => setCustomerInputValue(e.target.value)}
           className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
         />
+        {errors && errors.customer && <div>{errors.customer}</div>}
       </div>
       <BaseInput disabled={disabled || cantUpdate} label="TVA" placeholder="TVA en %" type="numeric" value={bill.tva || ""} onChange={inputChange("tva")} />
       <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />

@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 60px;
 
     &__item {
         // .LoaderBalls__wrapper__item
@@ -28,6 +29,7 @@
 
     &.small {
         width: 40px;
+        height: 20px;
 
         .loader-balls__item {
             // .LoaderBalls__wrapper__item

@@ -15,15 +15,17 @@ const CustomerModal: React.FC<any> = ({ isOpen, onRequestClose, customer }) => {
       onRequestClose();
       toast.show({ message: "Enregistrement réussi", variant: "success" });
     },
+    throwOnError: true,
   });
 
   const saveCustomer = async (e: any) => {
     e.preventDefault();
 
     try {
-      await customerMutation(customer);
+      await customerMutation(newCustomer);
       queryCache.invalidateQueries("customers-query");
     } catch (error) {
+      toast.show({ message: "Erreur lors de l'enregistrement", variant: "error" });
       console.error("Error !!!", error);
     }
   };

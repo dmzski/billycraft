@@ -21,8 +21,22 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
   }
 
   const [createOrUpdateBillMutation, createOrUpdateBillMutationState] = useMutation(BillGraphQL.createOrUpdateBill, {
-    onSuccess: () => {
-      onRequestClose();
+    onSuccess: (data) => {
+      const tmp = [...queryCache.getQueryData<Bill[]>("bills")!];
+      if (data.updateBill) {
+        const index = tmp.findIndex((b) => b.id === data.updateBill.id);
+        if (index > -1) {
+          tmp[index] = data.updateBill;
+          setNewBill({ ...data.updateBill });
+          queryCache.setQueryData("bills", tmp);
+        }
+      } else if (data.createBill) {
+        tmp.push(data.createBill);
+        queryCache.setQueryData("bills", tmp);
+        setNewBill({ ...data.createBill });
+      } else {
+        onRequestClose();
+      }
       toast.show({ message: "Enregistrement effectué", variant: "success" });
     },
   });
@@ -61,19 +75,11 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
 
   const downloadPdf = async () => {
     try {
-      if (pdfState.isIdle) {
+      if (pdfState.isIdle && newBill.id) {
         pdfState.update("loading");
-        const html = await PdfApi.getBillPdf(bill.id);
-        const fileLink = document.createElement("a");
-        fileLink.download = bill.id;
-        fileLink.target = "_blank";
+        const html = await PdfApi.getBillPdf(newBill.id);
         const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
-        fileLink.href = url;
-        fileLink.style.display = "none";
-        document.body.appendChild(fileLink);
-        fileLink.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(fileLink);
+        window.open(url, "blank");
         pdfState.update("idle");
       }
     } catch (e) {
@@ -93,7 +99,7 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
     <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newBill.id ? "Nouvelle " : "Modifier une "}facture</h1>
-        {bill && bill.id && (
+        {newBill && newBill.id && (
           <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
             <span className="material-icons mr-3">picture_as_pdf</span> PDF
           </button>

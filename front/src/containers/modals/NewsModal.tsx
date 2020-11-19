@@ -6,7 +6,7 @@ import CustomModal from "./CustomModal";
 import happyLogo from "../../assets/img/logo_happy.png";
 
 const NewsModal = () => {
-  const [showNewsModal, setShowNewsModal] = React.useState(false);
+  const [showNewsModal, setShowNewsModal] = React.useState(process.env.NODE_ENV === "development");
   const newsDivRef = React.useRef<any>(null);
   const newsQuery = useQuery(
     "news-query",
@@ -40,8 +40,8 @@ const NewsModal = () => {
     window.localStorage.setItem("version", VERSION);
   };
   return (
-    <CustomModal isOpen={showNewsModal} onRequestClose={toggleClose}>
-      <div style={{ zIndex: 0 }}>
+    <CustomModal contentClassName="w-3/4 lg:w-1/2" isOpen={showNewsModal} onRequestClose={toggleClose}>
+      <div style={{ zIndex: 0 }} className="w-full">
         <h1 className="text-2xl font-bold text-center pb-2 border-b-2 border-black relative">
           {VERSION} : What's new ? 🚀
           <img src={happyLogo} className="absolute object-contain h-24" style={{ top: -25, right: 10, zIndex: -1 }} alt="happy_logo" />

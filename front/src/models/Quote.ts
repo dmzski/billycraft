@@ -9,6 +9,7 @@ export class Quote {
   tva: number = 0;
   createdAt?: string;
   updatedAt?: string;
+  sentAt?: string;
   status: QuoteStatusEnum = QuoteStatusEnum.DRAFT;
   lines: QuoteLine[] = [];
   total?: number;

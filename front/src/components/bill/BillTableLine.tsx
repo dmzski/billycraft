@@ -1,4 +1,4 @@
-import { format, parse, parseJSON, toDate } from "date-fns";
+import { format, parseJSON } from "date-fns";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
@@ -21,6 +21,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
     onSuccess: () => {
       toast.show({ message: "Facture mis à jour", variant: "success" });
     },
+    throwOnError: true,
   });
 
   const updateBillStatus = (status: BillStatusEnum) => async (e: any) => {
@@ -33,6 +34,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
       setOpenStatusPopup(false);
       queryCache.invalidateQueries("bills");
     } catch (error) {
+      toast.show({ message: "Erreur lors de la mise à jour", variant: "error" });
       console.error("Error !!!", error);
     }
   };
@@ -107,17 +109,8 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
 
   return (
     <tr className={"bill-table-line hover " + (isSelected ? "selected" : "")} onClick={editBill}>
-      <td className="px-2 py-2">
-        <input
-          type="checkbox"
-          onClick={(e: any) => {
-            e.stopPropagation();
-            onSelect(bill.id);
-          }}
-        />
-      </td>
-      <td className="text-left">{bill.title}</td>
-      <td className="text-center">{bill.customer.name}</td>
+      <td className="pl-2 text-left truncate">{bill.title}</td>
+      <td className="text-center truncate">{bill.customer.name}</td>
       <td className="text-center">{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
       <td className="text-center">{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</td>
       <td className="text-center">{Math.round(getBillTotal(bill) * 100) / 100} €</td>

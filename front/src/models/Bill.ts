@@ -8,6 +8,7 @@ export class Bill {
   tva: number = 0;
   createdAt?: string;
   updatedAt?: string;
+  sentAt?: string;
   status: BillStatusEnum = BillStatusEnum.DRAFT;
   lines: BillLine[] = [];
   total?: number;

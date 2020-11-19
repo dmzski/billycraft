@@ -11,6 +11,7 @@ import SelectInput from "../../components/inputs/SelectInput";
 
 const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
+  const [errors, setErrors] = React.useState<any>({});
   const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
   const lineTableRef = React.useRef<any>(null);
 
@@ -44,7 +45,6 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
     tmp.lines.push(newLine);
     setQuote(tmp);
     setTimeout(() => {
-      console.log(document.getElementById(newLine.line + "-select"));
       document.getElementById(newLine.line + "-select")?.focus();
     }, 200);
   }, [setQuote, quote]);
@@ -59,7 +59,10 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
     setQuote(tmp);
     if (tmp.customer.id) {
       onSubmit(e);
+      setErrors({});
     } else {
+      e.preventDefault();
+      setErrors({ customer: "Saisissez un client en le sélectionnant dans la liste" });
     }
   };
 
@@ -111,6 +114,7 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
           onChange={(e: any) => setCustomerInputValue(e.target.value)}
           className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
         />
+        {errors && errors.customer && <div>{errors.customer}</div>}
       </div>
       <BaseInput
         divClassName="mt-2"
@@ -125,7 +129,7 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
         <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
         {!cantUpdate && (
           <div className="flex">
-            <button type="button" className="button transparent w-full focus:shadow-outline" onClick={addLine} disabled={disabled}>
+            <button type="button" className="button primary w-full focus:shadow-outline" onClick={addLine} disabled={disabled}>
               Ajouter une ligne
             </button>
           </div>

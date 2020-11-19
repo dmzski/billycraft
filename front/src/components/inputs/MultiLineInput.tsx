@@ -1,6 +1,17 @@
 import React from "react";
 
-const MultiLineInput: React.FC<any> = ({ className, value, onChange, placeholder, wrap, disabled, style, maxLength }) => {
+type MultiLineInputProps = {
+  className?: string;
+  value: string;
+  onChange: (e: any) => any;
+  placeholder?: string;
+  wrap?: any;
+  disabled?: boolean;
+  style?: any;
+  maxLength?: number;
+};
+
+const MultiLineInput: React.FC<MultiLineInputProps> = ({ className, value, onChange, placeholder, wrap, disabled, style, maxLength }) => {
   const textAreaRef = React.useRef<any>(null);
   React.useEffect(() => {
     function resize() {

@@ -1,16 +1,10 @@
-import { startOfMonth, startOfYear, addMinutes, formatISO, formatISO9075 } from "date-fns";
-import { subMinutes } from "date-fns/esm";
+import { startOfMonth, startOfYear } from "date-fns";
 import React from "react";
 import { useQuery } from "react-query";
-import { HttpClient } from "../api/HttpClient";
 import { ReportApi } from "../api/ReportApi";
 import Loader from "../components/Loader";
-import { VERSION } from "../constants/global";
-import DashboardCard from "../containers/cards/DashboardCard";
-import Layout from "../containers/layout/Layout";
 import ReportCards from "../containers/reports/ReportCards";
 import YearReportGraph from "../containers/reports/YearReportGraph";
-import CounterAnimated from "../containers/texts/CounterAnimated";
 import { ReportDTO } from "../models/dtos/Report";
 
 const Dashboard = () => {
@@ -21,14 +15,6 @@ const Dashboard = () => {
   const yearReportQuery = useQuery<ReportDTO>(["year-report", startOfYear(dateTarget)], ReportApi.getYearReport, {
     refetchOnWindowFocus: false,
   });
-
-  if (monthReportQuery.isLoading || !monthReportQuery.data) {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-  }
 
   const monthReport = monthReportQuery.data || new ReportDTO();
   const yearReport = yearReportQuery.data || new ReportDTO();

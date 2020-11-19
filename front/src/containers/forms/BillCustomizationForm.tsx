@@ -54,7 +54,7 @@ const BillCustomizationForm: React.FC<any> = ({ billCustomization }) => {
   }, [billCustomization]);
 
   return (
-    <form onSubmit={onSubmit} className="w-3/4 flex flex-col border-gray-400 border p-5 rounded bg-white shadow-lg">
+    <form onSubmit={onSubmit} className="w-full flex flex-col">
       <div className="flex mt-3 w-full content-center items-center">
         <div className="w-10 h-10 mr-3 border-2 border-black" style={{ backgroundColor: newBillCustomization.mainColor || "white" }}></div>
         <BaseInput

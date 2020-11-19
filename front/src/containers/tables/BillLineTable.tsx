@@ -19,16 +19,16 @@ const BillLineTable: React.FC<any> = ({ bill, setBill, disabled }) => {
   }
 
   return (
-    <table className="table-fixed bill-table w-auto">
+    <table className="bill-table w-full">
       <thead>
         <tr>
-          <th className="w-2 px-2 py-2">Type</th>
-          <th className="px-2 py-2 text-left">Description</th>
-          <th className="w-1/12 px-2 py-2">Quantité</th>
-          <th className="w-1/12 px-2 py-2">Prix H.T</th>
-          <th className="w-1/12 px-2 py-2">Prix TTC</th>
-          <th className="w-1/12 px-2 py-2">Sous Total</th>
-          <th className="w-5 px-4 py-2"></th>
+          <th className="w-32 px-2 py-2">Type</th>
+          <th className="px-2 w-auto py-2 text-left">Description</th>
+          <th className="w-32 px-2 py-2">Quantité</th>
+          <th className="w-32 px-2 py-2">Prix H.T</th>
+          <th className="w-32 px-2 py-2">Prix TTC</th>
+          <th className="w-32 px-2 py-2">Sous Total</th>
+          <th className="w-12 px-4 py-2"></th>
         </tr>
       </thead>
       <tbody>

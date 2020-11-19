@@ -9,9 +9,13 @@ import { Product } from "../models/Product";
 const ProductsPage = () => {
   const productsQuery = useQuery("products", ProductGraphQL.getAllProducts, { refetchOnWindowFocus: false });
   return (
-    <div className="flex-col justify-center w-full">
+    <div className="flex-col justify-center w-full items-center">
       <h2 className="text-bold text-2xl text-center">Vos produits</h2>
-      {productsQuery.isLoading && <Loader />}
+      {productsQuery.isLoading && (
+        <div className="w-full flex justify-center">
+          <Loader />
+        </div>
+      )}
       {productsQuery.isError && <div>Une erreur est survenue</div>}
       {productsQuery.data && <ProductTable products={productsQuery.data.sort((a: Product, b: Product) => a.description.localeCompare(b.description))} />}
     </div>

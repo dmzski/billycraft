@@ -1,9 +1,5 @@
-import { format } from "date-fns";
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { ROUTES } from "../../routes";
-import Modal from "react-modal";
-import CustomerForm from "../../containers/forms/CustomerForm";
+import { useParams } from "react-router-dom";
 import CustomerModal from "../../containers/modals/CustomerModal";
 
 const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
@@ -23,11 +19,8 @@ const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
 
   return (
     <tr className="quote-table-line hover " onClick={editCustomer}>
-      <td className="px-2">
-        <input type="checkbox" onChange={(e) => {}} />
-      </td>
-      <td className="text-left">{customer.name}</td>
-      <td className="text-center">{customer.contact}</td>
+      <td className="pl-2 text-left truncate">{customer.name}</td>
+      <td className="text-center truncate">{customer.contact}</td>
       <td className="text-center">{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</td>
       <td className="text-center">{customer.email}</td>
       <CustomerModal

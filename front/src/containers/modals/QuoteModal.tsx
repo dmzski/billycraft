@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
 import { useHistory } from "react-router-dom";
+import { EmailApi } from "../../api/EmailApi";
 import { PdfApi } from "../../api/PdfApi";
 import { BillGraphQL } from "../../graphql/BillGraphQL";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
@@ -20,15 +21,26 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   const pdfState = useLoadingState();
   const history = useHistory();
 
-  function goBack(e: any) {
-    onRequestClose();
-  }
-
   const [createOrUpdateQuoteMutation, createOrUpdateQuoteMutationState] = useMutation(QuoteGraphQL.createOrUpdateQuote, {
-    onSuccess: () => {
-      onRequestClose();
+    onSuccess: (data) => {
+      const tmp = [...queryCache.getQueryData<Quote[]>("quotes")!];
+      if (data.updateQuote) {
+        const index = tmp.findIndex((q) => q.id === data.updateQuote.id);
+        if (index > -1) {
+          tmp[index] = data.updateQuote;
+          setNewQuote({ ...data.updateQuote });
+          queryCache.setQueryData("quotes", tmp);
+        }
+      } else if (data.createQuote) {
+        tmp.push(data.createQuote);
+        queryCache.setQueryData("quotes", tmp);
+        setNewQuote({ ...data.createQuote });
+      } else {
+        onRequestClose();
+      }
       toast.show({ message: "Enregistrement effectué", variant: "success" });
     },
+    throwOnError: true,
   });
   const [createBillFormQuoteMutation, createBillFormQuoteMutationState] = useMutation(BillGraphQL.createFromQuote, {
     onSuccess: () => {
@@ -37,12 +49,17 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
       toast.show({ message: "Facture créé", variant: "success" });
     },
   });
-
   const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(QuoteGraphQL.updateQuoteStatus, {
     onSuccess: () => {
       onRequestClose();
       toast.show({ message: "Devis mis à jour", variant: "success" });
     },
+  });
+  const [sendMailMutation, sendMailMutationState] = useMutation(EmailApi.sendQuote, {
+    onSuccess: () => {
+      toast.show({ message: "Email envoyé", variant: "success" });
+    },
+    throwOnError: true,
   });
 
   async function saveQuote(e: any) {
@@ -52,8 +69,8 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
     try {
       await createOrUpdateQuoteMutation(newQuote);
-      queryCache.invalidateQueries("quotes");
     } catch (error) {
+      toast.show({ message: "Erreur lors de l'enregistrement", variant: "error" });
       console.error("Error !!!", error);
     }
   }
@@ -72,19 +89,11 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
 
   const downloadPdf = async () => {
     try {
-      if (pdfState.isIdle) {
+      if (pdfState.isIdle && newQuote.id) {
         pdfState.update("loading");
-        const html = await PdfApi.getQuotePdf(quote.id);
-        const fileLink = document.createElement("a");
-        fileLink.download = quote.id;
-        fileLink.target = "_blank";
+        const html = await PdfApi.getQuotePdf(newQuote.id);
         const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
-        fileLink.href = url;
-        fileLink.style.display = "none";
-        document.body.appendChild(fileLink);
-        fileLink.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(fileLink);
+        window.open(url, "blank");
         pdfState.update("idle");
       }
     } catch (e) {
@@ -96,10 +105,21 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
   };
 
+  const sendMail = async () => {
+    try {
+      if (!sendMailMutationState.isLoading && quote.id) {
+        await sendMailMutation(quote.id);
+      }
+    } catch (e) {
+      console.log("Error when send email pdf", e);
+      toast.show({ message: "Erreur lors de l'envoi de l'email", variant: "error" });
+    }
+  };
+
   const createBillFromQuote = async (e: any) => {
     try {
       if (!createBillFormQuoteMutationState.isLoading && quote.id) {
-        const result = createBillFormQuoteMutation(quote.id);
+        createBillFormQuoteMutation(quote.id);
         queryCache.invalidateQueries("bills");
       }
     } catch (error) {
@@ -116,7 +136,12 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
       <div className="flex items-center mb-4  border-b-2 border-gray-400">
         <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
-        {quote && quote.status === QuoteStatusEnum.ACCEPTED && quote.id && (
+        {newQuote && newQuote.status === QuoteStatusEnum.SENT && newQuote.id && (
+          <button className="button info mb-2 mr-3" onClick={sendMail} title="Envoyer par mail" disabled={sendMailMutationState.isLoading}>
+            <span className="material-icons mr-3">email</span> Envoyer le mail
+          </button>
+        )}
+        {newQuote && newQuote.status === QuoteStatusEnum.ACCEPTED && newQuote.id && (
           <button
             className="button success mb-2 mr-3"
             onClick={createBillFromQuote}
@@ -126,7 +151,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
             <span className="material-icons mr-3">payment</span> Créer la facture
           </button>
         )}
-        {quote && quote.id && (
+        {newQuote && newQuote.id && (
           <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
             <span className="material-icons mr-3">picture_as_pdf</span> PDF
           </button>

@@ -59,6 +59,7 @@ services:
       PDF_SERVICE_API_MP_REST_SCOPE: javax.inject.Singleton
       COMPTA_UPLOAD_DIR: /uploads
       COMPTA_BASE_URL: http://api.coco-erp.lan
+      QUARKUS_MAILER_HOST: mailserver
     volumes:
       - ./uploads:/uploads
     labels:
@@ -68,6 +69,12 @@ services:
       - "traefik.http.middlewares.back.headers.accesscontrolalloworiginlist=http://localhost:3000"
       - "traefik.http.middlewares.back.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.back.headers.addvaryheader=true"
+
+  mailserver:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
 
   reverse-proxy:
     # The official v2 Traefik docker image

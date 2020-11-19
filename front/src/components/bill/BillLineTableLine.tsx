@@ -83,7 +83,7 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
         <div className={"relative line-input " + (disabled ? "disabled" : "")}>
           <MultiLineInputAutoComplete
             placeholder="Description"
-            className="w-full"
+            className="w-full flex"
             disabled={disabled}
             value={line.description}
             onChange={handleChange("description")}

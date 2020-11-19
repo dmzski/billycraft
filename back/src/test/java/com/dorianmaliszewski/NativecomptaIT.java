@@ -1,4 +1,4 @@
-package com.dorianmaliszewski;
+package com.coco;
 
 import io.quarkus.test.junit.NativeImageTest;
 

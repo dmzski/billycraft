@@ -29,19 +29,28 @@ export function filterQuotes(array: any[], filters: any) {
     if (filters.createdAt && quote.createdAt && !format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm").includes(filters.createdAt)) {
       takeIt = false;
     }
+    if (filters.sentAt && ((quote.sentAt && !format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm").includes(filters.sentAt)) || !quote.sentAt)) {
+      takeIt = false;
+    }
     return takeIt;
   });
 }
 
 export function calculatePriceTTC(line: QuoteLine, tva = 0) {
+  if (!line.price) {
+    return 0;
+  }
   const price = parseFloat(line.price as any);
   return price + price * (tva / 100);
 }
 
 export function getQuoteTotal(quote: Quote) {
-  let total = 0;
-  total = quote.lines
-    .map((quoteLine: QuoteLine) => calculatePriceTTC(quoteLine, quote.tva) * quoteLine.quantity)
-    .reduce((previousValue: number, currentValue: number) => previousValue + currentValue);
-  return total;
+  let array = quote.lines
+    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
+    .map((quoteLine: QuoteLine) => calculatePriceTTC(quoteLine, quote.tva) * (quoteLine.quantity ? quoteLine.quantity : 0));
+
+  if (array && array.length > 0) {
+    return array.reduce((previousValue: number, currentValue: number) => previousValue + currentValue);
+  }
+  return 0;
 }

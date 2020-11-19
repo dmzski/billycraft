@@ -107,12 +107,12 @@
                 {/if}
             </div>
             <div style="display: flex; flex-direction: column">
-                <span>Date d'émission : {time:format(quote.getPDFDate, 'dd/MM/yyyy')}</span>
+                <span>Date d'émission : {quote.getPDFDate}</span>
                 <div style='font-size: 26px; margin-top: 20px; border: 2px solid black; text-align: center; background-color: {customization.mainColor ?: "white"};'>DEVIS</div>
             </div>
         </div>
     <div class="flex w-full" style="justify-content: space-between">
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column; width: 10cm">
             <span style="font-weight: bold">{company.name}</span>
             <span>{company.address.transformToHtml.raw}</span>
             <span>{company.postalCode}&nbsp;{company.city}</span>
@@ -124,9 +124,9 @@
             <span>&#9990; : {company.phoneNumber ?: ""}</span>
             {/if}
         </div>
-        <div style="display: flex; flex-direction: column; margin-top: 5mm">
+        <div style="display: flex; flex-direction: column; margin-top: 5mm; text-align: right; width: 10cm">
             {#if quote.customer}
-                <span>{quote.customer.name}</span>
+                <span style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">{quote.customer.name}</span>
                 <span>{quote.customer.address.transformToHtml.raw}</span>
                 <span>{quote.customer.postalCode},&nbsp;{quote.customer.city}</span>
                 {#if customization.displayCustomerEmail }
@@ -138,44 +138,50 @@
             {/if}
         </div>
     </div>
-    <div class="flex w-full" style="flex-direction: column; align-items: flex-end; margin-top: 20px; font-weight: bold">
+    <div class="flex w-full" style="flex-direction: column; align-items: flex-end; margin-top: 20px; font-weight: bold;">
         <span>Référence : {quote.id}</span>
     </div>
     <div class="w-full flex" style="margin-top: 20px; margin-bottom: 20px">
         <span>Objet :&nbsp;</span>
         <span>{quote.title}</span>
     </div>
-        <table style="width: 100%">
+        <table style="width: 21cm;">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Quantité</th>
-                    <th>Prix unitaire HT</th>
-                    <th>Sous total</th>
+                    <th style="width: 13cm">Description</th>
+                    <th style="width: 2cm">Quantité</th>
+                    <th style="width: 3cm">Prix unitaire HT</th>
+                    <th style="width: 3cm">Sous total</th>
                 </tr>
             </thead>
             <tbody>
                 {#if articles.size > 0}
                     <tr>
-                        <td colspan="4" style="text-align: center">MATERIELS</td>
+                        <td style="text-align: center; font-weight: bold">MATERIELS</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 {/if}
                 {#for line in articles}
                     <tr>
-                        <td style="width: 13cm ">{line.description.transformToHtml.raw}</td>
-                        <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
-                        <td style="text-align: center;width: 3cm">{line.price.formatCurrency}</td>
+                        <td style="max-width: 13cm; overflow-wrap: break-word;">{line.description.transformToHtml.raw}</td>
+                        <td style="text-align: center; ">{line.quantity.formatNumber}</td>
+                        <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
                         <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
                     </tr>
                 {/for}
                 {#if services.size > 0}
                 <tr>
-                    <td colspan="4" style="text-align: center">SERVICES</td>
+                    <td style="text-align: center; font-weight: bold">SERVICES</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 {/if}
                 {#for line in services}
                 <tr>
-                    <td style="width: 13cm ">{line.description.transformToHtml.raw}</td>
+                    <td style="max-width: 13cm; overflow-wrap: break-word;">{line.description.transformToHtml.raw}</td>
                     <td style="text-align: center; width: 2cm">{line.quantity.formatNumber}</td>
                     <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
                     <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>

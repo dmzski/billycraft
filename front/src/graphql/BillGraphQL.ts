@@ -4,30 +4,32 @@ import { Bill } from "../models/Bill";
 import { BillStatusEnum } from "../models/BillStatusEnum";
 import { graphQLClient } from "./GraphQLClient";
 
+const BILL_DTO = `
+id
+customer {
+  id
+  name
+}
+title
+createdAt
+updatedAt
+sentAt
+version
+status
+lines {
+  line
+  description
+  price
+  quantity
+  type
+}`;
 export const BillGraphQL = {
   getAllBills: async () => {
     const { allBills } = await graphQLClient.request(
       gql`
         query {
           allBills {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            sentAt
-            version
-            status
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${BILL_DTO}
           }
         }
       `
@@ -40,24 +42,7 @@ export const BillGraphQL = {
       gql`
         query {
           allBillsNotArchived {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            sentAt
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${BILL_DTO}
           }
         }
       `
@@ -70,24 +55,7 @@ export const BillGraphQL = {
       gql`
         query {
           allBillsArchived {
-            id
-            customer {
-              id
-              name
-            }
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            sentAt
-            lines {
-              line
-              description
-              price
-              quantity
-              type
-            }
+            ${BILL_DTO}
           }
         }
       `
@@ -101,15 +69,7 @@ export const BillGraphQL = {
       gql`
         mutation ($bill: BillInput!) {
           ${bill.id ? "updateBill" : "createBill"}(bill: $bill) {
-            id
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            customer {
-                id
-            }
+            ${BILL_DTO}
           }
         }
       `,
@@ -126,15 +86,7 @@ export const BillGraphQL = {
       gql`
         query {
             billById(id: "${id}") {
-            id
-            title
-            customer {
-              id
-              name
-            }
-            phoneNumber
-            postalCode
-            status
+            ${BILL_DTO}
           }
         }
       `
@@ -148,15 +100,7 @@ export const BillGraphQL = {
       gql`
         mutation($id: String, $statusEnum: BillStatusEnum) {
           updateBillStatus(id: $id, statusEnum: $statusEnum) {
-            id
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            customer {
-              id
-            }
+            ${BILL_DTO}
           }
         }
       `,
@@ -175,15 +119,6 @@ export const BillGraphQL = {
         mutation($quoteId: String) {
           createBillFromQuote(quoteId: $quoteId) {
             id
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            quoteId
-            customer {
-              id
-            }
           }
         }
       `,

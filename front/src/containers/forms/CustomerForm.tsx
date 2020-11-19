@@ -24,7 +24,15 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
         </h1>
       </div>
       <form className="mt-3" onSubmit={onSubmit}>
-        <BaseInput disabled={disabled} divClassName="mt-3" label="Nom" placeholder="Nom du client" value={customer.name} onChange={inputChange("name")} />
+        <BaseInput
+          disabled={disabled}
+          divClassName="mt-3"
+          label="Nom"
+          placeholder="Nom du client"
+          value={customer.name}
+          maxLength={100}
+          onChange={inputChange("name")}
+        />
         <BaseInput
           disabled={disabled}
           divClassName="mt-3"
@@ -32,6 +40,7 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
           placeholder="Adresse du client"
           value={customer.address}
           onChange={inputChange("address")}
+          maxLength={255}
         />
         <BaseInput disabled={disabled} divClassName="mt-3" label="Email" placeholder="Adresse email" value={customer.email} onChange={inputChange("email")} />
         <BaseInput
@@ -41,6 +50,7 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
           placeholder="Téléphone"
           value={customer.phoneNumber}
           onChange={inputChange("phoneNumber")}
+          maxLength={10}
         />
         <BaseInput disabled={disabled} divClassName="mt-3" label="Ville" placeholder="Ville" value={customer.city} onChange={inputChange("city")} />
         <BaseInput
@@ -50,6 +60,7 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
           placeholder="Code Postal"
           value={customer.postalCode}
           onChange={inputChange("postalCode")}
+          maxLength={10}
         />
         <BaseInput
           disabled={disabled}
@@ -58,6 +69,7 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
           placeholder="Nom complet"
           value={customer.contact}
           onChange={inputChange("contact")}
+          maxLength={100}
         />
         <div className="mt-3 flex flex-row-reverse">
           <button className="primary" disabled={isLoading || disabled} type="submit">

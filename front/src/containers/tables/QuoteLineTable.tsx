@@ -22,13 +22,13 @@ const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
     <table className="table-fixed quote-table w-full" style={{ overflowX: "auto" }}>
       <thead>
         <tr>
-          <th className="w-2 px-2 py-2">Type</th>
-          <th className="px-2 py-2 text-left">Description</th>
-          <th className="w-1/12 px-2 py-2">Quantité</th>
-          <th className="w-1/12 px-2 py-2">Prix H.T</th>
-          <th className="w-1/12 px-2 py-2">Prix TTC</th>
-          <th className="w-1/12 px-2 py-2">Sous Total</th>
-          <th className="w-5 px-4 py-2"></th>
+          <th className="w-32 px-2 py-2">Type</th>
+          <th className="px-2 py-2 text-left w-auto">Description</th>
+          <th className="w-32 px-2 py-2">Quantité</th>
+          <th className="w-32 px-2 py-2">Prix H.T</th>
+          <th className="w-32 px-2 py-2">Prix TTC</th>
+          <th className="w-32 px-2 py-2">Sous Total</th>
+          <th className="w-12 px-4 py-2"></th>
         </tr>
       </thead>
       <tbody>

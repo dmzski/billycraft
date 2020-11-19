@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nouveau devis</title>
+</head>
+<body>
+<div>
+    {#if customization.body }
+    {customization.body.replaceIdentifiers(quote).transformToHtml.raw}
+    {/if}
+</div>
+<div
+        style="
+        height: 2px;
+        width: 100%;
+        font-size: 0.6rem;
+        margin-top: 10px;
+        background-color: rgba(137, 43, 226, 0.452);
+        margin-bottom: 10px;
+      "
+></div>
+<div
+        style="
+        margin-right: 5px;
+        text-align: right;
+        font-family: Roboto, sans-serif;
+        color: #a0a0a0;
+      "
+>
+    Powered by
+    <a
+            style="
+          color: rgb(137, 43, 226);
+          font-weight: bold;
+          text-decoration: none;
+          text-transform: uppercase;
+        "
+            href="https://coco-erp.fr"
+    >coco-erp</a
+    >
+</div>
+</body>
+</html>

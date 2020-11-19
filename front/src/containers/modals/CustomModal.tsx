@@ -1,7 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const CustomModal: React.FC<any> = ({ isOpen, children, onRequestClose, style, closeOnOverlayClick }) => {
+type CustomModalProps = {
+  isOpen: boolean;
+  children?: any;
+  onRequestClose: (e?: any) => any;
+  style?: any;
+  closeOnOverlayClick?: boolean;
+  contentClassName?: any;
+};
+
+const CustomModal: React.FC<CustomModalProps> = ({ isOpen, children, onRequestClose, style, closeOnOverlayClick, contentClassName }) => {
   const overlayRef = React.useRef<any>(null);
   const containerRef = React.useRef<any>(null);
   const [visible, setVisible] = React.useState(false);
@@ -72,7 +81,12 @@ const CustomModal: React.FC<any> = ({ isOpen, children, onRequestClose, style, c
           else e.stopPropagation();
         }}
       >
-        <div ref={containerRef} className="custom-modal-container hide" style={style ? style.content : null} onClick={(e: any) => e.stopPropagation()}>
+        <div
+          ref={containerRef}
+          className={"custom-modal-container hide " + contentClassName}
+          style={style ? style.content : null}
+          onClick={(e: any) => e.stopPropagation()}
+        >
           <button
             onClick={handleClose}
             className="outline-none hover:shadow-outline flex items-center justify-center absolute top-0 bg-white text-gray-700 p-2 rounded-full"

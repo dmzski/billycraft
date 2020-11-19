@@ -1,14 +1,10 @@
-import { format } from "date-fns";
-import { valueFromAST } from "graphql";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { LINE_TYPE } from "../../constants/line";
-import { QUOTE_STATUS } from "../../constants/quote";
 import { ProductGraphQL } from "../../graphql/ProductGraphQL";
 import { useToast } from "../../providers/ToastProvider";
 import { calculatePriceTTC } from "../../utils/quote";
 import BaseSelect from "../inputs/BaseSelect";
-import MultiLineInput from "../inputs/MultiLineInput";
 import MultiLineInputAutoComplete from "../inputs/MultiLineInputAutoComplete";
 
 type QuoteLineTableLine = {
@@ -50,7 +46,7 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
 
   const saveAsModel = async (event: any) => {
     try {
-      const result = await saveProductMutation({ description: line.description, price: line.price });
+      await saveProductMutation({ description: line.description, price: line.price });
       toast.show({ message: "Modèle enregistré", variant: "success" });
     } catch (error) {
       toast.show({ message: "Erruer lors de l'enregistrement", variant: "error" });
@@ -85,7 +81,7 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
         <div className={"relative line-input " + (disabled ? "disabled" : "")}>
           <MultiLineInputAutoComplete
             placeholder="Description"
-            className="w-full"
+            className="w-full flex"
             disabled={disabled}
             value={line.description}
             onChange={handleChange("description")}
