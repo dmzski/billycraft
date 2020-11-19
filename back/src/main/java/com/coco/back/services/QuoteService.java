@@ -35,7 +35,8 @@ public class QuoteService {
     @Transactional
     public Quote createQuote(String username, Quote quote) {
         User user = (User) User.findByIdOptional(username).orElseThrow();
-        quote.customer = Customer.findById(quote.customer.id);
+        quote.id = null;
+        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, quote.customer.id).singleResult();
         AtomicInteger index = new AtomicInteger();
         quote.lines.forEach(quoteLine -> {
             quoteLine.line = index.getAndIncrement();
@@ -55,6 +56,7 @@ public class QuoteService {
         quote.title = newQuote.title;
         quote.tva = newQuote.tva;
         quote.lines.clear();
+        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, newQuote.customer.id).singleResult();
         quote.persistAndFlush();
         AtomicInteger index = new AtomicInteger();
         quote.lines.addAll(newQuote.lines.stream().peek(quoteLine -> {

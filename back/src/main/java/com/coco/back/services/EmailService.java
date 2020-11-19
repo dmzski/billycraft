@@ -51,9 +51,12 @@ public class EmailService {
 
 
     public void batchSendQuoteEmail(File file, Quote quote) {
+        if (quote.customer == null) {
+            return;
+        }
         Company company = (Company) Company.find("id = ?1", quote.companyId).singleResultOptional().orElseThrow();
         User user = (User) User.find("email = ?1", quote.createdBy).singleResultOptional().orElseThrow();
-        Customer customer = (Customer) Customer.find("id = ?1", quote.companyId).singleResultOptional().orElseThrow();
+        Customer customer = (Customer) Customer.find("id = ?1", quote.customer.id).singleResultOptional().orElseThrow();
 
         if (customer.email == null) {
             return ;
@@ -83,9 +86,12 @@ public class EmailService {
     }
 
     public void batchSendBillEmail(File file, Bill bill) {
+        if (bill.customer == null) {
+            return;
+        }
         Company company = (Company) Company.find("id = ?1", bill.companyId).singleResultOptional().orElseThrow();
         User user = (User) User.find("email = ?1", bill.createdBy).singleResultOptional().orElseThrow();
-        Customer customer = (Customer) Customer.find("id = ?1", bill.companyId).singleResultOptional().orElseThrow();
+        Customer customer = (Customer) Customer.find("id = ?1", bill.customer.id).singleResultOptional().orElseThrow();
 
         if (customer.email == null) {
             return ;

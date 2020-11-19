@@ -33,7 +33,8 @@ public class BillService {
     @Transactional
     public Bill createBill(String username, Bill bill) {
         User user = (User) User.findByIdOptional(username).orElseThrow();
-        bill.customer = Customer.findById(bill.customer.id);
+        bill.id = null;
+        bill.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, bill.customer.id).singleResult();
         AtomicInteger index = new AtomicInteger();
         bill.lines.forEach(billLine -> {
             billLine.line = index.getAndIncrement();
@@ -72,6 +73,7 @@ public class BillService {
         bill.status = BillStatusEnum.DRAFT;
         bill.tva = newBill.tva;
         bill.title = newBill.title;
+        bill.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, newBill.customer.id).singleResult();
         bill.lines.clear();
         bill.persistAndFlush();
 
