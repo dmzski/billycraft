@@ -23,3 +23,6 @@ package:
 
 update-docker:
 	./mvnw clean package -Pnative && ${DC} build && ${DC} up -d
+
+load-test:
+	./scripts/loadtest.sh
