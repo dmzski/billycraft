@@ -1,7 +1,7 @@
 package com.coco.back.main.services;
 
-import com.coco.back.main.dtos.SearchResultDTO;
 import com.coco.back.main.dtos.SearchDTO;
+import com.coco.back.main.dtos.SearchResultDTO;
 import com.coco.back.main.enums.SearchCategoryEnum;
 import com.coco.back.main.models.Bill;
 import com.coco.back.main.models.Company;

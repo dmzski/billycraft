@@ -1,14 +1,12 @@
 package com.coco.back.main.services;
 
-import com.coco.back.main.models.BillCustomization;
-import com.coco.back.main.models.Company;
-import com.coco.back.main.services.rest.PDFServiceRest;
 import com.coco.back.main.enums.BillStatusEnum;
-import com.coco.back.main.enums.LineTypeEnum;
 import com.coco.back.main.enums.StatusEnum;
 import com.coco.back.main.forms.PdfMultipartForm;
 import com.coco.back.main.models.Bill;
-import com.coco.back.main.models.BillLine;
+import com.coco.back.main.models.BillCustomization;
+import com.coco.back.main.models.Company;
+import com.coco.back.main.services.rest.PDFServiceRest;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.api.CheckedTemplate;
@@ -25,9 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class BillPDFService {

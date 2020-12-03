@@ -1,7 +1,6 @@
 package com.coco.back.main.services;
 
 import com.coco.back.main.dtos.ReportDTO;
-import com.coco.back.main.enums.LineTypeEnum;
 import com.coco.back.main.models.Bill;
 import com.coco.back.main.models.Company;
 import com.coco.back.main.utils.BillUtils;

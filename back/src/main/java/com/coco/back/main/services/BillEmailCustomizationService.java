@@ -1,8 +1,8 @@
 package com.coco.back.main.services;
 
+import com.coco.back.main.models.BillEmailCustomization;
 import com.coco.back.main.models.Company;
 import com.coco.back.main.models.QuoteCustomization;
-import com.coco.back.main.models.BillEmailCustomization;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;

@@ -1,8 +1,8 @@
 package com.coco.back.main.graphql;
 
+import com.coco.back.main.enums.SettingEnum;
 import com.coco.back.main.models.Setting;
 import com.coco.back.main.services.SettingService;
-import com.coco.back.main.enums.SettingEnum;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Query;

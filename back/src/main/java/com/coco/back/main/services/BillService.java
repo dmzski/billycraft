@@ -1,8 +1,8 @@
 package com.coco.back.main.services;
 
-import com.coco.back.main.models.*;
 import com.coco.back.main.enums.BillStatusEnum;
 import com.coco.back.main.enums.StatusEnum;
+import com.coco.back.main.models.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

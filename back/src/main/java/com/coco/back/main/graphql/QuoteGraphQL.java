@@ -1,8 +1,8 @@
 package com.coco.back.main.graphql;
 
+import com.coco.back.main.enums.StatusEnum;
 import com.coco.back.main.models.Quote;
 import com.coco.back.main.services.QuoteService;
-import com.coco.back.main.enums.StatusEnum;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;

@@ -1,8 +1,8 @@
 package com.coco.back.main.models;
 
+import com.coco.back.main.deserializers.CustomInstantDeserializer;
 import com.coco.back.main.enums.BillStatusEnum;
 import com.coco.back.main.generators.BillIdGenerator;
-import com.coco.back.main.deserializers.CustomInstantDeserializer;
 import com.coco.back.main.serializers.CustomInstantSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

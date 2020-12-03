@@ -2,14 +2,12 @@ package com.coco.back.main.graphql;
 
 import com.coco.back.main.models.Customer;
 import com.coco.back.main.services.CustomerService;
-import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Mutation;
 import org.eclipse.microprofile.graphql.Query;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.inject.Inject;
 import java.util.List;

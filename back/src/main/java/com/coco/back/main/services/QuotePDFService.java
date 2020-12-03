@@ -1,12 +1,10 @@
 package com.coco.back.main.services;
 
+import com.coco.back.main.enums.StatusEnum;
+import com.coco.back.main.forms.PdfMultipartForm;
 import com.coco.back.main.models.Company;
 import com.coco.back.main.models.Quote;
 import com.coco.back.main.models.QuoteCustomization;
-import com.coco.back.main.models.QuoteLine;
-import com.coco.back.main.enums.LineTypeEnum;
-import com.coco.back.main.enums.StatusEnum;
-import com.coco.back.main.forms.PdfMultipartForm;
 import com.coco.back.main.services.rest.PDFServiceRest;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
@@ -24,9 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class QuotePDFService {

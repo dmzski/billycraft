@@ -1,7 +1,7 @@
 package com.coco.back.main.graphql;
 
-import com.coco.back.main.services.CompanyService;
 import com.coco.back.main.models.Company;
+import com.coco.back.main.services.CompanyService;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;

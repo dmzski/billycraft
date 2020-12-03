@@ -1,7 +1,7 @@
 package com.coco.back.main.models;
 
-import com.coco.back.main.models.IdClasses.BillLinePK;
 import com.coco.back.main.enums.LineTypeEnum;
+import com.coco.back.main.models.IdClasses.BillLinePK;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.persistence.*;
