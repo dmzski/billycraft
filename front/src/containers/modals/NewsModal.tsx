@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { HttpClient } from "../../api/HttpClient";
-import { VERSION } from "../../constants/global";
+import { DISPLAY_NEWS, VERSION } from "../../constants/global";
 import CustomModal from "./CustomModal";
 import happyLogo from "../../assets/img/logo_happy.png";
 
@@ -30,7 +30,7 @@ const NewsModal = () => {
 
   React.useEffect(() => {
     const version = window.localStorage.getItem("version");
-    if (!version || version !== VERSION) {
+    if (DISPLAY_NEWS && (!version || version !== VERSION)) {
       setShowNewsModal(true);
     }
   }, []);

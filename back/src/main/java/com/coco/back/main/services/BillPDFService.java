@@ -59,15 +59,7 @@ public class BillPDFService {
         Company company = (Company) Company.findByIdOptional(bill.companyId).orElseThrow(EntityNotFoundException::new);
         BillCustomization billCustomization = (BillCustomization) BillCustomization.find("company_id = ?1", company.id).singleResultOptional().orElse(new BillCustomization());
 
-        List<BillLine> articles = new ArrayList<>();
-        List<BillLine> services = new ArrayList<>();
-        if (bill.lines != null) {
-            articles = bill.lines.stream().filter(billLine -> billLine.type != null && billLine.type.equals(LineTypeEnum.ARTICLE)).collect(Collectors.toList());
-            services = bill.lines.stream().filter(billLine -> billLine.type == null || !billLine.type.equals(LineTypeEnum.ARTICLE)).collect(Collectors.toList());
-
-        }
-
-        String html = Templates.bill().data("bill", bill).data("articles", articles).data("services", services).data("company",company).data("customization", billCustomization).render();
+        String html = Templates.bill().data("bill", bill).data("lines", bill.lines).data("company",company).data("customization", billCustomization).render();
         try {
             PdfMultipartForm form = new PdfMultipartForm();
             form.index = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
@@ -118,11 +110,11 @@ public class BillPDFService {
     public File getBillPdfFile(String username, String billId) {
         Bill bill = this.billService.getBillById(username, billId);
         Company company = (Company) Company.findByIdOptional(bill.companyId).orElseThrow(EntityNotFoundException::new);
-        if (bill.fileName == null || bill.fileName.equals("") || bill.status.equals(StatusEnum.DRAFT)) {
+        if (bill.status.equals(StatusEnum.DRAFT)) {
             return null;
         }
         File f = new File(pdfDir + "/" + company.id + "/" + bill.fileName);
-        if (!f.exists()) {
+        if (bill.fileName == null || bill.fileName.equals("") || !f.exists()) {
             this.generateBill(username, billId);
             return new File(bill.fileName);
         }

@@ -19,10 +19,10 @@ dev:
 	./mvnw clean compile quarkus:dev
 
 package:
-	./mvnw clean package -Pnative
+	./mvnw clean package
 
 update-docker:
-	./mvnw clean package -Pnative && ${DC} build && ${DC} up -d
+	./mvnw clean package && ${DC} build && ${DC} up -d
 
 load-test:
 	./scripts/loadtest.sh

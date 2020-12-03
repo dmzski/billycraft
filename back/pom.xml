@@ -66,6 +66,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-reactive-pg-client</artifactId>
     </dependency>
     <dependency>
@@ -88,6 +92,21 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-mailer</artifactId>
     </dependency>
+
+    <!-- Apache POI -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>4.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>4.1.2</version>
+    </dependency>
+    <!-- /Apache POI -->
+
+
   </dependencies>
   <build>
     <plugins>
@@ -154,7 +173,6 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <additionalBuildArgs>-H:IncludeResourceBundles=sun.util.resources.TimeZoneNames</additionalBuildArgs>
       </properties>
     </profile>
   </profiles>

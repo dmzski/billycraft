@@ -12,7 +12,7 @@ import SelectInput from "../../components/inputs/SelectInput";
 const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
   const [errors, setErrors] = React.useState<any>({});
-  const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
+  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, { refetchOnWindowFocus: false, enabled: customerInputValue.length > 0 });
   const lineTableRef = React.useRef<any>(null);
 
   function inputChange(property: keyof Quote) {
@@ -111,10 +111,12 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
           data={getSelectCustomerData()}
           placeholder="Nom du client"
           value={customerInputValue}
+          isError={customersQuery.isError}
+          isLoading={customersQuery.isLoading}
           onChange={(e: any) => setCustomerInputValue(e.target.value)}
           className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
         />
-        {errors && errors.customer && <div>{errors.customer}</div>}
+        {errors && errors.customer && <div className="text-red-700 font-bold">{errors.customer}</div>}
       </div>
       <BaseInput
         divClassName="mt-2"

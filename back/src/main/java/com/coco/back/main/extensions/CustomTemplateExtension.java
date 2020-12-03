@@ -37,7 +37,7 @@ public class CustomTemplateExtension {
 
     static String formatCurrency(Double num) {
         if (num == 0) {
-            return "";
+            return "0.00 €";
         }
         return String.format("%.2f €", num);
     }
@@ -68,7 +68,7 @@ public class CustomTemplateExtension {
 
     static String formatNumber(Double num) {
         if (num == 0) {
-            return "";
+            return "0.00";
         }
         return String.format("%.2f", num);
     }

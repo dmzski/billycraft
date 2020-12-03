@@ -58,14 +58,8 @@ public class QuotePDFService {
         Company company = (Company) Company.findByIdOptional(quote.companyId).orElseThrow(EntityNotFoundException::new);
         QuoteCustomization quoteCustomization = (QuoteCustomization) QuoteCustomization.find("company_id = ?1", company.id).singleResultOptional().orElse(new QuoteCustomization());
 
-        List<QuoteLine> articles = new ArrayList<>();
-        List<QuoteLine> services = new ArrayList<>();
-        if (quote.lines != null) {
-            articles = quote.lines.stream().filter(quoteLine -> quoteLine.type != null && quoteLine.type.equals(LineTypeEnum.ARTICLE)).collect(Collectors.toList());
-            services = quote.lines.stream().filter(quoteLine -> quoteLine.type == null || !quoteLine.type.equals(LineTypeEnum.ARTICLE)).collect(Collectors.toList());
 
-        }
-        String html = Templates.quote().data("quote", quote).data("articles", articles).data("services", services).data("company",company).data("customization", quoteCustomization).render();
+        String html = Templates.quote().data("quote", quote).data("lines", quote.lines).data("company",company).data("customization", quoteCustomization).render();
         try {
             PdfMultipartForm form = new PdfMultipartForm();
             form.index = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
@@ -119,7 +113,7 @@ public class QuotePDFService {
             return null;
         }
         File f = new File(pdfDir + "/" + company.id + "/" + quote.fileName);
-        if (quote.fileName == null || !f.exists()) {
+        if (quote.fileName == null || quote.fileName.equals("") || !f.exists()) {
                 this.generateQuote(username, quoteId);
                 quote = this.quoteService.getQuoteById(username, quoteId);
                 return new File(pdfDir + "/" + company.id + "/" + quote.fileName);

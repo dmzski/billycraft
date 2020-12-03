@@ -51,6 +51,6 @@ public class CustomerService {
 
     public List<Customer> getAllCustomersByNameContains(String username, String name) {
         User user = (User) User.find("email = ?1", username).singleResultOptional().orElseThrow();
-        return Customer.find("company_id = ?1 AND lower(name) LIKE ?2", user.company.id, "%" + name.toLowerCase() + "%").list();
+        return Customer.find("company_id = ?1 AND concat(cast(id as string),translate(lower(name), ' ', '')) LIKE ?2", user.company.id, "%" + name.toLowerCase().replaceAll(" ", "") + "%").list();
     }
 }

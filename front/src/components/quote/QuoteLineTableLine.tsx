@@ -92,9 +92,10 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
             id={"line-" + line.line + "-description"}
             onOptionClick={onOptionClick}
           />
-          {line.description && line.description.length > 0 && !isLineInProducts() && (
+          {!disabled && line.description && line.description.length > 0 && !isLineInProducts() && (
             <div className="absolute right-0 flex justify-center items-center h-full pb-2">
               <button
+                tabIndex={-1}
                 disabled={saveProductMutationState.isLoading}
                 type="button"
                 onClick={saveAsModel}
@@ -111,24 +112,26 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input
             disabled={disabled}
-            className="text-right"
+            className="text-right flex"
             placeholder="Quantité"
             type="number"
             step="0.01"
-            value={line.quantity || ""}
+            style={{height: 36}}
+            value={line.quantity || line.quantity === 0 ? line.quantity : ""}
             onChange={handleChange("quantity")}
-          />
+            />
         </div>
       </td>
       <td className="text-center">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input
+            style={{height: 36}}
             disabled={disabled}
-            className="text-right"
+            className="text-right flex"
             placeholder="Prix"
             type="number"
             step="0.01"
-            value={line.price || ""}
+            value={line.price || line.price === 0 ? line.price : ""}
             onChange={handleChange("price")}
           />
         </div>
@@ -137,7 +140,7 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
       <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</td>
       <td className="text-center">
         {!disabled && (
-          <button className="px-2" onClick={deleteLine} type="button">
+          <button className="px-2 flex" onClick={deleteLine} type="button">
             <span style={{ padding: 0 }} className="material-icons">
               delete
             </span>

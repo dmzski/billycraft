@@ -160,7 +160,7 @@ const MultiLineInputAutoComplete: React.FC<any> = ({
       <textarea
         id={id}
         ref={textAreaRef}
-        className={className}
+        className={className + " multiline-input"}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
@@ -170,7 +170,7 @@ const MultiLineInputAutoComplete: React.FC<any> = ({
         disabled={disabled}
         rows={1}
       ></textarea>
-      {open && value && value.length > 0 && !disabled && (
+      {!disabled && open && value && value.length > 0 && !disabled && (
         <ul
           style={{ top: "100%" }}
           id={id + "-result"}

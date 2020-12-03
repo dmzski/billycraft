@@ -31,10 +31,10 @@ public class PdfResource {
 
     @GET
     @Path("/quote/{id}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces("application/pdf")
     public Response getPdfByQuoteId (@PathParam String tenant, @PathParam String id) {
         byte[] pdf = this.quotePdfService.getQuotePdf(username, id);
-        return Response.ok(pdf).build();
+        return Response.ok(pdf).header("Content-Disposition","attachment; filename=\"" + id + ".pdf\"").build();
     }
 
     @GET

@@ -93,7 +93,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
         pdfState.update("loading");
         const html = await PdfApi.getQuotePdf(newQuote.id);
         const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
-        window.open(url, "blank");
+        window.open(url, "_blank");
         pdfState.update("idle");
       }
     } catch (e) {

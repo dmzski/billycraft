@@ -58,12 +58,12 @@ const BillPage = () => {
         {showArchived ? (
           <button className="button" onClick={handleShowArchived}>
             <span className="material-icons mr-2">visibility_off</span>
-            <p>Masquer les factures archivées</p>
+            <p>Masquer les factures archivées/payées</p>
           </button>
         ) : (
           <button className="button" onClick={handleShowArchived}>
             <span className="material-icons mr-2">visibility</span>
-            <p>Voir les factures archivées</p>
+            <p>Voir les factures archivées/payées</p>
           </button>
         )}
         {showFilters ? (

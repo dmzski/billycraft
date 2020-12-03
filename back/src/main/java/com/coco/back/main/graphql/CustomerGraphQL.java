@@ -20,12 +20,6 @@ public class CustomerGraphQL {
     @Inject
     CustomerService customerService;
 
-    @Inject
-    SecurityIdentity securityIdentity;
-
-    @Inject
-    JsonWebToken token;
-
     @Claim(standard = Claims.preferred_username)
     String username;
 

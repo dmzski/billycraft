@@ -8,6 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class BillService {
     }
 
     public List<Bill> getAllBillsNotArchived(String username) {
-        return Bill.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status != 'ARCHIVED'", username);
+        return Bill.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status not in ?2", username, Arrays.asList(BillStatusEnum.ARCHIVED, BillStatusEnum.PAYMENT_PAID));
     }
 
     public Bill getBillById(String username, String id) {
@@ -77,6 +78,8 @@ public class BillService {
         bill.lines.clear();
         bill.persistAndFlush();
 
+
+
         AtomicInteger index = new AtomicInteger();
         bill.lines.addAll(newBill.lines.stream().peek(billLine -> {
             billLine.line = index.getAndIncrement();
@@ -119,7 +122,7 @@ public class BillService {
     }
 
     public List<Bill> getAllBillsArchived(String username) {
-        return Bill.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status = 'ARCHIVED'", username);
+        return Bill.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status in ?2", username, Arrays.asList(BillStatusEnum.ARCHIVED, BillStatusEnum.PAYMENT_PAID));
     }
 
     @Transactional

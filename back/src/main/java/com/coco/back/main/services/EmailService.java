@@ -62,6 +62,11 @@ public class EmailService {
             return ;
         }
 
+        if (file == null || !file.exists()) {
+            file = this.quotePDFService.getQuotePdfFile(quote.createdBy, quote.id);
+        }
+
+
         QuoteEmailCustomization quoteEmailCustomization = (QuoteEmailCustomization) QuoteEmailCustomization.find("company_id = ?1", company.id).singleResultOptional().orElse(new QuoteEmailCustomization());
 
         Mail quoteMail = Mail
@@ -96,6 +101,11 @@ public class EmailService {
         if (customer.email == null) {
             return ;
         }
+        if (file == null || !file.exists()) {
+            file = this.billPDFService.getBillPdfFile(bill.createdBy, bill.id);
+        }
+
+        System.out.println(file.getName());
 
         BillEmailCustomization billEmailCustomization = (BillEmailCustomization) BillEmailCustomization.find("company_id = ?1", company.id).singleResultOptional().orElse(new BillEmailCustomization());
         Mail billMail =  Mail
