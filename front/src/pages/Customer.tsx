@@ -1,13 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { useHistory } from "react-router-dom";
-import CustomerForm from "../containers/forms/CustomerForm";
-import Layout from "../containers/layout/Layout";
 import CustomerTable from "../containers/tables/CustomerTable";
 import { CustomerGraphQL } from "../graphql/CustomerGraphQL";
-import { ROUTES } from "../routes";
-import Modal from "react-modal";
-import CustomModal from "../containers/modals/CustomModal";
 import CustomerModal from "../containers/modals/CustomerModal";
 import { Customer } from "../models/Customer";
 
@@ -32,8 +26,7 @@ const mockData = (nbLine: number) => {
 };
 
 const CustomerPage = () => {
-  const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers);
-  const history = useHistory();
+  const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers, {refetchOnWindowFocus: false});
   const [isOpen, setIsOpen] = React.useState(false);
 
   const goToNewCustomer = (e: any) => {
