@@ -4,6 +4,7 @@ import { useMutation, useQueryCache } from "react-query";
 import { useHistory } from "react-router-dom";
 import { EmailApi } from "../../api/EmailApi";
 import { PdfApi } from "../../api/PdfApi";
+import { QUOTE_STATUS } from "../../constants/quote";
 import { BillGraphQL } from "../../graphql/BillGraphQL";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
 import useLoadingState from "../../hooks/useLoadingState";
@@ -128,6 +129,9 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
   };
 
+  const isQuoteMinimumAccepted = () => {
+    return [QuoteStatusEnum.ACCEPTED, QuoteStatusEnum.DEPOSIT_ASK, QuoteStatusEnum.DEPOSIT_PAID].includes(newQuote.status) 
+  }
   React.useEffect(() => {
     setNewQuote(quote ? quote : new Quote());
   }, [quote, isOpen]);
@@ -141,7 +145,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
             <span className="material-icons mr-3">email</span> Envoyer le mail
           </button>
         )}
-        {newQuote && newQuote.status === QuoteStatusEnum.ACCEPTED && newQuote.id && (
+        {newQuote && isQuoteMinimumAccepted() && newQuote.id && (
           <button
             className="button success mb-2 mr-3"
             onClick={createBillFromQuote}

@@ -5,26 +5,6 @@ import { CustomerGraphQL } from "../graphql/CustomerGraphQL";
 import CustomerModal from "../containers/modals/CustomerModal";
 import { Customer } from "../models/Customer";
 
-const mockData = (nbLine: number) => {
-  const array: any[] = [];
-  for (let i = 0; i < nbLine; i++) {
-    array.push({
-      id: i,
-      name: "Client " + i,
-      contact: "Contact " + i,
-      phone:
-        "06" +
-        Math.round(i * 100 * Math.random())
-          .toString()
-          .padEnd(8, "9"),
-      address: ("Adresse " + i + " ").padEnd(50, "bla"),
-      city: "Ville " + i,
-      postalCode: "20137",
-    });
-  }
-  return array;
-};
-
 const CustomerPage = () => {
   const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers, {refetchOnWindowFocus: false});
   const [isOpen, setIsOpen] = React.useState(false);

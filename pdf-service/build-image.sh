@@ -1,0 +1,1 @@
+docker build -t coco-erp-pdf-service:latest .
