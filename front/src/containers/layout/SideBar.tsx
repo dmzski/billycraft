@@ -26,7 +26,7 @@ const SideBar: React.FC<any> = () => {
   };
 
   return (
-    <div className="w-full bg-white flex flex-col h-full">
+    <div className="w-full bg-white flex flex-col h-full border-r-2 border-primary-600 z-10">
       <div className="flex flex-col items-center justify-center mt-3">
         {user.data?.company?.logo ? <img src={user.data?.company?.logo} className="h-24 mb-2" alt="Logo" /> : <div className="h-24"></div>}
         <p>Hello {user.data ? user.data.firstName : ""} 👋</p>

@@ -5,17 +5,17 @@
 @import "tailwindcss/utilities";
 
 :root {
-  --color-bg: theme("colors.gray.200");
+  --color-bg: theme("colors.background");
   --color-font: #363636;
-  --color-primary: theme("colors.purple.600");
+  --color-primary: theme("colors.primary.600");
   --color-primary-rgb: 107, 70, 192;
-  --color-primary-text: theme("colors.white");
+  --color-primary-text: theme("colors.foreground");
 }
 
 body[data-theme="dark"] {
-  --color-bg: #282930;
+  --color-bg: theme("colors.foreground");
   --color-font: #b1b3bd;
-  --color-primary: theme("colors.purple.600");
+  --color-primary: theme("colors.primary.600");
   --color-primary-text: theme("colors.white");
 }
 

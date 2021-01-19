@@ -1,10 +1,8 @@
+import { Button, TextInput } from "@coco-ui/core";
 import React from "react";
-import { useMutation, useQuery } from "react-query";
-import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
+import { useQuery } from "react-query";
 import { Quote, QuoteLine } from "../../models/Quote";
-import BaseInput from "../../components/inputs/BaseInput";
 import QuoteLineTable from "../tables/QuoteLineTable";
-import AutoCompleteInput from "../../components/inputs/AutoCompleteInput";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import SelectInput from "../../components/inputs/SelectInput";
@@ -12,7 +10,10 @@ import SelectInput from "../../components/inputs/SelectInput";
 const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }) => {
   const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
   const [errors, setErrors] = React.useState<any>({});
-  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, { refetchOnWindowFocus: false, enabled: customerInputValue.length > 0 });
+  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
+    refetchOnWindowFocus: false,
+    enabled: customerInputValue.length > 0,
+  });
   const lineTableRef = React.useRef<any>(null);
 
   function inputChange(property: keyof Quote) {
@@ -99,7 +100,7 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
 
   return (
     <form className="quote-form" onSubmit={beforeOnSubmit}>
-      <BaseInput disabled={disabled || cantUpdate} label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
+      <TextInput disabled={disabled || cantUpdate} aria-label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
       <div className="mt-2">
         <label htmlFor="customer-select" className="block text-gray-700 text-sm font-bold mb-1 ml-1">
           Sélectionner un client
@@ -118,10 +119,10 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
         />
         {errors && errors.customer && <div className="text-red-700 font-bold">{errors.customer}</div>}
       </div>
-      <BaseInput
-        divClassName="mt-2"
+      <TextInput
+        className="mt-2"
         disabled={disabled || cantUpdate}
-        label="TVA"
+        aria-label="TVA"
         placeholder="TVA en %"
         type="numeric"
         value={quote.tva || ""}
@@ -131,48 +132,48 @@ const QuoteForm: React.FC<any> = ({ quote, setQuote, onSubmit, disabled, onUpdat
         <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
         {!cantUpdate && (
           <div className="flex">
-            <button type="button" className="button primary w-full focus:shadow-outline" onClick={addLine} disabled={disabled}>
+            <Button type="button" className="button primary w-full focus:shadow-outline" onClick={addLine} disabled={disabled}>
               Ajouter une ligne
-            </button>
+            </Button>
           </div>
         )}
       </div>
 
       <div className="flex pt-3 flex-row-reverse">
         {(!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status) && (
-          <button className="button bg-gray-600 text-white p-3 rounded ml-4" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
+          <Button className="button bg-gray-600 text-white p-3 rounded ml-4" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
             Enregistrer
-          </button>
+          </Button>
         )}
         {quote.id && quote.status === QuoteStatusEnum.DRAFT && (
-          <button className="button bg-green-600 text-white p-3 rounded" type="button" onClick={onUpdateStatus(QuoteStatusEnum.SENT)} disabled={disabled}>
+          <Button className="bg-sucess-600 text-white p-3 rounded" type="button" onClick={onUpdateStatus(QuoteStatusEnum.SENT)} disabled={disabled}>
             Envoyer le devis
-          </button>
+          </Button>
         )}
         {quote.status === QuoteStatusEnum.SENT && (
           <>
-            <button type="button" className="button success ml-3" onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}>
+            <Button type="button" className="button success ml-3" onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}>
               Devis accepté
-            </button>
-            <button type="button" className="button error" onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}>
+            </Button>
+            <Button type="button" className="button error" onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}>
               Devis refusé
-            </button>
+            </Button>
           </>
         )}
         {quote.status === QuoteStatusEnum.ACCEPTED && (
-          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
+          <Button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
             Demander un accompte
-          </button>
+          </Button>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK && (
-          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
+          <Button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
             Accompte payé
-          </button>
+          </Button>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID && (
-          <button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}>
+          <Button type="button" className="button primary" onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}>
             Archiver le devis
-          </button>
+          </Button>
         )}
       </div>
     </form>

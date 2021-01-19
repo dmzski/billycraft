@@ -2,7 +2,6 @@ import React from "react";
 import SearchBar from "../../components/SearchBar";
 import SideBar from "./SideBar";
 
-import logo from "../../assets/img/logo.png";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import MobileLayout from "./MobileLayout";
 

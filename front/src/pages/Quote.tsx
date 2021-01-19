@@ -8,6 +8,7 @@ import { filterQuotes, sortQuotes } from "../utils/quote";
 import QuoteModal from "../containers/modals/QuoteModal";
 import QuoteFilterContainer from "../containers/QuoteFilterContainer";
 import { useParams } from "react-router-dom";
+import { Button } from "@coco-ui/core";
 
 const QuotePage = () => {
   const [selected, setSelected] = React.useState<number[]>([]);
@@ -56,31 +57,31 @@ const QuotePage = () => {
     <>
       <div className="flex items-center justify-between">
         {showArchived ? (
-          <button className="button" onClick={handleShowArchived}>
+          <Button className="button" onClick={handleShowArchived}>
             <span className="material-icons mr-2">visibility_off</span>
             <p>Masquer les devis archivés</p>
-          </button>
+          </Button>
         ) : (
-          <button className="button" onClick={handleShowArchived}>
+          <Button className="button" onClick={handleShowArchived}>
             <span className="material-icons mr-2">visibility</span>
             <p>Voir les devis archivés</p>
-          </button>
+          </Button>
         )}
         {showFilters ? (
-          <button className="button default" onClick={handleShowFilters}>
+          <Button className="button default" onClick={handleShowFilters}>
             <span className="material-icons mr-2">filter_alt</span>
             <p>Masquer les filres</p>
-          </button>
+          </Button>
         ) : (
-          <button className="button info" onClick={handleShowFilters}>
+          <Button className="button info" onClick={handleShowFilters}>
             <span className="material-icons mr-2">filter_alt</span>
             <p>Afficher les filtres</p>
-          </button>
+          </Button>
         )}
-        <button className="primary" onClick={goToNewQuote}>
+        <Button className="primary" onClick={goToNewQuote}>
           <span className="material-icons mr-2">add</span>
           <p>Nouveau devis</p>
-        </button>
+        </Button>
       </div>
       {showFilters && <QuoteFilterContainer filters={filters} setFilters={setFilters} />}
       <div>

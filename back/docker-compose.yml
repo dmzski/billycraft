@@ -7,10 +7,10 @@ services:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-    - 5432:5432
+      - 5432:5432
     volumes:
-    - ./db/data:/var/lib/postgresql/data
-    - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -23,6 +23,9 @@ services:
       DB_PASSWORD: keycloak
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/realm.json
+    volumes:
+      - ./realm-export.json:/tmp/realm.json
     depends_on:
       - db
     labels:
@@ -32,11 +35,13 @@ services:
       - "traefik.http.middlewares.keycloak.headers.accesscontrolalloworiginlist=*"
       - "traefik.http.middlewares.keycloak.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.keycloak.headers.addvaryheader=true"
+    ports:
+      - 8081:8080
 
   pdf:
     image: thecodingmachine/gotenberg:6
     ports:
-    - 8091:3000
+      - 8091:3000
     environment:
       DEFAULT_WAIT_TIMEOUT: "30"
     links:
@@ -47,6 +52,8 @@ services:
     build:
       dockerfile: ./src/main/docker/Dockerfile.jvm
       context: ./
+    ports:
+      - 8090:8080
     environment:
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://db/compta?currentSchema=compta
       QUARKUS_DATASOURCE_REACTIVE_URL: postgresql://db/compta?currentSchema=compta
@@ -93,4 +100,3 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-
