@@ -4,9 +4,10 @@ import { HttpClient } from "../../api/HttpClient";
 import { DISPLAY_NEWS, VERSION } from "../../constants/global";
 import CustomModal from "./CustomModal";
 import happyLogo from "../../assets/img/logo_happy.png";
+import { Modal } from "@coco-ui/core";
 
 const NewsModal = () => {
-  const [showNewsModal, setShowNewsModal] = React.useState(process.env.NODE_ENV === "development");
+  const [showNewsModal, setShowNewsModal] = React.useState(false);
   const newsDivRef = React.useRef<any>(null);
   const newsQuery = useQuery(
     "news-query",
@@ -35,12 +36,12 @@ const NewsModal = () => {
     }
   }, []);
 
-  const toggleClose = (e: any) => {
+  const toggleClose = () => {
     setShowNewsModal(false);
     window.localStorage.setItem("version", VERSION);
   };
   return (
-    <CustomModal contentClassName="w-3/4 lg:w-1/2" isOpen={showNewsModal} onRequestClose={toggleClose}>
+    <Modal open={showNewsModal} onClose={toggleClose}>
       <div style={{ zIndex: 0 }} className="w-full">
         <h1 className="text-2xl font-bold text-center pb-2 border-b-2 border-black relative">
           {VERSION} : What's new ? 🚀
@@ -50,7 +51,7 @@ const NewsModal = () => {
         <div id="news" ref={newsDivRef} className="pt-10 bg-white" style={{ zIndex: 2 }}></div>
         <div className="text-center mt-10 text-sm font-bold">Made with ❤ by Dorian Maliszewski</div>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
 import { PdfApi } from "../../api/PdfApi";
 import { BillGraphQL } from "../../graphql/BillGraphQL";

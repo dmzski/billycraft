@@ -1,3 +1,4 @@
+import { Button } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { LINE_TYPE } from "../../constants/line";
@@ -96,16 +97,18 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
           />
           {!disabled && line.description && line.description.length > 0 && !isLineInProducts() && (
             <div className="absolute right-0 flex justify-center items-center h-full pb-2">
-              <button
+              <Button
                 tabIndex={-1}
                 disabled={saveProductMutationState.isLoading}
                 type="button"
-                onClick={saveAsModel}
+                onClick={(e) => {
+                  saveAsModel(e);
+                }}
                 className=" outline-none hover:bg-gray-200 h-12 w-12 p-2 rounded-full active:outline-none focus:outline-none material-icons text-primary-700"
                 title="Sauvegarder comme modèle"
               >
                 save
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -118,16 +121,16 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
             placeholder="Quantité"
             type="number"
             step="0.01"
-            style={{height: 36}}
+            style={{ height: 36 }}
             value={line.quantity || line.quantity === 0 ? line.quantity : ""}
             onChange={handleChange("quantity")}
-            />
+          />
         </div>
       </td>
       <td className="text-center">
         <div className={"line-input " + (disabled ? "disabled" : "")}>
           <input
-            style={{height: 36}}
+            style={{ height: 36 }}
             disabled={disabled}
             className="text-right"
             placeholder="Prix"
@@ -142,11 +145,11 @@ const BillLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disa
       <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</td>
       <td className="text-center">
         {!disabled && (
-          <button className="px-2 flex" type="button" onClick={deleteLine}>
+          <Button className="px-2 flex" type="button" onClick={deleteLine}>
             <span style={{ padding: 0 }} className="material-icons">
               delete
             </span>
-          </button>
+          </Button>
         )}
       </td>
     </tr>

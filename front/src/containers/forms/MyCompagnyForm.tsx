@@ -9,6 +9,7 @@ import { CompanyGraphQL } from "../../graphql/CompanyGraphQL";
 import { useToast } from "../../providers/ToastProvider";
 import useLoadingState from "../../hooks/useLoadingState";
 import { CompanyApi } from "../../api/CompanyApi";
+import { Button, TextInput } from "@coco-ui/core";
 
 const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
   const queryCache = useQueryCache();
@@ -29,10 +30,10 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
     setCompany(tmp);
   };
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
     if (!updateCompanyMutationState.isLoading) {
-      await updateCompanyMutation(company);
+      updateCompanyMutation(company);
     }
   };
 
@@ -62,20 +63,13 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
 
   return (
     <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
-      <BaseInput divClassName="pt-2 w-full" placeholder="Nom" value={company.name} onChange={inputChange("name")} />
-      <textarea
-        className=" border border-gray-200 mt-2 p-3 w-full"
-        rows={3}
-        style={{ resize: "none" }}
-        placeholder="Adresse"
-        value={company.address}
-        onChange={inputChange("address")}
-      />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Code Postal" value={company.postalCode} onChange={inputChange("postalCode")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Ville" value={company.city} onChange={inputChange("city")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Téléphone" value={company.phoneNumber} onChange={inputChange("phoneNumber")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="Email" value={company.email} onChange={inputChange("email")} />
-      <BaseInput divClassName="pt-2 w-full" placeholder="SIRET" value={company.siret} onChange={inputChange("siret")} />
+      <TextInput className="mt-2 w-full" placeholder="Nom" value={company.name} onChange={inputChange("name")} />
+      <TextInput multiline className="mt-2 w-full" style={{ resize: "none" }} placeholder="Adresse" value={company.address} onChange={inputChange("address")} />
+      <TextInput className="mt-2 w-full" placeholder="Code Postal" value={company.postalCode} onChange={inputChange("postalCode")} />
+      <TextInput className="mt-2 w-full" placeholder="Ville" value={company.city} onChange={inputChange("city")} />
+      <TextInput className="mt-2 w-full" placeholder="Téléphone" value={company.phoneNumber} onChange={inputChange("phoneNumber")} />
+      <TextInput className="mt-2 w-full" placeholder="Email" value={company.email} onChange={inputChange("email")} />
+      <TextInput className="mt-2 w-full" placeholder="SIRET" value={company.siret} onChange={inputChange("siret")} />
       {company.id ? (
         <div className="flex w-full pt-2">
           <BaseInput divClassName=" w-4/5" placeholder="URL du logo" value={company.logo} onChange={inputChange("logo")} />
@@ -87,9 +81,9 @@ const MyCompagnyForm: React.FC<any> = ({ company, setCompany }) => {
       ) : (
         <div className="pt-2">Vous pourrez télécharger votre logo après la création de l'entreprise dans vos paramètres</div>
       )}
-      <button className="w-full primary mt-5" onClick={onSubmit}>
+      <Button className="w-full primary mt-5" onClick={onSubmit}>
         Enregister
-      </button>
+      </Button>
     </form>
   );
 };
