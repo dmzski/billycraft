@@ -1,6 +1,6 @@
 # Custom
-db/
-.uploads/
+db/data/
+uploads/
 
 # Eclipse
 .project
