@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    tr th, .total-header {
+        text-align: center;
+        border: 1px solid black;
+        background-color: {customization.mainColor ?: 'white'};
+    }
+    tfoot tr td {
+        border: 1px solid black;
+    }
+    tbody tr td {
+        text-align: center;
+        padding-top: 2mm;
+        padding-bottom: 2mm;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: white;
+    }
+    tbody tr:nth-child(odd) {
+        background-color: #E9E9E9;
+    }
+    tbody tr td {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        text-align: left;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    tbody tr:first-child td {
+        border-top: 1px solid black;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: 1px solid black;
+    }
+
+
+    .flex {
+        display: flex;
+    }
+
+    .w-full {
+        width: 100%;
+    }
+
+    .after-table {
+        page-break-before: auto;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        break-before: auto;
+        break-after: avoid;
+        break-inside: avoid;
+        word-break: keep-all;
+        white-space: nowrap;
+        line-break: loose;
+    }
+
+
+
+    @page
+    {
+        size:  A4;   /* auto is the initial value */
+        margin: 0.5cm 1cm 2.5cm 1cm;
+        page-break-after: avoid;
+    }
+
+    html, body {
+        width: 210mm;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        page-break-after: avoid;
+    }
+
+    @media print {
+        table { page-break-after:auto; }
+        table tr    { page-break-inside:avoid; page-break-after:auto; }
+        table td    { page-break-inside:avoid; page-break-after:auto; }
+        table thead {  }
+        table tfoot { page-break-inside: avoid; }
+    }
+
+</style>
+<body>
+        <div class="flex w-full" style="flex-direction: row; justify-content: space-between; height: 100px; margin-bottom: 10px">
+            <div>
+                {#if company.logo}
+                <img src="{company.logo}" alt="Logo" height=100 />
+                {/if}
+            </div>
+            <div style="display: flex; flex-direction: column">
+                <span>Date d'émission : {bill.getPDFDate}</span>
+                <div style='font-size: 26px; margin-top: 20px; border: 2px solid black; text-align: center; background-color: {customization.mainColor ?: "white"};'>FACTURE</div>
+            </div>
+        </div>
+    <div class="flex w-full" style="justify-content: space-between">
+        <div style="display: flex; flex-direction: column; width: 10cm">
+            <span style="font-weight: bold">{company.name}</span>
+            <span>{company.address.transformToHtml.raw}</span>
+            <span>{company.postalCode}&nbsp;{company.city}</span>
+            <span>SIRET : {company.siret}</span>
+            {#if customization.displayCompanyEmail }
+            <span>&#9993; : {company.email ?: ""}</span>
+            {/if}
+            {#if customization.displayCompanyPhoneNumber }
+            <span>&#9990; : {company.phoneNumber ?: ""}</span>
+            {/if}
+        </div>
+        <div style="display: flex; flex-direction: column; margin-top: 5mm; text-align: right; width: 10cm">
+            {#if bill.customer}
+                <span style="overflow-wrap: break-word;">{bill.customer.name}</span>
+                <span style="overflow-wrap: break-word;">{bill.customer.address.transformToHtml.raw}</span>
+                <span>{bill.customer.postalCode},&nbsp;{bill.customer.city}</span>
+                {#if customization.displayCustomerEmail }
+                <span>&#9993; : {bill.customer.email ?: ""}</span>
+                {/if}
+                {#if customization.displayCustomerPhoneNumber }
+                <span>&#9990; : {bill.customer.phoneNumber ?: ""}</span>
+                {/if}
+            {/if}
+        </div>
+    </div>
+    <div class="flex w-full" style="flex-direction: column; align-items: flex-end; margin-top: 20px; font-weight: bold">
+        <span>Référence : {bill.id}</span>
+    </div>
+    <div class="w-full flex" style="margin-top: 20px; margin-bottom: 20px">
+        <span>Objet :&nbsp;</span>
+        <span>{bill.title}</span>
+    </div>
+    <div class="w-full">
+        <table style="width: 21cm;">
+            <thead>
+            <tr>
+                <th style="width: 13cm">Description</th>
+                <th style="width: 2cm">Quantité</th>
+                <th style="width: 3cm">Prix unitaire HT</th>
+                <th style="width: 3cm">Sous total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {#for line in lines}
+            {#if line.price != null && line.quantity != null}
+            <tr>
+                <td style="max-width: 13cm; overflow-wrap: break-word; padding-left: 5mm">{line.description.transformToHtml.raw}</td>
+                <td style="text-align: center; ">{line.quantity.formatNumber}</td>
+                <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
+                <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>
+            </tr>
+            {#else}
+            <tr>
+                <td style="max-width: 13cm; overflow-wrap: break-word; font-weight: bold">{line.description.transformToHtml.raw}</td>
+                <td style="text-align: center; "></td>
+                <td style="text-align: center; width: 3cm"></td>
+                <td style="text-align: center; width: 3cm"></td>
+            </tr>
+            {/if}
+
+            {/for}
+            </tbody>
+            <tfoot>
+            <tr style="height: 20px; background-color: white">
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+            </tr>
+            {#if bill.tva}
+            <tr class="background-color: white">
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td>TVA</td>
+                <td>{bill.tva} %</td>
+            </tr>
+            {/if}
+            <tr class="background-color: white" style="font-weight: bold">
+                <td style="border: none;"></td>
+                <td style="border: none;"></td>
+                <td class="total-header">TOTAL</td>
+                <td style="text-align: center">{bill.total.formatCurrency}</td>
+            </tr>
+            </tfoot>
+        </table>
+        <div>
+            {#if customization.afterTable}
+            <div class="w-full after-table">
+                {customization.afterTable.transformToHtml.raw}
+            </div>
+            {/if}
+        </div>
+
+    </div>
+</body>
+</html>

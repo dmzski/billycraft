@@ -1,0 +1,19 @@
+<style>
+    .footer {
+        max-height: 2.5cm;
+        overflow: hidden;
+        word-wrap: break-word;         /* All browsers since IE 5.5+ */
+        overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+        padding: 0;
+        margin-left: 0.5cm;
+        margin-right: 0.5cm;
+        max-width: 20cm;
+        font-size: 6px !important;
+        hyphens: auto;
+    }
+</style>
+<div class="footer">
+    {#if footer}
+        {footer.transformToHtml.raw}
+    {/if}
+</div>

@@ -1,13 +1,15 @@
 import { Customer } from "./Customer";
+import { LineTypeEnum } from "./LineTypeEnum";
 import { QuoteStatusEnum } from "./QuoteStatusEnum";
 
 export class Quote {
   id?: string;
-  title: string = "";
+  title = "";
   customer: Customer = new Customer();
-  tva: number = 0;
+  tva = 0;
   createdAt?: string;
   updatedAt?: string;
+  sentAt?: string;
   status: QuoteStatusEnum = QuoteStatusEnum.DRAFT;
   lines: QuoteLine[] = [];
   total?: number;
@@ -15,8 +17,9 @@ export class Quote {
 
 export class QuoteLine {
   id?: string;
-  description: string = "";
-  quantity: number = 0;
-  price: number = 0;
-  line: number = 0;
+  description = "";
+  quantity = 0;
+  price = 0;
+  line = 0;
+  type: LineTypeEnum = LineTypeEnum.SERVICE;
 }

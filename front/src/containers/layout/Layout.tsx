@@ -1,19 +1,29 @@
 import React from "react";
+import SearchBar from "../../components/SearchBar";
 import SideBar from "./SideBar";
+import useBreakpoint from "../../hooks/useBreakpoint";
+import MobileLayout from "./MobileLayout";
 
-const Layout: React.FC<any> = (props) => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps): JSX.Element => {
+  const breakpoint = useBreakpoint();
+
+  if (!breakpoint.isMd) {
+    return <MobileLayout>{children}</MobileLayout>;
+  }
+
   return (
-    <div className="flex h-full w-full">
-      <SideBar />
-      <div className="flex w-full flex-col fixed ml-64 h-10">
-        <div className="flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div">
-          <div className="inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span className="text-gray-500 sm:leading-5 material-icons mr-3">search</span>
-          </div>
-          <input className="search-input" placeholder="Rechercher" />
-        </div>
+    <div className="h-full w-full">
+      <aside className="h-screen fixed w-64">
+        <SideBar />
+      </aside>
+      <div className="pl-64 flex flex-col">
+        <SearchBar />
+        <div className="mt-4 pb-2 mx-2 h-full relative">{children}</div>
       </div>
-      <div className="main pl-64 pt-10 w-full">{props.children}</div>
     </div>
   );
 };

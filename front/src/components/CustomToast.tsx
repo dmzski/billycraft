@@ -1,25 +1,89 @@
 import React, { SyntheticEvent } from "react";
+import { ToastVariant } from "models/Toast";
 
-export function ToastContainer(props: any) {
-  return <div className="toast-container">{props.children}</div>;
-}
+export const ToastContainer = (props: any): JSX.Element => {
+  return <div className="overflow-hidden py-2 fixed bottom-0 right-0 flex flex-col-reverse w-72">{props.children}</div>;
+};
 
-export const CustomToast: React.FC<any> = ({ open, onClose, duration = 3000, message, variant, vertical, horizontal }) => {
-  const handleClose = (event?: SyntheticEvent, reason?: string) => {
+const variants = {
+  default: {
+    toast: "shadow bg-white rounded pt-2 text-black",
+    progressBar: "bg-black",
+  },
+  success: {
+    toast: "shadow bg-success-600 rounded pt-2 text-white",
+    progressBar: "bg-white opacity-50",
+  },
+  errror: {
+    toast: "shadow bg-error-600 rounded pt-2 text-white",
+    progressBar: "bg-white opacity-50",
+  },
+  warning: {
+    toast: "shadow bg-warning-500 rounded pt-2 text-white",
+    progressBar: "bg-white opacity-50",
+  },
+  info: {
+    toast: "shadow bg-info-600 rounded pt-2 text-white",
+    progressBar: "bg-white opacity-50",
+  },
+};
+
+type ToastProps = {
+  onClose: () => any;
+  duration: number;
+  message: string;
+  variant: ToastVariant;
+};
+
+export const CustomToast = ({ onClose, duration = 3000, message, variant }: ToastProps): JSX.Element => {
+  const toastRef = React.useRef<any>(null);
+  const progressBarRef = React.useRef<HTMLDivElement>(null);
+  const handleClose = (_event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
-    onClose();
+    toastRef.current.classList.add("translate-x-72");
+    setTimeout(() => {
+      onClose();
+    }, 500);
   };
 
   React.useEffect(() => {
-    let timeout = setTimeout(() => {
-      onClose();
+    const timeoutAnimation = setTimeout(() => {
+      if (toastRef.current) {
+        toastRef.current.classList.remove("translate-x-72");
+        progressBarRef.current?.classList.add("-translate-x-full");
+      }
+    });
+    const timeout = setTimeout(() => {
+      toastRef.current.classList.add("translate-x-72");
+      setTimeout(() => {
+        onClose();
+      }, 500);
     }, duration);
+
     return () => {
+      clearTimeout(timeoutAnimation);
       clearTimeout(timeout);
     };
   }, []);
 
-  return <div className={"toast " + (open ? "open" : "hide") + " " + (variant || "default")}>{message}</div>;
+  return (
+    <div
+      ref={toastRef}
+      onClick={handleClose}
+      className={`mr-2 transition duration-500 transition-transform transform translate-x-72 overflow-hidden flex flex-col ${
+        (variants as any)[variant]?.toast ?? variants.default.toast
+      }`}
+    >
+      <div className="flex-grow px-2">{message}</div>
+      <div
+        ref={progressBarRef}
+        className={`${
+          (variants as any)[variant]?.progressBar ?? variants.default.progressBar
+        } ease-linear mt-2 h-1 w-full transition transition-transform transform`}
+        style={{ transitionDuration: `${Math.round(duration / 1000)}s` }}
+      />
+    </div>
+  );
 };

@@ -1,0 +1,12 @@
+{
+  "name": "coco-kc-theme",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "login:build:css": "tailwindcss build styles/tailwind.css -o theme/login/resources/css/main.css"
+  },
+  "dependencies": {
+    "tailwindcss": "^1.9.6"
+  }
+}

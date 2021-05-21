@@ -15,20 +15,23 @@ const keycloakProviderInitConfig: any = {
   checkLoginIframe: false,
 };
 
-const MainProvider: React.FC<any> = ({ children }) => {
-  const [isConnected, setIsConnected] = React.useState(false);
+type MainProviderProps = {
+  children: React.ReactNode;
+};
+const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
   const onKeycloakTokens = (tokens: any) => {
     if (tokens.idToken) {
       fetchRegister(tokens.idToken);
       graphQLClient.setHeader("Authorization", "Bearer " + tokens.idToken);
-      setIsConnected(true);
     }
   };
 
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
       <ReactKeycloakProvider onTokens={onKeycloakTokens} initOptions={keycloakProviderInitConfig} authClient={keycloak}>
-        <ToastProvider>{isConnected ? <UserProvider>{children}</UserProvider> : <div>Chargement</div>}</ToastProvider>
+        <ToastProvider>
+          <UserProvider>{children}</UserProvider>
+        </ToastProvider>
       </ReactKeycloakProvider>
     </ReactQueryCacheProvider>
   );

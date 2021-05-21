@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 import { graphQLClient } from "./GraphQLClient";
 
 export const UserGraphQL = {
-  getMyInformation: async () => {
+  getMyInformation: async (): Promise<any> => {
     const { myInformation } = await graphQLClient.request(
       gql`
         query {
@@ -12,6 +12,8 @@ export const UserGraphQL = {
             lastName
             company {
               id
+              name
+              logo
             }
           }
         }

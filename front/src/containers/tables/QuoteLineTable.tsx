@@ -1,10 +1,8 @@
-import { setMaxListeners } from "process";
+import { Table } from "@coco-ui/core";
 import React from "react";
 import QuoteLineTableLine from "../../components/quote/QuoteLineTableLine";
-import QuoteTableLine from "../../components/quote/QuoteTableLine";
-import { QuoteLine } from "../../models/Quote";
 
-const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
+const QuoteLineTable = ({ quote, setQuote, disabled }: any): JSX.Element => {
   function deleteLine(index: number) {
     return () => {
       const newLines = [...quote.lines];
@@ -22,24 +20,27 @@ const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
   }
 
   return (
-    <table className="table-fixed quote-table w-auto">
-      <thead>
-        <tr>
-          <th className="w-1/3 px-4 py-2">Description</th>
-          <th className="w-1/6 px-4 py-2">Quantité</th>
-          <th className="w-1/6 px-4 py-2">Prix H.T</th>
-          <th className="w-1/6 px-4 py-2">Prix TTC</th>
-          <th className="w-1/6 px-4 py-2">Sous Total</th>
-          <th className="w-1/12 px-4 py-2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table className="table-fixed">
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell className="w-48">Type</Table.HeadCell>
+          <Table.HeadCell className="w-full">Description</Table.HeadCell>
+          <Table.HeadCell className="w-32">Quantité</Table.HeadCell>
+          <Table.HeadCell className="w-48">Prix HT</Table.HeadCell>
+          <Table.HeadCell className="w-32">Prix TTC</Table.HeadCell>
+          <Table.HeadCell className="w-36">Sous Total</Table.HeadCell>
+          <Table.HeadCell className="w-8" />
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
         {quote.lines &&
           quote.lines.map((line: any, index: number) => (
-            <QuoteLineTableLine disabled={disabled} key={index} tva={quote.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            <Table.Row key={index}>
+              <QuoteLineTableLine disabled={disabled} tva={quote.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            </Table.Row>
           ))}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   );
 };
 

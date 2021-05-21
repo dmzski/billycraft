@@ -1,88 +1,36 @@
-import { tmpdir } from "os";
+import { Table, useTableState } from "@coco-ui/core";
 import React from "react";
 import QuoteTableLine from "../../components/quote/QuoteTableLine";
 
-const QuoteList: React.FC<any> = ({ data, selected, setSelected, setData }) => {
-  const [sort, setSort] = React.useState<any>({ createdAt: -1 });
-
-  const onSelectQuote = (id: number) => {
-    const tmp = [...selected];
-    if (tmp.includes(id)) {
-      tmp.splice(
-        tmp.findIndex((s: number) => s === id),
-        1
-      );
-      setSelected(tmp);
-    } else {
-      tmp.push(id);
-      setSelected(tmp);
-    }
-  };
-
-  const setQuote = (newQuote: any) => {
-    const index = data.findIndex((quote: any) => quote.id === newQuote.id);
-    if (index > -1) {
-      const tmp = [...data];
-      tmp.splice(index, 1, newQuote);
-      setData(tmp);
-    }
-  };
-
-  const sortBy = (field: string) => (e: any) => {
-    const tmp: any = {};
-    tmp[field] = !sort[field] || sort[field] === -1 ? 1 : -1;
-    setSort(tmp);
-  };
-
-  const getQuoteSorted = React.useCallback(() => {
-    if (!data) return [];
-    let array = [...data];
-    Object.keys(sort).forEach((key) => {
-      const order: any = sort[key];
-      array = array.sort((a, b) => (a[key] > b[key] ? (order ? (order === 1 ? 1 : -1) : 0) : a[key] < b[key] ? (order ? (order === 1 ? -1 : 1) : 0) : 0));
-    });
-    return array;
-  }, [sort, data]);
+const QuoteList = ({ data }: any): JSX.Element => {
+  const { data: quotes, sort, onSort } = useTableState({ data, initialSort: { field: "createdAt", order: "desc" } });
 
   return (
-    <table className="table-fixed quote-table">
-      <thead>
-        <tr>
-          <th className="px-4 py-2"></th>
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("title")} sort={sort["title"]} text="Titre" />
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("customer")} sort={sort["customer"]} text="Client" />
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("createdAt")} sort={sort["createdAt"]} text="Création" />
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("updatedAt")} sort={sort["updatedAt"]} text="Mis à jour" />
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("total")} sort={sort["total"]} text="Total" />
-          <QuoteTableHeader className="w-2/12 px-4 py-2" onClick={sortBy("status")} sort={sort["status"]} text="Status" />
-        </tr>
-      </thead>
-      <tbody>
-        {getQuoteSorted().map((quote: any, index: number) => (
-          <QuoteTableLine
-            isEven={index % 2 === 0}
-            isSelected={selected.includes(quote.id)}
-            key={quote.id}
-            quote={quote}
-            onSelect={onSelectQuote}
-            setQuote={setQuote}
-          />
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-const QuoteTableHeader: React.FC<any> = ({ className, onClick, sort, text }) => {
-  return (
-    <th className={className} onClick={onClick}>
-      <div className="flex w-full justify-between">
-        <span className="flex-grow text-center">{text}</span>
-        {((!sort && sort !== -1) || sort === 0) && <span className="material-icons"></span>}
-        {sort === 1 && <span className="material-icons">expand_more</span>}
-        {sort === -1 && <span className="material-icons">expand_less</span>}
-      </div>
-    </th>
+    <Table className="mt-4 table-fixed" data={quotes}>
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell sort={sort} sortable="title" onSort={onSort}>
+            Titre
+          </Table.HeadCell>
+          <Table.HeadCell sort={sort} sortable="customer" onSort={onSort}>
+            Client
+          </Table.HeadCell>
+          <Table.HeadCell sort={sort} sortable="createdAt" onSort={onSort}>
+            Création
+          </Table.HeadCell>
+          <Table.HeadCell sort={sort} sortable="sentAt" onSort={onSort}>
+            Envoyé
+          </Table.HeadCell>
+          <Table.HeadCell sort={sort} sortable="total" onSort={onSort}>
+            Total
+          </Table.HeadCell>
+          <Table.HeadCell sort={sort} sortable="status" onSort={onSort}>
+            Status
+          </Table.HeadCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>{({ row }) => <QuoteTableLine key={row.id} quote={row} />}</Table.Body>
+    </Table>
   );
 };
 

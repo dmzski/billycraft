@@ -1,8 +1,8 @@
 {
     "realm": "compta",
-    "auth-server-url": "http://localhost:8081/auth/",
+    "auth-server-url": "http://oauth.coco-erp.lan/auth/",
     "ssl-required": "external",
-    "resource": "compta",
+    "resource": "front",
     "public-client": true,
     "confidential-port": 0
 }

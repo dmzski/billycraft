@@ -7,7 +7,7 @@ export class Toast {
   vertical?: "top" | "bottom";
   horizontal?: "left" | "center" | "right";
   variant: ToastVariant;
-  callback?: Function;
+  callback?: () => any;
 
   constructor() {
     this.id = Toast.nextId;

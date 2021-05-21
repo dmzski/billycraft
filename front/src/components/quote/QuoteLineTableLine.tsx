@@ -1,22 +1,23 @@
-import { format } from "date-fns";
+import { Icon, Select, Table, TextInput } from "@coco-ui/core";
 import React from "react";
-import { QUOTE_STATUS } from "../../constants/quote";
+import { LINE_TYPE } from "../../constants/line";
 import { calculatePriceTTC } from "../../utils/quote";
 
-type QuoteLineTableLine = {
+type QuoteLineTableLineProps = {
   line: any;
   setLine: (newLine: any) => void;
   tva: number;
   deleteLine: () => void;
+  disabled?: boolean;
 };
-const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, disabled }) => {
+const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteLineTableLineProps): JSX.Element => {
   const handleChange = (field: string) => (e: any) => {
     const tmp = { ...line };
     let value: any;
     switch (field) {
       case "price":
       case "quantity":
-        value = e.target.value;
+        value = parseFloat(e.target.value) || e.target.value;
         break;
       default:
         value = e.target.value;
@@ -26,39 +27,63 @@ const QuoteLineTableLine: React.FC<any> = ({ line, setLine, tva, deleteLine, dis
   };
 
   return (
-    <tr className={"quote-table-line low-py"}>
-      <td>
-        <div className={"line-input " + (disabled ? "disabled" : "")}>
-          <input disabled={disabled} className="w-full" value={line.description} onChange={handleChange("description")} />
-        </div>
-      </td>
-      <td>
-        <div className={"line-input " + (disabled ? "disabled" : "")}>
-          <input
-            disabled={disabled}
-            className="text-right"
-            placeholder="Quantité"
-            type="text"
-            value={line.quantity || ""}
-            onChange={handleChange("quantity")}
-          />
-        </div>
-      </td>
-      <td>
-        <div className={"line-input " + (disabled ? "disabled" : "")}>
-          <input disabled={disabled} className="text-right" placeholder="Prix" type="text" value={line.price || ""} onChange={handleChange("price")} />
-        </div>
-      </td>
-      <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</td>
-      <td className="align-text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</td>
-      <td>
+    <>
+      <Table.Cell>
+        <Select
+          disabled={disabled}
+          value={line.type}
+          onChange={(result) => setLine({ ...line, type: result.enum })}
+          textKey="name"
+          valueKey="enum"
+          options={Object.values(LINE_TYPE)}
+          name={line.line + "-select"}
+          id={line.line + "-select"}
+        />
+      </Table.Cell>
+      <Table.Cell>
+        <TextInput
+          placeholder="Description"
+          className="w-full flex"
+          disabled={disabled}
+          value={line.description}
+          multiline
+          onChange={handleChange("description")}
+          id={"line-" + line.line + "-description"}
+          name={"line-" + line.line + "-description"}
+        />
+      </Table.Cell>
+      <Table.Cell>
+        <TextInput
+          disabled={disabled}
+          className="text-right w-full"
+          placeholder="Quantité"
+          type="number"
+          step="0.01"
+          value={line.quantity || line.quantity === 0 ? line.quantity : ""}
+          onChange={handleChange("quantity")}
+        />
+      </Table.Cell>
+      <Table.Cell>
+        <TextInput
+          disabled={disabled}
+          className="text-right w-full"
+          placeholder="Prix"
+          type="number"
+          step="0.01"
+          value={line.price || line.price === 0 ? line.price : ""}
+          onChange={handleChange("price")}
+        />
+      </Table.Cell>
+      <Table.Cell>{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</Table.Cell>
+      <Table.Cell>{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</Table.Cell>
+      <Table.Cell className="pr-1">
         {!disabled && (
-          <button className="px-2" onClick={deleteLine}>
-            <span className="material-icons">delete</span>
+          <button className="apperance-none">
+            <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" onClick={deleteLine} />
           </button>
         )}
-      </td>
-    </tr>
+      </Table.Cell>
+    </>
   );
 };
 

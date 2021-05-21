@@ -1,18 +1,19 @@
-import React from "react";
-import Dashboard from "./pages/Dashboard";
-import Quote from "./pages/Quote";
-import QuoteForm from "./pages/QuoteForm";
-
 export const ROUTES = {
   DASHBOARD: {
     path: "/dashboard",
     title: "Accueil",
-    icon: "home",
+    icon: "chart-pie",
   },
   QUOTES: {
     path: "/quotes",
     title: "Devis",
-    icon: "description",
+    icon: "document-text",
+    exact: true,
+  },
+  BILLS: {
+    path: "/bills",
+    title: "Factures",
+    icon: "cash",
     exact: true,
   },
   QUOTE_FORM: {
@@ -22,7 +23,7 @@ export const ROUTES = {
   CUSTOMERS: {
     path: "/customers",
     title: "Clients",
-    icon: "apartment",
+    icon: "user-group",
     exact: true,
   },
   CUSTOMER_FORM: {
@@ -33,10 +34,23 @@ export const ROUTES = {
     path: "/settings",
     exact: true,
     title: "Paramètres",
-    icon: "settings",
+    icon: "cog",
+  },
+
+  SUPPORT: {
+    path: "/support",
+    exact: true,
+    title: "Support",
+    icon: "",
   },
   ONBOARDING_COMPANY: {
     path: "/onboarding/create-company",
     title: "Créer mon entreprise",
+  },
+  PRODUCTS: {
+    path: "/products",
+    title: "Articles",
+    exact: true,
+    icon: "cube",
   },
 };

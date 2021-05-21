@@ -1,0 +1,14 @@
+{
+  "name": "cocoerp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build:css": "tailwindcss build ./styles/tailwind.css -o ./src/assets/main.css"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.0.2",
+    "postcss": "^8.1.8",
+    "tailwindcss": "^2.0.1"
+  }
+}

@@ -4,9 +4,33 @@ import { HttpClient } from "./HttpClient";
 export const PDF_URL = API_URL + "/pdfs";
 
 export const PdfApi = {
-  getPdf: async (quoteId: string) => {
-    const { query, abort } = HttpClient.GET(`${PDF_URL}/${quoteId}`);
-    let promise = query.then((res: any) => res.blob()).then((blob: any) => blob);
+  getQuotePdf: async (quoteId: string): Promise<any> => {
+    const { query, abort } = HttpClient.GET(`${PDF_URL}/quote/${quoteId}`);
+    const promise = query
+      .then((res: any) => {
+        if (res.status === 200) {
+          return res.blob();
+        } else {
+          throw res;
+        }
+      })
+      .then((blob: any) => blob);
+
+    promise.cancel = abort;
+
+    return promise;
+  },
+  getBillPdf: async (billId: string): Promise<any> => {
+    const { query, abort } = HttpClient.GET(`${PDF_URL}/bill/${billId}`);
+    const promise = query
+      .then((res: any) => {
+        if (res.status === 200) {
+          return res.blob();
+        } else {
+          throw res;
+        }
+      })
+      .then((blob: any) => blob);
 
     promise.cancel = abort;
 

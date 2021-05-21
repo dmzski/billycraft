@@ -1,10 +1,9 @@
-import { request, gql } from "graphql-request";
-import { GRAPHQL_URL } from "../constants/global";
+import { gql } from "graphql-request";
 import { Company } from "../models/Company";
 import { graphQLClient } from "./GraphQLClient";
 
 export const CompanyGraphQL = {
-  getMyCompany: async () => {
+  getMyCompany: async (): Promise<Company> => {
     const { myCompany } = await graphQLClient.request(
       gql`
         query {
@@ -17,6 +16,7 @@ export const CompanyGraphQL = {
             address
             siret
             logo
+            email
           }
         }
       `
@@ -24,7 +24,7 @@ export const CompanyGraphQL = {
 
     return myCompany;
   },
-  createOrUpdateMyCompany: async (company: Company) => {
+  createOrUpdateMyCompany: async (company: Company): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation ($company: CompanyInput!) {
@@ -32,11 +32,12 @@ export const CompanyGraphQL = {
             id
             name
             phoneNumber
-            city
             postalCode
+            city
             address
-            logo
             siret
+            logo
+            email
           }
         }
       `,

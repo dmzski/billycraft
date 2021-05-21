@@ -1,0 +1,4 @@
+FROM alpine:latest
+
+COPY theme /coco-erp
+CMD ["sh"]

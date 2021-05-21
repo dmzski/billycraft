@@ -1,42 +1,37 @@
-import { format } from "date-fns";
+import { Table } from "@coco-ui/core";
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { ROUTES } from "../../routes";
-import Modal from "react-modal";
-import CustomerForm from "../../containers/forms/CustomerForm";
+import { useParams } from "react-router-dom";
+import CustomerModal from "../../containers/modals/CustomerModal";
 
-const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
+const QuoteTableLine = ({ customer }: any): JSX.Element => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const { id } = useParams<any>();
 
-  const editCustomer = (e: any) => {
-    e.stopPropagation();
+  const editCustomer = () => {
     setIsOpen(true);
   };
 
+  React.useEffect(() => {
+    if (customer && id === customer.id) {
+      setIsOpen(true);
+    }
+  }, [id, customer]);
+
   return (
-    <tr className="quote-table-line" onClick={editCustomer}>
-      <td className="px-2">
-        <input type="checkbox" onChange={(e) => {}} />
-      </td>
-      <td>{customer.name}</td>
-      <td>{customer.contact}</td>
-      <td>{customer.phoneNumber}</td>
-      <td>{customer.city}</td>
-      <td>{customer.postalCode}</td>
-      <td className="overflow-hidden">{customer.address}</td>
-      <Modal
-        className="modal"
-        overlayClassName="modal-overlay"
+    <Table.Row hoverable onClick={editCustomer}>
+      <Table.Cell>{customer.name}</Table.Cell>
+      <Table.Cell>{customer.contact}</Table.Cell>
+      <Table.Cell>{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</Table.Cell>
+      <Table.Cell>{customer.email}</Table.Cell>
+      <CustomerModal
         isOpen={modalIsOpen}
         onRequestClose={(e: any) => {
-          e.stopPropagation();
+          if (e) e.stopPropagation();
           setIsOpen(false);
         }}
-        contentLabel="Example Modal"
-      >
-        <CustomerForm customer={customer} closeModal={() => setIsOpen(false)} />
-      </Modal>
-    </tr>
+        customer={customer}
+      />
+    </Table.Row>
   );
 };
 

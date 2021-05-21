@@ -2,11 +2,13 @@ import { Quote } from "./Quote";
 
 export class Customer {
   id?: number;
-  city: String = "";
-  contact: String = "";
-  name: String = "";
-  phoneNumber: String = "";
-  postalCode: String = "";
+  city = "";
+  contact = "";
+  name = "";
+  phoneNumber = "";
+  postalCode = "";
+  email = "";
+  address = "";
   quotes: Quote[] = [];
   createdAt?: Date;
   updatedAt?: Date;

@@ -1,0 +1,1 @@
+ALTER TABLE com_bill ADD COLUMN paid_at TIMESTAMP;
