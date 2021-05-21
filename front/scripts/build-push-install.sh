@@ -3,7 +3,7 @@ docker login
 checkSuccess () {
         if [ $? != 0 ] ; then
                 echo "Non zero code. Rollback files then exiting";
-                sed -i -e "s/VERSION = .*/VERSION = \"$currentVersion\"/g" ./src/constants/global.ts
+                sed -e "s/VERSION = .*/VERSION = \"$currentVersion\";/g" ./src/constants/global.ts > ./src/constants/global.ts
                 egrep -lRZ "$version" ./kubernetes/ | xargs -0 -l sed -i -e "s/$version/$currentVersion/g" > /dev/null
                 exit 1;
         fi
@@ -29,12 +29,12 @@ while [[ "$displayPopup" != "o" ]] && [[ "$displayPopup" != "n" ]]; do
 done
 
 if [[ "$displayPopup" == "o" ]]; then
-        sed -i -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = true/g" ./src/constants/global.ts
+        sed -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = true;/g" ./src/constants/global.ts > ./src/constants/global.ts
 else
-        sed -i -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = false/g" ./src/constants/global.ts
+        sed -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = false;/g" ./src/constants/global.ts > ./src/constants/global.ts
 fi
 
-sed -i -e "s/VERSION = .*/VERSION = \"$version\"/g" ./src/constants/global.ts
+sed -e "s/VERSION = .*/VERSION = \"$version\";/g" ./src/constants/global.ts > ./src/constants/global.ts
 checkSuccess
 
 echo "Building image...";

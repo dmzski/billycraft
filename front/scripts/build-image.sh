@@ -9,7 +9,7 @@ while [[ "$confirm" != "O" ]] && [[ "$confirm" != "N" ]]; do
     read confirm
 done
 
-sed -i -e "s/VERSION = .*/VERSION = \"$currentVersion\"/g" ./src/constants/global.ts
+sed -e "s/VERSION = .*/VERSION = \"$currentVersion\";/g" ./src/constants/global.ts > ./src/constants/global.ts
 
 
 docker build -t compta-front:latest -f ./Dockerfile ./
