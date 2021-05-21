@@ -21,6 +21,8 @@ const CustomerForm = ({ customer, setCustomer, onSubmit, isLoading, disabled }: 
       <form className="mt-3" onSubmit={onSubmit}>
         <TextInput disabled={disabled} label="Nom" placeholder="Nom du client" value={customer.name} maxLength={100} onChange={inputChange("name")} />
         <TextInput
+          multiline
+          rows={3}
           disabled={disabled}
           containerClassName="mt-3"
           label="Adresse"

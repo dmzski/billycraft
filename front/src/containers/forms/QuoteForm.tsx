@@ -121,7 +121,7 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
         inputProps={{
           autocomplete: "off",
         }}
-        options={customersQuery.data || []}
+        options={customersQuery.data || [quote.customer]}
         placeholder="Nom du client"
         value={quote.customer}
         onSearchChange={(str) => {

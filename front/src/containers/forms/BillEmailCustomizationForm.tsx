@@ -15,35 +15,45 @@ const BillEmailCustomizationForm = ({ billEmailCustomization, onSubmit }: any): 
 
   return (
     <form onSubmit={(e) => onSubmit(e, newBillEmailCustomization)} className="w-full">
+      <h2 className="font-bold text-xl underline leading-10">Personnalisation de l&lsquo;email</h2>
       <div className="my-2 flex">
-        <Switch checked={newBillEmailCustomization.sendAutomatically} id="sendBillAutomatically" onChange={handleToggle("sendAutomatically")} />
-        <div className="ml-2">Envoyer l&lsquo;email automatiquement lorsque la facture passe au status &ldquo;Envoyé&ldquo;</div>
+        <Switch labelPosition="right" checked={newBillEmailCustomization.sendAutomatically} id="sendAutomatically" onChange={handleToggle("sendAutomatically")}>
+          <div className="ml-2">Envoyer l&lsquo;email automatiquement lorsque la facture passe au status &ldquo;Envoyé&ldquo;</div>
+        </Switch>
       </div>
-      <div className="border border-black p-3 mb-3">
-        <p>Pour insérer le numéro du devis entrez : #BILL_ID#</p>
-        <p>Pour insérer le titre du devis entrez : #BILL_TITLE#</p>
+      <div className="bg-info-200 text-info-700 rounded p-3 mb-3">
+        <p className="underline">Astuces :</p>
+        <ul className="list-disc list-inside">
+          <li>Pour insérer le numéro du devis entrez : #BILL_ID#</li>
+          <li>Pour insérer le titre du devis entrez : #BILL_TITLE#</li>
+        </ul>
       </div>
       <div>
-        <label className="font-bold text-gray-700">Objet du mail</label>
         <TextInput
+          id="object"
+          name="object"
+          label="Objet du mail"
           value={newBillEmailCustomization.object}
           onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, object: e.target.value })}
-          placeholder="Objet du mail"
+          placeholder="Facture #BILL_ID# : #BILL_TITLE#"
           className="border-2 border-gray-200 p-3 w-full rounded"
         />
       </div>
       <div className="mt-2">
-        <label className="font-bold text-gray-700">Corps du mail</label>
         <TextInput
+          id="body"
+          name="body"
+          label="Corps du mail"
           multiline
+          rows={5}
           value={newBillEmailCustomization.body}
           onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, body: e.target.value })}
-          placeholder="Corps du mail"
+          placeholder="Vous trouvez en pièce jointe la facture #BILL_ID# concernant #BILL_TITLE#.&#10;Cordialement,"
           className="border-2 border-gray-200 p-3 w-full rounded"
         />
       </div>
       <div>
-        <Button size="md" className="w-full mt-3">
+        <Button type="submit" size="md" className="w-full mt-3">
           Enregistrer
         </Button>
       </div>

@@ -48,9 +48,11 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col">
+      <h2 className="font-bold text-xl underline leading-10">Personnalisation du PDF</h2>
       <div className="flex mt-3 w-full content-center items-center">
         <div className="w-10 h-10 mr-3 border-2 border-black" style={{ backgroundColor: newBillCustomization.mainColor || "white" }}></div>
         <TextInput
+          id="mainColor"
           value={newBillCustomization.mainColor}
           onChange={(e: any) => {
             setNewBillCustomization({ ...newBillCustomization, mainColor: e.target.value });
@@ -99,7 +101,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
       <div className="mt-3">
         <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">Après le tableau</h1>
         <TextInput
+          id="afterTable"
           multiline
+          rows={5}
           placeholder="En dessous du tableau"
           value={newBillCustomization.afterTable}
           className="w-full"
@@ -110,7 +114,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
       <div className="mt-2">
         <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">Pied de page</h1>
         <TextInput
+          id="footer"
           multiline
+          rows={5}
           className="w-full"
           placeholder="Pied de page"
           value={newBillCustomization.footer}
@@ -118,7 +124,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           onChange={(e: React.ChangeEvent) => setNewBillCustomization({ ...newBillCustomization, footer: (e.target as HTMLTextAreaElement).value })}
         />
       </div>
-      <Button size="md" className="w-full mt-5" onClick={onSubmit}>
+      <Button type="submit" size="md" className="w-full mt-5" onClick={onSubmit}>
         Enregister
       </Button>
     </form>

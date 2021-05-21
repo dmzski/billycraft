@@ -143,7 +143,7 @@ const SelectInput = ({
       <input disabled={disabled} id={id} className={className || "select-input"} placeholder={placeholder} type="text" value={value} onChange={onChange} />
       {isLoading && (
         <div className="absolute top-0 flex w-auto h-full items-center" style={{ right: "1rem" }}>
-          <Loader size="small" />
+          <Loader size="sm" />
         </div>
       )}
       {open && value && value.length > 0 && !disabled && (

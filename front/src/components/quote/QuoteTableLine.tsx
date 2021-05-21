@@ -1,5 +1,6 @@
 import { ActionButton, Icon, Table } from "@coco-ui/core";
 import { format, parseJSON } from "date-fns";
+import { Quote } from "models/Quote";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
@@ -10,7 +11,7 @@ import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { getQuoteTotal } from "../../utils/quote";
 
-const QuoteTableLine = ({ quote }: any): JSX.Element => {
+const QuoteTableLine = ({ quote }: { quote: Quote }): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -30,7 +31,7 @@ const QuoteTableLine = ({ quote }: any): JSX.Element => {
       return false;
     }
     try {
-      await updateQuoteStatusMutation({ id: quote.id, statusEnum: status });
+      quote.id && (await updateQuoteStatusMutation({ id: quote.id, statusEnum: status }));
       setOpenStatusPopup(false);
       queryCache.invalidateQueries("quotes");
     } catch (error) {

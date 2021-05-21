@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+import { Product } from "models/Product";
 import { graphQLClient } from "./GraphQLClient";
 
 export const ProductGraphQL = {
@@ -36,7 +37,7 @@ export const ProductGraphQL = {
     return getAllProductsContains;
   },
 
-  saveProduct: async (product: any): Promise<any> => {
+  saveProduct: async (product: Product): Promise<any> => {
     const { mutation } = await graphQLClient.request(
       gql`
         mutation($product: ProductInput!) {

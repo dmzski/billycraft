@@ -1,9 +1,9 @@
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
-import { CompanyGraphQL } from "../../graphql/CompanyGraphQL";
-import { useToast } from "../../providers/ToastProvider";
-import useLoadingState from "../../hooks/useLoadingState";
-import { CompanyApi } from "../../api/CompanyApi";
+import { CompanyGraphQL } from "graphql/CompanyGraphQL";
+import { useToast } from "providers/ToastProvider";
+import useLoadingState from "hooks/useLoadingState";
+import { CompanyApi } from "api/CompanyApi";
 import { Button, TextInput } from "@coco-ui/core";
 
 const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
@@ -59,6 +59,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
   return (
     <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
       <TextInput
+        id="name"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -68,7 +69,9 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("name")}
       />
       <TextInput
+        id="address"
         multiline
+        rows={3}
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -79,6 +82,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("address")}
       />
       <TextInput
+        id="postal-code"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -88,6 +92,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("postalCode")}
       />
       <TextInput
+        id="city"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -97,6 +102,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("city")}
       />
       <TextInput
+        id="phone-number"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -106,6 +112,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("phoneNumber")}
       />
       <TextInput
+        id="email"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"
@@ -115,6 +122,7 @@ const MyCompagnyForm = ({ company, setCompany }: any): JSX.Element => {
         onChange={inputChange("email")}
       />
       <TextInput
+        id="siret"
         className="w-full"
         containerClassName="mt-2 w-full"
         labelVariant="inside"

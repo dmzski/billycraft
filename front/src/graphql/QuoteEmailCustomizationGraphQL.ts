@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+import { QuoteEmailCustomization } from "models/QuoteEmailCustomization";
 import { graphQLClient } from "./GraphQLClient";
 
 export const QuoteEmailCustomizationGraphQL = {
@@ -18,7 +19,7 @@ export const QuoteEmailCustomizationGraphQL = {
 
     return myQuoteEmailCustomization;
   },
-  updateMyQuoteCustomization: async (quoteEmailCustomization: any): Promise<any> => {
+  updateMyQuoteCustomization: async (quoteEmailCustomization: QuoteEmailCustomization): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation($quoteEmailCustomization: QuoteEmailCustomizationInput!) {

@@ -1,9 +1,10 @@
 import { Table } from "@coco-ui/core";
 import React from "react";
 import { useParams } from "react-router-dom";
-import CustomerModal from "../../containers/modals/CustomerModal";
+import CustomerModal from "containers/modals/CustomerModal";
+import { Customer } from "models/Customer";
 
-const QuoteTableLine = ({ customer }: any): JSX.Element => {
+const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const { id } = useParams<any>();
 

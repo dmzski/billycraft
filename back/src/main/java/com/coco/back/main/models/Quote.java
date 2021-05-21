@@ -4,7 +4,6 @@ import com.coco.back.main.deserializers.CustomInstantDeserializer;
 import com.coco.back.main.enums.StatusEnum;
 import com.coco.back.main.generators.QuoteIdGenerator;
 import com.coco.back.main.serializers.CustomInstantSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;

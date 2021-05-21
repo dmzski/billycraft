@@ -5,7 +5,6 @@ import BillLineTable from "../tables/BillLineTable";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
 import { Button, Select, TextInput } from "@coco-ui/core";
-import { Customer } from "../../models/Customer";
 
 const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): JSX.Element => {
   const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
@@ -66,16 +65,6 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
     return bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
 
-  const getSelectCustomerData = React.useCallback(() => {
-    const array: { value: string; name: string }[] = [];
-    if (customersQuery.data) {
-      customersQuery.data.forEach((customer: Customer) => {
-        array.push({ value: `${customer.id}`, name: customer.name });
-      });
-    }
-    return array;
-  }, [customersQuery.data]);
-
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
       <TextInput
@@ -92,9 +81,9 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
         isLoading={customersQuery.isLoading}
         isSearchable
         disabled={disabled || cantUpdate}
-        options={getSelectCustomerData()}
+        options={customersQuery.data || [bill.customer]}
         textKey="name"
-        valueKey="value"
+        valueKey="id"
         placeholder="Nom du client"
         value={bill.customer}
         onSearchChange={(str) => str && setCustomerInputValue(str)}

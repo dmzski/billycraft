@@ -1,8 +1,11 @@
 import React, { SyntheticEvent } from "react";
 import { ToastVariant } from "models/Toast";
 
-export const ToastContainer = (props: any): JSX.Element => {
-  return <div className="overflow-hidden py-2 fixed bottom-0 right-0 flex flex-col-reverse w-72">{props.children}</div>;
+type ToastContainerProps = {
+  children: React.ReactNode;
+};
+export const ToastContainer = (props: ToastContainerProps): JSX.Element => {
+  return <div className="overflow-hidden z-20 py-2 fixed bottom-0 right-0 flex flex-col-reverse w-72">{props.children}</div>;
 };
 
 const variants = {
