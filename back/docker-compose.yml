@@ -37,6 +37,12 @@ services:
       - "traefik.http.middlewares.keycloak.headers.addvaryheader=true"
     ports:
       - 8081:8080
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
 
   pdf:
     image: thecodingmachine/gotenberg:6
@@ -62,6 +68,9 @@ services:
       QUARKUS_HTTP_CORS_METHODS: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
       QUARKUS_HTTP_CORS_ORIGINS: "*"
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/auth/realms/compta
+      QUARKUS_OIDC_TOKEN_ISSUER: http://oauth.coco-erp.lan/auth/realms/compta
+      QUARKUS_OIDC_CLIENT_ID: api
+      QUARKUS_OIDC_CREDENTIALS_SECRET: f833dfef-ba82-488c-b549-c56e7ef59583
       PDF_SERVICE_API_MP_REST_URL: http://pdf:3000
       PDF_SERVICE_API_MP_REST_SCOPE: javax.inject.Singleton
       COMPTA_UPLOAD_DIR: /uploads

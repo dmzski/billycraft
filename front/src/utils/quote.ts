@@ -1,20 +1,20 @@
-import { compareAsc, format, isAfter, parseJSON } from "date-fns";
+import { compareAsc, format, parseJSON } from "date-fns";
 import { QUOTE_STATUS } from "../constants/quote";
 import { Quote, QuoteLine } from "../models/Quote";
 
-export function sortQuotes(array: any[]) {
+export function sortQuotes(array: any[]): any[] {
   return array.sort((quoteA, quoteB) => {
     const updateAtCompare = compareAsc(new Date(quoteA.updatedAt), new Date(quoteB.updatedAt));
     if (updateAtCompare === 0) {
-      const statusA = Object.values(QUOTE_STATUS).find((s) => s.enum === quoteA.status);
-      const statusB = Object.values(QUOTE_STATUS).find((s) => s.enum === quoteB.status);
-      return statusA!.weight > statusB!.weight ? 1 : statusA!.weight < statusB!.weight ? -1 : 0;
+      const statusA = Object.values(QUOTE_STATUS).find((s) => s.enum === quoteA.status) || { weight: 0 };
+      const statusB = Object.values(QUOTE_STATUS).find((s) => s.enum === quoteB.status) || { weight: 0 };
+      return statusA.weight > statusB.weight ? 1 : statusA.weight < statusB.weight ? -1 : 0;
     }
     return updateAtCompare;
   });
 }
 
-export function filterQuotes(array: any[], filters: any) {
+export function filterQuotes(array: any[], filters: any): any[] {
   if (!array) return [];
   if (!filters) return array;
   const arrayFiltered = [...array];
@@ -36,7 +36,7 @@ export function filterQuotes(array: any[], filters: any) {
   });
 }
 
-export function calculatePriceTTC(line: QuoteLine, tva = 0) {
+export function calculatePriceTTC(line: QuoteLine, tva = 0): number {
   if (!line.price) {
     return 0;
   }
@@ -44,8 +44,8 @@ export function calculatePriceTTC(line: QuoteLine, tva = 0) {
   return price + price * (tva / 100);
 }
 
-export function getQuoteTotal(quote: Quote) {
-  let array = quote.lines
+export function getQuoteTotal(quote: Quote): number {
+  const array = quote.lines
     .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
     .map((quoteLine: QuoteLine) => calculatePriceTTC(quoteLine, quote.tva) * (quoteLine.quantity ? quoteLine.quantity : 0));
 

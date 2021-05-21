@@ -1,8 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { COLORS } from "../constants/colors";
 
-const Login = () => {
+const Login = (): JSX.Element => {
   const history = useHistory();
   function login() {
     history.push("/dashboard");

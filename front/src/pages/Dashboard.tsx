@@ -7,8 +7,8 @@ import ReportCards from "../containers/reports/ReportCards";
 import YearReportGraph from "../containers/reports/YearReportGraph";
 import { ReportDTO } from "../models/dtos/Report";
 
-const Dashboard = () => {
-  const [dateTarget, setDateTarget] = React.useState(new Date());
+const Dashboard = (): JSX.Element => {
+  const [dateTarget] = React.useState(new Date());
   const monthReportQuery = useQuery<ReportDTO>(["month-report", startOfMonth(dateTarget)], ReportApi.getMonthReport, {
     refetchOnWindowFocus: false,
   });

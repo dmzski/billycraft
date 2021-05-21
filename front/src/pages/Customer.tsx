@@ -4,26 +4,30 @@ import CustomerTable from "../containers/tables/CustomerTable";
 import { CustomerGraphQL } from "../graphql/CustomerGraphQL";
 import CustomerModal from "../containers/modals/CustomerModal";
 import { Customer } from "../models/Customer";
+import { Button, Loader } from "@coco-ui/core";
 
-const CustomerPage = () => {
-  const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers, {refetchOnWindowFocus: false});
+const CustomerPage = (): JSX.Element => {
+  const customersQuery = useQuery("customers-query", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const goToNewCustomer = (e: any) => {
+  const goToNewCustomer = () => {
     setIsOpen(true);
   };
 
   return (
     <>
       <div className="flex flex-row-reverse">
-        <button className="primary" onClick={goToNewCustomer}>
-          <span className="material-icons">add</span>
-          <p>Nouveau client</p>
-        </button>
+        <Button icon="plus" size="md" onClick={goToNewCustomer}>
+          Nouveau client
+        </Button>
       </div>
       <div>
         <CustomerTable data={customersQuery.data} />
-        {customersQuery.isLoading && <div>Chargement en cours...</div>}
+        {customersQuery.isLoading && (
+          <div className="mt-2 flex justify-center">
+            <Loader />
+          </div>
+        )}
       </div>
       <CustomerModal customer={new Customer()} isOpen={isOpen} onRequestClose={() => setIsOpen(false)} />
     </>

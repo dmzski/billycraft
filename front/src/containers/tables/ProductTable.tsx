@@ -1,24 +1,22 @@
+import { Grid } from "@coco-ui/core";
 import React from "react";
 import ProductTableLine from "../../components/product/ProductTableLine";
 import { Product } from "../../models/Product";
 
-const ProductTable: React.FC<any> = ({ products }) => {
+const ProductTable = ({ products }: any): JSX.Element => {
   return (
     <div className="w-full">
-      <table className="w-full text-left table-card">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th className="text-right">Prix Unitaire HT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product: Product) => (
-            <ProductTableLine product={product} />
-          ))}
-          <ProductTableLine product={new Product()} />
-        </tbody>
-      </table>
+      <Grid cols={2} gap={1}>
+        <div>Nom</div>
+        <div className="text-right">
+          <span>Prix Unitaire HT</span>
+          <span className="px-12"></span>
+        </div>
+        {products.map((product: Product) => (
+          <ProductTableLine key={product.id || "new-product"} product={product} />
+        ))}
+        <ProductTableLine product={new Product()} />
+      </Grid>
     </div>
   );
 };

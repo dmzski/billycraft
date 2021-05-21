@@ -1,10 +1,10 @@
 import React from "react";
 import { ReportDTO } from "../../models/dtos/Report";
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format, parseJSON } from "date-fns";
 import { getNormalizedDate } from "../../utils/date";
 
-const YearReportGraph: React.FC<{ report: ReportDTO }> = ({ report }) => {
+const YearReportGraph = ({ report }: { report: ReportDTO }): JSX.Element => {
   const data = React.useMemo(() => {
     if (report) {
       return report.details.map((monthReport) => {
@@ -34,10 +34,15 @@ const YearReportGraph: React.FC<{ report: ReportDTO }> = ({ report }) => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
-        <Legend margin={{ top: 10, bottom: 50 }} />
-        <Bar dataKey="articleSales" stackId="1" fill="#795548" name="Vente de matériels" />
-        <Bar dataKey="serviceSales" stackId="1" fill="#48bb78" name="Vente de services commerciaux ou artisanaux" />
-        <Bar dataKey="otherSales" stackId="1" fill="#a0aec0" name="Vente d'autres types de service" />
+        <Bar dataKey="articleSales" stackId="1" fill="text-info-600" className="text-info-600 fill-current" name="Vente de matériels" />
+        <Bar
+          dataKey="serviceSales"
+          stackId="1"
+          fill="text-success-600"
+          className="text-success-600 fill-current"
+          name="Vente de services commerciaux ou artisanaux"
+        />
+        <Bar dataKey="otherSales" fill="text-gray-600" stackId="1" className="text-gray-600 fill-current" name="Vente d'autres types de service" />
       </BarChart>
     </ResponsiveContainer>
   );

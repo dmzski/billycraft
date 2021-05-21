@@ -6,9 +6,9 @@ import { HttpClient } from "./HttpClient";
 export const REPORT_URL = API_URL + "/reports";
 
 export const ReportApi = {
-  getMonthReport: async (_: any, month: string) => {
+  getMonthReport: async (_: any, month: string): Promise<any> => {
     const { query, abort } = HttpClient.GET(`${REPORT_URL}/month?query=${getNormalizedDate(parseJSON(month)).toJSON()}`);
-    let promise = query.then((res: any) => {
+    const promise = query.then((res: any) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -20,9 +20,9 @@ export const ReportApi = {
 
     return promise;
   },
-  getYearReport: async (_: any, year: string) => {
+  getYearReport: async (_: any, year: string): Promise<any> => {
     const { query, abort } = HttpClient.GET(`${REPORT_URL}/year?query=${getNormalizedDate(parseJSON(year)).toJSON()}`);
-    let promise = query.then((res: any) => {
+    const promise = query.then((res: any) => {
       if (res.status === 200) {
         return res.json();
       } else {

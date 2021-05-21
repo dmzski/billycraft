@@ -15,7 +15,10 @@ const keycloakProviderInitConfig: any = {
   checkLoginIframe: false,
 };
 
-const MainProvider: React.FC<any> = ({ children }) => {
+type MainProviderProps = {
+  children: React.ReactNode;
+};
+const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
   const onKeycloakTokens = (tokens: any) => {
     if (tokens.idToken) {
       fetchRegister(tokens.idToken);

@@ -1,3 +1,4 @@
+import { Icon } from "@coco-ui/core";
 import React from "react";
 
 type DashboardCardProps = {
@@ -8,11 +9,11 @@ type DashboardCardProps = {
   color?: string;
 };
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ size, icon, title, children, color = "text-primary-700" }) => {
+const DashboardCard = ({ size, icon, title, children, color = "text-primary-700" }: DashboardCardProps): JSX.Element => {
   return (
     <div className={"flex bg-white shadow-lg rounded-md flex-col px-8 py-5 mx-2 my-3 " + size}>
       <div className={"flex flex-col font-bold justify-center items-center " + color}>
-        <span className="material-icons mb-2 text-4xl">{icon}</span>
+        <Icon name={icon as any} className="mb-2 text-4xl" />
         <span>{title}</span>
       </div>
       <div className="font-bold mt-8 flex justify-center items-center">{children}</div>

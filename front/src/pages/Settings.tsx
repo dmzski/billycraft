@@ -1,26 +1,18 @@
+import { Loader } from "@coco-ui/core";
 import React from "react";
 import { useQuery } from "react-query";
-import BillCustomizationForm from "../containers/forms/BillCustomizationForm";
 import MyCompagnyForm from "../containers/forms/MyCompagnyForm";
-import QuoteCustomizationForm from "../containers/forms/QuoteCustomizationForm";
-import QuoteEmailCustomizationForm from "../containers/forms/QuoteEmailCustomizationForm";
-import Layout from "../containers/layout/Layout";
 import BillTab from "../containers/settings/BillTab";
 import QuoteTab from "../containers/settings/QuoteTab";
-import { BillCustomizationGraphQL } from "../graphql/BillCustomizationGraphQL";
 import { CompanyGraphQL } from "../graphql/CompanyGraphQL";
-import { QuoteCustomizationGraphQL } from "../graphql/QuoteCustomizationGraphQL";
-import { QuoteEmailCustomizationGraphQL } from "../graphql/QuoteEmailCustomizationGraphQL";
-import { QuoteEmailCustomization } from "../models/QuoteEmailCustomization";
-import { useToast } from "../providers/ToastProvider";
 
-const Settings = () => {
+const Settings = (): JSX.Element => {
   const [tab, setTab] = React.useState("company");
   const companyQuery = useQuery("my-company", CompanyGraphQL.getMyCompany, { enabled: tab === "company" });
 
   const [company, setCompany] = React.useState<any>({});
 
-  const changeTab = (newTab: string) => (e: any) => {
+  const changeTab = (newTab: string) => () => {
     setTab(newTab);
   };
 
@@ -35,19 +27,19 @@ const Settings = () => {
         <div className="flex justify-center items-center w-full bg-white mb-3">
           <div
             onClick={changeTab("company")}
-            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "company" && "font-bold border-purple-600")}
+            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "company" && "font-bold border-primary-600")}
           >
             Mon entreprise
           </div>
           <div
             onClick={changeTab("quote")}
-            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "quote" && "font-bold border-purple-600")}
+            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "quote" && "font-bold border-primary-600")}
           >
             Personnalisation des devis
           </div>
           <div
             onClick={changeTab("bill")}
-            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "bill" && "font-bold border-purple-600")}
+            className={"cursor-pointer hover:font-bold p-3 w-1/3 text-center border-b-4 " + (tab === "bill" && "font-bold border-primary-600")}
           >
             Personnalisation des factures
           </div>
@@ -56,11 +48,15 @@ const Settings = () => {
           {tab === "company" && (
             <>
               {companyQuery.data && (
-                <div className="w-3/4 bg-white shadow-md rounded p-5">
+                <div className="w-3/4">
                   <MyCompagnyForm company={company} setCompany={setCompany} />
                 </div>
               )}
-              {companyQuery.isLoading && <div>Chargement de l'entreprise...</div>}
+              {companyQuery.isLoading && (
+                <div className="mt-2 flex justify-center">
+                  <Loader />
+                </div>
+              )}
               {companyQuery.isError && <div>Une erreur est survenue</div>}
             </>
           )}

@@ -1,7 +1,8 @@
+import { Table } from "@coco-ui/core";
 import React from "react";
 import BillLineTableLine from "../../components/bill/BillLineTableLine";
 
-const BillLineTable: React.FC<any> = ({ bill, setBill, disabled }) => {
+const BillLineTable = ({ bill, setBill, disabled }: any): JSX.Element => {
   function deleteLine(index: number) {
     return () => {
       const newLines = [...bill.lines];
@@ -19,25 +20,27 @@ const BillLineTable: React.FC<any> = ({ bill, setBill, disabled }) => {
   }
 
   return (
-    <table className="bill-table w-full">
-      <thead>
-        <tr>
-          <th className="w-32 px-2 py-2">Type</th>
-          <th className="px-2 w-auto py-2 text-left">Description</th>
-          <th className="w-32 px-2 py-2">Quantité</th>
-          <th className="w-32 px-2 py-2">Prix H.T</th>
-          <th className="w-32 px-2 py-2">Prix TTC</th>
-          <th className="w-32 px-2 py-2">Sous Total</th>
-          <th className="w-12 px-4 py-2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell>Type</Table.HeadCell>
+          <Table.HeadCell>Description</Table.HeadCell>
+          <Table.HeadCell>Quantité</Table.HeadCell>
+          <Table.HeadCell>Prix HT</Table.HeadCell>
+          <Table.HeadCell>Prix TTC</Table.HeadCell>
+          <Table.HeadCell>Sous Total</Table.HeadCell>
+          <Table.HeadCell className="w-8" />
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
         {bill.lines &&
           bill.lines.map((line: any, index: number) => (
-            <BillLineTableLine disabled={disabled} key={index} tva={bill.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            <Table.Row key={index}>
+              <BillLineTableLine disabled={disabled} tva={bill.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            </Table.Row>
           ))}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   );
 };
 

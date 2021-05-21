@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "react-query";
-import Layout from "../containers/layout/Layout";
 import BillTable from "../containers/tables/BillTable";
 import { BillGraphQL } from "../graphql/BillGraphQL";
 import { Bill } from "../models/Bill";
@@ -8,8 +7,9 @@ import { filterBills, sortBills } from "../utils/bill";
 import BillModal from "../containers/modals/BillModal";
 import BillFilterContainer from "../containers/BillFilterContainer";
 import { useParams } from "react-router-dom";
+import { Button, Grid, Loader } from "@coco-ui/core";
 
-const BillPage = () => {
+const BillPage = (): JSX.Element => {
   const [selected, setSelected] = React.useState<number[]>([]);
   const [bills, setBills] = React.useState<Bill[]>([]);
   const [filters, setFilters] = React.useState<any>({});
@@ -54,39 +54,42 @@ const BillPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        {showArchived ? (
-          <button className="button" onClick={handleShowArchived}>
-            <span className="material-icons mr-2">visibility_off</span>
-            <p>Masquer les factures archivées/payées</p>
-          </button>
-        ) : (
-          <button className="button" onClick={handleShowArchived}>
-            <span className="material-icons mr-2">visibility</span>
-            <p>Voir les factures archivées/payées</p>
-          </button>
-        )}
-        {showFilters ? (
-          <button className="button default" onClick={handleShowFilters}>
-            <span className="material-icons mr-2">filter_alt</span>
-            <p>Masquer les filres</p>
-          </button>
-        ) : (
-          <button className="button info" onClick={handleShowFilters}>
-            <span className="material-icons mr-2">filter_alt</span>
-            <p>Afficher les filtres</p>
-          </button>
-        )}
-        <button className="primary" onClick={goToNewBill}>
-          <span className="material-icons mr-2">add</span>
-          <p>Nouvelle facture</p>
-        </button>
-      </div>
+      <Grid cols={3}>
+        <div>
+          {showArchived ? (
+            <Button size="md" variant="default" icon="eye-off" onClick={handleShowArchived}>
+              Masquer les factures archivées/payées
+            </Button>
+          ) : (
+            <Button size="md" variant="default" icon="eye" onClick={handleShowArchived}>
+              Voir les factures archivées/payées
+            </Button>
+          )}
+        </div>
+        <div className="flex justify-center">
+          {showFilters ? (
+            <Button size="md" icon="filter" variant="info" onClick={handleShowFilters}>
+              Masquer les filres
+            </Button>
+          ) : (
+            <Button size="md" variant="info" icon="filter" onClick={handleShowFilters}>
+              Afficher les filtres
+            </Button>
+          )}
+        </div>
+        <div className="flex flex-row-reverse">
+          <Button size="md" icon="plus" onClick={goToNewBill}>
+            Nouvelle facture
+          </Button>
+        </div>
+      </Grid>
       {showFilters && <BillFilterContainer filters={filters} setFilters={setFilters} />}
-      <div>
-        <BillTable data={billSorted()} selected={selected} setSelected={setSelected} setData={setBills} />
-        {(billsArchivedQuery.isLoading || billsQuery.isLoading) && <div>Chargement en cours...</div>}
-      </div>
+      <BillTable data={billSorted()} selected={selected} setSelected={setSelected} setData={setBills} />
+      {(billsArchivedQuery.isLoading || billsQuery.isLoading) && (
+        <div className="mt-2 flex justify-center">
+          <Loader />
+        </div>
+      )}
       <BillModal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}

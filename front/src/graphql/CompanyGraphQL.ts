@@ -3,7 +3,7 @@ import { Company } from "../models/Company";
 import { graphQLClient } from "./GraphQLClient";
 
 export const CompanyGraphQL = {
-  getMyCompany: async () => {
+  getMyCompany: async (): Promise<Company> => {
     const { myCompany } = await graphQLClient.request(
       gql`
         query {
@@ -24,7 +24,7 @@ export const CompanyGraphQL = {
 
     return myCompany;
   },
-  createOrUpdateMyCompany: async (company: Company) => {
+  createOrUpdateMyCompany: async (company: Company): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation ($company: CompanyInput!) {

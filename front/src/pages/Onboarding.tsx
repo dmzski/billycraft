@@ -1,8 +1,7 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import MyCompagnyForm from "../containers/forms/MyCompagnyForm";
 
-const Onboarding = () => {
+const Onboarding = (): JSX.Element => {
   const [company, setCompany] = React.useState({});
 
   return (
@@ -14,7 +13,7 @@ const Onboarding = () => {
         </div>
 
         <div className="text-gray-600">
-          <p>Créer votre entreprise pour commencer à utiliser l'outil renseigner les informations concernant votre entreprise</p>
+          <p>Créer votre entreprise pour commencer à utiliser l&lsquo;outil renseigner les informations concernant votre entreprise</p>
         </div>
 
         <div className="w-full mt-3">

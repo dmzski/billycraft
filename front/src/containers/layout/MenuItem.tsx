@@ -1,7 +1,8 @@
+import { Icon } from "@coco-ui/core";
 import React from "react";
-import { NavLink, useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
-const MenuItem: React.FC<any> = ({ text, icon, path, exact }) => {
+const MenuItem = ({ text, icon, path, exact }: any): JSX.Element => {
   const history = useHistory();
   const match = useRouteMatch({
     path,
@@ -12,9 +13,13 @@ const MenuItem: React.FC<any> = ({ text, icon, path, exact }) => {
   };
 
   return (
-    <div onClick={navigate} className={`flex mt-5 items-center py-2 px-8 text-primary-600 cursor-pointer ${match ? "font-bold bg-primary-200" : "bg-white"}`}>
-      <span className="h-5 w-5 material-icons">{icon}</span>
-
+    <div
+      onClick={navigate}
+      className={`flex items-center py-3 px-8 text-primary-600 border-r-4 cursor-pointer ${
+        match ? "border-primary-600 font-bold bg-primary-200" : "bg-white border-white"
+      }`}
+    >
+      <Icon name={icon} />
       <span className="mx-4">{text}</span>
     </div>
   );

@@ -7,7 +7,7 @@ const ToastContext = React.createContext<any>({});
 type ToastInfo = {
   message: string;
   variant: ToastVariant;
-  callback?: Function;
+  callback?: () => any;
   vertical?: string;
   horizontal?: string;
   duration?: number;
@@ -20,7 +20,7 @@ type ToastProviderProps = {
   vertical?: string;
 };
 
-const ToastProvider: React.FC<any> = ({ children, duration = 3000, horizontal = "center", vertical = "bottom" }) => {
+const ToastProvider = ({ children, duration = 3000 }: ToastProviderProps): JSX.Element => {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
   const [nextToast, setNextToast] = React.useState<Toast>();
 
@@ -58,23 +58,14 @@ const ToastProvider: React.FC<any> = ({ children, duration = 3000, horizontal = 
       {children}
       <ToastContainer>
         {nextToast && (
-          <CustomToast
-            duration={nextToast.duration}
-            open={nextToast.open}
-            key={nextToast.id}
-            message={nextToast.message}
-            horizontal={nextToast.horizontal ? nextToast.horizontal : horizontal}
-            vertical={nextToast.vertical ? nextToast.vertical : vertical}
-            variant={nextToast.variant}
-            onClose={onCloseToast}
-          />
+          <CustomToast duration={nextToast.duration} key={nextToast.id} message={nextToast.message} variant={nextToast.variant} onClose={onCloseToast} />
         )}
       </ToastContainer>
     </ToastContext.Provider>
   );
 };
 
-const useToast = () => {
+const useToast = (): any => {
   return React.useContext(ToastContext);
 };
 

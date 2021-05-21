@@ -2,19 +2,19 @@ import { compareAsc, format, parseJSON } from "date-fns";
 import { BILL_STATUS } from "../constants/bill";
 import { Bill, BillLine } from "../models/Bill";
 
-export function sortBills(array: any[]) {
+export function sortBills(array: any[]): any[] {
   return array.sort((billA, billB) => {
     const updateAtCompare = compareAsc(new Date(billA.updatedAt), new Date(billB.updatedAt));
     if (updateAtCompare === 0) {
-      const statusA = Object.values(BILL_STATUS).find((s) => s.enum === billA.status);
-      const statusB = Object.values(BILL_STATUS).find((s) => s.enum === billB.status);
-      return statusA!.weight > statusB!.weight ? 1 : statusA!.weight < statusB!.weight ? -1 : 0;
+      const statusA = Object.values(BILL_STATUS).find((s) => s.enum === billA.status) || { weight: 0 };
+      const statusB = Object.values(BILL_STATUS).find((s) => s.enum === billB.status) || { weight: 0 };
+      return statusA.weight > statusB.weight ? 1 : statusA.weight < statusB.weight ? -1 : 0;
     }
     return updateAtCompare;
   });
 }
 
-export function filterBills(array: any[], filters: any) {
+export function filterBills(array: any[], filters: any): any[] {
   if (!array) return [];
   if (!filters) return array;
   const arrayFiltered = [...array];
@@ -36,12 +36,12 @@ export function filterBills(array: any[], filters: any) {
   });
 }
 
-export function calculatePriceTTC(line: BillLine, tva = 0) {
+export function calculatePriceTTC(line: BillLine, tva = 0): number {
   const price = parseFloat(line.price as any);
   return price + price * (tva / 100);
 }
 
-export function getBillTotal(bill: Bill) {
+export function getBillTotal(bill: Bill): number {
   const array = bill.lines
     .filter((billLine: BillLine) => billLine.price && billLine.quantity)
     .map((billine: BillLine) => calculatePriceTTC(billine, bill.tva) * billine.quantity);

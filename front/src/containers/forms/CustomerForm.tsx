@@ -1,13 +1,8 @@
+import { Button, TextInput } from "@coco-ui/core";
 import React from "react";
-import { useMutation, useQuery, useQueryCache } from "react-query";
-import { useHistory, useParams } from "react-router-dom";
-import BaseInput from "../../components/inputs/BaseInput";
-import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { Customer } from "../../models/Customer";
-import { useToast } from "../../providers/ToastProvider";
-import { ROUTES } from "../../routes";
 
-const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubmit, isLoading, disabled }) => {
+const CustomerForm = ({ customer, setCustomer, onSubmit, isLoading, disabled }: any): JSX.Element => {
   function inputChange(property: keyof Customer) {
     return (event: any) => {
       const tmp: any = { ...customer };
@@ -17,54 +12,53 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center border-b-2 border-gray-400 pb-3">
+    <div className="flex flex-col w-full">
+      <div className="flex items-center border-b-2 border-gray-400 pb-3 w-full">
         <h1 className="ml-4 text-xl">
           {!customer.id ? "Nouveau " : "Modifier un "}client{customer.id ? " #" + customer.id : ""}
         </h1>
       </div>
       <form className="mt-3" onSubmit={onSubmit}>
-        <BaseInput
+        <TextInput disabled={disabled} label="Nom" placeholder="Nom du client" value={customer.name} maxLength={100} onChange={inputChange("name")} />
+        <TextInput
           disabled={disabled}
-          divClassName="mt-3"
-          label="Nom"
-          placeholder="Nom du client"
-          value={customer.name}
-          maxLength={100}
-          onChange={inputChange("name")}
-        />
-        <BaseInput
-          disabled={disabled}
-          divClassName="mt-3"
+          containerClassName="mt-3"
           label="Adresse"
           placeholder="Adresse du client"
           value={customer.address}
           onChange={inputChange("address")}
           maxLength={255}
         />
-        <BaseInput disabled={disabled} divClassName="mt-3" label="Email" placeholder="Adresse email" value={customer.email} onChange={inputChange("email")} />
-        <BaseInput
+        <TextInput
           disabled={disabled}
-          divClassName="mt-3"
+          containerClassName="mt-3"
+          label="Email"
+          placeholder="Adresse email"
+          value={customer.email}
+          onChange={inputChange("email")}
+        />
+        <TextInput
+          disabled={disabled}
+          containerClassName="mt-3"
           label="Téléphone"
           placeholder="Téléphone"
           value={customer.phoneNumber}
           onChange={inputChange("phoneNumber")}
           maxLength={10}
         />
-        <BaseInput disabled={disabled} divClassName="mt-3" label="Ville" placeholder="Ville" value={customer.city} onChange={inputChange("city")} />
-        <BaseInput
+        <TextInput disabled={disabled} containerClassName="mt-3" label="Ville" placeholder="Ville" value={customer.city} onChange={inputChange("city")} />
+        <TextInput
           disabled={disabled}
-          divClassName="mt-3"
+          containerClassName="mt-3"
           label="Code Postal"
           placeholder="Code Postal"
           value={customer.postalCode}
           onChange={inputChange("postalCode")}
           maxLength={10}
         />
-        <BaseInput
+        <TextInput
           disabled={disabled}
-          divClassName="mt-3"
+          containerClassName="mt-3"
           label="Contact"
           placeholder="Nom complet"
           value={customer.contact}
@@ -72,9 +66,9 @@ const CustomerForm: React.FC<any> = ({ customer, closeModal, setCustomer, onSubm
           maxLength={100}
         />
         <div className="mt-3 flex flex-row-reverse">
-          <button className="primary" disabled={isLoading || disabled} type="submit">
+          <Button size="md" disabled={isLoading || disabled} type="submit">
             Enregistrer
-          </button>
+          </Button>
         </div>
       </form>
     </div>

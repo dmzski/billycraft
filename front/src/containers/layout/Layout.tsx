@@ -1,26 +1,29 @@
 import React from "react";
 import SearchBar from "../../components/SearchBar";
 import SideBar from "./SideBar";
-
 import useBreakpoint from "../../hooks/useBreakpoint";
 import MobileLayout from "./MobileLayout";
 
-const Layout: React.FC<any> = (props) => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps): JSX.Element => {
   const breakpoint = useBreakpoint();
 
   if (!breakpoint.isMd) {
-    return <MobileLayout {...props} />;
+    return <MobileLayout>{children}</MobileLayout>;
   }
 
   return (
-    <div className="flex h-full w-full">
-      <div className="fixed left-0 top-0 h-full z-10 w-64">
+    <div className="h-full w-full">
+      <aside className="h-screen fixed w-64">
         <SideBar />
-      </div>
-      <div className="flex w-full flex-col fixed pl-64 h-10 z-10">
+      </aside>
+      <div className="pl-64 flex flex-col">
         <SearchBar />
+        <div className="mt-4 pb-2 mx-2 h-full relative">{children}</div>
       </div>
-      <div className="pl-64 pt-10 w-full relative">{props.children}</div>
     </div>
   );
 };

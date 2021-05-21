@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import "./assets/main.scss";
+import "./assets/main.css";
 
 if (window.localStorage.getItem("theme") === "dark") {
   document.body.dataset.theme = "dark";

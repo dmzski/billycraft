@@ -15,7 +15,7 @@ const NewsModal = () => {
       const { query, abort } = HttpClient.GET("/news.html", {
         cache: "no-cache",
       });
-      let promise = query.then((res: any) => res.text());
+      const promise = query.then((res: any) => res.text());
 
       promise.cancel = abort;
       return promise;
@@ -44,7 +44,7 @@ const NewsModal = () => {
     <Modal open={showNewsModal} onClose={toggleClose}>
       <div style={{ zIndex: 0 }} className="w-full">
         <h1 className="text-2xl font-bold text-center pb-2 border-b-2 border-black relative">
-          {VERSION} : What's new ? 🚀
+          {VERSION} : What&lsquo;s new ? 🚀
           <img src={happyLogo} className="absolute object-contain h-24" style={{ top: -25, right: 10, zIndex: -1 }} alt="happy_logo" />
         </h1>
         {newsQuery.isLoading && <div>Chargement en cours...</div>}

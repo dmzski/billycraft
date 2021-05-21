@@ -6,8 +6,8 @@ export enum SearchCategoryEnum {
 }
 
 export class SearchResultDTO {
-  id: string = "";
-  description: string = "";
+  id = "";
+  description = "";
 }
 
 export class SearchDTO {

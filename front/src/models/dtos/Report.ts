@@ -1,9 +1,9 @@
 export class ReportDTO {
-  startDate: string = "";
-  endDate: string = "";
-  sales: number = 0;
-  articleSales: number = 0;
-  serviceSales: number = 0;
-  otherSales: number = 0;
+  startDate = "";
+  endDate = "";
+  sales = 0;
+  articleSales = 0;
+  serviceSales = 0;
+  otherSales = 0;
   details: ReportDTO[] = [];
 }

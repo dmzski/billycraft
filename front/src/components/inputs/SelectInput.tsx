@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import React from "react";
 import Loader from "../Loader";
 
@@ -14,7 +15,7 @@ type SelectInputProps = {
   placeholder?: string;
   className?: string;
 };
-const SelectInput: React.FC<SelectInputProps> = ({
+const SelectInput = ({
   id,
   data,
   isLoading,
@@ -26,7 +27,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
   disabled,
   placeholder = "Rechercher",
   className,
-}) => {
+}: SelectInputProps) => {
   let currentId = 0;
   const [focused, setFocused] = React.useState<any>(null);
   const [open, setOpen] = React.useState<any>(defaultOpen);
