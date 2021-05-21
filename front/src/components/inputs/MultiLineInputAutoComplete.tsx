@@ -1,19 +1,7 @@
+/* eslint-disable  */
 import React from "react";
-import Loader from "../Loader";
 
-const MultiLineInputAutoComplete: React.FC<any> = ({
-  id,
-  isLoading,
-  isError,
-  className,
-  value,
-  onChange,
-  placeholder,
-  wrap,
-  disabled,
-  options,
-  onOptionClick,
-}) => {
+const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, onChange, placeholder, wrap, disabled, options, onOptionClick }: any) => {
   const textAreaRef = React.useRef<any>(null);
   let currentId = 0;
   const [focused, setFocused] = React.useState<any>(null);

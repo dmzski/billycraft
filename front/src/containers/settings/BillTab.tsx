@@ -1,3 +1,4 @@
+import { Loader } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { BillCustomizationGraphQL } from "../../graphql/BillCustomizationGraphQL";
@@ -6,7 +7,7 @@ import { useToast } from "../../providers/ToastProvider";
 import BillCustomizationForm from "../forms/BillCustomizationForm";
 import BillEmailCustomizationForm from "../forms/BillEmailCustomizationForm";
 
-const BillTab = () => {
+const BillTab = (): JSX.Element => {
   const toast = useToast();
   const billCustomizationQuery = useQuery("bill-customization", BillCustomizationGraphQL.getMyInformation, {
     refetchOnWindowFocus: false,
@@ -37,17 +38,25 @@ const BillTab = () => {
   return (
     <div className="w-3/4">
       {billCustomizationQuery.data && (
-        <div className="p-5 bg-white shadow-lg rounded border-gray-200 border">
+        <div>
           <BillCustomizationForm billCustomization={billCustomizationQuery.data} />
         </div>
       )}
-      {billCustomizationQuery.isLoading && <div>Chargement de la personnalisation des factures</div>}
+      {billCustomizationQuery.isLoading && (
+        <div className="mt-2 flex justify-center">
+          <Loader />
+        </div>
+      )}
       {billCustomizationQuery.isError && <div>Une erreur est survenue</div>}
 
-      {billEmailCustomizationQuery.isLoading && <div>Chargement de la personnalisation des emails</div>}
+      {billEmailCustomizationQuery.isLoading && (
+        <div className="mt-2 flex justify-center">
+          <Loader />
+        </div>
+      )}
       {billEmailCustomizationQuery.isError && <div>Une erreur est survenue lors du chargement de la personnalisation des emails</div>}
       {billEmailCustomizationQuery.data && (
-        <div className="mt-3 p-5 bg-white shadow-lg rounded ">
+        <div className="mt-10">
           <BillEmailCustomizationForm billEmailCustomization={billEmailCustomizationQuery.data} onSubmit={handleEmailCustomizationSubmit} />
         </div>
       )}

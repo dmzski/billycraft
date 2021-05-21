@@ -1,3 +1,4 @@
+import { Icon } from "@coco-ui/core";
 import React from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
@@ -6,7 +7,7 @@ import { SearchDTO } from "../models/dtos/SearchDTO";
 import { ROUTES } from "../routes";
 import SelectInput from "./inputs/SelectInput";
 
-const SearchBar = () => {
+const SearchBar = (): JSX.Element => {
   const [search, setSearch] = React.useState("");
   const history = useHistory();
 
@@ -16,7 +17,7 @@ const SearchBar = () => {
     setSearch(e.target.value);
   };
 
-  const handleOptionClick = (event: any, option: any, header?: any) => {
+  const handleOptionClick = (_event: any, option: any, header?: any) => {
     switch (header) {
       case "QUOTE":
         history.push(ROUTES.QUOTES.path + "/" + option.id);
@@ -31,10 +32,8 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="h-12 flex bg-white pt-3 pb-3 rounded-md shadow-sm search-div z-10">
-      <div className="inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <span className="text-gray-500 sm:leading-5 material-icons mr-3">search</span>
-      </div>
+    <div className="z-10 h-12 flex flex-grow shadow bg-white pt-3 pb-3 rounded-md">
+      <Icon name="search" className="text-gray-500 mx-4" />
       <SelectInput
         id="top-search-input-select"
         data={searchQuery.data ? searchQuery.data.map((value: any) => ({ header: value.category, values: value.results })) : []}
@@ -43,7 +42,7 @@ const SearchBar = () => {
         value={search}
         onChange={handleChange}
         onClickOption={handleOptionClick}
-        className="search-input"
+        className="w-full focus:outline-none"
       />
     </div>
   );

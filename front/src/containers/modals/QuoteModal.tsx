@@ -1,10 +1,9 @@
+import { Button, Modal } from "@coco-ui/core";
 import React from "react";
-import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
 import { useHistory } from "react-router-dom";
 import { EmailApi } from "../../api/EmailApi";
 import { PdfApi } from "../../api/PdfApi";
-import { QUOTE_STATUS } from "../../constants/quote";
 import { BillGraphQL } from "../../graphql/BillGraphQL";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
 import useLoadingState from "../../hooks/useLoadingState";
@@ -13,9 +12,8 @@ import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { ROUTES } from "../../routes";
 import QuoteForm from "../forms/QuoteForm";
-import CustomModal from "./CustomModal";
 
-const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
+const QuoteModal = ({ isOpen, onRequestClose, quote }: any): JSX.Element => {
   const [newQuote, setNewQuote] = React.useState<Quote>(new Quote());
   const queryCache = useQueryCache();
   const toast = useToast();
@@ -24,7 +22,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
 
   const [createOrUpdateQuoteMutation, createOrUpdateQuoteMutationState] = useMutation(QuoteGraphQL.createOrUpdateQuote, {
     onSuccess: (data) => {
-      const tmp = [...queryCache.getQueryData<Quote[]>("quotes")!];
+      const tmp = [...(queryCache.getQueryData<Quote[]>("quotes") ?? [])];
       if (data.updateQuote) {
         const index = tmp.findIndex((q) => q.id === data.updateQuote.id);
         if (index > -1) {
@@ -69,6 +67,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
       return false;
     }
     try {
+      console.log(newQuote);
       await createOrUpdateQuoteMutation(newQuote);
     } catch (error) {
       toast.show({ message: "Erreur lors de l'enregistrement", variant: "error" });
@@ -76,7 +75,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
   }
 
-  const updateQuoteStatus = (status: QuoteStatusEnum) => async (e: any) => {
+  const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     if (updateQuoteStatusMutationState.isLoading || createOrUpdateQuoteMutationState.isLoading) {
       return false;
     }
@@ -117,7 +116,7 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
     }
   };
 
-  const createBillFromQuote = async (e: any) => {
+  const createBillFromQuote = async () => {
     try {
       if (!createBillFormQuoteMutationState.isLoading && quote.id) {
         createBillFormQuoteMutation(quote.id);
@@ -130,45 +129,66 @@ const QuoteModal: React.FC<any> = ({ isOpen, onRequestClose, quote }) => {
   };
 
   const isQuoteMinimumAccepted = () => {
-    return [QuoteStatusEnum.ACCEPTED, QuoteStatusEnum.DEPOSIT_ASK, QuoteStatusEnum.DEPOSIT_PAID].includes(newQuote.status) 
-  }
+    return [QuoteStatusEnum.ACCEPTED, QuoteStatusEnum.DEPOSIT_ASK, QuoteStatusEnum.DEPOSIT_PAID].includes(newQuote.status);
+  };
   React.useEffect(() => {
     setNewQuote(quote ? quote : new Quote());
   }, [quote, isOpen]);
 
   return (
-    <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
-      <div className="flex items-center mb-4  border-b-2 border-gray-400">
-        <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
-        {newQuote && newQuote.status === QuoteStatusEnum.SENT && newQuote.id && (
-          <button className="button info mb-2 mr-3" onClick={sendMail} title="Envoyer par mail" disabled={sendMailMutationState.isLoading}>
-            <span className="material-icons mr-3">email</span> Envoyer le mail
-          </button>
-        )}
-        {newQuote && isQuoteMinimumAccepted() && newQuote.id && (
-          <button
-            className="button success mb-2 mr-3"
-            onClick={createBillFromQuote}
-            title="Créer la facture"
-            disabled={createBillFormQuoteMutationState.isLoading}
-          >
-            <span className="material-icons mr-3">payment</span> Créer la facture
-          </button>
-        )}
-        {newQuote && newQuote.id && (
-          <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
-            <span className="material-icons mr-3">picture_as_pdf</span> PDF
-          </button>
-        )}
+    <Modal open={isOpen} onClose={onRequestClose} size="xl">
+      <div className="flex-col w-full">
+        <div className="flex items-center mb-4 border-b-2 border-gray-400">
+          <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
+          {newQuote && newQuote.status === QuoteStatusEnum.SENT && newQuote.id && (
+            <Button
+              className="mb-1 mr-1"
+              variant="info"
+              icon="mail"
+              size="sm"
+              onClick={sendMail}
+              title="Envoyer par mail"
+              disabled={sendMailMutationState.isLoading}
+            >
+              Envoyer le mail
+            </Button>
+          )}
+          {newQuote && isQuoteMinimumAccepted() && newQuote.id && (
+            <Button
+              variant="success"
+              size="sm"
+              className="mb-1 mr-3"
+              onClick={createBillFromQuote}
+              title="Créer la facture"
+              disabled={createBillFormQuoteMutationState.isLoading}
+              icon="document-add"
+            >
+              Créer la facture
+            </Button>
+          )}
+          {newQuote && newQuote.id && (
+            <Button
+              disabled={pdfState.isLoading}
+              title="Télécharger le PDF"
+              onClick={downloadPdf}
+              variant="primary"
+              className="mb-1"
+              size="sm"
+              icon="document-download"
+            >
+              PDF
+            </Button>
+          )}
+        </div>
+        <QuoteForm
+          onSubmit={saveQuote}
+          quote={newQuote}
+          setQuote={setNewQuote}
+          disabled={createOrUpdateQuoteMutationState.isLoading || updateQuoteStatusMutationState.isLoading}
+          onUpdateStatus={updateQuoteStatus}
+        />
       </div>
-      <QuoteForm
-        onSubmit={saveQuote}
-        quote={newQuote}
-        setQuote={setNewQuote}
-        disabled={createOrUpdateQuoteMutationState.isLoading || updateQuoteStatusMutationState.isLoading}
-        onUpdateStatus={updateQuoteStatus}
-      />
-    </CustomModal>
+    </Modal>
   );
 };
 

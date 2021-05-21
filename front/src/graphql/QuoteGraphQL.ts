@@ -1,7 +1,5 @@
-import request, { gql } from "graphql-request";
-import { GRAPHQL_URL } from "../constants/global";
+import { gql } from "graphql-request";
 import { Quote } from "../models/Quote";
-import { QuoteStatusEnum } from "../models/QuoteStatusEnum";
 import { graphQLClient } from "./GraphQLClient";
 
 const QUOTE_DTO = `
@@ -25,7 +23,7 @@ lines {
 }`;
 
 export const QuoteGraphQL = {
-  getAllQuotes: async () => {
+  getAllQuotes: async (): Promise<Quote[]> => {
     const { allQuotes } = await graphQLClient.request(
       gql`
         query {
@@ -38,7 +36,7 @@ export const QuoteGraphQL = {
 
     return allQuotes;
   },
-  getAllQuotesNotArchived: async () => {
+  getAllQuotesNotArchived: async (): Promise<Quote[]> => {
     const { allQuotesNotArchived } = await graphQLClient.request(
       gql`
         query {
@@ -51,7 +49,7 @@ export const QuoteGraphQL = {
 
     return allQuotesNotArchived;
   },
-  getAllQuotesArchived: async () => {
+  getAllQuotesArchived: async (): Promise<Quote[]> => {
     const { allQuotesArchived } = await graphQLClient.request(
       gql`
         query {
@@ -65,24 +63,32 @@ export const QuoteGraphQL = {
     return allQuotesArchived;
   },
 
-  createOrUpdateQuote: async (quote: Quote) => {
+  createOrUpdateQuote: async ({ id, customer, lines, status, title, tva, total }: Quote): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation ($quote: QuoteInput!) {
-          ${quote.id ? "updateQuote" : "createQuote"}(quote: $quote) {
+          ${id ? "updateQuote" : "createQuote"}(quote: $quote) {
             ${QUOTE_DTO}
           }
         }
       `,
       {
-        quote,
+        quote: {
+          id,
+          customer,
+          lines,
+          status,
+          title,
+          tva,
+          total,
+        },
       }
     );
 
     return mutation;
   },
 
-  getQuote: async (_: any, id: number) => {
+  getQuote: async (_: unknown, id: number): Promise<Quote> => {
     const { quoteById } = await graphQLClient.request(
       gql`
         query {
@@ -96,20 +102,12 @@ export const QuoteGraphQL = {
     return quoteById;
   },
 
-  sendQuote: async (id: string) => {
+  sendQuote: async (id: string): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
           mutation {
             sendQuote(id: "${id}") {
-              id
-              title
-              createdAt
-              updatedAt
-              version
-              status
-              customer {
-                  id
-              }
+              ${QUOTE_DTO}
             }
           }
         `
@@ -118,20 +116,12 @@ export const QuoteGraphQL = {
     return mutation;
   },
 
-  updateQuoteStatus: async ({ id, statusEnum }: any) => {
+  updateQuoteStatus: async ({ id, statusEnum }: { id: string; statusEnum: string }): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation($id: String, $statusEnum: StatusEnum) {
           updateQuoteStatus(id: $id, statusEnum: $statusEnum) {
-            id
-            title
-            createdAt
-            updatedAt
-            version
-            status
-            customer {
-              id
-            }
+            ${QUOTE_DTO}
           }
         }
       `,

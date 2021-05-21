@@ -3,7 +3,7 @@ import { Customer } from "../models/Customer";
 import { graphQLClient } from "./GraphQLClient";
 
 export const CustomerGraphQL = {
-  getAllCustomers: async () => {
+  getAllCustomers: async (): Promise<Customer[]> => {
     const { allCustomers } = await graphQLClient.request(
       gql`
         query {
@@ -23,24 +23,33 @@ export const CustomerGraphQL = {
 
     return allCustomers;
   },
-  createOrUpdateCustomer: async (customer: Customer) => {
+  createOrUpdateCustomer: async ({ address, city, contact, email, name, phoneNumber, postalCode, id }: Customer): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation ($customer: CustomerInput) {
-          ${customer.id ? "updateCustomer" : "createCustomer"}(customer: $customer) {
+          ${id ? "updateCustomer" : "createCustomer"}(customer: $customer) {
             id
           }
         }
       `,
       {
-        customer,
+        customer: {
+          id,
+          address,
+          city,
+          contact,
+          email,
+          name,
+          phoneNumber,
+          postalCode,
+        },
       }
     );
 
     return mutation;
   },
 
-  getCustomer: async (_: any, id: number) => {
+  getCustomer: async (_: any, id: number): Promise<Customer> => {
     const { customerById } = await graphQLClient.request(
       gql`
         query {
@@ -58,12 +67,12 @@ export const CustomerGraphQL = {
     return customerById;
   },
 
-  getAllCustomersByNameContain: async (key: string, name: string) => {
+  getAllCustomersByNameContain: async (key: string, name: string): Promise<Customer[]> => {
     const { allCustomersByNameContain } = await graphQLClient.request(
       gql`
       query {
         allCustomersByNameContain(name: "${name}") {
-          id 
+          id
           name
         }
 

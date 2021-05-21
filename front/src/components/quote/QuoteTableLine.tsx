@@ -1,3 +1,4 @@
+import { ActionButton, Icon, Table } from "@coco-ui/core";
 import { format, parseJSON } from "date-fns";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
@@ -9,7 +10,7 @@ import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { getQuoteTotal } from "../../utils/quote";
 
-const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, isEven }) => {
+const QuoteTableLine = ({ quote }: any): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -37,7 +38,7 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
     }
   };
 
-  const editQuote = (e: any) => {
+  const editQuote = () => {
     setIsModalOpen(!isModalOpen);
   };
 
@@ -49,21 +50,11 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
 
   const getStatus = React.useMemo(() => {
     const status = Object.values(QUOTE_STATUS).find((s) => s.enum === quote.status);
-    const onStatusClick = (e: any) => {
-      e.stopPropagation();
-      e.preventDefault();
-      if (quote.status !== QuoteStatusEnum.ARCHIVED) {
-        setOpenStatusPopup(!openStatusPopup);
-      }
-      return false;
-    };
 
     return (
-      <div className="status-text" onClick={onStatusClick}>
-        <span style={{ marginRight: 7 }} className="material-icons">
-          {status?.icon}
-        </span>
-        <span>{status?.text}</span>
+      <div className="flex items-center">
+        <Icon name={(status?.icon as any) || "question-mark-circle"} />
+        <span className="ml-1">{status?.text}</span>
       </div>
     );
   }, [quote, openStatusPopup]);
@@ -112,33 +103,38 @@ const QuoteTableLine: React.FC<any> = ({ quote, isSelected, onSelect, setQuote, 
   }, [statusRef, openStatusPopup]);
 
   return (
-    <tr className={"quote-table-line hover " + (isSelected ? "selected" : "")} onClick={editQuote}>
-      <td className="pl-3 text-left truncate">{quote.title}</td>
-      <td className="text-center truncate">{quote.customer.name}</td>
-      <td className="text-center">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-center">{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-center">{Math.round(getQuoteTotal(quote) * 100) / 100} €</td>
-      <td className="text-center status" ref={statusRef}>
-        {getStatus}
-        {openStatusPopup && (
-          <div className="popup">
-            {getNextStatuses().map((s, index) => (
-              <div key={index} onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}>
-                <span className="material-icons">{s.icon}</span>
+    <Table.Row onClick={editQuote}>
+      <Table.Cell>{quote.title}</Table.Cell>
+      <Table.Cell>{quote.customer.name}</Table.Cell>
+      <Table.Cell>{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell>{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell>{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
+      <Table.Cell
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        <ActionButton variant="outline">
+          <ActionButton.Content>{getStatus}</ActionButton.Content>
+          {getNextStatuses().map((s, index) => (
+            <ActionButton.Action key={index} onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}>
+              <div className="flex items-center">
+                <Icon className="mr-2" name={s.icon as any} />
                 <span>{s.text}</span>
               </div>
-            ))}
-          </div>
-        )}
-      </td>
-      <QuoteModal
-        quote={quote}
-        onRequestClose={(e: any) => {
-          setIsModalOpen(false);
-        }}
-        isOpen={isModalOpen}
-      />
-    </tr>
+            </ActionButton.Action>
+          ))}
+        </ActionButton>
+
+        <QuoteModal
+          quote={quote}
+          onRequestClose={() => {
+            setIsModalOpen(false);
+          }}
+          isOpen={isModalOpen}
+        />
+      </Table.Cell>
+    </Table.Row>
   );
 };
 

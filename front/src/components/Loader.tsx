@@ -1,13 +1,8 @@
 import React from "react";
+import { Loader as CocoLoader } from "@coco-ui/core";
 
-const Loader: React.FC<{ size?: "small" | "normal" | "big" }> = ({ size = "normal" }) => {
-  return (
-    <div className={"loader-balls " + size}>
-      <div className={"loader-balls__item " + size}></div>
-      <div className={"loader-balls__item " + size}></div>
-      <div className={"loader-balls__item " + size}></div>
-    </div>
-  );
+const Loader = ({ size }: any): JSX.Element => {
+  return <CocoLoader size={size} />;
 };
 
 export default Loader;

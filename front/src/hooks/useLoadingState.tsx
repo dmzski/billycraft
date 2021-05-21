@@ -2,7 +2,7 @@ import React from "react";
 
 type LoadingState = "idle" | "loading" | "success" | "error";
 
-const useLoadingState = (initialState: LoadingState = "idle") => {
+const useLoadingState = (initialState: LoadingState = "idle"): any => {
   const [state, setState] = React.useState(initialState);
 
   const update = (newState: LoadingState) => {

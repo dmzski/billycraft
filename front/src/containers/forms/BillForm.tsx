@@ -1,22 +1,24 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { Bill, BillLine } from "../../models/Bill";
-import BaseInput from "../../components/inputs/BaseInput";
 import BillLineTable from "../tables/BillLineTable";
-import AutoCompleteInput from "../../components/inputs/AutoCompleteInput";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
-import SelectInput from "../../components/inputs/SelectInput";
+import { Button, Select, TextInput } from "@coco-ui/core";
+import { Customer } from "../../models/Customer";
 
-const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }) => {
+const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): JSX.Element => {
   const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
-  const customersQuery = useQuery("customers", CustomerGraphQL.getAllCustomers, { refetchOnWindowFocus: false });
+  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
+    refetchOnWindowFocus: false,
+    enabled: customerInputValue?.length > 0,
+  });
   const [errors, setErrors] = React.useState<any>({});
 
   function inputChange(property: keyof Bill) {
-    return (event: any) => {
+    return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const tmp: any = { ...bill };
-      let value: any;
+      let value: string | number;
       switch (property) {
         case "tva":
           value = parseInt(event.target.value);
@@ -29,12 +31,11 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
     };
   }
 
-  function onCustomerOptionClick(event: any, option: any) {
+  function onCustomerOptionClick(option: any) {
     const tmp: any = { ...bill };
     tmp.customer = { id: option.id };
     setCustomerInputValue(option.description);
     setBill(tmp);
-    event.target.blur();
   }
 
   function addLine() {
@@ -66,10 +67,10 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
   }, [bill]);
 
   const getSelectCustomerData = React.useCallback(() => {
-    const array: any[] = [{ header: undefined, values: [] }];
+    const array: { value: string; name: string }[] = [];
     if (customersQuery.data) {
-      customersQuery.data.forEach((customer: any) => {
-        array[0].values.push({ id: customer.id + "", description: customer.name });
+      customersQuery.data.forEach((customer: Customer) => {
+        array.push({ value: `${customer.id}`, name: customer.name });
       });
     }
     return array;
@@ -77,59 +78,70 @@ const BillForm: React.FC<any> = ({ bill, setBill, onSubmit, disabled, onUpdateSt
 
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
-      <BaseInput disabled={disabled || cantUpdate} label="Titre" placeholder="Titre de la facture" value={bill.title} onChange={inputChange("title")} />
-      <div className="mt-2">
-        <label htmlFor="customer-select" className="block text-gray-700 text-sm font-bold mb-1 ml-1">
-          Sélectionner un client
-        </label>
-        <SelectInput
-          id="customer-select"
-          isLoading={customersQuery.isLoading}
-          disabled={disabled || cantUpdate}
-          onClickOption={onCustomerOptionClick}
-          data={getSelectCustomerData()}
-          placeholder="Nom du client"
-          value={customerInputValue}
-          onChange={(e: any) => setCustomerInputValue(e.target.value)}
-          className="text-gray-700 py-2 px-3 w-full z-10 shadow appearance-none border rounded focus:outline-none focus:shadow-outline"
-        />
-        {errors && errors.customer && <div>{errors.customer}</div>}
-      </div>
-      <BaseInput disabled={disabled || cantUpdate} label="TVA" placeholder="TVA en %" type="numeric" value={bill.tva || ""} onChange={inputChange("tva")} />
+      <TextInput
+        containerClassName="my-2"
+        disabled={disabled || cantUpdate}
+        label="Titre"
+        placeholder="Titre de la facture"
+        value={bill.title}
+        onChange={inputChange("title")}
+      />
+      <Select
+        label="Sélectionner un client"
+        id="customer-select"
+        isLoading={customersQuery.isLoading}
+        isSearchable
+        disabled={disabled || cantUpdate}
+        options={getSelectCustomerData()}
+        textKey="name"
+        valueKey="value"
+        placeholder="Nom du client"
+        value={bill.customer}
+        onSearchChange={(str) => str && setCustomerInputValue(str)}
+        onChange={onCustomerOptionClick}
+      />
+      {errors && errors.customer && <div>{errors.customer}</div>}
+      <TextInput
+        containerClassName="my-3"
+        disabled={disabled || cantUpdate}
+        label="TVA"
+        placeholder="TVA en %"
+        type="numeric"
+        value={bill.tva || ""}
+        onChange={inputChange("tva")}
+      />
       <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
       {!cantUpdate && (
-        <div className="flex">
-          <button type="button" className="primary w-full" onClick={addLine} disabled={disabled}>
-            Ajouter une ligne
-          </button>
-        </div>
+        <Button type="button" className="mt-2 w-full" variant="default" size="sm" onClick={addLine} disabled={disabled}>
+          Ajouter une ligne
+        </Button>
       )}
 
       <div className="flex pt-3 flex-row-reverse">
         {(!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status) && (
-          <button className="bg-gray-600 text-white p-3 rounded ml-4" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
+          <Button icon="save" size="md" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
             Enregistrer
-          </button>
+          </Button>
         )}
         {bill.id && bill.status === BillStatusEnum.DRAFT && (
-          <button className="bg-green-600 text-white p-3 rounded" type="button" onClick={onUpdateStatus(BillStatusEnum.SENT)} disabled={disabled}>
+          <Button size="md" icon="mail" className="mr-1" variant="success" type="button" onClick={onUpdateStatus(BillStatusEnum.SENT)} disabled={disabled}>
             Envoyer la facture
-          </button>
+          </Button>
         )}
         {bill.status === BillStatusEnum.SENT && (
           <>
-            <button type="button" className="button success ml-3" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
+            <Button icon="thumb-up" size="md" type="button" variant="success" className="ml-3" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
               Facture payée
-            </button>
-            <button type="button" className="button error" onClick={onUpdateStatus(BillStatusEnum.REFUSED)}>
+            </Button>
+            <Button icon="thumb-down" size="md" type="button" variant="error" onClick={onUpdateStatus(BillStatusEnum.REFUSED)}>
               Facture refusée
-            </button>
+            </Button>
           </>
         )}
         {bill.status === BillStatusEnum.PAYMENT_PAID && (
-          <button type="button" className="primary" onClick={onUpdateStatus(BillStatusEnum.ARCHIVED)}>
+          <Button size="md" icon="archive" type="button" onClick={onUpdateStatus(BillStatusEnum.ARCHIVED)}>
             Archiver la facture
-          </button>
+          </Button>
         )}
       </div>
     </form>

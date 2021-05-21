@@ -1,7 +1,5 @@
-import request, { gql } from "graphql-request";
-import { GRAPHQL_URL } from "../constants/global";
+import { gql } from "graphql-request";
 import { Bill } from "../models/Bill";
-import { BillStatusEnum } from "../models/BillStatusEnum";
 import { graphQLClient } from "./GraphQLClient";
 
 const BILL_DTO = `
@@ -24,7 +22,7 @@ lines {
   type
 }`;
 export const BillGraphQL = {
-  getAllBills: async () => {
+  getAllBills: async (): Promise<Bill[]> => {
     const { allBills } = await graphQLClient.request(
       gql`
         query {
@@ -37,7 +35,7 @@ export const BillGraphQL = {
 
     return allBills;
   },
-  getAllBillsNotArchived: async () => {
+  getAllBillsNotArchived: async (): Promise<Bill[]> => {
     const { allBillsNotArchived } = await graphQLClient.request(
       gql`
         query {
@@ -50,7 +48,7 @@ export const BillGraphQL = {
 
     return allBillsNotArchived;
   },
-  getAllBillsArchived: async () => {
+  getAllBillsArchived: async (): Promise<Bill[]> => {
     const { allBillsArchived } = await graphQLClient.request(
       gql`
         query {
@@ -64,24 +62,33 @@ export const BillGraphQL = {
     return allBillsArchived;
   },
 
-  createOrUpdateBill: async (bill: Bill) => {
+  createOrUpdateBill: async ({ id, quoteId, customer, lines, status, title, tva, total }: Bill): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation ($bill: BillInput!) {
-          ${bill.id ? "updateBill" : "createBill"}(bill: $bill) {
+          ${id ? "updateBill" : "createBill"}(bill: $bill) {
             ${BILL_DTO}
           }
         }
       `,
       {
-        bill,
+        bill: {
+          id,
+          quoteId,
+          customer,
+          lines,
+          status,
+          title,
+          tva,
+          total,
+        },
       }
     );
 
     return mutation;
   },
 
-  getBill: async (_: any, id: number) => {
+  getBill: async (_: unknown, id: number): Promise<Bill> => {
     const { billById } = await graphQLClient.request(
       gql`
         query {
@@ -95,7 +102,7 @@ export const BillGraphQL = {
     return billById;
   },
 
-  updateBillStatus: async ({ id, statusEnum }: any) => {
+  updateBillStatus: async ({ id, statusEnum }: { id: string; statusEnum: string }): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation($id: String, $statusEnum: BillStatusEnum) {
@@ -113,7 +120,7 @@ export const BillGraphQL = {
     return mutation;
   },
 
-  createFromQuote: async (quoteId: string) => {
+  createFromQuote: async (quoteId: string): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation($quoteId: String) {

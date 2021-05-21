@@ -1,8 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { COLORS } from "../constants/colors";
 
-const Login = () => {
+const Login = (): JSX.Element => {
   const history = useHistory();
   function login() {
     history.push("/dashboard");
@@ -28,7 +27,7 @@ const Login = () => {
               Mot de passe
             </label>
             <input
-              className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border border-error-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="******************"
@@ -36,13 +35,13 @@ const Login = () => {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-info-500 hover:bg-info-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={login}
             >
               Se connecter
             </button>
-            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+            <a className="inline-block align-baseline font-bold text-sm text-info-500 hover:text-info-800" href="#">
               Mot de passe oublié ?
             </a>
           </div>

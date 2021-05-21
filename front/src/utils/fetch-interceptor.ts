@@ -2,7 +2,7 @@ import fetchIntercept from "fetch-intercept";
 
 let unregister: any;
 
-function fetchRegister(token: string) {
+function fetchRegister(token: string): any {
   fetchUnregister();
   unregister = fetchIntercept.register({
     request: function (url, config) {
@@ -37,7 +37,7 @@ function fetchRegister(token: string) {
   });
 }
 
-function fetchUnregister() {
+function fetchUnregister(): void {
   if (unregister) {
     unregister();
   }

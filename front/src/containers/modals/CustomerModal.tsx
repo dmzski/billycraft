@@ -1,19 +1,19 @@
+import { Modal } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { Customer } from "../../models/Customer";
 import { useToast } from "../../providers/ToastProvider";
 import CustomerForm from "../forms/CustomerForm";
-import CustomModal from "./CustomModal";
 
-const CustomerModal: React.FC<any> = ({ isOpen, onRequestClose, customer }) => {
+const CustomerModal = ({ isOpen, onRequestClose, customer }: any): JSX.Element => {
   const [newCustomer, setNewCustomer] = React.useState<Customer>(new Customer());
   const toast = useToast();
   const queryCache = useQueryCache();
   const [customerMutation, { isLoading, isError }] = useMutation(CustomerGraphQL.createOrUpdateCustomer, {
     onSuccess: () => {
-      onRequestClose();
       toast.show({ message: "Enregistrement réussi", variant: "success" });
+      onRequestClose();
     },
     throwOnError: true,
   });
@@ -35,7 +35,7 @@ const CustomerModal: React.FC<any> = ({ isOpen, onRequestClose, customer }) => {
   }, [customer]);
 
   return (
-    <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { minWidth: "80%" } }}>
+    <Modal open={isOpen} onClose={onRequestClose}>
       <CustomerForm
         setCustomer={setNewCustomer}
         customer={newCustomer}
@@ -45,7 +45,7 @@ const CustomerModal: React.FC<any> = ({ isOpen, onRequestClose, customer }) => {
         disabled={isLoading}
       />
       {isError && <div className="mt-3">Une erreur est survenue</div>}
-    </CustomModal>
+    </Modal>
   );
 };
 

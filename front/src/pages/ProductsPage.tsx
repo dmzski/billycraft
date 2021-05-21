@@ -1,12 +1,11 @@
 import React from "react";
 import { useQuery } from "react-query";
 import Loader from "../components/Loader";
-import Layout from "../containers/layout/Layout";
 import ProductTable from "../containers/tables/ProductTable";
 import { ProductGraphQL } from "../graphql/ProductGraphQL";
 import { Product } from "../models/Product";
 
-const ProductsPage = () => {
+const ProductsPage = (): JSX.Element => {
   const productsQuery = useQuery("products", ProductGraphQL.getAllProducts, { refetchOnWindowFocus: false });
   return (
     <div className="flex-col justify-center w-full items-center">

@@ -4,13 +4,13 @@ import { HttpClient } from "./HttpClient";
 export const COMPANY_URL = API_URL + "/company";
 
 export const CompanyApi = {
-  uploadLogo: async (file: File) => {
+  uploadLogo: async (file: File): Promise<any> => {
     const { query, abort } = HttpClient.POST(`${COMPANY_URL}/upload-logo`, file, {
       headers: {
         "Content-Type": "application/octet-stream",
       },
     });
-    let promise = query
+    const promise = query
       .then((res: any) => {
         if (res.status === 200) {
           return res.text();

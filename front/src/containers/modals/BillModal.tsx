@@ -1,5 +1,5 @@
+import { Button, Modal } from "@coco-ui/core";
 import React from "react";
-import Modal from "react-modal";
 import { useMutation, useQueryCache } from "react-query";
 import { PdfApi } from "../../api/PdfApi";
 import { BillGraphQL } from "../../graphql/BillGraphQL";
@@ -8,21 +8,16 @@ import { Bill } from "../../models/Bill";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import BillForm from "../forms/BillForm";
-import CustomModal from "./CustomModal";
 
-const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
+const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
   const [newBill, setNewBill] = React.useState<Bill>(new Bill());
   const queryCache = useQueryCache();
   const toast = useToast();
   const pdfState = useLoadingState();
 
-  function goBack(e: any) {
-    onRequestClose();
-  }
-
   const [createOrUpdateBillMutation, createOrUpdateBillMutationState] = useMutation(BillGraphQL.createOrUpdateBill, {
     onSuccess: (data) => {
-      const tmp = [...queryCache.getQueryData<Bill[]>("bills")!];
+      const tmp = [...(queryCache.getQueryData<Bill[]>("bills") ?? [])];
       if (data.updateBill) {
         const index = tmp.findIndex((b) => b.id === data.updateBill.id);
         if (index > -1) {
@@ -61,7 +56,7 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
     }
   }
 
-  const updateBillStatus = (status: BillStatusEnum) => async (e: any) => {
+  const updateBillStatus = (status: BillStatusEnum) => async () => {
     if (updateBillStatusMutationState.isLoading || createOrUpdateBillMutationState.isLoading) {
       return false;
     }
@@ -96,23 +91,33 @@ const BillModal: React.FC<any> = ({ isOpen, onRequestClose, bill }) => {
   }, [bill, isOpen]);
 
   return (
-    <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} style={{ content: { width: "80%" } }}>
-      <div className="flex items-center mb-4  border-b-2 border-gray-400">
-        <h1 className="ml-4 text-2xl flex-grow">{!newBill.id ? "Nouvelle " : "Modifier une "}facture</h1>
-        {newBill && newBill.id && (
-          <button className="button primary mb-2" onClick={downloadPdf} title="Télécharger le PDF" disabled={pdfState.isLoading}>
-            <span className="material-icons mr-3">picture_as_pdf</span> PDF
-          </button>
-        )}
+    <Modal open={isOpen} onClose={onRequestClose} size="xl">
+      <div className="flex flex-col w-full">
+        <div className="flex items-center mb-4  border-b-2 border-gray-400">
+          <h1 className="ml-4 text-2xl flex-grow">{!newBill.id ? "Nouvelle " : "Modifier une "}facture</h1>
+          {newBill && newBill.id && (
+            <Button
+              disabled={pdfState.isLoading}
+              title="Télécharger le PDF"
+              onClick={downloadPdf}
+              variant="primary"
+              className="mb-1"
+              size="sm"
+              icon="document-download"
+            >
+              PDF
+            </Button>
+          )}
+        </div>
+        <BillForm
+          onSubmit={saveBill}
+          bill={newBill}
+          setBill={setNewBill}
+          disabled={createOrUpdateBillMutationState.isLoading || updateBillStatusMutationState.isLoading}
+          onUpdateStatus={updateBillStatus}
+        />
       </div>
-      <BillForm
-        onSubmit={saveBill}
-        bill={newBill}
-        setBill={setNewBill}
-        disabled={createOrUpdateBillMutationState.isLoading || updateBillStatusMutationState.isLoading}
-        onUpdateStatus={updateBillStatus}
-      />
-    </CustomModal>
+    </Modal>
   );
 };
 

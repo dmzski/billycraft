@@ -1,7 +1,8 @@
+import { Table } from "@coco-ui/core";
 import React from "react";
 import QuoteLineTableLine from "../../components/quote/QuoteLineTableLine";
 
-const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
+const QuoteLineTable = ({ quote, setQuote, disabled }: any): JSX.Element => {
   function deleteLine(index: number) {
     return () => {
       const newLines = [...quote.lines];
@@ -19,25 +20,27 @@ const QuoteLineTable: React.FC<any> = ({ quote, setQuote, disabled }) => {
   }
 
   return (
-    <table className="table-fixed quote-table w-full" style={{ overflowX: "auto" }}>
-      <thead>
-        <tr>
-          <th className="w-32 px-2 py-2">Type</th>
-          <th className="px-2 py-2 text-left w-auto">Description</th>
-          <th className="w-32 px-2 py-2">Quantité</th>
-          <th className="w-32 px-2 py-2">Prix H.T</th>
-          <th className="w-32 px-2 py-2">Prix TTC</th>
-          <th className="w-32 px-2 py-2">Sous Total</th>
-          <th className="w-12 px-4 py-2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table className="table-fixed">
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell className="w-48">Type</Table.HeadCell>
+          <Table.HeadCell className="w-full">Description</Table.HeadCell>
+          <Table.HeadCell className="w-32">Quantité</Table.HeadCell>
+          <Table.HeadCell className="w-48">Prix HT</Table.HeadCell>
+          <Table.HeadCell className="w-32">Prix TTC</Table.HeadCell>
+          <Table.HeadCell className="w-36">Sous Total</Table.HeadCell>
+          <Table.HeadCell className="w-8" />
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
         {quote.lines &&
           quote.lines.map((line: any, index: number) => (
-            <QuoteLineTableLine disabled={disabled} key={index} tva={quote.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            <Table.Row key={index}>
+              <QuoteLineTableLine disabled={disabled} tva={quote.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
+            </Table.Row>
           ))}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   );
 };
 

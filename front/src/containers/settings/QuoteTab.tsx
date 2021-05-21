@@ -1,3 +1,4 @@
+import { Loader } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { QuoteCustomizationGraphQL } from "../../graphql/QuoteCustomizationGraphQL";
@@ -6,7 +7,7 @@ import { useToast } from "../../providers/ToastProvider";
 import QuoteCustomizationForm from "../forms/QuoteCustomizationForm";
 import QuoteEmailCustomizationForm from "../forms/QuoteEmailCustomizationForm";
 
-const QuoteTab = () => {
+const QuoteTab = (): JSX.Element => {
   const toast = useToast();
   const quoteCustomizationQuery = useQuery("quote-customization", QuoteCustomizationGraphQL.getMyInformation, {
     refetchOnWindowFocus: false,
@@ -35,18 +36,26 @@ const QuoteTab = () => {
   return (
     <div className="w-full flex justify-center flex-col items-center">
       {quoteCustomizationQuery.data && (
-        <div className="w-3/4 bg-white shadow-md rounded p-5">
+        <div className="w-3/4">
           <QuoteCustomizationForm quoteCustomization={quoteCustomizationQuery.data} />
         </div>
       )}
-      {quoteCustomizationQuery.isLoading && <div>Chargement de la personnalisation des devis</div>}
+      {quoteCustomizationQuery.isLoading && (
+        <div className="mt-2 flex justify-center">
+          <Loader />
+        </div>
+      )}
       {quoteCustomizationQuery.isError && <div>Une erreur est survenue</div>}
       {quoteEmailCustomizationQuery.data && (
-        <div className="w-3/4 bg-white shadow-md rounded p-5 mt-3">
+        <div className="w-3/4 mt-10">
           <QuoteEmailCustomizationForm quoteEmailCustomization={quoteEmailCustomizationQuery.data} onSubmit={handleEmailCustomizationSubmit} />
         </div>
       )}
-      {quoteEmailCustomizationQuery.isLoading && <div>Chargement de la personnalisation de l'email des devis</div>}
+      {quoteEmailCustomizationQuery.isLoading && (
+        <div className="mt-2 flex justify-center">
+          <Loader />
+        </div>
+      )}
       {quoteEmailCustomizationQuery.isError && <div>Une erreur est survenue</div>}
     </div>
   );

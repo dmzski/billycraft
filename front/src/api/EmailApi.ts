@@ -4,9 +4,9 @@ import { HttpClient } from "./HttpClient";
 export const EMAIL_URL = API_URL + "/emails";
 
 export const EmailApi = {
-  sendQuote: async (quoteId: String) => {
+  sendQuote: async (quoteId: string): Promise<any> => {
     const { query, abort } = HttpClient.POST(`${EMAIL_URL}/quotes/send?id=${quoteId}`, {});
-    let promise = query.then((res: any) => {
+    const promise = query.then((res: any) => {
       if (res.status === 200) {
         return res.text();
       } else {
@@ -18,9 +18,9 @@ export const EmailApi = {
 
     return promise;
   },
-  sendBill: async (billId: String) => {
+  sendBill: async (billId: string): Promise<any> => {
     const { query, abort } = HttpClient.POST(`${EMAIL_URL}/bills/send?id=${billId}`, {});
-    let promise = query.then((res: any) => {
+    const promise = query.then((res: any) => {
       if (res.status === 200) {
         return res.text();
       } else {

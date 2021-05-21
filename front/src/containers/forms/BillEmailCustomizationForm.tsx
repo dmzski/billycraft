@@ -1,10 +1,8 @@
+import { Button, Switch, TextInput } from "@coco-ui/core";
 import React from "react";
-import BaseInput from "../../components/inputs/BaseInput";
-import MultiLineInput from "../../components/inputs/MultiLineInput";
-import SwitchInput from "../../components/inputs/SwitchInput";
 import { BillEmailCustomization } from "../../models/BillEmailCustomization";
 
-const BillEmailCustomizationForm: React.FC<any> = ({ billEmailCustomization, onSubmit }) => {
+const BillEmailCustomizationForm = ({ billEmailCustomization, onSubmit }: any): JSX.Element => {
   const [newBillEmailCustomization, setNewBillEmailCustomization] = React.useState(billEmailCustomization || new BillEmailCustomization());
 
   React.useEffect(() => {
@@ -18,8 +16,8 @@ const BillEmailCustomizationForm: React.FC<any> = ({ billEmailCustomization, onS
   return (
     <form onSubmit={(e) => onSubmit(e, newBillEmailCustomization)} className="w-full">
       <div className="my-2 flex">
-        <SwitchInput checked={newBillEmailCustomization.sendAutomatically} id="sendBillAutomatically" onToggle={handleToggle("sendAutomatically")} />
-        <div className="ml-2">Envoyer l'email automatiquement lorsque la facture passe au status "Envoyé"</div>
+        <Switch checked={newBillEmailCustomization.sendAutomatically} id="sendBillAutomatically" onChange={handleToggle("sendAutomatically")} />
+        <div className="ml-2">Envoyer l&lsquo;email automatiquement lorsque la facture passe au status &ldquo;Envoyé&ldquo;</div>
       </div>
       <div className="border border-black p-3 mb-3">
         <p>Pour insérer le numéro du devis entrez : #BILL_ID#</p>
@@ -27,7 +25,7 @@ const BillEmailCustomizationForm: React.FC<any> = ({ billEmailCustomization, onS
       </div>
       <div>
         <label className="font-bold text-gray-700">Objet du mail</label>
-        <BaseInput
+        <TextInput
           value={newBillEmailCustomization.object}
           onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, object: e.target.value })}
           placeholder="Objet du mail"
@@ -36,7 +34,8 @@ const BillEmailCustomizationForm: React.FC<any> = ({ billEmailCustomization, onS
       </div>
       <div className="mt-2">
         <label className="font-bold text-gray-700">Corps du mail</label>
-        <MultiLineInput
+        <TextInput
+          multiline
           value={newBillEmailCustomization.body}
           onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, body: e.target.value })}
           placeholder="Corps du mail"
@@ -44,7 +43,9 @@ const BillEmailCustomizationForm: React.FC<any> = ({ billEmailCustomization, onS
         />
       </div>
       <div>
-        <button className="button primary w-full mt-3">Enregistrer</button>
+        <Button size="md" className="w-full mt-3">
+          Enregistrer
+        </Button>
       </div>
     </form>
   );

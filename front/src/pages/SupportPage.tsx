@@ -1,17 +1,16 @@
+import { Icon } from "@coco-ui/core";
 import React from "react";
 
-const SupportPage = () => {
+const SupportPage = (): JSX.Element => {
   return (
-    <div>
-      <div className="flex flex-col bg-white rounded-md shadow-lg p-5 text-lg">
-        <h2 className="font-bold text-2xl leading-tight mb-4">Un problème ? contactez nous !</h2>
-        <a className="ml-4 flex items-center text-blue-700 mb-2" href="mailto:contact@coco-erp.fr">
-          <span className="material-icons mr-3">email</span> <span> contact@coco-erp.fr</span>
-        </a>
-        <a className=" ml-4 flex items-center text-blue-700" href="tel:0619755845">
-          <span className="material-icons mr-3">call</span> <span> 06 19 75 58 45</span>
-        </a>
-      </div>
+    <div className="m-2">
+      <h2 className="font-bold text-2xl leading-tight mb-4">Un problème ? contactez nous !</h2>
+      <a className="ml-4 flex items-center text-blue-700 mb-2" href="mailto:contact@coco-erp.fr">
+        <Icon name="mail" className="mr-2" /> <span>contact@coco-erp.fr</span>
+      </a>
+      <a className="ml-4 flex items-center text-blue-700" href="tel:0619755845">
+        <Icon name="phone" className="mr-2" /> <span>06 19 75 58 45</span>
+      </a>
     </div>
   );
 };

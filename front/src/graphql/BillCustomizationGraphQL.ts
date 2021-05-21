@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 import { graphQLClient } from "./GraphQLClient";
 
 export const BillCustomizationGraphQL = {
-  getMyInformation: async () => {
+  getMyInformation: async (): Promise<any> => {
     const { myBillCustomization } = await graphQLClient.request(
       gql`
         query {
@@ -21,7 +21,7 @@ export const BillCustomizationGraphQL = {
 
     return myBillCustomization;
   },
-  updateMyBillCustomization: async (billCustomization: any) => {
+  updateMyBillCustomization: async (billCustomization: any): Promise<any> => {
     const mutation = await graphQLClient.request(
       gql`
         mutation($billCustomization: BillCustomizationInput!) {

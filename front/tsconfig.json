@@ -17,9 +17,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
+  "exclude": [
+    "postcss.config.js",
+    "tailwind.config.js",
+    "node_modules"
+  ]
 }

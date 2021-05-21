@@ -1,13 +1,13 @@
+import { Table } from "@coco-ui/core";
 import React from "react";
 import { useParams } from "react-router-dom";
 import CustomerModal from "../../containers/modals/CustomerModal";
 
-const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
+const QuoteTableLine = ({ customer }: any): JSX.Element => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const { id } = useParams<any>();
 
-  const editCustomer = (e: any) => {
-    e.stopPropagation();
+  const editCustomer = () => {
     setIsOpen(true);
   };
 
@@ -18,11 +18,11 @@ const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
   }, [id, customer]);
 
   return (
-    <tr className="quote-table-line hover " onClick={editCustomer}>
-      <td className="pl-2 text-left truncate">{customer.name}</td>
-      <td className="text-center truncate">{customer.contact}</td>
-      <td className="text-center">{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</td>
-      <td className="text-center">{customer.email}</td>
+    <Table.Row hoverable onClick={editCustomer}>
+      <Table.Cell>{customer.name}</Table.Cell>
+      <Table.Cell>{customer.contact}</Table.Cell>
+      <Table.Cell>{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</Table.Cell>
+      <Table.Cell>{customer.email}</Table.Cell>
       <CustomerModal
         isOpen={modalIsOpen}
         onRequestClose={(e: any) => {
@@ -31,7 +31,7 @@ const QuoteTableLine: React.FC<any> = ({ customer, isEven }) => {
         }}
         customer={customer}
       />
-    </tr>
+    </Table.Row>
   );
 };
 

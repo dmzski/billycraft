@@ -1,6 +1,7 @@
+/* eslint-disable  */
 import React from "react";
 
-const BaseSelect: React.FC<any> = ({ name, id, onChange, options, value, disabled }) => {
+const BaseSelect = ({ name, id, onChange, options, value, disabled }: any) => {
   return (
     <select id={id} onChange={onChange} className="input-select bg-white border-gray-200" disabled={disabled} value={value || ""}>
       <option value="">Sélectionner...</option>

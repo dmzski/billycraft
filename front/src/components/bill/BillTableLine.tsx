@@ -1,4 +1,6 @@
+import { ActionButton, Icon, Table } from "@coco-ui/core";
 import { format, parseJSON } from "date-fns";
+import { Bill } from "models/Bill";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
@@ -9,7 +11,11 @@ import { BillStatusEnum } from "../../models/BillStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { getBillTotal } from "../../utils/bill";
 
-const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isEven }) => {
+type BillTableLineProps = {
+  bill: Bill;
+  isSelected?: boolean;
+};
+const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -30,7 +36,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
       return false;
     }
     try {
-      await updateBillStatusMutation({ id: bill.id, statusEnum: status });
+      bill.id && (await updateBillStatusMutation({ id: bill.id, statusEnum: status }));
       setOpenStatusPopup(false);
       queryCache.invalidateQueries("bills");
     } catch (error) {
@@ -39,7 +45,7 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
     }
   };
 
-  const editBill = (e: any) => {
+  const editBill = () => {
     setIsModalOpen(true);
   };
 
@@ -51,21 +57,11 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
 
   const getStatus = React.useMemo(() => {
     const status = Object.values(BILL_STATUS).find((s) => s.enum === bill.status);
-    const onStatusClick = (e: any) => {
-      e.stopPropagation();
-      e.preventDefault();
-      if (bill.status !== BillStatusEnum.ARCHIVED) {
-        setOpenStatusPopup(!openStatusPopup);
-      }
-      return false;
-    };
 
     return (
-      <div className="status-text" onClick={onStatusClick}>
-        <span style={{ marginRight: 7 }} className="material-icons">
-          {status?.icon}
-        </span>
-        <span>{status?.text}</span>
+      <div className="flex items-center">
+        <Icon name={(status?.icon as any) || "question-mark-circle"} />
+        <span className="ml-1">{status?.text}</span>
       </div>
     );
   }, [bill, openStatusPopup]);
@@ -108,36 +104,40 @@ const BillTableLine: React.FC<any> = ({ bill, isSelected, onSelect, setBill, isE
   }, [statusRef, openStatusPopup]);
 
   return (
-    <tr className={"bill-table-line hover " + (isSelected ? "selected" : "")} onClick={editBill}>
-      <td className="pl-2 text-left truncate">{bill.title}</td>
-      <td className="text-center truncate">{bill.customer.name}</td>
-      <td className="text-center">{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-center">{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</td>
-      <td className="text-center">{Math.round(getBillTotal(bill) * 100) / 100} €</td>
-      <td className="text-center status" ref={statusRef}>
-        {getStatus}
-        {openStatusPopup && (
-          <div className="popup">
-            {getNextStatuses().map((s, index) => (
-              <div key={index} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
-                <span className="material-icons">{s.icon}</span>
+    <Table.Row onClick={editBill} hoverable>
+      <Table.Cell>{bill.title}</Table.Cell>
+      <Table.Cell>{bill.customer.name}</Table.Cell>
+      <Table.Cell>{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell>{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell>{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
+      <Table.Cell
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        <ActionButton variant="outline">
+          <ActionButton.Content>{getStatus}</ActionButton.Content>
+          {getNextStatuses().map((s, index) => (
+            <ActionButton.Action key={index} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
+              <div className="flex items-center">
+                <Icon className="mr-2" name={s.icon as any} />
                 <span>{s.text}</span>
               </div>
-            ))}
-          </div>
-        )}
-      </td>
-      <BillModal
-        bill={bill}
-        onRequestClose={(e: any) => {
-          if (e) {
-            e.stopPropagation();
-          }
-          setIsModalOpen(false);
-        }}
-        isOpen={isModalOpen}
-      />
-    </tr>
+            </ActionButton.Action>
+          ))}
+        </ActionButton>
+        <BillModal
+          bill={bill}
+          onRequestClose={(e: any) => {
+            if (e) {
+              e.stopPropagation();
+            }
+            setIsModalOpen(false);
+          }}
+          isOpen={isModalOpen}
+        />
+      </Table.Cell>
+    </Table.Row>
   );
 };
 

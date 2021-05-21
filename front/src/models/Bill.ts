@@ -3,9 +3,9 @@ import { BillStatusEnum } from "./BillStatusEnum";
 
 export class Bill {
   id?: string;
-  title: string = "";
+  title = "";
   customer: Customer = new Customer();
-  tva: number = 0;
+  tva = 0;
   createdAt?: string;
   updatedAt?: string;
   sentAt?: string;
@@ -17,8 +17,8 @@ export class Bill {
 
 export class BillLine {
   id?: string;
-  description: string = "";
-  quantity: number = 0;
-  price: number = 0;
-  line: number = 0;
+  description = "";
+  quantity = 0;
+  price = 0;
+  line = 0;
 }

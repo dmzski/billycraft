@@ -1,28 +1,38 @@
 DC=docker-compose
 
-up:
+up: ## DC up
 	${DC} up -d
 
-down:
+down: ## DC down
 	${DC} down
 
-start:
+start: ## DC start
 	${DC} start
 
-stop:
+stop: ## DC stop
 	${DC} stop
 
-build:
+build: ## DC build
 	${DC} build
 
-dev:
+dev: ## Launch dev server
 	./mvnw clean compile quarkus:dev
 
-package:
+package: ## Maven clean package
 	./mvnw clean package
 
-update-docker:
+logs: ## Show docker compose logs
+	${DC} logs -f
+
+ps: ## Show docker compose status
+	${DC} ps
+
+update-docker: ## Maven clean package and docker-compose build and docker-compose up -d
 	./mvnw clean package && ${DC} build && ${DC} up -d
 
-load-test:
+load-test: ## Loadtesting the application with scripts/loadtest.sh
 	./scripts/loadtest.sh
+
+help: ## This help dialog.
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
