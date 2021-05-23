@@ -104,7 +104,7 @@ const QuoteTableLine = ({ quote }: { quote: Quote }): JSX.Element => {
   }, [statusRef, openStatusPopup]);
 
   return (
-    <Table.Row onClick={editQuote}>
+    <Table.Row hoverable onClick={editQuote}>
       <Table.Cell>{quote.title}</Table.Cell>
       <Table.Cell>{quote.customer.name}</Table.Cell>
       <Table.Cell>{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>

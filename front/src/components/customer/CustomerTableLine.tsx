@@ -23,15 +23,18 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
       <Table.Cell>{customer.name}</Table.Cell>
       <Table.Cell>{customer.contact}</Table.Cell>
       <Table.Cell>{customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}</Table.Cell>
-      <Table.Cell>{customer.email}</Table.Cell>
-      <CustomerModal
-        isOpen={modalIsOpen}
-        onRequestClose={(e: any) => {
-          if (e) e.stopPropagation();
-          setIsOpen(false);
-        }}
-        customer={customer}
-      />
+      <Table.Cell>
+        {customer.email}
+
+        <CustomerModal
+          isOpen={modalIsOpen}
+          onRequestClose={(e: any) => {
+            if (e) e.stopPropagation();
+            setIsOpen(false);
+          }}
+          customer={customer}
+        />
+      </Table.Cell>
     </Table.Row>
   );
 };
