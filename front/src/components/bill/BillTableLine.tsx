@@ -13,9 +13,9 @@ import { getBillTotal } from "../../utils/bill";
 
 type BillTableLineProps = {
   bill: Bill;
-  isSelected?: boolean;
+  isEven?: boolean;
 };
-const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
+const BillTableLine = ({ bill, isEven }: BillTableLineProps): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -104,18 +104,19 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
   }, [statusRef, openStatusPopup]);
 
   return (
-    <Table.Row onClick={editBill} hoverable>
-      <Table.Cell>{bill.title}</Table.Cell>
-      <Table.Cell>{bill.customer.name}</Table.Cell>
-      <Table.Cell>{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell>{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell>{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
+    <Table.Row isEven={isEven} onClick={editBill} hoverable>
+      <Table.Cell className="pl-2 py-3 truncate">{bill.title}</Table.Cell>
+      <Table.Cell className="truncate">{bill.customer.name}</Table.Cell>
+      <Table.Cell className="">{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell className="">{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell className="">{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
       <Table.Cell
+        className=""
         onClick={(event) => {
           event.stopPropagation();
         }}
       >
-        <ActionButton variant="outline">
+        <ActionButton size="sm" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map((s, index) => (
             <ActionButton.Action key={index} onClick={updateBillStatus(s.enum as BillStatusEnum)}>

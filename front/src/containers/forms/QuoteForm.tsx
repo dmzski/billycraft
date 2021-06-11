@@ -5,6 +5,7 @@ import { Quote, QuoteLine } from "../../models/Quote";
 import QuoteLineTable from "../tables/QuoteLineTable";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
+import { ProductGraphQL } from "graphql/ProductGraphQL";
 
 type QuoteFormProps = {
   quote: Quote;
@@ -15,14 +16,21 @@ type QuoteFormProps = {
 };
 const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: QuoteFormProps): JSX.Element => {
   const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
+  const [existingProductInput, setExistingProductInput] = React.useState<string>("");
+  const [existingProductSelected, setExistingProductSelected] = React.useState<any>();
   const [errors, setErrors] = React.useState<any>({});
   const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
     refetchOnWindowFocus: false,
     enabled: customerInputValue?.length > 0,
   });
+  const productsQuery = useQuery(["products-by-name"], ProductGraphQL.getAllProducts, {
+    refetchOnWindowFocus: false,
+    enabled: existingProductInput?.length > 0,
+  });
+
   const lineTableRef = React.useRef<any>(null);
 
-  function inputChange(property: keyof Quote) {
+  const inputChange = (property: keyof Quote) => {
     return (event: any) => {
       const tmp: any = { ...quote };
       let value: any;
@@ -36,25 +44,27 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
       tmp[property] = value;
       setQuote(tmp);
     };
-  }
+  };
 
-  function onCustomerOptionClick(option: any) {
+  const onCustomerOptionClick = (option: any) => {
     const tmp: any = { ...quote };
     tmp.customer = option;
     setQuote(tmp);
     setErrors({ ...errors, customer: undefined });
-  }
+  };
 
-  const addLine = React.useCallback(() => {
-    const tmp = { ...quote };
-    const newLine = new QuoteLine();
-    newLine.line = -1 * tmp.lines.length + 1;
-    tmp.lines.push(newLine);
-    setQuote(tmp);
-    setTimeout(() => {
-      document.getElementById(newLine.line + "-select")?.focus();
-    }, 200);
-  }, [setQuote, quote]);
+  const addLine = React.useCallback(
+    (newLine = new QuoteLine()) => {
+      const tmp = { ...quote };
+      newLine.line = -1 * tmp.lines.length + 1;
+      tmp.lines.push(newLine);
+      setQuote(tmp);
+      setTimeout(() => {
+        document.getElementById(newLine.line + "-select")?.focus();
+      }, 200);
+    },
+    [setQuote, quote]
+  );
 
   const beforeOnSubmit = (e: any) => {
     const tmp = { ...quote };
@@ -70,6 +80,18 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
     } else {
       e.preventDefault();
       setErrors({ customer: "Saisissez un client en le sélectionnant dans la liste" });
+    }
+  };
+
+  const handleSelectExistingProduct = (result: any) => {
+    setExistingProductSelected(result);
+  };
+
+  const addExistingProductSelected = () => {
+    if (existingProductSelected) {
+      addLine(existingProductSelected);
+      setExistingProductInput("");
+      setExistingProductSelected(undefined);
     }
   };
 
@@ -119,7 +141,7 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
         disabled={disabled || cantUpdate}
         onChange={onCustomerOptionClick}
         inputProps={{
-          autocomplete: "off",
+          autocomplete: "nope",
         }}
         options={customersQuery.data || [quote.customer]}
         placeholder="Nom du client"
@@ -145,6 +167,30 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
         value={quote.tva || ""}
         onChange={inputChange("tva")}
       />
+      <div className="my-2 flex items-end">
+        <Select
+          label="Ajouter un produit existant"
+          tabIndex={0}
+          containerClassName="flex-grow"
+          name="existing-product"
+          id="existing-product"
+          inputProps={{
+            autocomplete: "nope",
+          }}
+          options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
+          isLoading={productsQuery.isLoading}
+          isSearchable
+          placeholder="Nom du produit"
+          valueKey="id"
+          textKey="name"
+          value={existingProductSelected}
+          onSearchChange={(str) => setExistingProductInput(str ?? "")}
+          onChange={handleSelectExistingProduct}
+        />
+        <Button onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
+          Ajouter
+        </Button>
+      </div>
       <div ref={lineTableRef}>
         <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
         {!cantUpdate && (

@@ -32,9 +32,8 @@ public class ProductGraphQL {
     @Query("getAllProductsContains")
     @Description("Get all products that contains the string")
     public List<Product> getAllProductsContains(String search) {
-        return this.productService.findAllOfMyCompanyContains(username, search);
+        return this.productService.searchInMyCompagny(username, search);
     }
-
 
     @Mutation("saveProduct")
     @Description("Create or update a product (same description)")

@@ -9,8 +9,10 @@ export const ProductGraphQL = {
         query {
           getAllProducts {
             id
+            name
             description
             price
+            type
           }
         }
       `
@@ -24,8 +26,10 @@ export const ProductGraphQL = {
         query($search: String) {
           getAllProductsContains(search: $search) {
             id
+            name
             description
             price
+            type
           }
         }
       `,
@@ -43,8 +47,10 @@ export const ProductGraphQL = {
         mutation($product: ProductInput!) {
           saveProduct(product: $product) {
             id
+            name
             description
             price
+            type
           }
         }
       `,

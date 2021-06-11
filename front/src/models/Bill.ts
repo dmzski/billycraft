@@ -1,5 +1,6 @@
 import { Customer } from "./Customer";
 import { BillStatusEnum } from "./BillStatusEnum";
+import { LineTypeEnum } from "./LineTypeEnum";
 
 export class Bill {
   id?: string;
@@ -17,6 +18,7 @@ export class Bill {
 
 export class BillLine {
   id?: string;
+  type: LineTypeEnum = LineTypeEnum.SERVICE;
   description = "";
   quantity = 0;
   price = 0;

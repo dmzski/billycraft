@@ -12,7 +12,7 @@ const App = (): JSX.Element => {
       </MainProvider>
       <div
         style={{ zIndex: -1 }}
-        className="bg-primary-700 origin-bottom-right transform -rotate-45 w-1/2 h-screen translate-y-1/2 -translate-x-1/4 fixed bottom-0 left-full"
+        className="bg-primary-700 origin-bottom-right transform -rotate-45 h-72 w-72 translate-y-20 translate-x-52 fixed bottom-0 right-0 overflow-hidden"
       />
     </BrowserRouter>
   );

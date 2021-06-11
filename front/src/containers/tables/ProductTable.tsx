@@ -5,13 +5,13 @@ import { Product } from "models/Product";
 
 const ProductTable = ({ products }: { products: Product[] }): JSX.Element => {
   return (
-    <Table className="w-full mt-4">
+    <Table className="w-full table-fixed mt-4">
       <Table.Head>
-        <Table.HeadCell>Type</Table.HeadCell>
-        <Table.HeadCell>Mot-clés</Table.HeadCell>
-        <Table.HeadCell>Nom</Table.HeadCell>
-        <Table.HeadCell className="text-right">Prix Unitaire HT</Table.HeadCell>
-        <Table.HeadCell className="w-1/6" />
+        <Table.HeadCell className="p-2 w-42">Type</Table.HeadCell>
+        <Table.HeadCell className="p-2 w-1/3">Nom</Table.HeadCell>
+        <Table.HeadCell className="p-2 w-1/3">Description</Table.HeadCell>
+        <Table.HeadCell className="text-right p-2 pr-8">Prix Unitaire HT</Table.HeadCell>
+        <Table.HeadCell className="w-20 p-2" />
       </Table.Head>
       <Table.Body>
         {products.map((product: Product) => (

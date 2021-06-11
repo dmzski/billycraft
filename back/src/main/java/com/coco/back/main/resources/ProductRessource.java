@@ -29,13 +29,11 @@ public class ProductRessource {
         return this.productService.findAllOfMyCompany(username);
     }
 
-
-
     @GET
     @Path("/contains")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Product> getAllProductsContains(@QueryParam("q") String query) {
-        return this.productService.findAllOfMyCompanyContains(username, query);
+        return this.productService.searchInMyCompagny(username, query);
     }
 
     @DELETE

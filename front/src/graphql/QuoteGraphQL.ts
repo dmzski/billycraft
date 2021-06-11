@@ -76,7 +76,13 @@ export const QuoteGraphQL = {
         quote: {
           id,
           customer,
-          lines,
+          lines: (lines || []).map(({ description, line, price, quantity, type }) => ({
+            type,
+            description,
+            quantity,
+            price,
+            line,
+          })),
           status,
           title,
           tva,

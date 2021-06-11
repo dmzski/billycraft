@@ -1,4 +1,4 @@
-package com.coco;
+package com.coco.back;
 
 import io.quarkus.test.junit.NativeImageTest;
 
