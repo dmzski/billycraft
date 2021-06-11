@@ -21,6 +21,9 @@ dev: ## Launch dev server
 package: ## Maven clean package
 	./mvnw clean package
 
+package-native: ## Maven clean package
+	./mvnw package -Pnative -Dquarkus.native.container-build=true
+
 logs: ## Show docker compose logs
 	${DC} logs -f
 
