@@ -137,6 +137,7 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
       />
       <div className="my-2 flex items-end">
         <Select
+          disabled={disabled || cantUpdate}
           label="Ajouter un produit existant"
           tabIndex={0}
           containerClassName="flex-grow"
@@ -155,7 +156,7 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
           onSearchChange={(str) => setExistingProductInput(str ?? "")}
           onChange={handleSelectExistingProduct}
         />
-        <Button onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
+        <Button disabled={disabled || cantUpdate} onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
           Ajouter
         </Button>
       </div>
