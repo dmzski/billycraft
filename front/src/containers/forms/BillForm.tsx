@@ -89,6 +89,18 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
     return bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
 
+  React.useEffect(() => {
+    if (!bill.customer) {
+      setCustomerInputValue("");
+    }
+  }, [bill.customer]);
+
+  const handleShortcut = (event: React.KeyboardEvent) => {
+    if (event.ctrlKey && event.key === "Enter" && !cantUpdate) {
+      addLine();
+    }
+  };
+
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
       <TextInput
@@ -147,7 +159,9 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
           Ajouter
         </Button>
       </div>
-      <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
+      <div onKeyDown={handleShortcut}>
+        <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
+      </div>
       {!cantUpdate && (
         <Button type="button" className="mt-2 w-full" variant="default" size="sm" onClick={addLine} disabled={disabled}>
           Ajouter une ligne
