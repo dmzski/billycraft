@@ -18,6 +18,7 @@ export class Bill {
 
 export class BillLine {
   id?: string;
+  name = "";
   type: LineTypeEnum = LineTypeEnum.SERVICE;
   description = "";
   quantity = 0;

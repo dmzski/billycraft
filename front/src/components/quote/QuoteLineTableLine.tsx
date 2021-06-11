@@ -91,8 +91,8 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
       <Table.Cell className="px-1 text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</Table.Cell>
       <Table.Cell className="px-1">
         {!disabled && (
-          <button className="w-full flex justify-center items-center apperance-none">
-            <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" onClick={deleteLine} />
+          <button type="button" className="w-full flex justify-center items-center apperance-none" onClick={deleteLine}>
+            <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" />
           </button>
         )}
       </Table.Cell>
