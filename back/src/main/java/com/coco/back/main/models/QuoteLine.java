@@ -24,6 +24,7 @@ public class QuoteLine {
     @Column(name = "price")
     public Double price;
 
+    public String name;
     public String description;
 
     @Enumerated(value = EnumType.STRING)

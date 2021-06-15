@@ -144,8 +144,7 @@
         <span>Référence : {bill.id}</span>
     </div>
     <div class="w-full flex" style="margin-top: 20px; margin-bottom: 20px">
-        <span>Objet :&nbsp;</span>
-        <span>{bill.title}</span>
+        <b style="white-space: nowrap;">Objet :</b>&nbsp;{bill.title}
     </div>
     <div class="w-full">
         <table style="width: 21cm;">
@@ -161,7 +160,10 @@
             {#for line in lines}
             {#if line.price != null && line.quantity != null}
             <tr>
-                <td style="max-width: 13cm; overflow-wrap: break-word; padding-left: 5mm">{line.description.transformToHtml.raw}</td>
+                <td style="max-width: 13cm; overflow-wrap: break-word; padding-left: 5mm">
+                    <div style="padding-bottom: 0.5mm;">{line.name}</div>
+                    <div>{line.description.transformToHtml.raw}</div>
+                </td>
                 <td style="text-align: center; ">{line.quantity.formatNumber}</td>
                 <td style="text-align: center; width: 3cm">{line.price.formatCurrency}</td>
                 <td style="text-align: center; width: 3cm">{line.subTotal.formatCurrency}</td>

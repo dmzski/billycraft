@@ -11,7 +11,7 @@ import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { getQuoteTotal } from "../../utils/quote";
 
-const QuoteTableLine = ({ quote }: { quote: Quote }): JSX.Element => {
+const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -104,18 +104,19 @@ const QuoteTableLine = ({ quote }: { quote: Quote }): JSX.Element => {
   }, [statusRef, openStatusPopup]);
 
   return (
-    <Table.Row onClick={editQuote}>
-      <Table.Cell>{quote.title}</Table.Cell>
-      <Table.Cell>{quote.customer.name}</Table.Cell>
-      <Table.Cell>{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell>{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell>{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
+    <Table.Row isEven={isEven} hoverable onClick={editQuote}>
+      <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
+      <Table.Cell className="truncate">{quote.customer.name}</Table.Cell>
+      <Table.Cell className="">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell className="">{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell className="">{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
       <Table.Cell
+        className=""
         onClick={(event) => {
           event.stopPropagation();
         }}
       >
-        <ActionButton variant="outline">
+        <ActionButton size="sm" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map((s, index) => (
             <ActionButton.Action key={index} onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}>

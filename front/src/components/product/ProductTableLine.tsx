@@ -1,4 +1,4 @@
-import { Icon, TextInput } from "@coco-ui/core";
+import { Icon, Select, Table, TextInput } from "@coco-ui/core";
 import React from "react";
 import { CheckIcon, PencilIcon, TrashIcon, XIcon } from "@heroicons/react/solid";
 import { useMutation, useQueryCache } from "react-query";
@@ -6,12 +6,14 @@ import { ProductApi } from "../../api/ProductApi";
 import { ProductGraphQL } from "../../graphql/ProductGraphQL";
 import { Product } from "../../models/Product";
 import { useToast } from "../../providers/ToastProvider";
+import { LINE_TYPE } from "constants/line";
 
 type ProductTableLineProps = {
   product: Product;
+  isEven?: boolean;
 };
 
-const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
+const ProductTableLine = ({ product, isEven }: ProductTableLineProps): JSX.Element => {
   const [editMode, setEditMode] = React.useState(product.id ? false : true);
   const [newProduct, setNewProduct] = React.useState(product);
   const [deleteMode, setDeleteMode] = React.useState(false);
@@ -43,7 +45,14 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
   const onSubmit = async (e: React.FormEvent) => {
     e.stopPropagation();
     try {
-      await saveProductMutation({ description: newProduct.description, price: parseFloat(newProduct.price + "") });
+      await saveProductMutation({
+        id: product.id,
+        description: newProduct.description,
+        price: parseFloat(newProduct.price + ""),
+        type: newProduct.type,
+        keywords: newProduct.keywords,
+        name: newProduct.name,
+      });
       toast.show({ message: product.id ? "Article modifié" : "Article ajouté", variant: "success" });
       setEditMode(false);
       queryCache.invalidateQueries("products");
@@ -70,11 +79,33 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
   }, [editMode, product]);
 
   return (
-    <>
-      <div className="flex items-center">
-        <TextInput multiline rows={1} className="w-full" value={newProduct.description} disabled={!editMode} onChange={handleChange("description")} />
-      </div>
-      <div className="text-right flex items-center">
+    <Table.Row isEven={isEven}>
+      <Table.Cell className="px-1">
+        <Select
+          className="w-full"
+          disabled={!editMode}
+          value={Object.values(LINE_TYPE).find(({ enum: lineEnum }) => lineEnum === newProduct.type)}
+          onChange={(result) => {
+            setNewProduct({ ...newProduct, type: result.enum });
+          }}
+          textKey="name"
+          valueKey="enum"
+          options={Object.values(LINE_TYPE)}
+          name={newProduct.id + "-select"}
+          id={newProduct.id + "-select"}
+        />
+      </Table.Cell>
+      <Table.Cell className="px-1">
+        <div className="flex items-center">
+          <TextInput className="w-full" value={newProduct.name} disabled={!editMode} onChange={handleChange("name")} />
+        </div>
+      </Table.Cell>
+      <Table.Cell className="px-1 py-2">
+        <div className="flex items-center">
+          <TextInput autoResizeHeight multiline className="w-full" value={newProduct.description} disabled={!editMode} onChange={handleChange("description")} />
+        </div>
+      </Table.Cell>
+      <Table.Cell className="px-1 w-48">
         <div className="w-full flex justify-center items-center mr-1">
           <TextInput
             containerClassName="w-full"
@@ -86,43 +117,43 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
             disabled={!editMode}
             onChange={handleChange("price")}
           />
-          <span className="ml-2">€</span>
+          <span className="mx-2">€</span>
         </div>
-        <div className="ml-1 w-20 flex items-center">
-          {deleteMode ? (
-            <div className="absolute flex right-0 items-center bg-white shadow rounded px-2 py-1">
-              <span className="mr-2">Supprimer ? </span>
-              <Icon name="check" onClick={onDelete} className="rounded-full w-8 h-8 p-2 text-white bg-success-600 hover:bg-success-700 mr-1" />
-              <Icon name="x" onClick={toggleDeleteMode} className="rounded-full text-white bg-error-600 hover:bg-error-700 w-8 h-8 p-2" />
-            </div>
-          ) : editMode ? (
-            <>
-              <button
-                onClick={onSubmit}
-                disabled={saveProductMutationState.isLoading || !newProduct.price || !newProduct.description || newProduct.description.length < 3}
-                className="appearance-none focus:outline-none"
-              >
-                <CheckIcon className="rounded-full p-2 w-8 text-white bg-success-600 hover:bg-success-700" />
+      </Table.Cell>
+      <Table.Cell className="w-20 relative">
+        {deleteMode ? (
+          <div className="absolute w-max top-1/2 transform -translate-y-1/2 flex right-0 items-center bg-white shadow rounded px-2 py-1">
+            <span className="mr-2">Supprimer ? </span>
+            <Icon name="check" onClick={onDelete} className="rounded-full w-8 h-8 p-2 text-white bg-success-600 hover:bg-success-700 mr-1" />
+            <Icon name="x" onClick={toggleDeleteMode} className="rounded-full text-white bg-error-600 hover:bg-error-700 w-8 h-8 p-2" />
+          </div>
+        ) : editMode ? (
+          <div className="flex items-center">
+            <button
+              onClick={onSubmit}
+              disabled={saveProductMutationState.isLoading || !newProduct.price || !newProduct.name || !newProduct.type}
+              className="appearance-none focus:outline-none"
+            >
+              <CheckIcon className="rounded-full p-2 w-8 text-white bg-success-600 hover:bg-success-700" />
+            </button>
+            {product.id && (
+              <button type="button" onClick={toggleEditMode} className="ml-1 appearance-none focus:outline-none">
+                <XIcon className="rounded-full p-2 text-white bg-error-600 hover:bg-error-700 w-8" />
               </button>
-              {product.id && (
-                <button type="button" onClick={toggleEditMode} className="ml-1 appearance-none focus:outline-none">
-                  <XIcon className="rounded-full p-2 text-white bg-error-600 hover:bg-error-700 w-8" />
-                </button>
-              )}
-            </>
-          ) : (
-            <>
-              <button type="button" onClick={toggleEditMode} className="appearance-none focus:outline-none mr-1">
-                <PencilIcon className="rounded-full p-2 text-white bg-info-600 hover:bg-info-700 w-8" />
-              </button>
-              <button type="button" disabled={deleteProductMutationState.isLoading} onClick={toggleDeleteMode} className="appearance-none focus:outline-none">
-                <TrashIcon className="rounded-full text-white p-2 bg-error-600 hover:bg-error-700 w-8" />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    </>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <button type="button" onClick={toggleEditMode} className="appearance-none focus:outline-none mr-1">
+              <PencilIcon className="rounded-full p-2 text-white bg-info-600 hover:bg-info-700 w-8" />
+            </button>
+            <button type="button" disabled={deleteProductMutationState.isLoading} onClick={toggleDeleteMode} className="appearance-none focus:outline-none">
+              <TrashIcon className="rounded-full text-white p-2 bg-error-600 hover:bg-error-700 w-8" />
+            </button>
+          </div>
+        )}
+      </Table.Cell>
+    </Table.Row>
   );
 };
 

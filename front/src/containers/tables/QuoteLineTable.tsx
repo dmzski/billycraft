@@ -20,16 +20,17 @@ const QuoteLineTable = ({ quote, setQuote, disabled }: any): JSX.Element => {
   }
 
   return (
-    <Table className="table-fixed">
+    <Table className="table-fixed w-full">
       <Table.Head>
         <Table.Row>
-          <Table.HeadCell className="w-48">Type</Table.HeadCell>
-          <Table.HeadCell className="w-full">Description</Table.HeadCell>
-          <Table.HeadCell className="w-32">Quantité</Table.HeadCell>
-          <Table.HeadCell className="w-48">Prix HT</Table.HeadCell>
-          <Table.HeadCell className="w-32">Prix TTC</Table.HeadCell>
-          <Table.HeadCell className="w-36">Sous Total</Table.HeadCell>
-          <Table.HeadCell className="w-8" />
+          <Table.HeadCell className="w-48 py-2 pl-2">Type</Table.HeadCell>
+          <Table.HeadCell className="w-full px-1">Nom</Table.HeadCell>
+          <Table.HeadCell className="w-full px-1">Description</Table.HeadCell>
+          <Table.HeadCell className="w-28 px-1">Quantité</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Prix HT</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Prix TTC</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Sous Total</Table.HeadCell>
+          <Table.HeadCell className="w-12" />
         </Table.Row>
       </Table.Head>
       <Table.Body>

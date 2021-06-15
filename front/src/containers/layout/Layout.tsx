@@ -17,12 +17,12 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
 
   return (
     <div className="h-full w-full">
-      <aside className="h-screen fixed w-64">
+      <aside className="h-screen fixed w-64 z-10">
         <SideBar />
       </aside>
       <div className="pl-64 flex flex-col">
         <SearchBar />
-        <div className="mt-4 pb-2 mx-2 h-full relative">{children}</div>
+        <div className="mt-4 pb-2 px-2 h-full relative">{children}</div>
       </div>
     </div>
   );

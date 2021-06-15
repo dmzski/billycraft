@@ -36,6 +36,9 @@ fi
 sed -i'' -e "s/VERSION = .*/VERSION = \"$version\";/g" ./src/constants/global.ts
 checkSuccess
 
+# For mac os sed
+rm -f src/constants/global.ts-e
+
 echo "Building image...";
 # Build
 docker build -t compta-front:latest -f ./Dockerfile ./

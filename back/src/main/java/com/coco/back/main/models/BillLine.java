@@ -24,8 +24,8 @@ public class BillLine {
     @Column(name = "price")
     public Double price;
 
+    public String name;
     public String description;
-
 
     @Enumerated(value = EnumType.STRING)
     public LineTypeEnum type;
@@ -38,6 +38,7 @@ public class BillLine {
         this.line = quoteLine.line;
         this.quantity = quoteLine.quantity;
         this.price = quoteLine.price;
+        this.name = quoteLine.name;
         this.description = quoteLine.description;
         this.bill = bill;
         this.type = quoteLine.type;

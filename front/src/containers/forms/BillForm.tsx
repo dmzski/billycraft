@@ -5,16 +5,23 @@ import BillLineTable from "../tables/BillLineTable";
 import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
 import { BillStatusEnum } from "../../models/BillStatusEnum";
 import { Button, Select, TextInput } from "@coco-ui/core";
+import { ProductGraphQL } from "graphql/ProductGraphQL";
 
 const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): JSX.Element => {
   const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
+  const [existingProductInput, setExistingProductInput] = React.useState<string>("");
+  const [existingProductSelected, setExistingProductSelected] = React.useState<any>();
+  const [errors, setErrors] = React.useState<any>({});
   const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
     refetchOnWindowFocus: false,
     enabled: customerInputValue?.length > 0,
   });
-  const [errors, setErrors] = React.useState<any>({});
+  const productsQuery = useQuery(["products-by-name"], ProductGraphQL.getAllProducts, {
+    refetchOnWindowFocus: false,
+    enabled: existingProductInput?.length > 0,
+  });
 
-  function inputChange(property: keyof Bill) {
+  const inputChange = (property: keyof Bill) => {
     return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const tmp: any = { ...bill };
       let value: string | number;
@@ -28,22 +35,27 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
       tmp[property] = value;
       setBill(tmp);
     };
-  }
+  };
 
-  function onCustomerOptionClick(option: any) {
+  const onCustomerOptionClick = (option: any) => {
     const tmp: any = { ...bill };
     tmp.customer = { id: option.id };
     setCustomerInputValue(option.description);
     setBill(tmp);
-  }
+  };
 
-  function addLine() {
-    const tmp = { ...bill };
-    const newLine = new BillLine();
-    newLine.line = tmp.lines.length + 1;
-    tmp.lines.push(newLine);
-    setBill(tmp);
-  }
+  const addLine = React.useCallback(
+    (newLine = new BillLine()) => {
+      const tmp = { ...bill };
+      newLine.line = -1 * tmp.lines.length + 1;
+      tmp.lines.push(newLine);
+      setBill(tmp);
+      setTimeout(() => {
+        document.getElementById(newLine.line + "-select")?.focus();
+      }, 200);
+    },
+    [setBill, bill]
+  );
 
   const beforeOnSubmit = (e: any) => {
     const tmp = { ...bill };
@@ -61,9 +73,33 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
     }
   };
 
+  const handleSelectExistingProduct = (result: any) => {
+    setExistingProductSelected(result);
+  };
+
+  const addExistingProductSelected = () => {
+    if (existingProductSelected) {
+      addLine(existingProductSelected);
+      setExistingProductInput("");
+      setExistingProductSelected(undefined);
+    }
+  };
+
   const cantUpdate = React.useMemo(() => {
     return bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
+
+  React.useEffect(() => {
+    if (!bill.customer) {
+      setCustomerInputValue("");
+    }
+  }, [bill.customer]);
+
+  const handleShortcut = (event: React.KeyboardEvent) => {
+    if (event.ctrlKey && event.key === "Enter" && !cantUpdate) {
+      addLine();
+    }
+  };
 
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
@@ -99,7 +135,34 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
         value={bill.tva || ""}
         onChange={inputChange("tva")}
       />
-      <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
+      <div className="my-2 flex items-end">
+        <Select
+          disabled={disabled || cantUpdate}
+          label="Ajouter un produit existant"
+          tabIndex={0}
+          containerClassName="flex-grow"
+          name="existing-product"
+          id="existing-product"
+          inputProps={{
+            autocomplete: "nope",
+          }}
+          options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
+          isLoading={productsQuery.isLoading}
+          isSearchable
+          placeholder="Nom du produit"
+          valueKey="id"
+          textKey="name"
+          value={existingProductSelected}
+          onSearchChange={(str) => setExistingProductInput(str ?? "")}
+          onChange={handleSelectExistingProduct}
+        />
+        <Button disabled={disabled || cantUpdate} onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
+          Ajouter
+        </Button>
+      </div>
+      <div onKeyDown={handleShortcut}>
+        <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
+      </div>
       {!cantUpdate && (
         <Button type="button" className="mt-2 w-full" variant="default" size="sm" onClick={addLine} disabled={disabled}>
           Ajouter une ligne

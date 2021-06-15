@@ -40,6 +40,7 @@ const PrivateSwitch = (): JSX.Element => {
           <Route>
             <div className="flex justify-center items-center h-full">
               <Loader />
+              <span className="ml-3">Chargement de vos données...</span>
             </div>
           </Route>
         </Switch>
@@ -81,6 +82,7 @@ const PrivateSwitch = (): JSX.Element => {
   ) : (
     <div className="flex justify-center items-center h-full">
       <Loader />
+      <span className="ml-1">Initialisation</span>
     </div>
   );
 };

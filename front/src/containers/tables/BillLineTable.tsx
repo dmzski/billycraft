@@ -20,16 +20,17 @@ const BillLineTable = ({ bill, setBill, disabled }: any): JSX.Element => {
   }
 
   return (
-    <Table>
+    <Table className="table-fixed w-full">
       <Table.Head>
         <Table.Row>
-          <Table.HeadCell>Type</Table.HeadCell>
-          <Table.HeadCell>Description</Table.HeadCell>
-          <Table.HeadCell>Quantité</Table.HeadCell>
-          <Table.HeadCell>Prix HT</Table.HeadCell>
-          <Table.HeadCell>Prix TTC</Table.HeadCell>
-          <Table.HeadCell>Sous Total</Table.HeadCell>
-          <Table.HeadCell className="w-8" />
+          <Table.HeadCell className="w-48 py-2 pl-2">Type</Table.HeadCell>
+          <Table.HeadCell className="w-full px-1">Nom</Table.HeadCell>
+          <Table.HeadCell className="w-full px-1">Description</Table.HeadCell>
+          <Table.HeadCell className="w-28 px-1">Quantité</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Prix HT</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Prix TTC</Table.HeadCell>
+          <Table.HeadCell className="w-36 px-1 text-right">Sous Total</Table.HeadCell>
+          <Table.HeadCell className="w-12" />
         </Table.Row>
       </Table.Head>
       <Table.Body>

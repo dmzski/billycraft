@@ -17,6 +17,7 @@ export class Quote {
 
 export class QuoteLine {
   id?: string;
+  name = "";
   description = "";
   quantity = 0;
   price = 0;
