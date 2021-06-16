@@ -1,1 +1,1 @@
-window.API_URL = "http://api.coco-erp.lan";
+window.API_URL = "http://localhost:8080";
