@@ -63,6 +63,12 @@
     ],
     "@semantic-release/changelog",
     "@semantic-release/github",
-    "@semantic-release/git"
+    "@semantic-release/git",
+    ["@semantic-release/exec", {
+      "prepareCmd": "docker build -t maliszewskid/compta-front -f ./Dockerfile ./"
+    }],
+    ["semantic-release-docker", {
+      "name": "maliszewskid/compta-front"
+    }]
   ]
 }
