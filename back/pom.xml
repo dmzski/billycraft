@@ -4,7 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.coco.back</groupId>
   <artifactId>main-service</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.2.1-SNAPSHOT</version>
+  <scm>
+    <developerConnection>scm:git:git@github.com:DorianMaliszewski/coco-erp.git</developerConnection>
+  </scm>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -18,10 +21,6 @@
     <quarkus.platform.version>1.13.3.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
   </properties>
-  <scm>
-    <developerConnection>scm:git:https://https://github.com/DorianMaliszewski/coco-erp.git</developerConnection>
-  </scm>
-  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -96,8 +95,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-mailer</artifactId>
     </dependency>
-
-    <!-- Apache POI -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
@@ -108,9 +105,10 @@
       <artifactId>poi-ooxml</artifactId>
       <version>4.1.2</version>
     </dependency>
-    <!-- /Apache POI -->
-
-
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-docker</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -140,6 +138,20 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
+          <quarkus.application.version>${project.version}</quarkus.application.version>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M4</version>
+        <configuration>
+          <tagNameFormat>back-v@{project.version}</tagNameFormat>
+          <scmCommentPrefix>chore(back):</scmCommentPrefix>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <scmReleaseCommitComment>@{prefix} release @{releaseLabel}</scmReleaseCommitComment>
+          <scmDevelopmentCommitComment>@{prefix} prepare for next development iteration</scmDevelopmentCommitComment>
+          <completionGoals>clean package -Dquarkus.container-image.push=true</completionGoals>
+          <quarkus.container-image.push>true</quarkus.container-image.push>
         </configuration>
       </plugin>
     </plugins>
