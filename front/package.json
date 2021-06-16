@@ -53,6 +53,8 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@types/draftjs-to-html": "^0.8.0",
     "@types/html-to-draftjs": "^1.4.0",
     "@types/jest": "^24.0.0",
@@ -76,6 +78,7 @@
     "postcss": "^7",
     "postcss-cli": "^8.0.0",
     "prettier": "^2.2.1",
+    "semantic-release": "^17.4.4",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }
