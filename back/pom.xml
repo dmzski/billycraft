@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.coco.back</groupId>
   <artifactId>main-service</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -18,6 +18,10 @@
     <quarkus.platform.version>1.13.3.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
   </properties>
+  <scm>
+    <developerConnection>scm:git:https://https://github.com/DorianMaliszewski/coco-erp.git</developerConnection>
+  </scm>
+  
   <dependencyManagement>
     <dependencies>
       <dependency>
