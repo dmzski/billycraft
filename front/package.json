@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "version": "0.1.0",
+  "version": "1.16.3",
   "private": true,
   "dependencies": {
     "@coco-ui/core": "^1.12.5",
