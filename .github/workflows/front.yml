@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - front/**
+    # paths:
+    #   - front/**
 
 defaults:
   run:
