@@ -1,19 +1,22 @@
 name: Front CI
 
 on:
-  push:
-    pull_request:
+  pull_request:
       types: ['opened', 'edited', 'reopened', 'synchronize']
+  push:
     branches:
       - master
     paths:
       - front/**
-      - .github/front.yml
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./front
 
 jobs:
   lint:
     runs-on: ubuntu-20.04
-    working-directory: ./front
     steps:
     - uses: actions/checkout@v2.3.4
     - uses: actions/cache@v2.1.6
@@ -26,11 +29,10 @@ jobs:
       uses: actions/setup-node@v2.1.5
       with:
         node-version: 16
-    - run: yarn
+    - run: yarn --pure-lockfile
     - run: yarn run lint
 
   build:
-    working-directory: ./front
     runs-on: ubuntu-20.04
     needs: [lint]
     steps:
@@ -43,7 +45,6 @@ jobs:
     - run: yarn run build
 
   deploy:
-    working-directory: ./front
     runs-on: ubuntu-20.04
     needs: [build]
     if: github.ref == 'refs/heads/master'
@@ -64,10 +65,9 @@ jobs:
     - run: yarn run semantic-release
       env:
         HUSKY: 0
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   push:
-    working-directory: ./front
     runs-on: ubuntu-20.04
     needs: [deploy]
     if: github.ref == 'refs/heads/master'
