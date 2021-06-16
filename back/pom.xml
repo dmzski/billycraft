@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.coco.back</groupId>
   <artifactId>main-service</artifactId>
-  <version>1.2.3-SNAPSHOT</version>
+  <version>1.2.2-SNAPSHOT</version>
   <scm>
     <developerConnection>scm:git:https://github.com/DorianMaliszewski/coco-erp.git</developerConnection>
     <tag>HEAD</tag>
@@ -150,7 +150,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <scmReleaseCommitComment>@{prefix} release @{releaseLabel}</scmReleaseCommitComment>
           <scmDevelopmentCommitComment>@{prefix} prepare for next development iteration</scmDevelopmentCommitComment>
-          <completionGoals>clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true</completionGoals>
+          <preparationGoals>clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true</preparationGoals>
         </configuration>
       </plugin>
     </plugins>

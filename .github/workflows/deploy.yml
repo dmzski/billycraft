@@ -131,7 +131,7 @@ jobs:
         distribution: 'adopt'
 
     - name: "Maven release"
-      run: ./mvnw -B release:prepare release:perform -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
+      run: ./mvnw -B release:prepare -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
