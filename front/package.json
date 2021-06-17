@@ -52,6 +52,11 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.2.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -79,6 +84,7 @@
     "postcss-cli": "^8.0.0",
     "prettier": "^2.2.1",
     "semantic-release": "^17.4.4",
+    "semantic-release-docker": "^2.2.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }
