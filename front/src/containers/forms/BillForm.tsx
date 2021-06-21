@@ -39,9 +39,9 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
 
   const onCustomerOptionClick = (option: any) => {
     const tmp: any = { ...bill };
-    tmp.customer = { id: option.id };
-    setCustomerInputValue(option.description);
+    tmp.customer = option;
     setBill(tmp);
+    setErrors({ ...errors, customer: undefined });
   };
 
   const addLine = React.useCallback(
@@ -112,18 +112,27 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
         onChange={inputChange("title")}
       />
       <Select
+        tabIndex={0}
         label="Sélectionner un client"
         id="customer-select"
-        isLoading={customersQuery.isLoading}
-        isSearchable
+        name="customer"
         disabled={disabled || cantUpdate}
+        onChange={onCustomerOptionClick}
+        inputProps={{
+          autoComplete: "nope",
+        }}
         options={customersQuery.data || [bill.customer]}
-        textKey="name"
-        valueKey="id"
         placeholder="Nom du client"
         value={bill.customer}
-        onSearchChange={(str) => str && setCustomerInputValue(str)}
-        onChange={onCustomerOptionClick}
+        onSearchChange={(str) => {
+          if (str) {
+            setCustomerInputValue(str);
+          }
+        }}
+        textKey="name"
+        valueKey="id"
+        isSearchable
+        isLoading={customersQuery.isLoading}
       />
       {errors && errors.customer && <div>{errors.customer}</div>}
       <TextInput
