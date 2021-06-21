@@ -1,3 +1,10 @@
+### [1.17.1](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.0...v1.17.1) (2021-06-21)
+
+
+### :bug: Bug Fixes
+
+* select customers ([#14](https://github.com/DorianMaliszewski/coco-erp/issues/14)) ([9577430](https://github.com/DorianMaliszewski/coco-erp/commit/9577430c16d4fbad34b27278317fab2ed49735cc))
+
 ## 1.0.0 (2021-06-17)
 
 
