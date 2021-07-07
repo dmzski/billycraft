@@ -18,19 +18,20 @@ public class BillIdGenerator implements IdentifierGenerator {
     public static final String GENERATOR_NAME = "billIdGenerator";
 
     @Override
-    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o)
+            throws HibernateException {
         String prefix = "";
         Bill bill = (Bill) o;
         prefix += bill.companyId + "_";
-        prefix += LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyy")) + "_";
+        prefix += LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyy")) + "_F";
         try {
             Connection connection = sharedSessionContractImplementor.connection();
-            PreparedStatement statement=connection.prepareStatement("SELECT COUNT(*) AS num FROM com_bill WHERE company_id = ?");
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT COUNT(*) AS num FROM com_bill WHERE company_id = ?");
             statement.setLong(1, bill.companyId);
             ResultSet rs = statement.executeQuery();
-            if(rs.next())
-            {
-                int id=rs.getInt(1)+1;
+            if (rs.next()) {
+                int id = rs.getInt(1) + 1;
                 String generatedId = prefix + id;
                 return generatedId;
             }

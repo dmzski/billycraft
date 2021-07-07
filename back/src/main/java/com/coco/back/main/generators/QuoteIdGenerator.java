@@ -18,21 +18,21 @@ public class QuoteIdGenerator implements IdentifierGenerator {
     public static final String GENERATOR_NAME = "quoteIdGenerator";
 
     @Override
-    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o)
+            throws HibernateException {
         String prefix = "";
         Quote quote = (Quote) o;
         prefix += quote.companyId + "_";
-        prefix += LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyy")) + "_";
+        prefix += LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyy")) + "_D";
         try {
             Connection connection = sharedSessionContractImplementor.connection();
-            PreparedStatement statement=connection.prepareStatement("SELECT COUNT(*) AS num FROM com_quote WHERE company_id = ?");
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT COUNT(*) AS num FROM com_quote WHERE company_id = ?");
             statement.setLong(1, quote.companyId);
             ResultSet rs = statement.executeQuery();
-            if(rs.next())
-            {
-                int id=rs.getInt(1)+1;
+            if (rs.next()) {
+                int id = rs.getInt(1) + 1;
                 String generatedId = prefix + id;
-                System.out.println("Generated Id: " + generatedId);
                 return generatedId;
             }
         } catch (SQLException e) {

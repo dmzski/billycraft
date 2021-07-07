@@ -223,9 +223,14 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
           </>
         )}
         {quote.status === QuoteStatusEnum.ACCEPTED && (
-          <Button size="md" icon="currency-euro" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
-            Demander un accompte
-          </Button>
+          <>
+            <Button size="md" variant="default" className="mr-2" icon="document" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DRAFT)}>
+              Remettre en brouillon
+            </Button>
+            <Button size="md" icon="currency-euro" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
+              Demander un accompte
+            </Button>
+          </>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK && (
           <Button size="md" icon="check" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>

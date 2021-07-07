@@ -7,7 +7,7 @@ import { filterQuotes, sortQuotes } from "../utils/quote";
 import QuoteModal from "../containers/modals/QuoteModal";
 import QuoteFilterContainer from "../containers/QuoteFilterContainer";
 import { useParams } from "react-router-dom";
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Grid, Loader } from "@coco-ui/core";
 
 const QuotePage = (): JSX.Element => {
   const [quotes, setQuotes] = React.useState<Quote[]>([]);
@@ -53,29 +53,23 @@ const QuotePage = (): JSX.Element => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        {showArchived ? (
-          <Button size="md" variant="default" icon="eye-off" onClick={handleShowArchived}>
-            Masquer les devis archivés
+      <Grid cols={3}>
+        <div>
+          <Button size="md" variant="default" icon={showArchived ? "eye-off" : "eye"} onClick={handleShowArchived}>
+            {showArchived ? "Masquer les devis archivés" : "Voir les devis archivés"}
           </Button>
-        ) : (
-          <Button variant="default" size="md" className="flex" icon="eye" onClick={handleShowArchived}>
-            Voir les devis archivés
-          </Button>
-        )}
-        {showFilters ? (
+        </div>
+        <div className="flex justify-center">
           <Button size="md" variant="info" icon="filter" onClick={handleShowFilters}>
-            Masquer les filres
+            {showFilters ? "Masquer les filtres" : "Afficher les filtres"}
           </Button>
-        ) : (
-          <Button size="md" variant="info" icon="filter" onClick={handleShowFilters}>
-            Afficher les filtres
+        </div>
+        <div className="flex justify-end">
+          <Button size="md" onClick={goToNewQuote} icon="plus">
+            <p>Nouveau devis</p>
           </Button>
-        )}
-        <Button size="md" className="primary" onClick={goToNewQuote} icon="plus">
-          <p>Nouveau devis</p>
-        </Button>
-      </div>
+        </div>
+      </Grid>
       {showFilters && <QuoteFilterContainer filters={filters} setFilters={setFilters} />}
       <QuoteList data={quoteSorted()} />
       {(quotesArchivedQuery.isLoading || quotesQuery.isLoading) && (

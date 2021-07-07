@@ -24,7 +24,7 @@ const BillList = ({ data }: any): JSX.Element => {
           <Table.HeadCell className="w-48" sort={sort} sortable="total" onSort={onSort}>
             Total
           </Table.HeadCell>
-          <Table.HeadCell className="w-32" sort={sort} sortable="status" onSort={onSort}>
+          <Table.HeadCell className="w-48" sort={sort} sortable="status" onSort={onSort}>
             Status
           </Table.HeadCell>
         </Table.Row>
