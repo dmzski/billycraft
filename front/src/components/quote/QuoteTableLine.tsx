@@ -70,7 +70,7 @@ const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): 
         array.push(QUOTE_STATUS.DRAFT, QUOTE_STATUS.ARCHIVED);
         break;
       case QuoteStatusEnum.ACCEPTED:
-        array.push(QUOTE_STATUS.DEPOSIT_ASK, QUOTE_STATUS.DEPOSIT_PAID, QUOTE_STATUS.ARCHIVED);
+        array.push(QUOTE_STATUS.DRAFT, QUOTE_STATUS.DEPOSIT_ASK, QUOTE_STATUS.DEPOSIT_PAID, QUOTE_STATUS.ARCHIVED);
         break;
       case QuoteStatusEnum.DEPOSIT_ASK:
         array.push(QUOTE_STATUS.DEPOSIT_PAID, QUOTE_STATUS.ARCHIVED);
@@ -107,8 +107,8 @@ const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): 
     <Table.Row isEven={isEven} hoverable onClick={editQuote}>
       <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{quote.customer.name}</Table.Cell>
-      <Table.Cell className="">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell className="">{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
+      <Table.Cell className="">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : "-"}</Table.Cell>
+      <Table.Cell className="">{quote.sentAt ? format(parseJSON(quote.sentAt), "dd/MM/yyyy à HH:mm") : "-"}</Table.Cell>
       <Table.Cell className="">{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
       <Table.Cell
         className=""

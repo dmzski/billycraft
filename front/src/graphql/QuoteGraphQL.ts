@@ -9,6 +9,7 @@ customer {
   name
 }
 title
+tva
 createdAt
 updatedAt
 sentAt
@@ -65,6 +66,7 @@ export const QuoteGraphQL = {
   },
 
   createOrUpdateQuote: async ({ id, customer, lines, status, title, tva, total }: Quote): Promise<any> => {
+    console.log("La tva", tva);
     const mutation = await graphQLClient.request(
       gql`
         mutation ($quote: QuoteInput!) {

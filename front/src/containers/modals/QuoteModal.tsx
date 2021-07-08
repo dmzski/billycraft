@@ -67,7 +67,6 @@ const QuoteModal = ({ isOpen, onRequestClose, quote }: any): JSX.Element => {
       return false;
     }
     try {
-      console.log(newQuote);
       await createOrUpdateQuoteMutation(newQuote);
     } catch (error) {
       toast.show({ message: "Erreur lors de l'enregistrement", variant: "error" });

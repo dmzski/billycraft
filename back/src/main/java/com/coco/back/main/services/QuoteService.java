@@ -25,18 +25,21 @@ public class QuoteService {
     }
 
     public List<Quote> getAllQuotesNotArchived(String username) {
-        return Quote.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status != 'ARCHIVED'", username);
+        return Quote.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status != 'ARCHIVED'",
+                username);
     }
 
     public Quote getQuoteById(String username, String id) {
-        return Quote.find("id = ?1 AND company_id = (SELECT u.company.id from User u WHERE u.email = ?2)", id, username).singleResult();
+        return Quote.find("id = ?1 AND company_id = (SELECT u.company.id from User u WHERE u.email = ?2)", id, username)
+                .singleResult();
     }
 
     @Transactional
     public Quote createQuote(String username, Quote quote) {
         User user = (User) User.findByIdOptional(username).orElseThrow();
         quote.id = null;
-        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, quote.customer.id).singleResult();
+        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2",
+                username, quote.customer.id).singleResult();
         AtomicInteger index = new AtomicInteger();
         quote.lines.forEach(quoteLine -> {
             quoteLine.line = index.getAndIncrement();
@@ -56,14 +59,14 @@ public class QuoteService {
         quote.title = newQuote.title;
         quote.tva = newQuote.tva;
         quote.lines.clear();
-        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2", username, newQuote.customer.id).singleResult();
+        quote.customer = Customer.find("company_id = (SELECT u.company.id FROM User u where u.email = ?1) AND id = ?2",
+                username, newQuote.customer.id).singleResult();
         quote.persistAndFlush();
         AtomicInteger index = new AtomicInteger();
         quote.lines.addAll(newQuote.lines.stream().peek(quoteLine -> {
-                quoteLine.line = index.getAndIncrement();
-                quoteLine.quote = quote;
-                }).collect(Collectors.toList())
-        );
+            quoteLine.line = index.getAndIncrement();
+            quoteLine.quote = quote;
+        }).collect(Collectors.toList()));
         quote.persist();
         return quote;
     }
@@ -72,8 +75,10 @@ public class QuoteService {
     public Quote updateQuoteStatus(String username, String id, StatusEnum newStatus) {
         Quote quote = this.getQuoteById(username, id);
 
-        // If the quote was refused and user want to put in draft again
-        if (quote.status != null && quote.status.equals(StatusEnum.REFUSED) && (newStatus == null || newStatus.equals(StatusEnum.DRAFT))){
+        // If the quote was refused/accepted and user want to put in draft again
+        if (quote.status != null
+                && (quote.status.equals(StatusEnum.REFUSED) || quote.status.equals(StatusEnum.ACCEPTED))
+                && (newStatus == null || newStatus.equals(StatusEnum.DRAFT))) {
             quote.sentAt = null;
             quote.fileName = null;
         }
@@ -84,7 +89,8 @@ public class QuoteService {
         if (quote.status.isGreaterThanOrEqualSent() && quote.sentAt == null) {
             quote.sentAt = Instant.now();
             quote.persist();
-            QuoteEmailCustomization quoteEmailCustomization = QuoteEmailCustomization.find("company_id = ?1", quote.companyId).firstResult();
+            QuoteEmailCustomization quoteEmailCustomization = QuoteEmailCustomization
+                    .find("company_id = ?1", quote.companyId).firstResult();
             if (quoteEmailCustomization != null && quoteEmailCustomization.sendAutomatically) {
                 this.emailService.sendQuoteEmailWithQuote(username, quote);
             }
@@ -95,6 +101,7 @@ public class QuoteService {
     }
 
     public List<Quote> getAllQuotesArchived(String username) {
-        return Quote.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status = 'ARCHIVED'", username);
+        return Quote.list("company_id = (SELECT u.company.id from User u WHERE u.email = ?1) and status = 'ARCHIVED'",
+                username);
     }
 }
