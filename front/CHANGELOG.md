@@ -1,3 +1,10 @@
+## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
+
+
+### :gear: Features
+
+* prefix and can back from accepted [#15](https://github.com/DorianMaliszewski/coco-erp/issues/15) ([#16](https://github.com/DorianMaliszewski/coco-erp/issues/16)) ([3dfc047](https://github.com/DorianMaliszewski/coco-erp/commit/3dfc04739c0cc85484b9c3314d7d39aa6efb8406))
+
 ### [1.17.1](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.0...v1.17.1) (2021-06-21)
 
 
