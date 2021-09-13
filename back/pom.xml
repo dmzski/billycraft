@@ -150,7 +150,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <scmReleaseCommitComment>@{prefix} release @{releaseLabel}</scmReleaseCommitComment>
           <scmDevelopmentCommitComment>@{prefix} prepare for next development iteration</scmDevelopmentCommitComment>
-          <preparationGoals>clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true</preparationGoals>
+          <preparationGoals>clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true -Dquarkus.container-image.additional-tags=latest</preparationGoals>
         </configuration>
       </plugin>
     </plugins>
