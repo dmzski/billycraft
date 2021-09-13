@@ -1,0 +1,9 @@
+FROM cosmtrek/air
+
+EXPOSE 8080
+
+WORKDIR /app
+
+RUN mkdir /pdfs && chmod 777 -R /pdfs
+
+VOLUME [ "/app", "/pdfs" ]

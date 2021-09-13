@@ -1,0 +1,12 @@
+.dockerignore
+docker-compose.yml
+Dockerfile.dev
+db/
+generated/
+
+app.env
+docker.env
+
+Makefile
+Insomnia.json
+realm-export.json

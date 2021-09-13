@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.coco.back</groupId>
   <artifactId>main-service</artifactId>
-  <version>1.2.2</version>
+  <version>1.2.3-SNAPSHOT</version>
   <scm>
     <developerConnection>scm:git:https://github.com/DorianMaliszewski/coco-erp.git</developerConnection>
     <tag>back-v1.2.2</tag>
