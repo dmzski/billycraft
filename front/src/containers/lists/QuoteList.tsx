@@ -6,7 +6,7 @@ const QuoteList = ({ data }: any): JSX.Element => {
   const { data: quotes, sort, onSort } = useTableState({ data, initialSort: { field: "createdAt", order: "desc" } });
 
   return (
-    <Table className="w-full mt-4 table-fixed text-left" data={quotes}>
+    <Table hoverable className="w-full mt-4 table-fixed text-left" data={quotes}>
       <Table.Head>
         <Table.Row>
           <Table.HeadCell className="pl-2 w-1/3 py-3" sort={sort} sortable="title" onSort={onSort}>
@@ -29,7 +29,11 @@ const QuoteList = ({ data }: any): JSX.Element => {
           </Table.HeadCell>
         </Table.Row>
       </Table.Head>
-      <Table.Body>{({ row }) => <QuoteTableLine key={row.id} quote={row} />}</Table.Body>
+      <Table.Body>
+        {quotes.map((quote) => (
+          <QuoteTableLine key={quote.id} quote={quote} />
+        ))}
+      </Table.Body>
     </Table>
   );
 };

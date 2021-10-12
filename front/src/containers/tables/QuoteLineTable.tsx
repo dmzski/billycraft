@@ -1,8 +1,26 @@
-import { Table } from "@coco-ui/core";
+import { Icon, List } from "@coco-ui/core";
+import { Quote, QuoteLine } from "models/Quote";
 import React from "react";
+import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import QuoteLineTableLine from "../../components/quote/QuoteLineTableLine";
 
-const QuoteLineTable = ({ quote, setQuote, disabled }: any): JSX.Element => {
+const reorderLines = (list: QuoteLine[], startIndex: number, endIndex: number) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result.map((line, index) => ({ ...line, line: index }));
+};
+
+const QuoteLineTable = ({
+  quote,
+  setQuote,
+  disabled,
+}: {
+  quote: Quote;
+  setQuote: React.Dispatch<React.SetStateAction<Quote>>;
+  disabled?: boolean;
+}): JSX.Element => {
   function deleteLine(index: number) {
     return () => {
       const newLines = [...quote.lines];
@@ -19,29 +37,86 @@ const QuoteLineTable = ({ quote, setQuote, disabled }: any): JSX.Element => {
     };
   }
 
+  const onDragEnd = (result: DropResult) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const newLines = reorderLines(quote.lines, result.source.index, result.destination.index);
+
+    setQuote({
+      ...quote,
+      lines: newLines,
+    });
+  };
+
   return (
-    <Table className="table-fixed w-full">
-      <Table.Head>
-        <Table.Row>
-          <Table.HeadCell className="w-48 py-2 pl-2">Type</Table.HeadCell>
-          <Table.HeadCell className="w-full px-1">Nom</Table.HeadCell>
-          <Table.HeadCell className="w-full px-1">Description</Table.HeadCell>
-          <Table.HeadCell className="w-28 px-1">Quantité</Table.HeadCell>
-          <Table.HeadCell className="w-36 px-1 text-right">Prix HT</Table.HeadCell>
-          <Table.HeadCell className="w-36 px-1 text-right">Prix TTC</Table.HeadCell>
-          <Table.HeadCell className="w-36 px-1 text-right">Sous Total</Table.HeadCell>
-          <Table.HeadCell className="w-12" />
-        </Table.Row>
-      </Table.Head>
-      <Table.Body>
-        {quote.lines &&
-          quote.lines.map((line: any, index: number) => (
-            <Table.Row key={index}>
-              <QuoteLineTableLine disabled={disabled} tva={quote.tva} line={line} deleteLine={deleteLine(index)} setLine={setLine(index)} />
-            </Table.Row>
-          ))}
-      </Table.Body>
-    </Table>
+    <List
+      className="bg-white w-full"
+      data={quote.lines}
+      columns={[
+        {
+          name: "Type",
+          className: "w-48 ml-4",
+        },
+        {
+          name: "Nom",
+          className: "w-72 pl-2",
+        },
+        {
+          name: "Description",
+          className: "w-full ml-2",
+        },
+        {
+          name: "Quantité",
+          className: "w-36",
+        },
+        {
+          name: "Prix HT",
+          className: "w-48",
+        },
+        {
+          name: "Prix TTC",
+          className: "w-48",
+        },
+        {
+          name: "Sous Total",
+          className: "w-48",
+        },
+        {
+          name: "",
+          className: "w-24",
+        },
+      ]}
+    >
+      {({ data }) => (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId={`lines`}>
+            {(droppableProvided) => (
+              <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
+                {(data as QuoteLine[])?.map((line, index) => (
+                  <Draggable key={index} draggableId={index.toString()} index={index}>
+                    {(provided) => (
+                      <QuoteLineTableLine
+                        provided={provided}
+                        key={line.line}
+                        disabled={disabled}
+                        tva={quote.tva}
+                        line={line}
+                        deleteLine={deleteLine(line.line)}
+                        setLine={setLine(line.line)}
+                      />
+                    )}
+                  </Draggable>
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+    </List>
   );
 };
 

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import CustomerModal from "containers/modals/CustomerModal";
 import { Customer } from "models/Customer";
 
-const QuoteTableLine = ({ customer, isEven }: { customer: Customer; isEven?: boolean }): JSX.Element => {
+const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const { id } = useParams<any>();
 
@@ -19,7 +19,7 @@ const QuoteTableLine = ({ customer, isEven }: { customer: Customer; isEven?: boo
   }, [id, customer]);
 
   return (
-    <Table.Row isEven={isEven} hoverable onClick={editCustomer}>
+    <Table.Row hoverable onClick={editCustomer}>
       <Table.Cell className="truncate py-3 pl-2 w-1/3">{customer.name}</Table.Cell>
       <Table.Cell className="truncate w-1/3">{customer.contact}</Table.Cell>
       <Table.Cell className="w-48">

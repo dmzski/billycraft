@@ -1,83 +1,194 @@
+import { Button } from "@coco-ui/core";
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { Quote, QuoteLine } from "../models/Quote";
+import { useMutation, useQuery, useQueryCache } from "react-query";
+import { useParams, useHistory } from "react-router-dom";
+import { EmailApi } from "../api/EmailApi";
+import { PdfApi } from "../api/PdfApi";
+import { BillGraphQL } from "../graphql/BillGraphQL";
+import { QuoteGraphQL } from "../graphql/QuoteGraphQL";
+import useLoadingState from "../hooks/useLoadingState";
+import { Quote } from "../models/Quote";
+import { QuoteStatusEnum } from "../models/QuoteStatusEnum";
+import { useToast } from "../providers/ToastProvider";
+import { ROUTES } from "../routes";
+import QuoteForm from "../containers/forms/QuoteForm";
 
-import QuoteLineTable from "../containers/tables/QuoteLineTable";
-import { Button, TextInput } from "@coco-ui/core";
-
-const QuoteForm = (): JSX.Element => {
-  const { id } = useParams<{ id: string }>();
+const QuoteCreationPage = (): JSX.Element => {
+  const [newQuote, setNewQuote] = React.useState<Quote>(new Quote());
+  const queryCache = useQueryCache();
+  const toast = useToast();
+  const pdfState = useLoadingState();
   const history = useHistory();
-  const [quote, setQuote] = React.useState<Quote>(new Quote());
+  const { id } = useParams<{ id: string }>();
+  const { data: quote } = useQuery(`quote-${id}`, () => QuoteGraphQL.getQuote(id), { enabled: id !== "new" });
 
-  function goBack() {
-    history.goBack();
-  }
-
-  function inputChange(property: keyof Quote) {
-    return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const tmp: any = { ...quote };
-      let value: any;
-      switch (property) {
-        case "tva":
-          value = parseInt(event.target.value);
-          break;
-        default:
-          value = event.target.value;
+  const [createOrUpdateQuoteMutation, createOrUpdateQuoteMutationState] = useMutation(QuoteGraphQL.createOrUpdateQuote, {
+    onSuccess: (data) => {
+      const tmp = [...(queryCache.getQueryData<Quote[]>("quotes") ?? [])];
+      if (data.updateQuote) {
+        const index = tmp.findIndex((q) => q.id === data.updateQuote.id);
+        if (index > -1) {
+          tmp[index] = data.updateQuote;
+          setNewQuote({ ...data.updateQuote });
+          queryCache.setQueryData("quotes", tmp);
+        }
+      } else if (data.createQuote) {
+        tmp.push(data.createQuote);
+        queryCache.setQueryData("quotes", tmp);
+        setNewQuote({ ...data.createQuote });
+      } else {
+        history.push(ROUTES.QUOTES.path);
       }
-      tmp[property] = value;
-      setQuote(tmp);
-    };
-  }
+      toast.show({ message: "Enregistrement effectué", variant: "success" });
+    },
+    throwOnError: true,
+  });
+  const [createBillFormQuoteMutation, createBillFormQuoteMutationState] = useMutation(BillGraphQL.createFromQuote, {
+    onSuccess: () => {
+      history.push(ROUTES.QUOTES.path);
+      history.push(ROUTES.BILLS.path);
+      toast.show({ message: "Facture créé", variant: "success" });
+    },
+  });
+  const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(QuoteGraphQL.updateQuoteStatus, {
+    onSuccess: () => {
+      history.push(ROUTES.QUOTES.path);
+      toast.show({ message: "Devis mis à jour", variant: "success" });
+    },
+  });
+  const [sendMailMutation, sendMailMutationState] = useMutation(EmailApi.sendQuote, {
+    onSuccess: () => {
+      toast.show({ message: "Email envoyé", variant: "success" });
+    },
+    throwOnError: true,
+  });
 
-  function addLine() {
-    const tmp = { ...quote };
-    const newLine = new QuoteLine();
-    newLine.line = tmp.lines.length + 1;
-    tmp.lines.push(newLine);
-    setQuote(tmp);
-  }
-
-  React.useEffect(() => {
+  async function saveQuote(e: any) {
+    e.preventDefault();
+    if (updateQuoteStatusMutationState.isLoading || createOrUpdateQuoteMutationState.isLoading) {
+      return false;
+    }
     try {
-      if (id !== "new") {
-        setQuote(new Quote());
+      await createOrUpdateQuoteMutation(newQuote);
+    } catch (error) {
+      toast.show({ message: "Erreur lors de l'enregistrement", variant: "error" });
+      console.error("Error !!!", error);
+    }
+  }
+
+  const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
+    if (updateQuoteStatusMutationState.isLoading || createOrUpdateQuoteMutationState.isLoading) {
+      return false;
+    }
+    try {
+      await updateQuoteStatusMutation({ id, statusEnum: status });
+      queryCache.invalidateQueries("quotes");
+    } catch (error) {
+      console.error("Error !!!", error);
+    }
+  };
+
+  const downloadPdf = async () => {
+    try {
+      if (pdfState.isIdle && newQuote.id) {
+        pdfState.update("loading");
+        const html = await PdfApi.getQuotePdf(newQuote.id);
+        const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
+        window.open(url, "_blank");
+        pdfState.update("idle");
       }
     } catch (e) {
-      setQuote(new Quote());
+      console.log("Error when downlaod pdf", e);
+      toast.show({ message: "Erreur lors de la génération du PDF", variant: "error" });
+      setTimeout(() => {
+        pdfState.update("idle");
+      }, 1000);
     }
-  }, [id]);
+  };
+
+  const sendMail = async () => {
+    try {
+      if (!sendMailMutationState.isLoading && id) {
+        await sendMailMutation(id);
+      }
+    } catch (e) {
+      console.log("Error when send email pdf", e);
+      toast.show({ message: "Erreur lors de l'envoi de l'email", variant: "error" });
+    }
+  };
+
+  const createBillFromQuote = async () => {
+    try {
+      if (!createBillFormQuoteMutationState.isLoading && id) {
+        createBillFormQuoteMutation(id);
+        queryCache.invalidateQueries("bills");
+      }
+    } catch (error) {
+      console.log("Une erreur est survenue", error);
+      toast.show({ message: "Erreur lors de la génération de la facture", variant: "error" });
+    }
+  };
+
+  const isQuoteMinimumAccepted = () => {
+    return [QuoteStatusEnum.ACCEPTED, QuoteStatusEnum.DEPOSIT_ASK, QuoteStatusEnum.DEPOSIT_PAID].includes(newQuote.status);
+  };
+  React.useEffect(() => {
+    setNewQuote(quote && id !== "new" ? quote : new Quote());
+  }, [quote]);
 
   return (
-    <>
-      <div className="flex items-center">
-        <button className="primary" onClick={goBack}>
-          Retour
-        </button>
-        <h1 className="ml-4 text-lg">
-          {!quote.id ? "Nouveau " : "Modifier un "}devis{quote.id ? " #" + quote.id : ""}
-        </h1>
-      </div>
-      <form className="quote-form">
-        <TextInput label="Titre" placeholder="Titre du devis" value={quote.title} onChange={inputChange("title")} />
-        <TextInput label="Client" placeholder="Nom du client" value={`${quote.customer}`} onChange={inputChange("customer")} />
-        <TextInput label="TVA" placeholder="TVA en %" type="numeric" value={quote.tva || ""} onChange={inputChange("tva")} />
-        <QuoteLineTable quote={quote} setQuote={setQuote} />
-        <div className="flex">
-          <button type="button" className="primary w-full" onClick={addLine}>
-            Ajouter une ligne
-          </button>
-        </div>
-
-        <div className="flex pt-3 flex-row-reverse">
-          <Button variant="link" className="ml-4">
-            Enregistrer
+    <div className="w-full px-2">
+      <div className="flex items-center mb-4 border-b-2 border-gray-400">
+        <h1 className="ml-4 text-2xl flex-grow">{!newQuote.id ? "Nouveau " : "Modifier un "}devis</h1>
+        {newQuote && newQuote.status === QuoteStatusEnum.SENT && newQuote.id && (
+          <Button
+            className="mb-1 mr-1"
+            variant="info"
+            icon="mail"
+            size="sm"
+            onClick={sendMail}
+            title="Envoyer par mail"
+            disabled={sendMailMutationState.isLoading}
+          >
+            Envoyer le mail
           </Button>
-          <Button variant="success">Envoyer le devis</Button>
-        </div>
-      </form>
-    </>
+        )}
+        {newQuote && isQuoteMinimumAccepted() && newQuote.id && (
+          <Button
+            variant="success"
+            size="sm"
+            className="mb-1 mr-3"
+            onClick={createBillFromQuote}
+            title="Créer la facture"
+            disabled={createBillFormQuoteMutationState.isLoading}
+            icon="document-add"
+          >
+            Créer la facture
+          </Button>
+        )}
+        {newQuote && newQuote.id && (
+          <Button
+            disabled={pdfState.isLoading}
+            title="Télécharger le PDF"
+            onClick={downloadPdf}
+            variant="primary"
+            className="mb-1"
+            size="sm"
+            icon="document-download"
+          >
+            PDF
+          </Button>
+        )}
+      </div>
+      <QuoteForm
+        onSubmit={saveQuote}
+        quote={newQuote}
+        setQuote={setNewQuote}
+        disabled={createOrUpdateQuoteMutationState.isLoading || updateQuoteStatusMutationState.isLoading}
+        onUpdateStatus={updateQuoteStatus}
+      />
+    </div>
   );
 };
 
-export default QuoteForm;
+export default QuoteCreationPage;

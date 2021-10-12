@@ -54,7 +54,7 @@ services:
       - "reverse-proxy:api.coco-erp.lan"
 
   back:
-    image: compta-back:latest
+    image: maliszewskid/compta-back:local
     build:
       dockerfile: ./src/main/docker/Dockerfile.jvm
       context: ./
@@ -78,6 +78,12 @@ services:
       QUARKUS_MAILER_HOST: mailserver
     volumes:
       - ./uploads:/uploads
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
     labels:
       - "traefik.http.routers.back.rule=Host(`api.coco-erp.lan`)"
       - "traefik.enable=true"

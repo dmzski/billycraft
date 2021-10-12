@@ -31,13 +31,13 @@ ps: ## Show docker compose status
 	${DC} ps
 
 update-docker: ## Maven clean package and docker-compose build and docker-compose up -d
-	./mvnw clean package -Dquarkus.container-image.build=true && ${DC} up -d
+	./mvnw clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.additional-tags=local && ${DC} up -d
 
 load-test: ## Loadtesting the application with scripts/loadtest.sh
 	./scripts/loadtest.sh
 
 push: ## Build and push docker
-	./mvnw clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true
+	./mvnw clean package -Dquarkus.container-image.push=true -Dquarkus.container-image.build=true -Dquarkus.container-image.additional-tags=latest
 
 help: ## This help dialog.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'

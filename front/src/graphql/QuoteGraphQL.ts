@@ -98,7 +98,7 @@ export const QuoteGraphQL = {
     return mutation;
   },
 
-  getQuote: async (_: unknown, id: number): Promise<Quote> => {
+  getQuote: async (id: string): Promise<Quote> => {
     const { quoteById } = await graphQLClient.request(
       gql`
         query {

@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@coco-ui/core": {
+      "signature": "6ecf85eac7cd3112ff4856c7884e05f6",
+      "file": true,
+      "replaced": "^1.14.3"
+    }
+  }
+}

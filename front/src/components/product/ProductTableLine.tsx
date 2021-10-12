@@ -10,10 +10,9 @@ import { LINE_TYPE } from "constants/line";
 
 type ProductTableLineProps = {
   product: Product;
-  isEven?: boolean;
 };
 
-const ProductTableLine = ({ product, isEven }: ProductTableLineProps): JSX.Element => {
+const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
   const [editMode, setEditMode] = React.useState(product.id ? false : true);
   const [newProduct, setNewProduct] = React.useState(product);
   const [deleteMode, setDeleteMode] = React.useState(false);
@@ -79,7 +78,7 @@ const ProductTableLine = ({ product, isEven }: ProductTableLineProps): JSX.Eleme
   }, [editMode, product]);
 
   return (
-    <Table.Row isEven={isEven}>
+    <Table.Row>
       <Table.Cell className="px-1">
         <Select
           className="w-full"

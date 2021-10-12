@@ -1,0 +1,10 @@
+import { Story, Meta } from '@storybook/react';
+import { SelectProps } from '.';
+declare const _default: Meta<import("@storybook/react").Args>;
+export default _default;
+export declare const Basic: Story<SelectProps>;
+export declare const Searchable: Story<SelectProps>;
+export declare const Labeled: Story<SelectProps>;
+export declare const CustomOption: Story<SelectProps>;
+export declare const Multi: Story<SelectProps>;
+export declare const Controlled: Story<SelectProps>;

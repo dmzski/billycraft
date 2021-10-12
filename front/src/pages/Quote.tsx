@@ -6,8 +6,9 @@ import { Quote } from "../models/Quote";
 import { filterQuotes, sortQuotes } from "../utils/quote";
 import QuoteModal from "../containers/modals/QuoteModal";
 import QuoteFilterContainer from "../containers/QuoteFilterContainer";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Button, Grid, Loader } from "@coco-ui/core";
+import { ROUTES } from "routes";
 
 const QuotePage = (): JSX.Element => {
   const [quotes, setQuotes] = React.useState<Quote[]>([]);
@@ -16,8 +17,8 @@ const QuotePage = (): JSX.Element => {
   const [showFilters, setShowFilters] = React.useState(false);
   const quotesArchivedQuery = useQuery("quotes-archived", QuoteGraphQL.getAllQuotesArchived, { enabled: false, refetchOnWindowFocus: false });
   const quotesQuery = useQuery("quotes", QuoteGraphQL.getAllQuotesNotArchived, { refetchOnWindowFocus: false });
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const { id } = useParams<any>();
+  const history = useHistory();
 
   const quoteSorted = React.useCallback(() => {
     const list = [...quotes];
@@ -28,7 +29,7 @@ const QuotePage = (): JSX.Element => {
   }, [quotes, quotesArchivedQuery.data, showArchived, filters]);
 
   const goToNewQuote = () => {
-    setIsModalOpen(true);
+    history.push(ROUTES.QUOTE_FORM.path.replace(":id", "new"));
   };
 
   React.useEffect(() => {
@@ -77,13 +78,6 @@ const QuotePage = (): JSX.Element => {
           <Loader />
         </div>
       )}
-      <QuoteModal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        className="modal"
-        overlayClassName="modal-overlay"
-        style={{ content: { minWidth: "80%" } }}
-      />
     </>
   );
 };

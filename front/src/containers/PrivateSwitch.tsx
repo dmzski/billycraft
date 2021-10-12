@@ -6,7 +6,6 @@ import BillPage from "../pages/Bill";
 import Dashboard from "../pages/Dashboard";
 import { useUser } from "../providers/UserProvider";
 import { ROUTES } from "../routes";
-import QuoteForm from "../pages/QuoteForm";
 import Customer from "../pages/Customer";
 import CustomerForm from "../pages/CustomerForm";
 import Settings from "../pages/Settings";
@@ -15,6 +14,7 @@ import Loader from "../components/Loader";
 import ProductsPage from "../pages/ProductsPage";
 import Layout from "./layout/Layout";
 import SupportPage from "../pages/SupportPage";
+import QuoteForm from "../pages/QuoteForm";
 
 const PrivateSwitch = (): JSX.Element => {
   const user = useUser();
@@ -55,6 +55,7 @@ const PrivateSwitch = (): JSX.Element => {
         <Layout>
           <Switch location={location}>
             <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
+            <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
             <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />
             <Route path={ROUTES.BILLS.path} exact={ROUTES.BILLS.exact} component={BillPage} />
             <Route path={ROUTES.CUSTOMERS.path} exact={ROUTES.CUSTOMERS.exact} component={Customer} />
@@ -64,7 +65,6 @@ const PrivateSwitch = (): JSX.Element => {
             <Route path={ROUTES.BILLS.path + "/:id"} component={BillPage} />
             <Route path={ROUTES.CUSTOMERS.path + "/:id"} component={Customer} />
 
-            <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
             <Route path={ROUTES.CUSTOMER_FORM.path} component={CustomerForm} />
 
             <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />

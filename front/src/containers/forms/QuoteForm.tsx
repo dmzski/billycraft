@@ -176,7 +176,7 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
           name="existing-product"
           id="existing-product"
           inputProps={{
-            autocomplete: "nope",
+            autoComplete: "nope",
           }}
           options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
           isLoading={productsQuery.isLoading}
@@ -192,7 +192,7 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
           Ajouter
         </Button>
       </div>
-      <div ref={lineTableRef}>
+      <div ref={lineTableRef} className="my-2">
         <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
         {!cantUpdate && (
           <Button type="button" variant="default" className="w-full mt-2" size="sm" onClick={addLine} disabled={disabled}>

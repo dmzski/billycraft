@@ -3,21 +3,20 @@ import { format, parseJSON } from "date-fns";
 import { Quote } from "models/Quote";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
-import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { ROUTES } from "routes";
 import { QUOTE_STATUS } from "../../constants/quote";
-import QuoteModal from "../../containers/modals/QuoteModal";
 import { QuoteGraphQL } from "../../graphql/QuoteGraphQL";
 import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
 import { useToast } from "../../providers/ToastProvider";
 import { getQuoteTotal } from "../../utils/quote";
 
-const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): JSX.Element => {
+const QuoteTableLine = ({ quote }: { quote: Quote }): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const queryCache = useQueryCache();
   const toast = useToast();
-  const { id } = useParams<any>();
+  const history = useHistory();
 
   const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(QuoteGraphQL.updateQuoteStatus, {
     onSuccess: () => {
@@ -40,14 +39,8 @@ const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): 
   };
 
   const editQuote = () => {
-    setIsModalOpen(!isModalOpen);
+    history.push(ROUTES.QUOTE_FORM.path.replace(":id", quote.id ?? "new"));
   };
-
-  React.useEffect(() => {
-    if (quote && id === quote.id) {
-      setIsModalOpen(true);
-    }
-  }, [id, quote]);
 
   const getStatus = React.useMemo(() => {
     const status = Object.values(QUOTE_STATUS).find((s) => s.enum === quote.status);
@@ -104,7 +97,7 @@ const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): 
   }, [statusRef, openStatusPopup]);
 
   return (
-    <Table.Row isEven={isEven} hoverable onClick={editQuote}>
+    <Table.Row hoverable onClick={editQuote}>
       <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{quote.customer.name}</Table.Cell>
       <Table.Cell className="">{quote.createdAt ? format(parseJSON(quote.createdAt), "dd/MM/yyyy à HH:mm") : "-"}</Table.Cell>
@@ -127,14 +120,6 @@ const QuoteTableLine = ({ quote, isEven }: { quote: Quote; isEven?: boolean }): 
             </ActionButton.Action>
           ))}
         </ActionButton>
-
-        <QuoteModal
-          quote={quote}
-          onRequestClose={() => {
-            setIsModalOpen(false);
-          }}
-          isOpen={isModalOpen}
-        />
       </Table.Cell>
     </Table.Row>
   );

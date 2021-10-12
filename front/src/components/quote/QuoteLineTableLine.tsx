@@ -1,5 +1,6 @@
-import { Icon, Select, Table, TextInput } from "@coco-ui/core";
+import { Icon, Select, List, TextInput } from "@coco-ui/core";
 import React from "react";
+import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { LINE_TYPE } from "../../constants/line";
 import { calculatePriceTTC } from "../../utils/quote";
 
@@ -9,8 +10,10 @@ type QuoteLineTableLineProps = {
   tva: number;
   deleteLine: () => void;
   disabled?: boolean;
+  provided?: DraggableProvided;
+  snapshot?: DraggableStateSnapshot;
 };
-const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteLineTableLineProps): JSX.Element => {
+const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled, provided }: QuoteLineTableLineProps): JSX.Element => {
   const handleChange = (field: string) => (e: any) => {
     const tmp = { ...line };
     let value: any;
@@ -27,8 +30,8 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
   };
 
   return (
-    <>
-      <Table.Cell className="pl-2 py-2">
+    <List.Row ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
+      <List.Cell className="w-48">
         <Select
           disabled={disabled}
           tabIndex={0}
@@ -40,8 +43,8 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
           name={line.line + "-select"}
           id={line.line + "-select"}
         />
-      </Table.Cell>
-      <Table.Cell className="px-1">
+      </List.Cell>
+      <List.Cell className="w-72">
         <TextInput
           placeholder="Nom"
           className="w-full"
@@ -51,11 +54,11 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
           id={"line-" + line.line + "-name"}
           name={"line-" + line.line + "-name"}
         />
-      </Table.Cell>
-      <Table.Cell className="px-1">
+      </List.Cell>
+      <List.Cell className="w-full">
         <TextInput
           placeholder="Description"
-          className="w-full flex my-2"
+          className="w-full flex"
           disabled={disabled}
           value={line.description}
           multiline
@@ -64,8 +67,8 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
           id={"line-" + line.line + "-description"}
           name={"line-" + line.line + "-description"}
         />
-      </Table.Cell>
-      <Table.Cell className="px-1">
+      </List.Cell>
+      <List.Cell className="w-36">
         <TextInput
           disabled={disabled}
           className="text-right w-full"
@@ -75,8 +78,8 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
           value={line.quantity || line.quantity === 0 ? line.quantity : ""}
           onChange={handleChange("quantity")}
         />
-      </Table.Cell>
-      <Table.Cell className="px-1">
+      </List.Cell>
+      <List.Cell className="w-48">
         <TextInput
           disabled={disabled}
           className="text-right w-full"
@@ -86,17 +89,17 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: QuoteL
           value={line.price || line.price === 0 ? line.price : ""}
           onChange={handleChange("price")}
         />
-      </Table.Cell>
-      <Table.Cell className="px-1 text-right">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</Table.Cell>
-      <Table.Cell className="px-1 text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</Table.Cell>
-      <Table.Cell className="px-1">
-        {!disabled && (
+      </List.Cell>
+      <List.Cell className="w-48 items-center flex">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</List.Cell>
+      <List.Cell className="w-48 items-center flex">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</List.Cell>
+      <List.Cell className="w-24 items-center flex">
+        {!disabled ? (
           <button type="button" className="w-full flex justify-center items-center apperance-none" onClick={deleteLine}>
             <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" />
           </button>
-        )}
-      </Table.Cell>
-    </>
+        ) : null}
+      </List.Cell>
+    </List.Row>
   );
 };
 

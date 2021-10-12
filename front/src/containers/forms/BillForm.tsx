@@ -153,7 +153,7 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
           name="existing-product"
           id="existing-product"
           inputProps={{
-            autocomplete: "nope",
+            autoComplete: "nope",
           }}
           options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
           isLoading={productsQuery.isLoading}
