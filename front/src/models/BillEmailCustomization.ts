@@ -1,5 +1,9 @@
-export class BillEmailCustomization {
-  public id?: number;
-  public object = "";
-  public body = "";
+interface BillEmailCustomization {
+  id: number;
+  body: string;
+  object: string;
+  sendAutomatically: boolean;
+  companyId: number;
 }
+
+export default BillEmailCustomization;

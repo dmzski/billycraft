@@ -1,7 +1,15 @@
 import { TextInput } from "@coco-ui/core";
 import React from "react";
 
-const QuoteFilterContainer = ({ filters, setFilters }: any): JSX.Element => {
+type QuoteFilterContainerProps = {
+  filters: Record<string, string>;
+  setFilters: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+};
+
+const QuoteFilterContainer = ({
+  filters,
+  setFilters,
+}: QuoteFilterContainerProps): JSX.Element => {
   return (
     <div className="flex justify-around my-2">
       <TextInput
@@ -16,19 +24,25 @@ const QuoteFilterContainer = ({ filters, setFilters }: any): JSX.Element => {
         placeholder="Filtrer par client"
         label="Client"
         value={filters.customer}
-        onChange={(e: any) => setFilters({ ...filters, customer: e.target.value })}
+        onChange={(e: any) =>
+          setFilters({ ...filters, customer: e.target.value })
+        }
       />
       <TextInput
         placeholder="Filtrer par date de création"
         label="Date de création"
         value={filters.createdAt}
-        onChange={(e: any) => setFilters({ ...filters, createdAt: e.target.value })}
+        onChange={(e: any) =>
+          setFilters({ ...filters, createdAt: e.target.value })
+        }
       />
       <TextInput
         placeholder="Filtrer par date d'envoi"
         label="Date d'envoi"
         value={filters.sentAt}
-        onChange={(e: any) => setFilters({ ...filters, sentAt: e.target.value })}
+        onChange={(e: any) =>
+          setFilters({ ...filters, sentAt: e.target.value })
+        }
       />
     </div>
   );

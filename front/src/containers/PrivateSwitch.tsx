@@ -1,6 +1,12 @@
 import { useKeycloak } from "@react-keycloak/web";
 import React from "react";
-import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import Quote from "../pages/Quote";
 import BillPage from "../pages/Bill";
 import Dashboard from "../pages/Dashboard";
@@ -24,10 +30,16 @@ const PrivateSwitch = (): JSX.Element => {
 
   React.useEffect(() => {
     if (user.data && keycloak.authenticated) {
-      if (!user.data.company && history.location.pathname !== ROUTES.ONBOARDING_COMPANY.path) {
+      if (
+        user.data.companyId === undefined &&
+        history.location.pathname !== ROUTES.ONBOARDING_COMPANY.path
+      ) {
         history.push(ROUTES.ONBOARDING_COMPANY.path);
       }
-      if (user.data.company && history.location.pathname === ROUTES.ONBOARDING_COMPANY.path) {
+      if (
+        user.data.companyId &&
+        history.location.pathname === ROUTES.ONBOARDING_COMPANY.path
+      ) {
         history.push(ROUTES.DASHBOARD.path);
       }
     }
@@ -44,7 +56,7 @@ const PrivateSwitch = (): JSX.Element => {
             </div>
           </Route>
         </Switch>
-      ) : !user.data.company ? (
+      ) : user.data.companyId === undefined ? (
         <Switch location={location}>
           <Route path={ROUTES.ONBOARDING_COMPANY.path} component={Onboarding} />
           <Route>
@@ -56,21 +68,44 @@ const PrivateSwitch = (): JSX.Element => {
           <Switch location={location}>
             <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
             <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
-            <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />
-            <Route path={ROUTES.BILLS.path} exact={ROUTES.BILLS.exact} component={BillPage} />
-            <Route path={ROUTES.CUSTOMERS.path} exact={ROUTES.CUSTOMERS.exact} component={Customer} />
-            <Route path={ROUTES.PRODUCTS.path} exact={ROUTES.PRODUCTS.exact} component={ProductsPage} />
+            <Route
+              path={ROUTES.QUOTES.path}
+              exact={ROUTES.QUOTES.exact}
+              component={Quote}
+            />
+            <Route
+              path={ROUTES.BILLS.path}
+              exact={ROUTES.BILLS.exact}
+              component={BillPage}
+            />
+            <Route
+              path={ROUTES.CUSTOMERS.path}
+              exact={ROUTES.CUSTOMERS.exact}
+              component={Customer}
+            />
+            <Route
+              path={ROUTES.PRODUCTS.path}
+              exact={ROUTES.PRODUCTS.exact}
+              component={ProductsPage}
+            />
 
-            <Route path={ROUTES.QUOTES.path + "/:id"} component={Quote} />
+            <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
             <Route path={ROUTES.BILLS.path + "/:id"} component={BillPage} />
             <Route path={ROUTES.CUSTOMERS.path + "/:id"} component={Customer} />
 
             <Route path={ROUTES.CUSTOMER_FORM.path} component={CustomerForm} />
 
-            <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
-            <Route path={ROUTES.ONBOARDING_COMPANY.path} component={Onboarding} />
+            <Route
+              path={ROUTES.SETTINGS.path}
+              exact={ROUTES.SETTINGS.exact}
+              component={Settings}
+            />
 
-            <Route path={ROUTES.SUPPORT.path} exact={ROUTES.SUPPORT.exact} component={SupportPage} />
+            <Route
+              path={ROUTES.SUPPORT.path}
+              exact={ROUTES.SUPPORT.exact}
+              component={SupportPage}
+            />
 
             <Route>
               <Redirect to={ROUTES.DASHBOARD.path} />

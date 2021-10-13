@@ -5,7 +5,11 @@ type ToastContainerProps = {
   children: React.ReactNode;
 };
 export const ToastContainer = (props: ToastContainerProps): JSX.Element => {
-  return <div className="overflow-hidden z-20 py-2 fixed bottom-0 right-0 flex flex-col-reverse w-72">{props.children}</div>;
+  return (
+    <div className="overflow-hidden z-20 py-2 fixed bottom-0 right-0 flex flex-col-reverse w-72">
+      {props.children}
+    </div>
+  );
 };
 
 const variants = {
@@ -17,7 +21,7 @@ const variants = {
     toast: "shadow bg-success-600 rounded pt-2 text-white",
     progressBar: "bg-white opacity-50",
   },
-  errror: {
+  error: {
     toast: "shadow bg-error-600 rounded pt-2 text-white",
     progressBar: "bg-white opacity-50",
   },
@@ -38,7 +42,12 @@ type ToastProps = {
   variant: ToastVariant;
 };
 
-export const CustomToast = ({ onClose, duration = 3000, message, variant }: ToastProps): JSX.Element => {
+export const CustomToast = ({
+  onClose,
+  duration = 3000,
+  message,
+  variant,
+}: ToastProps): JSX.Element => {
   const toastRef = React.useRef<any>(null);
   const progressBarRef = React.useRef<HTMLDivElement>(null);
   const handleClose = (_event?: SyntheticEvent, reason?: string) => {
@@ -83,7 +92,8 @@ export const CustomToast = ({ onClose, duration = 3000, message, variant }: Toas
       <div
         ref={progressBarRef}
         className={`${
-          (variants as any)[variant]?.progressBar ?? variants.default.progressBar
+          (variants as any)[variant]?.progressBar ??
+          variants.default.progressBar
         } ease-linear mt-2 h-1 w-full transition transition-transform transform`}
         style={{ transitionDuration: `${Math.round(duration / 1000)}s` }}
       />

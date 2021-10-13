@@ -1,15 +1,15 @@
-import { Quote } from "./Quote";
-
-export class Customer {
-  id?: number;
-  city = "";
-  contact = "";
-  name = "";
-  phoneNumber = "";
-  postalCode = "";
-  email = "";
-  address = "";
-  quotes: Quote[] = [];
-  createdAt?: Date;
-  updatedAt?: Date;
+interface Customer {
+  id: number;
+  name: string;
+  contact: string;
+  phoneNumber: string;
+  city: string;
+  postalCode: string;
+  address: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: number;
 }
+
+export default Customer;

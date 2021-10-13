@@ -1,7 +1,19 @@
 /* eslint-disable  */
 import React from "react";
 
-const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, onChange, placeholder, wrap, disabled, options, onOptionClick }: any) => {
+const MultiLineInputAutoComplete = ({
+  id,
+  isLoading,
+  isError,
+  className,
+  value,
+  onChange,
+  placeholder,
+  wrap,
+  disabled,
+  options,
+  onOptionClick,
+}: any) => {
   const textAreaRef = React.useRef<any>(null);
   let currentId = 0;
   const [focused, setFocused] = React.useState<any>(null);
@@ -20,7 +32,9 @@ const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, 
         setFocused(document.getElementById(id + "-option-0"));
       } else {
         const focusId = focused.id;
-        const actualN = parseInt(focusId.split("-")[focusId.split("-").length - 1]);
+        const actualN = Number(
+          focusId.split("-")[focusId.split("-").length - 1]
+        );
         const nextId = id + "-option-" + (actualN + n);
         const nextFocus = document.getElementById(nextId);
         if (nextFocus) {
@@ -88,11 +102,15 @@ const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, 
     document.addEventListener("click", handleFocusLeave);
     searchInput?.addEventListener("focus", handleFocus);
     searchInput?.addEventListener("click", preventHandleFocusLeave);
-    document.getElementById(id + "-result")?.addEventListener("click", preventHandleFocusLeave);
+    document
+      .getElementById(id + "-result")
+      ?.addEventListener("click", preventHandleFocusLeave);
 
     return () => {
       if (searchInput) searchInput.removeEventListener("focus", handleFocus);
-      document.getElementById(id + "-result")?.removeEventListener("click", preventHandleFocusLeave);
+      document
+        .getElementById(id + "-result")
+        ?.removeEventListener("click", preventHandleFocusLeave);
       searchInput?.removeEventListener("click", preventHandleFocusLeave);
       document.removeEventListener("click", handleFocusLeave);
     };
@@ -101,7 +119,8 @@ const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, 
   React.useEffect(() => {
     function resize() {
       textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+      textAreaRef.current.style.height =
+        textAreaRef.current.scrollHeight + "px";
     }
     /* 0-timeout to get the already changed textAreaRef.current */
     function delayedResize() {
@@ -166,7 +185,10 @@ const MultiLineInputAutoComplete = ({ id, isLoading, isError, className, value, 
         >
           {isLoading && <div className="absolute right-0">...</div>}
           {isError && <span>Une erreur est survenue</span>}
-          {options && options.map((option: any, index: number) => getValueComponent(option))}
+          {options &&
+            options.map((option: any, index: number) =>
+              getValueComponent(option)
+            )}
         </ul>
       )}
     </div>

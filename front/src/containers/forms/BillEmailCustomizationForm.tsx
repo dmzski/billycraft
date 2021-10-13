@@ -1,24 +1,60 @@
 import { Button, Switch, TextInput } from "@coco-ui/core";
 import React from "react";
-import { BillEmailCustomization } from "../../models/BillEmailCustomization";
+import { FormEvent } from "react-router/node_modules/@types/react";
+import BillEmailCustomization from "../../models/BillEmailCustomization";
 
-const BillEmailCustomizationForm = ({ billEmailCustomization, onSubmit }: any): JSX.Element => {
-  const [newBillEmailCustomization, setNewBillEmailCustomization] = React.useState(billEmailCustomization || new BillEmailCustomization());
+const defaultValues = {
+  body: "",
+  object: "",
+  sendAutomatically: false,
+} as BillEmailCustomization;
+
+type BillEmailCustomizationFormProps = {
+  billEmailCustomization: BillEmailCustomization;
+  onSubmit: (e: FormEvent, values: BillEmailCustomization) => void;
+};
+
+const BillEmailCustomizationForm = ({
+  billEmailCustomization,
+  onSubmit,
+}: BillEmailCustomizationFormProps): JSX.Element => {
+  const [
+    newBillEmailCustomization,
+    setNewBillEmailCustomization,
+  ] = React.useState<BillEmailCustomization>(
+    billEmailCustomization || defaultValues
+  );
 
   React.useEffect(() => {
-    setNewBillEmailCustomization(billEmailCustomization || new BillEmailCustomization());
+    setNewBillEmailCustomization(billEmailCustomization || defaultValues);
   }, [billEmailCustomization]);
 
   const handleToggle = (field: string) => (e: any) => {
-    setNewBillEmailCustomization({ ...newBillEmailCustomization, [field]: e.target.checked });
+    setNewBillEmailCustomization({
+      ...newBillEmailCustomization,
+      [field]: e.target.checked,
+    });
   };
 
   return (
-    <form onSubmit={(e) => onSubmit(e, newBillEmailCustomization)} className="w-full">
-      <h2 className="font-bold text-xl underline leading-10">Personnalisation de l&lsquo;email</h2>
+    <form
+      onSubmit={(e) => onSubmit(e, newBillEmailCustomization)}
+      className="w-full"
+    >
+      <h2 className="font-bold text-xl underline leading-10">
+        Personnalisation de l&lsquo;email
+      </h2>
       <div className="my-2 flex">
-        <Switch labelPosition="right" checked={newBillEmailCustomization.sendAutomatically} id="sendAutomatically" onChange={handleToggle("sendAutomatically")}>
-          <div className="ml-2">Envoyer l&lsquo;email automatiquement lorsque la facture passe au status &ldquo;Envoyé&ldquo;</div>
+        <Switch
+          labelPosition="right"
+          checked={newBillEmailCustomization.sendAutomatically}
+          id="sendAutomatically"
+          onChange={handleToggle("sendAutomatically")}
+        >
+          <div className="ml-2">
+            Envoyer l&lsquo;email automatiquement lorsque la facture passe au
+            status &ldquo;Envoyé&ldquo;
+          </div>
         </Switch>
       </div>
       <div className="bg-info-200 text-info-700 rounded p-3 mb-3">
@@ -34,7 +70,12 @@ const BillEmailCustomizationForm = ({ billEmailCustomization, onSubmit }: any): 
           name="object"
           label="Objet du mail"
           value={newBillEmailCustomization.object}
-          onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, object: e.target.value })}
+          onChange={(e: any) =>
+            setNewBillEmailCustomization({
+              ...newBillEmailCustomization,
+              object: e.target.value,
+            })
+          }
           placeholder="Facture #BILL_ID# : #BILL_TITLE#"
           className="border-2 border-gray-200 p-3 w-full rounded"
         />
@@ -47,7 +88,12 @@ const BillEmailCustomizationForm = ({ billEmailCustomization, onSubmit }: any): 
           multiline
           rows={5}
           value={newBillEmailCustomization.body}
-          onChange={(e: any) => setNewBillEmailCustomization({ ...newBillEmailCustomization, body: e.target.value })}
+          onChange={(e: any) =>
+            setNewBillEmailCustomization({
+              ...newBillEmailCustomization,
+              body: e.target.value,
+            })
+          }
           placeholder="Vous trouvez en pièce jointe la facture #BILL_ID# concernant #BILL_TITLE#.&#10;Cordialement,"
           className="border-2 border-gray-200 p-3 w-full rounded"
         />

@@ -2,7 +2,7 @@ import { Table } from "@coco-ui/core";
 import React from "react";
 import { useParams } from "react-router-dom";
 import CustomerModal from "containers/modals/CustomerModal";
-import { Customer } from "models/Customer";
+import Customer from "models/Customer";
 
 const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -20,10 +20,17 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
 
   return (
     <Table.Row hoverable onClick={editCustomer}>
-      <Table.Cell className="truncate py-3 pl-2 w-1/3">{customer.name}</Table.Cell>
+      <Table.Cell className="truncate py-3 pl-2 w-1/3">
+        {customer.name}
+      </Table.Cell>
       <Table.Cell className="truncate w-1/3">{customer.contact}</Table.Cell>
       <Table.Cell className="w-48">
-        {customer.phoneNumber ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5") : ""}
+        {customer.phoneNumber
+          ? customer.phoneNumber.replace(
+              /(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,
+              "$1 $2 $3 $4 $5"
+            )
+          : ""}
       </Table.Cell>
       <Table.Cell className="w-48">
         {customer.email}

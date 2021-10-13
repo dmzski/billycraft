@@ -1,20 +1,22 @@
 import { ActionButton, Icon, Table } from "@coco-ui/core";
+import { BillApi } from "api/BillApi";
 import { format, parseJSON } from "date-fns";
-import { Bill } from "models/Bill";
+import Bill from "models/Bill";
+import Customer from "models/Customer";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
 import { BILL_STATUS } from "../../constants/bill";
 import BillModal from "../../containers/modals/BillModal";
-import { BillGraphQL } from "../../graphql/BillGraphQL";
-import { BillStatusEnum } from "../../models/BillStatusEnum";
+import { BillStatusEnum } from "../../models/Bill";
 import { useToast } from "../../providers/ToastProvider";
 import { getBillTotal } from "../../utils/bill";
 
 type BillTableLineProps = {
   bill: Bill;
+  customer?: Customer;
 };
-const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
+const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   const [openStatusPopup, setOpenStatusPopup] = React.useState<boolean>(false);
   const statusRef = React.useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -22,12 +24,15 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
   const toast = useToast();
   const { id } = useParams<any>();
 
-  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(BillGraphQL.updateBillStatus, {
-    onSuccess: () => {
-      toast.show({ message: "Facture mis à jour", variant: "success" });
-    },
-    throwOnError: true,
-  });
+  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
+    BillApi.updateStatus,
+    {
+      onSuccess: () => {
+        toast.show({ message: "Facture mis à jour", variant: "success" });
+      },
+      throwOnError: true,
+    }
+  );
 
   const updateBillStatus = (status: BillStatusEnum) => async (e: any) => {
     e.stopPropagation();
@@ -35,11 +40,14 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
       return false;
     }
     try {
-      bill.id && (await updateBillStatusMutation({ id: bill.id, statusEnum: status }));
+      bill.id && (await updateBillStatusMutation({ id: bill.id, status }));
       setOpenStatusPopup(false);
       queryCache.invalidateQueries("bills");
     } catch (error) {
-      toast.show({ message: "Erreur lors de la mise à jour", variant: "error" });
+      toast.show({
+        message: "Erreur lors de la mise à jour",
+        variant: "error",
+      });
       console.error("Error !!!", error);
     }
   };
@@ -55,7 +63,9 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
   }, [id, bill]);
 
   const getStatus = React.useMemo(() => {
-    const status = Object.values(BILL_STATUS).find((s) => s.enum === bill.status);
+    const status = Object.values(BILL_STATUS).find(
+      (s) => s.enum === bill.status
+    );
 
     return (
       <div className="flex items-center">
@@ -69,7 +79,11 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
     const array = [];
     switch (bill.status) {
       case BillStatusEnum.SENT:
-        array.push(BILL_STATUS.REFUSED, BILL_STATUS.PAYMENT_PAID, BILL_STATUS.ARCHIVED);
+        array.push(
+          BILL_STATUS.REFUSED,
+          BILL_STATUS.PAYMENT_PAID,
+          BILL_STATUS.ARCHIVED
+        );
         break;
       case BillStatusEnum.REFUSED:
         array.push(BILL_STATUS.DRAFT, BILL_STATUS.ARCHIVED);
@@ -86,7 +100,11 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
 
   React.useEffect(() => {
     function handleClickOutside(event: any) {
-      if (statusRef.current && !statusRef.current.contains(event.target) && openStatusPopup) {
+      if (
+        statusRef.current &&
+        !statusRef.current.contains(event.target) &&
+        openStatusPopup
+      ) {
         event.stopPropagation();
         event.preventDefault();
         setOpenStatusPopup(false);
@@ -105,10 +123,20 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
   return (
     <Table.Row onClick={editBill} hoverable>
       <Table.Cell className="pl-2 py-3 truncate">{bill.title}</Table.Cell>
-      <Table.Cell className="truncate">{bill.customer.name}</Table.Cell>
-      <Table.Cell className="">{bill.createdAt ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell className="">{bill.sentAt ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm") : ""}</Table.Cell>
-      <Table.Cell className="">{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
+      <Table.Cell className="truncate">{customer?.name ?? "N.C"}</Table.Cell>
+      <Table.Cell className="">
+        {bill.createdAt
+          ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm")
+          : ""}
+      </Table.Cell>
+      <Table.Cell className="">
+        {bill.sentAt
+          ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm")
+          : ""}
+      </Table.Cell>
+      <Table.Cell className="">
+        {Math.round(getBillTotal(bill) * 100) / 100} €
+      </Table.Cell>
       <Table.Cell
         className=""
         onClick={(event) => {
@@ -118,7 +146,10 @@ const BillTableLine = ({ bill }: BillTableLineProps): JSX.Element => {
         <ActionButton size="sm" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map((s, index) => (
-            <ActionButton.Action key={index} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
+            <ActionButton.Action
+              key={index}
+              onClick={updateBillStatus(s.enum as BillStatusEnum)}
+            >
               <div className="flex items-center">
                 <Icon className="mr-2" name={s.icon as any} />
                 <span>{s.text}</span>

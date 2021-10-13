@@ -1,8 +1,6 @@
 import { Icon, Select, Table, TextInput } from "@coco-ui/core";
 import React from "react";
-import { useQuery } from "react-query";
 import { LINE_TYPE } from "../../constants/line";
-import { ProductGraphQL } from "../../graphql/ProductGraphQL";
 import { calculatePriceTTC } from "../../utils/bill";
 
 type BillLineTableLineProps = {
@@ -12,7 +10,13 @@ type BillLineTableLineProps = {
   deleteLine: () => void;
   disabled?: boolean;
 };
-const BillLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: BillLineTableLineProps): JSX.Element => {
+const BillLineTableLine = ({
+  line,
+  setLine,
+  tva,
+  deleteLine,
+  disabled,
+}: BillLineTableLineProps): JSX.Element => {
   const handleChange = (field: string) => (e: any) => {
     const tmp = { ...line };
     let value: any;
@@ -34,11 +38,12 @@ const BillLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: BillLin
         <Select
           disabled={disabled}
           tabIndex={0}
-          value={Object.values(LINE_TYPE).find(({ enum: type }) => type === line.type)}
-          onChange={(result) => setLine({ ...line, type: result.enum })}
-          textKey="name"
-          valueKey="enum"
-          options={Object.values(LINE_TYPE)}
+          value={line.type}
+          onChange={(result) => setLine({ ...line, type: result })}
+          options={Object.values(LINE_TYPE).map((type) => ({
+            value: type.enum,
+            label: type.name,
+          }))}
           name={line.line + "-select"}
           id={line.line + "-select"}
         />
@@ -89,12 +94,25 @@ const BillLineTableLine = ({ line, setLine, tva, deleteLine, disabled }: BillLin
           onChange={handleChange("price")}
         />
       </Table.Cell>
-      <Table.Cell className="px-1 text-right">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</Table.Cell>
-      <Table.Cell className="px-1 text-right">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</Table.Cell>
+      <Table.Cell className="px-1 text-right">
+        {Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €
+      </Table.Cell>
+      <Table.Cell className="px-1 text-right">
+        {Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 ||
+          0}{" "}
+        €
+      </Table.Cell>
       <Table.Cell className="px-1">
         {!disabled && (
-          <button type="button" className="w-full flex justify-center items-center apperance-none" onClick={deleteLine}>
-            <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" />
+          <button
+            type="button"
+            className="w-full flex justify-center items-center apperance-none"
+            onClick={deleteLine}
+          >
+            <Icon
+              name="trash"
+              className="p-1 flex text-white rounded-full bg-error-600"
+            />
           </button>
         )}
       </Table.Cell>

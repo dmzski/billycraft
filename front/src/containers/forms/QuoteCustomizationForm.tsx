@@ -1,22 +1,35 @@
 import { Button, Switch, TextInput } from "@coco-ui/core";
+import { QuoteCustomizationApi } from "api/QuoteCustomizationApi";
+import QuoteCustomization from "models/QuoteCustomization";
 import React from "react";
 import { useMutation } from "react-query";
-import { QuoteCustomizationGraphQL } from "../../graphql/QuoteCustomizationGraphQL";
 import { useToast } from "../../providers/ToastProvider";
 
-const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
-  const [newQuoteCustomization, setNewQuoteCustomization] = React.useState<any>({} as any);
+type QuoteCustomizationFormProps = {
+  quoteCustomization: QuoteCustomization;
+};
+const QuoteCustomizationForm = ({
+  quoteCustomization,
+}: QuoteCustomizationFormProps): JSX.Element => {
+  const [
+    newQuoteCustomization,
+    setNewQuoteCustomization,
+  ] = React.useState<QuoteCustomization>({} as QuoteCustomization);
   const toast = useToast();
-  const [updateQuoteCustomizationMutation, updateQuoteCustomizationMutationState] = useMutation(QuoteCustomizationGraphQL.updateMyQuoteCustomization, {
+  const [
+    updateQuoteCustomizationMutation,
+    updateQuoteCustomizationMutationState,
+  ] = useMutation(QuoteCustomizationApi.updateMine, {
     onSuccess: () => {
       toast.show({ message: "Modification enregistrée", variant: "success" });
     },
   });
 
-  const handleToggle = (property: any) => () => {
-    const tmp = { ...newQuoteCustomization };
-    tmp[property] = !tmp[property];
-    setNewQuoteCustomization(tmp);
+  const handleToggle = (property: keyof QuoteCustomization) => () => {
+    setNewQuoteCustomization((current) => ({
+      ...current,
+      [property]: !current[property],
+    }));
   };
 
   const onSubmit = (e: any) => {
@@ -34,14 +47,24 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
 
   return (
     <form onSubmit={onSubmit} className="w-full">
-      <h2 className="font-bold text-xl underline leading-10">Personnalisation du PDF</h2>
+      <h2 className="font-bold text-xl underline leading-10">
+        Personnalisation du PDF
+      </h2>
       <div className="flex mt-3 w-full content-center items-center">
-        <div className="w-10 h-10 mr-3 border-2 border-black" style={{ backgroundColor: newQuoteCustomization.mainColor || "white" }}></div>
+        <div
+          className="w-10 h-10 mr-3 border-2 border-black"
+          style={{
+            backgroundColor: newQuoteCustomization.mainColor || "white",
+          }}
+        ></div>
         <TextInput
           id="mainColor"
           value={newQuoteCustomization.mainColor}
           onChange={(e: any) => {
-            setNewQuoteCustomization({ ...newQuoteCustomization, mainColor: e.target.value });
+            setNewQuoteCustomization({
+              ...newQuoteCustomization,
+              mainColor: e.target.value,
+            });
           }}
           label="Couleur principale"
           placeholder="Couleur en hexadecimale : #000000"
@@ -52,7 +75,11 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
         <div className="flex flex-col">
           <h3 className="text-lg">Informations du client</h3>
           <div className="mt-2 flex">
-            <Switch checked={newQuoteCustomization.displayCustomerEmail} id="displayCustomerEmail" onChange={handleToggle("displayCustomerEmail")}>
+            <Switch
+              checked={newQuoteCustomization.displayCustomerEmail}
+              id="displayCustomerEmail"
+              onChange={handleToggle("displayCustomerEmail")}
+            >
               Afficher l&lsquo;email du client
             </Switch>
           </div>
@@ -69,7 +96,11 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
         <div className="flex flex-col">
           <h3 className="text-lg">Informations de l&lsquo;entreprise</h3>
           <div className="mt-2 flex">
-            <Switch checked={newQuoteCustomization.displayCompanyEmail} id="displayCompanyEmail" onChange={handleToggle("displayCompanyEmail")}>
+            <Switch
+              checked={newQuoteCustomization.displayCompanyEmail}
+              id="displayCompanyEmail"
+              onChange={handleToggle("displayCompanyEmail")}
+            >
               Afficher l&lsquo;email de mon entreprise
             </Switch>
           </div>
@@ -85,7 +116,9 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
         </div>
       </div>
       <div className="mt-3">
-        <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">Après le tableau</h1>
+        <h1 className="text-lg font-bold border-b-2 pb-2 pt-2">
+          Après le tableau
+        </h1>
         <TextInput
           id="afterTable"
           rows={5}
@@ -94,7 +127,12 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
           value={newQuoteCustomization.afterTable}
           className="w-full"
           maxLength={1000}
-          onChange={(e: any) => setNewQuoteCustomization({ ...newQuoteCustomization, afterTable: e.target.value })}
+          onChange={(e: any) =>
+            setNewQuoteCustomization({
+              ...newQuoteCustomization,
+              afterTable: e.target.value,
+            })
+          }
         />
       </div>
       <div className="mt-2">
@@ -107,10 +145,20 @@ const QuoteCustomizationForm = ({ quoteCustomization }: any): JSX.Element => {
           placeholder="Pied de page"
           value={newQuoteCustomization.footer}
           maxLength={1000}
-          onChange={(e: any) => setNewQuoteCustomization({ ...newQuoteCustomization, footer: e.target.value })}
+          onChange={(e: any) =>
+            setNewQuoteCustomization({
+              ...newQuoteCustomization,
+              footer: e.target.value,
+            })
+          }
         />
       </div>
-      <Button type="submit" size="md" className="w-full mt-5" onClick={onSubmit}>
+      <Button
+        type="submit"
+        size="md"
+        className="w-full mt-5"
+        onClick={onSubmit}
+      >
         Enregister
       </Button>
     </form>

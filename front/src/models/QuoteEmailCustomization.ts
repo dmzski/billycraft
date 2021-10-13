@@ -1,5 +1,9 @@
-export class QuoteEmailCustomization {
-  public id?: number;
-  public object = "";
-  public body = "";
+interface QuoteEmailCustomization {
+  id?: number;
+  body: string;
+  object: string;
+  sendAutomatically: boolean;
+  companyId: number;
 }
+
+export default QuoteEmailCustomization;

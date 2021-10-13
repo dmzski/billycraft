@@ -1,30 +1,47 @@
 import { Loader } from "@coco-ui/core";
+import { BillCustomizationApi } from "api/BillCustomizationApi";
+import { BillEmailCustomizationApi } from "api/BillEmailCustomizationApi";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
-import { BillCustomizationGraphQL } from "../../graphql/BillCustomizationGraphQL";
-import { BillEmailCustomizationGraphQL } from "../../graphql/BillEmailCustomizationGraphQL";
 import { useToast } from "../../providers/ToastProvider";
 import BillCustomizationForm from "../forms/BillCustomizationForm";
 import BillEmailCustomizationForm from "../forms/BillEmailCustomizationForm";
 
 const BillTab = (): JSX.Element => {
   const toast = useToast();
-  const billCustomizationQuery = useQuery("bill-customization", BillCustomizationGraphQL.getMyInformation, {
-    refetchOnWindowFocus: false,
-  });
+  const billCustomizationQuery = useQuery(
+    "bill-customization",
+    BillCustomizationApi.findMine,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
-  const billEmailCustomizationQuery = useQuery("bill-email-customization", BillEmailCustomizationGraphQL.getMine, {
-    refetchOnWindowFocus: false,
-  });
-  const [saveEmailCustomization, saveEmailCustomizationState] = useMutation(BillEmailCustomizationGraphQL.updateMyBillCustomization, {
-    onSuccess: () => {
-      billEmailCustomizationQuery.refetch();
-      toast.show({ message: "Modifications enregistrées", variant: "success" });
-    },
-    throwOnError: true,
-  });
+  const billEmailCustomizationQuery = useQuery(
+    "bill-email-customization",
+    BillEmailCustomizationApi.findMine,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  const [saveEmailCustomization, saveEmailCustomizationState] = useMutation(
+    BillEmailCustomizationApi.updateMine,
+    {
+      onSuccess: () => {
+        billEmailCustomizationQuery.refetch();
+        toast.show({
+          message: "Modifications enregistrées",
+          variant: "success",
+        });
+      },
+      throwOnError: true,
+    }
+  );
 
-  const handleEmailCustomizationSubmit = async (e: any, billEmailCustomization: any) => {
+  const handleEmailCustomizationSubmit = async (
+    e: any,
+    billEmailCustomization: any
+  ) => {
     e.preventDefault();
     try {
       if (!saveEmailCustomizationState.isLoading) {
@@ -39,7 +56,9 @@ const BillTab = (): JSX.Element => {
     <div className="w-3/4">
       {billCustomizationQuery.data && (
         <div>
-          <BillCustomizationForm billCustomization={billCustomizationQuery.data} />
+          <BillCustomizationForm
+            billCustomization={billCustomizationQuery.data}
+          />
         </div>
       )}
       {billCustomizationQuery.isLoading && (
@@ -54,10 +73,18 @@ const BillTab = (): JSX.Element => {
           <Loader />
         </div>
       )}
-      {billEmailCustomizationQuery.isError && <div>Une erreur est survenue lors du chargement de la personnalisation des emails</div>}
+      {billEmailCustomizationQuery.isError && (
+        <div>
+          Une erreur est survenue lors du chargement de la personnalisation des
+          emails
+        </div>
+      )}
       {billEmailCustomizationQuery.data && (
         <div className="mt-10">
-          <BillEmailCustomizationForm billEmailCustomization={billEmailCustomizationQuery.data} onSubmit={handleEmailCustomizationSubmit} />
+          <BillEmailCustomizationForm
+            billEmailCustomization={billEmailCustomizationQuery.data}
+            onSubmit={handleEmailCustomizationSubmit}
+          />
         </div>
       )}
     </div>

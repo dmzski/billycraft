@@ -45,7 +45,9 @@ const SelectInput = ({
         setFocused(document.getElementById(id + "-option-0"));
       } else {
         const focusId = focused.id;
-        const actualN = parseInt(focusId.split("-")[focusId.split("-").length - 1]);
+        const actualN = Number(
+          focusId.split("-")[focusId.split("-").length - 1]
+        );
         const nextId = id + "-option-" + (actualN + n);
         const nextFocus = document.getElementById(nextId);
         if (nextFocus) {
@@ -115,11 +117,15 @@ const SelectInput = ({
     document.addEventListener("click", handleFocusLeave);
     searchInput?.addEventListener("focus", handleFocus);
     searchInput?.addEventListener("click", preventHandleFocusLeave);
-    document.getElementById(id + "-result")?.addEventListener("click", preventHandleFocusLeave);
+    document
+      .getElementById(id + "-result")
+      ?.addEventListener("click", preventHandleFocusLeave);
 
     return () => {
       if (searchInput) searchInput.removeEventListener("focus", handleFocus);
-      document.getElementById(id + "-result")?.removeEventListener("click", preventHandleFocusLeave);
+      document
+        .getElementById(id + "-result")
+        ?.removeEventListener("click", preventHandleFocusLeave);
       searchInput?.removeEventListener("click", preventHandleFocusLeave);
       document.removeEventListener("click", handleFocusLeave);
     };
@@ -140,9 +146,20 @@ const SelectInput = ({
 
   return (
     <div className="relative w-full">
-      <input disabled={disabled} id={id} className={className || "select-input"} placeholder={placeholder} type="text" value={value} onChange={onChange} />
+      <input
+        disabled={disabled}
+        id={id}
+        className={className || "select-input"}
+        placeholder={placeholder}
+        type="text"
+        value={value}
+        onChange={onChange}
+      />
       {isLoading && (
-        <div className="absolute top-0 flex w-auto h-full items-center" style={{ right: "1rem" }}>
+        <div
+          className="absolute top-0 flex w-auto h-full items-center"
+          style={{ right: "1rem" }}
+        >
           <Loader size="sm" />
         </div>
       )}
@@ -156,8 +173,17 @@ const SelectInput = ({
           {data &&
             data.map((option: any, index: number) => (
               <div className="w-full" key={index}>
-                {option.header && <div className="px-2 py-2 font-bold text-lg">{option.header}</div>}
-                <ul>{option.values && option.values.map((value: any) => getValueComponent(value, option.header))}</ul>
+                {option.header && (
+                  <div className="px-2 py-2 font-bold text-lg">
+                    {option.header}
+                  </div>
+                )}
+                <ul>
+                  {option.values &&
+                    option.values.map((value: any) =>
+                      getValueComponent(value, option.header)
+                    )}
+                </ul>
               </div>
             ))}
         </div>

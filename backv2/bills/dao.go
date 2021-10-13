@@ -19,6 +19,19 @@ func (dao BillDao) FindAllByTenant(tenant int) (bills []models.Bill) {
 	return
 }
 
+func (dao BillDao) FindAllByTenantByStatusIs(tenant int, status string) (bill []models.Bill) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status = ?", tenant, status).Find(&bill).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+func (dao BillDao) FindAllByTenantByStatusIsNot(tenant int, status string) (bill []models.Bill) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status <> ?", tenant, status).Find(&bill).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao BillDao) FindOneByIdAndTenant(id string, tenant int) (bill models.Bill) {
 	if err := database.DBConn.Preload("Lines").Find(&bill, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)

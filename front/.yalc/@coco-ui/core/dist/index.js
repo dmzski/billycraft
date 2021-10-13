@@ -1130,26 +1130,23 @@ var Radio = function (_a) {
 };
 
 var Option = function (_a) {
-    var isMulti = _a.isMulti, value = _a.value, valueKey = _a.valueKey, textKey = _a.textKey, option = _a.option, focused = _a.focused, _b = _a.renderOption, renderOption = _b === void 0 ? function (_a) {
-        var option = _a.option, isSelected = _a.isSelected;
-        return (React__default['default'].createElement("div", { className: "flex items-center" },
-            option[textKey],
-            isMulti && isSelected ? (React__default['default'].createElement(CheckIcon, { className: "fill-current h-4 w-4" })) : null));
-    } : _b, onOptionClick = _a.onOptionClick;
+    var isMulti = _a.isMulti, value = _a.value, option = _a.option, focused = _a.focused, onOptionClick = _a.onOptionClick;
     var isSelected = React__default['default'].useMemo(function () {
-        var _a;
-        return isMulti
-            ? ((_a = value) === null || _a === void 0 ? void 0 : _a.findIndex(function (v) { return v[valueKey] === option[valueKey]; })) > -1
-            : option[valueKey] === value;
-    }, [value, valueKey, option, isMulti]);
-    return (React__default['default'].createElement("div", { className: "truncate py-1 px-1 hover:bg-primary-600 hover:text-white cursor-pointer " + (focused === option ? 'bg-primary-600 text-white' : '') + " " + (isSelected && focused !== option ? 'text-primary-600' : ''), key: option[valueKey], id: option[valueKey], role: "option", "aria-selected": isSelected, onClick: function (event) { return onOptionClick(option, event); } }, renderOption({ option: option, isSelected: isSelected })));
+        return isMulti && Array.isArray(value)
+            ? value.includes(option.value)
+            : option.value === value;
+    }, [value, option, isMulti]);
+    return (React__default['default'].createElement("div", { className: "truncate py-1 px-1 hover:bg-primary-600 hover:text-white cursor-pointer " + (focused === option.value ? 'bg-primary-600 text-white' : '') + " " + (isSelected && focused !== option.value ? 'text-primary-600' : ''), key: option.value, id: "" + option.value, role: "option", "aria-selected": isSelected, onClick: function (event) { return onOptionClick(option, event); } },
+        React__default['default'].createElement("div", { className: "flex items-center" },
+            option.label,
+            isMulti && isSelected ? (React__default['default'].createElement(CheckIcon, { className: "fill-current h-4 w-4" })) : null)));
 };
 
 var OptionList = React__default['default'].forwardRef(function (_a, ref) {
-    var focused = _a.focused, isOpen = _a.isOpen, name = _a.name, options = _a.options, onOptionClick = _a.onOptionClick, valueKey = _a.valueKey, textKey = _a.textKey, value = _a.value, isMulti = _a.isMulti, renderOption = _a.renderOption;
+    var focused = _a.focused, isOpen = _a.isOpen, name = _a.name, options = _a.options, onOptionClick = _a.onOptionClick, value = _a.value, isMulti = _a.isMulti;
     return (React__default['default'].createElement("div", { className: "z-10 absolute top-full left-0 " + (isOpen
             ? 'border shadow bg-white mt-1 max-h-40 w-full overflow-y-scroll'
-            : 'sr-only'), ref: ref, "aria-label": name + " listbox", id: name + '-list', role: "listbox" }, options.map(function (option, index) { return (React__default['default'].createElement(Option, { renderOption: renderOption, focused: focused, key: option[valueKey], isMulti: isMulti, option: option, index: index, valueKey: valueKey, textKey: textKey, onOptionClick: onOptionClick, value: value })); })));
+            : 'sr-only'), ref: ref, "aria-label": name + " listbox", id: name + '-list', role: "listbox" }, options.map(function (option, index) { return (React__default['default'].createElement(Option, { focused: focused, key: option.value, isMulti: isMulti, option: option, index: index, onOptionClick: onOptionClick, value: value })); })));
 });
 OptionList.displayName = 'OptionList';
 
@@ -1182,10 +1179,14 @@ var Label = function (_a) {
 };
 
 var defaultFilterOptions = function (_a) {
-    var options = _a.options, textKey = _a.textKey, search = _a.search;
+    var options = _a.options, search = _a.search;
     return options.filter(function (option) {
-        var _a;
-        return (_a = option[textKey]) === null || _a === void 0 ? void 0 : _a.toLowerCase().replace(/\s+/g, '').includes(search.toLowerCase().replace(/\s+/g, ''));
+        return typeof option.label === 'string'
+            ? option.label
+                .toLowerCase()
+                .replace(/\s+/g, '')
+                .includes(search.toLowerCase().replace(/\s+/g, ''))
+            : true;
     });
 };
 var getContainerClassName = function (_a) {
@@ -1196,17 +1197,11 @@ var getContainerClassName = function (_a) {
 };
 var Select = React__default['default'].forwardRef(function (_a, ref) {
     var _b, _c;
-    var className = _a.className, containerClassNameProp = _a.containerClassName, id = _a.id, _d = _a.name, name = _d === void 0 ? '' : _d, _e = _a.options, options = _e === void 0 ? [] : _e, placeholder = _a.placeholder, onChange = _a.onChange, onSearchChange = _a.onSearchChange, value = _a.value, parentRef = _a.parentRef, disabled = _a.disabled, label = _a.label, _f = _a.labelVariant, labelVariant = _f === void 0 ? 'outside' : _f, readOnly = _a.readOnly, tabIndex = _a.tabIndex, isLoading = _a.isLoading, isSearchable = _a.isSearchable, isMulti = _a.isMulti, isMultiLine = _a.isMultiLine, additionalInputProps = _a.inputProps, searchValue = _a.searchValue, _g = _a.textKey, textKey = _g === void 0 ? 'label' : _g, _h = _a.filterOptions, filterOptions = _h === void 0 ? defaultFilterOptions : _h, _j = _a.valueKey, valueKey = _j === void 0 ? 'value' : _j, _k = _a.renderSelected, renderSelected = _k === void 0 ? function (value) {
-        return isMulti
-            ? value
-                .map(function (value) { return value[textKey]; })
-                .join(', ')
-            : value[textKey];
-    } : _k, renderOption = _a.renderOption;
+    var className = _a.className, containerClassNameProp = _a.containerClassName, id = _a.id, _d = _a.name, name = _d === void 0 ? '' : _d, _e = _a.options, options = _e === void 0 ? [] : _e, placeholder = _a.placeholder, onChange = _a.onChange, onSearchChange = _a.onSearchChange, isMulti = _a.isMulti, _f = _a.value, value = _f === void 0 ? isMulti ? [] : undefined : _f, parentRef = _a.parentRef, disabled = _a.disabled, label = _a.label, _g = _a.labelVariant, labelVariant = _g === void 0 ? 'outside' : _g, readOnly = _a.readOnly, tabIndex = _a.tabIndex, isLoading = _a.isLoading, isSearchable = _a.isSearchable, isMultiLine = _a.isMultiLine, additionalInputProps = _a.inputProps, searchValue = _a.searchValue, _h = _a.filterOptions, filterOptions = _h === void 0 ? defaultFilterOptions : _h;
     var InputComponent = isMultiLine ? 'textarea' : 'input';
-    var _l = React__default['default'].useState(false), isOpen = _l[0], setOpen = _l[1];
-    var _m = React__default['default'].useState(searchValue), search = _m[0], setSearch = _m[1];
-    var _o = React__default['default'].useState(value || undefined), focused = _o[0], setFocused = _o[1];
+    var _j = React__default['default'].useState(false), isOpen = _j[0], setOpen = _j[1];
+    var _k = React__default['default'].useState(searchValue), search = _k[0], setSearch = _k[1];
+    var _l = React__default['default'].useState(isMulti || !value || Array.isArray(value) ? (_b = options[0]) === null || _b === void 0 ? void 0 : _b.value : value), focused = _l[0], setFocused = _l[1];
     var inputRef = React__default['default'].useRef(null);
     var containerRef = React__default['default'].useRef(null);
     React__default['default'].useImperativeHandle(ref, function () { return inputRef.current; });
@@ -1217,10 +1212,8 @@ var Select = React__default['default'].forwardRef(function (_a, ref) {
     });
     var inputProps = React__default['default'].useMemo(function () { return (__assign({ tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : -1 }, additionalInputProps)); }, [tabIndex, additionalInputProps]);
     var finalOptions = React__default['default'].useMemo(function () {
-        return !isSearchable || !search
-            ? options
-            : filterOptions({ options: options, textKey: textKey, search: search });
-    }, [isSearchable, options, textKey, search, filterOptions]);
+        return !isSearchable || !search ? options : filterOptions({ options: options, search: search });
+    }, [isSearchable, options, search, filterOptions]);
     var handleOpen = React__default['default'].useCallback(function (event) {
         if (event) {
             event.preventDefault();
@@ -1232,25 +1225,24 @@ var Select = React__default['default'].forwardRef(function (_a, ref) {
     }, [disabled, readOnly]);
     // Click an option change the value only
     var handleClickForMulti = React__default['default'].useCallback(function (option) {
-        if (!value) {
-            onChange === null || onChange === void 0 ? void 0 : onChange([option]);
+        if (!value || !Array.isArray(value)) {
+            onChange === null || onChange === void 0 ? void 0 : onChange([option.value]);
             return;
         }
-        var typedValue = value;
-        var index = typedValue === null || typedValue === void 0 ? void 0 : typedValue.findIndex(function (v) { return v[valueKey] === option[valueKey]; });
+        var index = value.findIndex(function (v) { return v === option.value; });
         // Handle if we click on an option which is already in value
         if (index > -1) {
-            var tmp = __spreadArray([], typedValue);
+            var tmp = __spreadArray([], value);
             tmp.splice(index, 1);
             onChange === null || onChange === void 0 ? void 0 : onChange(__spreadArray([], tmp));
         }
         else {
-            onChange === null || onChange === void 0 ? void 0 : onChange(__spreadArray(__spreadArray([], typedValue), [option]));
+            onChange === null || onChange === void 0 ? void 0 : onChange(__spreadArray(__spreadArray([], value), [option.value]));
         }
     }, [onChange, value]);
     // Click an option change search and value then close the options
     var handleClickForSingle = React__default['default'].useCallback(function (option) {
-        onChange === null || onChange === void 0 ? void 0 : onChange(option);
+        onChange === null || onChange === void 0 ? void 0 : onChange(option.value);
         setSearch(undefined);
         inputRef.current.focus();
         setOpen(false);
@@ -1268,10 +1260,8 @@ var Select = React__default['default'].forwardRef(function (_a, ref) {
                 break;
             case 'ArrowUp':
                 {
-                    var index_1 = finalOptions.findIndex(function (option) { return option === focused; });
-                    setFocused(function (current) {
-                        return finalOptions[index_1 - 1] || current;
-                    });
+                    var index_1 = finalOptions.findIndex(function (option) { return option.value === focused; });
+                    setFocused(function (current) { var _a; return ((_a = finalOptions[index_1 - 1]) === null || _a === void 0 ? void 0 : _a.value) || current; });
                 }
                 break;
             case 'ArrowDown':
@@ -1279,17 +1269,19 @@ var Select = React__default['default'].forwardRef(function (_a, ref) {
                     handleOpen();
                 }
                 else {
-                    var index_2 = finalOptions.findIndex(function (option) { return option === focused; });
-                    setFocused(function (current) {
-                        return finalOptions[index_2 + 1] || current;
-                    });
+                    var index_2 = finalOptions.findIndex(function (option) { return option.value === focused; });
+                    setFocused(function (current) { var _a; return ((_a = finalOptions[index_2 + 1]) === null || _a === void 0 ? void 0 : _a.value) || current; });
                 }
                 break;
-            case 'Enter':
-                isMulti
-                    ? handleClickForMulti(focused)
-                    : handleClickForSingle(focused);
+            case 'Enter': {
+                var optionSelected = options.find(function (option) { return option.value === focused; });
+                if (optionSelected) {
+                    isMulti
+                        ? handleClickForMulti(optionSelected)
+                        : handleClickForSingle(optionSelected);
+                }
                 break;
+            }
         }
     }, [
         handleClickForMulti,
@@ -1316,35 +1308,55 @@ var Select = React__default['default'].forwardRef(function (_a, ref) {
             className: className,
         });
     }, [disabled, readOnly, isLoading, label, labelVariant, className]);
+    var valueRender = React__default['default'].useMemo(function () {
+        var _a;
+        return Array.isArray(value)
+            ? options
+                .filter(function (option) { return value.includes(option.value); })
+                .map(function (option) { return option.label; })
+                .join(', ')
+            : (_a = options.find(function (option) { return value === option.value; })) === null || _a === void 0 ? void 0 : _a.label;
+    }, [options, value]);
     // When value change, change the focus
     React__default['default'].useEffect(function () {
-        var selected = value
-            ? options.findIndex(function (option) { return option[valueKey] === value[valueKey]; })
-            : 0;
-        setFocused(selected > -1 ? selected : 0);
-    }, [value, options, valueKey]);
+        setFocused(function (current) {
+            var _a, _b;
+            if (current)
+                return current;
+            var selected = value
+                ? options.find(function (option) {
+                    if (Array.isArray(value)) {
+                        return option.value === value[value.length - 1];
+                    }
+                    return option.value === value;
+                })
+                : options[0];
+            return (_a = selected === null || selected === void 0 ? void 0 : selected.value) !== null && _a !== void 0 ? _a : (_b = options[0]) === null || _b === void 0 ? void 0 : _b.value;
+        });
+    }, [value, options]);
     React__default['default'].useEffect(function () {
         setSearch(searchValue);
     }, [searchValue]);
     // Set focus
     React__default['default'].useEffect(function () {
-        if (!focused && finalOptions.length)
-            setFocused(finalOptions[0]);
-        if ((finalOptions === null || finalOptions === void 0 ? void 0 : finalOptions.findIndex(function (option) { return option === focused; })) < 0) {
-            setFocused(finalOptions[0]);
+        var _a;
+        if (!focused && finalOptions.length > 0)
+            setFocused(finalOptions[0].value);
+        if ((finalOptions === null || finalOptions === void 0 ? void 0 : finalOptions.findIndex(function (option) { return option.value === focused; })) < 0) {
+            setFocused((_a = finalOptions[0]) === null || _a === void 0 ? void 0 : _a.value);
         }
     }, [focused, finalOptions]);
     var selectRender = (React__default['default'].createElement("div", { onClick: handleOpen, ref: containerRef, className: containerClassName, "aria-disabled": disabled, onKeyDown: handleKeyDown },
         label && labelVariant === 'inside' ? (React__default['default'].createElement(Label, { variant: "inside", id: id }, label)) : null,
         React__default['default'].createElement("div", { className: "w-full flex items-center flex-grow", "aria-readonly": readOnly },
             isMulti ? (React__default['default'].createElement(React__default['default'].Fragment, null,
-                value && (React__default['default'].createElement("div", { className: "flex outline-none mr-1" }, renderSelected(value || []))),
+                value && (React__default['default'].createElement("div", { className: "flex outline-none mr-1" }, valueRender)),
                 React__default['default'].createElement(InputComponent, __assign({ className: ("flex-grow outline-none " + (isLoading
                         ? 'bg-transparent pointer-events-none cursor-not-allowed'
-                        : '') + " " + (disabled ? 'opacity-50' : '')).replace(/ +(?= )/g, ' '), "aria-expanded": isOpen, "aria-controls": name + '-list', "aria-owns": name + '-list', "aria-activedescendant": (_b = options.find(function (option) { return option[valueKey] === value; })) === null || _b === void 0 ? void 0 : _b[valueKey], role: "combobox", "aria-haspopup": "listbox", id: id, placeholder: placeholder || 'Select...' }, inputProps, { ref: inputRef, disabled: disabled, readOnly: readOnly || !isSearchable, onKeyDown: handleKeyDown, value: search, onChange: handleInputChange })))) : (React__default['default'].createElement(InputComponent, __assign({ className: ("bg-transparent w-full outline-none " + (isLoading ? 'pointer-events-none cursor-not-allowed' : '') + " " + (disabled ? 'opacity-50' : '')).replace(/ +(?= )/g, ' '), "aria-expanded": isOpen, "aria-controls": name + '-list', "aria-autocomplete": name + '-list', "aria-activedescendant": (_c = options.find(function (option) { return option[valueKey] === value; })) === null || _c === void 0 ? void 0 : _c[valueKey], role: "combobox", "aria-haspopup": "listbox", type: "text", id: id }, inputProps, { ref: inputRef, disabled: disabled, readOnly: readOnly || isLoading || !isSearchable, placeholder: placeholder || 'Select...', onChange: handleInputChange, onKeyDown: handleKeyDown, value: search !== null && search !== void 0 ? search : ((value === null || value === void 0 ? void 0 : value[textKey]) || '') }))),
+                        : '') + " " + (disabled ? 'opacity-50' : '')).replace(/ +(?= )/g, ' '), "aria-expanded": isOpen, "aria-controls": name + '-list', "aria-owns": name + '-list', role: "combobox", "aria-haspopup": "listbox", id: id, placeholder: placeholder || 'Select...' }, inputProps, { ref: inputRef, disabled: disabled, readOnly: readOnly || !isSearchable, onKeyDown: handleKeyDown, value: search, onChange: handleInputChange })))) : (React__default['default'].createElement(InputComponent, __assign({ className: ("bg-transparent w-full outline-none " + (isLoading ? 'pointer-events-none cursor-not-allowed' : '') + " " + (disabled ? 'opacity-50' : '')).replace(/ +(?= )/g, ' '), "aria-expanded": isOpen, "aria-controls": name + '-list', "aria-autocomplete": name + '-list', "aria-activedescendant": value, role: "combobox", "aria-haspopup": "listbox", type: "text", id: id }, inputProps, { ref: inputRef, disabled: disabled, readOnly: readOnly || isLoading || !isSearchable, placeholder: placeholder || 'Select...', onChange: handleInputChange, onKeyDown: handleKeyDown, value: search !== null && search !== void 0 ? search : (((_c = options.find(function (option) { return option.value === value; })) === null || _c === void 0 ? void 0 : _c.label) || '') }))),
             isLoading || readOnly ? null : (React__default['default'].createElement(ChevronDownIcon, { width: 12, height: 12, className: "fill-current " + (isOpen ? 'text-primary-600' : 'text-gray-400') })),
             isLoading && (React__default['default'].createElement(Loader, { className: "mx-1", size: "sm", color: "primary-800" }))),
-        isLoading ? null : (React__default['default'].createElement(OptionList, { isMulti: isMulti, name: name, isOpen: isOpen, options: finalOptions, value: value, valueKey: valueKey, textKey: textKey, focused: focused, renderOption: renderOption, onOptionClick: function (option, event) {
+        isLoading ? null : (React__default['default'].createElement(OptionList, { isMulti: isMulti, name: name, isOpen: isOpen, options: finalOptions, value: value, focused: focused, onOptionClick: function (option, event) {
                 event.preventDefault();
                 event.stopPropagation();
                 isMulti

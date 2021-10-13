@@ -20,9 +20,26 @@ func InitRoutes(api fiber.Router) {
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	var dtos []dtos.Bill
-	for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
-		newDto := x.ToDTO()
-		dtos = append(dtos, newDto)
+	filter := c.Query("filter")
+	switch filter {
+	case "not_archived":
+		for _, x := range DAO.FindAllByTenantByStatusIsNot(*user.CompanyID, "ARCHIVED") {
+			newDto := x.ToDTO()
+			dtos = append(dtos, newDto)
+		}
+		break
+	case "archived":
+		for _, x := range DAO.FindAllByTenantByStatusIs(*user.CompanyID, "ARCHIVED") {
+			newDto := x.ToDTO()
+			dtos = append(dtos, newDto)
+		}
+		break
+	default:
+		for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
+			newDto := x.ToDTO()
+			dtos = append(dtos, newDto)
+		}
+		break
 	}
 	return c.JSON(dtos)
 }

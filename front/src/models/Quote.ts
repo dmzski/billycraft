@@ -1,26 +1,38 @@
-import { Customer } from "./Customer";
 import { LineTypeEnum } from "./LineTypeEnum";
-import { QuoteStatusEnum } from "./QuoteStatusEnum";
 
-export class Quote {
-  id?: string;
-  title = "";
-  customer: Customer = new Customer();
-  tva = 0;
-  createdAt?: string;
-  updatedAt?: string;
+interface Quote {
+  id: string;
+  title: string;
+  tva: number;
+  createdAt: string;
+  updatedAt: string;
   sentAt?: string;
-  status: QuoteStatusEnum = QuoteStatusEnum.DRAFT;
-  lines: QuoteLine[] = [];
-  total?: number;
+  status: QuoteStatusEnum;
+  createdBy: string;
+  companyId: number;
+  customerId: number;
+  fileName?: string;
+  lines: QuoteLine[];
 }
 
-export class QuoteLine {
-  id?: string;
-  name = "";
-  description = "";
-  quantity = 0;
-  price = 0;
-  line = 0;
-  type: LineTypeEnum = LineTypeEnum.SERVICE;
+export interface QuoteLine {
+  quoteId: string;
+  line: number;
+  quantity: number;
+  price: number;
+  name: string;
+  description: string;
+  type: LineTypeEnum;
 }
+
+export enum QuoteStatusEnum {
+  DRAFT = "DRAFT",
+  SENT = "SENT",
+  ACCEPTED = "ACCEPTED",
+  REFUSED = "REFUSED",
+  DEPOSIT_ASK = "DEPOSIT_ASK",
+  DEPOSIT_PAID = "DEPOSIT_PAID",
+  ARCHIVED = "ARCHIVED",
+}
+
+export default Quote;

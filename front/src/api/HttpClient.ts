@@ -1,27 +1,120 @@
+type HTTPClientRequest<T> = Promise<T> & {
+  cancel?: () => void;
+};
+
+const defaultHeaders = {
+  "Content-Type": "application/json",
+};
+
+type BodyType = any;
 export const HttpClient = {
-  GET: (url: string, config?: RequestInit): { query: any; abort: () => void } => {
+  GET: <T = any>(url: string, config?: RequestInit): HTTPClientRequest<T> => {
     const controller = new AbortController();
     const signal = controller.signal;
-    return { query: fetch(url, { signal, ...config }) as any, abort: () => controller.abort() };
+    const promise = fetch(url, { signal, method: "GET", ...config }).then(
+      transformBody
+    ) as HTTPClientRequest<T>;
+    promise.cancel = controller.abort;
+    return promise;
   },
-  POST: (url: string, body: any, config?: any): { query: any; abort: () => void } => {
+  POST: <T = any>(
+    url: string,
+    body?: BodyType,
+    config?: RequestInit
+  ): HTTPClientRequest<T> => {
     const controller = new AbortController();
     const signal = controller.signal;
-    return { query: fetch(url, { signal, method: "POST", body, ...config }) as any, abort: () => controller.abort() };
+    const promise = fetch(url, {
+      ...config,
+      signal,
+      method: "POST",
+      body: computeBody(body),
+      headers: {
+        ...defaultHeaders,
+        ...config?.headers,
+      },
+    }).then(transformBody) as HTTPClientRequest<T>;
+    promise.cancel = controller.abort;
+    return promise;
   },
-  PUT: (url: string, body: any, config?: any): { query: any; abort: () => void } => {
+  PUT: <T = any>(
+    url: string,
+    body?: BodyType,
+    config?: RequestInit
+  ): HTTPClientRequest<T> => {
     const controller = new AbortController();
     const signal = controller.signal;
-    return { query: fetch(url, { signal, method: "PUT", body, ...config }) as any, abort: () => controller.abort() };
+    const promise = fetch(url, {
+      ...config,
+      signal,
+      method: "PUT",
+      body: computeBody(body),
+      headers: {
+        ...defaultHeaders,
+        ...config?.headers,
+      },
+    }).then(transformBody) as HTTPClientRequest<T>;
+    promise.cancel = controller.abort;
+    return promise;
   },
-  PATCH: (url: string, body: any, config?: any): { query: any; abort: () => void } => {
+  PATCH: <T = any>(
+    url: string,
+    body?: BodyType,
+    config?: RequestInit
+  ): HTTPClientRequest<T> => {
     const controller = new AbortController();
     const signal = controller.signal;
-    return { query: fetch(url, { signal, method: "PATCH", body, ...config }) as any, abort: () => controller.abort() };
+    const promise = fetch(url, {
+      ...config,
+      signal,
+      method: "PATCH",
+      body: computeBody(body),
+      headers: {
+        ...defaultHeaders,
+        ...config?.headers,
+      },
+    }).then(transformBody) as HTTPClientRequest<T>;
+    promise.cancel = controller.abort;
+    return promise;
   },
-  DELETE: (url: string, body: any, config?: any): { query: any; abort: () => void } => {
+  DELETE: <T = any>(
+    url: string,
+    body?: BodyType,
+    config?: RequestInit
+  ): HTTPClientRequest<T> => {
     const controller = new AbortController();
     const signal = controller.signal;
-    return { query: fetch(url, { signal, method: "DELETE", body, ...config }) as any, abort: () => controller.abort() };
+    const promise = fetch(url, {
+      ...config,
+      signal,
+      method: "DELETE",
+      body: computeBody(body),
+      headers: {
+        ...defaultHeaders,
+        ...config?.headers,
+      },
+    }).then(transformBody) as HTTPClientRequest<T>;
+    promise.cancel = controller.abort;
+
+    return promise;
   },
+};
+
+const computeBody = (body: BodyType): string | File => {
+  if (typeof body === "string" || (body as File).stream) {
+    return body;
+  }
+
+  return JSON.stringify(body);
+};
+
+const transformBody = async <T>(res: Response): Promise<T | Response> => {
+  if (
+    res.headers.get("Content-type") === "application/json" &&
+    res.status >= 200 &&
+    res.status < 300
+  )
+    return res.json() as Promise<T>;
+  if (res.status >= 400) throw res;
+  return res;
 };

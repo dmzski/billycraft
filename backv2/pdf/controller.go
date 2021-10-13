@@ -26,10 +26,14 @@ func getOrGenerateQuote(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		quote := quotes.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		if quote.Status == "" || quote.Status == "DRAFT" {
+			return generateQuote(c)
+		}
+
 		file, err := os.Open(fmt.Sprintf("%s%d/quotes/%s.pdf", config.Get().PdfDir, quote.CompanyID, quote.ID))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
-			return generateQuote(c)
+			return c.Status(fiber.ErrInternalServerError.Code).SendString("An error occured")
 		}
 		return c.SendFile(file.Name())
 	}

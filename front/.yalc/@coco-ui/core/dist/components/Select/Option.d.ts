@@ -1,19 +1,16 @@
 import React from 'react';
-import { SelectOptionType } from '.';
+import { SelectOptionType, ValueType } from '.';
 export interface RenderSelectOptionProps {
     option: SelectOptionType;
     isSelected?: boolean;
 }
 interface OptionProps {
     isMulti?: boolean;
-    value: SelectOptionType | SelectOptionType[];
-    valueKey: string;
-    textKey: string;
+    value?: ValueType;
     option: SelectOptionType;
-    focused: number;
+    focused: number | string;
     index: number;
-    renderOption?: (option: RenderSelectOptionProps) => React.ReactNode;
     onOptionClick: (option: SelectOptionType, event: React.MouseEvent) => void;
 }
-declare const Option: ({ isMulti, value, valueKey, textKey, option, focused, renderOption, onOptionClick, }: OptionProps) => JSX.Element;
+declare const Option: ({ isMulti, value, option, focused, onOptionClick, }: OptionProps) => JSX.Element;
 export default Option;

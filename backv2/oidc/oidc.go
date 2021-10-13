@@ -43,7 +43,7 @@ func New(config OidcConfig) func(c *fiber.Ctx) error {
 			log.Println("Error when creating oidc provider", err.Error(), config.AuthServerURL)
 			return
 		}
-		verifier = provider.Verifier(&oidc.Config{ClientID: "account"})
+		verifier = provider.Verifier(&oidc.Config{SkipClientIDCheck: true})
 
 		// Configure an OpenID Connect aware OAuth2 client.
 		oauth2Config = oauth2.Config{
@@ -72,22 +72,18 @@ func Secure() func(c *fiber.Ctx) error {
 			return c.Status(400).SendString("Malformed Authorization header")
 		}
 
-		_, err := verifier.Verify(ctx, parts[1])
+		token, err := verifier.Verify(ctx, parts[1])
 		if err != nil {
 			log.Println(err.Error())
 			return c.Status(401).SendString("Unauthorized access")
 		}
 
-		userInfo, err := provider.UserInfo(ctx, oauth2.StaticTokenSource(&oauth2.Token{
-			AccessToken: parts[1],
-		}))
 		if err != nil {
 			return c.Status(500).SendString("Can't retrieve user info")
 		}
 
-		c.Locals("userInfo", userInfo)
 		claims := &Claims{}
-		err = userInfo.Claims(claims)
+		err = token.Claims(claims)
 		if err != nil {
 			log.Println("Error when unmarshal claims")
 			return c.Status(500).SendString("Error when parsing claims")

@@ -1,15 +1,31 @@
-import { Icon, List } from "@coco-ui/core";
-import { Quote, QuoteLine } from "models/Quote";
+import { List } from "@coco-ui/core";
+import Quote, { QuoteLine } from "models/Quote";
 import React from "react";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import QuoteLineTableLine from "../../components/quote/QuoteLineTableLine";
 
-const reorderLines = (list: QuoteLine[], startIndex: number, endIndex: number) => {
+const reorderLines = (
+  list: QuoteLine[],
+  startIndex: number,
+  endIndex: number
+) => {
   const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+  const [removed] = result.splice(
+    result.findIndex(({ line }) => line === startIndex),
+    1
+  );
+  result.splice(
+    result.findIndex(({ line }) => line === endIndex),
+    0,
+    removed
+  );
 
-  return result.map((line, index) => ({ ...line, line: index }));
+  return result;
 };
 
 const QuoteLineTable = ({
@@ -24,7 +40,10 @@ const QuoteLineTable = ({
   function deleteLine(index: number) {
     return () => {
       const newLines = [...quote.lines];
-      newLines.splice(index, 1);
+      newLines.splice(
+        quote.lines.findIndex(({ line }) => line === index),
+        1
+      );
       setQuote({ ...quote, lines: newLines });
     };
   }
@@ -32,7 +51,7 @@ const QuoteLineTable = ({
   function setLine(index: number) {
     return (newLine: any) => {
       const newLines = [...quote.lines];
-      newLines[index] = newLine;
+      newLines[newLines.findIndex((line) => line.line === index)] = newLine;
       setQuote({ ...quote, lines: newLines });
     };
   }
@@ -43,7 +62,11 @@ const QuoteLineTable = ({
       return;
     }
 
-    const newLines = reorderLines(quote.lines, result.source.index, result.destination.index);
+    const newLines = reorderLines(
+      quote.lines,
+      result.source.index,
+      result.destination.index
+    );
 
     setQuote({
       ...quote,
@@ -94,9 +117,16 @@ const QuoteLineTable = ({
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId={`lines`}>
             {(droppableProvided) => (
-              <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-                {(data as QuoteLine[])?.map((line, index) => (
-                  <Draggable key={index} draggableId={index.toString()} index={index}>
+              <div
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
+              >
+                {(data as QuoteLine[])?.map((line) => (
+                  <Draggable
+                    key={line.line}
+                    draggableId={line.line.toString()}
+                    index={line.line}
+                  >
                     {(provided) => (
                       <QuoteLineTableLine
                         provided={provided}

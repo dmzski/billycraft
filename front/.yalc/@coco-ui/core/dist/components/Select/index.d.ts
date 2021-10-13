@@ -1,12 +1,14 @@
 import React from 'react';
-import { RenderSelectOptionProps } from './Option';
-export declare type SelectOptionType = any;
+export declare type SelectOptionType = {
+    value: string | number;
+    label: string;
+};
+export declare type ValueType = string | number | Array<string | number> | undefined;
 export interface SelectProps {
     className?: string;
     containerClassName?: string;
     filterOptions?: (args: {
         options: SelectOptionType[];
-        textKey: string;
         search: string;
     }) => SelectOptionType[];
     id?: string;
@@ -15,9 +17,9 @@ export interface SelectProps {
     placeholder?: string;
     label?: string;
     labelVariant?: 'outside' | 'inside';
-    onChange?: (result: SelectOptionType | SelectOptionType[]) => unknown;
+    onChange?: (result: ValueType) => unknown;
     onSearchChange?: (string: string) => any;
-    value?: SelectOptionType | SelectOptionType[];
+    value: ValueType;
     parentRef?: React.RefObject<HTMLDivElement>;
     disabled?: boolean;
     readOnly?: boolean;
@@ -26,11 +28,7 @@ export interface SelectProps {
     isSearchable?: boolean;
     isMulti?: boolean;
     isMultiLine?: boolean;
-    textKey?: string;
-    valueKey?: string;
     inputProps?: any;
-    renderSelected?: (values: SelectOptionType[] | SelectOptionType) => React.ReactNode;
-    renderOption?: (option: RenderSelectOptionProps) => React.ReactNode;
     searchValue?: string;
 }
 declare const Select: React.ForwardRefExoticComponent<SelectProps & React.RefAttributes<HTMLInputElement>>;

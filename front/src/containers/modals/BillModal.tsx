@@ -1,34 +1,45 @@
 import { Button, Modal } from "@coco-ui/core";
+import { BillApi } from "api/BillApi";
+import useCustomers from "hooks/useCustomers";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { PdfApi } from "../../api/PdfApi";
-import { BillGraphQL } from "../../graphql/BillGraphQL";
 import useLoadingState from "../../hooks/useLoadingState";
-import { Bill } from "../../models/Bill";
-import { BillStatusEnum } from "../../models/BillStatusEnum";
+import Bill, { BillStatusEnum } from "../../models/Bill";
 import { useToast } from "../../providers/ToastProvider";
 import BillForm from "../forms/BillForm";
 
-const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
-  const [newBill, setNewBill] = React.useState<Bill>(new Bill());
+type BillModalProps = {
+  isOpen: boolean;
+  onRequestClose: (e?: MouseEvent) => void;
+  bill?: Bill;
+};
+const BillModal = ({
+  isOpen,
+  onRequestClose,
+  bill,
+}: BillModalProps): JSX.Element => {
+  const [newBill, setNewBill] = React.useState<Bill>({} as Bill);
+  const customers = useCustomers();
   const queryCache = useQueryCache();
   const toast = useToast();
   const pdfState = useLoadingState();
 
-  const [createOrUpdateBillMutation, createOrUpdateBillMutationState] = useMutation(BillGraphQL.createOrUpdateBill, {
+  const [
+    createOrUpdateBillMutation,
+    createOrUpdateBillMutationState,
+  ] = useMutation(BillApi.createOrUpdate, {
     onSuccess: (data) => {
       const tmp = [...(queryCache.getQueryData<Bill[]>("bills") ?? [])];
-      if (data.updateBill) {
-        const index = tmp.findIndex((b) => b.id === data.updateBill.id);
+      if (data) {
+        const index = tmp.findIndex((b) => b.id === data.id);
         if (index > -1) {
-          tmp[index] = data.updateBill;
-          setNewBill({ ...data.updateBill });
-          queryCache.setQueryData("bills", tmp);
+          tmp[index] = data;
+        } else {
+          tmp.push(data);
         }
-      } else if (data.createBill) {
-        tmp.push(data.createBill);
+        setNewBill({ ...data });
         queryCache.setQueryData("bills", tmp);
-        setNewBill({ ...data.createBill });
       } else {
         onRequestClose();
       }
@@ -36,16 +47,22 @@ const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
     },
   });
 
-  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(BillGraphQL.updateBillStatus, {
-    onSuccess: () => {
-      onRequestClose();
-      toast.show({ message: "Facture mise à jour", variant: "success" });
-    },
-  });
+  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
+    BillApi.updateStatus,
+    {
+      onSuccess: () => {
+        onRequestClose();
+        toast.show({ message: "Facture mise à jour", variant: "success" });
+      },
+    }
+  );
 
   async function saveBill(e: any) {
     e.preventDefault();
-    if (updateBillStatusMutationState.isLoading || createOrUpdateBillMutationState.isLoading) {
+    if (
+      updateBillStatusMutationState.isLoading ||
+      createOrUpdateBillMutationState.isLoading
+    ) {
       return false;
     }
     try {
@@ -57,11 +74,14 @@ const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
   }
 
   const updateBillStatus = (status: BillStatusEnum) => async () => {
-    if (updateBillStatusMutationState.isLoading || createOrUpdateBillMutationState.isLoading) {
+    if (
+      updateBillStatusMutationState.isLoading ||
+      createOrUpdateBillMutationState.isLoading
+    ) {
       return false;
     }
     try {
-      await updateBillStatusMutation({ id: bill.id, statusEnum: status });
+      if (bill?.id) await updateBillStatusMutation({ id: bill.id, status });
       queryCache.invalidateQueries("bills");
     } catch (error) {
       console.error("Error !!!", error);
@@ -73,13 +93,18 @@ const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
       if (pdfState.isIdle && newBill.id) {
         pdfState.update("loading");
         const html = await PdfApi.getBillPdf(newBill.id);
-        const url = URL.createObjectURL(new Blob([html], { type: "application/pdf" }));
+        const url = URL.createObjectURL(
+          new Blob([html], { type: "application/pdf" })
+        );
         window.open(url, "_blank");
         pdfState.update("idle");
       }
     } catch (e) {
-      console.log("Error when downlaod pdf", e);
-      toast.show({ message: "Erreur lors de la génération du PDF", variant: "error" });
+      console.error("Error when downlaod pdf", e);
+      toast.show({
+        message: "Erreur lors de la génération du PDF",
+        variant: "error",
+      });
       setTimeout(() => {
         pdfState.update("idle");
       }, 1000);
@@ -87,14 +112,16 @@ const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
   };
 
   React.useEffect(() => {
-    setNewBill(bill ? bill : new Bill());
+    setNewBill(bill ? bill : ({} as Bill));
   }, [bill, isOpen]);
 
   return (
     <Modal open={isOpen} onClose={onRequestClose} size="xl">
       <div className="flex flex-col w-full">
         <div className="flex items-center mb-4  border-b-2 border-gray-400">
-          <h1 className="ml-4 text-2xl flex-grow">{!newBill.id ? "Nouvelle " : "Modifier une "}facture</h1>
+          <h1 className="ml-4 text-2xl flex-grow">
+            {!newBill.id ? "Nouvelle " : "Modifier une "}facture
+          </h1>
           {newBill && newBill.id && (
             <Button
               disabled={pdfState.isLoading}
@@ -110,10 +137,14 @@ const BillModal = ({ isOpen, onRequestClose, bill }: any): JSX.Element => {
           )}
         </div>
         <BillForm
+          customer={customers.find((c) => c.id === newBill.customerId)}
           onSubmit={saveBill}
           bill={newBill}
           setBill={setNewBill}
-          disabled={createOrUpdateBillMutationState.isLoading || updateBillStatusMutationState.isLoading}
+          disabled={
+            createOrUpdateBillMutationState.isLoading ||
+            updateBillStatusMutationState.isLoading
+          }
           onUpdateStatus={updateBillStatus}
         />
       </div>

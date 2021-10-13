@@ -20,8 +20,8 @@ import (
 )
 
 var (
-	fillWhite  = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	fillGray   = color.RGBA{R: 230, G: 230, B: 230, A: 255}
+	whiteRGB   = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	grayRGB    = color.RGBA{R: 230, G: 230, B: 230, A: 255}
 	marginL    = 5.0
 	marginB    = 25
 	cellMargin = 1.0
@@ -91,25 +91,19 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.Ln(3)
 
-	pdf.SetX(marginL)
-	pdf.SetLineWidth(0.3)
-	pdf.CellFormat(cols[0], 8, tr("Désignation"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(cols[1], 8, tr("Quantité"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(cols[2], 8, tr("Prix HT"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(cols[3], 8, tr("Sous Total"), "1", 0, "C", true, 0, "")
-	pdf.Ln(-1)
+	addHeaders(pdf, qc)
 
 	_, lineHt = pdf.GetFontSize()
 	reportTotal := 0.0
 
 	for i, line := range quote.Lines {
 		pdf.SetFont("Arial", "", 10)
-		pdf.SetCellMargin(4)
-		lineColor := fillWhite
+		pdf.SetCellMargin(cellMargin)
+		lineColor := whiteRGB
 		borderStr := "LR"
 
 		if i%2 == 1 {
-			lineColor = fillGray
+			lineColor = grayRGB
 		}
 		if i == len(quote.Lines)-1 {
 			borderStr = "LBR"
@@ -232,9 +226,10 @@ func getLinePrice(quote models.Quote, line models.QuoteLine) float64 {
 func addHeaders(pdf gofpdf.Pdf, qc models.QuoteCustomization) {
 	rgba, err := parseHexColor(qc.MainColor)
 	if err != nil {
-		rgba = color.RGBA{R: 0, G: 0, B: 255, A: 255}
+		rgba = color.RGBA{R: 0, G: 255, B: 255, A: 255}
 	}
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
+	currentR, currentG, currentB := pdf.GetFillColor()
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 	pdf.SetFont("Arial", "B", 10)
 	pdf.SetX(marginL)
@@ -244,6 +239,7 @@ func addHeaders(pdf gofpdf.Pdf, qc models.QuoteCustomization) {
 	pdf.CellFormat(cols[2], 10, tr("Prix HT"), "1", 0, "C", true, 0, "")
 	pdf.CellFormat(cols[3], 10, tr("Sous Total"), "1", 0, "C", true, 0, "")
 	pdf.Ln(-1)
+	pdf.SetFillColor(currentR, currentG, currentB)
 }
 
 func addTotal(pdf gofpdf.Pdf, reportTotal float64) {

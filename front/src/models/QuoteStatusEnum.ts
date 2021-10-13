@@ -1,9 +1,0 @@
-export enum QuoteStatusEnum {
-  DRAFT = "DRAFT",
-  SENT = "SENT",
-  ACCEPTED = "ACCEPTED",
-  REFUSED = "REFUSED",
-  DEPOSIT_ASK = "DEPOSIT_ASK",
-  DEPOSIT_PAID = "DEPOSIT_PAID",
-  ARCHIVED = "ARCHIVED",
-}

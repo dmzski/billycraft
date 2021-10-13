@@ -9,12 +9,20 @@ import { ReportDTO } from "../models/dtos/Report";
 
 const Dashboard = (): JSX.Element => {
   const [dateTarget] = React.useState(new Date());
-  const monthReportQuery = useQuery<ReportDTO>(["month-report", startOfMonth(dateTarget)], ReportApi.getMonthReport, {
-    refetchOnWindowFocus: false,
-  });
-  const yearReportQuery = useQuery<ReportDTO>(["year-report", startOfYear(dateTarget)], ReportApi.getYearReport, {
-    refetchOnWindowFocus: false,
-  });
+  const monthReportQuery = useQuery<ReportDTO>(
+    ["month-report", startOfMonth(dateTarget)],
+    (_, month: string) => ReportApi.getMonthReport(month),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  const yearReportQuery = useQuery<ReportDTO>(
+    ["year-report", startOfYear(dateTarget)],
+    (_, year: string) => ReportApi.getYearReport(year),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const monthReport = monthReportQuery.data || new ReportDTO();
   const yearReport = yearReportQuery.data || new ReportDTO();

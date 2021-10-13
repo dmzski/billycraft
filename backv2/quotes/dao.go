@@ -19,6 +19,19 @@ func (dao QuoteDao) FindAllByTenant(tenant int) (quotes []models.Quote) {
 	return
 }
 
+func (dao QuoteDao) FindAllByTenantByStatusIs(tenant int, status string) (quotes []models.Quote) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status = ?", tenant, status).Find(&quotes).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+func (dao QuoteDao) FindAllByTenantByStatusIsNot(tenant int, status string) (quotes []models.Quote) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status <> ?", tenant, status).Find(&quotes).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant int) (quote models.Quote) {
 	if err := database.DBConn.Preload("Lines").Find(&quote, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)

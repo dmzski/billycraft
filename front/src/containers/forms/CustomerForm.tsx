@@ -1,8 +1,22 @@
 import { Button, TextInput } from "@coco-ui/core";
 import React from "react";
-import { Customer } from "../../models/Customer";
+import { FormEventHandler } from "react-router/node_modules/@types/react";
+import Customer from "../../models/Customer";
 
-const CustomerForm = ({ customer, setCustomer, onSubmit, isLoading, disabled }: any): JSX.Element => {
+type CustomerFormProps = {
+  customer: Customer;
+  setCustomer: React.Dispatch<React.SetStateAction<Customer>>;
+  onSubmit: FormEventHandler;
+  disabled: boolean;
+  isLoading: boolean;
+};
+const CustomerForm = ({
+  customer,
+  setCustomer,
+  onSubmit,
+  isLoading,
+  disabled,
+}: CustomerFormProps): JSX.Element => {
   function inputChange(property: keyof Customer) {
     return (event: any) => {
       const tmp: any = { ...customer };
@@ -15,11 +29,19 @@ const CustomerForm = ({ customer, setCustomer, onSubmit, isLoading, disabled }: 
     <div className="flex flex-col w-full">
       <div className="flex items-center border-b-2 border-gray-400 pb-3 w-full">
         <h1 className="ml-4 text-xl">
-          {!customer.id ? "Nouveau " : "Modifier un "}client{customer.id ? " #" + customer.id : ""}
+          {!customer.id ? "Nouveau " : "Modifier un "}client
+          {customer.id ? " #" + customer.id : ""}
         </h1>
       </div>
       <form className="mt-3" onSubmit={onSubmit}>
-        <TextInput disabled={disabled} label="Nom" placeholder="Nom du client" value={customer.name} maxLength={100} onChange={inputChange("name")} />
+        <TextInput
+          disabled={disabled}
+          label="Nom"
+          placeholder="Nom du client"
+          value={customer.name}
+          maxLength={100}
+          onChange={inputChange("name")}
+        />
         <TextInput
           multiline
           rows={3}
@@ -48,7 +70,14 @@ const CustomerForm = ({ customer, setCustomer, onSubmit, isLoading, disabled }: 
           onChange={inputChange("phoneNumber")}
           maxLength={10}
         />
-        <TextInput disabled={disabled} containerClassName="mt-3" label="Ville" placeholder="Ville" value={customer.city} onChange={inputChange("city")} />
+        <TextInput
+          disabled={disabled}
+          containerClassName="mt-3"
+          label="Ville"
+          placeholder="Ville"
+          value={customer.city}
+          onChange={inputChange("city")}
+        />
         <TextInput
           disabled={disabled}
           containerClassName="mt-3"

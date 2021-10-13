@@ -1,17 +1,13 @@
 import React from 'react';
-import { SelectOptionType } from '.';
-import { RenderSelectOptionProps } from './Option';
+import { SelectOptionType, ValueType } from '.';
 interface OptionListProps {
-    focused: number;
+    focused: string | number;
     isOpen?: boolean;
     name: string;
     options: SelectOptionType[];
     onOptionClick: (option: SelectOptionType, event: React.MouseEvent) => void;
-    valueKey: string;
-    textKey: string;
-    value: SelectOptionType | SelectOptionType[];
+    value?: ValueType;
     isMulti?: boolean;
-    renderOption?: (optionProps: RenderSelectOptionProps) => React.ReactNode;
 }
 declare const OptionList: React.ForwardRefExoticComponent<OptionListProps & React.RefAttributes<HTMLDivElement>>;
 export default OptionList;

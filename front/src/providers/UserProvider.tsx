@@ -1,7 +1,7 @@
 import { useKeycloak } from "@react-keycloak/web";
+import { UserApi } from "api/UserApi";
 import React from "react";
 import { useQuery } from "react-query";
-import { UserGraphQL } from "../graphql/UserGraphQL";
 
 const UserContext = React.createContext<any>({} as any);
 
@@ -10,9 +10,17 @@ type UserProviderProps = {
 };
 const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
   const { keycloak } = useKeycloak();
-  const myInformationQuery = useQuery("my-information", UserGraphQL.getMyInformation, { enabled: keycloak.authenticated });
+  const myInformationQuery = useQuery(
+    "my-information",
+    UserApi.getMyInformation,
+    { enabled: keycloak.authenticated, refetchOnWindowFocus: false }
+  );
 
-  return <UserContext.Provider value={{ ...myInformationQuery }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ ...myInformationQuery }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 const useUser = (): any => {

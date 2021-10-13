@@ -1,8 +1,9 @@
+import Company from "models/Company";
 import React from "react";
 import MyCompagnyForm from "../containers/forms/MyCompagnyForm";
 
 const Onboarding = (): JSX.Element => {
-  const [company, setCompany] = React.useState({});
+  const [company, setCompany] = React.useState<Company>({} as Company);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -13,7 +14,10 @@ const Onboarding = (): JSX.Element => {
         </div>
 
         <div className="text-gray-600">
-          <p>Créer votre entreprise pour commencer à utiliser l&lsquo;outil renseigner les informations concernant votre entreprise</p>
+          <p>
+            Créer votre entreprise pour commencer à utiliser l&lsquo;outil
+            renseigner les informations concernant votre entreprise
+          </p>
         </div>
 
         <div className="w-full mt-3">

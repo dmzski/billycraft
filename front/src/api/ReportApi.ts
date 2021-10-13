@@ -6,32 +6,14 @@ import { HttpClient } from "./HttpClient";
 export const REPORT_URL = API_URL + "/reports";
 
 export const ReportApi = {
-  getMonthReport: async (_: any, month: string): Promise<any> => {
-    const { query, abort } = HttpClient.GET(`${REPORT_URL}/month?query=${getNormalizedDate(parseJSON(month)).toJSON()}`);
-    const promise = query.then((res: any) => {
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        throw res;
-      }
-    });
-
-    promise.cancel = abort;
-
-    return promise;
-  },
-  getYearReport: async (_: any, year: string): Promise<any> => {
-    const { query, abort } = HttpClient.GET(`${REPORT_URL}/year?query=${getNormalizedDate(parseJSON(year)).toJSON()}`);
-    const promise = query.then((res: any) => {
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        throw res;
-      }
-    });
-
-    promise.cancel = abort;
-
-    return promise;
-  },
+  getMonthReport: async (month: string): Promise<any> =>
+    HttpClient.GET(
+      `${REPORT_URL}/month?query=${getNormalizedDate(
+        parseJSON(month)
+      ).toJSON()}`
+    ),
+  getYearReport: async (year: string): Promise<any> =>
+    HttpClient.GET(
+      `${REPORT_URL}/year?query=${getNormalizedDate(parseJSON(year)).toJSON()}`
+    ),
 };

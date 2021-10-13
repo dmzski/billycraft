@@ -5,6 +5,7 @@ import (
 	"backv2/dtos"
 	"backv2/models"
 	"log"
+	"strings"
 )
 
 type CustomerDao struct {
@@ -12,6 +13,13 @@ type CustomerDao struct {
 
 func (dao CustomerDao) FindAllByTenant(tenant int) (customers []models.Customer) {
 	if err := database.DBConn.Find(&customers, "company_id = ?", tenant).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao CustomerDao) FindAllByTenantAndNameContains(tenant int, q string) (customers []models.Customer) {
+	if err := database.DBConn.Where("company_id = ? AND TRANSLATE(LOWER(name), ' ', '') LIKE ?", tenant, "%"+strings.ReplaceAll(strings.ToLower(q)+"%", " ", "")).Find(&customers).Error; err != nil {
 		panic(err)
 	}
 	return

@@ -1,70 +1,106 @@
 import { Button, Select, TextInput } from "@coco-ui/core";
 import React from "react";
 import { useQuery } from "react-query";
-import { Quote, QuoteLine } from "../../models/Quote";
+import Quote, { QuoteLine } from "../../models/Quote";
 import QuoteLineTable from "../tables/QuoteLineTable";
-import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
-import { QuoteStatusEnum } from "../../models/QuoteStatusEnum";
-import { ProductGraphQL } from "graphql/ProductGraphQL";
+import { QuoteStatusEnum } from "../../models/Quote";
+import Customer from "models/Customer";
+import { LineTypeEnum } from "models/LineTypeEnum";
+import { CustomerApi } from "api/CustomerApi";
+import { ProductApi } from "api/ProductApi";
+import { ValueType } from "@coco-ui/core/dist/components/Select";
+
+const defaultLine = {
+  description: "",
+  name: "",
+  price: 0,
+  quantity: 0,
+  type: LineTypeEnum.ARTICLE,
+};
 
 type QuoteFormProps = {
   quote: Quote;
-  setQuote: React.Dispatch<any>;
+  customer?: Customer;
+  setQuote: React.Dispatch<React.SetStateAction<Quote>>;
   onSubmit: (event: React.FormEvent<any>) => any;
   disabled: boolean;
   onUpdateStatus: (status: QuoteStatusEnum) => any;
 };
-const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: QuoteFormProps): JSX.Element => {
-  const [customerInputValue, setCustomerInputValue] = React.useState(quote.customer ? quote.customer.name : "");
-  const [existingProductInput, setExistingProductInput] = React.useState<string>("");
-  const [existingProductSelected, setExistingProductSelected] = React.useState<any>();
-  const [errors, setErrors] = React.useState<any>({});
-  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
-    refetchOnWindowFocus: false,
-    enabled: customerInputValue?.length > 0,
-  });
-  const productsQuery = useQuery(["products-by-name"], ProductGraphQL.getAllProducts, {
+const QuoteForm = ({
+  quote,
+  customer,
+  setQuote,
+  onSubmit,
+  disabled,
+  onUpdateStatus,
+}: QuoteFormProps): JSX.Element => {
+  const [customerInputValue, setCustomerInputValue] = React.useState<string>(
+    customer ? customer.name : ""
+  );
+  const [
+    existingProductInput,
+    setExistingProductInput,
+  ] = React.useState<string>("");
+  const [productIdSelected, setProductIdSelected] = React.useState<number>();
+  const [errors, setErrors] = React.useState<
+    Record<string, string | undefined>
+  >({});
+  const customersQuery = useQuery(
+    ["customers-by-name", customerInputValue],
+    CustomerApi.findAllByNameContains,
+    {
+      refetchOnWindowFocus: false,
+      enabled: customerInputValue?.length > 0,
+    }
+  );
+  const productsQuery = useQuery(["products-by-name"], ProductApi.findAll, {
     refetchOnWindowFocus: false,
     enabled: existingProductInput?.length > 0,
   });
 
-  const lineTableRef = React.useRef<any>(null);
-
   const inputChange = (property: keyof Quote) => {
-    return (event: any) => {
-      const tmp: any = { ...quote };
+    return (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       let value: any;
       switch (property) {
         case "tva":
-          value = parseInt(event.target.value);
+          value = Number(event.target.value);
           break;
         default:
           value = event.target.value;
       }
-      tmp[property] = value;
-      setQuote(tmp);
+      setQuote((current) => ({
+        ...current,
+        [property]: value,
+      }));
     };
   };
 
-  const onCustomerOptionClick = (option: any) => {
-    const tmp: any = { ...quote };
-    tmp.customer = option;
-    setQuote(tmp);
-    setErrors({ ...errors, customer: undefined });
-  };
+  const onCustomerOptionClick = React.useCallback((option: ValueType) => {
+    setQuote((current) => ({
+      ...current,
+      customerId: Number(option),
+    }));
+    setErrors((current) => ({ ...current, customer: undefined }));
+  }, []);
 
-  const addLine = React.useCallback(
-    (newLine = new QuoteLine()) => {
-      const tmp = { ...quote };
-      newLine.line = -1 * tmp.lines.length + 1;
-      tmp.lines.push(newLine);
-      setQuote(tmp);
-      setTimeout(() => {
-        document.getElementById(newLine.line + "-select")?.focus();
-      }, 200);
-    },
-    [setQuote, quote]
-  );
+  const onProductSelectedChange = React.useCallback((option: ValueType) => {
+    setProductIdSelected(Number(option));
+  }, []);
+
+  const addLine = React.useCallback((newLine = defaultLine) => {
+    setQuote((current) => ({
+      ...current,
+      lines: [
+        ...(current.lines || []),
+        { ...newLine, line: (current.lines || []).length },
+      ],
+    }));
+    setTimeout(() => {
+      document.getElementById(newLine.line + "-select")?.focus();
+    }, 200);
+  }, []);
 
   const beforeOnSubmit = (e: any) => {
     const tmp = { ...quote };
@@ -74,53 +110,66 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
       return line;
     });
     setQuote(tmp);
-    if (tmp.customer.id) {
+    if (tmp.customerId) {
       onSubmit(e);
       setErrors({});
     } else {
       e.preventDefault();
-      setErrors({ customer: "Saisissez un client en le sélectionnant dans la liste" });
+      setErrors({
+        customer: "Saisissez un client en le sélectionnant dans la liste",
+      });
     }
   };
 
-  const handleSelectExistingProduct = (result: any) => {
-    setExistingProductSelected(result);
-  };
-
   const addExistingProductSelected = () => {
-    if (existingProductSelected) {
-      addLine(existingProductSelected);
+    if (productIdSelected && productsQuery.data) {
+      addLine(
+        productsQuery.data.find((product) => product.id === productIdSelected)
+      );
       setExistingProductInput("");
-      setExistingProductSelected(undefined);
+      setProductIdSelected(undefined);
     }
   };
 
   const cantUpdate = React.useMemo(() => {
-    return quote.status !== QuoteStatusEnum.DRAFT;
+    return quote.status && quote.status !== QuoteStatusEnum.DRAFT;
   }, [quote]);
 
-  React.useEffect(() => {
-    const el = lineTableRef.current;
-    function handleCtrlEnter(e: KeyboardEvent) {
-      if (e.ctrlKey && e.key === "Enter" && !cantUpdate) {
-        addLine();
-      }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.ctrlKey && e.key === "Enter" && !cantUpdate) {
+      e.stopPropagation();
+      addLine();
     }
-    if (el) {
-      el.addEventListener("keydown", handleCtrlEnter);
-    }
-    return () => {
-      if (el) {
-        el.removeEventListener("keydown", handleCtrlEnter);
-      }
-    };
-  }, [lineTableRef, cantUpdate, addLine]);
+  };
 
   React.useEffect(() => {
-    if (!quote.customer) {
+    if (!customer) {
       setCustomerInputValue("");
     }
-  }, [quote.customer]);
+  }, [customer]);
+
+  const customerOptions = React.useMemo(() => {
+    if (customersQuery.data) {
+      return customersQuery.data.map((customer) => ({
+        value: customer.id,
+        label: customer.name,
+      }));
+    }
+    if (customer) {
+      return [{ value: customer.id, label: customer.name }];
+    }
+    return [];
+  }, [customersQuery.data, customer]);
+
+  const productOptions = React.useMemo(() => {
+    if (productsQuery.data) {
+      return productsQuery.data.map((product) => ({
+        value: product.id,
+        label: product.name,
+      }));
+    }
+    return [];
+  }, [productsQuery.data]);
 
   return (
     <form onSubmit={beforeOnSubmit}>
@@ -143,20 +192,20 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
         inputProps={{
           autoComplete: "nope",
         }}
-        options={customersQuery.data || [quote.customer]}
+        options={customerOptions}
         placeholder="Nom du client"
-        value={quote.customer}
+        value={quote.customerId}
         onSearchChange={(str) => {
           if (str) {
             setCustomerInputValue(str);
           }
         }}
-        textKey="name"
-        valueKey="id"
         isSearchable
         isLoading={customersQuery.isLoading}
       />
-      {errors && errors.customer && <div className="text-error-600 text-xs">{errors.customer}</div>}
+      {errors && errors.customer && (
+        <div className="text-error-600 text-xs">{errors.customer}</div>
+      )}
       <TextInput
         label="TVA (%)"
         containerClassName="my-3"
@@ -178,24 +227,39 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
           inputProps={{
             autoComplete: "nope",
           }}
-          options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
+          options={productOptions}
           isLoading={productsQuery.isLoading}
           isSearchable
           placeholder="Nom du produit"
-          valueKey="id"
-          textKey="name"
-          value={existingProductSelected}
+          value={productIdSelected}
           onSearchChange={(str) => setExistingProductInput(str ?? "")}
-          onChange={handleSelectExistingProduct}
+          onChange={onProductSelectedChange}
         />
-        <Button disabled={disabled || cantUpdate} onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
+        <Button
+          disabled={disabled || cantUpdate}
+          onClick={addExistingProductSelected}
+          type="button"
+          className="py-2 ml-2 w-1/6"
+          variant="default"
+        >
           Ajouter
         </Button>
       </div>
-      <div ref={lineTableRef} className="my-2">
-        <QuoteLineTable disabled={disabled || cantUpdate} quote={quote} setQuote={setQuote} />
+      <div onKeyDown={handleKeyDown} className="my-2">
+        <QuoteLineTable
+          disabled={disabled || cantUpdate}
+          quote={quote}
+          setQuote={setQuote}
+        />
         {!cantUpdate && (
-          <Button type="button" variant="default" className="w-full mt-2" size="sm" onClick={addLine} disabled={disabled}>
+          <Button
+            type="button"
+            variant="default"
+            className="w-full mt-2"
+            size="sm"
+            onClick={addLine}
+            disabled={disabled}
+          >
             Ajouter une ligne
           </Button>
         )}
@@ -203,42 +267,92 @@ const QuoteForm = ({ quote, setQuote, onSubmit, disabled, onUpdateStatus }: Quot
 
       <div className="flex justify-end pt-3">
         {quote.id && quote.status === QuoteStatusEnum.DRAFT && (
-          <Button className="mr-1" variant="success" size="md" type="button" onClick={onUpdateStatus(QuoteStatusEnum.SENT)} disabled={disabled}>
+          <Button
+            className="mr-1"
+            variant="success"
+            size="md"
+            type="button"
+            onClick={onUpdateStatus(QuoteStatusEnum.SENT)}
+            disabled={disabled}
+          >
             Envoyer le devis
           </Button>
         )}
-        {(!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status) && (
-          <Button variant="primary" size="md" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
+        {(!quote.id ||
+          quote.status === QuoteStatusEnum.DRAFT ||
+          !quote.status) && (
+          <Button
+            variant="primary"
+            size="md"
+            type="submit"
+            onClick={beforeOnSubmit}
+            disabled={disabled}
+          >
             Enregistrer
           </Button>
         )}
         {quote.status === QuoteStatusEnum.SENT && (
           <>
-            <Button size="md" variant="success" type="button" icon="thumb-up" className="ml-3" onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}>
+            <Button
+              size="md"
+              variant="success"
+              type="button"
+              icon="thumb-up"
+              className="ml-3"
+              onClick={onUpdateStatus(QuoteStatusEnum.ACCEPTED)}
+            >
               Devis accepté
             </Button>
-            <Button size="md" variant="error" type="button" icon="thumb-down" onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}>
+            <Button
+              size="md"
+              variant="error"
+              type="button"
+              icon="thumb-down"
+              onClick={onUpdateStatus(QuoteStatusEnum.REFUSED)}
+            >
               Devis refusé
             </Button>
           </>
         )}
         {quote.status === QuoteStatusEnum.ACCEPTED && (
           <>
-            <Button size="md" variant="default" className="mr-2" icon="document" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DRAFT)}>
+            <Button
+              size="md"
+              variant="default"
+              className="mr-2"
+              icon="document"
+              type="button"
+              onClick={onUpdateStatus(QuoteStatusEnum.DRAFT)}
+            >
               Remettre en brouillon
             </Button>
-            <Button size="md" icon="currency-euro" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}>
+            <Button
+              size="md"
+              icon="currency-euro"
+              type="button"
+              onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_ASK)}
+            >
               Demander un accompte
             </Button>
           </>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK && (
-          <Button size="md" icon="check" type="button" onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
+          <Button
+            size="md"
+            icon="check"
+            type="button"
+            onClick={onUpdateStatus(QuoteStatusEnum.DEPOSIT_PAID)}
+          >
             Accompte payé
           </Button>
         )}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID && (
-          <Button size="md" icon="archive" type="button" onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}>
+          <Button
+            size="md"
+            icon="archive"
+            type="button"
+            onClick={onUpdateStatus(QuoteStatusEnum.ARCHIVED)}
+          >
             Archiver le devis
           </Button>
         )}

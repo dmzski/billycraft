@@ -1,105 +1,192 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Bill, BillLine } from "../../models/Bill";
+import Bill, { BillLine } from "../../models/Bill";
 import BillLineTable from "../tables/BillLineTable";
-import { CustomerGraphQL } from "../../graphql/CustomerGraphQL";
-import { BillStatusEnum } from "../../models/BillStatusEnum";
+import { BillStatusEnum } from "../../models/Bill";
 import { Button, Select, TextInput } from "@coco-ui/core";
-import { ProductGraphQL } from "graphql/ProductGraphQL";
+import { LineTypeEnum } from "models/LineTypeEnum";
+import {
+  FormEventHandler,
+  MouseEventHandler,
+} from "react-router/node_modules/@types/react";
+import Customer from "models/Customer";
+import { CustomerApi } from "api/CustomerApi";
+import { ProductApi } from "api/ProductApi";
+import { ValueType } from "@coco-ui/core/dist/components/Select";
 
-const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): JSX.Element => {
-  const [customerInputValue, setCustomerInputValue] = React.useState(bill.customer ? bill.customer.name : "");
-  const [existingProductInput, setExistingProductInput] = React.useState<string>("");
-  const [existingProductSelected, setExistingProductSelected] = React.useState<any>();
-  const [errors, setErrors] = React.useState<any>({});
-  const customersQuery = useQuery(["customers-by-name", customerInputValue], CustomerGraphQL.getAllCustomersByNameContain, {
-    refetchOnWindowFocus: false,
-    enabled: customerInputValue?.length > 0,
-  });
-  const productsQuery = useQuery(["products-by-name"], ProductGraphQL.getAllProducts, {
+const defaultLine = {
+  description: "",
+  name: "",
+  price: 0,
+  quantity: 0,
+  type: LineTypeEnum.ARTICLE,
+};
+
+type BillFormProps = {
+  bill: Bill;
+  customer?: Customer;
+  setBill: React.Dispatch<React.SetStateAction<Bill>>;
+  onSubmit: FormEventHandler;
+  disabled?: boolean;
+  onUpdateStatus: (status: BillStatusEnum) => MouseEventHandler;
+};
+
+const BillForm = ({
+  bill,
+  customer,
+  setBill,
+  onSubmit,
+  disabled,
+  onUpdateStatus,
+}: BillFormProps): JSX.Element => {
+  const [customerInputValue, setCustomerInputValue] = React.useState(
+    customer ? customer.name : ""
+  );
+  const [
+    existingProductInput,
+    setExistingProductInput,
+  ] = React.useState<string>("");
+  const [productIdSelected, setProductIdSelected] = React.useState<number>();
+  const [errors, setErrors] = React.useState<
+    Record<string, string | undefined>
+  >({});
+  const customersQuery = useQuery(
+    ["customers-by-name", customerInputValue],
+    CustomerApi.findAllByNameContains,
+    {
+      refetchOnWindowFocus: false,
+      enabled: customerInputValue?.length > 0,
+    }
+  );
+  const productsQuery = useQuery(["products-by-name"], ProductApi.findAll, {
     refetchOnWindowFocus: false,
     enabled: existingProductInput?.length > 0,
   });
 
-  const inputChange = (property: keyof Bill) => {
-    return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const tmp: any = { ...bill };
+  const inputChange = React.useCallback((property: keyof Bill) => {
+    return (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       let value: string | number;
       switch (property) {
         case "tva":
-          value = parseInt(event.target.value);
+          value = Number(event.target.value);
           break;
         default:
           value = event.target.value;
       }
-      tmp[property] = value;
-      setBill(tmp);
+      setBill((current) => ({
+        ...current,
+        [property]: value,
+      }));
     };
-  };
+  }, []);
 
-  const onCustomerOptionClick = (option: any) => {
-    const tmp: any = { ...bill };
-    tmp.customer = option;
-    setBill(tmp);
-    setErrors({ ...errors, customer: undefined });
-  };
+  const onCustomerOptionClick = React.useCallback((option: ValueType) => {
+    setBill((current) => ({
+      ...current,
+      customerId: Number(option),
+    }));
+    setErrors((current) => ({ ...current, customer: undefined }));
+  }, []);
 
   const addLine = React.useCallback(
-    (newLine = new BillLine()) => {
-      const tmp = { ...bill };
-      newLine.line = -1 * tmp.lines.length + 1;
-      tmp.lines.push(newLine);
-      setBill(tmp);
+    (newLine: Partial<BillLine> = defaultLine) => {
+      setBill((current) => ({
+        ...current,
+        lines: [
+          ...(current.lines || []),
+          {
+            ...newLine,
+            line: (current.lines || []).length,
+          } as BillLine,
+        ],
+      }));
       setTimeout(() => {
         document.getElementById(newLine.line + "-select")?.focus();
       }, 200);
     },
-    [setBill, bill]
+    []
   );
 
-  const beforeOnSubmit = (e: any) => {
-    const tmp = { ...bill };
-    tmp.lines = tmp.lines.map((line: BillLine) => {
-      line.price = parseFloat(line.price as any);
-      line.quantity = parseFloat(line.quantity as any);
-      return line;
-    });
-    setBill(tmp);
-    if (tmp.customer.id) {
-      onSubmit(e);
-    } else {
-      e.preventDefault();
-      setErrors({ customer: "Choisissez un client en le sélectionnant dans la liste" });
-    }
-  };
+  const beforeOnSubmit = React.useCallback(
+    (e: React.FormEvent) => {
+      setBill((current) => ({
+        ...current,
+        lines: (current.lines || []).map((line) => ({
+          ...line,
+          price: Number(line.price),
+          quantity: Number(line.quantity),
+        })),
+      }));
+      if (bill.customerId) {
+        onSubmit(e);
+      } else {
+        e.preventDefault();
+        setErrors({
+          customer: "Choisissez un client en le sélectionnant dans la liste",
+        });
+      }
+    },
+    [bill]
+  );
 
-  const handleSelectExistingProduct = (result: any) => {
-    setExistingProductSelected(result);
-  };
+  const handleSelectExistingProduct = React.useCallback(
+    (productId: ValueType) => {
+      setProductIdSelected(Number(productId));
+    },
+    []
+  );
 
-  const addExistingProductSelected = () => {
-    if (existingProductSelected) {
-      addLine(existingProductSelected);
+  const addExistingProductSelected = React.useCallback(() => {
+    if (productIdSelected && productsQuery.data) {
+      addLine(productsQuery.data.find(({ id }) => id === productIdSelected));
       setExistingProductInput("");
-      setExistingProductSelected(undefined);
+      setProductIdSelected(undefined);
     }
-  };
+  }, [productIdSelected, productsQuery.data]);
 
   const cantUpdate = React.useMemo(() => {
-    return bill.status !== BillStatusEnum.DRAFT;
+    return bill.status && bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
 
   React.useEffect(() => {
-    if (!bill.customer) {
+    if (!customer) {
       setCustomerInputValue("");
     }
-  }, [bill.customer]);
+  }, [customer]);
 
-  const handleShortcut = (event: React.KeyboardEvent) => {
-    if (event.ctrlKey && event.key === "Enter" && !cantUpdate) {
-      addLine();
+  const handleShortcut = React.useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "Enter" && !cantUpdate) {
+        addLine();
+      }
+    },
+    [addLine, cantUpdate]
+  );
+
+  const customerOptions = React.useMemo(() => {
+    if (customersQuery.data) {
+      return customersQuery.data.map(({ id, name }) => ({
+        value: id,
+        label: name,
+      }));
     }
-  };
+    if (customer) {
+      return [{ value: customer.id, label: customer.name }];
+    }
+    return [];
+  }, []);
+
+  const productOptions = React.useMemo(() => {
+    if (productsQuery.data) {
+      return productsQuery.data.map(({ id, name }) => ({
+        value: id,
+        label: name,
+      }));
+    }
+    return [];
+  }, [productsQuery.data]);
 
   return (
     <form className="bill-form" onSubmit={beforeOnSubmit}>
@@ -121,16 +208,12 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
         inputProps={{
           autoComplete: "nope",
         }}
-        options={customersQuery.data || [bill.customer]}
+        options={customerOptions}
         placeholder="Nom du client"
-        value={bill.customer}
+        value={bill.customerId}
         onSearchChange={(str) => {
-          if (str) {
-            setCustomerInputValue(str);
-          }
+          if (str) setCustomerInputValue(str);
         }}
-        textKey="name"
-        valueKey="id"
         isSearchable
         isLoading={customersQuery.isLoading}
       />
@@ -155,52 +238,99 @@ const BillForm = ({ bill, setBill, onSubmit, disabled, onUpdateStatus }: any): J
           inputProps={{
             autoComplete: "nope",
           }}
-          options={productsQuery.data ? productsQuery.data.filter((product: any) => product.name) : []}
+          options={productOptions}
           isLoading={productsQuery.isLoading}
           isSearchable
           placeholder="Nom du produit"
-          valueKey="id"
-          textKey="name"
-          value={existingProductSelected}
+          value={productIdSelected}
           onSearchChange={(str) => setExistingProductInput(str ?? "")}
           onChange={handleSelectExistingProduct}
         />
-        <Button disabled={disabled || cantUpdate} onClick={addExistingProductSelected} type="button" className="py-2 ml-2 w-1/6" variant="default">
+        <Button
+          disabled={disabled || cantUpdate}
+          onClick={addExistingProductSelected}
+          type="button"
+          className="py-2 ml-2 w-1/6"
+          variant="default"
+        >
           Ajouter
         </Button>
       </div>
       <div onKeyDown={handleShortcut}>
-        <BillLineTable disabled={disabled || cantUpdate} bill={bill} setBill={setBill} />
+        <BillLineTable
+          disabled={disabled || cantUpdate}
+          bill={bill}
+          setBill={setBill}
+        />
       </div>
       {!cantUpdate && (
-        <Button type="button" className="mt-2 w-full" variant="default" size="sm" onClick={addLine} disabled={disabled}>
+        <Button
+          type="button"
+          className="mt-2 w-full"
+          variant="default"
+          size="sm"
+          onClick={() => addLine()}
+          disabled={disabled}
+        >
           Ajouter une ligne
         </Button>
       )}
 
       <div className="flex pt-3 flex-row-reverse">
         {(!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status) && (
-          <Button icon="save" size="md" type="submit" onClick={beforeOnSubmit} disabled={disabled}>
+          <Button
+            icon="save"
+            size="md"
+            type="submit"
+            onClick={beforeOnSubmit}
+            disabled={disabled}
+          >
             Enregistrer
           </Button>
         )}
         {bill.id && bill.status === BillStatusEnum.DRAFT && (
-          <Button size="md" icon="mail" className="mr-1" variant="success" type="button" onClick={onUpdateStatus(BillStatusEnum.SENT)} disabled={disabled}>
+          <Button
+            size="md"
+            icon="mail"
+            className="mr-1"
+            variant="success"
+            type="button"
+            onClick={onUpdateStatus(BillStatusEnum.SENT)}
+            disabled={disabled}
+          >
             Envoyer la facture
           </Button>
         )}
         {bill.status === BillStatusEnum.SENT && (
           <>
-            <Button icon="thumb-up" size="md" type="button" variant="success" className="ml-3" onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}>
+            <Button
+              icon="thumb-up"
+              size="md"
+              type="button"
+              variant="success"
+              className="ml-3"
+              onClick={onUpdateStatus(BillStatusEnum.PAYMENT_PAID)}
+            >
               Facture payée
             </Button>
-            <Button icon="thumb-down" size="md" type="button" variant="error" onClick={onUpdateStatus(BillStatusEnum.REFUSED)}>
+            <Button
+              icon="thumb-down"
+              size="md"
+              type="button"
+              variant="error"
+              onClick={onUpdateStatus(BillStatusEnum.REFUSED)}
+            >
               Facture refusée
             </Button>
           </>
         )}
         {bill.status === BillStatusEnum.PAYMENT_PAID && (
-          <Button size="md" icon="archive" type="button" onClick={onUpdateStatus(BillStatusEnum.ARCHIVED)}>
+          <Button
+            size="md"
+            icon="archive"
+            type="button"
+            onClick={onUpdateStatus(BillStatusEnum.ARCHIVED)}
+          >
             Archiver la facture
           </Button>
         )}

@@ -1,4 +1,5 @@
 import { Icon, Select, List, TextInput } from "@coco-ui/core";
+import { LineTypeEnum } from "models/LineTypeEnum";
 import React from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { LINE_TYPE } from "../../constants/line";
@@ -13,7 +14,14 @@ type QuoteLineTableLineProps = {
   provided?: DraggableProvided;
   snapshot?: DraggableStateSnapshot;
 };
-const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled, provided }: QuoteLineTableLineProps): JSX.Element => {
+const QuoteLineTableLine = ({
+  line,
+  setLine,
+  tva,
+  deleteLine,
+  disabled,
+  provided,
+}: QuoteLineTableLineProps): JSX.Element => {
   const handleChange = (field: string) => (e: any) => {
     const tmp = { ...line };
     let value: any;
@@ -30,22 +38,28 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled, provided
   };
 
   return (
-    <List.Row ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
+    <List.Row
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      {...provided?.dragHandleProps}
+    >
       <List.Cell className="w-48">
         <Select
           disabled={disabled}
           tabIndex={0}
-          value={Object.values(LINE_TYPE).find(({ enum: type }) => type === line.type)}
-          onChange={(result) => setLine({ ...line, type: result.enum })}
-          textKey="name"
-          valueKey="enum"
-          options={Object.values(LINE_TYPE)}
+          value={line.type}
+          onChange={(type) => setLine({ ...line, type: type as LineTypeEnum })}
+          options={Object.values(LINE_TYPE).map((type) => ({
+            value: type.enum,
+            label: type.name,
+          }))}
           name={line.line + "-select"}
           id={line.line + "-select"}
         />
       </List.Cell>
       <List.Cell className="w-72">
         <TextInput
+          required
           placeholder="Nom"
           className="w-full"
           disabled={disabled}
@@ -90,12 +104,25 @@ const QuoteLineTableLine = ({ line, setLine, tva, deleteLine, disabled, provided
           onChange={handleChange("price")}
         />
       </List.Cell>
-      <List.Cell className="w-48 items-center flex">{Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €</List.Cell>
-      <List.Cell className="w-48 items-center flex">{Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 || 0} €</List.Cell>
+      <List.Cell className="w-48 items-center flex">
+        {Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €
+      </List.Cell>
+      <List.Cell className="w-48 items-center flex">
+        {Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) / 100 ||
+          0}{" "}
+        €
+      </List.Cell>
       <List.Cell className="w-24 items-center flex">
         {!disabled ? (
-          <button type="button" className="w-full flex justify-center items-center apperance-none" onClick={deleteLine}>
-            <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" />
+          <button
+            type="button"
+            className="w-full flex justify-center items-center apperance-none"
+            onClick={deleteLine}
+          >
+            <Icon
+              name="trash"
+              className="p-1 flex text-white rounded-full bg-error-600"
+            />
           </button>
         ) : null}
       </List.Cell>

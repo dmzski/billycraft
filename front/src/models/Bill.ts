@@ -1,27 +1,37 @@
-import { Customer } from "./Customer";
-import { BillStatusEnum } from "./BillStatusEnum";
 import { LineTypeEnum } from "./LineTypeEnum";
 
-export class Bill {
-  id?: string;
-  title = "";
-  customer: Customer = new Customer();
-  tva = 0;
-  createdAt?: string;
-  updatedAt?: string;
-  sentAt?: string;
-  status: BillStatusEnum = BillStatusEnum.DRAFT;
-  lines: BillLine[] = [];
-  total?: number;
-  quoteId?: string;
+export enum BillStatusEnum {
+  DRAFT = "DRAFT",
+  SENT = "SENT",
+  REFUSED = "REFUSED",
+  PAYMENT_PAID = "PAYMENT_PAID",
+  ARCHIVED = "ARCHIVED",
 }
 
-export class BillLine {
-  id?: string;
-  name = "";
-  type: LineTypeEnum = LineTypeEnum.SERVICE;
-  description = "";
-  quantity = 0;
-  price = 0;
-  line = 0;
+interface Bill {
+  id: string;
+  title: string;
+  tva: number;
+  createdAt: string;
+  updatedAt: string;
+  sentAt?: string;
+  status: BillStatusEnum;
+  createdBy: string;
+  companyId: number;
+  customerId: number;
+  fileName: null;
+  lines: BillLine[];
+  quoteId: string;
 }
+
+export interface BillLine {
+  billId: string;
+  line: number;
+  quantity: number;
+  price: number;
+  name: string;
+  description: string;
+  type: LineTypeEnum;
+}
+
+export default Bill;
