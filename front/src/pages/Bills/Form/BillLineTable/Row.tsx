@@ -38,12 +38,14 @@ const BillLineTableLine = ({
   };
 
   return (
-    <div
-      ref={provided?.innerRef}
-      {...provided?.draggableProps}
-      {...provided?.dragHandleProps}
-    >
+    <div ref={provided?.innerRef} {...provided?.draggableProps}>
       <List.Row className="bg-background">
+        <List.Cell
+          {...provided?.dragHandleProps}
+          className="w-12 items-center flex"
+        >
+          <Icon name="selector" size={12} />
+        </List.Cell>
         <List.Cell className="w-48">
           <Select
             disabled={disabled}

@@ -127,7 +127,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
         />
       </Table.Cell>
       <Table.Cell className="px-1">
-        <div className="flex items-center">
+        <div className="flex">
           <TextInput
             className="w-full"
             value={newProduct.name}
@@ -137,7 +137,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
         </div>
       </Table.Cell>
       <Table.Cell className="px-1 py-2">
-        <div className="flex items-center">
+        <div className="flex">
           <TextInput
             autoResizeHeight
             multiline
@@ -149,7 +149,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
         </div>
       </Table.Cell>
       <Table.Cell className="px-1 w-48">
-        <div className="w-full flex justify-center items-center mr-1">
+        <div className="w-full flex mr-1">
           <TextInput
             containerClassName="w-full"
             min={0}
@@ -163,9 +163,9 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
           <span className="mx-2">€</span>
         </div>
       </Table.Cell>
-      <Table.Cell className="w-20 relative">
+      <Table.Cell className="w-20">
         {deleteMode ? (
-          <div className="absolute w-max top-1/2 transform -translate-y-1/2 flex right-0 items-center bg-white shadow rounded px-2 py-1">
+          <div className="flex">
             <span className="mr-2">Supprimer ? </span>
             <Icon
               name="check"
@@ -179,7 +179,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
             />
           </div>
         ) : editMode ? (
-          <div className="flex items-center">
+          <div className="flex">
             <button
               onClick={onSubmit}
               disabled={
@@ -203,11 +203,11 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
             )}
           </div>
         ) : (
-          <div className="flex items-center">
+          <div className="flex">
             <button
               type="button"
               onClick={toggleEditMode}
-              className="appearance-none focus:outline-none mr-2"
+              className="appearance-none focus:outline-none mr-1"
             >
               <PencilIcon className="rounded-full p-2 text-white bg-info-600 hover:bg-info-700 w-8" />
             </button>

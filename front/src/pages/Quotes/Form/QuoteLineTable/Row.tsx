@@ -38,12 +38,14 @@ const QuoteLineTableLine = ({
   };
 
   return (
-    <div
-      ref={provided?.innerRef}
-      {...provided?.draggableProps}
-      {...provided?.dragHandleProps}
-    >
+    <div ref={provided?.innerRef} {...provided?.draggableProps}>
       <List.Row className="bg-background">
+        <List.Cell
+          {...provided?.dragHandleProps}
+          className="w-12 items-center flex"
+        >
+          <Icon name="selector" size={12} />
+        </List.Cell>
         <List.Cell className="w-48">
           <Select
             disabled={disabled}
@@ -110,7 +112,7 @@ const QuoteLineTableLine = ({
         <List.Cell className="w-48 py-2">
           {Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €
         </List.Cell>
-        <List.Cell className="w-48 py-2">
+        <List.Cell className="w-52 py-2">
           {Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) /
             100 || 0}{" "}
           €

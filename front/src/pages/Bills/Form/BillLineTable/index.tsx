@@ -71,15 +71,15 @@ const BillLineTable = ({
       columns={[
         {
           name: "Type",
-          className: "w-48 ml-4",
+          className: "pl-12 w-48",
         },
         {
           name: "Nom",
-          className: "w-72 pl-2",
+          className: "w-72 pl-6",
         },
         {
           name: "Description",
-          className: "w-full ml-2",
+          className: "w-full pl-4",
         },
         {
           name: "Quantité",
@@ -95,7 +95,7 @@ const BillLineTable = ({
         },
         {
           name: "Sous Total",
-          className: "w-48",
+          className: "w-52",
         },
         {
           name: "",
@@ -113,6 +113,7 @@ const BillLineTable = ({
               >
                 {(data as BillLine[])?.map((line, index) => (
                   <Draggable
+                    isDragDisabled={disabled}
                     key={`draggable-${line.line}`}
                     draggableId={line.line.toString()}
                     index={index}
