@@ -11,8 +11,10 @@ export const QuoteEmailCustomizationApi = {
   updateMine: (
     customization: QuoteEmailCustomization
   ): Promise<QuoteEmailCustomization> =>
-    HttpClient.POST(
-      `${QUOTE_EMAIL_CUSTOMIZATION_URL}/${customization.id}`,
-      customization
-    ),
+    !customization.id
+      ? HttpClient.POST(`${QUOTE_EMAIL_CUSTOMIZATION_URL}`, customization)
+      : HttpClient.PATCH(
+          `${QUOTE_EMAIL_CUSTOMIZATION_URL}/${customization.id}`,
+          customization
+        ),
 };

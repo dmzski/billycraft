@@ -19,15 +19,6 @@ import (
 	"github.com/jung-kurt/gofpdf/contrib/httpimg"
 )
 
-var (
-	whiteRGB   = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	grayRGB    = color.RGBA{R: 230, G: 230, B: 230, A: 255}
-	marginL    = 5.0
-	marginB    = 25
-	cellMargin = 1.0
-	cols       = []float64{135, 20, 20, 25}
-)
-
 func generateQuotePDF(quote models.Quote) *os.File {
 
 	c := company.DAO.FindOneById(quote.CompanyID)
@@ -91,48 +82,49 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.Ln(3)
 
-	addHeaders(pdf, qc)
+	addQuoteHeaders(pdf, qc)
 
 	_, lineHt = pdf.GetFontSize()
 	reportTotal := 0.0
+	totalAndTvaHeight := totalAndTvaCellHeight
+
+	if quote.Tva != nil && *quote.Tva > 0 {
+		totalAndTvaHeight *= 2
+	}
 
 	for i, line := range quote.Lines {
 		pdf.SetFont("Arial", "", 10)
-		pdf.SetCellMargin(cellMargin)
-		lineColor := whiteRGB
-		borderStr := "LR"
+		pdf.SetX(marginL)
 
+		lineColor := whiteRGB
 		if i%2 == 1 {
 			lineColor = grayRGB
 		}
-		if i == len(quote.Lines)-1 {
-			borderStr = "LBR"
-		}
 		pdf.SetFillColor(int(lineColor.R), int(lineColor.G), int(lineColor.B))
-		pdf.SetX(marginL)
 
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		linePrice := getLinePrice(quote, line)
+		linePrice := getQuoteLinePrice(quote, line)
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 		if linePrice > 0 {
 			reportTotal += linePrice
 		}
 
-		lines := pdf.SplitText(line.Name, 135)
-		descriptionLines := pdf.SplitText(line.Description, 135)
-		height := float64(len(lines)+len(descriptionLines))*lineHt + cellMargin*float64(len(lines)+len(descriptionLines))
+		lines := pdf.SplitText(line.Name, cols[0]-cellMargin)
+		descriptionLines := pdf.SplitText(line.Description, cols[0]-cellMargin)
+		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
-		if pdf.GetY()+height > pageSize.Ht-float64(marginB)-10 {
+		// The height oof the row more the height of total and tva
+		if pdf.GetY()+height+(lineHt+lineMargin*4)*2 > pageSize.Ht-float64(marginB)-10 {
 			pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
-			addTotal(pdf, reportTotal)
+			addQuoteTotal(pdf, reportTotal)
 			pdf.AddPage()
-			addHeaders(pdf, qc)
+			addQuoteHeaders(pdf, qc)
 		}
 
 		if line.Price == 0 && line.Quantity == 0 {
 			pdf.SetFont("Arial", "B", 10)
-			pdf.SetCellMargin(cellMargin)
+			pdf.SetCellMargin(lineMargin)
 			quantity = ""
 			price = ""
 			subtotal = ""
@@ -142,49 +134,67 @@ func generateQuotePDF(quote models.Quote) *os.File {
 			subtotal = "OFFERT"
 		}
 		pdf.SetFont("Arial", "B", 10)
+		pdf.SetDrawColor(pdf.GetFillColor())
+		pdf.Rect(pdf.GetX(), pdf.GetY(), float64(pageSize.Wd-marginL*2), float64(height), "F")
+		pdf.SetDrawColor(int(blackRGB.R), int(blackRGB.G), int(blackRGB.B))
+
 		currentY := pdf.GetY()
-		for index, line := range lines {
-			if index == len(lines) {
-				pdf.MultiCell(cols[0], lineHt+cellMargin, tr(line), "LBR", "", true)
-			} else {
-				pdf.MultiCell(cols[0], lineHt+cellMargin, tr(line), "LR", "", true)
-			}
+		pdf.SetXY(marginL+cellMargin, currentY+cellMargin)
+		for _, line := range lines {
+			pdf.SetX(marginL + cellMargin)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(line), "", "", false)
 		}
 		pdf.SetFont("Arial", "", 10)
 
-		for index, descriptionLine := range descriptionLines {
-			if index == len(descriptionLines) {
-				pdf.MultiCell(cols[0], lineHt+cellMargin, tr(descriptionLine), "LBR", "", true)
-			} else {
-				pdf.MultiCell(cols[0], lineHt+cellMargin, tr(descriptionLine), "LR", "", true)
-			}
+		for _, descriptionLine := range descriptionLines {
+			pdf.SetX(marginL + cellMargin)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(descriptionLine), "", "", false)
 		}
 		pdf.SetXY(marginL+cols[0], currentY)
-		pdf.CellFormat(cols[1], height, quantity, borderStr, 0, "C", true, 0, "")
-		pdf.CellFormat(cols[2], height, tr(price), borderStr, 0, "C", true, 0, "")
-		pdf.CellFormat(cols[3], height, tr(subtotal), borderStr, 0, "C", true, 0, "")
-		pdf.Ln(-1)
+		pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2], height, tr(price), "", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[3], height, tr(subtotal), "", 0, "C", true, 0, "")
+
+		// Cell borders
+		pdf.Line(marginL, currentY, marginL, currentY+float64(height))
+		pdf.Line(marginL+cols[0], currentY, marginL+cols[0], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1], currentY, marginL+cols[0]+cols[1], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1]+cols[2], currentY, marginL+cols[0]+cols[1]+cols[2], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY, marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY+float64(height))
+
+		pdf.SetXY(marginL, currentY+height)
 	}
-	pdf.Line(marginL, pdf.GetY(), 135+20+20+25, pdf.GetY())
+	pdf.Line(marginL, pdf.GetY(), cols[0]+cols[1]+cols[2]+cols[3], pdf.GetY())
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
 	if quote.Tva != nil && *quote.Tva > 0 {
 		pdf.SetX(marginL + 135 + 20)
-		pdf.CellFormat(20, 8, "TVA", "1", 0, "C", true, 0, "")
-		pdf.CellFormat(25, 8, tr(fmt.Sprintf("%d", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
+		pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
+		pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%d", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
 	}
 
 	pdf.SetFont("Arial", "B", 10)
 	pdf.Ln(-1)
 	pdf.SetX(marginL + cols[0] + cols[1])
-	pdf.CellFormat(cols[2], 8, "Total", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(cols[3], 8, tr(fmt.Sprintf("%.2f", getQuoteTotal(quote))+"€"), "1", 0, "C", false, 0, "")
+	pdf.CellFormat(cols[2], float64(totalAndTvaCellHeight), "Total", "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", getQuoteTotal(quote))+"€"), "1", 0, "C", false, 0, "")
 	pdf.SetFont("Arial", "", 10)
 
-	pdf.Ln(7)
+	pdf.SetY(pdf.GetY() + lineHt*3)
+	afterTableLines := pdf.SplitText(qc.AfterTable, pageSize.Wd-marginL*2)
+	height := float64(len(afterTableLines))*lineHt + cellMargin*float64(len(afterTableLines))
+	if pdf.GetY()+height > pageSize.Ht-float64(marginB)-10 {
+		pdf.AddPage()
+	}
 
-	pdf.MultiCell(marginL, 7, tr(qc.AfterTable), "0", "", false)
+	for index, line := range afterTableLines {
+		if index == len(afterTableLines) {
+			pdf.MultiCell(pageSize.Wd-marginL*2, lineHt+cellMargin, tr(line), "", "", false)
+		} else {
+			pdf.MultiCell(pageSize.Wd-marginL*2, lineHt+cellMargin, tr(line), "", "", false)
+		}
+	}
 
 	os.MkdirAll(config.Get().PdfDir+fmt.Sprintf("%d", c.ID)+"/quotes/", os.ModePerm)
 	file, err := os.Create(config.Get().PdfDir + fmt.Sprintf("%d", c.ID) + "/quotes/" + quote.ID + ".pdf")
@@ -213,7 +223,7 @@ func getQuoteTotal(quote models.Quote) float64 {
 
 }
 
-func getLinePrice(quote models.Quote, line models.QuoteLine) float64 {
+func getQuoteLinePrice(quote models.Quote, line models.QuoteLine) float64 {
 	tva := 0.0
 	if quote.Tva != nil && *quote.Tva > 0 {
 		tva = float64(int(*quote.Tva) / 100)
@@ -223,10 +233,10 @@ func getLinePrice(quote models.Quote, line models.QuoteLine) float64 {
 
 }
 
-func addHeaders(pdf gofpdf.Pdf, qc models.QuoteCustomization) {
+func addQuoteHeaders(pdf gofpdf.Pdf, qc models.QuoteCustomization) {
 	rgba, err := parseHexColor(qc.MainColor)
 	if err != nil {
-		rgba = color.RGBA{R: 0, G: 255, B: 255, A: 255}
+		rgba = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	}
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
 	currentR, currentG, currentB := pdf.GetFillColor()
@@ -242,7 +252,7 @@ func addHeaders(pdf gofpdf.Pdf, qc models.QuoteCustomization) {
 	pdf.SetFillColor(currentR, currentG, currentB)
 }
 
-func addTotal(pdf gofpdf.Pdf, reportTotal float64) {
+func addQuoteTotal(pdf gofpdf.Pdf, reportTotal float64) {
 	reportTotalCellWidth := 40
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
 	_, height := pdf.GetPageSize()

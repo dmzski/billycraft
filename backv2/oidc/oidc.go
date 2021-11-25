@@ -74,7 +74,6 @@ func Secure() func(c *fiber.Ctx) error {
 
 		token, err := verifier.Verify(ctx, parts[1])
 		if err != nil {
-			log.Println(err.Error())
 			return c.Status(401).SendString("Unauthorized access")
 		}
 
@@ -85,7 +84,6 @@ func Secure() func(c *fiber.Ctx) error {
 		claims := &Claims{}
 		err = token.Claims(claims)
 		if err != nil {
-			log.Println("Error when unmarshal claims")
 			return c.Status(500).SendString("Error when parsing claims")
 		}
 		user := users.DAO.FindMe(claims.PreferredUsername)

@@ -10,8 +10,10 @@ export const QuoteCustomizationApi = {
   updateMine: (
     customization: QuoteCustomization
   ): Promise<QuoteCustomization> =>
-    HttpClient.POST(
-      `${QUOTE_CUSTOMIZATION_URL}/${customization.id}`,
-      customization
-    ),
+    customization.id
+      ? HttpClient.PATCH(
+          `${QUOTE_CUSTOMIZATION_URL}/${customization.id}`,
+          customization
+        )
+      : HttpClient.POST(`${QUOTE_CUSTOMIZATION_URL}`, customization),
 };

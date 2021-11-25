@@ -45,10 +45,14 @@ func getOrGenerateBill(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		bill := bills.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		if bill.Status == "" || bill.Status == "DRAFT" {
+			return generateBill(c)
+		}
+
 		file, err := os.Open(fmt.Sprintf("%s%d/bills/%s.pdf", config.Get().PdfDir, bill.CompanyID, bill.ID))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
-			return generateQuote(c)
+			return c.Status(fiber.ErrInternalServerError.Code).SendString("An error occured")
 		}
 		return c.SendFile(file.Name())
 	}

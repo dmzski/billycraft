@@ -1,7 +1,10 @@
 package pdf
 
 import (
+	"backv2/billCustomization"
+	"backv2/company"
 	"backv2/config"
+	"backv2/customers"
 	"backv2/models"
 	"fmt"
 	"log"
@@ -16,46 +19,60 @@ import (
 	"github.com/jung-kurt/gofpdf/contrib/httpimg"
 )
 
-func generateBillPDF(b models.Bill) *os.File {
-	c := b.Company
-	bc := c.BillCustomization
-	if bc == nil {
-		bc = &models.BillCustomization{}
-	}
+var (
+	blackRGB              = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	whiteRGB              = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	grayRGB               = color.RGBA{R: 230, G: 230, B: 230, A: 255}
+	marginL               = 5.0
+	marginB               = 25
+	cellMargin            = 2.0
+	lineMargin            = 1.0
+	cols                  = []float64{135, 20, 20, 25}
+	totalAndTvaCellHeight = 8
+)
+
+func generateBillPDF(bill models.Bill) *os.File {
+	c := company.DAO.FindOneById(bill.CompanyID)
+	bc := billCustomization.DAO.FindFirstByTenant(bill.CompanyID)
+	customer := customers.DAO.FindOneByIdAndTenant(*bill.CustomerID, bill.CompanyID)
 	rgba, err := parseHexColor(bc.MainColor)
 	if err != nil {
 		rgba = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	}
+
 	pdf := gofpdf.New("P", "mm", "A4", "")
+	_, lineHt := pdf.GetFontSize()
+	pageSize := pdf.GetPageSizeStr("A4")
 	pdf.AddPage()
-	pdf.SetMargins(5, 5, 5)
+	pdf.SetMargins(marginL, marginL, marginL)
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetFont("Arial", "", 10)
+	pdf.SetAutoPageBreak(false, 0)
 	pdf.SetFooterFunc(func() {
-		pdf.SetY(-20)
-		pdf.SetX(2)
-		pdf.SetFont("Arial", "I", 8)
-		pdf.MultiCell(206, 3, tr(bc.Footer), "", "L", false)
+		pdf.SetY(pageSize.Ht - float64(marginB))
+		pdf.SetX(marginL)
+		pdf.SetFont("Arial", "I", 5)
+		pdf.MultiCell(pageSize.Wd-marginL*2, 5, tr(bc.Footer), "", "L", false)
 	})
 
 	if c.Logo != nil {
 		httpimg.Register(pdf, *c.Logo, "png")
 		opt := gofpdf.ImageOptions{}
 		opt.ImageType = "png"
-		pdf.ImageOptions(*c.Logo, 5, 5, 30, 30, false, opt, 0, "")
+		pdf.ImageOptions(*c.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 	}
-	pdf.SetX(-110)
+	pdf.SetX(-100 - marginL)
 
 	date := time.Now()
 
 	pdf.CellFormat(100, 5, tr("Date d'émission : "+date.Format("02/01/2006")), "0", 1, "R", false, 0, "")
 	pdf.Ln(2)
 
-	pdf.SetX(-60)
+	pdf.SetX(-50 - marginL)
 	pdf.SetFont("Arial", "B", 14)
 	pdf.SetLineWidth(1)
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
-	pdf.CellFormat(50, 10, tr("DEVIS"), "1", 1, "C", true, 0, "")
+	pdf.CellFormat(50, 10, tr("FACTURE"), "1", 1, "C", true, 0, "")
 	pdf.SetFont("Arial", "", 10)
 
 	pdf.SetY(35)
@@ -64,52 +81,62 @@ func generateBillPDF(b models.Bill) *os.File {
 	y := pdf.GetY()
 	pdf.MultiCell(100, 5, tr(companyStr), "0", "L", false)
 	pdf.SetY(y + 4)
-	pdf.SetX(-110)
-	customerStr := b.Customer.Name + "\n" + b.Customer.Address + "\n" + b.Customer.PostalCode + ", " + b.Customer.City
-	pdf.MultiCell(100, 5, tr(customerStr), "0", "R", false)
+	pdf.SetX(-100 - marginL)
+	if customer.Name != "" {
+		customerStr := customer.Name + "\n" + customer.Address + "\n" + customer.PostalCode + ", " + customer.City
+		pdf.MultiCell(100, 5, tr(customerStr), "0", "R", false)
+	}
 
 	pdf.SetFont("Arial", "B", 10)
-	pdf.CellFormat(0, 10, tr("Référence du devis : "+b.ID), "0", 1, "R", false, 0, "")
-	pdf.CellFormat(0, 5, tr("Objet du devis : "+b.Title), "0", 1, "L", false, 0, "")
+	pdf.CellFormat(0, 10, tr("Référence du devis : "+bill.ID), "0", 1, "R", false, 0, "")
+	pdf.CellFormat(0, 5, tr("Objet du devis : "+bill.Title), "0", 1, "L", false, 0, "")
 	pdf.SetFont("Arial", "B", 10)
 
 	pdf.Ln(3)
 
-	left := 5.0
-	pdf.SetX(left)
-	pdf.SetLineWidth(0.3)
-	pdf.CellFormat(135, 8, tr("Désignation"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(20, 8, tr("Quantité"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(20, 8, tr("Prix HT"), "1", 0, "C", true, 0, "")
-	pdf.CellFormat(25, 8, tr("Sous Total"), "1", 0, "C", true, 0, "")
-	pdf.Ln(-1)
-	pdf.SetFont("Arial", "", 10)
+	addBillHeaders(pdf, bc)
 
-	pdf.SetAutoPageBreak(true, 15)
-	fillWhite := color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	fillGray := color.RGBA{R: 230, G: 230, B: 230, A: 255}
-	for i, line := range b.Lines {
+	_, lineHt = pdf.GetFontSize()
+	reportTotal := 0.0
+	totalAndTvaHeight := totalAndTvaCellHeight
+
+	if bill.Tva != nil && *bill.Tva > 0 {
+		totalAndTvaHeight *= 2
+	}
+
+	for i, line := range bill.Lines {
 		pdf.SetFont("Arial", "", 10)
-		pdf.SetCellMargin(4)
-		lineColor := fillWhite
-		borderStr := "LR"
+		pdf.SetX(marginL)
 
+		lineColor := whiteRGB
 		if i%2 == 1 {
-			lineColor = fillGray
-		}
-		if i == len(b.Lines)-1 {
-			borderStr = "LBR"
+			lineColor = grayRGB
 		}
 		pdf.SetFillColor(int(lineColor.R), int(lineColor.G), int(lineColor.B))
-		pdf.SetX(left)
-		y := pdf.GetY()
+
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		subtotal := fmt.Sprintf("%.2f€", line.Price*float64(line.Quantity))
+		linePrice := getLinePrice(bill, line)
+		subtotal := fmt.Sprintf("%.2f€", linePrice)
+		if linePrice > 0 {
+			reportTotal += linePrice
+		}
+
+		lines := pdf.SplitText(line.Name, cols[0]-cellMargin)
+		descriptionLines := pdf.SplitText(line.Description, cols[0]-cellMargin)
+		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
+
+		// The height oof the row more the height of total and tva
+		if pdf.GetY()+height+(lineHt+lineMargin*4)*2 > pageSize.Ht-float64(marginB)-10 {
+			pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
+			addBillTotal(pdf, reportTotal)
+			pdf.AddPage()
+			addBillHeaders(pdf, bc)
+		}
 
 		if line.Price == 0 && line.Quantity == 0 {
 			pdf.SetFont("Arial", "B", 10)
-			pdf.SetCellMargin(2)
+			pdf.SetCellMargin(lineMargin)
 			quantity = ""
 			price = ""
 			subtotal = ""
@@ -118,39 +145,71 @@ func generateBillPDF(b models.Bill) *os.File {
 			price = "OFFERT"
 			subtotal = "OFFERT"
 		}
+		pdf.SetFont("Arial", "B", 10)
+		pdf.SetDrawColor(pdf.GetFillColor())
+		pdf.Rect(pdf.GetX(), pdf.GetY(), float64(pageSize.Wd-marginL*2), float64(height), "F")
+		pdf.SetDrawColor(int(blackRGB.R), int(blackRGB.G), int(blackRGB.B))
 
-		pdf.MultiCell(135, 5, tr(line.Description), borderStr, "", true)
-		height := pdf.GetY() - y
-		pdf.SetY(y)
-		pdf.SetX(left + 135)
-		pdf.CellFormat(20, height, quantity, borderStr, 0, "C", true, 0, "")
-		pdf.CellFormat(20, height, tr(price), borderStr, 0, "C", true, 0, "")
-		pdf.CellFormat(25, height, tr(subtotal), borderStr, 0, "C", true, 0, "")
-		pdf.Ln(-1)
+		currentY := pdf.GetY()
+		pdf.SetXY(marginL+cellMargin, currentY+cellMargin)
+		for _, line := range lines {
+			pdf.SetX(marginL + cellMargin)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(line), "", "", false)
+		}
+		pdf.SetFont("Arial", "", 10)
+
+		for _, descriptionLine := range descriptionLines {
+			pdf.SetX(marginL + cellMargin)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(descriptionLine), "", "", false)
+		}
+		pdf.SetXY(marginL+cols[0], currentY)
+		pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2], height, tr(price), "", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[3], height, tr(subtotal), "", 0, "C", true, 0, "")
+
+		// Cell borders
+		pdf.Line(marginL, currentY, marginL, currentY+float64(height))
+		pdf.Line(marginL+cols[0], currentY, marginL+cols[0], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1], currentY, marginL+cols[0]+cols[1], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1]+cols[2], currentY, marginL+cols[0]+cols[1]+cols[2], currentY+float64(height))
+		pdf.Line(marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY, marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY+float64(height))
+
+		pdf.SetXY(marginL, currentY+height)
 	}
+	pdf.Line(marginL, pdf.GetY(), cols[0]+cols[1]+cols[2]+cols[3], pdf.GetY())
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
-	if b.Tva != nil && *b.Tva > 0 {
-		pdf.SetX(left + 135 + 20)
-		pdf.CellFormat(20, 8, "TVA", "1", 0, "C", true, 0, "")
-		pdf.CellFormat(25, 8, tr(fmt.Sprintf("%d", b.Tva)+"%"), "1", 0, "C", false, 0, "")
+	if bill.Tva != nil && *bill.Tva > 0 {
+		pdf.SetX(marginL + 135 + 20)
+		pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
+		pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%d", *bill.Tva)+"%"), "1", 0, "C", false, 0, "")
 	}
 
 	pdf.SetFont("Arial", "B", 10)
 	pdf.Ln(-1)
-	pdf.SetX(left + 135 + 20)
-	pdf.CellFormat(20, 8, "Total", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(25, 8, tr(fmt.Sprintf("%.2f", getBillTotal(b))+"€"), "1", 0, "C", false, 0, "")
+	pdf.SetX(marginL + cols[0] + cols[1])
+	pdf.CellFormat(cols[2], float64(totalAndTvaCellHeight), "Total", "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", getBillTotal(bill))+"€"), "1", 0, "C", false, 0, "")
 	pdf.SetFont("Arial", "", 10)
 
-	pdf.Ln(7)
+	pdf.SetY(pdf.GetY() + lineHt*3)
+	afterTableLines := pdf.SplitText(bc.AfterTable, pageSize.Wd-marginL*2)
+	height := float64(len(afterTableLines))*lineHt + cellMargin*float64(len(afterTableLines))
+	if pdf.GetY()+height > pageSize.Ht-float64(marginB)-10 {
+		pdf.AddPage()
+	}
 
-	pdf.MultiCell(0, 7, tr(bc.AfterTable), "0", "", false)
+	for index, line := range afterTableLines {
+		if index == len(afterTableLines) {
+			pdf.MultiCell(pageSize.Wd-marginL*2, lineHt+cellMargin, tr(line), "", "", false)
+		} else {
+			pdf.MultiCell(pageSize.Wd-marginL*2, lineHt+cellMargin, tr(line), "", "", false)
+		}
+	}
 
 	os.MkdirAll(config.Get().PdfDir+fmt.Sprintf("%d", c.ID)+"/bills/", os.ModePerm)
-	file, err := os.Create(config.Get().PdfDir + fmt.Sprintf("%d", c.ID) + "/bills/" + b.ID + ".pdf")
-
+	file, err := os.Create(config.Get().PdfDir + fmt.Sprintf("%d", c.ID) + "/bills/" + bill.ID + ".pdf")
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -162,16 +221,57 @@ func generateBillPDF(b models.Bill) *os.File {
 	return file
 }
 
-func getBillTotal(b models.Bill) float64 {
+func getBillTotal(bill models.Bill) float64 {
 	total := 0.0
 	tva := 0.0
-	if b.Tva != nil && *b.Tva > 0 {
-		tva = float64(int(*b.Tva) / 100)
+	if bill.Tva != nil && *bill.Tva > 0 {
+		tva = float64(int(*bill.Tva) / 100)
 	}
-	for _, line := range b.Lines {
+	for _, line := range bill.Lines {
 		total += float64(line.Quantity) * (line.Price + (line.Price * tva))
 	}
 
 	return total
 
+}
+
+func getLinePrice(bill models.Bill, line models.BillLine) float64 {
+	tva := 0.0
+	if bill.Tva != nil && *bill.Tva > 0 {
+		tva = float64(int(*bill.Tva) / 100)
+	}
+
+	return line.Quantity * (line.Price + (line.Price * tva))
+
+}
+
+func addBillHeaders(pdf gofpdf.Pdf, bc models.BillCustomization) {
+	rgba, err := parseHexColor(bc.MainColor)
+	if err != nil {
+		rgba = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	}
+	tr := pdf.UnicodeTranslatorFromDescriptor("")
+	currentR, currentG, currentB := pdf.GetFillColor()
+	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
+	pdf.SetFont("Arial", "B", 10)
+	pdf.SetX(marginL)
+	pdf.SetLineWidth(0.3)
+	pdf.CellFormat(cols[0], 10, tr("Désignation"), "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[1], 10, tr("Quantité"), "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[2], 10, tr("Prix HT"), "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[3], 10, tr("Sous Total"), "1", 0, "C", true, 0, "")
+	pdf.Ln(-1)
+	pdf.SetFillColor(currentR, currentG, currentB)
+}
+
+func addBillTotal(pdf gofpdf.Pdf, reportTotal float64) {
+	reportTotalCellWidth := 40
+	tr := pdf.UnicodeTranslatorFromDescriptor("")
+	_, height := pdf.GetPageSize()
+	pdf.SetY(height - float64(marginB) - 10)
+	pdf.SetFont("Arial", "B", 10)
+	pdf.SetX(marginL + cols[0] + cols[1] + cols[2] - float64(reportTotalCellWidth))
+	pdf.CellFormat(float64(reportTotalCellWidth), 10, tr("Total reporté"), "1", 0, "C", true, 0, "")
+	pdf.CellFormat(cols[3], 10, tr(fmt.Sprintf("%.2f", reportTotal)+"€"), "1", 0, "C", false, 0, "")
+	pdf.SetFont("Arial", "", 10)
 }

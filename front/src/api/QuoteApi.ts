@@ -37,7 +37,7 @@ export const QuoteApi = {
       tva,
     };
 
-    const promise = id
+    const promise = !id
       ? HttpClient.POST<Quote>(`${QUOTE_URL}`, data)
       : HttpClient.PATCH<Quote>(`${QUOTE_URL}/${id}`, data);
 

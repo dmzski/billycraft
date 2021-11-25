@@ -3,8 +3,9 @@ import { LineTypeEnum } from "./LineTypeEnum";
 export enum BillStatusEnum {
   DRAFT = "DRAFT",
   SENT = "SENT",
+  ACCEPTED = "ACCEPTED",
   REFUSED = "REFUSED",
-  PAYMENT_PAID = "PAYMENT_PAID",
+  PAYMENT_PAID = "PAID",
   ARCHIVED = "ARCHIVED",
 }
 

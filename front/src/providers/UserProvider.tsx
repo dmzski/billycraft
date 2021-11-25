@@ -1,4 +1,5 @@
 import { useKeycloak } from "@react-keycloak/web";
+import { CompanyApi } from "api/CompanyApi";
 import { UserApi } from "api/UserApi";
 import React from "react";
 import { useQuery } from "react-query";
@@ -15,9 +16,17 @@ const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
     UserApi.getMyInformation,
     { enabled: keycloak.authenticated, refetchOnWindowFocus: false }
   );
+  const myCompany = useQuery("my-company", CompanyApi.getMine, {
+    enabled:
+      myInformationQuery.data?.companyId !== undefined &&
+      keycloak.authenticated,
+    refetchOnWindowFocus: false,
+  });
 
   return (
-    <UserContext.Provider value={{ ...myInformationQuery }}>
+    <UserContext.Provider
+      value={{ ...myInformationQuery, company: myCompany.data }}
+    >
       {children}
     </UserContext.Provider>
   );

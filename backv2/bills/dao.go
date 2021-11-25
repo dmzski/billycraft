@@ -47,13 +47,22 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 		tx.Rollback()
 		panic(err)
 	}
-	if enums.BillStatus(changes.Status).IsGreaterThanOrEqualSent() && bill.SentAt == nil {
-		now := time.Now()
-		bill.SentAt = &now
-	} else {
-		bill.SentAt = nil
+	if changes.Status != nil {
+		if enums.BillStatus(*changes.Status).IsGreaterThanOrEqualSent() && bill.SentAt == nil {
+			now := time.Now()
+			changes.SentAt = &now
+		} else {
+			changes.SentAt = nil
+		}
+		if enums.BillStatus(*changes.Status).IsPaid() && bill.PaidAt == nil {
+			now := time.Now()
+			changes.PaidAt = &now
+		} else {
+			changes.PaidAt = nil
+		}
 	}
 	tx = tx.Updates(changes)
+
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
@@ -89,6 +98,7 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 		tx.Rollback()
 		panic(err)
 	}
+	log.Println(bill.SentAt, bill.PaidAt)
 	return
 }
 

@@ -11,8 +11,10 @@ export const BillEmailCustomizationApi = {
   updateMine: (
     customization: BillEmailCustomization
   ): Promise<BillEmailCustomization> =>
-    HttpClient.POST(
-      `${BILL_EMAIL_CUSTOMIZATION_URL}/${customization.id}`,
-      customization
-    ),
+    customization.id
+      ? HttpClient.PATCH(
+          `${BILL_EMAIL_CUSTOMIZATION_URL}/${customization.id}`,
+          customization
+        )
+      : HttpClient.POST(`${BILL_EMAIL_CUSTOMIZATION_URL}`, customization),
 };

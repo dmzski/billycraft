@@ -16,6 +16,7 @@ type Bill struct {
 	Tva        *int
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
+	PaidAt     *time.Time
 	SentAt     *time.Time
 	Status     string
 	CreatedBy  string
@@ -35,6 +36,7 @@ func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Omit(clause.Associations)
 	b.CreatedAt = time.Now()
 	b.UpdatedAt = nil
+	b.SentAt = nil
 	b.SentAt = nil
 	b.FileName = nil
 	var lastId int
@@ -66,8 +68,9 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 		Tva:        b.Tva,
 		CreatedAt:  b.CreatedAt,
 		UpdatedAt:  b.UpdatedAt,
+		PaidAt:     b.PaidAt,
 		SentAt:     b.SentAt,
-		Status:     b.Status,
+		Status:     *b.Status,
 		CreatedBy:  b.CreatedBy,
 		CompanyID:  b.CompanyID,
 		CustomerID: b.CustomerID,
@@ -87,8 +90,9 @@ func (bill Bill) ToDTO() dtos.Bill {
 		Tva:        bill.Tva,
 		CreatedAt:  bill.CreatedAt,
 		UpdatedAt:  bill.UpdatedAt,
+		PaidAt:     bill.PaidAt,
 		SentAt:     bill.SentAt,
-		Status:     bill.Status,
+		Status:     &bill.Status,
 		CreatedBy:  bill.CreatedBy,
 		CompanyID:  bill.CompanyID,
 		CustomerID: bill.CustomerID,

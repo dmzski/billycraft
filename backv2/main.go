@@ -9,12 +9,14 @@ import (
 	"backv2/customers"
 	"backv2/database"
 	"backv2/dtos"
+	"backv2/logo"
 	"backv2/oidc"
 	"backv2/pdf"
 	"backv2/products"
 	"backv2/quoteCustomization"
 	"backv2/quoteEmailCustomization"
 	"backv2/quotes"
+	"backv2/reports"
 	"backv2/users"
 	"errors"
 	"fmt"
@@ -106,6 +108,7 @@ func setupRoutes(app *fiber.App) {
 	api := app.Group("/api")
 	v1 := api.Group("/v1", oidc.Secure())
 	company.InitRoutes(v1)
+	reports.InitRoutes(v1)
 	customers.InitRoutes(v1)
 	quotes.InitRoutes(v1)
 	products.InitRoutes(v1)
@@ -116,4 +119,5 @@ func setupRoutes(app *fiber.App) {
 	quoteEmailCustomization.InitRoutes(v1)
 	billEmailCustomization.InitRoutes(v1)
 	pdf.InitRoutes(v1)
+	logo.InitRoutes(api)
 }

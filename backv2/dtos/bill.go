@@ -10,8 +10,9 @@ type Bill struct {
 	Tva        *int       `json:"tva"`
 	CreatedAt  time.Time  `json:"createdAt"`
 	UpdatedAt  *time.Time `json:"updatedAt"`
+	PaidAt     *time.Time `json:"paidAt"`
 	SentAt     *time.Time `json:"sentAt"`
-	Status     string     `json:"status"`
+	Status     *string    `json:"status"`
 	CreatedBy  string     `json:"createdBy"`
 	CompanyID  int        `json:"companyId"`
 	CustomerID *int       `json:"customerId"`

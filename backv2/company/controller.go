@@ -1,9 +1,12 @@
 package company
 
 import (
+	"backv2/config"
 	"backv2/dtos"
 	"backv2/models"
 	"backv2/users"
+	"fmt"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,6 +16,7 @@ func InitRoutes(group fiber.Router) {
 	router.Get("/mine", findMine)
 	router.Patch("/mine", updateMine)
 	router.Post("/", create)
+	router.Post("/upload-logo", uploadLogo)
 }
 
 func findMine(c *fiber.Ctx) error {
@@ -42,4 +46,25 @@ func updateMine(c *fiber.Ctx) error {
 	user.CompanyID = &newCompany.ID
 	users.DAO.SaveUser(user)
 	return c.JSON(dto)
+}
+
+func uploadLogo(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	company := DAO.FindOneById(*user.CompanyID)
+	file, err := c.FormFile("logo")
+	if err != nil {
+		return c.Status(500).SendString("Error when getting logo file")
+	}
+	err = os.MkdirAll(config.Get().UploadDir+fmt.Sprintf("/%d/", company.ID), os.ModePerm)
+	if err != nil {
+		return c.Status(500).SendString("Error when creating directory : " + err.Error())
+	}
+	err = c.SaveFile(file, config.Get().UploadDir+fmt.Sprintf("/%d/logo.png", company.ID))
+	if err != nil {
+		return c.Status(500).SendString("Error when saving logo file : " + err.Error())
+	}
+	newPath := fmt.Sprintf("%s/api/logo/%d", c.BaseURL(), company.ID)
+	company.Logo = &newPath
+	company = DAO.Update(company.ID, company.ToDTO())
+	return c.SendString(newPath)
 }

@@ -26,7 +26,11 @@ const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
 
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
-      <ReactKeycloakProvider onTokens={onKeycloakTokens} initOptions={keycloakProviderInitConfig} authClient={keycloak}>
+      <ReactKeycloakProvider
+        onTokens={onKeycloakTokens}
+        initOptions={keycloakProviderInitConfig}
+        authClient={keycloak}
+      >
         <ToastProvider>
           <UserProvider>{children}</UserProvider>
         </ToastProvider>

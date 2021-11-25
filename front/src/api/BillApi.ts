@@ -38,7 +38,7 @@ export const BillApi = {
       tva,
     };
 
-    const promise = id
+    const promise = !id
       ? HttpClient.POST<Bill>(`${BILL_URL}`, data)
       : HttpClient.PATCH<Bill>(`${BILL_URL}/${id}`, data);
 

@@ -100,8 +100,12 @@ export const HttpClient = {
   },
 };
 
-const computeBody = (body: BodyType): string | File => {
-  if (typeof body === "string" || (body as File).stream) {
+const computeBody = (body: BodyType): string | File | FormData => {
+  if (
+    typeof body === "string" ||
+    (body as File).stream ||
+    typeof (body as FormData).getAll === "function"
+  ) {
     return body;
   }
 
