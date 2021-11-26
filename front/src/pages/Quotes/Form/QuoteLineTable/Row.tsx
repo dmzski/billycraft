@@ -79,7 +79,7 @@ const QuoteLineTableLine = ({
             placeholder="Description"
             className="w-full flex"
             disabled={disabled}
-            value={line.description}
+            value={line.description ?? ""}
             multiline
             autoResizeHeight
             onChange={handleChange("description")}
@@ -94,7 +94,7 @@ const QuoteLineTableLine = ({
             placeholder="Quantité"
             type="number"
             step="0.01"
-            value={line.quantity || line.quantity === 0 ? line.quantity : ""}
+            value={line.quantity ?? ""}
             onChange={handleChange("quantity")}
           />
         </List.Cell>

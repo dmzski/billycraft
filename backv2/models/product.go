@@ -10,8 +10,8 @@ type Product struct {
 	ID          int64 `gorm:"primaryKey;autoIncrement;<-:create"`
 	Type        string
 	Name        string
-	Description string
-	Price       float64
+	Description *string
+	Price       *float64
 	CompanyID   int    `gorm:"<-:create"`
 	CreatedBy   string `gorm:"foreignKey:Email;<-:create"`
 }

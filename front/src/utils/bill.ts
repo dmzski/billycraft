@@ -88,7 +88,7 @@ export function getBillTotal(bill: Bill): number {
     .filter((billLine: BillLine) => billLine.price && billLine.quantity)
     .map(
       (billine: BillLine) =>
-        calculatePriceTTC(billine, bill.tva) * billine.quantity
+        calculatePriceTTC(billine, bill.tva) * (billine.quantity ?? 0)
     );
 
   if (array && array.length > 0) {

@@ -35,9 +35,9 @@ import (
 
 func main() {
 	var err error
-	config, err := config.LoadConfig(".")
+	config, err := config.LoadConfig()
 	if err != nil {
-		log.Fatal("cannot load config:", err)
+		log.Println("cannot load config:", err)
 	}
 
 	app := fiber.New(fiber.Config{
@@ -87,7 +87,7 @@ func initDb(config config.Config) {
 	var err error
 	dbLogger := gormLogger.Default.LogMode(gormLogger.Silent)
 	if config.Profile == "dev" {
-		dbLogger = gormLogger.Default.LogMode(gormLogger.Warn)
+		dbLogger = gormLogger.Default.LogMode(gormLogger.Info)
 	}
 	database.DBConn, err = gorm.Open(postgres.Open(config.DBSource), &gorm.Config{
 		Logger: dbLogger,

@@ -4,8 +4,8 @@ interface Product {
   id: number;
   type: LineTypeEnum;
   name: string;
-  description: string;
-  price: number;
+  description?: string | null;
+  price?: number | null;
   companyId: number;
   createdBy: string;
 }

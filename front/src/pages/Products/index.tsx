@@ -27,7 +27,7 @@ const ProductsPage = (): JSX.Element => {
         {productsQuery.data && (
           <ProductTable
             products={productsQuery.data.sort((a: Product, b: Product) =>
-              a.description.localeCompare(b.description)
+              a.name.localeCompare(b.name)
             )}
           />
         )}

@@ -105,8 +105,8 @@ const QuoteForm = ({
   const beforeOnSubmit = (e: any) => {
     const tmp = { ...quote };
     tmp.lines = tmp.lines.map((line: QuoteLine) => {
-      line.price = parseFloat(line.price as any);
-      line.quantity = parseFloat(line.quantity as any);
+      line.price = line.price ? parseFloat(`${line.price}`) : null;
+      line.quantity = line.quantity ? parseFloat(`${line.quantity}`) : null;
       return line;
     });
     setQuote(tmp);

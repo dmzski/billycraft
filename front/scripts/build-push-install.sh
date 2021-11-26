@@ -1,14 +1,10 @@
-currentVersion=`cat ./src/constants/global.ts| grep VERSION | cut -d " " -f5 | cut -d "\"" -f2`
 docker login
 checkSuccess () {
         if [ $? != 0 ] ; then
-                echo "Non zero code. Rollback files then exiting";
-                sed -i'' -e "s/VERSION = .*/VERSION = \"$currentVersion\";/g" ./src/constants/global.ts
+                echo "Non zero code. exiting";
                 exit 1;
         fi
 }
-
-echo "Version actuelle : $currentVersion"
 
 read -p "Entrer le numéro de version que vous voulez build, push et installer sur le serveur : " version
 
@@ -21,23 +17,7 @@ if [ "$confirm" = "N" ] ; then
         echo "Bye bye";
         exit 0;
 fi
-
-displayPopup="q"
-while [[ "$displayPopup" != "o" ]] && [[ "$displayPopup" != "n" ]]; do
-        read -p "Faut-il afficher le popup des news (o/n) : " displayPopup
-done
-
-if [[ "$displayPopup" == "o" ]]; then
-        sed -i'' -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = true;/g" ./src/constants/global.ts
-else
-        sed -i'' -e "s/DISPLAY_NEWS = .*/DISPLAY_NEWS = false;/g" ./src/constants/global.ts
-fi
-
-sed -i'' -e "s/VERSION = .*/VERSION = \"$version\";/g" ./src/constants/global.ts
 checkSuccess
-
-# For mac os sed
-rm -f src/constants/global.ts-e
 
 echo "Building image...";
 # Build

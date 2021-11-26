@@ -125,17 +125,6 @@ func generateQuotePDF(quote models.Quote) *os.File {
 			addQuoteHeaders(pdf, qc)
 		}
 
-		if line.Price == 0 && line.Quantity == 0 {
-			pdf.SetFont("Arial", "B", 10)
-			pdf.SetCellMargin(lineMargin)
-			quantity = ""
-			price = ""
-			subtotal = ""
-		}
-		if line.Price == 0 && line.Quantity != 0 {
-			price = "OFFERT"
-			subtotal = "OFFERT"
-		}
 		pdf.SetFont("Arial", "B", 10)
 		pdf.SetDrawColor(pdf.GetFillColor())
 		pdf.Rect(pdf.GetX(), pdf.GetY(), float64(pageSize.Wd-marginL*2), float64(height), "F")
@@ -143,16 +132,34 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 		currentY := pdf.GetY()
 		pdf.SetXY(marginL+cellMargin, currentY+cellMargin)
+
+		if line.Price == 0 {
+			price = "OFFERT"
+			subtotal = "OFFERT"
+		}
+
+		if line.Price == 0 && line.Quantity == 0 && line.Description == "" {
+			pdf.SetFont("Arial", "B", 10)
+			pdf.SetCellMargin(lineMargin)
+			quantity = ""
+			price = ""
+			subtotal = ""
+		} else {
+			pdf.SetFont("Arial", "", 10)
+		}
+
 		for _, line := range lines {
 			pdf.SetX(marginL + cellMargin)
 			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(line), "", "", false)
 		}
+
 		pdf.SetFont("Arial", "", 10)
 
 		for _, descriptionLine := range descriptionLines {
-			pdf.SetX(marginL + cellMargin)
-			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(descriptionLine), "", "", false)
+			pdf.SetX(marginL + cellMargin*2)
+			pdf.MultiCell(cols[0]-cellMargin*2, lineHt+lineMargin, tr(descriptionLine), "", "", false)
 		}
+
 		pdf.SetXY(marginL+cols[0], currentY)
 		pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[2], height, tr(price), "", 0, "C", true, 0, "")

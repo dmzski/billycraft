@@ -1515,8 +1515,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@coco-ui/core@file:.yalc/@coco-ui/core":
-  version "1.14.3"
+"@coco-ui/core@^1.15.0":
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/@coco-ui/core/-/core-1.15.0.tgz#a028ccff79da25a693b0364c6aacfa5fc720d6ea"
+  integrity sha512-ad3iFD4W7wqEDX9h7bqIt6izPMi8KQW7mgocSwr3KaybP7rDASCvfleoHKmzBY644p7+YMHhIE0VFjW9bX20Xg==
   dependencies:
     "@heroicons/react" "^1.0.1"
     react "^17.0.2"

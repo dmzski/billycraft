@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -34,11 +34,13 @@ var (
 	appConfig Config
 )
 
-func LoadConfig(path string) (config Config, err error) {
+func LoadConfig() (config Config, err error) {
 	// Load .env config
-	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
-	viper.SetConfigType("env")
+	if _, err := os.Open("./app.env"); err == nil {
+		viper.AddConfigPath(".")
+		viper.SetConfigName("app")
+		viper.SetConfigType("env")
+	}
 
 	// Override with env variable
 	viper.AutomaticEnv()
@@ -54,6 +56,5 @@ func LoadConfig(path string) (config Config, err error) {
 }
 
 func Get() Config {
-	log.Println(appConfig)
 	return appConfig
 }

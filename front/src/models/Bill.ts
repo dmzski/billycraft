@@ -28,10 +28,10 @@ interface Bill {
 export interface BillLine {
   billId: string;
   line: number;
-  quantity: number;
-  price: number;
+  quantity?: number | null;
+  price?: number | null;
   name: string;
-  description: string;
+  description?: string | null;
   type: LineTypeEnum;
 }
 

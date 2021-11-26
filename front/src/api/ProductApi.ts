@@ -15,5 +15,5 @@ export const ProductApi = {
   createOrUpdate: ({ id, ...product }: Partial<Product>): Promise<Product> =>
     !id
       ? HttpClient.POST(`${PRODUCT_URL}`, product)
-      : HttpClient.PUT(`${PRODUCT_URL}/${id}`, product),
+      : HttpClient.PATCH(`${PRODUCT_URL}/${id}`, product),
 };

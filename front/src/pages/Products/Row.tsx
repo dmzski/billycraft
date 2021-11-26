@@ -63,7 +63,10 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
       await saveProductMutation({
         id: product.id,
         description: newProduct.description,
-        price: parseFloat(newProduct.price + ""),
+        price:
+          `${newProduct.price}` !== ""
+            ? parseFloat(`${newProduct.price}`)
+            : null,
         type: newProduct.type,
         name: newProduct.name,
       });
@@ -142,7 +145,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
             autoResizeHeight
             multiline
             className="w-full"
-            value={newProduct.description}
+            value={newProduct.description ?? ""}
             disabled={!editMode}
             onChange={handleChange("description")}
           />
@@ -156,7 +159,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
             type="number"
             step={0.1}
             className="w-full text-right"
-            value={newProduct.price}
+            value={newProduct.price ?? ""}
             disabled={!editMode}
             onChange={handleChange("price")}
           />
@@ -182,12 +185,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
           <div className="flex">
             <button
               onClick={onSubmit}
-              disabled={
-                saveProductMutationState.isLoading ||
-                !newProduct.price ||
-                !newProduct.name ||
-                !newProduct.type
-              }
+              disabled={saveProductMutationState.isLoading || !newProduct.name}
               className="appearance-none focus:outline-none"
             >
               <CheckIcon className="rounded-full p-2 w-8 text-white bg-success-600 hover:bg-success-700" />
