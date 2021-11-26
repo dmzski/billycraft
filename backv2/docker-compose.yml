@@ -46,7 +46,7 @@ services:
       - 8080:8080
     volumes:
       - ./:/app
-      - ./generated:/pdfs
+      - ./generated:/upload
     env_file:
       - ./docker.env
     links:

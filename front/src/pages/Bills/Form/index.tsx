@@ -90,11 +90,13 @@ const BillFormPage = (): JSX.Element => {
     try {
       if (pdfState.isIdle && newBill.id) {
         pdfState.update("loading");
-        const html = await PdfApi.getBillPdf(newBill.id);
-        const url = URL.createObjectURL(
-          new Blob([html], { type: "application/pdf" })
-        );
-        window.open(url, "_blank");
+        const blob = await PdfApi.getBillPdf(newBill.id);
+        const link = document.createElement("a");
+        link.download = bill?.id ?? "unknown.pdf";
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         pdfState.update("idle");
       }
     } catch (e) {

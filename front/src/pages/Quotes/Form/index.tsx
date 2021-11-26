@@ -21,6 +21,7 @@ const QuoteCreationPage = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
   const { data: quote } = useQuery(`quote-${id}`, () => QuoteApi.findById(id), {
     enabled: id !== "new",
+    refetchOnWindowFocus: false,
   });
 
   const [
@@ -118,11 +119,13 @@ const QuoteCreationPage = (): JSX.Element => {
     try {
       if (pdfState.isIdle && newQuote.id) {
         pdfState.update("loading");
-        const html = await PdfApi.getQuotePdf(newQuote.id);
-        const url = URL.createObjectURL(
-          new Blob([html], { type: "application/pdf" })
-        );
-        window.open(url, "_blank");
+        const blob = await PdfApi.getQuotePdf(newQuote.id);
+        const link = document.createElement("a");
+        link.download = quote?.id ?? "unknown.pdf";
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         pdfState.update("idle");
       }
     } catch (e) {

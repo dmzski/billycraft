@@ -34,12 +34,14 @@ var (
 func generateBillPDF(bill models.Bill) *os.File {
 	c := company.DAO.FindOneById(bill.CompanyID)
 	bc := billCustomization.DAO.FindFirstByTenant(bill.CompanyID)
-	customer := customers.DAO.FindOneByIdAndTenant(*bill.CustomerID, bill.CompanyID)
+	customer := models.Customer{}
+	if bill.CustomerID != nil {
+		customer = customers.DAO.FindOneByIdAndTenant(*bill.CustomerID, bill.CompanyID)
+	}
 	rgba, err := parseHexColor(bc.MainColor)
 	if err != nil {
 		rgba = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	}
-
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	_, lineHt := pdf.GetFontSize()
 	pageSize := pdf.GetPageSizeStr("A4")
@@ -88,8 +90,8 @@ func generateBillPDF(bill models.Bill) *os.File {
 	}
 
 	pdf.SetFont("Arial", "B", 10)
-	pdf.CellFormat(0, 10, tr("Référence du devis : "+bill.ID), "0", 1, "R", false, 0, "")
-	pdf.CellFormat(0, 5, tr("Objet du devis : "+bill.Title), "0", 1, "L", false, 0, "")
+	pdf.CellFormat(0, 10, tr("Référence : "+bill.ID), "0", 1, "R", false, 0, "")
+	pdf.CellFormat(0, 5, tr("Objet : "+bill.Title), "0", 1, "L", false, 0, "")
 	pdf.SetFont("Arial", "B", 10)
 
 	pdf.Ln(3)
@@ -129,7 +131,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 		// The height oof the row more the height of total and tva
 		if pdf.GetY()+height+(lineHt+lineMargin*4)*2 > pageSize.Ht-float64(marginB)-10 {
 			pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
-			addBillTotal(pdf, reportTotal)
+			addQuoteTotal(pdf, reportTotal)
 			pdf.AddPage()
 			addBillHeaders(pdf, bc)
 		}
@@ -176,12 +178,12 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 		pdf.SetXY(marginL, currentY+height)
 	}
-	pdf.Line(marginL, pdf.GetY(), cols[0]+cols[1]+cols[2]+cols[3], pdf.GetY())
+	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
 	if bill.Tva != nil && *bill.Tva > 0 {
-		pdf.SetX(marginL + 135 + 20)
+		pdf.SetX(marginL + cols[0] + cols[1])
 		pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
 		pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%d", *bill.Tva)+"%"), "1", 0, "C", false, 0, "")
 	}
@@ -208,15 +210,19 @@ func generateBillPDF(bill models.Bill) *os.File {
 		}
 	}
 
-	os.MkdirAll(config.Get().PdfDir+fmt.Sprintf("%d", c.ID)+"/bills/", os.ModePerm)
-	file, err := os.Create(config.Get().PdfDir + fmt.Sprintf("%d", c.ID) + "/bills/" + bill.ID + ".pdf")
+	err = os.MkdirAll(fmt.Sprintf("%s/%d/bills", config.Get().UploadDir, c.ID), os.ModePerm)
 	if err != nil {
-		log.Println(err.Error())
+		log.Panicln(err.Error())
 	}
 
-	err = pdf.OutputFileAndClose(file.Name())
+	err = pdf.OutputFileAndClose(fmt.Sprintf("%s/%d/bills/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
 	if err != nil {
-		log.Println(err.Error())
+		log.Panicln(err.Error())
+	}
+
+	file, err := os.Open(fmt.Sprintf("%s/%d/bills/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
+	if err != nil {
+		log.Panicln(err.Error())
 	}
 	return file
 }

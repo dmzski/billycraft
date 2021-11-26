@@ -87,7 +87,7 @@ func initDb(config config.Config) {
 	var err error
 	dbLogger := gormLogger.Default.LogMode(gormLogger.Silent)
 	if config.Profile == "dev" {
-		dbLogger = gormLogger.Default.LogMode(gormLogger.Info)
+		dbLogger = gormLogger.Default.LogMode(gormLogger.Warn)
 	}
 	database.DBConn, err = gorm.Open(postgres.Open(config.DBSource), &gorm.Config{
 		Logger: dbLogger,

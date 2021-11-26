@@ -30,12 +30,12 @@ func getOrGenerateQuote(c *fiber.Ctx) error {
 			return generateQuote(c)
 		}
 
-		file, err := os.Open(fmt.Sprintf("%s%d/quotes/%s.pdf", config.Get().PdfDir, quote.CompanyID, quote.ID))
+		file, err := os.Open(fmt.Sprintf("%s/%d/quotes/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.ID))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
 			return c.Status(fiber.ErrInternalServerError.Code).SendString("An error occured")
 		}
-		return c.SendFile(file.Name())
+		return c.Download(file.Name())
 	}
 }
 
@@ -49,7 +49,7 @@ func getOrGenerateBill(c *fiber.Ctx) error {
 			return generateBill(c)
 		}
 
-		file, err := os.Open(fmt.Sprintf("%s%d/bills/%s.pdf", config.Get().PdfDir, bill.CompanyID, bill.ID))
+		file, err := os.Open(fmt.Sprintf("%s/%d/bills/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
 			return c.Status(fiber.ErrInternalServerError.Code).SendString("An error occured")
@@ -69,7 +69,7 @@ func generateQuote(c *fiber.Ctx) error {
 		}
 		file := generateQuotePDF(quote)
 
-		return c.SendFile(file.Name())
+		return c.Download(file.Name())
 	}
 }
 

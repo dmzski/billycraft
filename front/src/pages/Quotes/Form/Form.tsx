@@ -65,7 +65,7 @@ const QuoteForm = ({
       let value: any;
       switch (property) {
         case "tva":
-          value = Number(event.target.value);
+          value = Number(event.target.value) ?? 0;
           break;
         default:
           value = event.target.value;
@@ -179,7 +179,7 @@ const QuoteForm = ({
         disabled={disabled || cantUpdate}
         aria-label="Titre"
         placeholder="Titre du devis"
-        value={quote.title}
+        value={quote.title ?? ""}
         onChange={inputChange("title")}
       />
       <Select
@@ -213,7 +213,7 @@ const QuoteForm = ({
         aria-label="TVA"
         placeholder="TVA en %"
         type="numeric"
-        value={quote.tva || ""}
+        value={quote.tva ?? ""}
         onChange={inputChange("tva")}
       />
       <div className="my-4 flex items-end">
