@@ -4,7 +4,6 @@ import DashboardCard from "./DashboardCard";
 import CounterAnimated from "../../components/CounterAnimated";
 
 const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => {
-  console.log("Report", report);
   return (
     <div className="flex flex-wrap justify-between w-full items-center">
       <DashboardCard

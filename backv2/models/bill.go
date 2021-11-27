@@ -29,7 +29,7 @@ type Bill struct {
 }
 
 func (Bill) TableName() string {
-	return "compta.com_bill"
+	return "com_bill"
 }
 
 func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
@@ -40,7 +40,7 @@ func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
 	b.SentAt = nil
 	b.FileName = nil
 	var lastId int
-	idTx := tx.Raw("SELECT COUNT(*) AS num FROM compta.com_bill WHERE company_id = ?", b.CompanyID).Scan(&lastId)
+	idTx := tx.Raw("SELECT COUNT(*) AS num FROM com_bill WHERE company_id = ?", b.CompanyID).Scan(&lastId)
 	if idTx.Error != nil {
 		log.Fatalln("Cannot select last id : ", idTx.Error.Error())
 		err = idTx.Error

@@ -16,7 +16,7 @@ type QuoteEmailCustomization struct {
 }
 
 func (QuoteEmailCustomization) TableName() string {
-	return "compta.com_quote_email_customization"
+	return "com_quote_email_customization"
 }
 
 func (q *QuoteEmailCustomization) BeforeCreate(tx *gorm.DB) (err error) {

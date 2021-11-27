@@ -14,7 +14,7 @@ type BillLine struct {
 }
 
 func (BillLine) TableName() string {
-	return "compta.com_bill_line"
+	return "com_bill_line"
 }
 
 func (line BillLine) ToDTO() dtos.BillLine {

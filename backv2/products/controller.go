@@ -24,6 +24,9 @@ func findAll(c *fiber.Ctx) error {
 		newDto := x.ToDTO()
 		dtos = append(dtos, newDto)
 	}
+	if len(dtos) == 0 {
+		return c.JSON(make([]string, 0))
+	}
 	return c.JSON(dtos)
 }
 func findById(c *fiber.Ctx) error {

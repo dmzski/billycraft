@@ -27,7 +27,7 @@ type Quote struct {
 }
 
 func (Quote) TableName() string {
-	return "compta.com_quote"
+	return "com_quote"
 }
 
 func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
@@ -37,7 +37,7 @@ func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
 	q.SentAt = nil
 	q.FileName = nil
 	var lastId int
-	idTx := tx.Raw("SELECT COUNT(*) AS num FROM compta.com_quote WHERE company_id = ?", q.CompanyID).Scan(&lastId)
+	idTx := tx.Raw("SELECT COUNT(*) AS num FROM com_quote WHERE company_id = ?", q.CompanyID).Scan(&lastId)
 	if idTx.Error != nil {
 		log.Fatalln("Cannot select last id : ", idTx.Error.Error())
 		err = idTx.Error

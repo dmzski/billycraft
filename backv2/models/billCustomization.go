@@ -23,7 +23,7 @@ type BillCustomization struct {
 }
 
 func (BillCustomization) TableName() string {
-	return "compta.com_bill_customization"
+	return "com_bill_customization"
 }
 
 func (b *BillCustomization) BeforeCreate(tx *gorm.DB) (err error) {

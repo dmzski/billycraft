@@ -13,7 +13,7 @@ type QuoteLine struct {
 }
 
 func (QuoteLine) TableName() string {
-	return "compta.com_quote_line"
+	return "com_quote_line"
 }
 
 func (line QuoteLine) ToDTO() dtos.QuoteLine {

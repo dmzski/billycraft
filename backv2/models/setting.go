@@ -15,7 +15,7 @@ type Setting struct {
 }
 
 func (Setting) TableName() string {
-	return "compta.com_setting"
+	return "com_setting"
 }
 
 func (s Setting) ToDTO() dtos.Setting {

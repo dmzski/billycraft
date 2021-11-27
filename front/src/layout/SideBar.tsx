@@ -25,7 +25,7 @@ const SideBar = (): JSX.Element => {
           </p>
         ) : null}
         {user.company?.name ? (
-          <div className="border rounded mt-2 px-2">
+          <div className="border rounded my-2 px-2">
             <div className="text-xs opacity-30">Votre entreprise</div>
             <div className="text-lg">{user.company.name}</div>
           </div>

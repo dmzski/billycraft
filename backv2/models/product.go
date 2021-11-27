@@ -17,7 +17,7 @@ type Product struct {
 }
 
 func (p Product) TableName() string {
-	return "compta.com_product"
+	return "com_product"
 }
 
 func (p *Product) BeforeCreate(tx *gorm.DB) (err error) {

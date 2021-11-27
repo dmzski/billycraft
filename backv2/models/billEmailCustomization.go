@@ -16,7 +16,7 @@ type BillEmailCustomization struct {
 }
 
 func (BillEmailCustomization) TableName() string {
-	return "compta.com_bill_email_customization"
+	return "com_bill_email_customization"
 }
 
 func (b *BillEmailCustomization) BeforeCreate(tx *gorm.DB) (err error) {

@@ -27,7 +27,7 @@ type Company struct {
 }
 
 func (Company) TableName() string {
-	return "compta.com_company"
+	return "com_company"
 }
 
 func (c Company) ToDTO() dtos.Company {

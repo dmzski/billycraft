@@ -25,8 +25,7 @@ func (dao ProductDao) FindOneByIdAndTenant(id string, tenant int) (product model
 }
 
 func (dao ProductDao) Update(id string, tenant int, changes dtos.Product) (product models.Product) {
-	tx := database.DBConn.Begin()
-	tx = database.DBConn.Where("company_id = ? AND id = ?", tenant, id).First(&product)
+	tx := database.DBConn.Begin().Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
@@ -35,7 +34,6 @@ func (dao ProductDao) Update(id string, tenant int, changes dtos.Product) (produ
 		panic(tx.Error)
 	}
 
-	log.Println("Ici")
 	tx.Commit()
 	return
 }

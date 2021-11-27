@@ -23,7 +23,7 @@ type Customer struct {
 }
 
 func (Customer) TableName() string {
-	return "compta.com_customer"
+	return "com_customer"
 }
 
 func (c *Customer) BeforeCreate(tx *gorm.DB) (err error) {

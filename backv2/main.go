@@ -17,6 +17,7 @@ import (
 	"backv2/quoteEmailCustomization"
 	"backv2/quotes"
 	"backv2/reports"
+	"backv2/todos"
 	"backv2/users"
 	"errors"
 	"fmt"
@@ -25,7 +26,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/golang-migrate/migrate/v4"
 	"gorm.io/driver/postgres"
@@ -65,7 +65,7 @@ func main() {
 			return nil
 		},
 	})
-	app.Use(recover.New())
+	// app.Use(recover.New())
 	app.Use(cors.New())
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
@@ -92,6 +92,7 @@ func initDb(config config.Config) {
 	database.DBConn, err = gorm.Open(postgres.Open(config.DBSource), &gorm.Config{
 		Logger: dbLogger,
 	})
+
 	if err != nil {
 		panic("Failed to connect database")
 	}
@@ -119,5 +120,6 @@ func setupRoutes(app *fiber.App) {
 	quoteEmailCustomization.InitRoutes(v1)
 	billEmailCustomization.InitRoutes(v1)
 	pdf.InitRoutes(v1)
+	todos.InitRoutes(v1)
 	logo.InitRoutes(api)
 }

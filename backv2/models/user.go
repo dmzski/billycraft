@@ -11,7 +11,7 @@ type User struct {
 }
 
 func (User) TableName() string {
-	return "compta.com_user"
+	return "com_user"
 }
 
 func (u User) ToDTO() dtos.User {
