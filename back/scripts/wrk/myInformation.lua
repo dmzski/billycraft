@@ -1,6 +1,0 @@
-wrk.method = "POST"
-wrk.body   = "{\"query\":\"query { myInformation { email firstName lastName company { id name logo } } }\"}"
-wrk.headers["Content-Type"] = "application/json"
-wrk.headers["Accept"] = "application/json"
-wrk.headers["Connection"] = "keep-alive"
-wrk.headers["Accept-Encoding"] = "gzip, deflate, br"

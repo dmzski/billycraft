@@ -1,1 +1,0 @@
-ALTER TABLE com_product ADD COLUMN type varchar(100) default 'ARTICLE';

@@ -1,31 +1,19 @@
-# Back project
+# Backend COCOERP
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Prerequisite
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+- Docker and docker-compose
 
-## Running the application in dev mode
+## How to start in dev
 
-You can run your application in dev mode that enables live coding using:
+- Make sure these ports are free :
+  - 5432 : Postgres
+  - 8080 : API
+  - 8081 : Keycloak
+  - 1025 and 8025 : Fakesmtp
+  - 80 : Traefik
+- Run `make` or `make dev`
 
-```
-./mvnw quarkus:dev
-```
+## API Testing
 
-## Packaging and running the application
-
-The application can be packaged using `./mvnw package`.
-It produces the `back-1.0.0-runner.jar` file in the `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
-
-The application is now runnable using `java -jar target/back-1.0.0-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: `./mvnw package -Pnative`.
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your native executable with: `./target/back-1.0.0-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+- Import `Insmonia.json` (export v4) in your Insomnia, all should be good.
