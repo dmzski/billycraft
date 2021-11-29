@@ -26,6 +26,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/golang-migrate/migrate/v4"
 	"gorm.io/driver/postgres"
@@ -65,7 +66,9 @@ func main() {
 			return nil
 		},
 	})
-	// app.Use(recover.New())
+	if config.Profile == "dev" {
+		app.Use(recover.New())
+	}
 	app.Use(cors.New())
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{

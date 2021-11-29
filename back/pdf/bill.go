@@ -43,7 +43,6 @@ func generateBillPDF(bill models.Bill) *os.File {
 		rgba = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	}
 	pdf := gofpdf.New("P", "mm", "A4", "")
-	_, lineHt := pdf.GetFontSize()
 	pageSize := pdf.GetPageSizeStr("A4")
 	pdf.AddPage()
 	pdf.SetMargins(marginL, marginL, marginL)
@@ -59,8 +58,9 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	if c.Logo != nil {
 		httpimg.Register(pdf, *c.Logo, "png")
-		opt := gofpdf.ImageOptions{}
-		opt.ImageType = "png"
+		opt := gofpdf.ImageOptions{
+			ImageType: "png",
+		}
 		pdf.ImageOptions(*c.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 	}
 	pdf.SetX(-100 - marginL)
@@ -98,7 +98,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	addBillHeaders(pdf, bc)
 
-	_, lineHt = pdf.GetFontSize()
+	_, lineHt := pdf.GetFontSize()
 	reportTotal := 0.0
 	totalAndTvaHeight := totalAndTvaCellHeight
 
