@@ -124,14 +124,14 @@ func generateBillPDF(bill models.Bill) *os.File {
 			reportTotal += linePrice
 		}
 
-		lines := pdf.SplitText(line.Name, cols[0]-cellMargin)
-		descriptionLines := pdf.SplitText(line.Description, cols[0]-cellMargin)
+		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMargin)
+		descriptionLines := pdf.SplitLines([]byte(line.Description), cols[0]-cellMargin)
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height oof the row more the height of total and tva
 		if pdf.GetY()+height+(lineHt+lineMargin*4)*2 > pageSize.Ht-float64(marginB)-10 {
 			pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
-			addQuoteTotal(pdf, reportTotal)
+			addBillTotal(pdf, reportTotal)
 			pdf.AddPage()
 			addBillHeaders(pdf, bc)
 		}
@@ -161,14 +161,14 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 		for _, line := range lines {
 			pdf.SetX(marginL + cellMargin)
-			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(line), "", "", false)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(string(line)), "", "", false)
 		}
 
 		pdf.SetFont("Arial", "", 10)
 
 		for _, descriptionLine := range descriptionLines {
 			pdf.SetX(marginL + cellMargin*2)
-			pdf.MultiCell(cols[0]-cellMargin*2, lineHt+lineMargin, tr(descriptionLine), "", "", false)
+			pdf.MultiCell(cols[0]-cellMargin*2, lineHt+lineMargin, tr(string(descriptionLine)), "", "", false)
 		}
 		pdf.SetXY(marginL+cols[0], currentY)
 		pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")

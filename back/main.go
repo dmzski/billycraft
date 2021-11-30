@@ -66,7 +66,7 @@ func main() {
 			return nil
 		},
 	})
-	if config.Profile == "dev" {
+	if config.Profile != "dev" {
 		app.Use(recover.New())
 	}
 	app.Use(cors.New())

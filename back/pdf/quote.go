@@ -82,10 +82,10 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	pdf.SetFont("Arial", "B", 10)
 	pdf.CellFormat(0, 10, tr("Référence du devis : "+quote.ID), "0", 1, "R", false, 0, "")
 	pdf.CellFormat(0, 5, tr("Objet du devis : "+quote.Title), "0", 1, "L", false, 0, "")
-	pdf.SetFont("Arial", "B", 10)
 
 	pdf.Ln(3)
 
+	pdf.SetFont("Arial", "B", 10)
 	addQuoteHeaders(pdf, qc)
 
 	_, lineHt := pdf.GetFontSize()
@@ -114,8 +114,8 @@ func generateQuotePDF(quote models.Quote) *os.File {
 			reportTotal += linePrice
 		}
 
-		lines := pdf.SplitText(line.Name, cols[0]-cellMargin)
-		descriptionLines := pdf.SplitText(line.Description, cols[0]-cellMargin)
+		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMargin)
+		descriptionLines := pdf.SplitLines([]byte(line.Description), cols[0]-cellMargin)
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height oof the row more the height of total and tva
@@ -151,14 +151,14 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 		for _, line := range lines {
 			pdf.SetX(marginL + cellMargin)
-			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(line), "", "", false)
+			pdf.MultiCell(cols[0]-cellMargin, lineHt+lineMargin, tr(string(line)), "", "", false)
 		}
 
 		pdf.SetFont("Arial", "", 10)
 
 		for _, descriptionLine := range descriptionLines {
 			pdf.SetX(marginL + cellMargin*2)
-			pdf.MultiCell(cols[0]-cellMargin*2, lineHt+lineMargin, tr(descriptionLine), "", "", false)
+			pdf.MultiCell(cols[0]-cellMargin*2, lineHt+lineMargin, tr(string(descriptionLine)), "", "", false)
 		}
 
 		pdf.SetXY(marginL+cols[0], currentY)
