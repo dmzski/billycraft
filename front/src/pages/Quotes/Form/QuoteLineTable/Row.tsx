@@ -77,7 +77,7 @@ const QuoteLineTableLine = ({
         <List.Cell className="w-full">
           <TextInput
             placeholder="Description"
-            className="w-full flex"
+            className="w-full flex resize-none"
             disabled={disabled}
             value={line.description ?? ""}
             multiline

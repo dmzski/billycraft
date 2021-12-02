@@ -19,30 +19,26 @@ const QuoteCreationPage = (): JSX.Element => {
   const pdfState = useLoadingState();
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const { data: quote } = useQuery(`quote-${id}`, () => QuoteApi.findById(id), {
-    enabled: id !== "new",
-    refetchOnWindowFocus: false,
-  });
+  const { data: quote, refetch } = useQuery(
+    `quote-${id}`,
+    () => QuoteApi.findById(id),
+    {
+      enabled: id !== "new",
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const [
     createOrUpdateQuoteMutation,
     createOrUpdateQuoteMutationState,
   ] = useMutation(QuoteApi.createOrUpdate, {
     onSuccess: (data) => {
-      const tmp = [...(queryCache.getQueryData<Quote[]>("quotes") ?? [])];
-      if (data) {
-        const index = tmp.findIndex((q) => q.id === data.id);
-        if (index > -1) {
-          tmp[index] = data;
-        } else {
-          tmp.push(data);
-        }
-        setNewQuote({ ...data });
-        queryCache.setQueryData("quotes", tmp);
+      if (data.id !== id) {
+        history.push(ROUTES.QUOTE_FORM.path.replace(":id", data.id));
       } else {
-        history.push(ROUTES.QUOTES.path);
+        queryCache.invalidateQueries("quotes");
+        refetch();
       }
-      toast.show({ message: "Enregistrement effectué", variant: "success" });
     },
     throwOnError: true,
   });
@@ -51,7 +47,6 @@ const QuoteCreationPage = (): JSX.Element => {
     createBillFormQuoteMutationState,
   ] = useMutation(BillApi.createFromQuote, {
     onSuccess: () => {
-      history.push(ROUTES.QUOTES.path);
       history.push(ROUTES.BILLS.path);
       toast.show({ message: "Facture créé", variant: "success" });
     },
@@ -61,7 +56,7 @@ const QuoteCreationPage = (): JSX.Element => {
     updateQuoteStatusMutationState,
   ] = useMutation(QuoteApi.updateStatus, {
     onSuccess: () => {
-      history.push(ROUTES.QUOTES.path);
+      refetch();
       toast.show({ message: "Devis mis à jour", variant: "success" });
     },
   });
@@ -91,6 +86,10 @@ const QuoteCreationPage = (): JSX.Element => {
           line: index + 1,
         })),
       });
+      toast.show({
+        message: "Devis enregistré",
+        variant: "success",
+      });
     } catch (error) {
       toast.show({
         message: "Erreur lors de l'enregistrement",
@@ -117,11 +116,11 @@ const QuoteCreationPage = (): JSX.Element => {
 
   const downloadPdf = async () => {
     try {
-      if (pdfState.isIdle && newQuote.id) {
+      if (pdfState.isIdle && quote?.id) {
         pdfState.update("loading");
-        const blob = await PdfApi.getQuotePdf(newQuote.id);
+        const blob = await PdfApi.getQuotePdf(quote.id);
         const link = document.createElement("a");
-        link.download = quote?.id ?? "unknown.pdf";
+        link.download = quote.id ?? "unknown.pdf";
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
         link.click();

@@ -251,7 +251,7 @@ const BillForm = ({
           onClick={addExistingProductSelected}
           type="button"
           className="py-2 ml-4 w-1/6"
-          variant="default"
+          variant="secondary"
         >
           Ajouter
         </Button>
@@ -267,7 +267,7 @@ const BillForm = ({
         <Button
           type="button"
           className="mt-4 w-full"
-          variant="default"
+          variant="secondary"
           size="sm"
           onClick={() => addLine()}
           disabled={disabled}

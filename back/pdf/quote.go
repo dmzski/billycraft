@@ -110,12 +110,9 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		price := fmt.Sprintf("%.2f€", line.Price)
 		linePrice := getQuoteLinePrice(quote, line)
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
-		if linePrice > 0 {
-			reportTotal += linePrice
-		}
 
-		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMargin)
-		descriptionLines := pdf.SplitLines([]byte(line.Description), cols[0]-cellMargin)
+		lines := pdf.SplitLines([]byte(line.Name), cols[0]-15)
+		descriptionLines := pdf.SplitLines([]byte(line.Description), cols[0]-20)
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height oof the row more the height of total and tva
@@ -174,6 +171,10 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		pdf.Line(marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY, marginL+cols[0]+cols[1]+cols[2]+cols[3], currentY+float64(height))
 
 		pdf.SetXY(marginL, currentY+height)
+
+		if linePrice > 0 {
+			reportTotal += linePrice
+		}
 	}
 	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 

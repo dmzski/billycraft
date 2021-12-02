@@ -11,7 +11,7 @@ type ProductDao struct {
 }
 
 func (dao ProductDao) FindAllByTenant(tenant int) (products []models.Product) {
-	if err := database.DBConn.Find(&products, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Find(&products, "company_id = ?", tenant).Order("name asc").Error; err != nil {
 		panic(err)
 	}
 	return
@@ -49,8 +49,8 @@ func (dao ProductDao) Create(creator models.User, newProduct dtos.Product) (prod
 	return
 }
 
-func (dao ProductDao) Delete(id string, creator string) {
-	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Product{}).Error; err != nil {
+func (dao ProductDao) Delete(id string, tenant int) {
+	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Product{}).Error; err != nil {
 		panic(err)
 	}
 }

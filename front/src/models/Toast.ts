@@ -12,11 +12,16 @@ export class Toast {
   constructor() {
     this.id = Toast.nextId;
     this.message = "";
-    this.variant = "default";
+    this.variant = "secondary";
     this.open = true;
     this.duration = 5000;
     Toast.nextId++;
   }
 }
 
-export type ToastVariant = "default" | "success" | "warning" | "error" | "info";
+export type ToastVariant =
+  | "secondary"
+  | "success"
+  | "warning"
+  | "error"
+  | "info";

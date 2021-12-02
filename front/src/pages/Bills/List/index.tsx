@@ -12,11 +12,7 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   });
 
   return (
-    <Table
-      hoverable
-      className="text-left overlay-x-auto w-full table-fixed"
-      data={bills}
-    >
+    <Table className="text-left overlay-x-auto w-full table-fixed">
       <Table.Head>
         <Table.Row>
           <Table.HeadCell

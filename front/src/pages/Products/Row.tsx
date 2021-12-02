@@ -1,29 +1,49 @@
-import { Icon, Select, Table, TextInput } from "@coco-ui/core";
+import { Button, Icon, Select, Table, TextInput } from "@coco-ui/core";
 import React from "react";
-import {
-  CheckIcon,
-  PencilIcon,
-  TrashIcon,
-  XIcon,
-} from "@heroicons/react/solid";
 import { useMutation, useQueryCache } from "react-query";
 import { ProductApi } from "../../api/ProductApi";
 import Product from "../../models/Product";
 import { useToast } from "../../providers/ToastProvider";
 import { LINE_TYPE } from "constants/line";
 import { LineTypeEnum } from "models/LineTypeEnum";
+import { Controller, useForm } from "react-hook-form";
 
 type ProductTableLineProps = {
   product: Product;
+  isNew?: boolean;
 };
 
-const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
-  const [editMode, setEditMode] = React.useState(product.id ? false : true);
-  const [newProduct, setNewProduct] = React.useState(product);
-  const [deleteMode, setDeleteMode] = React.useState(false);
-  const [saveProductMutation, saveProductMutationState] = useMutation(
-    ProductApi.createOrUpdate
+const MODES = {
+  EDIT: "EDIT",
+  READ: "READ",
+  DELETE: "DELETE",
+};
+
+const ProductTableLine = ({
+  product,
+  isNew,
+}: ProductTableLineProps): JSX.Element => {
+  const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ);
+  const defaultValues = React.useMemo(
+    () => ({
+      type: LineTypeEnum.ARTICLE,
+      name: "",
+      description: "",
+      price: 0,
+    }),
+    []
   );
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isValid, isSubmitting },
+    reset,
+    watch,
+  } = useForm({
+    defaultValues,
+    mode: "all",
+    shouldUnregister: true,
+  });
   const [deleteProductMutation, deleteProductMutationState] = useMutation(
     ProductApi.delete,
     {
@@ -45,37 +65,32 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
 
   const toggleEditMode = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setEditMode(!editMode);
+    setMode((current) => (current === MODES.EDIT ? MODES.READ : MODES.EDIT));
   };
 
-  const handleChange = (field: keyof Product) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setNewProduct((current) => ({
-      ...current,
-      [field]: e.target.value,
-    }));
-  };
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.stopPropagation();
+  const onSubmit = async (data: Product) => {
     try {
-      await saveProductMutation({
+      await ProductApi.createOrUpdate({
         id: product.id,
-        description: newProduct.description,
-        price:
-          `${newProduct.price}` !== ""
-            ? parseFloat(`${newProduct.price}`)
-            : null,
-        type: newProduct.type,
-        name: newProduct.name,
+        description: data.description,
+        price: `${data.price}` !== "" ? parseFloat(`${data.price}`) : 0,
+        type: data.type,
+        name: data.name,
       });
       toast.show({
         message: product.id ? "Article modifié" : "Article ajouté",
         variant: "success",
       });
-      setEditMode(false);
-      queryCache.invalidateQueries("products");
+      if (isNew)
+        reset({
+          type: LineTypeEnum.ARTICLE,
+          name: "",
+          description: "",
+          price: 0,
+        });
+      else setMode(MODES.READ);
+
+      queryCache.refetchQueries("products");
     } catch (error) {
       toast.show({
         message: "Erreur lors de l'enregistrement",
@@ -85,7 +100,9 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
   };
 
   const toggleDeleteMode = () => {
-    setDeleteMode(!deleteMode);
+    setMode((current) =>
+      current === MODES.DELETE ? MODES.READ : MODES.DELETE
+    );
   };
 
   const onDelete = async () => {
@@ -100,125 +117,186 @@ const ProductTableLine = ({ product }: ProductTableLineProps): JSX.Element => {
     }
   };
 
+  const formID = `form-product-${product.id ?? "new"}`;
+
   React.useEffect(() => {
-    setNewProduct(
-      product || {
-        type: LineTypeEnum.ARTICLE,
-        name: "",
-        description: "",
-        price: 0,
-      }
-    );
-  }, [editMode, product]);
+    if (product.id) {
+      reset(product);
+    }
+  }, [product, reset]);
 
   return (
     <Table.Row>
       <Table.Cell className="px-1">
-        <Select
-          className="w-full"
-          disabled={!editMode}
-          value={newProduct.type}
-          onChange={(type) => {
-            setNewProduct({ ...newProduct, type: type as LineTypeEnum });
-          }}
-          options={Object.values(LINE_TYPE).map((type) => ({
-            value: type.enum,
-            label: type.name,
-          }))}
-          name={newProduct.id + "-select"}
-          id={newProduct.id + "-select"}
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value}
+              name={field.name}
+              className="w-full"
+              onChange={(type) => {
+                field.onChange(type);
+              }}
+              options={Object.values(LINE_TYPE).map((type) => ({
+                value: type.enum,
+                label: type.name,
+              }))}
+              disabled={mode !== MODES.EDIT}
+            />
+          )}
         />
       </Table.Cell>
       <Table.Cell className="px-1">
         <div className="flex">
-          <TextInput
-            className="w-full"
-            value={newProduct.name}
-            disabled={!editMode}
-            onChange={handleChange("name")}
+          <Controller
+            name="name"
+            control={control}
+            rules={{
+              required: true,
+              minLength: 1,
+            }}
+            render={({ field, fieldState }) => (
+              <TextInput
+                form={formID}
+                name={`${formID}-${field.name}`}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={mode !== MODES.EDIT}
+                ref={field.ref}
+                className="w-full"
+                error={fieldState.invalid}
+              />
+            )}
           />
         </div>
       </Table.Cell>
       <Table.Cell className="px-1 py-2">
         <div className="flex">
-          <TextInput
-            autoResizeHeight
-            multiline
-            className="w-full"
-            value={newProduct.description ?? ""}
-            disabled={!editMode}
-            onChange={handleChange("description")}
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }) => (
+              <TextInput
+                form={formID}
+                autoResizeHeight
+                multiline
+                name={field.name}
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={mode !== MODES.EDIT}
+                className="w-full"
+                error={fieldState.invalid}
+              />
+            )}
           />
         </div>
       </Table.Cell>
       <Table.Cell className="px-1 w-48">
         <div className="w-full flex mr-1">
-          <TextInput
-            containerClassName="w-full"
-            min={0}
-            type="number"
-            step={0.1}
-            className="w-full text-right"
-            value={newProduct.price ?? ""}
-            disabled={!editMode}
-            onChange={handleChange("price")}
+          <Controller
+            name="price"
+            rules={{ min: 0 }}
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                form={formID}
+                autoResizeHeight
+                multiline
+                name={field.name}
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={mode !== MODES.EDIT}
+                containerClassName="w-full"
+                type="number"
+                step={0.1}
+                className="w-full text-right"
+                error={!!errors.price}
+              />
+            )}
           />
-          <span className="mx-2">€</span>
+          <span className="mx-2 pt-2">€</span>
         </div>
       </Table.Cell>
       <Table.Cell className="w-20">
-        {deleteMode ? (
-          <div className="flex">
-            <span className="mr-2">Supprimer ? </span>
-            <Icon
-              name="check"
+        {mode === MODES.DELETE && !isNew ? (
+          <div className="flex relative">
+            <span className="w-28 absolute pt-2 -top-full font-bold">
+              Supprimer ?
+            </span>
+            <Button
+              type="button"
+              variant="success"
+              size="md"
+              className="w-8"
               onClick={onDelete}
-              className="rounded-full w-8 h-8 p-2 text-white bg-success-600 hover:bg-success-700 mr-1"
-            />
-            <Icon
-              name="x"
-              onClick={toggleDeleteMode}
-              className="rounded-full text-white bg-error-600 hover:bg-error-700 w-8 h-8 p-2"
-            />
-          </div>
-        ) : editMode ? (
-          <div className="flex">
-            <button
-              onClick={onSubmit}
-              disabled={saveProductMutationState.isLoading || !newProduct.name}
-              className="appearance-none focus:outline-none"
             >
-              <CheckIcon className="rounded-full p-2 w-8 text-white bg-success-600 hover:bg-success-700" />
-            </button>
-            {product.id && (
-              <button
-                type="button"
-                onClick={toggleEditMode}
-                className="ml-1 appearance-none focus:outline-none"
-              >
-                <XIcon className="rounded-full p-2 text-white bg-error-600 hover:bg-error-700 w-8" />
-              </button>
-            )}
+              <Icon name="check" />
+            </Button>
+            <Button
+              type="button"
+              className="w-8 ml-1"
+              variant="error"
+              size="md"
+              onClick={toggleDeleteMode}
+            >
+              <Icon name="x" />
+            </Button>
           </div>
-        ) : (
+        ) : null}
+        {mode === MODES.EDIT || isNew ? (
           <div className="flex">
-            <button
+            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+              <Button
+                type="submit"
+                size="md"
+                variant="success"
+                className="w-8"
+                disabled={!isValid || isSubmitting}
+              >
+                <Icon name="check" />
+              </Button>
+            </form>
+            {product.id ? (
+              <Button
+                type="button"
+                size="md"
+                variant="error"
+                onClick={toggleEditMode}
+                className="ml-1 w-8"
+              >
+                <Icon name="x" />
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+        {mode === MODES.READ && !isNew ? (
+          <div className="flex">
+            <Button
               type="button"
               onClick={toggleEditMode}
-              className="appearance-none focus:outline-none mr-1"
+              className="w-8"
+              variant="info"
+              size="md"
             >
-              <PencilIcon className="rounded-full p-2 text-white bg-info-600 hover:bg-info-700 w-8" />
-            </button>
-            <button
+              <Icon name="pencil" />
+            </Button>
+            <Button
               type="button"
               disabled={deleteProductMutationState.isLoading}
               onClick={toggleDeleteMode}
-              className="appearance-none focus:outline-none"
+              className="ml-1 w-8"
+              size="md"
+              variant="error"
             >
-              <TrashIcon className="rounded-full text-white p-2 bg-error-600 hover:bg-error-700 w-8" />
-            </button>
+              <Icon name="trash" />
+            </Button>
           </div>
-        )}
+        ) : null}
       </Table.Cell>
     </Table.Row>
   );

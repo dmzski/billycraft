@@ -15,7 +15,7 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
   const customers = useCustomers();
 
   return (
-    <Table hoverable className="w-full table-fixed text-left" data={quotes}>
+    <Table className="w-full table-fixed text-left">
       <Table.Head>
         <Table.Row>
           <Table.HeadCell

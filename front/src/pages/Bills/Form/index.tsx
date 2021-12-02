@@ -30,10 +30,12 @@ const BillFormPage = (): JSX.Element => {
     createOrUpdateBillMutation,
     createOrUpdateBillMutationState,
   ] = useMutation(BillApi.createOrUpdate, {
-    onSuccess: () => {
-      queryCache.invalidateQueries("bills");
-      refetch();
-      toast.show({ message: "Enregistrement effectué", variant: "success" });
+    onSuccess: (data) => {
+      if (data.id !== id) {
+        history.push(ROUTES.QUOTE_FORM.path.replace(":id", data.id));
+      } else {
+        refetch();
+      }
     },
     throwOnError: true,
   });
@@ -62,6 +64,11 @@ const BillFormPage = (): JSX.Element => {
         lines: newBill.lines.map((line, index) => ({ ...line, line: index })),
       });
       queryCache.invalidateQueries("bills");
+      refetch();
+      toast.show({
+        message: "Devis enregistré",
+        variant: "success",
+      });
     } catch (error) {
       toast.show({
         message: "Erreur lors de l'enregistrement",
@@ -81,6 +88,7 @@ const BillFormPage = (): JSX.Element => {
     try {
       await updateBillStatusMutation({ id, status });
       queryCache.invalidateQueries("bills");
+      refetch();
     } catch (error) {
       console.error("Error !!!", error);
     }
@@ -88,11 +96,11 @@ const BillFormPage = (): JSX.Element => {
 
   const downloadPdf = async () => {
     try {
-      if (pdfState.isIdle && newBill.id) {
+      if (pdfState.isIdle && bill?.id) {
         pdfState.update("loading");
-        const blob = await PdfApi.getBillPdf(newBill.id);
+        const blob = await PdfApi.getBillPdf(bill.id);
         const link = document.createElement("a");
-        link.download = bill?.id ?? "unknown.pdf";
+        link.download = bill.id ?? "unknown.pdf";
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
         link.click();

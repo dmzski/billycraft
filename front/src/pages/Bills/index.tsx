@@ -44,7 +44,7 @@ const BillPage = (): JSX.Element => {
           {showArchived ? (
             <Button
               size="md"
-              variant="default"
+              variant="secondary"
               icon="eye-off"
               onClick={handleShowArchived}
             >
@@ -53,7 +53,7 @@ const BillPage = (): JSX.Element => {
           ) : (
             <Button
               size="md"
-              variant="default"
+              variant="secondary"
               icon="eye"
               onClick={handleShowArchived}
             >

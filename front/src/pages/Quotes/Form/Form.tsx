@@ -240,7 +240,7 @@ const QuoteForm = ({
           onClick={addExistingProductSelected}
           type="button"
           className="py-2 ml-4 w-1/6"
-          variant="default"
+          variant="secondary"
         >
           Ajouter
         </Button>
@@ -254,7 +254,7 @@ const QuoteForm = ({
         {!cantUpdate && (
           <Button
             type="button"
-            variant="default"
+            variant="secondary"
             className="w-full mt-4"
             size="sm"
             onClick={addLine}
@@ -319,7 +319,7 @@ const QuoteForm = ({
           <>
             <Button
               size="md"
-              variant="default"
+              variant="secondary"
               className="mr-4"
               icon="document"
               type="button"

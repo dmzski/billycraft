@@ -10,7 +10,7 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }): JSX.Element => {
   });
 
   return (
-    <Table className="mt-2 w-full text-left" data={customers}>
+    <Table className="mt-2 w-full text-left">
       <Table.Head>
         <Table.Row>
           <Table.HeadCell

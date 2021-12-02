@@ -57,7 +57,7 @@ const QuotePage = (): JSX.Element => {
         <div>
           <Button
             size="md"
-            variant="default"
+            variant="secondary"
             icon={showArchived ? "eye-off" : "eye"}
             onClick={handleShowArchived}
           >
