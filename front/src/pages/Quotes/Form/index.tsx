@@ -2,14 +2,12 @@ import { Button } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQuery, useQueryCache } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
-import { EmailApi } from "../../../api/EmailApi";
 import { PdfApi } from "../../../api/PdfApi";
 import useLoadingState from "../../../hooks/useLoadingState";
 import Quote, { QuoteStatusEnum } from "../../../models/Quote";
 import { useToast } from "../../../providers/ToastProvider";
 import { ROUTES } from "../../../routes";
 import QuoteForm from "./Form";
-import { BillApi } from "api/BillApi";
 import { QuoteApi } from "api/QuoteApi";
 
 const QuoteCreationPage = (): JSX.Element => {
@@ -42,15 +40,7 @@ const QuoteCreationPage = (): JSX.Element => {
     },
     throwOnError: true,
   });
-  const [
-    createBillFormQuoteMutation,
-    createBillFormQuoteMutationState,
-  ] = useMutation(BillApi.createFromQuote, {
-    onSuccess: () => {
-      history.push(ROUTES.BILLS.path);
-      toast.show({ message: "Facture créé", variant: "success" });
-    },
-  });
+
   const [
     updateQuoteStatusMutation,
     updateQuoteStatusMutationState,
@@ -60,15 +50,6 @@ const QuoteCreationPage = (): JSX.Element => {
       toast.show({ message: "Devis mis à jour", variant: "success" });
     },
   });
-  const [sendMailMutation, sendMailMutationState] = useMutation(
-    EmailApi.sendQuote,
-    {
-      onSuccess: () => {
-        toast.show({ message: "Email envoyé", variant: "success" });
-      },
-      throwOnError: true,
-    }
-  );
 
   async function saveQuote(e: any) {
     e.preventDefault();
@@ -139,49 +120,6 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   };
 
-  const sendMail = async () => {
-    try {
-      if (!sendMailMutationState.isLoading && id) {
-        await sendMailMutation(id);
-      }
-    } catch (e) {
-      console.error("Error when send email pdf", e);
-      toast.show({
-        message: "Erreur lors de l'envoi de l'email",
-        variant: "error",
-      });
-    }
-  };
-
-  const createBillFromQuote = React.useCallback(async () => {
-    try {
-      if (!createBillFormQuoteMutationState.isLoading && id) {
-        createBillFormQuoteMutation(id);
-        queryCache.invalidateQueries("bills");
-      }
-    } catch (error) {
-      console.error("Une erreur est survenue", error);
-      toast.show({
-        message: "Erreur lors de la génération de la facture",
-        variant: "error",
-      });
-    }
-  }, [
-    id,
-    toast,
-    queryCache,
-    createBillFormQuoteMutationState,
-    createBillFormQuoteMutation,
-  ]);
-
-  const isQuoteMinimumAccepted = React.useCallback(() => {
-    return [
-      QuoteStatusEnum.ACCEPTED,
-      QuoteStatusEnum.DEPOSIT_ASK,
-      QuoteStatusEnum.DEPOSIT_PAID,
-    ].includes(newQuote.status);
-  }, [newQuote]);
-
   React.useEffect(() => {
     setNewQuote(quote && id !== "new" ? quote : ({} as Quote));
   }, [quote]);
@@ -198,22 +136,9 @@ const QuoteCreationPage = (): JSX.Element => {
       </Button>
       <div className="flex items-center mb-8 border-b">
         <h1 className="text-3xl flex-grow">
-          {!newQuote.id ? "Nouveau " : "Modifier un "}devis
+          {!newQuote.id ? "Nouveau devis" : "Modifier un devis"}
         </h1>
-        {newQuote?.id && newQuote.status === QuoteStatusEnum.SENT ? (
-          <Button
-            className="mb-1 mr-1"
-            variant="info"
-            icon="mail"
-            size="sm"
-            onClick={sendMail}
-            title="Envoyer par mail"
-            disabled={sendMailMutationState.isLoading}
-          >
-            Envoyer le mail
-          </Button>
-        ) : null}
-        {newQuote?.id && isQuoteMinimumAccepted() ? (
+        {/* {newQuote?.id && isQuoteMinimumAccepted() ? (
           <Button
             variant="success"
             size="sm"
@@ -225,7 +150,7 @@ const QuoteCreationPage = (): JSX.Element => {
           >
             Créer la facture
           </Button>
-        ) : null}
+        ) : null} */}
         {newQuote?.id ? (
           <Button
             disabled={pdfState.isLoading}
@@ -236,7 +161,7 @@ const QuoteCreationPage = (): JSX.Element => {
             size="sm"
             icon="document-download"
           >
-            PDF
+            Télécharger le PDF
           </Button>
         ) : null}
       </div>

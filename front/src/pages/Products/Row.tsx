@@ -38,7 +38,6 @@ const ProductTableLine = ({
     control,
     formState: { errors, isValid, isSubmitting },
     reset,
-    watch,
   } = useForm({
     defaultValues,
     mode: "all",

@@ -39,28 +39,19 @@ const BillForm = ({
   disabled,
   onUpdateStatus,
 }: BillFormProps): JSX.Element => {
-  const [customerInputValue, setCustomerInputValue] = React.useState(
-    customer ? customer.name : ""
-  );
-  const [
-    existingProductInput,
-    setExistingProductInput,
-  ] = React.useState<string>("");
   const [productIdSelected, setProductIdSelected] = React.useState<number>();
   const [errors, setErrors] = React.useState<
     Record<string, string | undefined>
   >({});
   const customersQuery = useQuery(
-    ["customers-by-name", customerInputValue],
+    "customers",
     CustomerApi.findAllByNameContains,
     {
       refetchOnWindowFocus: false,
-      enabled: customerInputValue?.length > 0,
     }
   );
-  const productsQuery = useQuery(["products-by-name"], ProductApi.findAll, {
+  const productsQuery = useQuery("products", ProductApi.findAll, {
     refetchOnWindowFocus: false,
-    enabled: existingProductInput?.length > 0,
   });
 
   const inputChange = React.useCallback((property: keyof Bill) => {
@@ -141,7 +132,6 @@ const BillForm = ({
   const addExistingProductSelected = React.useCallback(() => {
     if (productIdSelected && productsQuery.data) {
       addLine(productsQuery.data.find(({ id }) => id === productIdSelected));
-      setExistingProductInput("");
       setProductIdSelected(undefined);
     }
   }, [productIdSelected, productsQuery.data]);
@@ -149,12 +139,6 @@ const BillForm = ({
   const cantUpdate = React.useMemo(() => {
     return bill.status && bill.status !== BillStatusEnum.DRAFT;
   }, [bill]);
-
-  React.useEffect(() => {
-    if (!customer) {
-      setCustomerInputValue("");
-    }
-  }, [customer]);
 
   const handleShortcut = React.useCallback(
     (event: React.KeyboardEvent) => {
@@ -211,9 +195,6 @@ const BillForm = ({
         options={customerOptions}
         placeholder="Nom du client"
         value={bill.customerId}
-        onSearchChange={(str) => {
-          if (str) setCustomerInputValue(str);
-        }}
         isSearchable
         isLoading={customersQuery.isLoading}
       />
@@ -227,35 +208,6 @@ const BillForm = ({
         value={bill.tva || ""}
         onChange={inputChange("tva")}
       />
-      <div className="my-2 flex items-end">
-        <Select
-          disabled={disabled || cantUpdate}
-          label="Ajouter un produit existant"
-          tabIndex={0}
-          containerClassName="flex-grow"
-          name="existing-product"
-          id="existing-product"
-          inputProps={{
-            autoComplete: "nope",
-          }}
-          options={productOptions}
-          isLoading={productsQuery.isLoading}
-          isSearchable
-          placeholder="Nom du produit"
-          value={productIdSelected}
-          onSearchChange={(str) => setExistingProductInput(str ?? "")}
-          onChange={handleSelectExistingProduct}
-        />
-        <Button
-          disabled={disabled || cantUpdate}
-          onClick={addExistingProductSelected}
-          type="button"
-          className="py-2 ml-4 w-1/6"
-          variant="secondary"
-        >
-          Ajouter
-        </Button>
-      </div>
       <div onKeyDown={handleShortcut}>
         <BillLineTable
           disabled={disabled || cantUpdate}
@@ -264,17 +216,47 @@ const BillForm = ({
         />
       </div>
       {!cantUpdate ? (
-        <Button
-          type="button"
-          className="mt-4 w-full"
-          variant="secondary"
-          size="sm"
-          onClick={() => addLine()}
-          disabled={disabled}
-          icon="plus"
-        >
-          Ajouter une ligne
-        </Button>
+        <>
+          <Button
+            type="button"
+            className="mt-4 w-full"
+            variant="secondary"
+            size="sm"
+            onClick={() => addLine()}
+            disabled={disabled}
+            icon="plus"
+          >
+            Ajouter une ligne
+          </Button>
+          <div className="my-2 flex items-end">
+            <Select
+              disabled={disabled || cantUpdate}
+              label="Ajouter un produit existant"
+              tabIndex={0}
+              containerClassName="flex-grow"
+              name="existing-product"
+              id="existing-product"
+              inputProps={{
+                autoComplete: "nope",
+              }}
+              options={productOptions}
+              isLoading={productsQuery.isLoading}
+              isSearchable
+              placeholder="Nom du produit"
+              value={productIdSelected}
+              onChange={handleSelectExistingProduct}
+            />
+            <Button
+              disabled={disabled || cantUpdate}
+              onClick={addExistingProductSelected}
+              type="button"
+              className="py-2 ml-4 w-1/6"
+              variant="secondary"
+            >
+              Ajouter
+            </Button>
+          </div>
+        </>
       ) : null}
 
       <div className="flex pt-3 flex-row-reverse">

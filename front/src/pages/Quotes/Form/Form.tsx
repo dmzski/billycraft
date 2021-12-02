@@ -34,28 +34,15 @@ const QuoteForm = ({
   disabled,
   onUpdateStatus,
 }: QuoteFormProps): JSX.Element => {
-  const [customerInputValue, setCustomerInputValue] = React.useState<string>(
-    customer ? customer.name : ""
-  );
-  const [
-    existingProductInput,
-    setExistingProductInput,
-  ] = React.useState<string>("");
   const [productIdSelected, setProductIdSelected] = React.useState<number>();
   const [errors, setErrors] = React.useState<
     Record<string, string | undefined>
   >({});
-  const customersQuery = useQuery(
-    ["customers-by-name", customerInputValue],
-    CustomerApi.findAllByNameContains,
-    {
-      refetchOnWindowFocus: false,
-      enabled: customerInputValue?.length > 0,
-    }
-  );
-  const productsQuery = useQuery(["products-by-name"], ProductApi.findAll, {
+  const customersQuery = useQuery("customers", CustomerApi.findAll, {
     refetchOnWindowFocus: false,
-    enabled: existingProductInput?.length > 0,
+  });
+  const productsQuery = useQuery("products", ProductApi.findAll, {
+    refetchOnWindowFocus: false,
   });
 
   const inputChange = (property: keyof Quote) => {
@@ -126,7 +113,6 @@ const QuoteForm = ({
       addLine(
         productsQuery.data.find((product) => product.id === productIdSelected)
       );
-      setExistingProductInput("");
       setProductIdSelected(undefined);
     }
   };
@@ -141,12 +127,6 @@ const QuoteForm = ({
       addLine();
     }
   };
-
-  React.useEffect(() => {
-    if (!customer) {
-      setCustomerInputValue("");
-    }
-  }, [customer]);
 
   const customerOptions = React.useMemo(() => {
     if (customersQuery.data) {
@@ -195,11 +175,6 @@ const QuoteForm = ({
         options={customerOptions}
         placeholder="Nom du client"
         value={quote.customerId}
-        onSearchChange={(str) => {
-          if (str) {
-            setCustomerInputValue(str);
-          }
-        }}
         isSearchable
         isLoading={customersQuery.isLoading}
       />
@@ -216,35 +191,6 @@ const QuoteForm = ({
         value={quote.tva ?? ""}
         onChange={inputChange("tva")}
       />
-      <div className="my-4 flex items-end">
-        <Select
-          disabled={disabled || cantUpdate}
-          label="Ajouter un produit existant"
-          tabIndex={0}
-          containerClassName="flex-grow"
-          name="existing-product"
-          id="existing-product"
-          inputProps={{
-            autoComplete: "nope",
-          }}
-          options={productOptions}
-          isLoading={productsQuery.isLoading}
-          isSearchable
-          placeholder="Nom du produit"
-          value={productIdSelected}
-          onSearchChange={(str) => setExistingProductInput(str ?? "")}
-          onChange={onProductSelectedChange}
-        />
-        <Button
-          disabled={disabled || cantUpdate}
-          onClick={addExistingProductSelected}
-          type="button"
-          className="py-2 ml-4 w-1/6"
-          variant="secondary"
-        >
-          Ajouter
-        </Button>
-      </div>
       <div onKeyDown={handleKeyDown} className="my-4">
         <QuoteLineTable
           disabled={disabled || cantUpdate}
@@ -252,17 +198,47 @@ const QuoteForm = ({
           setQuote={setQuote}
         />
         {!cantUpdate && (
-          <Button
-            type="button"
-            variant="secondary"
-            className="w-full mt-4"
-            size="sm"
-            onClick={addLine}
-            disabled={disabled}
-            icon="plus"
-          >
-            Ajouter une ligne
-          </Button>
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full mt-4"
+              size="sm"
+              onClick={addLine}
+              disabled={disabled}
+              icon="plus"
+            >
+              Ajouter une ligne
+            </Button>
+            <div className="my-4 flex items-end">
+              <Select
+                disabled={disabled || cantUpdate}
+                label="Ajouter un produit existant"
+                tabIndex={0}
+                containerClassName="flex-grow"
+                name="existing-product"
+                id="existing-product"
+                inputProps={{
+                  autoComplete: "nope",
+                }}
+                options={productOptions}
+                isLoading={productsQuery.isLoading}
+                isSearchable
+                placeholder="Nom du produit"
+                value={productIdSelected}
+                onChange={onProductSelectedChange}
+              />
+              <Button
+                disabled={disabled || cantUpdate}
+                onClick={addExistingProductSelected}
+                type="button"
+                className="py-2 ml-4 w-1/6"
+                variant="secondary"
+              >
+                Ajouter
+              </Button>
+            </div>
+          </>
         )}
       </div>
 

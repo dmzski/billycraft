@@ -136,7 +136,7 @@ const BillFormPage = (): JSX.Element => {
       <div className="flex items-center mb-8 border-b">
         <div className="flex items-end flex-grow">
           <h1 className="text-3xl">
-            {!newBill.id ? "Nouvelle" : "Modifier une"}&nbsp;facture
+            {!newBill.id ? "Nouvelle facture" : "Modifier une facture"}
           </h1>
           <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
             {BILL_STATUS[newBill.status as keyof typeof BILL_STATUS]?.text}
@@ -152,7 +152,7 @@ const BillFormPage = (): JSX.Element => {
             size="sm"
             icon="document-download"
           >
-            PDF
+            Télécharger le PDF
           </Button>
         ) : null}
       </div>
