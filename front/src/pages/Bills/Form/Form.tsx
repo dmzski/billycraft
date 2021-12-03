@@ -190,7 +190,7 @@ const BillForm = ({
         disabled={disabled || cantUpdate}
         onChange={onCustomerOptionClick}
         inputProps={{
-          autoComplete: "nope",
+          autoComplete: "off",
         }}
         options={customerOptions}
         placeholder="Nom du client"
@@ -237,7 +237,7 @@ const BillForm = ({
               name="existing-product"
               id="existing-product"
               inputProps={{
-                autoComplete: "nope",
+                autoComplete: "off",
               }}
               options={productOptions}
               isLoading={productsQuery.isLoading}

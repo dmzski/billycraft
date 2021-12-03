@@ -170,7 +170,7 @@ const QuoteForm = ({
         disabled={disabled || cantUpdate}
         onChange={onCustomerOptionClick}
         inputProps={{
-          autoComplete: "nope",
+          autoComplete: "off",
         }}
         options={customerOptions}
         placeholder="Nom du client"
@@ -219,7 +219,7 @@ const QuoteForm = ({
                 name="existing-product"
                 id="existing-product"
                 inputProps={{
-                  autoComplete: "nope",
+                  autoComplete: "off",
                 }}
                 options={productOptions}
                 isLoading={productsQuery.isLoading}
