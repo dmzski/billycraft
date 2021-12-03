@@ -53,7 +53,7 @@ const TodoList = (): JSX.Element => {
       const fn = async () => {
         try {
           await TodoApi.create(data);
-          reset();
+          reset({ description: "" });
           refetch();
           toast.show({ message: "Tâche crée", variant: "success" });
         } catch {
@@ -135,14 +135,14 @@ const TodoList = (): JSX.Element => {
         </Button>
       </form>
       {data?.map((todo) => (
-        <div key={todo.id} className={`shadow mb-4 flex h-12 items-center`}>
+        <div key={todo.id} className={`shadow mb-4 flex py-1 items-center`}>
           <div className="ml-2 w-2/12">
             {formatRelative(new Date(todo.createdAt), Date.now(), {
               locale: fr,
             })}
           </div>
           <div className="ml-2 w-2/12">{todo.createdBy}</div>
-          <div className="ml-2 w-4/12">
+          <div className="ml-2 w-4/12 break-words">
             {editMode !== todo.id ? (
               todo.description
             ) : (
@@ -201,7 +201,7 @@ const TodoList = (): JSX.Element => {
               </div>
             ) : null}
             {todo.doneAt ? (
-              <div className="flex text-success-600">
+              <div className="flex py-1 text-success-600">
                 <div>
                   Fait&nbsp;
                   {formatRelative(new Date(todo.doneAt), Date.now(), {

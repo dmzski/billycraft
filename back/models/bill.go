@@ -68,6 +68,13 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 		x.BillID = ""
 		lines = append(lines, BillLine{}.FromDTO(x))
 	}
+
+	status := "DRAFT"
+
+	if b.Status != nil {
+		status = *b.Status
+	}
+
 	return Bill{
 		ID:         b.ID,
 		Title:      b.Title,
@@ -76,7 +83,7 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 		UpdatedAt:  b.UpdatedAt,
 		PaidAt:     b.PaidAt,
 		SentAt:     b.SentAt,
-		Status:     *b.Status,
+		Status:     status,
 		CreatedBy:  b.CreatedBy,
 		CompanyID:  b.CompanyID,
 		CustomerID: b.CustomerID,

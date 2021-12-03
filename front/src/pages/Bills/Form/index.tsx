@@ -32,7 +32,7 @@ const BillFormPage = (): JSX.Element => {
   ] = useMutation(BillApi.createOrUpdate, {
     onSuccess: (data) => {
       if (data.id !== id) {
-        history.push(ROUTES.QUOTE_FORM.path.replace(":id", data.id));
+        history.push(ROUTES.BILL_FORM.path.replace(":id", data.id));
       } else {
         refetch();
       }
@@ -67,7 +67,7 @@ const BillFormPage = (): JSX.Element => {
       queryCache.invalidateQueries("bills");
       refetch();
       toast.show({
-        message: "Devis enregistré",
+        message: "Facture enregistrée",
         variant: "success",
       });
     } catch (error) {
