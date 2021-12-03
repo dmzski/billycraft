@@ -23,7 +23,7 @@ const History = (): JSX.Element => (
             "cursor-pointer hover:font-bold p-3 w-1/3 text-center shadow rounded"
           }
         >
-          Devis
+          Devis archivés
         </NavLink>
         <NavLink
           to={TABS.BILLS}
@@ -32,7 +32,7 @@ const History = (): JSX.Element => (
             "cursor-pointer hover:font-bold p-3 w-1/3 mx-2 text-center shadow rounded"
           }
         >
-          Factures
+          Factures archivées
         </NavLink>
         <NavLink
           to={TABS.TODOS}
@@ -41,7 +41,7 @@ const History = (): JSX.Element => (
             "cursor-pointer hover:font-bold p-3 w-1/3 text-center shadow rounded"
           }
         >
-          Todos
+          Tâches finies
         </NavLink>
       </div>
     </div>

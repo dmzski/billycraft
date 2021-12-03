@@ -131,7 +131,7 @@ const QuoteTableLine = ({
   }, [statusRef, openStatusPopup]);
 
   return (
-    <Table.Row onClick={editQuote}>
+    <Table.Row hoverable onClick={editQuote}>
       <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? "N.C"}</Table.Cell>
       <Table.Cell className="">
