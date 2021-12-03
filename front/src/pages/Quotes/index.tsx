@@ -13,13 +13,9 @@ const QuotePage = (): JSX.Element => {
   const customers = useCustomers();
   const [filters, setFilters] = React.useState<any>({});
 
-  const quotesQuery = useQuery(
-    "quotes-notArchived",
-    QuoteApi.findAllNotArchived,
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  const quotesQuery = useQuery("quotes", QuoteApi.findAllNotArchived, {
+    refetchOnWindowFocus: false,
+  });
   const history = useHistory();
 
   const quoteSorted = React.useCallback(() => {

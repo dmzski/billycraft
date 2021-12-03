@@ -12,7 +12,7 @@ import { ROUTES } from "routes";
 const BillPage = (): JSX.Element => {
   const customers = useCustomers();
   const [filters, setFilters] = React.useState<any>({});
-  const billsQuery = useQuery("bills-notArchived", BillApi.findAllNotArchived);
+  const billsQuery = useQuery("bills", BillApi.findAllNotArchived);
   const history = useHistory();
 
   const billSorted = React.useCallback(() => {
