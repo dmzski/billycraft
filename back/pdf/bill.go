@@ -79,24 +79,34 @@ func generateBillPDF(bill models.Bill) *os.File {
 	pdf.SetFont("Arial", "", 10)
 
 	pdf.SetY(35)
-	pdf.SetX(5)
+	pdf.SetX(marginL)
 	companyStr := fmt.Sprintf("%s\n%s\n%s, %s", c.Name, c.Address, c.PostalCode, c.City)
+	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
-	pdf.MultiCell(100, 5, tr(companyStr), "0", "L", false)
-	pdf.SetY(y + 4)
-	pdf.SetX(-100 - marginL)
+	pdf.MultiCell(cols[0], lineHt+lineMargin, tr(companyStr), "0", "L", false)
+	afterCompanyY := pdf.GetY()
+	pdf.SetY(y)
+	pdf.SetX(pageSize.Wd - marginL - cols[1] - cols[2] - cols[3])
 	if customer.Name != "" {
 		customerStr := customer.Name + "\n" + customer.Address + "\n" + customer.PostalCode + ", " + customer.City
-		pdf.MultiCell(100, 5, tr(customerStr), "0", "R", false)
+		pdf.MultiCell(cols[1]+cols[2]+cols[3], lineHt+lineMargin, tr(customerStr), "0", "R", false)
+	}
+	afterCustomerY := pdf.GetY()
+
+	if afterCompanyY > afterCustomerY {
+		y = afterCompanyY
+	} else {
+		y = afterCustomerY
 	}
 
 	pdf.SetFont("Arial", "B", 10)
-	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Référence : "+bill.ID), "", "L", false)
+	pdf.SetY(y + cellMargin)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Référence : "+bill.ID), "", "R", false)
+	pdf.SetY(pdf.GetY() + lineHt)
 	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Objet : "+bill.Title), "", "L", false)
+	pdf.SetY(pdf.GetY() + lineHt)
+
 	pdf.SetFont("Arial", "B", 10)
-
-	pdf.Ln(3)
-
 	addBillHeaders(pdf, bc)
 
 	reportTotal := 0.0
