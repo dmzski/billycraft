@@ -103,3 +103,11 @@ export function getQuoteTotal(quote: Quote): number {
   }
   return 0;
 }
+
+export const isQuoteMinimumAccepted = ({ status }: Quote): boolean =>
+  [
+    QUOTE_STATUS.ARCHIVED.enum,
+    QUOTE_STATUS.ACCEPTED.enum,
+    QUOTE_STATUS.DEPOSIT_ASK.enum,
+    QUOTE_STATUS.DEPOSIT_PAID.enum,
+  ].includes(status);

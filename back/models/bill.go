@@ -85,6 +85,29 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 	}
 }
 
+func (b Bill) FromQuote(q Quote) Bill {
+	lines := []BillLine{}
+	for _, x := range q.Lines {
+		lines = append(lines, BillLine{
+			Bill:        b,
+			BillID:      b.ID,
+			Line:        x.Line,
+			Quantity:    x.Quantity,
+			Price:       x.Price,
+			Name:        x.Name,
+			Description: x.Description,
+			Type:        x.Type,
+		})
+	}
+	return Bill{
+		Title:      q.Title,
+		Tva:        q.Tva,
+		Status:     "DRAFT",
+		CustomerID: q.CustomerID,
+		Lines:      lines,
+	}
+}
+
 func (bill Bill) ToDTO() dtos.Bill {
 	lines := []dtos.BillLine{}
 	for _, x := range bill.Lines {

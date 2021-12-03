@@ -102,6 +102,25 @@ func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote mode
 	return
 }
 
+func (dao QuoteDao) CreateBill(creator models.User, id string) (bill models.Bill) {
+	tx := database.DBConn.Begin()
+	quote := models.Quote{}
+	if err := tx.Preload("Lines").Find(&quote, "company_id = ? AND id = ?", creator.CompanyID, id).Error; err != nil {
+		panic(err)
+	}
+	bill = bill.FromQuote(quote)
+	bill.CompanyID = *creator.CompanyID
+	bill.CreatedBy = creator.Email
+	bill.Status = "DRAFT"
+	log.Println(len(bill.Lines))
+
+	if err := database.DBConn.Omit("Company", "Custom").Create(&bill).Error; err != nil {
+		log.Println("Error : ", err.Error())
+		panic(err)
+	}
+	return
+}
+
 func (dao QuoteDao) Delete(id string, creator string) {
 	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Quote{}).Error; err != nil {
 		panic(err)

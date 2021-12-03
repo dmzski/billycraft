@@ -1,4 +1,5 @@
 import { API_URL } from "constants/global";
+import Bill from "models/Bill";
 import Quote, { QuoteStatusEnum } from "models/Quote";
 import { HttpClient } from "./HttpClient";
 
@@ -54,4 +55,6 @@ export const QuoteApi = {
     id: string;
     status: QuoteStatusEnum;
   }): Promise<Quote> => HttpClient.PATCH(`${QUOTE_URL}/${id}`, { status }),
+  createBill: async ({ id }: { id: string }): Promise<Bill> =>
+    HttpClient.POST<Bill>(`${QUOTE_URL}/${id}/bill`, {}),
 };

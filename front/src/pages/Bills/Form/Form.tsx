@@ -264,7 +264,7 @@ const BillForm = ({
           <Button
             icon="save"
             size="md"
-            type="submit"
+            type="button"
             onClick={beforeOnSubmit}
             disabled={disabled}
           >

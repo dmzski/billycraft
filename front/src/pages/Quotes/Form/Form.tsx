@@ -261,7 +261,7 @@ const QuoteForm = ({
           <Button
             variant="primary"
             size="md"
-            type="submit"
+            type="button"
             onClick={beforeOnSubmit}
             disabled={disabled}
           >

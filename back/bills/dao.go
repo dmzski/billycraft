@@ -56,7 +56,7 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 				changes.SentAt = &now
 			}
 		} else {
-			tx.Updates(map[string]interface{}{
+			tx.Model(&bill).Updates(map[string]interface{}{
 				"sent_at": gorm.Expr("NULL"),
 			})
 		}
@@ -66,12 +66,12 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 				changes.PaidAt = &now
 			}
 		} else {
-			tx.Updates(map[string]interface{}{
+			tx.Model(&bill).Updates(map[string]interface{}{
 				"paid_at": gorm.Expr("NULL"),
 			})
 		}
 	}
-	tx.Updates(changes)
+	tx.Model(&bill).Updates(changes)
 
 	if tx.Error != nil {
 		err := tx.Error

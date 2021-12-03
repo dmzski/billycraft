@@ -44,6 +44,7 @@ const BillFormPage = (): JSX.Element => {
     BillApi.updateStatus,
     {
       onSuccess: () => {
+        queryCache.invalidateQueries("bills");
         history.push(ROUTES.BILLS.path);
         toast.show({ message: "Facture mise à jour", variant: "success" });
       },

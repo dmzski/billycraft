@@ -9,6 +9,7 @@ import { useToast } from "../../../providers/ToastProvider";
 import { ROUTES } from "../../../routes";
 import QuoteForm from "./Form";
 import { QuoteApi } from "api/QuoteApi";
+import { isQuoteMinimumAccepted } from "utils/quote";
 
 const QuoteCreationPage = (): JSX.Element => {
   const [newQuote, setNewQuote] = React.useState<Quote>({} as Quote);
@@ -40,6 +41,22 @@ const QuoteCreationPage = (): JSX.Element => {
     },
     throwOnError: true,
   });
+
+  const [createBillFromQuote, createBillFromQuoteState] = useMutation(
+    QuoteApi.createBill,
+    {
+      onSuccess: (data) => {
+        toast.show({ message: "Facture crée", variant: "success" });
+        queryCache.invalidateQueries("bills");
+        if (data.id) {
+          history.push(ROUTES.BILL_FORM.path.replace(":id", data.id));
+        } else {
+          history.push(ROUTES.BILLS.path);
+        }
+      },
+      throwOnError: true,
+    }
+  );
 
   const [
     updateQuoteStatusMutation,
@@ -120,6 +137,10 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   };
 
+  const createBill = React.useCallback(() => {
+    createBillFromQuote({ id: newQuote.id });
+  }, [newQuote, createBillFromQuote]);
+
   React.useEffect(() => {
     setNewQuote(quote && id !== "new" ? quote : ({} as Quote));
   }, [quote]);
@@ -138,26 +159,26 @@ const QuoteCreationPage = (): JSX.Element => {
         <h1 className="text-3xl flex-grow">
           {!newQuote.id ? "Nouveau devis" : "Modifier un devis"}
         </h1>
-        {/* {newQuote?.id && isQuoteMinimumAccepted() ? (
+        {newQuote?.id && isQuoteMinimumAccepted(newQuote) ? (
           <Button
             variant="success"
             size="sm"
-            className="mb-1 mr-3"
-            onClick={createBillFromQuote}
+            className="mb-2 mr-2"
+            onClick={createBill}
             title="Créer la facture"
-            disabled={createBillFormQuoteMutationState.isLoading}
+            disabled={createBillFromQuoteState.isLoading}
             icon="document-add"
           >
             Créer la facture
           </Button>
-        ) : null} */}
+        ) : null}
         {newQuote?.id ? (
           <Button
             disabled={pdfState.isLoading}
             title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
-            className="mb-1"
+            className="mb-2"
             size="sm"
             icon="document-download"
           >

@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import QuoteList from "./List";
 import { filterQuotes, sortQuotes } from "../../utils/quote";
 import QuoteFilterContainer from "./Filters";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button, Grid, Loader } from "@coco-ui/core";
 import { ROUTES } from "routes";
 import { QuoteApi } from "api/QuoteApi";

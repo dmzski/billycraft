@@ -13,6 +13,7 @@ func InitRoutes(api fiber.Router) {
 	router.Get("/", findAll)
 	router.Get("/:id", findById)
 	router.Post("/", create)
+	router.Post("/:id/bill", createBill)
 	router.Patch("/:id", update)
 	router.Delete("/:id", delete)
 }
@@ -79,4 +80,14 @@ func create(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(DAO.Create(user, newQuote).ToDTO())
+}
+
+func createBill(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	if id := c.Params("id", ""); id == "" {
+		return fiber.NewError(400, "No id provided")
+	} else {
+		return c.JSON(DAO.CreateBill(user, id).ToDTO())
+	}
+
 }
