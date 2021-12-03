@@ -12,7 +12,14 @@ type TodoDao struct {
 }
 
 func (dao TodoDao) FindAllByTenant(tenant int) (todos []models.Todo) {
-	if err := database.DBConn.Find(&todos, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Find(&todos, "company_id = ? ORDER BY created_at desc", tenant).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao TodoDao) FindAllByTenantAndDoneAfter(tenant int, doneAfter time.Time) (todos []models.Todo) {
+	if err := database.DBConn.Find(&todos, "company_id = ? AND (done_at IS NULL OR done_at > ?) ORDER BY created_at desc", tenant, doneAfter).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -26,7 +33,8 @@ func (dao TodoDao) FindOneByIdAndTenant(id string, tenant int) (todo models.Todo
 }
 
 func (dao TodoDao) Update(id string, tenant int, changes dtos.TodoRequest) (todo models.Todo) {
-	tx := database.DBConn.Begin().Where("company_id = ? AND id = ?", tenant, id).First(&todo)
+	tx := database.DBConn.Begin()
+	tx.Where("company_id = ? AND id = ?", tenant, id).First(&todo)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
@@ -61,7 +69,8 @@ func (dao TodoDao) Delete(id string, creator string) {
 }
 
 func (dao TodoDao) Done(id string, user models.User) (todo models.Todo) {
-	tx := database.DBConn.Begin().Where("company_id = ? AND id = ?", user.CompanyID, id).First(&todo)
+	tx := database.DBConn.Begin()
+	tx = tx.Where("company_id = ? AND id = ?", user.CompanyID, id).First(&todo)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

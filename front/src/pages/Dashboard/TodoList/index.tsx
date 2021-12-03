@@ -4,16 +4,26 @@ import { formatRelative } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useToast } from "providers/ToastProvider";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 
+const dateOffset = 24 * 60 * 60 * 1000 * 7; //5 days
+
 const TodoList = (): JSX.Element => {
-  const { data, refetch } = useQuery("todos", TodoApi.findAll, {
-    refetchOnWindowFocus: false,
-  });
+  const { data, refetch } = useQuery(
+    "todos-dashboard",
+    () => TodoApi.findAllFinishedAfter(new Date(Date.now() - dateOffset)),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const [editMode, setEditMode] = React.useState<number>();
-  const [newTodo, setNewTodo] = React.useState("");
   const [editTodo, setEditTodo] = React.useState("");
   const toast = useToast();
+
+  const { handleSubmit, control, reset, formState } = useForm({
+    mode: "all",
+  });
 
   const handleDone = React.useCallback(
     (id: number) => () => {
@@ -31,13 +41,6 @@ const TodoList = (): JSX.Element => {
     [toast, refetch]
   );
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
-    (event) => {
-      setNewTodo(event.target.value);
-    },
-    []
-  );
-
   const handleChangeEdit: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
     (event) => {
       setEditTodo(event.target.value);
@@ -45,22 +48,25 @@ const TodoList = (): JSX.Element => {
     []
   );
 
-  const handleAddTodo = React.useCallback(() => {
-    const fn = async () => {
-      try {
-        await TodoApi.create({ description: newTodo });
-        setNewTodo("");
-        refetch();
-        toast.show({ message: "Tâche crée", variant: "success" });
-      } catch {
-        toast.show({
-          message: "Une erreur est survenue",
-          variant: "error",
-        });
-      }
-    };
-    fn();
-  }, [toast, refetch, newTodo]);
+  const onSubmit = React.useCallback(
+    (data: { description: string }) => {
+      const fn = async () => {
+        try {
+          await TodoApi.create(data);
+          reset();
+          refetch();
+          toast.show({ message: "Tâche crée", variant: "success" });
+        } catch {
+          toast.show({
+            message: "Une erreur est survenue",
+            variant: "error",
+          });
+        }
+      };
+      fn();
+    },
+    [toast, refetch, reset]
+  );
 
   const handleEdit = React.useCallback(
     (id: number, description: string) => () => {
@@ -101,8 +107,35 @@ const TodoList = (): JSX.Element => {
         <div className="ml-2 w-4/12">Description</div>
         <div className="ml-2 w-4/12" />
       </div>
+      <form className="flex mb-4" onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          name="description"
+          control={control}
+          defaultValue=""
+          rules={{ required: true, minLength: 3 }}
+          render={({ field, fieldState }) => (
+            <TextInput
+              className="mr-4 w-full"
+              placeholder="Nouveau todo"
+              name={field.name}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              value={field.value}
+              error={fieldState.invalid}
+            />
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={!formState.isValid || formState.isSubmitting}
+          variant="inverted-primary"
+          size="md"
+        >
+          Ajouter
+        </Button>
+      </form>
       {data?.map((todo) => (
-        <div key={todo.id} className={`shadow mb-4 p-2 flex`}>
+        <div key={todo.id} className={`shadow mb-4 flex h-12 items-center`}>
           <div className="ml-2 w-2/12">
             {formatRelative(new Date(todo.createdAt), Date.now(), {
               locale: fr,
@@ -126,7 +159,8 @@ const TodoList = (): JSX.Element => {
                 <Button
                   className="mr-4"
                   variant="success"
-                  size="md"
+                  size="sm"
+                  iconSize={18}
                   icon="save"
                   onClick={handleEditTodo}
                 >
@@ -135,7 +169,8 @@ const TodoList = (): JSX.Element => {
                 <Button
                   onClick={handleCancelEdit}
                   variant="error"
-                  size="md"
+                  size="sm"
+                  iconSize={18}
                   icon="x"
                 >
                   Annuler
@@ -146,10 +181,10 @@ const TodoList = (): JSX.Element => {
               <div className="flex">
                 <Button
                   onClick={handleEdit(todo.id, todo.description)}
-                  iconSize={18}
                   className="mr-4"
                   variant="info"
-                  size="md"
+                  size="sm"
+                  iconSize={18}
                   icon="pencil"
                 >
                   Modifier
@@ -157,7 +192,8 @@ const TodoList = (): JSX.Element => {
                 <Button
                   onClick={handleDone(todo.id)}
                   variant="success"
-                  size="md"
+                  size="sm"
+                  iconSize={18}
                   icon="check"
                 >
                   Fait
@@ -165,36 +201,19 @@ const TodoList = (): JSX.Element => {
               </div>
             ) : null}
             {todo.doneAt ? (
-              <div className="flex text-success-700 font-bold">
+              <div className="flex text-success-600">
                 <div>
                   Fait&nbsp;
                   {formatRelative(new Date(todo.doneAt), Date.now(), {
                     locale: fr,
                   })}
-                  &nbsp; par {todo.doneBy}
+                  &nbsp; par <span className="font-bold">{todo.doneBy}</span>
                 </div>
               </div>
             ) : null}
           </div>
         </div>
       ))}
-      <div className="flex mt-4">
-        <TextInput
-          className="mr-4 w-full"
-          placeholder="Nouveau todo"
-          name="newTodo"
-          onChange={handleChange as any}
-          value={newTodo}
-        />
-        <Button
-          onClick={handleAddTodo}
-          disabled={newTodo.length === 0}
-          variant="inverted-primary"
-          size="md"
-        >
-          Ajouter
-        </Button>
-      </div>
     </div>
   );
 };

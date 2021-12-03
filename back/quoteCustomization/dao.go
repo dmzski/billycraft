@@ -33,7 +33,7 @@ func (dao QuoteCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (qu
 
 func (dao QuoteCustomizationDao) Update(id string, tenant int, changes dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
 	tx := database.DBConn.Begin()
-	tx = database.DBConn.Where("company_id = ? AND id= ?", tenant, id).First(&quoteCustomization)
+	tx = tx.Where("company_id = ? AND id= ?", tenant, id).First(&quoteCustomization)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

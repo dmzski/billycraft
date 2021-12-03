@@ -7,6 +7,8 @@ import (
 	"backv2/models"
 	"log"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type BillDao struct {
@@ -41,27 +43,35 @@ func (dao BillDao) FindOneByIdAndTenant(id string, tenant int) (bill models.Bill
 
 func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models.Bill) {
 	tx := database.DBConn.Begin()
-	tx = database.DBConn.Where("company_id = ? AND id= ?", tenant, id).First(&bill)
+	tx.Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
 		panic(err)
 	}
 	if changes.Status != nil {
-		if enums.BillStatus(*changes.Status).IsGreaterThanOrEqualSent() && bill.SentAt == nil {
-			now := time.Now()
-			changes.SentAt = &now
+		if enums.BillStatus(*changes.Status).IsGreaterThanOrEqualSent() {
+			if bill.SentAt == nil {
+				now := time.Now()
+				changes.SentAt = &now
+			}
 		} else {
-			changes.SentAt = nil
+			tx.Updates(map[string]interface{}{
+				"sent_at": gorm.Expr("NULL"),
+			})
 		}
-		if enums.BillStatus(*changes.Status).IsPaid() && bill.PaidAt == nil {
-			now := time.Now()
-			changes.PaidAt = &now
+		if enums.BillStatus(*changes.Status).IsPaid() {
+			if bill.PaidAt == nil {
+				now := time.Now()
+				changes.PaidAt = &now
+			}
 		} else {
-			changes.PaidAt = nil
+			tx.Updates(map[string]interface{}{
+				"paid_at": gorm.Expr("NULL"),
+			})
 		}
 	}
-	tx = tx.Updates(changes)
+	tx.Updates(changes)
 
 	if tx.Error != nil {
 		err := tx.Error
@@ -78,27 +88,26 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 			lines = append(lines, newLine)
 		}
 
-		tx = database.DBConn.Where("bill_id = ?", bill.ID).Delete(models.BillLine{})
+		tx.Where("bill_id = ?", bill.ID).Delete(models.BillLine{})
 		if tx.Error != nil {
 			err := tx.Error
 			tx.Rollback()
 			panic(err)
 		}
-		err := database.DBConn.Model(&bill).Association("Lines").Append(&lines)
+		err := tx.Model(&bill).Association("Lines").Append(&lines)
 		if err != nil {
 			tx.Rollback()
 			panic(err)
 		}
 	}
 
-	tx.Commit()
-	tx = database.DBConn.Preload("Lines").Where("company_id = ? AND id= ?", tenant, id).First(&bill)
+	tx.Preload("Lines").Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
 		panic(err)
 	}
-	log.Println(bill.SentAt, bill.PaidAt)
+	tx.Commit()
 	return
 }
 

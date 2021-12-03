@@ -39,6 +39,7 @@ func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
 	b.SentAt = nil
 	b.SentAt = nil
 	b.FileName = nil
+	b.Status = "DRAFT"
 	var lastId int
 	idTx := tx.Raw("SELECT COUNT(*) AS num FROM com_bill WHERE company_id = ?", b.CompanyID).Scan(&lastId)
 	if idTx.Error != nil {
@@ -53,6 +54,11 @@ func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (b *Bill) BeforeUpdate(tx *gorm.DB) (err error) {
 	tx.Statement.Omit("Company", "Customer")
+
+	if b.Status == "" {
+		b.Status = "DRAFT"
+	}
+
 	return
 }
 

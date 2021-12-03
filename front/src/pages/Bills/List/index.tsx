@@ -12,11 +12,11 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   });
 
   return (
-    <Table className="text-left overlay-x-auto w-full table-fixed">
+    <Table className="text-left overlay-x-auto min-w-full table-fixed">
       <Table.Head>
         <Table.Row>
           <Table.HeadCell
-            className="w-1/3 py-3 pl-2"
+            className="w-1/4 pl-2"
             sort={sort}
             sortable="title"
             onSort={onSort}
@@ -32,7 +32,7 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
             Client
           </Table.HeadCell>
           <Table.HeadCell
-            className="w-48"
+            className="w-56"
             sort={sort}
             sortable="createdAt"
             onSort={onSort}
@@ -40,7 +40,7 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
             Création
           </Table.HeadCell>
           <Table.HeadCell
-            className="w-48"
+            className="w-64"
             sort={sort}
             sortable="sentAt"
             onSort={onSort}

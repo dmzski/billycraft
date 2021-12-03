@@ -17,5 +17,5 @@ func (s BillStatus) IsGreaterThanOrEqualSent() bool {
 }
 
 func (s BillStatus) IsPaid() bool {
-	return s != "DRAFT" && s != "SENT" && s != "REFUSED" && s != "ACCEPTED"
+	return s != "DRAFT" && s != "SENT" && s != "REFUSED" && s != "ACCEPTED" && s != "PAYMENT_ASK"
 }

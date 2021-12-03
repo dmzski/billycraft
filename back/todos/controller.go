@@ -4,6 +4,7 @@ import (
 	"backv2/dtos"
 	"backv2/models"
 	"fmt"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,15 +21,30 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var dtos []dtos.Todo
-	for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
-		newDto := x.ToDTO()
-		dtos = append(dtos, newDto)
+	doneAfter := c.Query("done_after")
+	var res []dtos.Todo
+	if doneAfter != "" {
+		doneAfterDate, err := time.Parse(time.RFC3339, doneAfter)
+		if err != nil {
+			return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+				Code:    fiber.ErrBadRequest.Code,
+				Message: "Can't parse date",
+			})
+		}
+		for _, x := range DAO.FindAllByTenantAndDoneAfter(*user.CompanyID, doneAfterDate) {
+			newDto := x.ToDTO()
+			res = append(res, newDto)
+		}
+	} else {
+		for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
+			newDto := x.ToDTO()
+			res = append(res, newDto)
+		}
 	}
-	if len(dtos) == 0 {
+	if len(res) == 0 {
 		return c.JSON(make([]string, 0))
 	}
-	return c.JSON(dtos)
+	return c.JSON(res)
 }
 func findById(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)

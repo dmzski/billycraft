@@ -56,6 +56,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	pdf.SetX(-100 - marginL)
 
 	date := time.Now()
+	_, lineHt := pdf.GetFontSize()
 
 	pdf.CellFormat(100, 5, tr("Date d'émission : "+date.Format("02/01/2006")), "0", 1, "R", false, 0, "")
 	pdf.Ln(2)
@@ -70,25 +71,34 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	pdf.SetY(35)
 	pdf.SetX(5)
 	companyStr := fmt.Sprintf("%s\n%s\n%s, %s", c.Name, c.Address, c.PostalCode, c.City)
+	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
-	pdf.MultiCell(100, 5, tr(companyStr), "0", "L", false)
-	pdf.SetY(y + 4)
+	pdf.MultiCell(100, lineHt+lineMargin, tr(companyStr), "0", "L", false)
+	afterCompanyY := pdf.GetY()
+	pdf.SetY(y)
 	pdf.SetX(-100 - marginL)
 	if customer.Name != "" {
 		customerStr := customer.Name + "\n" + customer.Address + "\n" + customer.PostalCode + ", " + customer.City
-		pdf.MultiCell(100, 5, tr(customerStr), "0", "R", false)
+		pdf.MultiCell(100, lineHt+lineMargin, tr(customerStr), "0", "R", false)
+	}
+	afterCustomerY := pdf.GetY()
+
+	if afterCompanyY > afterCustomerY {
+		y = afterCompanyY
+	} else {
+		y = afterCustomerY
 	}
 
 	pdf.SetFont("Arial", "B", 10)
-	pdf.CellFormat(0, 10, tr("Référence du devis : "+quote.ID), "0", 1, "R", false, 0, "")
-	pdf.CellFormat(0, 5, tr("Objet du devis : "+quote.Title), "0", 1, "L", false, 0, "")
-
-	pdf.Ln(3)
+	pdf.SetY(y)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Référence : "+quote.ID), "", "R", false)
+	pdf.SetY(pdf.GetY() + lineHt)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Objet : "+quote.Title), "", "L", false)
+	pdf.SetY(pdf.GetY() + lineHt)
 
 	pdf.SetFont("Arial", "B", 10)
 	addQuoteHeaders(pdf, qc)
 
-	_, lineHt := pdf.GetFontSize()
 	reportTotal := 0.0
 	totalAndTvaHeight := totalAndTvaCellHeight
 

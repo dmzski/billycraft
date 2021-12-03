@@ -40,15 +40,12 @@ func (dao ReportDAO) FindForMonth(tenant int, date time.Time) *dtos.Report {
 			case "ARTICLE":
 				report.ArticleSales += linePrice
 				billReport.ArticleSales += linePrice
-				break
-			case "OTHER":
+			case "OTHER_SERVICE":
 				report.OtherSales += linePrice
 				billReport.OtherSales += linePrice
-				break
 			case "SERVICE":
 				report.ServiceSales += linePrice
 				billReport.ServiceSales += linePrice
-				break
 			}
 		}
 		report.Details = append(report.Details, billReport)
@@ -79,7 +76,6 @@ func (dao ReportDAO) FindForYear(tenant int, date time.Time) *dtos.Report {
 		report.Details = append(report.Details, monthReport)
 		startDate = startDate.AddDate(0, 1, 0)
 	}
-	report.Sales = report.OtherSales + report.ArticleSales + report.ServiceSales
 	return report
 }
 

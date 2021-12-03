@@ -33,7 +33,7 @@ func (dao BillEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant int)
 
 func (dao BillEmailCustomizationDao) Update(id string, tenant int, changes dtos.BillEmailCustomization) (billEmailCustomization models.BillEmailCustomization) {
 	tx := database.DBConn.Begin()
-	tx = database.DBConn.Where("company_id = ? AND id= ?", tenant, id).First(&billEmailCustomization)
+	tx = tx.Where("company_id = ? AND id= ?", tenant, id).First(&billEmailCustomization)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

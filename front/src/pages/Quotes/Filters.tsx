@@ -13,14 +13,12 @@ const QuoteFilterContainer = ({
   return (
     <div className="flex justify-around my-2">
       <TextInput
-        className="mr-3"
         placeholder="Filtrer par titre"
         label="Titre"
         value={filters.title}
         onChange={(e: any) => setFilters({ ...filters, title: e.target.value })}
       />
       <TextInput
-        className="mr-3"
         placeholder="Filtrer par client"
         label="Client"
         value={filters.customer}

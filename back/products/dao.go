@@ -11,7 +11,7 @@ type ProductDao struct {
 }
 
 func (dao ProductDao) FindAllByTenant(tenant int) (products []models.Product) {
-	if err := database.DBConn.Find(&products, "company_id = ?", tenant).Order("name asc").Error; err != nil {
+	if err := database.DBConn.Find(&products, "company_id = ? ORDER BY name asc", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -25,7 +25,8 @@ func (dao ProductDao) FindOneByIdAndTenant(id string, tenant int) (product model
 }
 
 func (dao ProductDao) Update(id string, tenant int, changes dtos.Product) (product models.Product) {
-	tx := database.DBConn.Begin().Where("company_id = ? AND id = ?", tenant, id).First(&product)
+	tx := database.DBConn.Begin()
+	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

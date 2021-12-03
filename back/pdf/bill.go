@@ -66,6 +66,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 	pdf.SetX(-100 - marginL)
 
 	date := time.Now()
+	_, lineHt := pdf.GetFontSize()
 
 	pdf.CellFormat(100, 5, tr("Date d'émission : "+date.Format("02/01/2006")), "0", 1, "R", false, 0, "")
 	pdf.Ln(2)
@@ -90,15 +91,14 @@ func generateBillPDF(bill models.Bill) *os.File {
 	}
 
 	pdf.SetFont("Arial", "B", 10)
-	pdf.CellFormat(0, 10, tr("Référence : "+bill.ID), "0", 1, "R", false, 0, "")
-	pdf.CellFormat(0, 5, tr("Objet : "+bill.Title), "0", 1, "L", false, 0, "")
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Référence : "+bill.ID), "", "L", false)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr("Objet : "+bill.Title), "", "L", false)
 	pdf.SetFont("Arial", "B", 10)
 
 	pdf.Ln(3)
 
 	addBillHeaders(pdf, bc)
 
-	_, lineHt := pdf.GetFontSize()
 	reportTotal := 0.0
 	totalAndTvaHeight := totalAndTvaCellHeight
 

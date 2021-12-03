@@ -75,6 +75,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
         array.push(
           BILL_STATUS.REFUSED,
           BILL_STATUS.PAYMENT_PAID,
+          BILL_STATUS.TO_DECLARE,
           BILL_STATUS.ARCHIVED
         );
         break;
@@ -82,6 +83,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
         array.push(BILL_STATUS.DRAFT, BILL_STATUS.ARCHIVED);
         break;
       case BillStatusEnum.PAYMENT_PAID:
+        array.push(BILL_STATUS.TO_DECLARE);
         array.push(BILL_STATUS.ARCHIVED);
         break;
       case BillStatusEnum.DRAFT:
@@ -115,28 +117,25 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
 
   return (
     <Table.Row onClick={editBill} hoverable>
-      <Table.Cell className="pl-2 py-3 truncate">{bill.title}</Table.Cell>
+      <Table.Cell className="pl-2 truncate">{bill.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? "N.C"}</Table.Cell>
-      <Table.Cell className="">
+      <Table.Cell>
         {bill.createdAt
           ? format(parseJSON(bill.createdAt), "dd/MM/yyyy à HH:mm")
           : ""}
       </Table.Cell>
-      <Table.Cell className="">
+      <Table.Cell>
         {bill.sentAt
           ? format(parseJSON(bill.sentAt), "dd/MM/yyyy à HH:mm")
           : ""}
       </Table.Cell>
-      <Table.Cell className="">
-        {Math.round(getBillTotal(bill) * 100) / 100} €
-      </Table.Cell>
+      <Table.Cell>{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
       <Table.Cell
-        className=""
         onClick={(event) => {
           event.stopPropagation();
         }}
       >
-        <ActionButton size="sm" variant="outline">
+        <ActionButton size="xs" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map((s, index) => (
             <ActionButton.Action

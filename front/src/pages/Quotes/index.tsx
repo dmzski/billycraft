@@ -13,7 +13,6 @@ const QuotePage = (): JSX.Element => {
   const customers = useCustomers();
   const [filters, setFilters] = React.useState<any>({});
   const [showArchived, setShowArchived] = React.useState(false);
-  const [showFilters, setShowFilters] = React.useState(false);
 
   const quotesQuery = useQuery(
     ["quotes", showArchived ? "archived" : "notArchived"],
@@ -22,7 +21,6 @@ const QuotePage = (): JSX.Element => {
       refetchOnWindowFocus: false,
     }
   );
-  const { id } = useParams<any>();
   const history = useHistory();
 
   const quoteSorted = React.useCallback(() => {
@@ -33,27 +31,14 @@ const QuotePage = (): JSX.Element => {
     history.push(ROUTES.QUOTE_FORM.path.replace(":id", "new"));
   };
 
-  React.useEffect(() => {
-    if (
-      id &&
-      quotesQuery.data &&
-      !quotesQuery.data.some((quote: any) => quote.id === id)
-    ) {
-      setShowArchived(true);
-    }
-  }, [quotesQuery, id]);
-
-  const handleShowArchived = () => {
-    setShowArchived(!showArchived);
-  };
-  const handleShowFilters = () => {
-    setShowFilters(!showFilters);
-  };
+  const handleShowArchived = React.useCallback(() => {
+    setShowArchived((current) => !current);
+  }, []);
 
   return (
     <>
       <h2 className="text-3xl">Devis</h2>
-      <Grid cols={3} className="my-8">
+      <Grid cols={2} className="my-8">
         <div>
           <Button
             size="md"
@@ -66,25 +51,13 @@ const QuotePage = (): JSX.Element => {
               : "Voir les devis archivés"}
           </Button>
         </div>
-        <div className="flex justify-center">
-          <Button
-            size="md"
-            variant="info"
-            icon="filter"
-            onClick={handleShowFilters}
-          >
-            {showFilters ? "Masquer les filtres" : "Afficher les filtres"}
-          </Button>
-        </div>
         <div className="flex justify-end">
           <Button size="md" onClick={goToNewQuote} icon="plus">
             <p>Nouveau devis</p>
           </Button>
         </div>
       </Grid>
-      {showFilters ? (
-        <QuoteFilterContainer filters={filters} setFilters={setFilters} />
-      ) : null}
+      <QuoteFilterContainer filters={filters} setFilters={setFilters} />
       <QuoteList data={quoteSorted()} />
       {quotesQuery.isLoading ? (
         <div className="mt-2 flex justify-center">

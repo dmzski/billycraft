@@ -13,7 +13,6 @@ const BillPage = (): JSX.Element => {
   const customers = useCustomers();
   const [filters, setFilters] = React.useState<any>({});
   const [showArchived, setShowArchived] = React.useState(false);
-  const [showFilters, setShowFilters] = React.useState(false);
   const billsQuery = useQuery(
     ["bills", showArchived ? "archived" : "notArchived"],
     showArchived ? BillApi.findAllArchived : BillApi.findAllNotArchived
@@ -29,17 +28,13 @@ const BillPage = (): JSX.Element => {
   };
 
   const handleShowArchived = React.useCallback(() => {
-    setShowArchived(!showArchived);
-  }, []);
-
-  const handleShowFilters = React.useCallback(() => {
-    setShowFilters(!showFilters);
+    setShowArchived((current) => !current);
   }, []);
 
   return (
     <>
       <h1 className="text-3xl">Factures</h1>
-      <Grid cols={3} className="my-8">
+      <Grid cols={2} className="my-8">
         <div>
           {showArchived ? (
             <Button
@@ -61,36 +56,13 @@ const BillPage = (): JSX.Element => {
             </Button>
           )}
         </div>
-        <div className="flex justify-center">
-          {showFilters ? (
-            <Button
-              size="md"
-              icon="filter"
-              variant="info"
-              onClick={handleShowFilters}
-            >
-              Masquer les filres
-            </Button>
-          ) : (
-            <Button
-              size="md"
-              variant="info"
-              icon="filter"
-              onClick={handleShowFilters}
-            >
-              Afficher les filtres
-            </Button>
-          )}
-        </div>
         <div className="flex flex-row-reverse">
           <Button size="md" icon="plus" onClick={goToNewBill}>
             Nouvelle facture
           </Button>
         </div>
       </Grid>
-      {showFilters ? (
-        <BillFilterContainer filters={filters} setFilters={setFilters} />
-      ) : null}
+      <BillFilterContainer filters={filters} setFilters={setFilters} />
       <BillTable data={billSorted()} />
       {billsQuery.isLoading ? (
         <div className="mt-2 flex justify-center">

@@ -35,13 +35,13 @@ func (dao CompanyDao) Create(dto dtos.Company) (company models.Company) {
 
 func (dao CompanyDao) Update(id int, dto dtos.Company) (company models.Company) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("id = ?", id).First(&company)
+	tx.Where("id = ?", id).First(&company)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
 		panic(err)
 	}
-	tx = tx.Updates(&dto)
+	tx.Updates(&dto)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()

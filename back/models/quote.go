@@ -36,6 +36,7 @@ func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
 	q.UpdatedAt = nil
 	q.SentAt = nil
 	q.FileName = nil
+	q.Status = "DRAFT"
 	var lastId int
 	idTx := tx.Raw("SELECT COUNT(*) AS num FROM com_quote WHERE company_id = ?", q.CompanyID).Scan(&lastId)
 	if idTx.Error != nil {
@@ -49,6 +50,7 @@ func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (q *Quote) BeforeUpdate(tx *gorm.DB) (err error) {
 	tx.Statement.Omit("Company", "Customer")
+
 	return
 }
 

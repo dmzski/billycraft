@@ -7,6 +7,8 @@ import (
 	"backv2/models"
 	"log"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type QuoteDao struct {
@@ -41,18 +43,26 @@ func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant int) (quote models.Qu
 
 func (dao QuoteDao) Update(id string, tenant int, changes dtos.Quote) (quote models.Quote) {
 	tx := database.DBConn.Begin()
-	tx = database.DBConn.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
+	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
 	if tx.Error != nil {
+		tx.Rollback()
 		panic(tx.Error)
 	}
-	if enums.QuoteStatus(changes.Status).IsGreaterThanOrEqualSent() && quote.SentAt == nil {
-		now := time.Now()
-		quote.SentAt = &now
+	if enums.QuoteStatus(changes.Status).IsGreaterThanOrEqualSent() {
+		if quote.SentAt == nil {
+			now := time.Now()
+			changes.SentAt = &now
+		}
 	} else {
-		quote.SentAt = nil
+		if quote.SentAt != nil {
+			tx.Model(&quote).Updates(map[string]interface{}{
+				"sent_at": gorm.Expr("NULL"),
+			})
+		}
 	}
-	tx = tx.Updates(changes)
+	tx.Model(&quote).Updates(changes)
 	if tx.Error != nil {
+		tx.Rollback()
 		panic(tx.Error)
 	}
 
@@ -64,12 +74,14 @@ func (dao QuoteDao) Update(id string, tenant int, changes dtos.Quote) (quote mod
 			newLine := models.QuoteLine{}.FromDTO(x)
 			lines = append(lines, newLine)
 		}
-		tx = database.DBConn.Where("quote_id = ?", quote.ID).Delete(models.QuoteLine{})
+		tx.Where("quote_id = ?", quote.ID).Delete(models.QuoteLine{})
 		if tx.Error != nil {
+			tx.Rollback()
 			panic(tx.Error)
 		}
-		err := database.DBConn.Model(&quote).Association("Lines").Append(&lines)
+		err := tx.Model(&quote).Association("Lines").Append(&lines)
 		if err != nil {
+			tx.Rollback()
 			panic(err)
 		}
 	}
