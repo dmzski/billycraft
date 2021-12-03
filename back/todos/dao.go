@@ -18,6 +18,13 @@ func (dao TodoDao) FindAllByTenant(tenant int) (todos []models.Todo) {
 	return
 }
 
+func (dao TodoDao) FindAllByTenantAndIsDone(tenant int) (todos []models.Todo) {
+	if err := database.DBConn.Find(&todos, "company_id = ? AND done_at IS NOT NULL ORDER BY created_at desc", tenant).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao TodoDao) FindAllByTenantAndDoneAfter(tenant int, doneAfter time.Time) (todos []models.Todo) {
 	if err := database.DBConn.Find(&todos, "company_id = ? AND (done_at IS NULL OR done_at > ?) ORDER BY created_at desc", tenant, doneAfter).Error; err != nil {
 		panic(err)

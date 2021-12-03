@@ -9,6 +9,12 @@ export const TodoApi = {
   delete: async (id: number): Promise<undefined> =>
     HttpClient.DELETE(`${TODO_URL}/${id}`, {}),
   findAll: (): Promise<Todo[]> => HttpClient.GET<Todo[]>(`${TODO_URL}`),
+  findAllFinished: (): Promise<Todo[]> =>
+    HttpClient.GET<Todo[]>(
+      `${TODO_URL}?${new URLSearchParams({
+        status: "done",
+      })}`
+    ),
   findAllFinishedAfter: (date: Date): Promise<Todo[]> =>
     HttpClient.GET<Todo[]>(
       `${TODO_URL}?${new URLSearchParams({

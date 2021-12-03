@@ -142,7 +142,7 @@ const TodoList = (): JSX.Element => {
             })}
           </div>
           <div className="ml-2 w-2/12">{todo.createdBy}</div>
-          <div className="ml-2 w-4/12 break-words">
+          <div className="mx-2 w-4/12 break-all">
             {editMode !== todo.id ? (
               todo.description
             ) : (
@@ -153,7 +153,7 @@ const TodoList = (): JSX.Element => {
               />
             )}
           </div>
-          <div className="ml-2 w-4/12">
+          <div className="w-4/12">
             {!todo.doneAt && editMode === todo.id ? (
               <div className="flex items-center">
                 <Button

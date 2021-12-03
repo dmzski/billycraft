@@ -57,4 +57,10 @@ export const ROUTES = {
     exact: true,
     icon: "cube",
   },
+  HISTORY: {
+    path: "/history",
+    title: "Historique",
+    exact: false,
+    icon: "archive",
+  },
 };

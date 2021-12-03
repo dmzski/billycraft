@@ -22,6 +22,7 @@ import Settings from "./Settings";
 import SupportPage from "./SupportPage";
 import { useKeycloak } from "@react-keycloak/web";
 import { useUser } from "providers/UserProvider";
+import History from "./History";
 
 const PrivateSwitch = (): JSX.Element => {
   const user = useUser();
@@ -100,6 +101,12 @@ const PrivateSwitch = (): JSX.Element => {
               path={ROUTES.SETTINGS.path}
               exact={ROUTES.SETTINGS.exact}
               component={Settings}
+            />
+
+            <Route
+              path={ROUTES.HISTORY.path}
+              exact={ROUTES.HISTORY.exact}
+              component={History}
             />
 
             <Route

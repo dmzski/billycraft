@@ -22,7 +22,11 @@ func InitRoutes(api fiber.Router) {
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	doneAfter := c.Query("done_after")
-	var res []dtos.Todo
+	status := c.Query("status")
+	if status == "done" {
+		return makeArrayResponse(c, DAO.FindAllByTenantAndIsDone(*user.CompanyID))
+	}
+
 	if doneAfter != "" {
 		doneAfterDate, err := time.Parse(time.RFC3339, doneAfter)
 		if err != nil {
@@ -31,20 +35,11 @@ func findAll(c *fiber.Ctx) error {
 				Message: "Can't parse date",
 			})
 		}
-		for _, x := range DAO.FindAllByTenantAndDoneAfter(*user.CompanyID, doneAfterDate) {
-			newDto := x.ToDTO()
-			res = append(res, newDto)
-		}
-	} else {
-		for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
-			newDto := x.ToDTO()
-			res = append(res, newDto)
-		}
+
+		return makeArrayResponse(c, DAO.FindAllByTenantAndDoneAfter(*user.CompanyID, doneAfterDate))
 	}
-	if len(res) == 0 {
-		return c.JSON(make([]string, 0))
-	}
-	return c.JSON(res)
+
+	return makeArrayResponse(c, DAO.FindAllByTenant(*user.CompanyID))
 }
 func findById(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
@@ -93,4 +88,18 @@ func done(c *fiber.Ctx) error {
 	} else {
 		return c.JSON(DAO.Done(id, user).ToDTO())
 	}
+}
+
+func makeArrayResponse(c *fiber.Ctx, array []models.Todo) error {
+	var res []dtos.Todo
+	for _, x := range array {
+		newDto := x.ToDTO()
+		res = append(res, newDto)
+	}
+
+	if len(res) == 0 {
+		return c.JSON(make([]string, 0))
+	}
+
+	return c.JSON(res)
 }
