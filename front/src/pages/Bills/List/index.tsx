@@ -12,7 +12,7 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   });
 
   return (
-    <Table className="text-left overlay-x-auto min-w-full table-fixed">
+    <Table className="text-left overlay-x-auto w-full table-fixed">
       <Table.Head>
         <Table.Row>
           <Table.HeadCell
