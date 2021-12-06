@@ -7,9 +7,13 @@ import { Button, Loader } from "@coco-ui/core";
 import { CustomerApi } from "api/CustomerApi";
 
 const CustomerPage = (): JSX.Element => {
-  const customersQuery = useQuery("customers-query", CustomerApi.findAll, {
-    refetchOnWindowFocus: false,
-  });
+  const customersQuery = useQuery(
+    ["customers", "not-deleted"],
+    CustomerApi.findAllNotDeleted,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const [isOpen, setIsOpen] = React.useState(false);
 
   const goToNewCustomer = () => {

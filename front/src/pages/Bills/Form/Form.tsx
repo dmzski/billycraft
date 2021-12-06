@@ -10,21 +10,18 @@ import { useToast } from "providers/ToastProvider";
 import { Controller, useForm } from "react-hook-form";
 import { BillApi } from "api/BillApi";
 import { Prompt } from "react-router";
+import useCustomers from "hooks/useCustomers";
 
 const defaultBill = {} as Partial<Bill>;
 
 type BillFormProps = {
   bill: Bill;
-  customer?: Customer;
   onSubmitSuccess: (res: Bill) => Promise<void> | void;
 };
 
-const BillForm = ({
-  bill,
-  customer,
-  onSubmitSuccess,
-}: BillFormProps): JSX.Element => {
+const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   const toast = useToast();
+  const customers = useCustomers();
   const {
     handleSubmit,
     control,
@@ -34,9 +31,6 @@ const BillForm = ({
     mode: "all",
     shouldFocusError: true,
     defaultValues: defaultBill,
-  });
-  const customersQuery = useQuery("customers", CustomerApi.findAll, {
-    refetchOnWindowFocus: false,
   });
   const [
     updateBillStatusMutation,
@@ -84,17 +78,27 @@ const BillForm = ({
   );
 
   const customerOptions = React.useMemo(() => {
-    if (customersQuery.data) {
-      return customersQuery.data.map((customer) => ({
-        value: customer.id,
-        label: customer.name,
-      }));
+    const array = [];
+    if (customers) {
+      array.push(
+        ...customers
+          .filter(({ deleted }) => !deleted)
+          .map((customer) => ({
+            value: customer.id,
+            label: customer.name,
+          }))
+      );
     }
-    if (customer) {
-      return [{ value: customer.id, label: customer.name }];
+    if (
+      bill.customerId &&
+      !array.find(({ value }) => value === bill.customerId)
+    ) {
+      const customer = customers.find(({ id }) => id === bill.customerId);
+      if (customer) array.push({ value: customer.id, label: customer.name });
     }
-    return [];
-  }, [customersQuery.data, customer]);
+
+    return array;
+  }, [customers, bill]);
 
   useEffect(() => {
     if (bill) {
@@ -149,7 +153,6 @@ const BillForm = ({
             placeholder="Nom du client"
             value={field.value}
             isSearchable
-            isLoading={customersQuery.isLoading}
             ref={field.ref}
           />
         )}

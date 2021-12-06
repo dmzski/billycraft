@@ -1,12 +1,15 @@
 import { Button, TextInput } from "@coco-ui/core";
-import React from "react";
-import { FormEventHandler } from "react-router/node_modules/@types/react";
+import { CustomerApi } from "api/CustomerApi";
+import { useToast } from "providers/ToastProvider";
+import React, { FormEventHandler, useCallback } from "react";
+import { useQueryCache } from "react-query";
 import Customer from "../../../models/Customer";
 
 type CustomerFormProps = {
   customer: Customer;
   setCustomer: React.Dispatch<React.SetStateAction<Customer>>;
   onSubmit: FormEventHandler;
+  onSubmitSuccess?: () => Promise<void> | void;
   disabled: boolean;
   isLoading: boolean;
 };
@@ -14,9 +17,12 @@ const CustomerForm = ({
   customer,
   setCustomer,
   onSubmit,
+  onSubmitSuccess,
   isLoading,
   disabled,
 }: CustomerFormProps): JSX.Element => {
+  const toast = useToast();
+  const queryCache = useQueryCache();
   function inputChange(property: keyof Customer) {
     return (event: any) => {
       const tmp: any = { ...customer };
@@ -25,13 +31,38 @@ const CustomerForm = ({
     };
   }
 
+  const tryDelete = useCallback(() => {
+    const deleteCustomer = confirm(
+      "Êtes-vous sur de vouloir supprimer ce client"
+    );
+    if (deleteCustomer) {
+      const asyncDelete = async () => {
+        try {
+          await CustomerApi.delete(customer.id);
+          queryCache.invalidateQueries("customers");
+          toast.show({ message: "Client supprimé", variant: "success" });
+          onSubmitSuccess?.();
+        } catch (err) {
+          console.log(err);
+          toast.show({ message: "Une erreur est survenue", variant: "error" });
+        }
+      };
+      asyncDelete();
+    }
+  }, []);
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex items-center border-b-2 border-gray-400 pb-3 w-full">
-        <h1 className="ml-4 text-xl">
+        <h1 className="ml-4 text-xl flex-grow">
           {!customer.id ? "Nouveau " : "Modifier un "}client
           {customer.id ? " #" + customer.id : ""}
         </h1>
+        {customer.id ? (
+          <Button variant="error" icon="trash" onClick={tryDelete}>
+            Supprimer
+          </Button>
+        ) : null}
       </div>
       <form className="mt-3" onSubmit={onSubmit}>
         <TextInput

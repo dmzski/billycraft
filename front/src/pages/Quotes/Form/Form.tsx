@@ -4,26 +4,22 @@ import { useMutation, useQuery } from "react-query";
 import Quote, { QuoteLine } from "../../../models/Quote";
 import QuoteLineTable from "./QuoteLineTable";
 import { QuoteStatusEnum } from "../../../models/Quote";
-import Customer from "models/Customer";
 import { CustomerApi } from "api/CustomerApi";
 import { Controller, useForm } from "react-hook-form";
 import { QuoteApi } from "api/QuoteApi";
 import { useToast } from "providers/ToastProvider";
 import { Prompt } from "react-router";
+import useCustomers from "hooks/useCustomers";
 
 const defaultQuote = {} as Partial<Quote>;
 
 type QuoteFormProps = {
   quote: Quote;
-  customer?: Customer;
   onSubmitSuccess: (res: Quote) => Promise<void> | void;
 };
-const QuoteForm = ({
-  quote,
-  customer,
-  onSubmitSuccess,
-}: QuoteFormProps): JSX.Element => {
+const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   const toast = useToast();
+  const customers = useCustomers();
   const {
     handleSubmit,
     control,
@@ -34,9 +30,13 @@ const QuoteForm = ({
     shouldFocusError: true,
     defaultValues: defaultQuote,
   });
-  const customersQuery = useQuery("customers", CustomerApi.findAll, {
-    refetchOnWindowFocus: false,
-  });
+  const customersQuery = useQuery(
+    ["customers", "not-deleted"],
+    CustomerApi.findAllNotDeleted,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const [
     updateQuoteStatusMutation,
     { isLoading: isUpdatingStatus },
@@ -82,17 +82,27 @@ const QuoteForm = ({
   );
 
   const customerOptions = React.useMemo(() => {
-    if (customersQuery.data) {
-      return customersQuery.data.map((customer) => ({
-        value: customer.id,
-        label: customer.name,
-      }));
+    const array = [];
+    if (customers) {
+      array.push(
+        ...customers
+          .filter(({ deleted }) => !deleted)
+          .map((customer) => ({
+            value: customer.id,
+            label: customer.name,
+          }))
+      );
     }
-    if (customer) {
-      return [{ value: customer.id, label: customer.name }];
+    if (
+      quote.customerId &&
+      !array.find(({ value }) => value === quote.customerId)
+    ) {
+      const customer = customers.find(({ id }) => id === quote.customerId);
+      if (customer) array.push({ value: customer.id, label: customer.name });
     }
-    return [];
-  }, [customersQuery.data, customer]);
+
+    return array;
+  }, [customersQuery.data]);
 
   useEffect(() => {
     if (quote) {

@@ -73,7 +73,7 @@ func delete(c *fiber.Ctx) error {
 		if intId, err := strconv.Atoi(id); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed id : ", err.Error()))
 		} else {
-			DAO.Delete(intId, user.Email)
+			DAO.Delete(intId, *user.CompanyID)
 			return c.Status(204).SendString("Customer deleted")
 		}
 	}

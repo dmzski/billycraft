@@ -6,6 +6,10 @@ export const CUSTOMER_URL = API_URL + "/customers";
 
 export const CustomerApi = {
   findAll: (): Promise<Customer[]> => HttpClient.GET(`${CUSTOMER_URL}`),
+  findAllNotDeleted: (): Promise<Customer[]> =>
+    HttpClient.GET(`${CUSTOMER_URL}`).then((res: Customer[]) =>
+      res.filter(({ deleted }) => !deleted)
+    ),
   createOrUpdate: ({ id, ...data }: Customer): Promise<Customer> =>
     id
       ? HttpClient.PATCH(`${CUSTOMER_URL}/${id}`, data)
@@ -14,4 +18,6 @@ export const CustomerApi = {
     HttpClient.GET(`${CUSTOMER_URL}/${id}`),
   findAllByNameContains: (search: string): Promise<Customer[]> =>
     HttpClient.GET(`${CUSTOMER_URL}?search=${search}`),
+  delete: (id: number): Promise<unknown> =>
+    HttpClient.DELETE(`${CUSTOMER_URL}/${id}`),
 };

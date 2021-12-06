@@ -37,7 +37,7 @@ const CustomerModal = ({
 
     try {
       await customerMutation(newCustomer);
-      queryCache.invalidateQueries("customers-query");
+      queryCache.invalidateQueries("customers");
     } catch (error) {
       toast.show({
         message: "Erreur lors de l'enregistrement",
@@ -54,6 +54,7 @@ const CustomerModal = ({
   return (
     <Modal open={isOpen} onClose={onRequestClose}>
       <CustomerForm
+        onSubmitSuccess={onRequestClose}
         setCustomer={setNewCustomer}
         customer={newCustomer}
         isLoading={isLoading}

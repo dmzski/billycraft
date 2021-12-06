@@ -10,6 +10,7 @@ interface Customer {
   createdAt: string;
   updatedAt: string;
   companyId: number;
+  deleted?: boolean;
 }
 
 export default Customer;

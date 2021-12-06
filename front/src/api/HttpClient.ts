@@ -88,7 +88,7 @@ export const HttpClient = {
       ...config,
       signal,
       method: "DELETE",
-      body: computeBody(body),
+      body: body ? computeBody(body) : undefined,
       headers: {
         ...defaultHeaders,
         ...config?.headers,

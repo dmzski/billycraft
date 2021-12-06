@@ -12,7 +12,7 @@ type CustomerDao struct {
 }
 
 func (dao CustomerDao) FindAllByTenant(tenant int) (customers []models.Customer) {
-	if err := database.DBConn.Find(&customers, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Unscoped().Find(&customers, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -26,7 +26,7 @@ func (dao CustomerDao) FindAllByTenantAndNameContains(tenant int, q string) (cus
 }
 
 func (dao CustomerDao) FindOneByIdAndTenant(id int, tenant int) (customer models.Customer) {
-	if err := database.DBConn.Find(&customer, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
+	if err := database.DBConn.First(&customer, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -58,8 +58,8 @@ func (dao CustomerDao) Create(creator models.User, newCustomer dtos.Customer) (c
 	return
 }
 
-func (dao CustomerDao) Delete(id int, creator string) {
-	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Customer{}).Error; err != nil {
+func (dao CustomerDao) Delete(id int, tenant int) {
+	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Customer{}).Error; err != nil {
 		panic(err)
 	}
 }

@@ -13,5 +13,6 @@ type Customer struct {
 	Email       string     `json:"email"`
 	CreatedAt   time.Time  `json:"createdAt"`
 	UpdatedAt   *time.Time `json:"updatedAt"`
+	Deleted     bool       `json:"deleted"`
 	CompanyID   int        `json:"companyId"`
 }

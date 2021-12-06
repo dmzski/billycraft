@@ -99,7 +99,7 @@ const QuoteCreationPage = (): JSX.Element => {
       <div className="flex items-center mb-8 border-b">
         <div className="flex items-end flex-grow">
           <h1 className="text-3xl">
-            {!newQuote.id ? "Nouvelle facture" : "Modifier une facture"}
+            {!newQuote.id ? "Nouveau devis" : "Modifier un devis"}
           </h1>
           {newQuote.status ? (
             <Badge variant="outline" className="text-xs ml-2 my-2 px-2">

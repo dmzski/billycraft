@@ -17,8 +17,9 @@ type Customer struct {
 	Address     string
 	Email       string
 	CreatedAt   time.Time
-	UpdatedAt   *time.Time `gorm:"autoUpdateTime"`
-	CompanyID   int        `gorm:"<-:create"`
+	UpdatedAt   *time.Time     `gorm:"autoUpdateTime"`
+	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	CompanyID   int            `gorm:"<-:create"`
 	Company     Company
 }
 
@@ -44,6 +45,7 @@ func (c Customer) ToDTO() dtos.Customer {
 		CreatedAt:   c.CreatedAt,
 		UpdatedAt:   c.UpdatedAt,
 		CompanyID:   c.CompanyID,
+		Deleted:     c.DeletedAt.Valid,
 	}
 }
 
