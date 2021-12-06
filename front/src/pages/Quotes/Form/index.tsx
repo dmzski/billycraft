@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryCache } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import { PdfApi } from "../../../api/PdfApi";
 import useLoadingState from "../../../hooks/useLoadingState";
-import Quote, { QuoteStatusEnum } from "../../../models/Quote";
+import Quote from "../../../models/Quote";
 import { useToast } from "../../../providers/ToastProvider";
 import { ROUTES } from "../../../routes";
 import QuoteForm from "./Form";
@@ -27,21 +27,6 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   );
 
-  const [
-    createOrUpdateQuoteMutation,
-    createOrUpdateQuoteMutationState,
-  ] = useMutation(QuoteApi.createOrUpdate, {
-    onSuccess: (data) => {
-      if (data.id !== id) {
-        history.push(ROUTES.QUOTE_FORM.path.replace(":id", data.id));
-      } else {
-        queryCache.invalidateQueries("quotes");
-        refetch();
-      }
-    },
-    throwOnError: true,
-  });
-
   const [createBillFromQuote, createBillFromQuoteState] = useMutation(
     QuoteApi.createBill,
     {
@@ -58,59 +43,14 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   );
 
-  const [
-    updateQuoteStatusMutation,
-    updateQuoteStatusMutationState,
-  ] = useMutation(QuoteApi.updateStatus, {
-    onSuccess: () => {
+  async function onSubmitSuccess(data: Quote) {
+    if (data.id !== id) {
+      history.push(ROUTES.QUOTE_FORM.path.replace(":id", data.id));
+    } else {
+      queryCache.invalidateQueries("quotes");
       refetch();
-      toast.show({ message: "Devis mis à jour", variant: "success" });
-    },
-  });
-
-  async function saveQuote(e: any) {
-    e.preventDefault();
-    if (
-      updateQuoteStatusMutationState.isLoading ||
-      createOrUpdateQuoteMutationState.isLoading
-    ) {
-      return false;
-    }
-    try {
-      await createOrUpdateQuoteMutation({
-        ...newQuote,
-        lines: newQuote.lines.map((line, index) => ({
-          ...line,
-          line: index + 1,
-        })),
-      });
-      toast.show({
-        message: "Devis enregistré",
-        variant: "success",
-      });
-    } catch (error) {
-      toast.show({
-        message: "Erreur lors de l'enregistrement",
-        variant: "error",
-      });
-      console.error("Error !!!", error);
     }
   }
-
-  const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
-    if (
-      updateQuoteStatusMutationState.isLoading ||
-      createOrUpdateQuoteMutationState.isLoading
-    ) {
-      return false;
-    }
-    try {
-      await updateQuoteStatusMutation({ id, status });
-      queryCache.invalidateQueries("quotes");
-    } catch (error) {
-      console.error("Error !!!", error);
-    }
-  };
 
   const downloadPdf = async () => {
     try {
@@ -186,16 +126,7 @@ const QuoteCreationPage = (): JSX.Element => {
           </Button>
         ) : null}
       </div>
-      <QuoteForm
-        onSubmit={saveQuote}
-        quote={newQuote}
-        setQuote={setNewQuote}
-        disabled={
-          createOrUpdateQuoteMutationState.isLoading ||
-          updateQuoteStatusMutationState.isLoading
-        }
-        onUpdateStatus={updateQuoteStatus}
-      />
+      <QuoteForm onSubmitSuccess={onSubmitSuccess} quote={newQuote} />
     </div>
   );
 };

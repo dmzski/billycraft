@@ -78,12 +78,15 @@ export function filterQuotes(
   });
 }
 
-export function calculatePriceTTC(line: QuoteLine, tva = 0): number {
-  if (!line.price) {
+export function calculatePriceTTC(
+  price?: number | string | null,
+  tva = 0
+): number {
+  if (!price) {
     return 0;
   }
-  const price = parseFloat(line.price as any);
-  return price + price * (tva / 100);
+  const finalPrice = Number(`${price}`);
+  return finalPrice + finalPrice * (tva / 100);
 }
 
 export function getQuoteTotal(quote: Quote): number {
@@ -91,7 +94,7 @@ export function getQuoteTotal(quote: Quote): number {
     .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
     .map(
       (quoteLine: QuoteLine) =>
-        calculatePriceTTC(quoteLine, quote.tva) *
+        calculatePriceTTC(quoteLine.price, quote.tva) *
         (quoteLine.quantity ? quoteLine.quantity : 0)
     );
 
