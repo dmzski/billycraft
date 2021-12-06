@@ -18,6 +18,7 @@ func (dao ReportDAO) FindForMonth(tenant int, date time.Time) *dtos.Report {
 	if err != nil {
 		panic(err)
 	}
+
 	report := &dtos.Report{
 		Details:      []*dtos.Report{},
 		StartDate:    startDate.String(),
@@ -28,8 +29,8 @@ func (dao ReportDAO) FindForMonth(tenant int, date time.Time) *dtos.Report {
 	}
 	for _, bill := range bills {
 		billReport := &dtos.Report{
-			StartDate:    bill.CreatedAt.String(),
-			EndDate:      bill.CreatedAt.String(),
+			StartDate:    bill.PaidAt.String(),
+			EndDate:      bill.PaidAt.String(),
 			OtherSales:   0,
 			ServiceSales: 0,
 			ArticleSales: 0,
@@ -40,14 +41,15 @@ func (dao ReportDAO) FindForMonth(tenant int, date time.Time) *dtos.Report {
 			case "ARTICLE":
 				report.ArticleSales += linePrice
 				billReport.ArticleSales += linePrice
-			case "OTHER_SERVICE":
-				report.OtherSales += linePrice
-				billReport.OtherSales += linePrice
 			case "SERVICE":
 				report.ServiceSales += linePrice
 				billReport.ServiceSales += linePrice
+			default:
+				report.OtherSales += linePrice
+				billReport.OtherSales += linePrice
 			}
 		}
+		billReport.Sales = billReport.ArticleSales + billReport.ServiceSales + billReport.OtherSales
 		report.Details = append(report.Details, billReport)
 
 	}
