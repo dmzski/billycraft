@@ -1,10 +1,10 @@
 import { Badge, Button } from "@coco-ui/core";
 import React from "react";
-import { useMutation, useQuery, useQueryCache } from "react-query";
+import { useQuery, useQueryCache } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import { PdfApi } from "../../../api/PdfApi";
 import useLoadingState from "../../../hooks/useLoadingState";
-import Bill, { BillStatusEnum } from "../../../models/Bill";
+import Bill from "../../../models/Bill";
 import { useToast } from "../../../providers/ToastProvider";
 import { ROUTES } from "../../../routes";
 import BillForm from "./Form";
@@ -26,74 +26,14 @@ const BillFormPage = (): JSX.Element => {
     }
   );
 
-  const [
-    createOrUpdateBillMutation,
-    createOrUpdateBillMutationState,
-  ] = useMutation(BillApi.createOrUpdate, {
-    onSuccess: (data) => {
-      if (data.id !== id) {
-        history.push(ROUTES.BILL_FORM.path.replace(":id", data.id));
-      } else {
-        refetch();
-      }
-    },
-    throwOnError: true,
-  });
-
-  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
-    BillApi.updateStatus,
-    {
-      onSuccess: () => {
-        queryCache.invalidateQueries("bills");
-        history.push(ROUTES.BILLS.path);
-        toast.show({ message: "Facture mise à jour", variant: "success" });
-      },
-    }
-  );
-
-  async function saveBill(e: any) {
-    e.preventDefault();
-    if (
-      updateBillStatusMutationState.isLoading ||
-      createOrUpdateBillMutationState.isLoading
-    ) {
-      return false;
-    }
-    try {
-      await createOrUpdateBillMutation({
-        ...newBill,
-        lines: newBill.lines.map((line, index) => ({ ...line, line: index })),
-      });
+  async function onSubmitSuccess(data: Bill) {
+    if (data.id !== id) {
+      history.push(ROUTES.BILL_FORM.path.replace(":id", data.id));
+    } else {
       queryCache.invalidateQueries("bills");
       refetch();
-      toast.show({
-        message: "Facture enregistrée",
-        variant: "success",
-      });
-    } catch (error) {
-      toast.show({
-        message: "Erreur lors de l'enregistrement",
-        variant: "error",
-      });
-      console.error("Error !!!", error);
     }
   }
-
-  const updateBillStatus = (status: BillStatusEnum) => async () => {
-    if (
-      updateBillStatusMutationState.isLoading ||
-      createOrUpdateBillMutationState.isLoading
-    ) {
-      return false;
-    }
-    try {
-      await updateBillStatusMutation({ id, status });
-      queryCache.invalidateQueries("bills");
-      refetch();
-    } catch (error) {
-      console.error("Error !!!", error);
-    }
-  };
 
   const downloadPdf = async () => {
     try {
@@ -101,7 +41,7 @@ const BillFormPage = (): JSX.Element => {
         pdfState.update("loading");
         const blob = await PdfApi.getBillPdf(bill.id);
         const link = document.createElement("a");
-        link.download = bill.id ?? "unknown.pdf";
+        link.download = bill.id;
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
         link.click();
@@ -139,9 +79,11 @@ const BillFormPage = (): JSX.Element => {
           <h1 className="text-3xl">
             {!newBill.id ? "Nouvelle facture" : "Modifier une facture"}
           </h1>
-          <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
-            {BILL_STATUS[newBill.status as keyof typeof BILL_STATUS]?.text}
-          </Badge>
+          {newBill.status ? (
+            <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
+              {BILL_STATUS[newBill.status]?.text}
+            </Badge>
+          ) : null}
         </div>
         {newBill && newBill.id ? (
           <Button
@@ -157,16 +99,7 @@ const BillFormPage = (): JSX.Element => {
           </Button>
         ) : null}
       </div>
-      <BillForm
-        onSubmit={saveBill}
-        bill={newBill}
-        setBill={setNewBill}
-        disabled={
-          createOrUpdateBillMutationState.isLoading ||
-          updateBillStatusMutationState.isLoading
-        }
-        onUpdateStatus={updateBillStatus}
-      />
+      <BillForm onSubmitSuccess={onSubmitSuccess} bill={newBill} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Button } from "@coco-ui/core";
+import { Badge, Button } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQuery, useQueryCache } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import { ROUTES } from "../../../routes";
 import QuoteForm from "./Form";
 import { QuoteApi } from "api/QuoteApi";
 import { isQuoteMinimumAccepted } from "utils/quote";
+import { QUOTE_STATUS } from "constants/quote";
 
 const QuoteCreationPage = (): JSX.Element => {
   const [newQuote, setNewQuote] = React.useState<Quote>({} as Quote);
@@ -58,7 +59,7 @@ const QuoteCreationPage = (): JSX.Element => {
         pdfState.update("loading");
         const blob = await PdfApi.getQuotePdf(quote.id);
         const link = document.createElement("a");
-        link.download = quote.id ?? "unknown.pdf";
+        link.download = quote.id;
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
         link.click();
@@ -96,35 +97,42 @@ const QuoteCreationPage = (): JSX.Element => {
         Retourner à la liste des devis
       </Button>
       <div className="flex items-center mb-8 border-b">
-        <h1 className="text-3xl flex-grow">
-          {!newQuote.id ? "Nouveau devis" : "Modifier un devis"}
-        </h1>
-        {newQuote?.id && isQuoteMinimumAccepted(newQuote) ? (
-          <Button
-            variant="success"
-            size="sm"
-            className="mb-2 mr-2"
-            onClick={createBill}
-            title="Créer la facture"
-            disabled={createBillFromQuoteState.isLoading}
-            icon="document-add"
-          >
-            Créer la facture
-          </Button>
-        ) : null}
-        {newQuote?.id ? (
-          <Button
-            disabled={pdfState.isLoading}
-            title="Télécharger le PDF"
-            onClick={downloadPdf}
-            variant="primary"
-            className="mb-2"
-            size="sm"
-            icon="document-download"
-          >
-            Télécharger le PDF
-          </Button>
-        ) : null}
+        <div className="flex items-end flex-grow">
+          <h1 className="text-3xl">
+            {!newQuote.id ? "Nouvelle facture" : "Modifier une facture"}
+          </h1>
+          {newQuote.status ? (
+            <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
+              {QUOTE_STATUS[newQuote.status]?.text}
+            </Badge>
+          ) : null}
+        </div>
+        <Button
+          variant="success"
+          size="sm"
+          className="mb-2 mr-2"
+          onClick={createBill}
+          title="Créer la facture"
+          disabled={
+            createBillFromQuoteState.isLoading ||
+            !isQuoteMinimumAccepted(newQuote) ||
+            !newQuote.id
+          }
+          icon="document-add"
+        >
+          Créer la facture
+        </Button>
+        <Button
+          disabled={pdfState.isLoading || !newQuote.id}
+          title="Télécharger le PDF"
+          onClick={downloadPdf}
+          variant="primary"
+          className="mb-2"
+          size="sm"
+          icon="document-download"
+        >
+          Télécharger le PDF
+        </Button>
       </div>
       <QuoteForm onSubmitSuccess={onSubmitSuccess} quote={newQuote} />
     </div>

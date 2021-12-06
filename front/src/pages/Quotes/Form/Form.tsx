@@ -9,6 +9,7 @@ import { CustomerApi } from "api/CustomerApi";
 import { Controller, useForm } from "react-hook-form";
 import { QuoteApi } from "api/QuoteApi";
 import { useToast } from "providers/ToastProvider";
+import { Prompt } from "react-router";
 
 const defaultQuote = {} as Partial<Quote>;
 
@@ -26,7 +27,7 @@ const QuoteForm = ({
   const {
     handleSubmit,
     control,
-    formState: { isValid, isSubmitting },
+    formState: { isValid, isSubmitting, isDirty },
     reset,
   } = useForm({
     mode: "all",
@@ -101,6 +102,12 @@ const QuoteForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Prompt
+        when={isDirty}
+        message={() =>
+          `Attention ! Certaines modifications ne sont pas enregistrées`
+        }
+      />
       <Controller
         name="title"
         control={control}

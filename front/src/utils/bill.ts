@@ -78,9 +78,15 @@ export function filterBills(
   });
 }
 
-export function calculatePriceTTC(line: BillLine, tva = 0): number {
-  const price = parseFloat(line.price as any);
-  return price + price * (tva / 100);
+export function calculatePriceTTC(
+  price?: number | string | null,
+  tva = 0
+): number {
+  if (!price) {
+    return 0;
+  }
+  const finalPrice = Number(`${price}`);
+  return finalPrice + finalPrice * (tva / 100);
 }
 
 export function getBillTotal(bill: Bill): number {
@@ -88,7 +94,7 @@ export function getBillTotal(bill: Bill): number {
     .filter((billLine: BillLine) => billLine.price && billLine.quantity)
     .map(
       (billine: BillLine) =>
-        calculatePriceTTC(billine, bill.tva) * (billine.quantity ?? 0)
+        calculatePriceTTC(billine.price, bill.tva) * (billine.quantity ?? 0)
     );
 
   if (array && array.length > 0) {

@@ -1,41 +1,38 @@
 import { Icon, List, Select, TextInput } from "@coco-ui/core";
 import { LineTypeEnum } from "models/LineTypeEnum";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { LINE_TYPE } from "constants/line";
 import { calculatePriceTTC } from "utils/bill";
+import { Control, Controller, useWatch } from "react-hook-form";
 
 type BillLineTableLineProps = {
-  line: any;
-  setLine: (newLine: any) => void;
-  tva: number;
   deleteLine: () => void;
   disabled?: boolean;
   provided?: DraggableProvided;
   snapshot?: DraggableStateSnapshot;
+  index: number;
+  control: Control;
 };
 const BillLineTableLine = ({
-  line,
-  setLine,
-  tva,
   deleteLine,
   disabled,
   provided,
+  index,
+  control,
 }: BillLineTableLineProps): JSX.Element => {
-  const handleChange = (field: string) => (e: any) => {
-    const tmp = { ...line };
-    let value: any;
-    switch (field) {
-      case "price":
-      case "quantity":
-        value = parseFloat(e.target.value) || e.target.value;
-        break;
-      default:
-        value = e.target.value;
-    }
-    tmp[field] = value;
-    setLine(tmp);
-  };
+  const tva = useWatch({ control: control, name: "tva" });
+
+  const price = useWatch({
+    control,
+    name: `lines.${index}.price`,
+    defaultValue: 0,
+  });
+  const quantity = useWatch({
+    control,
+    name: `lines.${index}.quantity`,
+    defaultValue: 0,
+  });
 
   return (
     <div ref={provided?.innerRef} {...provided?.draggableProps}>
@@ -47,75 +44,118 @@ const BillLineTableLine = ({
           <Icon name="selector" size={12} />
         </List.Cell>
         <List.Cell className="w-48">
-          <Select
-            disabled={disabled}
-            tabIndex={0}
-            value={line.type}
-            onChange={(type) =>
-              setLine({ ...line, type: type as LineTypeEnum })
-            }
-            options={Object.values(LINE_TYPE).map((type) => ({
-              value: type.enum,
-              label: type.name,
-            }))}
-            name={line.line + "-select"}
-            id={line.line + "-select"}
+          <Controller
+            name={`lines.${index}.type`}
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Select
+                disabled={disabled}
+                tabIndex={0}
+                value={field.value}
+                onChange={(type) => field.onChange(type as LineTypeEnum)}
+                ref={field.ref}
+                options={Object.values(LINE_TYPE).map((type) => ({
+                  value: type.enum,
+                  label: type.name,
+                }))}
+                name={field.name}
+                id={field.name + "-select"}
+              />
+            )}
           />
         </List.Cell>
         <List.Cell className="w-72">
-          <TextInput
-            required
-            placeholder="Nom"
-            className="w-full"
-            disabled={disabled}
-            value={line.name}
-            onChange={handleChange("name")}
-            id={"line-" + line.line + "-name"}
-            name={"line-" + line.line + "-name"}
+          <Controller
+            name={`lines.${index}.name`}
+            rules={{ required: true }}
+            control={control}
+            render={({ field, fieldState: { invalid } }) => (
+              <TextInput
+                required
+                placeholder="Nom"
+                className="w-full"
+                disabled={disabled}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                error={invalid}
+              />
+            )}
           />
         </List.Cell>
         <List.Cell className="w-full">
-          <TextInput
-            placeholder="Description"
-            className="w-full flex"
-            disabled={disabled}
-            value={line.description}
-            multiline
-            autoResizeHeight
-            onChange={handleChange("description")}
-            id={"line-" + line.line + "-description"}
-            name={"line-" + line.line + "-description"}
+          <Controller
+            name={`lines.${index}.description`}
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                placeholder="Description"
+                className="w-full flex resize-none"
+                disabled={disabled}
+                value={field.value}
+                multiline
+                autoResizeHeight
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+              />
+            )}
           />
         </List.Cell>
         <List.Cell className="w-36">
-          <TextInput
-            disabled={disabled}
-            className="text-right w-full"
-            placeholder="Quantité"
-            type="number"
-            step="0.01"
-            value={line.quantity || line.quantity === 0 ? line.quantity : ""}
-            onChange={handleChange("quantity")}
+          <Controller
+            name={`lines.${index}.quantity`}
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                disabled={disabled}
+                className="text-right w-full"
+                placeholder="Quantité"
+                type="number"
+                step="0.01"
+                name={field.name}
+                value={field.value}
+                onChange={(event: ChangeEvent) =>
+                  field.onChange(
+                    Number((event.target as HTMLInputElement).value)
+                  )
+                }
+                onBlur={field.onBlur}
+              />
+            )}
           />
         </List.Cell>
         <List.Cell className="w-48">
-          <TextInput
-            disabled={disabled}
-            className="text-right w-full"
-            placeholder="Prix"
-            type="number"
-            step="0.01"
-            value={line.price || line.price === 0 ? line.price : ""}
-            onChange={handleChange("price")}
+          <Controller
+            name={`lines.${index}.price`}
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                disabled={disabled}
+                className="text-right w-full"
+                placeholder="Prix"
+                type="number"
+                step="0.01"
+                value={field.value}
+                onChange={(event: ChangeEvent) =>
+                  field.onChange(
+                    Number((event.target as HTMLInputElement).value)
+                  )
+                }
+                onBlur={field.onBlur}
+              />
+            )}
           />
         </List.Cell>
         <List.Cell className="w-48 py-2">
-          {Math.round(calculatePriceTTC(line, tva) * 100) / 100 || 0} €
+          {Math.round(calculatePriceTTC(price, tva) * 100) / 100 || 0}&nbsp;€
         </List.Cell>
-        <List.Cell className="w-48 py-2">
-          {Math.round(calculatePriceTTC(line, tva) * line.quantity * 100) /
-            100 || 0}{" "}
-          €
+        <List.Cell className="w-52 py-2">
+          {Math.round(calculatePriceTTC(price, tva) * quantity * 100) / 100 ||
+            0}
+          &nbsp;€
         </List.Cell>
         <List.Cell className="w-24 py-2">
           {!disabled ? (

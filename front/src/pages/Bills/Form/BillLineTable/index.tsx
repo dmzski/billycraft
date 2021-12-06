@@ -1,143 +1,216 @@
-import { List } from "@coco-ui/core";
-import Bill, { BillLine } from "models/Bill";
-import React from "react";
+import { Button, List, Select } from "@coco-ui/core";
+import { ValueType } from "@coco-ui/core/dist/components/Select";
+import { ProductApi } from "api/ProductApi";
+import { BillLine } from "models/Bill";
+import { LineTypeEnum } from "models/LineTypeEnum";
+import React, { useCallback } from "react";
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
 } from "react-beautiful-dnd";
-import Row from "./Row";
+import { Control, useFieldArray } from "react-hook-form";
+import { useQuery } from "react-query";
+import BillLaneTableRow from "./Row";
 
-const reorderLines = (
-  list: BillLine[],
-  startIndex: number,
-  endIndex: number
-) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+const defaultLine = {
+  description: "",
+  name: "",
+  price: 0,
+  quantity: 0,
+  type: LineTypeEnum.ARTICLE,
+};
 
-  return result;
+type BillLineTableProps = {
+  disabled?: boolean;
+  control: Control;
 };
 
 const BillLineTable = ({
-  bill,
-  setBill,
+  control,
   disabled,
-}: {
-  bill: Bill;
-  setBill: React.Dispatch<React.SetStateAction<Bill>>;
-  disabled?: boolean;
-}): JSX.Element => {
-  function deleteLine(index: number) {
-    return () => {
-      const newLines = [...bill.lines];
-      newLines.splice(index, 1);
-      setBill({ ...bill, lines: newLines });
-    };
-  }
+}: BillLineTableProps): JSX.Element => {
+  const productsQuery = useQuery("products", ProductApi.findAll, {
+    refetchOnWindowFocus: false,
+  });
+  const [productIdSelected, setProductIdSelected] = React.useState<number>();
+  const onProductSelectedChange = React.useCallback((option: ValueType) => {
+    setProductIdSelected(Number(option));
+  }, []);
 
-  function setLine(index: number) {
-    return (newLine: any) => {
-      const newLines = [...bill.lines];
-      newLines[index] = newLine;
-      setBill({ ...bill, lines: newLines });
-    };
-  }
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: "lines",
+    keyName: "line",
+  });
 
-  const onDragEnd = (result: DropResult) => {
-    // dropped outside the list
-    if (!result.destination) {
-      return;
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) {
+        return;
+      }
+
+      move(result.source.index, result.destination.index);
+    },
+    [move]
+  );
+
+  const addLine = React.useCallback(
+    (newLine = defaultLine) => {
+      append({ ...newLine, line: (fields || []).length + 1 });
+    },
+    [append, fields]
+  );
+
+  const productOptions = React.useMemo(() => {
+    if (productsQuery.data) {
+      return productsQuery.data.map((product) => ({
+        value: product.id,
+        label: product.name,
+      }));
     }
+    return [];
+  }, [productsQuery.data]);
 
-    const newLines = reorderLines(
-      bill.lines,
-      result.source.index,
-      result.destination.index
-    );
+  const addExistingProductSelected = () => {
+    if (productIdSelected && productsQuery.data) {
+      addLine(
+        productsQuery.data.find((product) => product.id === productIdSelected)
+      );
+      setProductIdSelected(undefined);
+      window.scrollTo({
+        behavior: "smooth",
+        top: document.body.scrollHeight,
+      });
+    }
+  };
 
-    setBill({
-      ...bill,
-      lines: newLines,
-    });
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.ctrlKey && e.key === "Enter" && !disabled) {
+      e.stopPropagation();
+      addLine();
+    }
   };
 
   return (
-    <List
-      className="bg-white w-full"
-      data={bill.lines}
-      columns={[
-        {
-          name: "Type",
-          className: "pl-12 w-48",
-        },
-        {
-          name: "Nom",
-          className: "w-72 pl-6",
-        },
-        {
-          name: "Description",
-          className: "w-full pl-4",
-        },
-        {
-          name: "Quantité",
-          className: "w-36",
-        },
-        {
-          name: "Prix HT",
-          className: "w-48",
-        },
-        {
-          name: "Prix TTC",
-          className: "w-48",
-        },
-        {
-          name: "Sous Total",
-          className: "w-52",
-        },
-        {
-          name: "",
-          className: "w-24",
-        },
-      ]}
-    >
-      {({ data }) => (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="lines">
-            {(droppableProvided) => (
-              <div
-                {...droppableProvided.droppableProps}
-                ref={droppableProvided.innerRef}
-              >
-                {(data as BillLine[])?.map((line, index) => (
-                  <Draggable
-                    isDragDisabled={disabled}
-                    key={`draggable-${line.line}`}
-                    draggableId={line.line.toString()}
-                    index={index}
+    <>
+      <div onKeyDown={handleKeyDown}>
+        <List
+          className="bg-white w-full"
+          data={fields}
+          columns={[
+            {
+              name: "Type",
+              className: "pl-12 w-48",
+            },
+            {
+              name: "Nom",
+              className: "w-72 pl-6",
+            },
+            {
+              name: "Description",
+              className: "w-full pl-4",
+            },
+            {
+              name: "Quantité",
+              className: "w-36",
+            },
+            {
+              name: "Prix HT",
+              className: "w-48",
+            },
+            {
+              name: "Prix TTC",
+              className: "w-48",
+            },
+            {
+              name: "Sous Total",
+              className: "w-52",
+            },
+            {
+              name: "",
+              className: "w-24",
+            },
+          ]}
+        >
+          {({ data }) => (
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="lines">
+                {(droppableProvided) => (
+                  <div
+                    {...droppableProvided.droppableProps}
+                    ref={droppableProvided.innerRef}
                   >
-                    {(provided) => (
-                      <Row
-                        provided={provided}
-                        key={`line-${line.line}`}
-                        disabled={disabled}
-                        tva={bill.tva}
-                        line={line}
-                        deleteLine={deleteLine(index)}
-                        setLine={setLine(index)}
-                      />
-                    )}
-                  </Draggable>
-                ))}
-                {droppableProvided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
-    </List>
+                    {(data as BillLine[])?.map((line, index) => (
+                      <Draggable
+                        key={`draggable-${line.line}`}
+                        draggableId={line.line.toString()}
+                        index={index}
+                        isDragDisabled={disabled}
+                      >
+                        {(provided) => (
+                          <BillLaneTableRow
+                            provided={provided}
+                            key={`${line.line}`}
+                            disabled={disabled}
+                            index={index}
+                            control={control}
+                            deleteLine={() => remove(index)}
+                          />
+                        )}
+                      </Draggable>
+                    ))}
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          )}
+        </List>
+      </div>
+      {!disabled ? (
+        <>
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full mt-4"
+            size="sm"
+            onClick={addLine}
+            disabled={disabled}
+            icon="plus"
+          >
+            Ajouter une ligne
+          </Button>
+          <div className="my-4 flex items-end">
+            <Select
+              label="Ajouter un produit existant"
+              tabIndex={0}
+              containerClassName="flex-grow"
+              name="existing-product"
+              id="existing-product"
+              inputProps={{
+                autoComplete: "off",
+              }}
+              options={productOptions}
+              isLoading={productsQuery.isLoading}
+              isSearchable
+              placeholder="Nom du produit"
+              value={productIdSelected}
+              onChange={onProductSelectedChange}
+            />
+            <Button
+              onClick={addExistingProductSelected}
+              type="button"
+              className="py-2 ml-4 w-1/6"
+              variant="secondary"
+            >
+              Ajouter
+            </Button>
+          </div>
+        </>
+      ) : null}
+    </>
   );
 };
 
