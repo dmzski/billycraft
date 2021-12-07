@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import Bill, { BillLine } from "../../../models/Bill";
 import BillLineTable from "./BillLineTable";
 import { BillStatusEnum } from "../../../models/Bill";
 import { Button, Select, TextInput } from "@coco-ui/core";
-import Customer from "models/Customer";
-import { CustomerApi } from "api/CustomerApi";
 import { useToast } from "providers/ToastProvider";
 import { Controller, useForm } from "react-hook-form";
 import { BillApi } from "api/BillApi";
