@@ -1,10 +1,9 @@
 import { Button, Select, TextInput } from "@coco-ui/core";
 import React, { useEffect } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import Quote, { QuoteLine } from "../../../models/Quote";
 import QuoteLineTable from "./QuoteLineTable";
 import { QuoteStatusEnum } from "../../../models/Quote";
-import { CustomerApi } from "api/CustomerApi";
 import { Controller, useForm } from "react-hook-form";
 import { QuoteApi } from "api/QuoteApi";
 import { useToast } from "providers/ToastProvider";
@@ -30,13 +29,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     shouldFocusError: true,
     defaultValues: defaultQuote,
   });
-  const customersQuery = useQuery(
-    ["customers", "not-deleted"],
-    CustomerApi.findAllNotDeleted,
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
   const [
     updateQuoteStatusMutation,
     { isLoading: isUpdatingStatus },
@@ -102,7 +94,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     }
 
     return array;
-  }, [customersQuery.data]);
+  }, [customers, quote.customerId]);
 
   useEffect(() => {
     if (quote) {
@@ -157,7 +149,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             placeholder="Nom du client"
             value={field.value}
             isSearchable
-            isLoading={customersQuery.isLoading}
+            isLoading={!customers}
             ref={field.ref}
           />
         )}
