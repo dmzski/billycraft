@@ -7,6 +7,7 @@ import { useToast } from "../../providers/ToastProvider";
 import { LINE_TYPE } from "constants/line";
 import { LineTypeEnum } from "models/LineTypeEnum";
 import { Controller, useForm } from "react-hook-form";
+import { STRINGS } from "constants/strings";
 
 type ProductTableLineProps = {
   product: Product;
@@ -44,19 +45,7 @@ const ProductTableLine = ({
     shouldUnregister: true,
   });
   const [deleteProductMutation, deleteProductMutationState] = useMutation(
-    ProductApi.delete,
-    {
-      onSuccess: () => {
-        toast.show({ message: "Article supprimé", variant: "success" });
-        queryCache.invalidateQueries("products");
-      },
-      onError: () => {
-        toast.show({
-          message: "Erreur lors de l'enregistrement",
-          variant: "error",
-        });
-      },
-    }
+    ProductApi.delete
   );
   const queryCache = useQueryCache();
 
@@ -77,7 +66,7 @@ const ProductTableLine = ({
         name: data.name,
       });
       toast.show({
-        message: product.id ? "Article modifié" : "Article ajouté",
+        message: STRINGS.SAVE_SUCCESS,
         variant: "success",
       });
       if (isNew)
@@ -90,9 +79,9 @@ const ProductTableLine = ({
       else setMode(MODES.READ);
 
       queryCache.refetchQueries("products");
-    } catch (error) {
+    } catch {
       toast.show({
-        message: "Erreur lors de l'enregistrement",
+        message: STRINGS.SAVE_ERROR,
         variant: "error",
       });
     }
@@ -107,10 +96,11 @@ const ProductTableLine = ({
   const onDelete = async () => {
     try {
       await deleteProductMutation(product.id);
-    } catch (error) {
-      console.error("Error", error);
+      queryCache.invalidateQueries("products");
+      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: "success" });
+    } catch {
       toast.show({
-        message: "Erreur lors de la suppression",
+        message: STRINGS.DELETE_ERROR,
         variant: "error",
       });
     }

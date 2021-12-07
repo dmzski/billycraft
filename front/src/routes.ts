@@ -31,7 +31,7 @@ export const ROUTES = {
     exact: true,
   },
   CUSTOMER_FORM: {
-    path: "/customer/edit/:id",
+    path: "/customers/edit/:id",
     title: "Edition de client",
   },
   SETTINGS: {

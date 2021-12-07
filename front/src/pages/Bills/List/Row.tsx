@@ -1,5 +1,6 @@
 import { ActionButton, Icon, Table } from "@coco-ui/core";
 import { BillApi } from "api/BillApi";
+import { STRINGS } from "constants/strings";
 import { format, parseJSON } from "date-fns";
 import Bill from "models/Bill";
 import Customer from "models/Customer";
@@ -26,9 +27,6 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
     BillApi.updateStatus,
     {
-      onSuccess: () => {
-        toast.show({ message: "Facture mis à jour", variant: "success" });
-      },
       throwOnError: true,
     }
   );
@@ -41,13 +39,13 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
     try {
       bill.id && (await updateBillStatusMutation({ id: bill.id, status }));
       setOpenStatusPopup(false);
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
       queryCache.invalidateQueries("bills");
-    } catch (error) {
+    } catch {
       toast.show({
-        message: "Erreur lors de la mise à jour",
+        message: STRINGS.SAVE_ERROR,
         variant: "error",
       });
-      console.error("Error !!!", error);
     }
   };
 

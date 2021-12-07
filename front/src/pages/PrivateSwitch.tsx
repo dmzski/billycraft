@@ -8,7 +8,6 @@ import {
 import BillDashboard from "./Bills";
 import BillForm from "./Bills/Form";
 import Customer from "./Customers";
-import CustomerForm from "./Customers/Form";
 import Dashboard from "./Dashboard";
 import Layout from "../layout/Layout";
 import Loader from "components/Loader";
@@ -93,9 +92,7 @@ const PrivateSwitch = (): JSX.Element => {
 
             <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
             <Route path={ROUTES.BILL_FORM.path} component={BillForm} />
-            <Route path={ROUTES.CUSTOMERS.path + "/:id"} component={Customer} />
-
-            <Route path={ROUTES.CUSTOMER_FORM.path} component={CustomerForm} />
+            <Route path={ROUTES.CUSTOMER_FORM.path} component={Customer} />
 
             <Route
               path={ROUTES.SETTINGS.path}

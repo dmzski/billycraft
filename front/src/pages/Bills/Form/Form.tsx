@@ -9,6 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { BillApi } from "api/BillApi";
 import { Prompt } from "react-router";
 import useCustomers from "hooks/useCustomers";
+import { STRINGS } from "constants/strings";
 
 const defaultBill = {} as Partial<Bill>;
 
@@ -38,11 +39,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   const updateBillStatus = (status: BillStatusEnum) => async () => {
     try {
       const res = await updateBillStatusMutation({ id: bill.id, status });
-      toast.show({ message: "Facture enregistrée", variant: "success" });
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
       onSubmitSuccess(res as Bill);
-    } catch (error) {
-      console.error("Error !!!", error);
-      toast.show({ message: "Une erreur est survenue", variant: "error" });
+    } catch {
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
     }
   };
 
@@ -57,11 +57,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
     try {
       const res = await BillApi.createOrUpdate(tmp);
       onSubmitSuccess(res);
-      toast.show({ message: "Enregistrement effectué", variant: "success" });
-    } catch (err) {
-      console.error("An error occured", err);
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+    } catch {
       toast.show({
-        message: "Une erreur est survenue lors de l'enregistrement",
+        message: STRINGS.SAVE_ERROR,
         variant: "error",
       });
     }

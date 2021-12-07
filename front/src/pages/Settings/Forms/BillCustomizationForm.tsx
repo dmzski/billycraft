@@ -1,5 +1,6 @@
 import { Button, Switch, TextInput } from "@coco-ui/core";
 import { BillCustomizationApi } from "api/BillCustomizationApi";
+import { STRINGS } from "constants/strings";
 import { ContentState, EditorState } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
 import BillCustomization from "models/BillCustomization";
@@ -23,7 +24,7 @@ const BillCustomizationForm = ({
     updateBillCustomizationMutationState,
   ] = useMutation(BillCustomizationApi.updateMine, {
     onSuccess: () => {
-      toast.show({ message: "Modification enregistrée", variant: "success" });
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
     },
   });
   const [, setAfterTableEditor] = React.useState(() =>

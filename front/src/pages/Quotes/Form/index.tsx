@@ -11,6 +11,7 @@ import QuoteForm from "./Form";
 import { QuoteApi } from "api/QuoteApi";
 import { isQuoteMinimumAccepted } from "utils/quote";
 import { QUOTE_STATUS } from "constants/quote";
+import { STRINGS } from "constants/strings";
 
 const QuoteCreationPage = (): JSX.Element => {
   const [newQuote, setNewQuote] = React.useState<Quote>({} as Quote);
@@ -32,7 +33,7 @@ const QuoteCreationPage = (): JSX.Element => {
     QuoteApi.createBill,
     {
       onSuccess: (data) => {
-        toast.show({ message: "Facture crée", variant: "success" });
+        toast.show({ message: STRINGS.BILL_CREATED, variant: "success" });
         queryCache.invalidateQueries("bills");
         if (data.id) {
           history.push(ROUTES.BILL_FORM.path.replace(":id", data.id));
@@ -66,8 +67,7 @@ const QuoteCreationPage = (): JSX.Element => {
         document.body.removeChild(link);
         pdfState.update("idle");
       }
-    } catch (e) {
-      console.error("Error when downlaod pdf", e);
+    } catch {
       toast.show({
         message: "Erreur lors de la génération du PDF",
         variant: "error",

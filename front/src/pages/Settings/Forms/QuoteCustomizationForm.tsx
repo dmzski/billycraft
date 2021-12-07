@@ -1,5 +1,6 @@
 import { Button, Switch, TextInput } from "@coco-ui/core";
 import { QuoteCustomizationApi } from "api/QuoteCustomizationApi";
+import { STRINGS } from "constants/strings";
 import QuoteCustomization from "models/QuoteCustomization";
 import React from "react";
 import { useMutation } from "react-query";
@@ -21,7 +22,7 @@ const QuoteCustomizationForm = ({
     updateQuoteCustomizationMutationState,
   ] = useMutation(QuoteCustomizationApi.updateMine, {
     onSuccess: () => {
-      toast.show({ message: "Modification enregistrée", variant: "success" });
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
     },
   });
 

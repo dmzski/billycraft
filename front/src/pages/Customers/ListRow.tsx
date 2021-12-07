@@ -1,22 +1,18 @@
 import { Table } from "@coco-ui/core";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import CustomerModal from "pages/Customers/Modals/CustomerModal";
 import Customer from "models/Customer";
+import { ROUTES } from "routes";
 
 const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const { id } = useParams<any>();
+  const { id } = useParams<{ id: string }>();
+  const history = useHistory();
 
   const editCustomer = () => {
-    setIsOpen(true);
+    if (customer.id)
+      history.push(ROUTES.CUSTOMER_FORM.path.replace(":id", `${customer.id}`));
   };
-
-  React.useEffect(() => {
-    if (customer && id === customer.id) {
-      setIsOpen(true);
-    }
-  }, [id, customer]);
 
   return (
     <Table.Row hoverable onClick={editCustomer}>
@@ -35,10 +31,10 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
       <Table.Cell className="w-48">
         {customer.email}
         <CustomerModal
-          isOpen={modalIsOpen}
+          isOpen={id === `${customer.id}`}
           onRequestClose={(e: any) => {
             if (e) e.stopPropagation();
-            setIsOpen(false);
+            history.push(ROUTES.CUSTOMERS.path);
           }}
           customer={customer}
         />

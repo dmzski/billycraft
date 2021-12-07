@@ -48,8 +48,7 @@ const BillFormPage = (): JSX.Element => {
         document.body.removeChild(link);
         pdfState.update("idle");
       }
-    } catch (e) {
-      console.error("Error when downlaod pdf", e);
+    } catch {
       toast.show({
         message: "Erreur lors de la génération du PDF",
         variant: "error",

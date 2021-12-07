@@ -9,6 +9,7 @@ import { QuoteApi } from "api/QuoteApi";
 import { useToast } from "providers/ToastProvider";
 import { Prompt } from "react-router";
 import useCustomers from "hooks/useCustomers";
+import { STRINGS } from "constants/strings";
 
 const defaultQuote = {} as Partial<Quote>;
 
@@ -36,11 +37,10 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
       const res = await updateQuoteStatusMutation({ id: quote.id, status });
-      toast.show({ message: "Devis enregistré", variant: "success" });
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
       onSubmitSuccess(res as Quote);
-    } catch (error) {
-      console.error("Error !!!", error);
-      toast.show({ message: "Une erreur est survenue", variant: "error" });
+    } catch {
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
     }
   };
 
@@ -55,11 +55,10 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     try {
       const res = await QuoteApi.createOrUpdate(tmp);
       onSubmitSuccess(res);
-      toast.show({ message: "Enregistrement effectué", variant: "success" });
-    } catch (err) {
-      console.error("An error occured", err);
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+    } catch {
       toast.show({
-        message: "Une erreur est survenue lors de l'enregistrement",
+        message: STRINGS.SAVE_ERROR,
         variant: "error",
       });
     }

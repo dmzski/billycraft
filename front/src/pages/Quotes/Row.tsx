@@ -17,6 +17,7 @@ import { QUOTE_STATUS } from "../../constants/quote";
 import { QuoteStatusEnum } from "../../models/Quote";
 import { useToast } from "../../providers/ToastProvider";
 import { getQuoteTotal } from "../../utils/quote";
+import { STRINGS } from "constants/strings";
 
 type QuoteTableLineProps = {
   quote: Quote;
@@ -35,11 +36,7 @@ const QuoteTableLine = ({
   const [
     updateQuoteStatusMutation,
     updateQuoteStatusMutationState,
-  ] = useMutation(QuoteApi.updateStatus, {
-    onSuccess: () => {
-      toast.show({ message: "Devis mis à jour", variant: "success" });
-    },
-  });
+  ] = useMutation(QuoteApi.updateStatus);
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => async (e: any) => {
     e.stopPropagation();
@@ -48,10 +45,11 @@ const QuoteTableLine = ({
     }
     try {
       quote.id && (await updateQuoteStatusMutation({ id: quote.id, status }));
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
       setOpenStatusPopup(false);
       queryCache.invalidateQueries("quotes");
-    } catch (error) {
-      console.error("Error !!!", error);
+    } catch {
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
     }
   };
 

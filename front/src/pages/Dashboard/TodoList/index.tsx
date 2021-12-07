@@ -1,5 +1,6 @@
 import { Button, TextInput } from "@coco-ui/core";
 import { TodoApi } from "api/TodoApi";
+import { STRINGS } from "constants/strings";
 import { formatRelative } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useToast } from "providers/ToastProvider";
@@ -31,9 +32,9 @@ const TodoList = (): JSX.Element => {
         try {
           await TodoApi.done(id);
           refetch();
-          toast.show({ message: "Tâche mise à jour", variant: "success" });
-        } catch (err) {
-          toast.show({ message: "Une erreur est survenue", variant: "error" });
+          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+        } catch {
+          toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
         }
       };
       fn();
@@ -55,10 +56,10 @@ const TodoList = (): JSX.Element => {
           await TodoApi.create(data);
           reset({ description: "" });
           refetch();
-          toast.show({ message: "Tâche crée", variant: "success" });
+          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
         } catch {
           toast.show({
-            message: "Une erreur est survenue",
+            message: STRINGS.SAVE_ERROR,
             variant: "error",
           });
         }
@@ -83,10 +84,10 @@ const TodoList = (): JSX.Element => {
         setEditTodo("");
         setEditMode(undefined);
         refetch();
-        toast.show({ message: "Tâche modifiée", variant: "success" });
+        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
       } catch {
         toast.show({
-          message: "Une erreur est survenue",
+          message: STRINGS.SAVE_ERROR,
           variant: "error",
         });
       }

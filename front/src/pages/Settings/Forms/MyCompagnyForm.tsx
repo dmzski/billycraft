@@ -6,6 +6,7 @@ import { CompanyApi } from "api/CompanyApi";
 import { Button, TextInput } from "@coco-ui/core";
 import Company from "models/Company";
 import { ChangeEvent } from "react-router/node_modules/@types/react";
+import { STRINGS } from "constants/strings";
 
 type MyCompagnyFormProps = {
   company: Company;
@@ -23,7 +24,7 @@ const MyCompagnyForm = ({
     CompanyApi.createOrUpdate,
     {
       onSuccess: () => {
-        toast.show({ message: "Enregistrement effectué", variant: "success" });
+        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
         queryCache.invalidateQueries("my-information");
         queryCache.invalidateQueries("my-company");
       },
@@ -63,12 +64,11 @@ const MyCompagnyForm = ({
           variant: "success",
         });
       }
-    } catch (error) {
+    } catch {
       toast.show({
         message: "Erreur lors de l'upload de l'image",
         variant: "error",
       });
-      console.error(error);
       uploadLogoState.update("idle");
     }
   };
