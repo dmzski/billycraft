@@ -120,8 +120,9 @@ const ProductTableLine = ({
         <Controller
           name="type"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState: { invalid } }) => (
             <Select
+              error={invalid}
               value={field.value}
               name={field.name}
               className="w-full"

@@ -48,8 +48,9 @@ const BillLineTableLine = ({
             name={`lines.${index}.type`}
             control={control}
             rules={{ required: true }}
-            render={({ field }) => (
+            render={({ field, fieldState: { invalid } }) => (
               <Select
+                error={invalid}
                 disabled={disabled}
                 tabIndex={0}
                 value={field.value}

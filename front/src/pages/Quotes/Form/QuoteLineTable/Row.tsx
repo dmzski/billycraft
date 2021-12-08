@@ -49,10 +49,11 @@ const QuoteLineTableLine = ({
             name={`lines.${index}.type`}
             control={control}
             rules={{ required: true }}
-            render={({ field }) => (
+            render={({ field, fieldState: { invalid } }) => (
               <Select
                 disabled={disabled}
                 tabIndex={0}
+                error={invalid}
                 value={field.value}
                 onChange={(type) => field.onChange(type as LineTypeEnum)}
                 ref={field.ref}

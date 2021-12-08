@@ -133,9 +133,10 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         name="customerId"
         control={control}
         rules={{ required: true }}
-        render={({ field }) => (
+        render={({ field, fieldState: { invalid } }) => (
           <Select
             tabIndex={0}
+            error={invalid}
             label="Sélectionner un client"
             variant="outside"
             id="customer-select"
