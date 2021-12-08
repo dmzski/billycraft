@@ -1,4 +1,4 @@
-import { Button, Switch, TextInput } from "@coco-ui/core";
+import { Button, Switch, Input, TextArea } from "@coco-ui/core";
 import { QuoteCustomizationApi } from "api/QuoteCustomizationApi";
 import { STRINGS } from "constants/strings";
 import QuoteCustomization from "models/QuoteCustomization";
@@ -57,7 +57,7 @@ const QuoteCustomizationForm = ({
               backgroundColor: newQuoteCustomization.mainColor || "white",
             }}
           ></div>
-          <TextInput
+          <Input
             id="mainColor"
             value={newQuoteCustomization.mainColor}
             onChange={(e: any) => {
@@ -68,7 +68,7 @@ const QuoteCustomizationForm = ({
             }}
             label="Couleur principale"
             placeholder="Couleur en hexadecimale : #000000"
-            containerClassName="w-full"
+            className="w-full"
           />
         </div>
         <div className="flex justify-around mt-3">
@@ -116,11 +116,10 @@ const QuoteCustomizationForm = ({
           </div>
         </div>
         <div className="mt-4">
-          <TextInput
+          <TextArea
             id="afterTable"
             rows={5}
             label="Après le tableau"
-            multiline
             placeholder="En dessous du tableau"
             value={newQuoteCustomization.afterTable}
             className="w-full"
@@ -134,10 +133,9 @@ const QuoteCustomizationForm = ({
           />
         </div>
         <div className="mt-4">
-          <TextInput
+          <TextArea
             id="footer"
             rows={5}
-            multiline
             label="Pied de page"
             className="w-full"
             placeholder="Pied de page"

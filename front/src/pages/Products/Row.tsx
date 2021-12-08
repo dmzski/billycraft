@@ -1,4 +1,4 @@
-import { Button, Icon, Select, Table, TextInput } from "@coco-ui/core";
+import { Button, Icon, Select, Table, Input, TextArea } from "@coco-ui/core";
 import React from "react";
 import { useMutation, useQueryCache } from "react-query";
 import { ProductApi } from "../../api/ProductApi";
@@ -116,7 +116,7 @@ const ProductTableLine = ({
 
   return (
     <Table.Row>
-      <Table.Cell className="px-1">
+      <Table.Cell>
         <Controller
           name="type"
           control={control}
@@ -137,78 +137,70 @@ const ProductTableLine = ({
           )}
         />
       </Table.Cell>
-      <Table.Cell className="px-1">
-        <div className="flex">
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              required: true,
-              minLength: 1,
-            }}
-            render={({ field, fieldState }) => (
-              <TextInput
-                form={formID}
-                name={`${formID}-${field.name}`}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                disabled={mode !== MODES.EDIT}
-                ref={field.ref}
-                className="w-full"
-                error={fieldState.invalid}
-              />
-            )}
-          />
-        </div>
+      <Table.Cell>
+        <Controller
+          name="name"
+          control={control}
+          rules={{
+            required: true,
+            minLength: 1,
+          }}
+          render={({ field, fieldState }) => (
+            <Input
+              form={formID}
+              name={`${formID}-${field.name}`}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              disabled={mode !== MODES.EDIT}
+              ref={field.ref}
+              className="w-full"
+              error={fieldState.invalid}
+            />
+          )}
+        />
       </Table.Cell>
-      <Table.Cell className="px-1 py-2">
-        <div className="flex">
-          <Controller
-            name="description"
-            control={control}
-            render={({ field, fieldState }) => (
-              <TextInput
-                form={formID}
-                autoResizeHeight
-                multiline
-                name={field.name}
-                value={field.value ?? ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                disabled={mode !== MODES.EDIT}
-                className="w-full"
-                error={fieldState.invalid}
-              />
-            )}
-          />
-        </div>
+      <Table.Cell>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TextArea
+              form={formID}
+              rows={1}
+              name={field.name}
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              disabled={mode !== MODES.EDIT}
+              className="w-full"
+              error={fieldState.invalid}
+            />
+          )}
+        />
       </Table.Cell>
-      <Table.Cell className="px-1 w-48">
-        <div className="w-full flex mr-1">
+      <Table.Cell className="w-48">
+        <div className="w-full flex">
           <Controller
             name="price"
             rules={{ min: 0 }}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <Input
                 form={formID}
-                autoResizeHeight
-                multiline
                 name={field.name}
                 value={field.value ?? ""}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 disabled={mode !== MODES.EDIT}
-                containerClassName="w-full"
+                className="w-full text-right"
                 type="number"
                 step={0.1}
-                className="w-full text-right"
                 error={!!errors.price}
               />
             )}
           />
-          <span className="mx-2 pt-2">€</span>
+          <span className="ml-2 pt-2">€</span>
         </div>
       </Table.Cell>
       <Table.Cell className="w-20">

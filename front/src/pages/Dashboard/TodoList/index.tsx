@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@coco-ui/core";
+import { Button, Input } from "@coco-ui/core";
 import { TodoApi } from "api/TodoApi";
 import { STRINGS } from "constants/strings";
 import { formatRelative } from "date-fns";
@@ -115,7 +115,7 @@ const TodoList = (): JSX.Element => {
           defaultValue=""
           rules={{ required: true, minLength: 3 }}
           render={({ field, fieldState }) => (
-            <TextInput
+            <Input
               className="mr-4 w-full"
               placeholder="Nouveau todo"
               name={field.name}
@@ -147,7 +147,7 @@ const TodoList = (): JSX.Element => {
             {editMode !== todo.id ? (
               todo.description
             ) : (
-              <TextInput
+              <Input
                 onChange={handleChangeEdit as any}
                 value={editTodo}
                 name={`description-${todo.id}`}

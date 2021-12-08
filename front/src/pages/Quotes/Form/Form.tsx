@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from "@coco-ui/core";
+import { Button, Select, Input } from "@coco-ui/core";
 import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 import Quote, { QuoteLine } from "../../../models/Quote";
@@ -114,12 +114,12 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         control={control}
         rules={{ required: true, minLength: 3 }}
         render={({ field, fieldState: { invalid } }) => (
-          <TextInput
-            containerClassName="my-4"
+          <Input
+            className="my-4"
             label="Titre"
             disabled={disabled}
             error={invalid}
-            aria-label="Titre"
+            variant="outside"
             placeholder="Titre du devis"
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -137,13 +137,11 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
           <Select
             tabIndex={0}
             label="Sélectionner un client"
+            variant="outside"
             id="customer-select"
             name={field.name}
             disabled={disabled}
             onChange={field.onChange}
-            inputProps={{
-              autoComplete: "off",
-            }}
             options={customerOptions}
             placeholder="Nom du client"
             value={field.value}
@@ -158,11 +156,11 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         control={control}
         rules={{ min: 0, max: 100 }}
         render={({ field, fieldState: { invalid } }) => (
-          <TextInput
+          <Input
             label="TVA (%)"
-            containerClassName="my-4"
+            className="my-4"
             disabled={disabled}
-            aria-label="TVA"
+            variant="outside"
             placeholder="TVA en %"
             type="number"
             value={field.value}

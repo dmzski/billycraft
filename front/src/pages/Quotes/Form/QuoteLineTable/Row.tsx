@@ -1,4 +1,4 @@
-import { Icon, List, Select, TextInput } from "@coco-ui/core";
+import { Icon, List, Select, Input, TextArea } from "@coco-ui/core";
 import { LineTypeEnum } from "models/LineTypeEnum";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { Control, Controller, useWatch } from "react-hook-form";
@@ -72,7 +72,7 @@ const QuoteLineTableLine = ({
             rules={{ required: true }}
             control={control}
             render={({ field, fieldState: { invalid } }) => (
-              <TextInput
+              <Input
                 required
                 placeholder="Nom"
                 className="w-full"
@@ -91,13 +91,12 @@ const QuoteLineTableLine = ({
             name={`lines.${index}.description`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <TextArea
                 placeholder="Description"
-                className="w-full flex resize-none"
+                rows={3}
+                className="w-full"
                 disabled={disabled}
                 value={field.value}
-                multiline
-                autoResizeHeight
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 name={field.name}
@@ -110,7 +109,7 @@ const QuoteLineTableLine = ({
             name={`lines.${index}.quantity`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <Input
                 disabled={disabled}
                 className="text-right w-full"
                 placeholder="Quantité"
@@ -120,7 +119,7 @@ const QuoteLineTableLine = ({
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
                   field.onChange(
-                    Number((event.target as HTMLInputElement).value)
+                    Number((event.target as HTMLInputElement).value) || 0
                   )
                 }
                 onBlur={field.onBlur}
@@ -133,7 +132,7 @@ const QuoteLineTableLine = ({
             name={`lines.${index}.price`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <Input
                 disabled={disabled}
                 className="text-right w-full"
                 placeholder="Prix"
@@ -142,7 +141,7 @@ const QuoteLineTableLine = ({
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
                   field.onChange(
-                    Number((event.target as HTMLInputElement).value)
+                    Number((event.target as HTMLInputElement).value) || 0
                   )
                 }
                 onBlur={field.onBlur}

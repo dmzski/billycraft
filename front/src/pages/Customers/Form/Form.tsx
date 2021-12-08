@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@coco-ui/core";
+import { Button, Input, TextArea } from "@coco-ui/core";
 import { CustomerApi } from "api/CustomerApi";
 import { STRINGS } from "constants/strings";
 import { useToast } from "providers/ToastProvider";
@@ -89,8 +89,9 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
+            <Input
               label="Nom"
+              variant="outside"
               placeholder="Nom du client"
               name={field.name}
               value={field.value}
@@ -107,11 +108,11 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 255, required: true }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              multiline
-              rows={3}
-              containerClassName="mt-3"
+            <TextArea
+              rows={4}
+              className="mt-3"
               label="Adresse"
+              variant="outside"
               placeholder="Adresse du client"
               name={field.name}
               value={field.value}
@@ -128,9 +129,10 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              containerClassName="mt-3"
+            <Input
+              className="mt-3"
               label="Email"
+              variant="outside"
               placeholder="Adresse email"
               name={field.name}
               value={field.value}
@@ -147,9 +149,10 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 10 }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              containerClassName="mt-3"
+            <Input
+              className="mt-3"
               label="Téléphone"
+              variant="outside"
               placeholder="Téléphone"
               name={field.name}
               value={field.value}
@@ -166,9 +169,10 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              containerClassName="mt-3"
+            <Input
+              className="mt-3"
               label="Ville"
+              variant="outside"
               placeholder="Ville"
               name={field.name}
               value={field.value}
@@ -185,9 +189,10 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 10, required: true }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              containerClassName="mt-3"
+            <Input
+              className="mt-3"
               label="Code Postal"
+              variant="outside"
               placeholder="Code Postal"
               name={field.name}
               value={field.value}
@@ -204,9 +209,10 @@ const CustomerForm = ({
           control={control}
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
-            <TextInput
-              containerClassName="mt-3"
+            <Input
+              className="mt-3"
               label="Contact"
+              variant="outside"
               placeholder="Nom complet"
               name={field.name}
               value={field.value}

@@ -1,4 +1,4 @@
-import { Button, Switch, TextInput } from "@coco-ui/core";
+import { Button, Switch, Input, TextArea } from "@coco-ui/core";
 import React from "react";
 import { FormEvent } from "react-router/node_modules/@types/react";
 import BillEmailCustomization from "../../../models/BillEmailCustomization";
@@ -64,7 +64,7 @@ const BillEmailCustomizationForm = ({
           </ul>
         </div>
         <div>
-          <TextInput
+          <Input
             id="object"
             name="object"
             label="Objet du mail"
@@ -80,11 +80,10 @@ const BillEmailCustomizationForm = ({
           />
         </div>
         <div className="mt-2">
-          <TextInput
+          <TextArea
             id="body"
             name="body"
             label="Corps du mail"
-            multiline
             rows={5}
             value={newBillEmailCustomization.body}
             onChange={(e: any) =>

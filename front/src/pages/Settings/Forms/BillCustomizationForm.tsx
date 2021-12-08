@@ -1,4 +1,4 @@
-import { Button, Switch, TextInput } from "@coco-ui/core";
+import { Button, Switch, Input, TextArea } from "@coco-ui/core";
 import { BillCustomizationApi } from "api/BillCustomizationApi";
 import { STRINGS } from "constants/strings";
 import { ContentState, EditorState } from "draft-js";
@@ -87,7 +87,7 @@ const BillCustomizationForm = ({
               backgroundColor: newBillCustomization.mainColor || "white",
             }}
           ></div>
-          <TextInput
+          <Input
             id="mainColor"
             value={newBillCustomization.mainColor}
             onChange={(e: any) => {
@@ -98,7 +98,7 @@ const BillCustomizationForm = ({
             }}
             label="Couleur principale"
             placeholder="Couleur en hexadecimale : #000000"
-            containerClassName="w-full"
+            className="w-full"
           />
         </div>
         <div className="flex justify-around mt-3">
@@ -146,10 +146,9 @@ const BillCustomizationForm = ({
           </div>
         </div>
         <div className="mt-3">
-          <TextInput
+          <TextArea
             id="afterTable"
             label="Après le tableau"
-            multiline
             rows={5}
             placeholder="En dessous du tableau"
             value={newBillCustomization.afterTable}
@@ -164,10 +163,9 @@ const BillCustomizationForm = ({
           />
         </div>
         <div className="mt-4">
-          <TextInput
+          <TextArea
             label="Pied de page"
             id="footer"
-            multiline
             rows={5}
             className="w-full"
             placeholder="Pied de page"

@@ -1,4 +1,4 @@
-import { TextInput } from "@coco-ui/core";
+import { Input } from "@coco-ui/core";
 import React from "react";
 
 type BillFilterContainerProps = {
@@ -11,13 +11,13 @@ const BillFilterContainer = ({
 }: BillFilterContainerProps): JSX.Element => {
   return (
     <div className="flex justify-around my-2">
-      <TextInput
+      <Input
         placeholder="Filtrer par titre"
         label="Titre"
         value={filters.title}
         onChange={(e: any) => setFilters({ ...filters, title: e.target.value })}
       />
-      <TextInput
+      <Input
         placeholder="Filtrer par client"
         label="Client"
         value={filters.customer}
@@ -25,7 +25,7 @@ const BillFilterContainer = ({
           setFilters({ ...filters, customer: e.target.value })
         }
       />
-      <TextInput
+      <Input
         placeholder="Filtrer par date de création"
         label="Date de création"
         value={filters.createdAt}
@@ -33,7 +33,7 @@ const BillFilterContainer = ({
           setFilters({ ...filters, createdAt: e.target.value })
         }
       />
-      <TextInput
+      <Input
         placeholder="Filtrer par date d'envoi"
         label="Date d'envoi"
         value={filters.sentAt}

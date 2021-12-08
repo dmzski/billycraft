@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import Bill, { BillLine } from "../../../models/Bill";
 import BillLineTable from "./BillLineTable";
 import { BillStatusEnum } from "../../../models/Bill";
-import { Button, Select, TextInput } from "@coco-ui/core";
+import { Button, Select, Input } from "@coco-ui/core";
 import { useToast } from "providers/ToastProvider";
 import { Controller, useForm } from "react-hook-form";
 import { BillApi } from "api/BillApi";
@@ -116,12 +116,13 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         control={control}
         rules={{ required: true, minLength: 3 }}
         render={({ field, fieldState: { invalid } }) => (
-          <TextInput
-            containerClassName="my-4"
+          <Input
+            className="my-4"
             label="Titre"
             disabled={disabled}
             error={invalid}
             aria-label="Titre"
+            variant="outside"
             placeholder="Titre du devis"
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -140,12 +141,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             tabIndex={0}
             label="Sélectionner un client"
             id="customer-select"
+            variant="outside"
             name={field.name}
             disabled={disabled}
             onChange={field.onChange}
-            inputProps={{
-              autoComplete: "off",
-            }}
             options={customerOptions}
             placeholder="Nom du client"
             value={field.value}
@@ -159,13 +158,14 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         control={control}
         rules={{ min: 0, max: 100 }}
         render={({ field, fieldState: { invalid } }) => (
-          <TextInput
+          <Input
             label="TVA (%)"
-            containerClassName="my-4"
+            className="my-4"
             disabled={disabled}
             aria-label="TVA"
             placeholder="TVA en %"
             type="number"
+            variant="outside"
             value={field.value}
             name={field.name}
             onChange={field.onChange}

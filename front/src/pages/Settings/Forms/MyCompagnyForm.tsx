@@ -3,7 +3,7 @@ import { useMutation, useQueryCache } from "react-query";
 import { useToast } from "providers/ToastProvider";
 import useLoadingState from "hooks/useLoadingState";
 import { CompanyApi } from "api/CompanyApi";
-import { Button, TextInput } from "@coco-ui/core";
+import { Button, Input, TextArea } from "@coco-ui/core";
 import Company from "models/Company";
 import { ChangeEvent } from "react-router/node_modules/@types/react";
 import { STRINGS } from "constants/strings";
@@ -78,22 +78,19 @@ const MyCompagnyForm = ({
       className="w-full flex flex-col justify-center items-center"
       onSubmit={onSubmit}
     >
-      <TextInput
+      <Input
         id="name"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Nom"
         placeholder="Nom"
         value={company.name}
         onChange={inputChange("name")}
       />
-      <TextInput
+      <TextArea
         id="address"
-        multiline
         rows={3}
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Adresse"
         style={{ resize: "none" }}
@@ -101,50 +98,45 @@ const MyCompagnyForm = ({
         value={company.address}
         onChange={inputChange("address")}
       />
-      <TextInput
+      <Input
         id="postal-code"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Code Postal"
         placeholder="Code Postal"
         value={company.postalCode}
         onChange={inputChange("postalCode")}
       />
-      <TextInput
+      <Input
         id="city"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Ville"
         placeholder="Ville"
         value={company.city}
         onChange={inputChange("city")}
       />
-      <TextInput
+      <Input
         id="phone-number"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Téléphone"
         placeholder="Téléphone"
         value={company.phoneNumber}
         onChange={inputChange("phoneNumber")}
       />
-      <TextInput
+      <Input
         id="email"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="Email"
         placeholder="Email"
         value={company.email}
         onChange={inputChange("email")}
       />
-      <TextInput
+      <Input
         id="siret"
-        className="w-full"
-        containerClassName="mt-2 w-full"
+        className="mt-2 w-full"
         variant="inside"
         label="SIRET"
         placeholder="SIRET"
@@ -153,7 +145,7 @@ const MyCompagnyForm = ({
       />
       {company.id ? (
         <div className="flex w-full pt-2">
-          <TextInput
+          <Input
             className=" w-4/5"
             placeholder="URL du logo"
             value={company.logo}

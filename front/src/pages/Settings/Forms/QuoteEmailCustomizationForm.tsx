@@ -1,4 +1,4 @@
-import { Button, Switch, TextInput } from "@coco-ui/core";
+import { Button, Switch, Input, TextArea } from "@coco-ui/core";
 import React from "react";
 import { FormEvent } from "react-router/node_modules/@types/react";
 import QuoteEmailCustomization from "../../../models/QuoteEmailCustomization";
@@ -63,7 +63,7 @@ const QuoteEmailCustomizationForm = ({
           </ul>
         </div>
         <div>
-          <TextInput
+          <Input
             id="email-subject"
             label="Objet du mail"
             value={newQuoteEmailCustomization.object}
@@ -80,10 +80,9 @@ const QuoteEmailCustomizationForm = ({
           />
         </div>
         <div className="mt-2">
-          <TextInput
+          <TextArea
             id="email-body"
             label="Corps du mail"
-            multiline
             rows={5}
             value={newQuoteEmailCustomization.body}
             onChange={(

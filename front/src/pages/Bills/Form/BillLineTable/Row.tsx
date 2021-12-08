@@ -1,4 +1,4 @@
-import { Icon, List, Select, TextInput } from "@coco-ui/core";
+import { Icon, List, Select, Input, TextArea } from "@coco-ui/core";
 import { LineTypeEnum } from "models/LineTypeEnum";
 import React, { ChangeEvent } from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
@@ -71,7 +71,7 @@ const BillLineTableLine = ({
             rules={{ required: true }}
             control={control}
             render={({ field, fieldState: { invalid } }) => (
-              <TextInput
+              <Input
                 required
                 placeholder="Nom"
                 className="w-full"
@@ -90,13 +90,12 @@ const BillLineTableLine = ({
             name={`lines.${index}.description`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <TextArea
                 placeholder="Description"
-                className="w-full flex resize-none"
+                className="w-full flex resize"
                 disabled={disabled}
                 value={field.value}
-                multiline
-                autoResizeHeight
+                rows={3}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 name={field.name}
@@ -109,7 +108,7 @@ const BillLineTableLine = ({
             name={`lines.${index}.quantity`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <Input
                 disabled={disabled}
                 className="text-right w-full"
                 placeholder="Quantité"
@@ -119,7 +118,7 @@ const BillLineTableLine = ({
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
                   field.onChange(
-                    Number((event.target as HTMLInputElement).value)
+                    Number((event.target as HTMLInputElement).value) || 0
                   )
                 }
                 onBlur={field.onBlur}
@@ -132,7 +131,7 @@ const BillLineTableLine = ({
             name={`lines.${index}.price`}
             control={control}
             render={({ field }) => (
-              <TextInput
+              <Input
                 disabled={disabled}
                 className="text-right w-full"
                 placeholder="Prix"
@@ -141,7 +140,7 @@ const BillLineTableLine = ({
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
                   field.onChange(
-                    Number((event.target as HTMLInputElement).value)
+                    Number((event.target as HTMLInputElement).value) || 0
                   )
                 }
                 onBlur={field.onBlur}

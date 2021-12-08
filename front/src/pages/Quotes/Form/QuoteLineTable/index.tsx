@@ -182,12 +182,9 @@ const QuoteLineTable = ({
             <Select
               label="Ajouter un produit existant"
               tabIndex={0}
-              containerClassName="flex-grow"
+              className="flex-grow"
               name="existing-product"
               id="existing-product"
-              inputProps={{
-                autoComplete: "off",
-              }}
               options={productOptions}
               isLoading={productsQuery.isLoading}
               isSearchable
