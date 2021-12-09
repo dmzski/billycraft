@@ -1,5 +1,5 @@
 import { Badge, Button } from '@coco-ui/core'
-import React from 'react'
+import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from 'api/QuoteApi'
@@ -14,7 +14,7 @@ import { ROUTES } from '../../../routes'
 import QuoteForm from './Form'
 
 const QuoteCreationPage = (): JSX.Element => {
-  const [newQuote, setNewQuote] = React.useState<Quote>({} as Quote)
+  const [newQuote, setNewQuote] = useState<Quote>({} as Quote)
   const queryCache = useQueryCache()
   const toast = useToast()
   const pdfState = useLoadingState()
@@ -71,11 +71,11 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   }
 
-  const createBill = React.useCallback(() => {
+  const createBill = useCallback(() => {
     createBillFromQuote({ id: newQuote.id })
   }, [newQuote, createBillFromQuote])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNewQuote(quote && id !== 'new' ? quote : ({} as Quote))
   }, [quote])
 

@@ -1,4 +1,12 @@
-import React, { ReactNode, useCallback, useMemo } from 'react'
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from 'react';
 import { CustomToast, ToastContainer } from '../components/CustomToast'
 import { Toast, ToastVariant } from '../models/Toast'
 
@@ -20,11 +28,11 @@ type ToastContextType = {
   show: (info: ToastInfo) => void
 }
 
-const ToastContext = React.createContext<ToastContextType>({} as ToastContextType)
+const ToastContext = createContext<ToastContextType>({} as ToastContextType)
 
 const ToastProvider = ({ children, duration = 3000 }: ToastProviderProps): JSX.Element => {
-  const [toasts, setToasts] = React.useState<Toast[]>([])
-  const [nextToast, setNextToast] = React.useState<Toast>()
+  const [toasts, setToasts] = useState<Toast[]>([])
+  const [nextToast, setNextToast] = useState<Toast>()
 
   const show = useCallback((info: ToastInfo) => {
     const newToast = new Toast()
@@ -49,7 +57,7 @@ const ToastProvider = ({ children, duration = 3000 }: ToastProviderProps): JSX.E
     }, 1000)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!nextToast) {
       setNextToast(toasts.shift())
     }
@@ -75,6 +83,6 @@ const ToastProvider = ({ children, duration = 3000 }: ToastProviderProps): JSX.E
   )
 }
 
-const useToast = (): ToastContextType => React.useContext(ToastContext)
+const useToast = (): ToastContextType => useContext(ToastContext)
 
 export { ToastProvider, useToast }

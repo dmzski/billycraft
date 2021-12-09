@@ -1,5 +1,5 @@
 import { Badge, Button } from '@coco-ui/core'
-import React from 'react'
+import { useState, useEffect } from 'react';
 import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 import { BillApi } from 'api/BillApi'
@@ -12,7 +12,7 @@ import { ROUTES } from '../../../routes'
 import BillForm from './Form'
 
 const BillFormPage = (): JSX.Element => {
-  const [newBill, setNewBill] = React.useState<Bill>({} as Bill)
+  const [newBill, setNewBill] = useState<Bill>({} as Bill)
   const queryCache = useQueryCache()
   const toast = useToast()
   const pdfState = useLoadingState()
@@ -55,7 +55,7 @@ const BillFormPage = (): JSX.Element => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNewBill(bill && id !== 'new' ? bill : ({} as Bill))
   }, [bill])
 

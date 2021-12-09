@@ -1,6 +1,5 @@
 import { TodoApi } from 'api/TodoApi';
 import Loader from 'components/Loader';
-import React from 'react';
 import { useQuery } from 'react-query';
 import TodoList from './List';
 

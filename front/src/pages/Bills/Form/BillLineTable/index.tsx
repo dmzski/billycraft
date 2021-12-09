@@ -3,7 +3,8 @@ import { ValueType } from '@coco-ui/core/dist/components/Select'
 import { ProductApi } from 'api/ProductApi'
 import { BillLine } from 'models/Bill'
 import { LineTypeEnum } from 'models/LineTypeEnum'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react';
+import * as React from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { Control, useFieldArray } from 'react-hook-form'
 import { useQuery } from 'react-query'

@@ -1,5 +1,4 @@
 import { Loader } from '@coco-ui/core';
-import React from 'react';
 import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi';
 import { useQuery } from 'react-query';
 import QuoteCustomizationForm from './Forms/QuoteCustomizationForm';

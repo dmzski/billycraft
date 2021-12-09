@@ -1,5 +1,4 @@
 import { Loader } from '@coco-ui/core';
-import React from 'react';
 import { BillCustomizationApi } from 'api/BillCustomizationApi';
 import { useQuery } from 'react-query';
 import BillCustomizationForm from './Forms/BillCustomizationForm';

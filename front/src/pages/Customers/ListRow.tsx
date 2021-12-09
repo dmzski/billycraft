@@ -1,5 +1,4 @@
 import { Table } from '@coco-ui/core'
-import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import CustomerModal from 'pages/Customers/Modals/CustomerModal'
 import Customer from 'models/Customer'
@@ -34,7 +33,7 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
         />
       </Table.Cell>
     </Table.Row>
-  )
+  );
 }
 
 export default QuoteTableLine

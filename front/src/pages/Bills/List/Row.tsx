@@ -5,7 +5,7 @@ import { STRINGS } from 'constants/strings'
 import { format, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from 'models/Bill'
 import Customer from 'models/Customer'
-import React, { MouseEvent } from 'react'
+import { useMemo, useCallback, MouseEvent } from 'react';
 import { useMutation, useQueryCache } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from 'routes'
@@ -53,7 +53,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
     history.push(ROUTES.BILL_FORM.path.replace(':id', bill.id))
   }
 
-  const getStatus = React.useMemo(() => {
+  const getStatus = useMemo(() => {
     const status = Object.values(BILL_STATUS).find(s => s.enum === bill.status)
 
     return (
@@ -64,7 +64,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
     )
   }, [bill])
 
-  const getNextStatuses = React.useCallback(() => {
+  const getNextStatuses = useCallback(() => {
     const array = []
     switch (bill.status) {
       case BillStatusEnum.SENT:

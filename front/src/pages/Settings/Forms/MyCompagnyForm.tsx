@@ -1,4 +1,5 @@
-import React, { ChangeEvent, FormEvent } from 'react'
+import { ChangeEvent, FormEvent } from 'react';
+import * as React from 'react';
 import { useMutation, useQueryCache } from 'react-query'
 import { useToast } from 'providers/ToastProvider'
 import useLoadingState from 'hooks/useLoadingState'

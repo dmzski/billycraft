@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useMemo, useEffect } from 'react';
 import { useMutation } from 'react-query'
 import { Button, Input, Select } from '@coco-ui/core'
 import { useToast } from 'providers/ToastProvider'
@@ -64,12 +64,12 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
     }
   }
 
-  const disabled = React.useMemo(
+  const disabled = useMemo(
     () => !!((bill.id && bill.status !== BillStatusEnum.DRAFT) || isUpdatingStatus),
     [bill, isUpdatingStatus],
   )
 
-  const customerOptions = React.useMemo(() => {
+  const customerOptions = useMemo(() => {
     const array = []
     if (customers) {
       array.push(

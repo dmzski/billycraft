@@ -1,6 +1,5 @@
 import { Icon } from '@coco-ui/core'
 import { useKeycloak } from '@react-keycloak/web'
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { VERSION } from 'constants/global'
 import { useUser } from 'providers/UserProvider'

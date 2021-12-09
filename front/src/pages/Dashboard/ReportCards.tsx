@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReportDTO } from '../../models/dtos/Report';
 import DashboardCard from './DashboardCard';
 import CounterAnimated from '../../components/CounterAnimated';

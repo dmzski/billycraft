@@ -1,4 +1,5 @@
-import React, { SyntheticEvent } from 'react'
+import { SyntheticEvent } from 'react';
+import * as React from 'react';
 import { ToastVariant } from 'models/Toast'
 
 type ToastContainerProps = {

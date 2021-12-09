@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Button, Loader } from '@coco-ui/core';
 import { CustomerApi } from 'api/CustomerApi';
@@ -14,7 +14,7 @@ const CustomerPage = (): JSX.Element => {
       refetchOnWindowFocus: false,
     },
   );
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const goToNewCustomer = () => {
     setIsOpen(true);

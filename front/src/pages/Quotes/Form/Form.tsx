@@ -1,5 +1,5 @@
 import { Button, Input, Select } from '@coco-ui/core'
-import React, { useEffect } from 'react'
+import { useMemo, useEffect } from 'react';
 import { useMutation } from 'react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { QuoteApi } from 'api/QuoteApi'
@@ -62,12 +62,12 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     }
   }
 
-  const disabled = React.useMemo(
+  const disabled = useMemo(
     () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT) || isUpdatingStatus),
     [quote, isUpdatingStatus],
   )
 
-  const customerOptions = React.useMemo(() => {
+  const customerOptions = useMemo(() => {
     const array = []
     if (customers) {
       array.push(

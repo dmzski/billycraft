@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import Loader from 'components/Loader'
 import { ROUTES } from 'routes'
-import React from 'react'
+import { useEffect } from 'react';
 import { useKeycloak } from '@react-keycloak/web'
 import { useUser } from 'providers/UserProvider'
 import BillDashboard from './Bills'
@@ -23,7 +23,7 @@ const PrivateSwitch = (): JSX.Element => {
   const history = useHistory()
   const location = useLocation()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user.data && keycloak.authenticated) {
       if (
         user.data.companyId === undefined &&

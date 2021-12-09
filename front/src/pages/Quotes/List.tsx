@@ -1,5 +1,4 @@
 import { Table, useTableState } from '@coco-ui/core';
-import React from 'react';
 import useCustomers from 'hooks/useCustomers';
 import Quote from 'models/Quote';
 import QuoteTableLine from './Row';

@@ -3,7 +3,8 @@ import { CompanyApi } from 'api/CompanyApi'
 import { UserApi } from 'api/UserApi'
 import Company from 'models/Company'
 import User from 'models/User'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react';
+import * as React from 'react';
 import { QueryResult, useQuery } from 'react-query'
 
 type UserContextType = QueryResult<User, unknown> & {

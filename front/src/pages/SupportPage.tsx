@@ -1,5 +1,4 @@
 import { Icon } from '@coco-ui/core'
-import React from 'react'
 
 const SupportPage = (): JSX.Element => (
   <div className="m-2">

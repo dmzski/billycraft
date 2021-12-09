@@ -6,7 +6,7 @@ import { formatRelative } from 'date-fns'
 // eslint-disable-next-line import/no-duplicates
 import { fr } from 'date-fns/locale'
 import { useToast } from 'providers/ToastProvider'
-import React from 'react'
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
 

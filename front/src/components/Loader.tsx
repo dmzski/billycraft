@@ -1,4 +1,3 @@
-import React from 'react';
 import { Loader as CocoLoader } from '@coco-ui/core';
 import { LoaderProps } from '@coco-ui/core/dist/components/Loader';
 

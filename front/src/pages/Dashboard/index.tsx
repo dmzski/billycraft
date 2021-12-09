@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Icon } from '@coco-ui/core';
 import { ReportApi } from '../../api/ReportApi';
@@ -9,7 +9,7 @@ import { ReportDTO } from '../../models/dtos/Report';
 import TodoList from './TodoList';
 
 const Dashboard = (): JSX.Element => {
-  const [dateTarget] = React.useState(new Date());
+  const [dateTarget] = useState(new Date());
   const monthReportQuery = useQuery<ReportDTO>(
     ['month-report', dateTarget],
     () => ReportApi.getMonthReport(dateTarget),

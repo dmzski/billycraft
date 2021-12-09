@@ -1,5 +1,4 @@
 import { Modal } from '@coco-ui/core';
-import React from 'react';
 import { useQueryCache } from 'react-query';
 import Customer from '../../../models/Customer';
 import CustomerForm from '../Form/Form';

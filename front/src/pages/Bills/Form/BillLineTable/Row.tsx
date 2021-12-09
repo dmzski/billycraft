@@ -1,6 +1,6 @@
 import { Icon, Input, List, Select, TextArea } from '@coco-ui/core'
 import { LineTypeEnum } from 'models/LineTypeEnum'
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { LINE_TYPE } from 'constants/line'
 import { calculatePriceTTC } from 'utils/bill'

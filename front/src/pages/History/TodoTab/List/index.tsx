@@ -1,7 +1,6 @@
 import { Table } from '@coco-ui/core';
 import { formatISO9075 } from 'date-fns';
 import { Todo } from 'models/Todo';
-import React from 'react';
 
 type TodoListProps = {
   data: Todo[];

@@ -1,9 +1,9 @@
 import Company from 'models/Company';
-import React from 'react';
+import { useState } from 'react';
 import MyCompagnyForm from './Settings/Forms/MyCompagnyForm';
 
 const Onboarding = (): JSX.Element => {
-  const [company, setCompany] = React.useState<Company>({} as Company);
+  const [company, setCompany] = useState<Company>({} as Company);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

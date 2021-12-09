@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table, useTableState } from '@coco-ui/core';
 import Customer from 'models/Customer';
 import CustomerTableLine from './ListRow';

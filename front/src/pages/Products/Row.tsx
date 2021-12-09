@@ -1,7 +1,7 @@
 import {
   Button, Icon, Input, Select, Table, TextArea,
 } from '@coco-ui/core';
-import React from 'react';
+import * as React from 'react';
 import { useMutation, useQueryCache } from 'react-query';
 import { LINE_TYPE } from 'constants/line';
 import { LineTypeEnum } from 'models/LineTypeEnum';

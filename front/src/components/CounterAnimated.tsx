@@ -1,9 +1,9 @@
-import React from 'react'
+import { useState, useEffect } from 'react';
 
 const CounterAnimated = ({ value }: { value: number }): JSX.Element => {
-  const [counter, setCounter] = React.useState(0)
+  const [counter, setCounter] = useState(0)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCounter(0)
     let initialCounter = 0
     const interval = setInterval(() => {

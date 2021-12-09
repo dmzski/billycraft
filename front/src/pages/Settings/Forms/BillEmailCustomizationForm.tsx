@@ -1,5 +1,5 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
-import React, { ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import BillEmailCustomization from '../../../models/BillEmailCustomization'
 
 const defaultValues = {
@@ -20,9 +20,9 @@ const BillEmailCustomizationForm = ({
   const [
     newBillEmailCustomization,
     setNewBillEmailCustomization,
-  ] = React.useState<BillEmailCustomization>(billEmailCustomization || defaultValues)
+  ] = useState<BillEmailCustomization>(billEmailCustomization || defaultValues)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNewBillEmailCustomization(billEmailCustomization || defaultValues)
   }, [billEmailCustomization])
 

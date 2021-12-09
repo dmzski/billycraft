@@ -1,5 +1,4 @@
 import { ProductApi } from 'api/ProductApi';
-import React from 'react';
 import { useQuery } from 'react-query';
 import Loader from '../../components/Loader';
 import ProductTable from './List';

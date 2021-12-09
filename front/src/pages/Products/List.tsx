@@ -1,5 +1,4 @@
 import { Table } from '@coco-ui/core';
-import React from 'react';
 import ProductTableLine from 'pages/Products/Row';
 import Product from 'models/Product';
 

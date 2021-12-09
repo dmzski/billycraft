@@ -1,7 +1,6 @@
 import { Table, useTableState } from '@coco-ui/core';
 import useCustomers from 'hooks/useCustomers';
 import Bill from 'models/Bill';
-import React from 'react';
 import BillTableLine from './Row';
 
 const BillList = ({ data }: { data: Bill[] }): JSX.Element => {

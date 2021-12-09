@@ -1,8 +1,8 @@
 import { Icon, Input } from '@coco-ui/core'
-import React, { ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react';
 
 const SearchBar = (): JSX.Element => {
-  const [search, setSearch] = React.useState('')
+  const [search, setSearch] = useState('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)

@@ -1,6 +1,5 @@
 import { IconName } from '@coco-ui/core/dist/components/Icon';
 import { ROUTES } from 'routes';
-import React from 'react';
 import MenuItem from './MenuItem';
 
 const menuRoutes = [

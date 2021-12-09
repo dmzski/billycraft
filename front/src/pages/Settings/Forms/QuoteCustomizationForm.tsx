@@ -2,7 +2,7 @@ import { Button, Input, Switch, TextArea } from '@coco-ui/core'
 import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
 import { STRINGS } from 'constants/strings'
 import QuoteCustomization from 'models/QuoteCustomization'
-import React, { ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useMutation } from 'react-query'
 import { useToast } from '../../../providers/ToastProvider'
 
@@ -12,7 +12,7 @@ type QuoteCustomizationFormProps = {
 const QuoteCustomizationForm = ({
   quoteCustomization,
 }: QuoteCustomizationFormProps): JSX.Element => {
-  const [newQuoteCustomization, setNewQuoteCustomization] = React.useState<QuoteCustomization>(
+  const [newQuoteCustomization, setNewQuoteCustomization] = useState<QuoteCustomization>(
     {} as QuoteCustomization,
   )
   const toast = useToast()
@@ -39,7 +39,7 @@ const QuoteCustomizationForm = ({
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (quoteCustomization) {
       setNewQuoteCustomization(quoteCustomization)
     }

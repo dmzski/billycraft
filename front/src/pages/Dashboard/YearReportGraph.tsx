@@ -1,11 +1,11 @@
-import React from 'react'
+import { useMemo } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format, parseJSON } from 'date-fns'
 import { ReportDTO } from '../../models/dtos/Report'
 import { getNormalizedDate } from '../../utils/date'
 
 const YearReportGraph = ({ report }: { report: ReportDTO }): JSX.Element => {
-  const data = React.useMemo(() => {
+  const data = useMemo(() => {
     if (report) {
       return report.details.map(monthReport => ({
         name: format(getNormalizedDate(parseJSON(monthReport.startDate)), 'MM-yyyy'),

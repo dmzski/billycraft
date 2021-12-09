@@ -1,6 +1,5 @@
 import { Icon } from '@coco-ui/core';
 import { IconName } from '@coco-ui/core/dist/components/Icon';
-import React from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 type MenuItemProps = {

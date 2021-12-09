@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import SearchBar from 'layout/SearchBar';
 import useBreakpoint from 'hooks/useBreakpoint';
 import SideBar from './SideBar';
