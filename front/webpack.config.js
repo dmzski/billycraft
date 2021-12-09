@@ -1,6 +1,10 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+
+const PUBLIC_PATH = path.resolve(__dirname, 'public')
+const BUILD_PATH = path.resolve(__dirname, 'build')
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -36,15 +40,22 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    plugins: [
+      new TsconfigPathsPlugin({
+        baseUrl: './src',
+      }),
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/index.html'),
+      template: 'public/index.html',
     }),
     new CleanWebpackPlugin(),
   ],
   devServer: {
-    static: path.join(__dirname, './src'),
+    static: {
+      directory: PUBLIC_PATH,
+    },
     port: 3000,
     hot: 'only',
     compress: true,
