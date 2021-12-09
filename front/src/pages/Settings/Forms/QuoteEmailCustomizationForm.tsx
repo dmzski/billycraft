@@ -1,18 +1,17 @@
-import { Button, Switch, Input, TextArea } from "@coco-ui/core";
-import React from "react";
-import { FormEvent } from "react-router/node_modules/@types/react";
-import QuoteEmailCustomization from "../../../models/QuoteEmailCustomization";
+import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import React, { ChangeEvent, FormEvent } from 'react'
+import QuoteEmailCustomization from '../../../models/QuoteEmailCustomization'
 
 const defaultValues = {
-  body: "",
-  object: "",
+  body: '',
+  object: '',
   sendAutomatically: false,
-} as QuoteEmailCustomization;
+} as QuoteEmailCustomization
 
 type QuoteEmailCustomizationFormProps = {
-  quoteEmailCustomization: QuoteEmailCustomization;
-  onSubmit: (e: FormEvent, data: QuoteEmailCustomization) => void;
-};
+  quoteEmailCustomization: QuoteEmailCustomization
+  onSubmit: (e: FormEvent, data: QuoteEmailCustomization) => void
+}
 const QuoteEmailCustomizationForm = ({
   quoteEmailCustomization,
   onSubmit,
@@ -20,26 +19,21 @@ const QuoteEmailCustomizationForm = ({
   const [
     newQuoteEmailCustomization,
     setNewQuoteEmailCustomization,
-  ] = React.useState<QuoteEmailCustomization>(
-    quoteEmailCustomization || defaultValues
-  );
+  ] = React.useState<QuoteEmailCustomization>(quoteEmailCustomization || defaultValues)
 
   React.useEffect(() => {
-    setNewQuoteEmailCustomization(quoteEmailCustomization || defaultValues);
-  }, [quoteEmailCustomization]);
+    setNewQuoteEmailCustomization(quoteEmailCustomization || defaultValues)
+  }, [quoteEmailCustomization])
 
-  const handleToggle = (field: string) => (e: any) => {
+  const handleToggle = (field: string) => (e: ChangeEvent<HTMLInputElement>) => {
     setNewQuoteEmailCustomization({
       ...newQuoteEmailCustomization,
       [field]: e.target.checked,
-    });
-  };
+    })
+  }
 
   return (
-    <form
-      onSubmit={(e) => onSubmit(e, newQuoteEmailCustomization)}
-      className="w-full"
-    >
+    <form onSubmit={e => onSubmit(e, newQuoteEmailCustomization)} className="w-full">
       <h2 className="text-2xl">Personnalisation de l&lsquo;email</h2>
       <div className="ml-4">
         <div className="my-4 flex">
@@ -47,11 +41,11 @@ const QuoteEmailCustomizationForm = ({
             labelPosition="right"
             checked={newQuoteEmailCustomization.sendAutomatically}
             id="sendQuoteAutomatically"
-            onChange={handleToggle("sendAutomatically")}
+            onChange={handleToggle('sendAutomatically')}
           >
             <div className="ml-2">
-              Envoyer l&lsquo;email automatiquement lorsque le devis passe au
-              status &ldquo;Envoyé&ldquo;
+              Envoyer l&lsquo;email automatiquement lorsque le devis passe au status
+              &ldquo;Envoyé&ldquo;
             </div>
           </Switch>
         </div>
@@ -67,9 +61,7 @@ const QuoteEmailCustomizationForm = ({
             id="email-subject"
             label="Objet du mail"
             value={newQuoteEmailCustomization.object}
-            onChange={(
-              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
               setNewQuoteEmailCustomization({
                 ...newQuoteEmailCustomization,
                 object: e.target.value,
@@ -85,9 +77,7 @@ const QuoteEmailCustomizationForm = ({
             label="Corps du mail"
             rows={5}
             value={newQuoteEmailCustomization.body}
-            onChange={(
-              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
               setNewQuoteEmailCustomization({
                 ...newQuoteEmailCustomization,
                 body: e.target.value,
@@ -102,7 +92,7 @@ const QuoteEmailCustomizationForm = ({
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default QuoteEmailCustomizationForm;
+export default QuoteEmailCustomizationForm

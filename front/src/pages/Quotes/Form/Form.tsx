@@ -1,113 +1,103 @@
-import { Button, Select, Input } from "@coco-ui/core";
-import React, { useEffect } from "react";
-import { useMutation } from "react-query";
-import Quote, { QuoteLine } from "../../../models/Quote";
-import QuoteLineTable from "./QuoteLineTable";
-import { QuoteStatusEnum } from "../../../models/Quote";
-import { Controller, useForm } from "react-hook-form";
-import { QuoteApi } from "api/QuoteApi";
-import { useToast } from "providers/ToastProvider";
-import { Prompt } from "react-router";
-import useCustomers from "hooks/useCustomers";
-import { STRINGS } from "constants/strings";
+import { Button, Input, Select } from '@coco-ui/core'
+import React, { useEffect } from 'react'
+import { useMutation } from 'react-query'
+import { Controller, useForm } from 'react-hook-form'
+import { QuoteApi } from 'api/QuoteApi'
+import { useToast } from 'providers/ToastProvider'
+import { Prompt } from 'react-router-dom'
+import useCustomers from 'hooks/useCustomers'
+import { STRINGS } from 'constants/strings'
+import Quote, { QuoteStatusEnum, QuoteLine } from '../../../models/Quote'
+import QuoteLineTable from './QuoteLineTable'
 
-const defaultQuote = {} as Partial<Quote>;
+const defaultQuote = {} as Partial<Quote>
 
 type QuoteFormProps = {
-  quote: Quote;
-  onSubmitSuccess: (res: Quote) => Promise<void> | void;
-};
+  quote: Quote
+  onSubmitSuccess: (res: Quote) => Promise<void> | void
+}
 const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
-  const toast = useToast();
-  const customers = useCustomers();
+  const toast = useToast()
+  const customers = useCustomers()
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting, isDirty },
     reset,
   } = useForm({
-    mode: "all",
+    mode: 'all',
     shouldFocusError: true,
     defaultValues: defaultQuote,
-  });
-  const [
-    updateQuoteStatusMutation,
-    { isLoading: isUpdatingStatus },
-  ] = useMutation(QuoteApi.updateStatus);
+  })
+  const [updateQuoteStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
+    QuoteApi.updateStatus,
+  )
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
-      const res = await updateQuoteStatusMutation({ id: quote.id, status });
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
-      onSubmitSuccess(res as Quote);
+      const res = await updateQuoteStatusMutation({ id: quote.id, status })
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      onSubmitSuccess(res as Quote)
     } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
     }
-  };
+  }
 
   const onSubmit = async (data: Quote) => {
-    const tmp = { ...data };
+    const tmp = { ...data }
     tmp.lines = (tmp.lines ?? []).map((line: QuoteLine, index: number) => ({
       ...line,
       line: index + 1,
       price: line.price ? Number(`${line.price}`) : null,
       quantity: line.quantity ? Number(`${line.quantity}`) : null,
-    }));
+    }))
     try {
-      const res = await QuoteApi.createOrUpdate(tmp);
-      onSubmitSuccess(res);
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+      const res = await QuoteApi.createOrUpdate(tmp)
+      onSubmitSuccess(res)
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
     } catch {
       toast.show({
         message: STRINGS.SAVE_ERROR,
-        variant: "error",
-      });
+        variant: 'error',
+      })
     }
-  };
+  }
 
   const disabled = React.useMemo(
-    () =>
-      (quote.id && quote.status !== QuoteStatusEnum.DRAFT) || isUpdatingStatus
-        ? true
-        : false,
-    [quote, isUpdatingStatus]
-  );
+    () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT) || isUpdatingStatus),
+    [quote, isUpdatingStatus],
+  )
 
   const customerOptions = React.useMemo(() => {
-    const array = [];
+    const array = []
     if (customers) {
       array.push(
         ...customers
           .filter(({ deleted }) => !deleted)
-          .map((customer) => ({
+          .map(customer => ({
             value: customer.id,
             label: customer.name,
-          }))
-      );
+          })),
+      )
     }
-    if (
-      quote.customerId &&
-      !array.find(({ value }) => value === quote.customerId)
-    ) {
-      const customer = customers.find(({ id }) => id === quote.customerId);
-      if (customer) array.push({ value: customer.id, label: customer.name });
+    if (quote.customerId && !array.find(({ value }) => value === quote.customerId)) {
+      const customer = customers.find(({ id }) => id === quote.customerId)
+      if (customer) array.push({ value: customer.id, label: customer.name })
     }
 
-    return array;
-  }, [customers, quote.customerId]);
+    return array
+  }, [customers, quote.customerId])
 
   useEffect(() => {
     if (quote) {
-      reset(quote);
+      reset(quote)
     }
-  }, [reset, quote]);
+  }, [reset, quote])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Prompt
         when={isDirty}
-        message={() =>
-          `Attention ! Certaines modifications ne sont pas enregistrées`
-        }
+        message={() => 'Attention ! Certaines modifications ne sont pas enregistrées'}
       />
       <Controller
         name="title"
@@ -190,9 +180,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             Envoyer le devis
           </Button>
         ) : null}
-        {!quote.id ||
-        quote.status === QuoteStatusEnum.DRAFT ||
-        !quote.status ? (
+        {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
           <Button
             variant="primary"
             size="md"
@@ -275,7 +263,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         ) : null}
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default QuoteForm;
+export default QuoteForm

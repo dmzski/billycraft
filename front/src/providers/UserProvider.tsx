@@ -1,39 +1,38 @@
-import { useKeycloak } from "@react-keycloak/web";
-import { CompanyApi } from "api/CompanyApi";
-import { UserApi } from "api/UserApi";
-import React from "react";
-import { useQuery } from "react-query";
+import { useKeycloak } from '@react-keycloak/web'
+import { CompanyApi } from 'api/CompanyApi'
+import { UserApi } from 'api/UserApi'
+import Company from 'models/Company'
+import User from 'models/User'
+import React, { useMemo } from 'react'
+import { QueryResult, useQuery } from 'react-query'
 
-const UserContext = React.createContext<any>({} as any);
+type UserContextType = QueryResult<User, unknown> & {
+  company?: Company
+}
+const UserContext = React.createContext<UserContextType>({} as UserContextType)
 
 type UserProviderProps = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
-  const { keycloak } = useKeycloak();
-  const myInformationQuery = useQuery(
-    "my-information",
-    UserApi.getMyInformation,
-    { enabled: keycloak.authenticated, refetchOnWindowFocus: false }
-  );
-  const myCompany = useQuery("my-company", CompanyApi.getMine, {
-    enabled:
-      myInformationQuery.data?.companyId !== undefined &&
-      keycloak.authenticated,
+  const { keycloak } = useKeycloak()
+  const myInformationQuery = useQuery('my-information', UserApi.getMyInformation, {
+    enabled: keycloak.authenticated,
     refetchOnWindowFocus: false,
-  });
+  })
+  const myCompany = useQuery('my-company', CompanyApi.getMine, {
+    enabled: myInformationQuery.data?.companyId !== undefined && keycloak.authenticated,
+    refetchOnWindowFocus: false,
+  })
 
-  return (
-    <UserContext.Provider
-      value={{ ...myInformationQuery, company: myCompany.data }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
-};
+  const value = useMemo(() => ({ ...myInformationQuery, company: myCompany.data }), [
+    myInformationQuery,
+    myCompany.data,
+  ])
 
-const useUser = (): any => {
-  return React.useContext(UserContext);
-};
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+}
 
-export { UserProvider, useUser };
+const useUser = (): UserContextType => React.useContext(UserContext)
+
+export { UserProvider, useUser }

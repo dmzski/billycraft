@@ -1,27 +1,26 @@
-import { Icon } from "@coco-ui/core";
-import { useKeycloak } from "@react-keycloak/web";
-import React from "react";
-import { Link } from "react-router-dom";
-import { VERSION } from "constants/global";
-import { useUser } from "providers/UserProvider";
-import { ROUTES } from "routes";
-import SideBarMenu from "./SideBarMenu";
+import { Icon } from '@coco-ui/core'
+import { useKeycloak } from '@react-keycloak/web'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { VERSION } from 'constants/global'
+import { useUser } from 'providers/UserProvider'
+import { ROUTES } from 'routes'
+import SideBarMenu from './SideBarMenu'
 
 const SideBar = (): JSX.Element => {
-  const user = useUser();
-  const { keycloak } = useKeycloak();
+  const user = useUser()
+  const { keycloak } = useKeycloak()
 
   const logout = () => {
-    keycloak.logout();
-  };
+    keycloak.logout()
+  }
 
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex flex-col items-center justify-center mt-4">
         {user.data ? (
           <p className="text-xs">
-            Connecté en tant que{" "}
-            <span className="text-primary-700">{user.data.firstName}</span>
+            Connecté en tant que <span className="text-primary-700">{user.data.firstName}</span>
           </p>
         ) : null}
         {user.company?.name ? (
@@ -31,13 +30,9 @@ const SideBar = (): JSX.Element => {
           </div>
         ) : null}
         {user.company?.logo ? (
-          <img
-            src={user.company?.logo}
-            className="h-24 mb-2 w-24 object-contain"
-            alt="Logo"
-          />
+          <img src={user.company?.logo} className="h-24 mb-2 w-24 object-contain" alt="Logo" />
         ) : (
-          <div className="h-24"></div>
+          <div className="h-24" />
         )}
       </div>
 
@@ -62,19 +57,19 @@ const SideBar = (): JSX.Element => {
             <Icon name="question-mark-circle" />
             <span className="mx-4 font-medium">Support</span>
           </Link>
-          <Link
-            to="#"
-            className="border-r-4 border-white flex items-center py-2 px-8 text-error-700 hover:bg-error-200 hover:border-error-700"
+          <button
+            type="button"
+            className="appearance-none border-r-4 border-white flex items-center py-2 px-8 text-error-700 hover:bg-error-200 hover:border-error-700"
             onClick={logout}
           >
             <Icon name="logout" type="outline" />
             <span className="mx-4 font-medium">Déconnexion</span>
-          </Link>
+          </button>
           <div className="text-xs text-center">{VERSION}</div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SideBar;
+export default SideBar

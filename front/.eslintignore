@@ -1,0 +1,5 @@
+# From .gitignore
+node_modules/
+serviceWorker.ts
+*.css
+*.svg

@@ -1,20 +1,19 @@
-import { Icon, List, Select, Input, TextArea } from "@coco-ui/core";
-import { LineTypeEnum } from "models/LineTypeEnum";
-import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
-import { Control, Controller, useWatch } from "react-hook-form";
-import { LINE_TYPE } from "../../../../constants/line";
-import { calculatePriceTTC } from "../../../../utils/quote";
-import React from "react";
-import { ChangeEvent } from "react-router/node_modules/@types/react";
+import { Icon, Input, List, Select, TextArea } from '@coco-ui/core'
+import { LineTypeEnum } from 'models/LineTypeEnum'
+import { ChangeEvent } from 'react'
+import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
+import { Control, Controller, useWatch } from 'react-hook-form'
+import { LINE_TYPE } from '../../../../constants/line'
+import { calculatePriceTTC } from '../../../../utils/quote'
 
 type QuoteLineTableLineProps = {
-  deleteLine: () => void;
-  disabled?: boolean;
-  provided?: DraggableProvided;
-  snapshot?: DraggableStateSnapshot;
-  index: number;
-  control: Control;
-};
+  deleteLine: () => void
+  disabled?: boolean
+  provided?: DraggableProvided
+  snapshot?: DraggableStateSnapshot
+  index: number
+  control: Control
+}
 const QuoteLineTableLine = ({
   deleteLine,
   disabled,
@@ -22,23 +21,25 @@ const QuoteLineTableLine = ({
   index,
   control,
 }: QuoteLineTableLineProps): JSX.Element => {
-  const tva = useWatch({ control: control, name: "tva" });
+  const tva = useWatch({ control, name: 'tva' })
 
   const price = useWatch({
     control,
     name: `lines.${index}.price`,
     defaultValue: 0,
-  });
+  })
   const quantity = useWatch({
     control,
     name: `lines.${index}.quantity`,
     defaultValue: 0,
-  });
+  })
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <div ref={provided?.innerRef} {...provided?.draggableProps}>
       <List.Row className="bg-background">
         <List.Cell
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
           className="w-12 items-center flex"
         >
@@ -55,14 +56,14 @@ const QuoteLineTableLine = ({
                 tabIndex={0}
                 error={invalid}
                 value={field.value}
-                onChange={(type) => field.onChange(type as LineTypeEnum)}
+                onChange={type => field.onChange(type as LineTypeEnum)}
                 ref={field.ref}
-                options={Object.values(LINE_TYPE).map((type) => ({
+                options={Object.values(LINE_TYPE).map(type => ({
                   value: type.enum,
                   label: type.name,
                 }))}
                 name={field.name}
-                id={field.name + "-select"}
+                id={`${field.name}-select`}
               />
             )}
           />
@@ -119,9 +120,7 @@ const QuoteLineTableLine = ({
                 name={field.name}
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
-                  field.onChange(
-                    Number((event.target as HTMLInputElement).value) || 0
-                  )
+                  field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 }
                 onBlur={field.onBlur}
               />
@@ -141,9 +140,7 @@ const QuoteLineTableLine = ({
                 step="0.01"
                 value={field.value}
                 onChange={(event: ChangeEvent) =>
-                  field.onChange(
-                    Number((event.target as HTMLInputElement).value) || 0
-                  )
+                  field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 }
                 onBlur={field.onBlur}
               />
@@ -151,11 +148,11 @@ const QuoteLineTableLine = ({
           />
         </List.Cell>
         <List.Cell className="w-48 py-2">
-          {Math.round(calculatePriceTTC(price, tva) * 100) / 100 || 0}&nbsp;€
+          {Math.round(calculatePriceTTC(price, tva) * 100) / 100 || 0}
+          &nbsp;€
         </List.Cell>
         <List.Cell className="w-52 py-2">
-          {Math.round(calculatePriceTTC(price, tva) * quantity * 100) / 100 ||
-            0}
+          {Math.round(calculatePriceTTC(price, tva) * quantity * 100) / 100 || 0}
           &nbsp;€
         </List.Cell>
         <List.Cell className="w-24 py-2">
@@ -165,16 +162,13 @@ const QuoteLineTableLine = ({
               className="w-full flex justify-center items-center apperance-none"
               onClick={deleteLine}
             >
-              <Icon
-                name="trash"
-                className="p-1 flex text-white rounded-full bg-error-600"
-              />
+              <Icon name="trash" className="p-1 flex text-white rounded-full bg-error-600" />
             </button>
           ) : null}
         </List.Cell>
       </List.Row>
     </div>
-  );
-};
+  )
+}
 
-export default QuoteLineTableLine;
+export default QuoteLineTableLine

@@ -1,104 +1,103 @@
-import { Button, Input } from "@coco-ui/core";
-import { TodoApi } from "api/TodoApi";
-import { STRINGS } from "constants/strings";
-import { formatRelative } from "date-fns";
-import { fr } from "date-fns/locale";
-import { useToast } from "providers/ToastProvider";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
+import { Button, Input } from '@coco-ui/core'
+import { TodoApi } from 'api/TodoApi'
+import { STRINGS } from 'constants/strings'
+// eslint-disable-next-line import/no-duplicates
+import { formatRelative } from 'date-fns'
+// eslint-disable-next-line import/no-duplicates
+import { fr } from 'date-fns/locale'
+import { useToast } from 'providers/ToastProvider'
+import React from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useQuery } from 'react-query'
 
-const dateOffset = 24 * 60 * 60 * 1000 * 7; //5 days
+const dateOffset = 24 * 60 * 60 * 1000 * 7 // 5 days
 
 const TodoList = (): JSX.Element => {
   const { data, refetch } = useQuery(
-    "todos-dashboard",
+    'todos-dashboard',
     () => TodoApi.findAllFinishedAfter(new Date(Date.now() - dateOffset)),
     {
       refetchOnWindowFocus: false,
-    }
-  );
-  const [editMode, setEditMode] = React.useState<number>();
-  const [editTodo, setEditTodo] = React.useState("");
-  const toast = useToast();
+    },
+  )
+  const [editMode, setEditMode] = React.useState<number>()
+  const [editTodo, setEditTodo] = React.useState('')
+  const toast = useToast()
 
   const { handleSubmit, control, reset, formState } = useForm({
-    mode: "all",
-  });
+    mode: 'all',
+  })
 
   const handleDone = React.useCallback(
     (id: number) => () => {
       const fn = async () => {
         try {
-          await TodoApi.done(id);
-          refetch();
-          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+          await TodoApi.done(id)
+          refetch()
+          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
         } catch {
-          toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
+          toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
         }
-      };
-      fn();
+      }
+      fn()
     },
-    [toast, refetch]
-  );
+    [toast, refetch],
+  )
 
-  const handleChangeEdit: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
-    (event) => {
-      setEditTodo(event.target.value);
-    },
-    []
-  );
+  const handleChangeEdit: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(event => {
+    setEditTodo(event.target.value)
+  }, [])
 
   const onSubmit = React.useCallback(
-    (data: { description: string }) => {
+    (values: { description: string }) => {
       const fn = async () => {
         try {
-          await TodoApi.create(data);
-          reset({ description: "" });
-          refetch();
-          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+          await TodoApi.create(values)
+          reset({ description: '' })
+          refetch()
+          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
         } catch {
           toast.show({
             message: STRINGS.SAVE_ERROR,
-            variant: "error",
-          });
+            variant: 'error',
+          })
         }
-      };
-      fn();
+      }
+      fn()
     },
-    [toast, refetch, reset]
-  );
+    [toast, refetch, reset],
+  )
 
   const handleEdit = React.useCallback(
     (id: number, description: string) => () => {
-      setEditMode(id);
-      setEditTodo(description);
+      setEditMode(id)
+      setEditTodo(description)
     },
-    []
-  );
+    [],
+  )
 
   const handleEditTodo = React.useCallback(() => {
     const fn = async () => {
       try {
-        await TodoApi.update(editMode as number, { description: editTodo });
-        setEditTodo("");
-        setEditMode(undefined);
-        refetch();
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+        await TodoApi.update(editMode as number, { description: editTodo })
+        setEditTodo('')
+        setEditMode(undefined)
+        refetch()
+        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
       } catch {
         toast.show({
           message: STRINGS.SAVE_ERROR,
-          variant: "error",
-        });
+          variant: 'error',
+        })
       }
-    };
-    fn();
-  }, [toast, refetch, editTodo, editMode]);
+    }
+    fn()
+  }, [toast, refetch, editTodo, editMode])
 
   const handleCancelEdit = React.useCallback(() => {
-    setEditMode(undefined);
-    setEditTodo("");
-  }, []);
+    setEditMode(undefined)
+    setEditTodo('')
+  }, [])
 
   return (
     <div>
@@ -135,8 +134,8 @@ const TodoList = (): JSX.Element => {
           Ajouter
         </Button>
       </form>
-      {data?.map((todo) => (
-        <div key={todo.id} className={`shadow mb-4 flex py-1 items-center`}>
+      {data?.map(todo => (
+        <div key={todo.id} className="shadow mb-4 flex py-1 items-center">
           <div className="ml-2 w-2/12">
             {formatRelative(new Date(todo.createdAt), Date.now(), {
               locale: fr,
@@ -147,11 +146,7 @@ const TodoList = (): JSX.Element => {
             {editMode !== todo.id ? (
               todo.description
             ) : (
-              <Input
-                onChange={handleChangeEdit as any}
-                value={editTodo}
-                name={`description-${todo.id}`}
-              />
+              <Input onChange={handleChangeEdit} value={editTodo} name={`description-${todo.id}`} />
             )}
           </div>
           <div className="w-4/12">
@@ -167,13 +162,7 @@ const TodoList = (): JSX.Element => {
                 >
                   Enregistrer
                 </Button>
-                <Button
-                  onClick={handleCancelEdit}
-                  variant="error"
-                  size="sm"
-                  iconSize={18}
-                  icon="x"
-                >
+                <Button onClick={handleCancelEdit} variant="error" size="sm" iconSize={18} icon="x">
                   Annuler
                 </Button>
               </div>
@@ -216,7 +205,7 @@ const TodoList = (): JSX.Element => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default TodoList;
+export default TodoList

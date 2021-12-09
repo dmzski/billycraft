@@ -1,50 +1,49 @@
-import { Button, Switch, Input, TextArea } from "@coco-ui/core";
-import { QuoteCustomizationApi } from "api/QuoteCustomizationApi";
-import { STRINGS } from "constants/strings";
-import QuoteCustomization from "models/QuoteCustomization";
-import React from "react";
-import { useMutation } from "react-query";
-import { useToast } from "../../../providers/ToastProvider";
+import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
+import { STRINGS } from 'constants/strings'
+import QuoteCustomization from 'models/QuoteCustomization'
+import React, { ChangeEvent, FormEvent } from 'react'
+import { useMutation } from 'react-query'
+import { useToast } from '../../../providers/ToastProvider'
 
 type QuoteCustomizationFormProps = {
-  quoteCustomization: QuoteCustomization;
-};
+  quoteCustomization: QuoteCustomization
+}
 const QuoteCustomizationForm = ({
   quoteCustomization,
 }: QuoteCustomizationFormProps): JSX.Element => {
-  const [
-    newQuoteCustomization,
-    setNewQuoteCustomization,
-  ] = React.useState<QuoteCustomization>({} as QuoteCustomization);
-  const toast = useToast();
-  const [
-    updateQuoteCustomizationMutation,
-    updateQuoteCustomizationMutationState,
-  ] = useMutation(QuoteCustomizationApi.updateMine, {
-    onSuccess: () => {
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+  const [newQuoteCustomization, setNewQuoteCustomization] = React.useState<QuoteCustomization>(
+    {} as QuoteCustomization,
+  )
+  const toast = useToast()
+  const [updateQuoteCustomizationMutation, updateQuoteCustomizationMutationState] = useMutation(
+    QuoteCustomizationApi.updateMine,
+    {
+      onSuccess: () => {
+        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      },
     },
-  });
+  )
 
   const handleToggle = (property: keyof QuoteCustomization) => () => {
-    setNewQuoteCustomization((current) => ({
+    setNewQuoteCustomization(current => ({
       ...current,
       [property]: !current[property],
-    }));
-  };
+    }))
+  }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault()
     if (!updateQuoteCustomizationMutationState.isLoading) {
-      updateQuoteCustomizationMutation(newQuoteCustomization);
+      updateQuoteCustomizationMutation(newQuoteCustomization)
     }
-  };
+  }
 
   React.useEffect(() => {
     if (quoteCustomization) {
-      setNewQuoteCustomization(quoteCustomization);
+      setNewQuoteCustomization(quoteCustomization)
     }
-  }, [quoteCustomization]);
+  }, [quoteCustomization])
 
   return (
     <form onSubmit={onSubmit} className="w-full">
@@ -54,17 +53,17 @@ const QuoteCustomizationForm = ({
           <div
             className="w-10 h-10 mr-4 border-2 border-black"
             style={{
-              backgroundColor: newQuoteCustomization.mainColor || "white",
+              backgroundColor: newQuoteCustomization.mainColor || 'white',
             }}
-          ></div>
+          />
           <Input
             id="mainColor"
             value={newQuoteCustomization.mainColor}
-            onChange={(e: any) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setNewQuoteCustomization({
                 ...newQuoteCustomization,
                 mainColor: e.target.value,
-              });
+              })
             }}
             label="Couleur principale"
             placeholder="Couleur en hexadecimale : #000000"
@@ -78,7 +77,7 @@ const QuoteCustomizationForm = ({
               <Switch
                 checked={newQuoteCustomization.displayCustomerEmail}
                 id="displayCustomerEmail"
-                onChange={handleToggle("displayCustomerEmail")}
+                onChange={handleToggle('displayCustomerEmail')}
               >
                 Afficher l&lsquo;email du client
               </Switch>
@@ -87,7 +86,7 @@ const QuoteCustomizationForm = ({
               <Switch
                 checked={newQuoteCustomization.displayCustomerPhoneNumber}
                 id="displayCustomerPhoneNumber"
-                onChange={handleToggle("displayCustomerPhoneNumber")}
+                onChange={handleToggle('displayCustomerPhoneNumber')}
               >
                 Afficher le téléphone du client
               </Switch>
@@ -99,7 +98,7 @@ const QuoteCustomizationForm = ({
               <Switch
                 checked={newQuoteCustomization.displayCompanyEmail}
                 id="displayCompanyEmail"
-                onChange={handleToggle("displayCompanyEmail")}
+                onChange={handleToggle('displayCompanyEmail')}
               >
                 Afficher l&lsquo;email de mon entreprise
               </Switch>
@@ -108,7 +107,7 @@ const QuoteCustomizationForm = ({
               <Switch
                 checked={newQuoteCustomization.displayCompanyPhoneNumber}
                 id="displayCompanyPhoneNumber"
-                onChange={handleToggle("displayCompanyPhoneNumber")}
+                onChange={handleToggle('displayCompanyPhoneNumber')}
               >
                 Afficher le téléphone de mon entreprise
               </Switch>
@@ -124,7 +123,7 @@ const QuoteCustomizationForm = ({
             value={newQuoteCustomization.afterTable}
             className="w-full"
             maxLength={1000}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewQuoteCustomization({
                 ...newQuoteCustomization,
                 afterTable: e.target.value,
@@ -141,7 +140,7 @@ const QuoteCustomizationForm = ({
             placeholder="Pied de page"
             value={newQuoteCustomization.footer}
             maxLength={1000}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewQuoteCustomization({
                 ...newQuoteCustomization,
                 footer: e.target.value,
@@ -154,7 +153,7 @@ const QuoteCustomizationForm = ({
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default QuoteCustomizationForm;
+export default QuoteCustomizationForm

@@ -1,29 +1,53 @@
 module.exports = {
   env: {
-    node: true,
-    commonjs: true,
+    browser: true,
+    es2021: true,
   },
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    'plugin:react/recommended',
+    'airbnb',
+    'prettier',
+    'plugin:@typescript-eslint/recommended',
   ],
-  parser: "@typescript-eslint/parser", // Specifies the ESLint parser
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2015, // Allows for the parsing of modern ECMAScript features
-    sourceType: "module", // Allows for the use of imports
     ecmaFeatures: {
-      jsx: true, // Allows for the parsing of JSX
+      jsx: true,
     },
+    ecmaVersion: 13,
+    sourceType: 'module',
   },
+  plugins: ['react', '@typescript-eslint'],
   rules: {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/setupTests.ts', '**/*.test.tsx', '**/*.spec.tsx'],
+      },
+    ],
+    'import/prefer-default-export': 'off',
+    semi: 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
+    'react/require-default-props': ['off', { extensions: ['.tsx'] }],
+    'react/jsx-filename-extension': ['off', { extensions: ['.tsx'] }],
+    'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
   },
   settings: {
-    react: {
-      version: "detect", // Tells eslint-plugin-react to automatically detect the version of React to use
+    'import/resolver': {
+      typescript: {},
     },
   },
-};
+  globals: {
+    React: true,
+    JSX: true,
+  },
+}

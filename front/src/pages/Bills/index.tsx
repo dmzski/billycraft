@@ -1,27 +1,30 @@
-import React from "react";
-import { useQuery } from "react-query";
-import BillTable from "./List";
-import { filterBills, sortBills } from "../../utils/bill";
-import BillFilterContainer from "./Filters";
-import { Button, Loader } from "@coco-ui/core";
-import useCustomers from "hooks/useCustomers";
-import { BillApi } from "api/BillApi";
-import { useHistory } from "react-router";
-import { ROUTES } from "routes";
+import { useCallback, useState } from 'react'
+import { useQuery } from 'react-query'
+import { Button, Loader } from '@coco-ui/core'
+import useCustomers from 'hooks/useCustomers'
+import { BillApi } from 'api/BillApi'
+import { useHistory } from 'react-router-dom'
+import { ROUTES } from 'routes'
+import BillFilterContainer from './Filters'
+import { filterBills, sortBills } from '../../utils/bill'
+import BillTable from './List'
+
+type BillFilters = Record<string, string>
 
 const BillPage = (): JSX.Element => {
-  const customers = useCustomers();
-  const [filters, setFilters] = React.useState<any>({});
-  const billsQuery = useQuery("bills", BillApi.findAllNotArchived);
-  const history = useHistory();
+  const customers = useCustomers()
+  const [filters, setFilters] = useState<BillFilters>({})
+  const billsQuery = useQuery('bills', BillApi.findAllNotArchived)
+  const history = useHistory()
 
-  const billSorted = React.useCallback(() => {
-    return sortBills(filterBills(billsQuery.data ?? [], filters, customers));
-  }, [billsQuery.data, filters]);
+  const billSorted = useCallback(
+    () => sortBills(filterBills(billsQuery.data ?? [], filters, customers)),
+    [billsQuery.data, filters],
+  )
 
   const goToNewBill = () => {
-    history.push(ROUTES.BILL_FORM.path.replace(":id", "new"));
-  };
+    history.push(ROUTES.BILL_FORM.path.replace(':id', 'new'))
+  }
 
   return (
     <>
@@ -39,7 +42,7 @@ const BillPage = (): JSX.Element => {
         </div>
       ) : null}
     </>
-  );
-};
+  )
+}
 
-export default BillPage;
+export default BillPage

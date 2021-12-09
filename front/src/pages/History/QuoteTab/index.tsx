@@ -1,22 +1,24 @@
-import { QuoteApi } from "api/QuoteApi";
-import Loader from "components/Loader";
-import useCustomers from "hooks/useCustomers";
-import QuoteFilterContainer from "pages/Quotes/Filters";
-import QuoteList from "pages/Quotes/List";
-import React from "react";
-import { useQuery } from "react-query";
-import { filterQuotes, sortQuotes } from "utils/quote";
+import { QuoteApi } from 'api/QuoteApi'
+import Loader from 'components/Loader'
+import useCustomers from 'hooks/useCustomers'
+import QuoteFilterContainer from 'pages/Quotes/Filters'
+import QuoteList from 'pages/Quotes/List'
+import { useCallback, useState } from 'react'
+import { useQuery } from 'react-query'
+import { filterQuotes, sortQuotes } from 'utils/quote'
 
+type QuoteFilters = Record<string, string>
 const QuoteTab = (): JSX.Element => {
-  const customers = useCustomers();
-  const [filters, setFilters] = React.useState<any>({});
+  const customers = useCustomers()
+  const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const quotesQuery = useQuery("quotes-archived", QuoteApi.findAllArchived, {
+  const quotesQuery = useQuery('quotes-archived', QuoteApi.findAllArchived, {
     refetchOnWindowFocus: false,
-  });
-  const quoteSorted = React.useCallback(() => {
-    return sortQuotes(filterQuotes(quotesQuery.data ?? [], filters, customers));
-  }, [filters, quotesQuery.data]);
+  })
+  const quoteSorted = useCallback(
+    () => sortQuotes(filterQuotes(quotesQuery.data ?? [], filters, customers)),
+    [filters, quotesQuery.data],
+  )
   return (
     <>
       <QuoteFilterContainer filters={filters} setFilters={setFilters} />
@@ -27,7 +29,7 @@ const QuoteTab = (): JSX.Element => {
         </div>
       ) : null}
     </>
-  );
-};
+  )
+}
 
-export default QuoteTab;
+export default QuoteTab

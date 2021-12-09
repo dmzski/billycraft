@@ -1,7 +1,7 @@
-import { IconName } from "@coco-ui/core/dist/components/Icon";
-import { ROUTES } from "routes";
-import React from "react";
-import MenuItem from "./MenuItem";
+import { IconName } from '@coco-ui/core/dist/components/Icon';
+import { ROUTES } from 'routes';
+import React from 'react';
+import MenuItem from './MenuItem';
 
 const menuRoutes = [
   ROUTES.DASHBOARD,
@@ -13,8 +13,7 @@ const menuRoutes = [
   ROUTES.SETTINGS,
 ];
 
-const SideBarMenu = (): JSX.Element => {
-  return (
+const SideBarMenu = (): JSX.Element => (
     <>
       {menuRoutes
         .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
@@ -27,7 +26,6 @@ const SideBarMenu = (): JSX.Element => {
           />
         ))}
     </>
-  );
-};
+  )
 
 export default SideBarMenu;

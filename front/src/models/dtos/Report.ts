@@ -1,9 +1,9 @@
-export class ReportDTO {
-  startDate = "";
-  endDate = "";
-  sales = 0;
-  articleSales = 0;
-  serviceSales = 0;
-  otherSales = 0;
-  details: ReportDTO[] = [];
+export type ReportDTO = {
+  startDate: string
+  endDate: string
+  sales: number
+  articleSales: number
+  serviceSales: number
+  otherSales: number
+  details: ReportDTO[]
 }

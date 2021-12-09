@@ -1,10 +1,9 @@
-import { Table } from "@coco-ui/core";
-import React from "react";
-import ProductTableLine from "pages/Products/Row";
-import Product from "models/Product";
+import { Table } from '@coco-ui/core';
+import React from 'react';
+import ProductTableLine from 'pages/Products/Row';
+import Product from 'models/Product';
 
-const ProductTable = ({ products }: { products: Product[] }): JSX.Element => {
-  return (
+const ProductTable = ({ products }: { products: Product[] }): JSX.Element => (
     <Table className="w-full table-fixed">
       <Table.Head>
         <Table.Row>
@@ -21,13 +20,12 @@ const ProductTable = ({ products }: { products: Product[] }): JSX.Element => {
         <ProductTableLine isNew product={{} as Product} />
         {products.map((product: Product) => (
           <ProductTableLine
-            key={product.id || "new-product"}
+            key={product.id || 'new-product'}
             product={product}
           />
         ))}
       </Table.Body>
     </Table>
-  );
-};
+  )
 
 export default ProductTable;

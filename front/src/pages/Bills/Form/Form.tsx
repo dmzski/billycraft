@@ -1,115 +1,105 @@
-import React, { useEffect } from "react";
-import { useMutation } from "react-query";
-import Bill, { BillLine } from "../../../models/Bill";
-import BillLineTable from "./BillLineTable";
-import { BillStatusEnum } from "../../../models/Bill";
-import { Button, Select, Input } from "@coco-ui/core";
-import { useToast } from "providers/ToastProvider";
-import { Controller, useForm } from "react-hook-form";
-import { BillApi } from "api/BillApi";
-import { Prompt } from "react-router";
-import useCustomers from "hooks/useCustomers";
-import { STRINGS } from "constants/strings";
+import React, { useEffect } from 'react'
+import { useMutation } from 'react-query'
+import { Button, Input, Select } from '@coco-ui/core'
+import { useToast } from 'providers/ToastProvider'
+import { Controller, useForm } from 'react-hook-form'
+import { BillApi } from 'api/BillApi'
+import { Prompt } from 'react-router-dom'
+import useCustomers from 'hooks/useCustomers'
+import { STRINGS } from 'constants/strings'
+import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
+import BillLineTable from './BillLineTable'
 
-const defaultBill = {} as Partial<Bill>;
+const defaultBill = {} as Partial<Bill>
 
 type BillFormProps = {
-  bill: Bill;
-  onSubmitSuccess: (res: Bill) => Promise<void> | void;
-};
+  bill: Bill
+  onSubmitSuccess: (res: Bill) => Promise<void> | void
+}
 
 const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
-  const toast = useToast();
-  const customers = useCustomers();
+  const toast = useToast()
+  const customers = useCustomers()
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting, isDirty },
     reset,
   } = useForm({
-    mode: "all",
+    mode: 'all',
     shouldFocusError: true,
     defaultValues: defaultBill,
-  });
-  const [
-    updateBillStatusMutation,
-    { isLoading: isUpdatingStatus },
-  ] = useMutation(BillApi.updateStatus);
+  })
+  const [updateBillStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
+    BillApi.updateStatus,
+  )
 
   const updateBillStatus = (status: BillStatusEnum) => async () => {
     try {
-      const res = await updateBillStatusMutation({ id: bill.id, status });
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
-      onSubmitSuccess(res as Bill);
+      const res = await updateBillStatusMutation({ id: bill.id, status })
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      onSubmitSuccess(res as Bill)
     } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
     }
-  };
+  }
 
   const onSubmit = async (data: Bill) => {
-    const tmp = { ...data };
+    const tmp = { ...data }
     tmp.lines = (tmp.lines ?? []).map((line: BillLine, index: number) => ({
       ...line,
       line: index + 1,
       price: line.price ? Number(`${line.price}`) : null,
       quantity: line.quantity ? Number(`${line.quantity}`) : null,
-    }));
+    }))
     try {
-      const res = await BillApi.createOrUpdate(tmp);
-      onSubmitSuccess(res);
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+      const res = await BillApi.createOrUpdate(tmp)
+      onSubmitSuccess(res)
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
     } catch {
       toast.show({
         message: STRINGS.SAVE_ERROR,
-        variant: "error",
-      });
+        variant: 'error',
+      })
     }
-  };
+  }
 
   const disabled = React.useMemo(
-    () =>
-      (bill.id && bill.status !== BillStatusEnum.DRAFT) || isUpdatingStatus
-        ? true
-        : false,
-    [bill, isUpdatingStatus]
-  );
+    () => !!((bill.id && bill.status !== BillStatusEnum.DRAFT) || isUpdatingStatus),
+    [bill, isUpdatingStatus],
+  )
 
   const customerOptions = React.useMemo(() => {
-    const array = [];
+    const array = []
     if (customers) {
       array.push(
         ...customers
           .filter(({ deleted }) => !deleted)
-          .map((customer) => ({
+          .map(customer => ({
             value: customer.id,
             label: customer.name,
-          }))
-      );
+          })),
+      )
     }
-    if (
-      bill.customerId &&
-      !array.find(({ value }) => value === bill.customerId)
-    ) {
-      const customer = customers.find(({ id }) => id === bill.customerId);
-      if (customer) array.push({ value: customer.id, label: customer.name });
+    if (bill.customerId && !array.find(({ value }) => value === bill.customerId)) {
+      const customer = customers.find(({ id }) => id === bill.customerId)
+      if (customer) array.push({ value: customer.id, label: customer.name })
     }
 
-    return array;
-  }, [customers, bill]);
+    return array
+  }, [customers, bill])
 
   useEffect(() => {
     if (bill) {
-      reset(bill);
+      reset(bill)
     }
-  }, [reset, bill]);
+  }, [reset, bill])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Prompt
         when={isDirty}
-        message={() =>
-          `Attention ! Certaines modifications ne sont pas enregistrées`
-        }
+        message={() => 'Attention ! Certaines modifications ne sont pas enregistrées'}
       />
       <Controller
         name="title"
@@ -237,7 +227,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         ) : null}
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default BillForm;
+export default BillForm

@@ -1,4 +1,4 @@
-import { LineTypeEnum } from "./LineTypeEnum";
+import { LineTypeEnum } from './LineTypeEnum';
 
 interface Product {
   id: number;

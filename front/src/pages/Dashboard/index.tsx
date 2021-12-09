@@ -1,28 +1,28 @@
-import React from "react";
-import { useQuery } from "react-query";
-import { ReportApi } from "../../api/ReportApi";
-import Loader from "../../components/Loader";
-import ReportCards from "./ReportCards";
-import YearReportGraph from "./YearReportGraph";
-import { ReportDTO } from "../../models/dtos/Report";
-import TodoList from "./TodoList";
-import { Icon } from "@coco-ui/core";
+import React from 'react';
+import { useQuery } from 'react-query';
+import { Icon } from '@coco-ui/core';
+import { ReportApi } from '../../api/ReportApi';
+import Loader from '../../components/Loader';
+import ReportCards from './ReportCards';
+import YearReportGraph from './YearReportGraph';
+import { ReportDTO } from '../../models/dtos/Report';
+import TodoList from './TodoList';
 
 const Dashboard = (): JSX.Element => {
   const [dateTarget] = React.useState(new Date());
   const monthReportQuery = useQuery<ReportDTO>(
-    ["month-report", dateTarget],
+    ['month-report', dateTarget],
     () => ReportApi.getMonthReport(dateTarget),
     {
       refetchOnWindowFocus: false,
-    }
+    },
   );
   const yearReportQuery = useQuery<ReportDTO>(
-    ["year-report", dateTarget],
+    ['year-report', dateTarget],
     () => ReportApi.getYearReport(dateTarget),
     {
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const monthReport = monthReportQuery.data || new ReportDTO();
@@ -60,6 +60,6 @@ const Dashboard = (): JSX.Element => {
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;

@@ -1,30 +1,33 @@
-import React from "react";
-import { useQuery } from "react-query";
-import QuoteList from "./List";
-import { filterQuotes, sortQuotes } from "../../utils/quote";
-import QuoteFilterContainer from "./Filters";
-import { useHistory } from "react-router-dom";
-import { Button, Loader } from "@coco-ui/core";
-import { ROUTES } from "routes";
-import { QuoteApi } from "api/QuoteApi";
-import useCustomers from "hooks/useCustomers";
+import { useCallback, useState } from 'react'
+import { useQuery } from 'react-query'
+import { useHistory } from 'react-router-dom'
+import { Button, Loader } from '@coco-ui/core'
+import { ROUTES } from 'routes'
+import { QuoteApi } from 'api/QuoteApi'
+import useCustomers from 'hooks/useCustomers'
+import QuoteFilterContainer from './Filters'
+import { filterQuotes, sortQuotes } from '../../utils/quote'
+import QuoteList from './List'
+
+type QuoteFilters = Record<string, string>
 
 const QuotePage = (): JSX.Element => {
-  const customers = useCustomers();
-  const [filters, setFilters] = React.useState<any>({});
+  const customers = useCustomers()
+  const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const quotesQuery = useQuery("quotes", QuoteApi.findAllNotArchived, {
+  const quotesQuery = useQuery('quotes', QuoteApi.findAllNotArchived, {
     refetchOnWindowFocus: false,
-  });
-  const history = useHistory();
+  })
+  const history = useHistory()
 
-  const quoteSorted = React.useCallback(() => {
-    return sortQuotes(filterQuotes(quotesQuery.data ?? [], filters, customers));
-  }, [filters, quotesQuery.data]);
+  const quoteSorted = useCallback(
+    () => sortQuotes(filterQuotes(quotesQuery.data ?? [], filters, customers)),
+    [filters, quotesQuery.data],
+  )
 
   const goToNewQuote = () => {
-    history.push(ROUTES.QUOTE_FORM.path.replace(":id", "new"));
-  };
+    history.push(ROUTES.QUOTE_FORM.path.replace(':id', 'new'))
+  }
 
   return (
     <>
@@ -42,7 +45,7 @@ const QuotePage = (): JSX.Element => {
         </div>
       ) : null}
     </>
-  );
-};
+  )
+}
 
-export default QuotePage;
+export default QuotePage

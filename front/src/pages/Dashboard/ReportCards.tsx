@@ -1,10 +1,9 @@
-import React from "react";
-import { ReportDTO } from "../../models/dtos/Report";
-import DashboardCard from "./DashboardCard";
-import CounterAnimated from "../../components/CounterAnimated";
+import React from 'react';
+import { ReportDTO } from '../../models/dtos/Report';
+import DashboardCard from './DashboardCard';
+import CounterAnimated from '../../components/CounterAnimated';
 
-const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => {
-  return (
+const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => (
     <div className="flex flex-wrap justify-between w-full items-center">
       <DashboardCard
         size="w-full md:w-1/2 lg:w-1/5"
@@ -54,7 +53,6 @@ const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => {
         <span>&nbsp;€</span>
       </DashboardCard>
     </div>
-  );
-};
+  )
 
 export default ReportCards;

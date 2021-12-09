@@ -1,6 +1,6 @@
-import Company from "models/Company";
-import React from "react";
-import MyCompagnyForm from "./Settings/Forms/MyCompagnyForm";
+import Company from 'models/Company';
+import React from 'react';
+import MyCompagnyForm from './Settings/Forms/MyCompagnyForm';
 
 const Onboarding = (): JSX.Element => {
   const [company, setCompany] = React.useState<Company>({} as Company);
@@ -26,6 +26,6 @@ const Onboarding = (): JSX.Element => {
       </div>
     </div>
   );
-};
+}
 
 export default Onboarding;

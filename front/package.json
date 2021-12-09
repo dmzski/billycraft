@@ -25,7 +25,7 @@
     "react-scripts": "4.0.3",
     "react-transition-group": "^4.4.1",
     "recharts": "^1.8.5",
-    "typescript": "^4.1.2"
+    "typescript": "^4.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,10 +34,8 @@
     "eject": "react-scripts eject",
     "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
     "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css -w",
-    "lint": "eslint --ext ts,tsx ."
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "lint": "eslint --ext ts,tsx .",
+    "lint:fix": "eslint --ext ts,tsx --fix ."
   },
   "browserslist": {
     "production": [
@@ -73,16 +71,17 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "@types/recharts": "^1.8.16",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "^9",
+    "eslint": "^8.4.1",
+    "eslint-config-airbnb": "^19.0.2",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.1.0",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-testing-library": "^3.9.2",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "postcss": "^7",
     "postcss-cli": "^8.0.0",
     "prettier": "^2.2.1",

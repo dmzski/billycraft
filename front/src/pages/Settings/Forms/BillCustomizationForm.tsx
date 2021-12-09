@@ -1,80 +1,78 @@
-import { Button, Switch, Input, TextArea } from "@coco-ui/core";
-import { BillCustomizationApi } from "api/BillCustomizationApi";
-import { STRINGS } from "constants/strings";
-import { ContentState, EditorState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import BillCustomization from "models/BillCustomization";
-import React from "react";
-import { useMutation } from "react-query";
-import { useToast } from "../../../providers/ToastProvider";
+import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import { BillCustomizationApi } from 'api/BillCustomizationApi'
+import { STRINGS } from 'constants/strings'
+import { ContentState, EditorState } from 'draft-js'
+import htmlToDraft from 'html-to-draftjs'
+import BillCustomization from 'models/BillCustomization'
+import React, { ChangeEvent } from 'react'
+import { useMutation } from 'react-query'
+import { useToast } from '../../../providers/ToastProvider'
 
 type BillCustomizationFormProps = {
-  billCustomization: BillCustomization;
-};
+  billCustomization: BillCustomization
+}
 
-const BillCustomizationForm = ({
-  billCustomization,
-}: BillCustomizationFormProps): JSX.Element => {
-  const [newBillCustomization, setNewBillCustomization] = React.useState<any>(
-    {} as any
-  );
-  const toast = useToast();
-  const [
-    updateBillCustomizationMutation,
-    updateBillCustomizationMutationState,
-  ] = useMutation(BillCustomizationApi.updateMine, {
-    onSuccess: () => {
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps): JSX.Element => {
+  const [newBillCustomization, setNewBillCustomization] = React.useState<BillCustomization>(
+    {} as BillCustomization,
+  )
+  const toast = useToast()
+  const [updateBillCustomizationMutation, updateBillCustomizationMutationState] = useMutation(
+    BillCustomizationApi.updateMine,
+    {
+      onSuccess: () => {
+        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      },
     },
-  });
+  )
   const [, setAfterTableEditor] = React.useState(() =>
     EditorState.createWithContent(
       ContentState.createFromBlockArray(
-        htmlToDraft(newBillCustomization.afterTable || "<div></div>")
-          .contentBlocks
-      )
-    )
-  );
+        htmlToDraft(newBillCustomization.afterTable || '<div></div>').contentBlocks,
+      ),
+    ),
+  )
   const [, setFooterEditor] = React.useState(() =>
     EditorState.createWithContent(
       ContentState.createFromBlockArray(
-        htmlToDraft(newBillCustomization.footer || "<div></div>").contentBlocks
-      )
-    )
-  );
+        htmlToDraft(newBillCustomization.footer || '<div></div>').contentBlocks,
+      ),
+    ),
+  )
 
-  const handleToggle = (property: string) => () => {
-    const tmp = { ...newBillCustomization };
-    tmp[property] = !tmp[property];
-    setNewBillCustomization(tmp);
-  };
+  const handleToggle = (property: keyof BillCustomization) => () => {
+    setNewBillCustomization(current => ({
+      ...current,
+      [property]: !current[property],
+    }))
+  }
 
   const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!updateBillCustomizationMutationState.isLoading) {
-      updateBillCustomizationMutation(newBillCustomization);
+      updateBillCustomizationMutation(newBillCustomization)
     }
-  };
+  }
 
   React.useEffect(() => {
     if (billCustomization) {
-      setNewBillCustomization(billCustomization);
+      setNewBillCustomization(billCustomization)
       setAfterTableEditor(
         EditorState.createWithContent(
           ContentState.createFromBlockArray(
-            htmlToDraft(billCustomization.afterTable || "").contentBlocks
-          )
-        )
-      );
+            htmlToDraft(billCustomization.afterTable || '').contentBlocks,
+          ),
+        ),
+      )
       setFooterEditor(
         EditorState.createWithContent(
           ContentState.createFromBlockArray(
-            htmlToDraft(billCustomization.footer || "").contentBlocks
-          )
-        )
-      );
+            htmlToDraft(billCustomization.footer || '').contentBlocks,
+          ),
+        ),
+      )
     }
-  }, [billCustomization]);
+  }, [billCustomization])
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col">
@@ -84,17 +82,17 @@ const BillCustomizationForm = ({
           <div
             className="w-10 h-10 mr-3 border-2 border-black"
             style={{
-              backgroundColor: newBillCustomization.mainColor || "white",
+              backgroundColor: newBillCustomization.mainColor || 'white',
             }}
-          ></div>
+          />
           <Input
             id="mainColor"
             value={newBillCustomization.mainColor}
-            onChange={(e: any) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setNewBillCustomization({
                 ...newBillCustomization,
                 mainColor: e.target.value,
-              });
+              })
             }}
             label="Couleur principale"
             placeholder="Couleur en hexadecimale : #000000"
@@ -108,7 +106,7 @@ const BillCustomizationForm = ({
               <Switch
                 checked={newBillCustomization.displayCustomerEmail}
                 id="displayCustomerEmail"
-                onChange={handleToggle("displayCustomerEmail")}
+                onChange={handleToggle('displayCustomerEmail')}
               >
                 Afficher l&lsquo;email du client
               </Switch>
@@ -117,7 +115,7 @@ const BillCustomizationForm = ({
               <Switch
                 checked={newBillCustomization.displayCustomerPhoneNumber}
                 id="displayCustomerPhoneNumber"
-                onChange={handleToggle("displayCustomerPhoneNumber")}
+                onChange={handleToggle('displayCustomerPhoneNumber')}
               >
                 Afficher le téléphone du client
               </Switch>
@@ -129,7 +127,7 @@ const BillCustomizationForm = ({
               <Switch
                 checked={newBillCustomization.displayCompanyEmail}
                 id="displayCompanyEmail"
-                onChange={handleToggle("displayCompanyEmail")}
+                onChange={handleToggle('displayCompanyEmail')}
               >
                 Afficher l&lsquo;email de mon entreprise
               </Switch>
@@ -138,7 +136,7 @@ const BillCustomizationForm = ({
               <Switch
                 checked={newBillCustomization.displayCompanyPhoneNumber}
                 id="displayCompanyPhoneNumber"
-                onChange={handleToggle("displayCompanyPhoneNumber")}
+                onChange={handleToggle('displayCompanyPhoneNumber')}
               >
                 Afficher le téléphone de mon entreprise
               </Switch>
@@ -154,10 +152,10 @@ const BillCustomizationForm = ({
             value={newBillCustomization.afterTable}
             className="w-full"
             maxLength={1000}
-            onChange={(e: React.ChangeEvent) =>
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewBillCustomization({
                 ...newBillCustomization,
-                afterTable: (e.target as HTMLTextAreaElement).value,
+                afterTable: e.target.value,
               })
             }
           />
@@ -184,7 +182,7 @@ const BillCustomizationForm = ({
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default BillCustomizationForm;
+export default BillCustomizationForm

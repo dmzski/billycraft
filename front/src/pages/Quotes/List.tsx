@@ -1,8 +1,8 @@
-import { Table, useTableState } from "@coco-ui/core";
-import React from "react";
-import useCustomers from "hooks/useCustomers";
-import Quote from "models/Quote";
-import QuoteTableLine from "./Row";
+import { Table, useTableState } from '@coco-ui/core';
+import React from 'react';
+import useCustomers from 'hooks/useCustomers';
+import Quote from 'models/Quote';
+import QuoteTableLine from './Row';
 
 type QuoteListProps = {
   data: Quote[];
@@ -10,7 +10,7 @@ type QuoteListProps = {
 const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
   const { data: quotes, sort, onSort } = useTableState({
     data,
-    initialSort: { field: "createdAt", order: "desc" },
+    initialSort: { field: 'createdAt', order: 'desc' },
   });
   const customers = useCustomers();
 
@@ -79,6 +79,6 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
       </Table.Body>
     </Table>
   );
-};
+}
 
 export default QuoteList;

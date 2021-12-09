@@ -1,13 +1,15 @@
-import { Button, Icon, Select, Table, Input, TextArea } from "@coco-ui/core";
-import React from "react";
-import { useMutation, useQueryCache } from "react-query";
-import { ProductApi } from "../../api/ProductApi";
-import Product from "../../models/Product";
-import { useToast } from "../../providers/ToastProvider";
-import { LINE_TYPE } from "constants/line";
-import { LineTypeEnum } from "models/LineTypeEnum";
-import { Controller, useForm } from "react-hook-form";
-import { STRINGS } from "constants/strings";
+import {
+  Button, Icon, Input, Select, Table, TextArea,
+} from '@coco-ui/core';
+import React from 'react';
+import { useMutation, useQueryCache } from 'react-query';
+import { LINE_TYPE } from 'constants/line';
+import { LineTypeEnum } from 'models/LineTypeEnum';
+import { Controller, useForm } from 'react-hook-form';
+import { STRINGS } from 'constants/strings';
+import { useToast } from '../../providers/ToastProvider';
+import Product from '../../models/Product';
+import { ProductApi } from '../../api/ProductApi';
 
 type ProductTableLineProps = {
   product: Product;
@@ -15,9 +17,9 @@ type ProductTableLineProps = {
 };
 
 const MODES = {
-  EDIT: "EDIT",
-  READ: "READ",
-  DELETE: "DELETE",
+  EDIT: 'EDIT',
+  READ: 'READ',
+  DELETE: 'DELETE',
 };
 
 const ProductTableLine = ({
@@ -28,11 +30,11 @@ const ProductTableLine = ({
   const defaultValues = React.useMemo(
     () => ({
       type: LineTypeEnum.ARTICLE,
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       price: 0,
     }),
-    []
+    [],
   );
   const {
     handleSubmit,
@@ -41,11 +43,11 @@ const ProductTableLine = ({
     reset,
   } = useForm({
     defaultValues,
-    mode: "all",
+    mode: 'all',
     shouldUnregister: true,
   });
   const [deleteProductMutation, deleteProductMutationState] = useMutation(
-    ProductApi.delete
+    ProductApi.delete,
   );
   const queryCache = useQueryCache();
 
@@ -61,52 +63,50 @@ const ProductTableLine = ({
       await ProductApi.createOrUpdate({
         id: product.id,
         description: data.description,
-        price: `${data.price}` !== "" ? parseFloat(`${data.price}`) : 0,
+        price: `${data.price}` !== '' ? parseFloat(`${data.price}`) : 0,
         type: data.type,
         name: data.name,
       });
       toast.show({
         message: STRINGS.SAVE_SUCCESS,
-        variant: "success",
+        variant: 'success',
       });
-      if (isNew)
+      if (isNew) {
         reset({
           type: LineTypeEnum.ARTICLE,
-          name: "",
-          description: "",
+          name: '',
+          description: '',
           price: 0,
         });
-      else setMode(MODES.READ);
+      } else setMode(MODES.READ);
 
-      queryCache.refetchQueries("products");
+      queryCache.refetchQueries('products');
     } catch {
       toast.show({
         message: STRINGS.SAVE_ERROR,
-        variant: "error",
+        variant: 'error',
       });
     }
   };
 
   const toggleDeleteMode = () => {
-    setMode((current) =>
-      current === MODES.DELETE ? MODES.READ : MODES.DELETE
-    );
+    setMode((current) => (current === MODES.DELETE ? MODES.READ : MODES.DELETE));
   };
 
   const onDelete = async () => {
     try {
       await deleteProductMutation(product.id);
-      queryCache.invalidateQueries("products");
-      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: "success" });
+      queryCache.invalidateQueries('products');
+      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' });
     } catch {
       toast.show({
         message: STRINGS.DELETE_ERROR,
-        variant: "error",
+        variant: 'error',
       });
     }
   };
 
-  const formID = `form-product-${product.id ?? "new"}`;
+  const formID = `form-product-${product.id ?? 'new'}`;
 
   React.useEffect(() => {
     if (product.id) {
@@ -170,7 +170,7 @@ const ProductTableLine = ({
               form={formID}
               rows={1}
               name={field.name}
-              value={field.value ?? ""}
+              value={field.value ?? ''}
               onChange={field.onChange}
               onBlur={field.onBlur}
               disabled={mode !== MODES.EDIT}
@@ -190,7 +190,7 @@ const ProductTableLine = ({
               <Input
                 form={formID}
                 name={field.name}
-                value={field.value ?? ""}
+                value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 disabled={mode !== MODES.EDIT}
@@ -282,6 +282,6 @@ const ProductTableLine = ({
       </Table.Cell>
     </Table.Row>
   );
-};
+}
 
 export default ProductTableLine;

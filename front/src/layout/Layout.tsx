@@ -1,8 +1,8 @@
-import React from "react";
-import SearchBar from "layout/SearchBar";
-import SideBar from "./SideBar";
-import useBreakpoint from "hooks/useBreakpoint";
-import MobileLayout from "./MobileLayout";
+import React from 'react';
+import SearchBar from 'layout/SearchBar';
+import useBreakpoint from 'hooks/useBreakpoint';
+import SideBar from './SideBar';
+import MobileLayout from './MobileLayout';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -28,6 +28,6 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
       </div>
     </div>
   );
-};
+}
 
 export default Layout;

@@ -1,11 +1,11 @@
-import { TodoApi } from "api/TodoApi";
-import Loader from "components/Loader";
-import React from "react";
-import { useQuery } from "react-query";
-import TodoList from "./List";
+import { TodoApi } from 'api/TodoApi';
+import Loader from 'components/Loader';
+import React from 'react';
+import { useQuery } from 'react-query';
+import TodoList from './List';
 
 const TodoTab = (): JSX.Element => {
-  const { data, isLoading } = useQuery("todos-done", TodoApi.findAllFinished);
+  const { data, isLoading } = useQuery('todos-done', TodoApi.findAllFinished);
 
   if (isLoading) {
     return (
@@ -16,6 +16,6 @@ const TodoTab = (): JSX.Element => {
   }
 
   return <TodoList data={data ?? []} />;
-};
+}
 
 export default TodoTab;

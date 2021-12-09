@@ -1,18 +1,18 @@
-import React from "react";
-import { useQuery } from "react-query";
-import CustomerTable from "./List";
-import CustomerModal from "./Modals/CustomerModal";
-import Customer from "../../models/Customer";
-import { Button, Loader } from "@coco-ui/core";
-import { CustomerApi } from "api/CustomerApi";
+import React from 'react';
+import { useQuery } from 'react-query';
+import { Button, Loader } from '@coco-ui/core';
+import { CustomerApi } from 'api/CustomerApi';
+import CustomerTable from './List';
+import CustomerModal from './Modals/CustomerModal';
+import Customer from '../../models/Customer';
 
 const CustomerPage = (): JSX.Element => {
   const customersQuery = useQuery(
-    ["customers", "not-deleted"],
+    ['customers', 'not-deleted'],
     CustomerApi.findAllNotDeleted,
     {
       refetchOnWindowFocus: false,
-    }
+    },
   );
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -43,6 +43,6 @@ const CustomerPage = (): JSX.Element => {
       </div>
     </>
   );
-};
+}
 
 export default CustomerPage;

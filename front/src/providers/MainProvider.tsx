@@ -1,28 +1,28 @@
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import React from "react";
-import { QueryCache, ReactQueryCacheProvider } from "react-query";
-import { fetchRegister } from "../utils/fetch-interceptor";
-import keycloak from "../utils/keycloak";
-import { ToastProvider } from "./ToastProvider";
-import { UserProvider } from "./UserProvider";
+import { ReactKeycloakProvider } from '@react-keycloak/web'
+import React from 'react'
+import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+import { fetchRegister } from '../utils/fetch-interceptor'
+import keycloak from '../utils/keycloak'
+import { ToastProvider } from './ToastProvider'
+import { UserProvider } from './UserProvider'
 
-const queryCache = new QueryCache();
+const queryCache = new QueryCache()
 
-const keycloakProviderInitConfig: any = {
-  onLoad: "login-required",
-  promiseType: "native",
+const keycloakProviderInitConfig = {
+  onLoad: 'login-required',
+  promiseType: 'native',
   checkLoginIframe: false,
-};
+}
 
 type MainProviderProps = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
-  const onKeycloakTokens = (tokens: any) => {
+  const onKeycloakTokens = (tokens: { idToken?: string }) => {
     if (tokens.idToken) {
-      fetchRegister(tokens.idToken);
+      fetchRegister(tokens.idToken)
     }
-  };
+  }
 
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
@@ -36,7 +36,7 @@ const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
         </ToastProvider>
       </ReactKeycloakProvider>
     </ReactQueryCacheProvider>
-  );
-};
+  )
+}
 
-export default MainProvider;
+export default MainProvider

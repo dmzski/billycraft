@@ -1,81 +1,76 @@
-import { Button, Input, TextArea } from "@coco-ui/core";
-import { CustomerApi } from "api/CustomerApi";
-import { STRINGS } from "constants/strings";
-import { useToast } from "providers/ToastProvider";
-import React, { useEffect, useCallback } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Customer from "../../../models/Customer";
+import { Button, Input, TextArea } from '@coco-ui/core'
+import { CustomerApi } from 'api/CustomerApi'
+import { STRINGS } from 'constants/strings'
+import { useToast } from 'providers/ToastProvider'
+import React, { useCallback, useEffect } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import Customer from '../../../models/Customer'
 
 const defaultCustomer = {
-  address: "",
-  name: "",
-  city: "",
-  phoneNumber: "",
-  contact: "",
-  email: "",
-  postalCode: "",
-} as Partial<Customer>;
+  address: '',
+  name: '',
+  city: '',
+  phoneNumber: '',
+  contact: '',
+  email: '',
+  postalCode: '',
+} as Partial<Customer>
 
 type CustomerFormProps = {
-  customer?: Customer;
-  onSubmitSuccess?: (data: Customer) => Promise<void> | void;
-};
-const CustomerForm = ({
-  customer,
-  onSubmitSuccess,
-}: CustomerFormProps): JSX.Element => {
-  const toast = useToast();
+  customer?: Customer
+  onSubmitSuccess?: (data: Customer) => Promise<void> | void
+}
+
+const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Element => {
+  const toast = useToast()
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting },
     reset,
   } = useForm({
-    mode: "all",
+    mode: 'all',
     defaultValues: defaultCustomer,
-  });
+  })
 
   const onSubmit = useCallback(async (data: Customer) => {
     try {
-      const res = await CustomerApi.createOrUpdate(data);
-      onSubmitSuccess?.(res);
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: "success" });
+      const res = await CustomerApi.createOrUpdate(data)
+      onSubmitSuccess?.(res)
+      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
     } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: "error" });
+      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
     }
-  }, []);
+  }, [])
 
   const tryDelete = useCallback(() => {
-    const deleteCustomer = confirm(
-      "Êtes-vous sur de vouloir supprimer ce client"
-    );
+    // eslint-disable-next-line no-alert
+    const deleteCustomer = window.confirm('Êtes-vous sur de vouloir supprimer ce client')
     if (deleteCustomer && customer?.id) {
       const asyncDelete = async () => {
         try {
-          await CustomerApi.delete(customer.id);
-          toast.show({ message: STRINGS.DELETE_SUCCESS, variant: "success" });
-          onSubmitSuccess?.({ ...customer, deleted: true });
+          await CustomerApi.delete(customer.id)
+          toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' })
+          onSubmitSuccess?.({ ...customer, deleted: true })
         } catch {
-          toast.show({ message: STRINGS.DELETE_ERROR, variant: "error" });
+          toast.show({ message: STRINGS.DELETE_ERROR, variant: 'error' })
         }
-      };
-      asyncDelete();
+      }
+      asyncDelete()
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (customer) {
-      reset(customer);
+      reset(customer)
     }
-  }, [reset, customer]);
+  }, [reset, customer])
 
   return (
     <div className="flex flex-col w-full">
       <div className="flex items-center border-b-2 border-gray-400 pb-3 w-full">
         <h1 className="ml-4 text-xl flex-grow">
-          {!customer?.id
-            ? `Nouveau client`
-            : `Modifier un client #${customer.id}`}
+          {!customer?.id ? 'Nouveau client' : `Modifier un client #${customer.id}`}
         </h1>
         {customer?.id ? (
           <Button variant="error" icon="trash" onClick={tryDelete}>
@@ -231,7 +226,7 @@ const CustomerForm = ({
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CustomerForm;
+export default CustomerForm

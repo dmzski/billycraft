@@ -1,18 +1,17 @@
-import { Button, Switch, Input, TextArea } from "@coco-ui/core";
-import React from "react";
-import { FormEvent } from "react-router/node_modules/@types/react";
-import BillEmailCustomization from "../../../models/BillEmailCustomization";
+import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import React, { ChangeEvent, FormEvent } from 'react'
+import BillEmailCustomization from '../../../models/BillEmailCustomization'
 
 const defaultValues = {
-  body: "",
-  object: "",
+  body: '',
+  object: '',
   sendAutomatically: false,
-} as BillEmailCustomization;
+} as BillEmailCustomization
 
 type BillEmailCustomizationFormProps = {
-  billEmailCustomization: BillEmailCustomization;
-  onSubmit: (e: FormEvent, values: BillEmailCustomization) => void;
-};
+  billEmailCustomization: BillEmailCustomization
+  onSubmit: (e: FormEvent, values: BillEmailCustomization) => void
+}
 
 const BillEmailCustomizationForm = ({
   billEmailCustomization,
@@ -21,26 +20,21 @@ const BillEmailCustomizationForm = ({
   const [
     newBillEmailCustomization,
     setNewBillEmailCustomization,
-  ] = React.useState<BillEmailCustomization>(
-    billEmailCustomization || defaultValues
-  );
+  ] = React.useState<BillEmailCustomization>(billEmailCustomization || defaultValues)
 
   React.useEffect(() => {
-    setNewBillEmailCustomization(billEmailCustomization || defaultValues);
-  }, [billEmailCustomization]);
+    setNewBillEmailCustomization(billEmailCustomization || defaultValues)
+  }, [billEmailCustomization])
 
-  const handleToggle = (field: string) => (e: any) => {
+  const handleToggle = (field: string) => (e: ChangeEvent<HTMLInputElement>) => {
     setNewBillEmailCustomization({
       ...newBillEmailCustomization,
       [field]: e.target.checked,
-    });
-  };
+    })
+  }
 
   return (
-    <form
-      onSubmit={(e) => onSubmit(e, newBillEmailCustomization)}
-      className="w-full"
-    >
+    <form onSubmit={e => onSubmit(e, newBillEmailCustomization)} className="w-full">
       <h2 className="text-2xl">Personnalisation de l&lsquo;email</h2>
       <div className="ml-4">
         <div className="my-4 flex">
@@ -48,11 +42,11 @@ const BillEmailCustomizationForm = ({
             labelPosition="right"
             checked={newBillEmailCustomization.sendAutomatically}
             id="sendAutomatically"
-            onChange={handleToggle("sendAutomatically")}
+            onChange={handleToggle('sendAutomatically')}
           >
             <div className="ml-2">
-              Envoyer l&lsquo;email automatiquement lorsque la facture passe au
-              status &ldquo;Envoyé&ldquo;
+              Envoyer l&lsquo;email automatiquement lorsque la facture passe au status
+              &ldquo;Envoyé&ldquo;
             </div>
           </Switch>
         </div>
@@ -69,7 +63,7 @@ const BillEmailCustomizationForm = ({
             name="object"
             label="Objet du mail"
             value={newBillEmailCustomization.object}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewBillEmailCustomization({
                 ...newBillEmailCustomization,
                 object: e.target.value,
@@ -86,7 +80,7 @@ const BillEmailCustomizationForm = ({
             label="Corps du mail"
             rows={5}
             value={newBillEmailCustomization.body}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewBillEmailCustomization({
                 ...newBillEmailCustomization,
                 body: e.target.value,
@@ -101,7 +95,7 @@ const BillEmailCustomizationForm = ({
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default BillEmailCustomizationForm;
+export default BillEmailCustomizationForm

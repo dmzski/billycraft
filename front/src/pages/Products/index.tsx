@@ -1,12 +1,12 @@
-import { ProductApi } from "api/ProductApi";
-import React from "react";
-import { useQuery } from "react-query";
-import Loader from "../../components/Loader";
-import ProductTable from "./List";
-import Product from "../../models/Product";
+import { ProductApi } from 'api/ProductApi';
+import React from 'react';
+import { useQuery } from 'react-query';
+import Loader from '../../components/Loader';
+import ProductTable from './List';
+import Product from '../../models/Product';
 
 const ProductsPage = (): JSX.Element => {
-  const productsQuery = useQuery("products", ProductApi.findAll, {
+  const productsQuery = useQuery('products', ProductApi.findAll, {
     refetchOnWindowFocus: false,
   });
   return (
@@ -26,14 +26,12 @@ const ProductsPage = (): JSX.Element => {
         {productsQuery.isError && <div>Une erreur est survenue</div>}
         {productsQuery.data && (
           <ProductTable
-            products={productsQuery.data.sort((a: Product, b: Product) =>
-              a.name.localeCompare(b.name)
-            )}
+            products={productsQuery.data.sort((a: Product, b: Product) => a.name.localeCompare(b.name))}
           />
         )}
       </div>
     </>
   );
-};
+}
 
 export default ProductsPage;

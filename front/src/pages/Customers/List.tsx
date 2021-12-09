@@ -1,12 +1,12 @@
-import React from "react";
-import { Table, useTableState } from "@coco-ui/core";
-import CustomerTableLine from "./ListRow";
-import Customer from "models/Customer";
+import React from 'react';
+import { Table, useTableState } from '@coco-ui/core';
+import Customer from 'models/Customer';
+import CustomerTableLine from './ListRow';
 
 const CustomerTable = ({ data = [] }: { data: Customer[] }): JSX.Element => {
   const { data: customers, sort, onSort } = useTableState({
     data,
-    initialSort: { field: "name", order: "asc" },
+    initialSort: { field: 'name', order: 'asc' },
   });
 
   return (
@@ -54,6 +54,6 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }): JSX.Element => {
       </Table.Body>
     </Table>
   );
-};
+}
 
 export default CustomerTable;

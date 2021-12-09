@@ -1,8 +1,8 @@
-import { Modal } from "@coco-ui/core";
-import React from "react";
-import { useQueryCache } from "react-query";
-import Customer from "../../../models/Customer";
-import CustomerForm from "../Form/Form";
+import { Modal } from '@coco-ui/core';
+import React from 'react';
+import { useQueryCache } from 'react-query';
+import Customer from '../../../models/Customer';
+import CustomerForm from '../Form/Form';
 
 type CustomerModalProps = {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const CustomerModal = ({
   const queryCache = useQueryCache();
 
   const onSubmitSuccess = (data: Customer) => {
-    queryCache.invalidateQueries("customers");
+    queryCache.invalidateQueries('customers');
     if (data.deleted) onRequestClose();
   };
 
@@ -26,6 +26,6 @@ const CustomerModal = ({
       <CustomerForm customer={customer} onSubmitSuccess={onSubmitSuccess} />
     </Modal>
   );
-};
+}
 
 export default CustomerModal;

@@ -1,16 +1,16 @@
-import { Loader } from "@coco-ui/core";
-import React from "react";
-import { QuoteCustomizationApi } from "api/QuoteCustomizationApi";
-import { useQuery } from "react-query";
-import QuoteCustomizationForm from "./Forms/QuoteCustomizationForm";
+import { Loader } from '@coco-ui/core';
+import React from 'react';
+import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi';
+import { useQuery } from 'react-query';
+import QuoteCustomizationForm from './Forms/QuoteCustomizationForm';
 
 const QuoteTab = (): JSX.Element => {
   const quoteCustomizationQuery = useQuery(
-    "quote-customization",
+    'quote-customization',
     QuoteCustomizationApi.findMine,
     {
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   return (
@@ -30,6 +30,6 @@ const QuoteTab = (): JSX.Element => {
       {quoteCustomizationQuery.isError && <div>Une erreur est survenue</div>}
     </div>
   );
-};
+}
 
 export default QuoteTab;
