@@ -1,4 +1,14 @@
-export const ROUTES = {
+import { IconName } from '@coco-ui/core/dist/components/Icon'
+
+export const ROUTES: Record<
+  string,
+  {
+    exact?: boolean
+    icon?: IconName
+    path: string
+    title: string
+  }
+> = {
   BILLS: {
     exact: true,
     icon: 'cash',
@@ -11,9 +21,9 @@ export const ROUTES = {
   },
   CALENDAR: {
     exact: true,
-    icon: 'user-group',
-    path: '/customers',
-    title: 'Clients',
+    icon: 'calendar',
+    path: '/calendar',
+    title: 'Calendrier',
   },
   CUSTOMERS: {
     exact: true,
@@ -64,8 +74,8 @@ export const ROUTES = {
   },
   SUPPORT: {
     exact: true,
-    icon: '',
+    icon: 'support',
     path: '/support',
     title: 'Support',
   },
-};
+}

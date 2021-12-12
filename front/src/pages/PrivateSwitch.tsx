@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import Loader from 'components/Loader'
 import { ROUTES } from 'routes'
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 import { useKeycloak } from '@react-keycloak/web'
 import { useUser } from 'providers/UserProvider'
 import BillDashboard from './Bills'
@@ -16,6 +16,7 @@ import QuoteForm from './Quotes/Form'
 import Settings from './Settings'
 import SupportPage from './SupportPage'
 import History from './History'
+import Calendar from './Calendar'
 
 const PrivateSwitch = (): JSX.Element => {
   const user = useUser()
@@ -61,6 +62,7 @@ const PrivateSwitch = (): JSX.Element => {
         <Layout>
           <Switch location={location}>
             <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
+            <Route path={ROUTES.CALENDAR.path} component={Calendar} />
             <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
             <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />
             <Route path={ROUTES.BILLS.path} exact={ROUTES.BILLS.exact} component={BillDashboard} />
