@@ -52,6 +52,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     }))
     try {
       const res = await QuoteApi.createOrUpdate(tmp)
+      reset(res)
       onSubmitSuccess(res)
       toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
     } catch {
@@ -97,7 +98,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Prompt
         when={isDirty}
-        message={() => 'Attention ! Certaines modifications ne sont pas enregistrées'}
+        message="Attention ! Certaines modifications ne sont pas enregistrées"
       />
       <Controller
         name="title"
@@ -156,7 +157,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             type="number"
             value={field.value}
             name={field.name}
-            onChange={field.onChange}
+            onChange={e => field.onChange(Number(e.target.value))}
             onBlur={field.onBlur}
             error={invalid}
             ref={field.ref}
