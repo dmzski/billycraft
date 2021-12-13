@@ -184,8 +184,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
                 form={formID}
                 name={field.name}
                 value={field.value ?? ''}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
+                onBlur={event => {
+                  field.onChange(Number((event.target as HTMLInputElement).value) || 0)
+                  field.onBlur()
+                }}
                 disabled={mode !== MODES.EDIT}
                 className="w-full text-right"
                 type="number"

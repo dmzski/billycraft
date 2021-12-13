@@ -119,10 +119,10 @@ const BillLineTableLine = ({
                 step="0.01"
                 name={field.name}
                 value={field.value}
-                onChange={(event: ChangeEvent) =>
+                onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                }
-                onBlur={field.onBlur}
+                  field.onBlur()
+                }}
               />
             )}
           />
@@ -139,10 +139,10 @@ const BillLineTableLine = ({
                 type="number"
                 step="0.01"
                 value={field.value}
-                onChange={(event: ChangeEvent) =>
+                onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                }
-                onBlur={field.onBlur}
+                  field.onBlur()
+                }}
               />
             )}
           />
