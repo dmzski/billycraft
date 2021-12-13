@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { Button, Input, Select } from '@coco-ui/core'
 import { useToast } from 'providers/ToastProvider'

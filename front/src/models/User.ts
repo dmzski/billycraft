@@ -1,8 +1,8 @@
 interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
-  companyId?: number;
+  email: string
+  firstName: string
+  lastName: string
+  companyId?: number
 }
 
-export default User;
+export default User

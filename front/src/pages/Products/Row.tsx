@@ -1,32 +1,27 @@
-import {
-  Button, Icon, Input, Select, Table, TextArea,
-} from '@coco-ui/core';
-import * as React from 'react';
-import { useMutation, useQueryCache } from 'react-query';
-import { LINE_TYPE } from 'constants/line';
-import { LineTypeEnum } from 'models/LineTypeEnum';
-import { Controller, useForm } from 'react-hook-form';
-import { STRINGS } from 'constants/strings';
-import { useToast } from '../../providers/ToastProvider';
-import Product from '../../models/Product';
-import { ProductApi } from '../../api/ProductApi';
+import { Button, Icon, Input, Select, Table, TextArea } from '@coco-ui/core'
+import * as React from 'react'
+import { useMutation, useQueryCache } from 'react-query'
+import { LINE_TYPE } from 'constants/line'
+import { LineTypeEnum } from 'models/LineTypeEnum'
+import { Controller, useForm } from 'react-hook-form'
+import { STRINGS } from 'constants/strings'
+import { useToast } from '../../providers/ToastProvider'
+import Product from '../../models/Product'
+import { ProductApi } from '../../api/ProductApi'
 
 type ProductTableLineProps = {
-  product: Product;
-  isNew?: boolean;
-};
+  product: Product
+  isNew?: boolean
+}
 
 const MODES = {
   EDIT: 'EDIT',
   READ: 'READ',
   DELETE: 'DELETE',
-};
+}
 
-const ProductTableLine = ({
-  product,
-  isNew,
-}: ProductTableLineProps): JSX.Element => {
-  const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ);
+const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Element => {
+  const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ)
   const defaultValues = React.useMemo(
     () => ({
       type: LineTypeEnum.ARTICLE,
@@ -35,7 +30,7 @@ const ProductTableLine = ({
       price: 0,
     }),
     [],
-  );
+  )
   const {
     handleSubmit,
     control,
@@ -45,18 +40,16 @@ const ProductTableLine = ({
     defaultValues,
     mode: 'all',
     shouldUnregister: true,
-  });
-  const [deleteProductMutation, deleteProductMutationState] = useMutation(
-    ProductApi.delete,
-  );
-  const queryCache = useQueryCache();
+  })
+  const [deleteProductMutation, deleteProductMutationState] = useMutation(ProductApi.delete)
+  const queryCache = useQueryCache()
 
-  const toast = useToast();
+  const toast = useToast()
 
   const toggleEditMode = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setMode((current) => (current === MODES.EDIT ? MODES.READ : MODES.EDIT));
-  };
+    e.stopPropagation()
+    setMode(current => (current === MODES.EDIT ? MODES.READ : MODES.EDIT))
+  }
 
   const onSubmit = async (data: Product) => {
     try {
@@ -66,53 +59,53 @@ const ProductTableLine = ({
         price: `${data.price}` !== '' ? parseFloat(`${data.price}`) : 0,
         type: data.type,
         name: data.name,
-      });
+      })
       toast.show({
         message: STRINGS.SAVE_SUCCESS,
         variant: 'success',
-      });
+      })
       if (isNew) {
         reset({
           type: LineTypeEnum.ARTICLE,
           name: '',
           description: '',
           price: 0,
-        });
-      } else setMode(MODES.READ);
+        })
+      } else setMode(MODES.READ)
 
-      queryCache.refetchQueries('products');
+      queryCache.refetchQueries('products')
     } catch {
       toast.show({
         message: STRINGS.SAVE_ERROR,
         variant: 'error',
-      });
+      })
     }
-  };
+  }
 
   const toggleDeleteMode = () => {
-    setMode((current) => (current === MODES.DELETE ? MODES.READ : MODES.DELETE));
-  };
+    setMode(current => (current === MODES.DELETE ? MODES.READ : MODES.DELETE))
+  }
 
   const onDelete = async () => {
     try {
-      await deleteProductMutation(product.id);
-      queryCache.invalidateQueries('products');
-      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' });
+      await deleteProductMutation(product.id)
+      queryCache.invalidateQueries('products')
+      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' })
     } catch {
       toast.show({
         message: STRINGS.DELETE_ERROR,
         variant: 'error',
-      });
+      })
     }
-  };
+  }
 
-  const formID = `form-product-${product.id ?? 'new'}`;
+  const formID = `form-product-${product.id ?? 'new'}`
 
   React.useEffect(() => {
     if (product.id) {
-      reset(product);
+      reset(product)
     }
-  }, [product, reset]);
+  }, [product, reset])
 
   return (
     <Table.Row>
@@ -126,10 +119,10 @@ const ProductTableLine = ({
               value={field.value}
               name={field.name}
               className="w-full"
-              onChange={(type) => {
-                field.onChange(type);
+              onChange={type => {
+                field.onChange(type)
               }}
-              options={Object.values(LINE_TYPE).map((type) => ({
+              options={Object.values(LINE_TYPE).map(type => ({
                 value: type.enum,
                 label: type.name,
               }))}
@@ -207,16 +200,8 @@ const ProductTableLine = ({
       <Table.Cell className="w-20">
         {mode === MODES.DELETE && !isNew ? (
           <div className="flex relative">
-            <span className="w-28 absolute pt-2 -top-full font-bold">
-              Supprimer ?
-            </span>
-            <Button
-              type="button"
-              variant="success"
-              size="md"
-              className="w-8"
-              onClick={onDelete}
-            >
+            <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
+            <Button type="button" variant="success" size="md" className="w-8" onClick={onDelete}>
               <Icon name="check" />
             </Button>
             <Button
@@ -258,13 +243,7 @@ const ProductTableLine = ({
         ) : null}
         {mode === MODES.READ && !isNew ? (
           <div className="flex">
-            <Button
-              type="button"
-              onClick={toggleEditMode}
-              className="w-8"
-              variant="info"
-              size="md"
-            >
+            <Button type="button" onClick={toggleEditMode} className="w-8" variant="info" size="md">
               <Icon name="pencil" />
             </Button>
             <Button
@@ -281,7 +260,7 @@ const ProductTableLine = ({
         ) : null}
       </Table.Cell>
     </Table.Row>
-  );
+  )
 }
 
-export default ProductTableLine;
+export default ProductTableLine

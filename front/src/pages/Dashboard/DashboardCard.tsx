@@ -1,6 +1,6 @@
 import { Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 
 type DashboardCardProps = {
   size: string

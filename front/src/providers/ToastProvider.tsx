@@ -6,7 +6,7 @@ import {
   ReactNode,
   useCallback,
   useMemo,
-} from 'react';
+} from 'react'
 import { CustomToast, ToastContainer } from '../components/CustomToast'
 import { Toast, ToastVariant } from '../models/Toast'
 

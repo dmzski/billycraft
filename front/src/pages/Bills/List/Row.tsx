@@ -5,7 +5,7 @@ import { STRINGS } from 'constants/strings'
 import { format, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from 'models/Bill'
 import Customer from 'models/Customer'
-import { useMemo, useCallback, MouseEvent } from 'react';
+import { useMemo, useCallback, MouseEvent } from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from 'routes'

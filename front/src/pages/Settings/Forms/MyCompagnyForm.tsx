@@ -1,5 +1,5 @@
-import { ChangeEvent, FormEvent } from 'react';
-import * as React from 'react';
+import { ChangeEvent, FormEvent } from 'react'
+import * as React from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { useToast } from 'providers/ToastProvider'
 import useLoadingState from 'hooks/useLoadingState'
@@ -77,7 +77,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="name"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Nom"
         placeholder="Nom"
         value={company.name}
@@ -87,7 +87,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
         id="address"
         rows={3}
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Adresse"
         style={{ resize: 'none' }}
         placeholder="Adresse"
@@ -97,7 +97,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="postal-code"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Code Postal"
         placeholder="Code Postal"
         value={company.postalCode}
@@ -106,7 +106,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="city"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Ville"
         placeholder="Ville"
         value={company.city}
@@ -115,7 +115,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="phone-number"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Téléphone"
         placeholder="Téléphone"
         value={company.phoneNumber}
@@ -124,7 +124,7 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="email"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="Email"
         placeholder="Email"
         value={company.email}
@@ -133,22 +133,25 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
       <Input
         id="siret"
         className="mt-2 w-full"
-        variant="inside"
+        variant="outside"
         label="SIRET"
         placeholder="SIRET"
         value={company.siret}
         onChange={inputChange('siret')}
       />
       {company.id ? (
-        <div className="flex w-full pt-2">
+        <div className="flex w-full mt-4">
           <Input
+            variant="outside"
+            label="URL du logo"
             className=" w-4/5"
             placeholder="URL du logo"
             value={company.logo}
             onChange={inputChange('logo')}
           />
           <Button
-            className="w-1/5 ml-2"
+            className="w-1/5 ml-2 mt-4"
+            variant="inverted-primary"
             type="button"
             onClick={selectFileToUpload}
             disabled={uploadLogoState.isLoading}

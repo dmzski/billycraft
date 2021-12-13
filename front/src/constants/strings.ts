@@ -4,4 +4,4 @@ export const STRINGS = {
   SAVE_ERROR: "Une erreur est survenue lors de l'enregistrement",
   DELETE_SUCCESS: 'Suppression effectuée',
   DELETE_ERROR: 'Une erreur est survenue lors de la suppression',
-};
+}

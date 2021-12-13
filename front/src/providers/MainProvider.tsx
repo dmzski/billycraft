@@ -1,5 +1,5 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web'
-import * as React from 'react';
+import * as React from 'react'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { fetchRegister } from '../utils/fetch-interceptor'
 import keycloak from '../utils/keycloak'

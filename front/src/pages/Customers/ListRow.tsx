@@ -33,7 +33,7 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
         />
       </Table.Cell>
     </Table.Row>
-  );
+  )
 }
 
 export default QuoteTableLine

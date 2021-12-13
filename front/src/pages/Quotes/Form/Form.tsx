@@ -1,5 +1,5 @@
 import { Button, Input, Select } from '@coco-ui/core'
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { QuoteApi } from 'api/QuoteApi'

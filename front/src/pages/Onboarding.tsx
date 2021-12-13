@@ -1,9 +1,9 @@
-import Company from 'models/Company';
-import { useState } from 'react';
-import MyCompagnyForm from './Settings/Forms/MyCompagnyForm';
+import Company from 'models/Company'
+import { useState } from 'react'
+import MyCompagnyForm from './Settings/Forms/MyCompagnyForm'
 
 const Onboarding = (): JSX.Element => {
-  const [company, setCompany] = useState<Company>({} as Company);
+  const [company, setCompany] = useState<Company>({} as Company)
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -15,8 +15,8 @@ const Onboarding = (): JSX.Element => {
 
         <div className="text-gray-600">
           <p>
-            Créer votre entreprise pour commencer à utiliser l&lsquo;outil
-            renseigner les informations concernant votre entreprise
+            Créer votre entreprise pour commencer à utiliser l&lsquo;outil renseigner les
+            informations concernant votre entreprise
           </p>
         </div>
 
@@ -25,7 +25,7 @@ const Onboarding = (): JSX.Element => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Onboarding;
+export default Onboarding

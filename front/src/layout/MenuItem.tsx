@@ -1,20 +1,18 @@
-import { Icon } from '@coco-ui/core';
-import { IconName } from '@coco-ui/core/dist/components/Icon';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Icon } from '@coco-ui/core'
+import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 type MenuItemProps = {
-  text: string;
-  icon: IconName;
-  path: string;
-  exact?: boolean;
-};
-const MenuItem = ({
-  text, icon, path, exact,
-}: MenuItemProps): JSX.Element => {
+  text: string
+  icon: IconName
+  path: string
+  exact?: boolean
+}
+const MenuItem = ({ text, icon, path, exact }: MenuItemProps): JSX.Element => {
   const match = useRouteMatch({
     path,
     exact,
-  });
+  })
 
   return (
     <Link
@@ -28,7 +26,7 @@ const MenuItem = ({
       <Icon name={icon} />
       <span className="mx-4">{text}</span>
     </Link>
-  );
+  )
 }
 
-export default MenuItem;
+export default MenuItem

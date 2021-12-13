@@ -1,24 +1,36 @@
-import { QuoteStatusEnum } from 'models/Quote';
+import { QuoteStatusEnum } from 'models/Quote'
 
 type QuoteStatusObject = {
-  enum: string;
-  text: string;
-  icon: string;
-  weight: number;
-};
+  enum: string
+  text: string
+  icon: string
+  weight: number
+}
 
 const QUOTE_STATUS: Record<QuoteStatusEnum, QuoteStatusObject> = {
   DRAFT: {
-    enum: 'DRAFT', text: 'Brouillon', icon: 'document', weight: 1,
+    enum: 'DRAFT',
+    text: 'Brouillon',
+    icon: 'document',
+    weight: 1,
   },
   SENT: {
-    enum: 'SENT', text: 'Envoyé', icon: 'mail', weight: 2,
+    enum: 'SENT',
+    text: 'Envoyé',
+    icon: 'mail',
+    weight: 2,
   },
   ACCEPTED: {
-    enum: 'ACCEPTED', text: 'Accepté', icon: 'thumb-up', weight: 3,
+    enum: 'ACCEPTED',
+    text: 'Accepté',
+    icon: 'thumb-up',
+    weight: 3,
   },
   REFUSED: {
-    enum: 'REFUSED', text: 'Refusé', icon: 'thumb-down', weight: 4,
+    enum: 'REFUSED',
+    text: 'Refusé',
+    icon: 'thumb-down',
+    weight: 4,
   },
   DEPOSIT_ASK: {
     enum: 'DEPOSIT_ASK',
@@ -33,8 +45,11 @@ const QUOTE_STATUS: Record<QuoteStatusEnum, QuoteStatusObject> = {
     weight: 4,
   },
   ARCHIVED: {
-    enum: 'ARCHIVED', text: 'Archivé', icon: 'archive', weight: 4,
+    enum: 'ARCHIVED',
+    text: 'Archivé',
+    icon: 'archive',
+    weight: 4,
   },
-};
+}
 
-export { QUOTE_STATUS };
+export { QUOTE_STATUS }

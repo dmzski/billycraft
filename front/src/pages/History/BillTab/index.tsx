@@ -3,7 +3,7 @@ import Loader from 'components/Loader'
 import useCustomers from 'hooks/useCustomers'
 import BillFilterContainer from 'pages/Bills/Filters'
 import BillTable from 'pages/Bills/List'
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { filterBills, sortBills } from 'utils/bill'
 

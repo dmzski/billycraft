@@ -5,8 +5,9 @@ type Appointment = {
   description?: string
   quoteId?: string
   billId?: string
-  assignee?: string
+  assignees?: string[]
   createdBy?: string
+  customerId?: number
   doneBy?: string
   done?: boolean
   name: string

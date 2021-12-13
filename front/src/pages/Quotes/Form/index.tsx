@@ -1,5 +1,5 @@
 import { Badge, Button } from '@coco-ui/core'
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react'
 import { useMutation, useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from 'api/QuoteApi'

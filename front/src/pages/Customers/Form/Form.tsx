@@ -2,7 +2,7 @@ import { Button, Input, TextArea } from '@coco-ui/core'
 import { CustomerApi } from 'api/CustomerApi'
 import { STRINGS } from 'constants/strings'
 import { useToast } from 'providers/ToastProvider'
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Customer from '../../../models/Customer'
 

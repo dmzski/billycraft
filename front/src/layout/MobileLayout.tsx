@@ -1,6 +1,4 @@
-import { Icon } from '@coco-ui/core'
-import * as React from 'react';
-import SearchBar from 'layout/SearchBar'
+import * as React from 'react'
 import SideBar from './SideBar'
 
 type MobileLayoutProps = {
@@ -12,10 +10,6 @@ const MobileLayout = ({ children }: MobileLayoutProps): JSX.Element => {
   return (
     <div className="flex flex-col h-full">
       <div className=" z-10 bg-white shadow-md flex flex-col fixed w-full top-0 h-auto items-center">
-        <div className="flex w-full items-center">
-          <Icon className="h-full mx-2" name="menu" onClick={() => setMenuOpen(!menuOpen)} />
-          <SearchBar />
-        </div>
         {menuOpen && (
           <button
             type="button"

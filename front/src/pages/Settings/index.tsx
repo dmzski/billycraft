@@ -1,7 +1,7 @@
 import { Loader } from '@coco-ui/core'
 import { CompanyApi } from 'api/CompanyApi'
 import { useQuery } from 'react-query'
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import Company from 'models/Company'
 import MyCompagnyForm from './Forms/MyCompagnyForm'
 import BillTab from './BillTab'

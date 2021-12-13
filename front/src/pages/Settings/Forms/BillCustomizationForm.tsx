@@ -4,8 +4,8 @@ import { STRINGS } from 'constants/strings'
 import { ContentState, EditorState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
 import BillCustomization from 'models/BillCustomization'
-import { ChangeEvent } from 'react';
-import * as React from 'react';
+import { ChangeEvent } from 'react'
+import * as React from 'react'
 import { useMutation } from 'react-query'
 import { useToast } from '../../../providers/ToastProvider'
 

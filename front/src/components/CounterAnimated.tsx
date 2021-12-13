@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 const CounterAnimated = ({ value }: { value: number }): JSX.Element => {
   const [counter, setCounter] = useState(0)

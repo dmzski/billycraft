@@ -1,5 +1,4 @@
 import * as React from 'react'
-import SearchBar from 'layout/SearchBar'
 import useBreakpoint from 'hooks/useBreakpoint'
 import SideBar from './SideBar'
 import MobileLayout from './MobileLayout'
@@ -21,9 +20,6 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         <SideBar />
       </aside>
       <div className="w-full pl-64">
-        <aside className="flex items-center justify-end w-full px-2 h-12 shadow">
-          <SearchBar />
-        </aside>
         <main className="w-full flex flex-col p-10 h-full">{children}</main>
       </div>
     </div>

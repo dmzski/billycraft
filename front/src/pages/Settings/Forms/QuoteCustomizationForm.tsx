@@ -2,7 +2,7 @@ import { Button, Input, Switch, TextArea } from '@coco-ui/core'
 import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
 import { STRINGS } from 'constants/strings'
 import QuoteCustomization from 'models/QuoteCustomization'
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useMutation } from 'react-query'
 import { useToast } from '../../../providers/ToastProvider'
 

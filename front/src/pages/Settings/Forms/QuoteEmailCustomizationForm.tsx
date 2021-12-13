@@ -1,6 +1,6 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
-import { ChangeEvent, FormEvent } from 'react';
-import * as React from 'react';
+import { ChangeEvent, FormEvent } from 'react'
+import * as React from 'react'
 import QuoteEmailCustomization from '../../../models/QuoteEmailCustomization'
 
 const defaultValues = {

@@ -1,6 +1,6 @@
-import { Button, Input, Modal, TextArea } from '@coco-ui/core'
+import { Button, Input, Modal, Select, TextArea } from '@coco-ui/core'
 import Appointment from 'models/Appointment'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 
 type AddAppointmentProps = {
@@ -17,6 +17,8 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
   const endDate = useWatch({ name: 'endDate', control })
 
   const onSubmit = useCallback((values: Appointment) => {
+    // TODO: Remove console.log after testing
+    // eslint-disable-next-line no-console
     console.log(values)
   }, [])
 
@@ -45,6 +47,24 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 ref={field.ref}
+                value={field.value}
+                error={invalid}
+              />
+            )}
+          />
+          <Controller
+            name="customerId"
+            control={control}
+            rules={{ required: true }}
+            render={({ field, fieldState: { invalid } }) => (
+              <Select
+                isMulti
+                className="mt-4"
+                label="Client"
+                variant="outside"
+                name={field.name}
+                onChange={field.onChange}
+                options={[]}
                 value={field.value}
                 error={invalid}
               />
@@ -107,6 +127,60 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
                 error={invalid}
                 min={startDate}
                 step={60 * 30}
+              />
+            )}
+          />
+
+          <Controller
+            name="assignees"
+            control={control}
+            render={({ field, fieldState: { invalid } }) => (
+              <Select
+                isMulti
+                className="mt-4"
+                label="Assigné à"
+                variant="outside"
+                name={field.name}
+                onChange={field.onChange}
+                options={[]}
+                value={field.value}
+                error={invalid}
+              />
+            )}
+          />
+
+          <Controller
+            name="quoteId"
+            control={control}
+            render={({ field, fieldState: { invalid } }) => (
+              <Select
+                isMulti
+                className="mt-4"
+                label="Devis associé"
+                variant="outside"
+                name={field.name}
+                onChange={field.onChange}
+                options={[]}
+                value={field.value}
+                error={invalid}
+              />
+            )}
+          />
+
+          <Controller
+            name="billId"
+            control={control}
+            render={({ field, fieldState: { invalid } }) => (
+              <Select
+                isMulti
+                className="mt-4"
+                label="Facture associée"
+                variant="outside"
+                name={field.name}
+                onChange={field.onChange}
+                options={[]}
+                value={field.value}
+                error={invalid}
               />
             )}
           />

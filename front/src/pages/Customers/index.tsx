@@ -1,24 +1,20 @@
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { Button, Loader } from '@coco-ui/core';
-import { CustomerApi } from 'api/CustomerApi';
-import CustomerTable from './List';
-import CustomerModal from './Modals/CustomerModal';
-import Customer from '../../models/Customer';
+import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { Button, Loader } from '@coco-ui/core'
+import { CustomerApi } from 'api/CustomerApi'
+import CustomerTable from './List'
+import CustomerModal from './Modals/CustomerModal'
+import Customer from '../../models/Customer'
 
 const CustomerPage = (): JSX.Element => {
-  const customersQuery = useQuery(
-    ['customers', 'not-deleted'],
-    CustomerApi.findAllNotDeleted,
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
-  const [isOpen, setIsOpen] = useState(false);
+  const customersQuery = useQuery(['customers', 'not-deleted'], CustomerApi.findAllNotDeleted, {
+    refetchOnWindowFocus: false,
+  })
+  const [isOpen, setIsOpen] = useState(false)
 
   const goToNewCustomer = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
 
   return (
     <>
@@ -42,7 +38,7 @@ const CustomerPage = (): JSX.Element => {
         />
       </div>
     </>
-  );
+  )
 }
 
-export default CustomerPage;
+export default CustomerPage
