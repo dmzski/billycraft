@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backv2/appointments"
 	"backv2/billCustomization"
 	"backv2/billEmailCustomization"
 	"backv2/bills"
@@ -125,4 +126,5 @@ func setupRoutes(app *fiber.App) {
 	pdf.InitRoutes(v1)
 	todos.InitRoutes(v1)
 	logo.InitRoutes(api)
+	appointments.InitRoutes(api)
 }
