@@ -1,25 +1,33 @@
 import { Button, Input, Modal, Select, TextArea } from '@coco-ui/core'
-import Appointment from 'models/Appointment'
+import { AppointmentApi } from 'api/AppointmentApi'
+import { formatRFC3339 } from 'date-fns'
+import Appointment, { AppointmentRequest } from 'models/Appointment'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 
 type AddAppointmentProps = {
-  appointment: Appointment
+  appointment: Partial<Appointment>
   isOpen?: boolean
   onClose: () => void
 }
 const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): JSX.Element => {
   const { control, handleSubmit, reset } = useForm({
-    mode: 'all',
+    mode: 'onBlur',
     defaultValues: appointment,
   })
   const startDate = useWatch({ name: 'startDate', control })
   const endDate = useWatch({ name: 'endDate', control })
 
-  const onSubmit = useCallback((values: Appointment) => {
+  const onSubmit = useCallback(async (values: AppointmentRequest) => {
     // TODO: Remove console.log after testing
     // eslint-disable-next-line no-console
-    console.log(values)
+    const data: AppointmentRequest = {
+      ...values,
+      startDate: formatRFC3339(new Date(values.startDate)),
+      endDate: formatRFC3339(new Date(values.endDate)),
+    }
+    console.log(data)
+    AppointmentApi.create(data)
   }, [])
 
   useEffect(() => {

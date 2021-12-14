@@ -69,11 +69,15 @@ func main() {
 	})
 	if config.Profile != "dev" {
 		app.Use(recover.New())
+	} else {
+		app.Use(recover.New(recover.Config{
+			EnableStackTrace: true,
+		}))
 	}
 	app.Use(cors.New())
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
-		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}​\n",
+		Format: "${pid} ${locals:requestid} ${status} ${method} ${path}\n",
 	}))
 	app.Use(oidc.New(oidc.OidcConfig{
 		AuthServerURL: config.OIDCAuthServerUrl,
@@ -112,6 +116,7 @@ func setupRoutes(app *fiber.App) {
 	log.Println("Setting up routes")
 	api := app.Group("/api")
 	v1 := api.Group("/v1", oidc.Secure())
+	// V1 Api Routes
 	company.InitRoutes(v1)
 	reports.InitRoutes(v1)
 	customers.InitRoutes(v1)
@@ -125,6 +130,8 @@ func setupRoutes(app *fiber.App) {
 	billEmailCustomization.InitRoutes(v1)
 	pdf.InitRoutes(v1)
 	todos.InitRoutes(v1)
+	appointments.InitRoutes(v1)
+
+	// Global API Routes
 	logo.InitRoutes(api)
-	appointments.InitRoutes(api)
 }

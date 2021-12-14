@@ -7,22 +7,36 @@ import (
 	"gorm.io/gorm"
 )
 
+type AppointmentAssignee struct {
+	AppointmentID int64
+	Assignee      string
+}
+
+func (t AppointmentAssignee) TableName() string {
+	return "com_appointment_assignees"
+}
+
 type Appointment struct {
 	ID          int64 `gorm:"primaryKey;autoIncrement;<-:create"`
-	Description string
+	Name        string
+	Description *string
 	CreatedAt   time.Time
 	StartDate   time.Time
-	EndDate   	time.Time
+	EndDate     time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
 	DoneAt      *time.Time
-	CompanyID   int     `gorm:"<-:create"`
-	CreatedBy   string  `gorm:"foreignKey:Email;<-:create"`
-	DoneBy      *string `gorm:"foreignKey:Email"`
+	CompanyID   int `gorm:"<-:create"`
+	CustomerID  *int
+	BillID      *string
+	QuoteID     *string
+	Assignees   []AppointmentAssignee `gorm:"foreignKey:AppointmentID"`
+	CreatedBy   string                `gorm:"<-:create"`
+	DoneBy      *string               ``
 }
 
 func (t Appointment) TableName() string {
-	return "com_todo"
+	return "com_appointment"
 }
 
 func (t *Appointment) BeforeCreate(tx *gorm.DB) (err error) {
@@ -30,28 +44,44 @@ func (t *Appointment) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (t Appointment) ToDTO() dtos.Appointment {
-	return dtos.Appointment{
-		ID:          t.ID,
-		Description: t.Description,
-		CompanyID:   t.CompanyID,
-		CreatedBy:   t.CreatedBy,
-		CreatedAt:   t.CreatedAt,
-		UpdatedAt:   t.UpdatedAt,
-		DoneBy:      t.DoneBy,
-		DoneAt:      t.DoneAt,
+func (a Appointment) ToDTO() (dto dtos.Appointment) {
+	dto = dtos.Appointment{
+		ID:          a.ID,
+		Description: a.Description,
+		CreatedBy:   a.CreatedBy,
+		CreatedAt:   a.CreatedAt,
+		UpdatedAt:   a.UpdatedAt,
+		DoneBy:      a.DoneBy,
+		DoneAt:      a.DoneAt,
+		Name:        a.Name,
+		StartDate:   a.StartDate,
+		EndDate:     a.EndDate,
+		CustomerID:  a.CustomerID,
+		BillID:      a.BillID,
+		QuoteID:     a.QuoteID,
+		Assignees:   make([]string, 0),
 	}
+	for _, assignee := range a.Assignees {
+		dto.Assignees = append(dto.Assignees, assignee.Assignee)
+	}
+	return dto
 }
 
-id?: number
-  startDate?: string
-  endDate?: string
-  description?: string
-  quoteId?: string
-  billId?: string
-  assignees?: string[]
-  createdBy?: string
-  customerId?: number
-  doneBy?: string
-  done?: boolean
-  name: string
+func (a Appointment) FromDTO(dto dtos.AppointmentRequest) Appointment {
+	a = Appointment{
+		Description: dto.Description,
+		DoneBy:      dto.DoneBy,
+		Name:        dto.Name,
+		StartDate:   dto.StartDate,
+		EndDate:     dto.EndDate,
+		CustomerID:  dto.CustomerID,
+		BillID:      dto.BillID,
+		QuoteID:     dto.QuoteID,
+		Assignees:   make([]AppointmentAssignee, 0),
+	}
+	for _, assignee := range dto.Assignees {
+		a.Assignees = append(a.Assignees, AppointmentAssignee{Assignee: assignee})
+	}
+
+	return a
+}

@@ -4,7 +4,6 @@ import (
 	"backv2/dtos"
 	"backv2/models"
 	"fmt"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -21,24 +20,6 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	doneAfter := c.Query("done_after")
-	status := c.Query("status")
-	if status == "done" {
-		return makeArrayResponse(c, DAO.FindAllByTenantAndIsDone(*user.CompanyID))
-	}
-
-	if doneAfter != "" {
-		doneAfterDate, err := time.Parse(time.RFC3339, doneAfter)
-		if err != nil {
-			return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
-				Code:    fiber.ErrBadRequest.Code,
-				Message: "Can't parse date",
-			})
-		}
-
-		return makeArrayResponse(c, DAO.FindAllByTenantAndDoneAfter(*user.CompanyID, doneAfterDate))
-	}
-
 	return makeArrayResponse(c, DAO.FindAllByTenant(*user.CompanyID))
 }
 func findById(c *fiber.Ctx) error {
@@ -91,14 +72,10 @@ func done(c *fiber.Ctx) error {
 }
 
 func makeArrayResponse(c *fiber.Ctx, array []models.Appointment) error {
-	var res []dtos.Appointment
+	res := make([]dtos.Appointment, 0)
 	for _, x := range array {
 		newDto := x.ToDTO()
 		res = append(res, newDto)
-	}
-
-	if len(res) == 0 {
-		return c.JSON(make([]string, 0))
 	}
 
 	return c.JSON(res)

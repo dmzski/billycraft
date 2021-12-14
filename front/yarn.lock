@@ -2124,10 +2124,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@coco-ui/core@^1.17.8":
-  version "1.17.8"
-  resolved "https://registry.npmjs.org/@coco-ui/core/-/core-1.17.8.tgz"
-  integrity sha512-C3K/PUxPAi2HCARsR3UAbwSxMDhE4yiXPIDfdGF3Uvk/DQlhwGxoVSQJUYi3zPoPkJe0KVxTGSDfAGDm0pX1gQ==
+"@coco-ui/core@^1.18.0":
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/@coco-ui/core/-/core-1.18.0.tgz#ef07f668f5cc4aff29b55285555dea49e215bb74"
+  integrity sha512-BXnhkb7X6tt+REFoYQvxCJS4cQ600Pk2/gYp4rzBFrZj5R5KfejGvIL7AD+y62UooSWnCZGs/haGuh41I3fGkA==
   dependencies:
     "@heroicons/react" "^1.0.1"
     classnames "^2.3.1"

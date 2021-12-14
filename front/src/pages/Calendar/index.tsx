@@ -7,7 +7,9 @@ import AddAppointment from './modals/AddAppointment'
 import TimeColumn from './TimeColumn'
 
 const Calendar = () => {
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | undefined>(undefined)
+  const [selectedAppointment, setSelectedAppointment] = useState<Partial<Appointment> | undefined>(
+    undefined,
+  )
   const [date, setDate] = useState(new Date())
 
   const startOfWeekDate = useMemo(() => startOfWeek(date, { weekStartsOn: 1 }), [date])
@@ -22,7 +24,7 @@ const Calendar = () => {
     [startOfWeekDate, endOfWeekDate],
   )
 
-  const handleClick = useCallback(() => setSelectedAppointment({} as Appointment), [])
+  const handleClick = useCallback(() => setSelectedAppointment({} as Partial<Appointment>), [])
   const handleCellClick = useCallback(
     (startDate: Date, endDate: Date) => () =>
       setSelectedAppointment({
@@ -89,7 +91,7 @@ const Calendar = () => {
         </Grid>
       </div>
       <AddAppointment
-        appointment={selectedAppointment ?? ({} as Appointment)}
+        appointment={selectedAppointment ?? ({} as Partial<Appointment>)}
         isOpen={selectedAppointment !== undefined}
         onClose={() => setSelectedAppointment(undefined)}
       />
