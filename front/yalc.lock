@@ -2,9 +2,9 @@
   "version": "v1",
   "packages": {
     "@coco-ui/core": {
-      "signature": "5a34ca1ad5b030fb6660c0619f4554c3",
+      "signature": "77f8bae0b8e3a5c66514e93e6c7fce5d",
       "file": true,
-      "replaced": "^1.14.3"
+      "replaced": "^1.20.0"
     }
   }
 }

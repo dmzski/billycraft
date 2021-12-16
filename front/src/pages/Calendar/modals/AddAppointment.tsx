@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Select, TextArea } from '@coco-ui/core'
+import { Button, DatePicker, Input, Modal, Select, TextArea } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
 import { formatRFC3339 } from 'date-fns'
 import Appointment, { AppointmentRequest } from 'models/Appointment'
@@ -101,19 +101,16 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
             control={control}
             rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
-              <Input
-                className="mt-4"
+              <DatePicker
+                className="mt-4 w-full"
                 label="Début du rendez-vous"
                 variant="outside"
                 name={field.name}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 ref={field.ref}
-                value={field.value}
-                type="datetime-local"
+                value={new Date(`${field.value}`)}
                 error={invalid}
-                max={endDate}
-                step={60 * 30}
               />
             )}
           />
@@ -122,19 +119,16 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
             control={control}
             rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
-              <Input
-                className="mt-4"
+              <DatePicker
+                className="mt-4 w-full"
                 label="Fin du rendez-vous"
                 variant="outside"
                 name={field.name}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 ref={field.ref}
-                value={field.value}
-                type="datetime-local"
+                value={new Date(`${field.value}`)}
                 error={invalid}
-                min={startDate}
-                step={60 * 30}
               />
             )}
           />
