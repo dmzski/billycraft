@@ -1,4 +1,4 @@
-import { compareAsc, format, parseJSON } from 'date-fns'
+import { compareAsc, format, formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
 import { BILL_STATUS } from '../constants/bill'
 import Bill, { BillLine } from '../models/Bill'
@@ -44,14 +44,13 @@ export function filterBills(
     if (
       filters.createdAt &&
       bill.createdAt &&
-      !format(parseJSON(bill.createdAt), 'dd/MM/yyyy à HH:mm').includes(filters.createdAt)
+      !formatISO9075(parseJSON(bill.createdAt)).includes(filters.createdAt)
     ) {
       takeIt = false
     }
     if (
       filters.sentAt &&
-      ((bill.sentAt &&
-        !format(parseJSON(bill.sentAt), 'dd/MM/yyyy à HH:mm').includes(filters.sentAt)) ||
+      ((bill.sentAt && !formatISO9075(parseJSON(bill.sentAt)).includes(filters.sentAt)) ||
         !bill.sentAt)
     ) {
       takeIt = false

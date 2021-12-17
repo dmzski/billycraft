@@ -4,7 +4,6 @@ import (
 	"backv2/database"
 	"backv2/dtos"
 	"backv2/models"
-	"fmt"
 	"log"
 	"time"
 )
@@ -46,7 +45,9 @@ func (dao AppointmentDao) Update(id string, tenant int, changes dtos.Appointment
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(models.Appointment{}.FromDTO(changes))
+	newValues := models.Appointment{}.FromDTO(changes)
+	log.Println(newValues)
+	tx = tx.Updates(newValues)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
@@ -59,9 +60,6 @@ func (dao AppointmentDao) Create(creator models.User, dto dtos.AppointmentReques
 	appointment = appointment.FromDTO(dto)
 	appointment.CompanyID = *creator.CompanyID
 	appointment.CreatedBy = creator.Email
-	log.Println("DTO")
-	log.Println(fmt.Printf("%+v\n", dto))
-	log.Println(fmt.Printf("%+v\n", appointment))
 	if err := database.DBConn.Create(&appointment).Error; err != nil {
 		log.Println("Error : ", err.Error())
 		panic(err)
@@ -70,7 +68,7 @@ func (dao AppointmentDao) Create(creator models.User, dto dtos.AppointmentReques
 }
 
 func (dao AppointmentDao) Delete(id string, creator string) {
-	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Appointment{}).Error; err != nil {
+	if err := database.DBConn.Where("id = ? and created_by = ?", id, creator).Delete(&models.Appointment{}).Error; err != nil {
 		panic(err)
 	}
 }

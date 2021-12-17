@@ -2,7 +2,7 @@ import { ActionButton, Icon, Table } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
 import { STRINGS } from 'constants/strings'
-import { format, parseJSON } from 'date-fns'
+import { format, formatISO9075, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from 'models/Bill'
 import Customer from 'models/Customer'
 import { useMemo, useCallback, MouseEvent } from 'react'
@@ -93,12 +93,8 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
     <Table.Row onClick={editBill} hoverable>
       <Table.Cell className="pl-2 truncate">{bill.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
-      <Table.Cell>
-        {bill.createdAt ? format(parseJSON(bill.createdAt), 'dd/MM/yyyy à HH:mm') : ''}
-      </Table.Cell>
-      <Table.Cell>
-        {bill.sentAt ? format(parseJSON(bill.sentAt), 'dd/MM/yyyy à HH:mm') : ''}
-      </Table.Cell>
+      <Table.Cell>{bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}</Table.Cell>
+      <Table.Cell>{bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : ''}</Table.Cell>
       <Table.Cell>{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
       <Table.Cell
         onClick={event => {

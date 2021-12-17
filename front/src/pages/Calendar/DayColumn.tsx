@@ -5,8 +5,18 @@ type DayColumnProps = {
   date: Date
   onCellClick: (startDate: Date, endDate: Date) => () => void
 }
+
+const HourCell = ({ date, onCellClick }: DayColumnProps): JSX.Element => (
+  <button
+    aria-label="Add appointment"
+    onDoubleClick={onCellClick(date, date)}
+    type="button"
+    className="w-full appearance-none h-14 flex items-center justify-center border-t border-gray-200"
+  />
+)
+
 const DayColumn = ({ date, onCellClick }: DayColumnProps): JSX.Element => {
-  const hours = useMemo(
+  const hoursOfDay = useMemo(
     () =>
       eachMinuteOfInterval(
         {
@@ -17,25 +27,17 @@ const DayColumn = ({ date, onCellClick }: DayColumnProps): JSX.Element => {
           step: 30,
         },
       ),
-    [date],
+    [],
   )
 
   return (
-    <section className="border-r border-b border-gray-300">
+    <section className="border-r border-b border-gray-300 w-52">
       <h2 className="text-center text-lg h-12 flex justify-center items-center">
-        {date.toLocaleString(undefined, { weekday: 'long' }).toLocaleUpperCase()}
+        {date.toLocaleString(undefined, { weekday: 'long', day: 'numeric' }).toLocaleUpperCase()}
       </h2>
-      <div className="flex-col">
-        {hours.map((hour: Date) => (
-          <button
-            onClick={onCellClick(hour, hour)}
-            type="button"
-            className="w-full appearance-none h-14 flex items-center justify-center border-t border-gray-200"
-          >
-            -
-          </button>
-        ))}
-      </div>
+      {hoursOfDay.map((hour: Date) => (
+        <HourCell key={`hour-${hour.getTime()}`} onCellClick={onCellClick} date={hour} />
+      ))}
     </section>
   )
 }

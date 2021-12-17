@@ -1,47 +1,115 @@
-import { Button, DatePicker, Input, Modal, Select, TextArea } from '@coco-ui/core'
+import { Button, DateTimePicker, Input, Modal, Select, TextArea } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
+import { STRINGS } from 'constants/strings'
 import { formatRFC3339 } from 'date-fns'
+import { parse } from 'date-fns/esm'
 import Appointment, { AppointmentRequest } from 'models/Appointment'
+import { useToast } from 'providers/ToastProvider'
 import { useCallback, useEffect } from 'react'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 type AddAppointmentProps = {
   appointment: Partial<Appointment>
   isOpen?: boolean
   onClose: () => void
+  onSubmitSuccess?: (data: Appointment) => void | Promise<void>
 }
-const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): JSX.Element => {
-  const { control, handleSubmit, reset } = useForm({
-    mode: 'onBlur',
-    defaultValues: appointment,
-  })
-  const startDate = useWatch({ name: 'startDate', control })
-  const endDate = useWatch({ name: 'endDate', control })
 
-  const onSubmit = useCallback(async (values: AppointmentRequest) => {
-    // TODO: Remove console.log after testing
-    // eslint-disable-next-line no-console
-    const data: AppointmentRequest = {
-      ...values,
-      startDate: formatRFC3339(new Date(values.startDate)),
-      endDate: formatRFC3339(new Date(values.endDate)),
+type AppointmentFormValues = {
+  name: string
+  description?: string
+  customerId?: number
+  billId?: string
+  quoteId?: string
+  assignees: string[]
+  doneBy?: string
+  startDate?: Date
+  endDate?: Date
+}
+
+const AddAppointment = ({
+  appointment,
+  isOpen,
+  onClose,
+  onSubmitSuccess,
+}: AddAppointmentProps): JSX.Element => {
+  const toast = useToast()
+  const { control, handleSubmit, reset } = useForm<AppointmentFormValues>({
+    mode: 'onBlur',
+    defaultValues: {
+      ...appointment,
+      startDate: appointment.startDate ? new Date(appointment.startDate) : undefined,
+      endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
+    },
+  })
+
+  const handleDelete = useCallback(() => {
+    const deleteFn = async () => {
+      try {
+        if (!appointment.id) {
+          throw new Error()
+        }
+        await AppointmentApi.delete(appointment.id)
+        toast.show({ variant: 'success', message: STRINGS.APPOINTMENT_DELETED })
+        onClose()
+        onSubmitSuccess?.(appointment as Appointment)
+      } catch {
+        toast.show({ variant: 'error', message: STRINGS.DELETE_ERROR })
+      }
     }
-    console.log(data)
-    AppointmentApi.create(data)
-  }, [])
+    deleteFn()
+  }, [appointment, onClose, toast, onSubmitSuccess])
+
+  const onSubmit = useCallback(
+    async (values: AppointmentFormValues) => {
+      console.log(values.startDate)
+      console.log(values.endDate)
+      const data: AppointmentRequest = {
+        ...values,
+        startDate: formatRFC3339(values.startDate ?? new Date()),
+        endDate: formatRFC3339(values.endDate ?? new Date()),
+      }
+      try {
+        const res = appointment.id
+          ? await AppointmentApi.update(appointment.id, data)
+          : await AppointmentApi.create(data)
+        toast.show({ variant: 'success', message: STRINGS.APPOINTMENT_CREATED })
+        onSubmitSuccess?.(res)
+        onClose()
+      } catch {
+        toast.show({ variant: 'error', message: STRINGS.SAVE_ERROR })
+      }
+    },
+    [toast, onSubmitSuccess, appointment, onClose],
+  )
 
   useEffect(() => {
     if (reset && appointment) {
-      reset(appointment)
+      reset({
+        ...appointment,
+        startDate: appointment.startDate ? new Date(appointment.startDate) : undefined,
+        endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
+      })
     }
   }, [reset, appointment])
 
   return (
     <Modal onClose={onClose} open={isOpen}>
       <div className="py-2 flex flex-col w-full">
-        <h2 className="pl-2 pb-2 text-xl mb-4 border-b-2 w-full">
-          {appointment?.id ? `Modifier un rendez-vous` : `Ajouter un rendez-vous`}
-        </h2>
+        <div className="mb-4 border-b-2 flex pl-2 pb-2 items-center">
+          <h2 className="text-xl w-full">
+            {appointment?.id ? `Modifier un rendez-vous` : `Ajouter un rendez-vous`}
+          </h2>
+          <Button
+            disabled={!appointment?.id}
+            type="button"
+            onClick={handleDelete}
+            variant="error"
+            icon="trash"
+          >
+            Supprimer
+          </Button>
+        </div>
         <form className="px-4 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="name"
@@ -49,6 +117,7 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
             rules={{ required: true, minLength: 3 }}
             render={({ field, fieldState: { invalid } }) => (
               <Input
+                required
                 label="Nom du rendez-vous"
                 variant="outside"
                 name={field.name}
@@ -63,7 +132,6 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
           <Controller
             name="customerId"
             control={control}
-            rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
               <Select
                 isMulti
@@ -101,7 +169,8 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
             control={control}
             rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
-              <DatePicker
+              <DateTimePicker
+                required
                 className="mt-4 w-full"
                 label="Début du rendez-vous"
                 variant="outside"
@@ -109,7 +178,7 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 ref={field.ref}
-                value={new Date(`${field.value}`)}
+                value={field.value}
                 error={invalid}
               />
             )}
@@ -119,7 +188,8 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
             control={control}
             rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
-              <DatePicker
+              <DateTimePicker
+                required
                 className="mt-4 w-full"
                 label="Fin du rendez-vous"
                 variant="outside"
@@ -127,7 +197,7 @@ const AddAppointment = ({ appointment, isOpen, onClose }: AddAppointmentProps): 
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 ref={field.ref}
-                value={new Date(`${field.value}`)}
+                value={field.value}
                 error={invalid}
               />
             )}

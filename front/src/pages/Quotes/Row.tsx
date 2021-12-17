@@ -1,6 +1,6 @@
 import { ActionButton, Icon, Table } from '@coco-ui/core'
 import { QuoteApi } from 'api/QuoteApi'
-import { format, parseJSON } from 'date-fns'
+import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
 import Quote, { QuoteStatusEnum } from 'models/Quote'
 import { useMutation, useQueryCache } from 'react-query'
@@ -99,10 +99,10 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
       <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
       <Table.Cell className="">
-        {quote.createdAt ? format(parseJSON(quote.createdAt), 'dd/MM/yyyy à HH:mm') : '-'}
+        {quote.createdAt ? formatISO9075(parseJSON(quote.createdAt)) : '-'}
       </Table.Cell>
       <Table.Cell className="">
-        {quote.sentAt ? format(parseJSON(quote.sentAt), 'dd/MM/yyyy à HH:mm') : '-'}
+        {quote.sentAt ? formatISO9075(parseJSON(quote.sentAt)) : '-'}
       </Table.Cell>
       <Table.Cell className="">{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
       <Table.Cell

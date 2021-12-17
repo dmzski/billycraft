@@ -1,4 +1,4 @@
-import { compareAsc, format, parseJSON } from 'date-fns'
+import { compareAsc, format, formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
 import { QUOTE_STATUS } from '../constants/quote'
 import Quote, { QuoteLine } from '../models/Quote'
@@ -46,17 +46,17 @@ export function filterQuotes(
     ) {
       takeIt = false
     }
+
     if (
       filters.createdAt &&
       quote.createdAt &&
-      !format(parseJSON(quote.createdAt), 'dd/MM/yyyy à HH:mm').includes(filters.createdAt)
+      !formatISO9075(parseJSON(quote.createdAt)).includes(filters.createdAt)
     ) {
       takeIt = false
     }
     if (
       filters.sentAt &&
-      ((quote.sentAt &&
-        !format(parseJSON(quote.sentAt), 'dd/MM/yyyy à HH:mm').includes(filters.sentAt)) ||
+      ((quote.sentAt && !formatISO9075(parseJSON(quote.sentAt)).includes(filters.sentAt)) ||
         !quote.sentAt)
     ) {
       takeIt = false

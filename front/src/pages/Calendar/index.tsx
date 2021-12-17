@@ -1,20 +1,33 @@
 import { Button, Grid, Icon } from '@coco-ui/core'
-import { addWeeks, eachDayOfInterval, endOfWeek, startOfWeek, subWeeks } from 'date-fns'
+import { AppointmentApi } from 'api/AppointmentApi'
+import {
+  addWeeks,
+  eachDayOfInterval,
+  endOfWeek,
+  formatRFC3339,
+  isAfter,
+  isBefore,
+  isEqual,
+  parseJSON,
+  startOfWeek,
+  subWeeks,
+} from 'date-fns'
 import Appointment from 'models/Appointment'
 import { useCallback, useMemo, useState } from 'react'
+import { useQuery } from 'react-query'
+import AppointmentCell from './AppointmentCalendar'
 import DayColumn from './DayColumn'
 import AddAppointment from './modals/AddAppointment'
 import TimeColumn from './TimeColumn'
 
 const Calendar = () => {
+  const { isLoading, data, refetch } = useQuery(`appointments`, AppointmentApi.findAll)
   const [selectedAppointment, setSelectedAppointment] = useState<Partial<Appointment> | undefined>(
     undefined,
   )
   const [date, setDate] = useState(new Date())
-
   const startOfWeekDate = useMemo(() => startOfWeek(date, { weekStartsOn: 1 }), [date])
   const endOfWeekDate = useMemo(() => endOfWeek(date, { weekStartsOn: 1 }), [date])
-
   const datesOfWeek = useMemo(
     () =>
       eachDayOfInterval({
@@ -28,12 +41,16 @@ const Calendar = () => {
   const handleCellClick = useCallback(
     (startDate: Date, endDate: Date) => () =>
       setSelectedAppointment({
-        startDate: startDate?.toISOString(),
-        endDate: endDate?.toISOString(),
+        startDate: formatRFC3339(startDate),
+        endDate: formatRFC3339(endDate),
         name: '',
       }),
     [],
   )
+
+  const onSubmitSuccess = useCallback(() => {
+    refetch()
+  }, [refetch])
 
   const goPreviousWeek = useCallback(() => {
     setDate(current => subWeeks(current, 1))
@@ -46,6 +63,8 @@ const Calendar = () => {
   const goToday = useCallback(() => {
     setDate(new Date())
   }, [])
+
+  console.log(startOfWeekDate)
 
   return (
     <div className="flex-col flex flex-grow">
@@ -82,15 +101,36 @@ const Calendar = () => {
           </Button>
         </div>
       </Grid>
-      <div className="flex mt-8">
+      <div className="relative flex mt-8">
         <TimeColumn />
-        <Grid gap={0} cols={7} className="flex-grow">
+        <div className="container absolute top-12 left-16 right-0 bottom-0 grid-cols-7 grid">
+          {data
+            ?.filter(({ startDate }) => {
+              const parsedDate = parseJSON(startDate)
+              console.log('Parsed', parsedDate, startDate)
+              return (
+                (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
+                isEqual(parsedDate, startOfWeekDate) ||
+                isEqual(parsedDate, endOfWeekDate)
+              )
+            })
+            .map((appointment: Appointment, index) => (
+              <AppointmentCell
+                onAppointmentClick={value => setSelectedAppointment(value)}
+                key={`appointment-${appointment.id}`}
+                appointment={appointment}
+                appointments={data}
+              />
+            ))}
+        </div>
+        <Grid gap={0} cols={7} className="absolute top-0 left-16 container">
           {datesOfWeek.map(dateOfWeek => (
             <DayColumn onCellClick={handleCellClick} key={dateOfWeek.getTime()} date={dateOfWeek} />
           ))}
         </Grid>
       </div>
       <AddAppointment
+        onSubmitSuccess={onSubmitSuccess}
         appointment={selectedAppointment ?? ({} as Partial<Appointment>)}
         isOpen={selectedAppointment !== undefined}
         onClose={() => setSelectedAppointment(undefined)}

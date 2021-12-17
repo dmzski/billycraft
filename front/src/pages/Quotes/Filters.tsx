@@ -1,4 +1,5 @@
-import { Input } from '@coco-ui/core'
+import { DatePicker, Input } from '@coco-ui/core'
+import { formatISO9075 } from 'date-fns'
 import { Dispatch, SetStateAction } from 'react'
 
 type QuoteFilterContainerProps = {
@@ -9,28 +10,35 @@ type QuoteFilterContainerProps = {
 const QuoteFilterContainer = ({ filters, setFilters }: QuoteFilterContainerProps): JSX.Element => (
   <div className="flex justify-around my-2">
     <Input
-      placeholder="Filtrer par titre"
       label="Titre"
+      variant="outside"
       value={filters.title}
       onChange={e => setFilters({ ...filters, title: e.target.value })}
     />
     <Input
-      placeholder="Filtrer par client"
       label="Client"
+      variant="outside"
       value={filters.customer}
       onChange={e => setFilters({ ...filters, customer: e.target.value })}
     />
-    <Input
-      placeholder="Filtrer par date de création"
+    <DatePicker
       label="Date de création"
-      value={filters.createdAt}
-      onChange={e => setFilters({ ...filters, createdAt: e.target.value })}
+      variant="outside"
+      value={filters.createdAt ? new Date(filters.createdAt) : undefined}
+      onChange={date =>
+        setFilters({
+          ...filters,
+          createdAt: formatISO9075(date, { representation: 'date' }),
+        })
+      }
     />
-    <Input
-      placeholder="Filtrer par date d'envoi"
+    <DatePicker
       label="Date d'envoi"
-      value={filters.sentAt}
-      onChange={e => setFilters({ ...filters, sentAt: e.target.value })}
+      variant="outside"
+      value={filters.sentAt ? new Date(filters.sentAt) : undefined}
+      onChange={date =>
+        setFilters({ ...filters, sentAt: formatISO9075(date, { representation: 'date' }) })
+      }
     />
   </div>
 )
