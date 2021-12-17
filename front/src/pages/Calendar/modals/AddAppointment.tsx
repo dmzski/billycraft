@@ -200,6 +200,7 @@ const AddAppointment = ({
             shouldUnregister
             rules={{
               deps: ['startDate'],
+              required: true,
               validate: value =>
                 !startDate || !value || isBefore(startDate, value) ? undefined : '',
             }}
