@@ -11,7 +11,7 @@ const hours = eachMinuteOfInterval(
 )
 
 const TimeColumn = () => (
-  <div className="w-16 text-gray-400 border-r text-right pr-2 pt-12">
+  <div className="w-6 text-gray-400 border-r text-right pr-2 pt-12">
     {hours.map((hourDate: Date) => (
       <div
         className="relative h-14"

@@ -107,9 +107,6 @@ const AppointmentCell = ({
         ref.current.style.zIndex = `${
           Math.abs(endOfAppointmentDay.getHours() + endOfAppointmentDay.getMinutes()) + 11
         }`
-      if (document.activeElement === event.target) {
-        onAppointmentClick(appointment)
-      }
     },
     [appointment, endOfAppointmentDay],
   )
@@ -119,6 +116,7 @@ const AppointmentCell = ({
       ref={ref}
       key={appointment.id}
       onMouseDown={handleMouseDown}
+      onDoubleClick={() => onAppointmentClick(appointment)}
       onBlur={handleBlur}
       type="button"
       className={`${AppointmentClassNames[appointment.id % AppointmentClassNames.length]}`}

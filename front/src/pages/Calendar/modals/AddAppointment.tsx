@@ -1,12 +1,11 @@
 import { Button, DateTimePicker, Input, Modal, Select, TextArea } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
 import { STRINGS } from 'constants/strings'
-import { formatRFC3339 } from 'date-fns'
-import { parse } from 'date-fns/esm'
+import { formatRFC3339, isAfter, isBefore, roundToNearestMinutes } from 'date-fns'
 import Appointment, { AppointmentRequest } from 'models/Appointment'
 import { useToast } from 'providers/ToastProvider'
 import { useCallback, useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 
 type AddAppointmentProps = {
   appointment: Partial<Appointment>
@@ -34,7 +33,13 @@ const AddAppointment = ({
   onSubmitSuccess,
 }: AddAppointmentProps): JSX.Element => {
   const toast = useToast()
-  const { control, handleSubmit, reset } = useForm<AppointmentFormValues>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, isValid },
+    watch,
+  } = useForm<AppointmentFormValues>({
     mode: 'onBlur',
     defaultValues: {
       ...appointment,
@@ -42,6 +47,9 @@ const AddAppointment = ({
       endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
     },
   })
+
+  const startDate = watch('startDate')
+  const endDate = watch('endDate')
 
   const handleDelete = useCallback(() => {
     const deleteFn = async () => {
@@ -62,8 +70,6 @@ const AddAppointment = ({
 
   const onSubmit = useCallback(
     async (values: AppointmentFormValues) => {
-      console.log(values.startDate)
-      console.log(values.endDate)
       const data: AppointmentRequest = {
         ...values,
         startDate: formatRFC3339(values.startDate ?? new Date()),
@@ -167,7 +173,12 @@ const AddAppointment = ({
           <Controller
             name="startDate"
             control={control}
-            rules={{ required: true }}
+            shouldUnregister
+            rules={{
+              required: true,
+              deps: ['endDate'],
+              validate: value => (value && endDate && !isBefore(value, endDate) ? '' : undefined),
+            }}
             render={({ field, fieldState: { invalid } }) => (
               <DateTimePicker
                 required
@@ -176,7 +187,7 @@ const AddAppointment = ({
                 variant="outside"
                 name={field.name}
                 onChange={field.onChange}
-                onBlur={field.onBlur}
+                onClickOutside={field.onBlur}
                 ref={field.ref}
                 value={field.value}
                 error={invalid}
@@ -186,7 +197,12 @@ const AddAppointment = ({
           <Controller
             name="endDate"
             control={control}
-            rules={{ required: true }}
+            shouldUnregister
+            rules={{
+              deps: ['startDate'],
+              validate: value =>
+                !startDate || !value || isBefore(startDate, value) ? undefined : '',
+            }}
             render={({ field, fieldState: { invalid } }) => (
               <DateTimePicker
                 required
@@ -195,7 +211,7 @@ const AddAppointment = ({
                 variant="outside"
                 name={field.name}
                 onChange={field.onChange}
-                onBlur={field.onBlur}
+                onClickOutside={field.onBlur}
                 ref={field.ref}
                 value={field.value}
                 error={invalid}
@@ -257,7 +273,7 @@ const AddAppointment = ({
             )}
           />
 
-          <Button className="mt-8" type="submit">
+          <Button className="mt-8" type="submit" disabled={isSubmitting || !isValid}>
             Enregistrer le rendez-vous
           </Button>
         </form>

@@ -64,8 +64,6 @@ const Calendar = () => {
     setDate(new Date())
   }, [])
 
-  console.log(startOfWeekDate)
-
   return (
     <div className="flex-col flex flex-grow">
       <div className="flex justify-between">
@@ -103,18 +101,17 @@ const Calendar = () => {
       </Grid>
       <div className="relative flex mt-8">
         <TimeColumn />
-        <div className="container absolute top-12 left-16 right-0 bottom-0 grid-cols-7 grid">
+        <div className="absolute top-12 left-6 right-0 bottom-0 overflow-y-hidden container">
           {data
             ?.filter(({ startDate }) => {
               const parsedDate = parseJSON(startDate)
-              console.log('Parsed', parsedDate, startDate)
               return (
                 (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
                 isEqual(parsedDate, startOfWeekDate) ||
                 isEqual(parsedDate, endOfWeekDate)
               )
             })
-            .map((appointment: Appointment, index) => (
+            .map((appointment: Appointment) => (
               <AppointmentCell
                 onAppointmentClick={value => setSelectedAppointment(value)}
                 key={`appointment-${appointment.id}`}
@@ -123,7 +120,7 @@ const Calendar = () => {
               />
             ))}
         </div>
-        <Grid gap={0} cols={7} className="absolute top-0 left-16 container">
+        <Grid gap={0} cols={7} className="absolute top-0 left-6 right-0 container">
           {datesOfWeek.map(dateOfWeek => (
             <DayColumn onCellClick={handleCellClick} key={dateOfWeek.getTime()} date={dateOfWeek} />
           ))}
