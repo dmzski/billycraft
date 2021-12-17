@@ -141,6 +141,7 @@ const AddAppointment = ({
             render={({ field, fieldState: { invalid } }) => (
               <Select
                 isMulti
+                disabled
                 className="mt-4"
                 label="Client"
                 variant="outside"
@@ -225,6 +226,7 @@ const AddAppointment = ({
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Select
+                disabled
                 isMulti
                 className="mt-4"
                 label="Assigné à"
@@ -243,6 +245,7 @@ const AddAppointment = ({
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Select
+                disabled
                 isMulti
                 className="mt-4"
                 label="Devis associé"
@@ -261,6 +264,7 @@ const AddAppointment = ({
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Select
+                disabled
                 isMulti
                 className="mt-4"
                 label="Facture associée"
