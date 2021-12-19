@@ -9,6 +9,7 @@ import (
 
 func InitRoutes(api fiber.Router) {
 	router := api.Group("/users")
+	router.Get("/", findAll)
 	router.Get("/me", findMe)
 	router.Patch("/me", updateMe)
 	router.Patch("/me/leave-company", leaveCompany)
@@ -18,6 +19,12 @@ func InitRoutes(api fiber.Router) {
 func findMe(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	return c.JSON(user.ToDTO())
+}
+
+func findAll(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	users := DAO.FindAllByCompanyId(*user.CompanyID)
+	return makeArrayResponse(c, users)
 }
 
 func updateMe(c *fiber.Ctx) error {
@@ -45,4 +52,14 @@ func joinCompany(c *fiber.Ctx) error {
 		}
 	}
 	return c.SendStatus(fiber.StatusNotImplemented)
+}
+
+func makeArrayResponse(c *fiber.Ctx, array []models.User) error {
+	res := make([]dtos.User, 0)
+	for _, x := range array {
+		newDto := x.ToDTO()
+		res = append(res, newDto)
+	}
+
+	return c.JSON(res)
 }

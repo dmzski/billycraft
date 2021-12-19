@@ -17,7 +17,7 @@ type AppointmentCellProps = {
 }
 
 const BASE_APPOINTMENTS_CLASS =
-  'absolute rounded p-2 appearance-none flex text-ellipsis break-words'
+  'absolute rounded p-2 appearance-none flex flex-col truncate text-left'
 const AppointmentClassNames = [
   `${BASE_APPOINTMENTS_CLASS} border-l-4 border-primary-700 bg-primary-100 focus:bg-primary-200`,
   `${BASE_APPOINTMENTS_CLASS} border-l-4 border-error-700 bg-error-100 focus:bg-error-200`,
@@ -128,7 +128,8 @@ const AppointmentCell = ({
         zIndex,
       }}
     >
-      {appointment.name}
+      <div className="truncate w-full">{appointment.name}</div>
+      <div className="text-xs truncate w-full">{appointment.description}</div>
     </button>
   )
 }

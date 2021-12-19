@@ -16,7 +16,15 @@ func (dao UserDao) FindByEmail(email string) (user models.User) {
 }
 
 func (dao UserDao) FindMe(email string) (user models.User) {
-	tx := database.DBConn.Debug().Preload(clause.Associations).First(&user, "com_user.email = ?", email)
+	tx := database.DBConn.Preload(clause.Associations).First(&user, "com_user.email = ?", email)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+	}
+	return
+}
+
+func (dao UserDao) FindAllByCompanyId(tenant int) (users []models.User) {
+	tx := database.DBConn.Find(&users, "company_id = ?", tenant)
 	if tx.Error != nil {
 		log.Println(tx.Error.Error())
 	}

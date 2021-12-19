@@ -17,10 +17,13 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
     <Table className="w-full table-fixed text-left">
       <Table.Head>
         <Table.Row>
-          <Table.HeadCell className="pl-2 w-1/3 py-3" sort={sort} sortable="title" onSort={onSort}>
+          <Table.HeadCell className="pl-4 w-32" sort={sort} sortable="id" onSort={onSort}>
+            #
+          </Table.HeadCell>
+          <Table.HeadCell className="w-96" sort={sort} sortable="title" onSort={onSort}>
             Titre
           </Table.HeadCell>
-          <Table.HeadCell className="w-1/4" sort={sort} sortable="customer" onSort={onSort}>
+          <Table.HeadCell className="w-80" sort={sort} sortable="customer" onSort={onSort}>
             Client
           </Table.HeadCell>
           <Table.HeadCell className="w-48" sort={sort} sortable="createdAt" onSort={onSort}>
@@ -28,9 +31,6 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
           </Table.HeadCell>
           <Table.HeadCell className="w-48" sort={sort} sortable="sentAt" onSort={onSort}>
             Envoyé
-          </Table.HeadCell>
-          <Table.HeadCell className="w-48" sort={sort} sortable="total" onSort={onSort}>
-            Total
           </Table.HeadCell>
           <Table.HeadCell className="w-48" sort={sort} sortable="status" onSort={onSort}>
             Status

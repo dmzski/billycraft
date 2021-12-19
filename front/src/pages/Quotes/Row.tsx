@@ -96,15 +96,15 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
 
   return (
     <Table.Row hoverable onClick={editQuote}>
-      <Table.Cell className="pl-2 py-3 truncate">{quote.title}</Table.Cell>
+      <Table.Cell className="pl-2 text-xs">{quote.id}</Table.Cell>
+      <Table.Cell className="truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
       <Table.Cell className="">
-        {quote.createdAt ? formatISO9075(parseJSON(quote.createdAt)) : '-'}
+        {quote.createdAt ? formatISO9075(parseJSON(quote.createdAt)) : ''}
       </Table.Cell>
       <Table.Cell className="">
         {quote.sentAt ? formatISO9075(parseJSON(quote.sentAt)) : '-'}
       </Table.Cell>
-      <Table.Cell className="">{Math.round(getQuoteTotal(quote) * 100) / 100} €</Table.Cell>
       <Table.Cell
         className=""
         onClick={event => {

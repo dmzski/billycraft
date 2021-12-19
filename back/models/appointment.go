@@ -8,8 +8,8 @@ import (
 )
 
 type AppointmentAssignee struct {
-	AppointmentID int64
-	Assignee      string
+	AppointmentID int64  `gorm:"primaryKey;autoIncrement:false"`
+	Assignee      string `gorm:"primaryKey;autoIncrement:false"`
 }
 
 func (t AppointmentAssignee) TableName() string {

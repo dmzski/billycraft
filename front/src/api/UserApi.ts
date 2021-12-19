@@ -6,4 +6,5 @@ export const USER_URL = `${API_URL}/users`
 
 export const UserApi = {
   getMyInformation: (): Promise<User> => HttpClient.GET(`${USER_URL}/me`),
+  findAll: (): Promise<User[]> => HttpClient.GET(`${USER_URL}`),
 }

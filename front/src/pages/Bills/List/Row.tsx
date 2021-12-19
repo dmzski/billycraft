@@ -91,11 +91,11 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
 
   return (
     <Table.Row onClick={editBill} hoverable>
-      <Table.Cell className="pl-2 truncate">{bill.title}</Table.Cell>
+      <Table.Cell className="text-xs">{bill.id}</Table.Cell>
+      <Table.Cell className=" truncate">{bill.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
       <Table.Cell>{bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}</Table.Cell>
-      <Table.Cell>{bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : ''}</Table.Cell>
-      <Table.Cell>{Math.round(getBillTotal(bill) * 100) / 100} €</Table.Cell>
+      <Table.Cell>{bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}</Table.Cell>
       <Table.Cell
         onClick={event => {
           event.stopPropagation()

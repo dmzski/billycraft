@@ -49,11 +49,7 @@ const Dashboard = (): JSX.Element => {
             <Loader />
           </div>
         ) : null}
-        {!monthReportQuery.isLoading && monthReport ? (
-          <ReportCards report={monthReport} />
-        ) : (
-          <div>NC</div>
-        )}
+        {!monthReportQuery.isLoading && monthReport ? <ReportCards report={monthReport} /> : null}
       </div>
       <h2 className="mt-10 text-xl">Rapport de l&apos;année en cours</h2>
       <div className="px-4 flex flex-col justify-center items-center">
@@ -62,9 +58,7 @@ const Dashboard = (): JSX.Element => {
             <ReportCards report={yearReport} />
             <YearReportGraph report={yearReport} />
           </>
-        ) : (
-          <div>NC</div>
-        )}
+        ) : null}
       </div>
     </div>
   )
