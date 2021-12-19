@@ -3,6 +3,8 @@ package models
 import (
 	"backv2/dtos"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Company struct {
@@ -28,6 +30,11 @@ type Company struct {
 
 func (Company) TableName() string {
 	return "com_company"
+}
+
+func (c *Company) BeforeCreate(tx *gorm.DB) (err error) {
+	c.ID = 0
+	return
 }
 
 func (c Company) ToDTO() dtos.Company {

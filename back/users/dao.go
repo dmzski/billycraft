@@ -31,6 +31,13 @@ func (dao UserDao) FindAllByCompanyId(tenant int) (users []models.User) {
 	return
 }
 
+func (dao UserDao) Create(user models.User) models.User {
+	if err := database.DBConn.Create(&user).Error; err != nil {
+		panic(err)
+	}
+	return user
+}
+
 func (dao UserDao) SaveUser(user models.User) models.User {
 	if err := database.DBConn.Select("FirstName", "LastName").Save(&user).Error; err != nil {
 		panic(err)
@@ -46,7 +53,7 @@ func (dao UserDao) LeaveCompany(user models.User) models.User {
 }
 
 func (dao UserDao) JoinCompany(email string, cid int) {
-	if err := database.DBConn.Exec("UPDATE compta.com_user SET company_id = ? WHERE email = ?", cid, email).Error; err != nil {
+	if err := database.DBConn.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", cid, email).Error; err != nil {
 		panic(err)
 	}
 }

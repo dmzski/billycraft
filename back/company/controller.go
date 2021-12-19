@@ -32,10 +32,10 @@ func create(c *fiber.Ctx) error {
 	newCompany := dtos.Company{}
 	c.BodyParser(&newCompany)
 	newCompany.CreatedBy = user.Email
-	DAO.Create(newCompany)
-	user.CompanyID = &newCompany.ID
-	users.DAO.SaveUser(user)
-	return c.JSON(newCompany)
+	company := DAO.Create(newCompany)
+	user.CompanyID = &company.ID
+	users.DAO.JoinCompany(user.Email, company.ID)
+	return c.JSON(company)
 }
 
 func updateMine(c *fiber.Ctx) error {

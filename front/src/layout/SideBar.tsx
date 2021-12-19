@@ -17,9 +17,9 @@ const SideBar = (): JSX.Element => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex flex-col items-center justify-center mt-4">
-        {user.data ? (
+        {user.user ? (
           <p className="text-xs">
-            Connecté en tant que <span className="text-primary-700">{user.data.firstName}</span>
+            Connecté en tant que <span className="text-primary-700">{user.user.firstName}</span>
           </p>
         ) : null}
         {user.company?.name ? (

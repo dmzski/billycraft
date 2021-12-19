@@ -5,9 +5,10 @@ import Company from 'models/Company'
 import User from 'models/User'
 import { useMemo } from 'react'
 import * as React from 'react'
-import { QueryResult, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 
-type UserContextType = QueryResult<User, unknown> & {
+type UserContextType = {
+  user?: User
   company?: Company
 }
 const UserContext = React.createContext<UserContextType>({} as UserContextType)
@@ -17,20 +18,18 @@ type UserProviderProps = {
 }
 const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
   const { keycloak } = useKeycloak()
-  const myInformationQuery = useQuery('my-information', UserApi.getMyInformation, {
+  const { data: user } = useQuery('my-information', UserApi.getMyInformation, {
     enabled: keycloak.authenticated,
     refetchOnWindowFocus: false,
   })
-  const myCompany = useQuery('my-company', CompanyApi.getMine, {
-    enabled: myInformationQuery.data?.companyId !== undefined && keycloak.authenticated,
+  const { data: company } = useQuery('my-company', CompanyApi.getMine, {
+    enabled: user?.companyId && keycloak.authenticated,
     refetchOnWindowFocus: false,
   })
 
-  const value = useMemo(() => ({ ...myInformationQuery, company: myCompany.data }), [
-    myInformationQuery,
-    myCompany.data,
-  ])
+  const value = useMemo(() => ({ user, company }), [user, company])
 
+  console.log('Value', value)
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 

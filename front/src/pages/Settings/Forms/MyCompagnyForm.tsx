@@ -89,7 +89,6 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
         className="mt-2 w-full"
         variant="outside"
         label="Adresse"
-        style={{ resize: 'none' }}
         placeholder="Adresse"
         value={company.address}
         onChange={inputChange('address')}
@@ -167,12 +166,12 @@ const MyCompagnyForm = ({ company, setCompany }: MyCompagnyFormProps): JSX.Eleme
           />
         </div>
       ) : (
-        <div className="pt-2">
+        <div className="mt-2">
           Vous pourrez télécharger votre logo après la création de l&lsquo;entreprise dans vos
           paramètres
         </div>
       )}
-      <Button size="md" className="w-full primary mt-5" onClick={onSubmit}>
+      <Button className="w-full primary mt-5" onClick={onSubmit}>
         Enregister
       </Button>
     </form>

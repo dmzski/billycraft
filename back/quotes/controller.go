@@ -20,28 +20,20 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var dtos []dtos.Quote
+	var res []models.Quote
 	filter := c.Query("filter")
 	switch filter {
 	case "not_archived":
-		for _, x := range DAO.FindAllByTenantByStatusIsNot(*user.CompanyID, "ARCHIVED") {
-			newDto := x.ToDTO()
-			dtos = append(dtos, newDto)
-		}
+		res = DAO.FindAllByTenantByStatusIsNot(*user.CompanyID, "ARCHIVED")
 	case "archived":
-		for _, x := range DAO.FindAllByTenantByStatusIs(*user.CompanyID, "ARCHIVED") {
-			newDto := x.ToDTO()
-			dtos = append(dtos, newDto)
-		}
+		res = DAO.FindAllByTenantByStatusIs(*user.CompanyID, "ARCHIVED")
 	default:
-		for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
-			newDto := x.ToDTO()
-			dtos = append(dtos, newDto)
-		}
+		res = DAO.FindAllByTenant(*user.CompanyID)
 	}
 
-	return c.JSON(dtos)
+	return makeArrayResponse(c, res)
 }
+
 func findById(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	if id := c.Params("id", ""); id == "" {
@@ -50,6 +42,7 @@ func findById(c *fiber.Ctx) error {
 		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
 	}
 }
+
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newQuote := dtos.Quote{}
@@ -90,4 +83,14 @@ func createBill(c *fiber.Ctx) error {
 		return c.JSON(DAO.CreateBill(user, id).ToDTO())
 	}
 
+}
+
+func makeArrayResponse(c *fiber.Ctx, array []models.Quote) error {
+	res := make([]dtos.Quote, 0)
+	for _, x := range array {
+		newDto := x.ToDTO()
+		res = append(res, newDto)
+	}
+
+	return c.JSON(res)
 }

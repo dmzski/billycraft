@@ -94,20 +94,10 @@ func Secure() func(c *fiber.Ctx) error {
 				LastName:  claims.FamilyName,
 				CompanyID: nil,
 			}
-			users.DAO.SaveUser(user)
+			users.DAO.Create(user)
 		}
 		c.Locals("user", user)
 
 		return c.Next()
 	}
-}
-
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-func generateRandomString(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	return string(b)
 }
