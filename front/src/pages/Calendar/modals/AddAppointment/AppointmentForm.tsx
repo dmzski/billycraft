@@ -1,4 +1,4 @@
-import { Button, DateTimePicker, Input, Modal, Select, TextArea } from '@coco-ui/core'
+import { Button, DateTimePicker, Input, Select, TextArea } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
 import { BillApi } from 'api/BillApi'
 import { CustomerApi } from 'api/CustomerApi'
@@ -14,7 +14,6 @@ import { useQuery } from 'react-query'
 
 type AddAppointmentFormProps = {
   appointment: Partial<Appointment>
-  isOpen?: boolean
   onClose: () => void
   onSubmitSuccess?: (data: Appointment) => void | Promise<void>
 }
@@ -31,12 +30,7 @@ type AppointmentFormValues = {
   endDate?: Date
 }
 
-const Form = ({
-  appointment,
-  isOpen,
-  onClose,
-  onSubmitSuccess,
-}: AddAppointmentFormProps): JSX.Element => {
+const Form = ({ appointment, onClose, onSubmitSuccess }: AddAppointmentFormProps): JSX.Element => {
   const toast = useToast()
   const { isLoading: isLoadingCustomers, data: customers } = useQuery(
     ['customers', 'not-deleted'],

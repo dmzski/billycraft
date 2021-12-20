@@ -53,9 +53,7 @@ const Suppliers = () => {
           <Loader />
         </div>
       ) : null}
-      {!isLoading && data && data.length > 0 ? (
-        <SupplierList onUpdate={setSelected} data={data} />
-      ) : null}
+      {!isLoading && data && data.length > 0 ? <SupplierList data={data} /> : null}
       {!isLoading && (!data || data.length === 0) ? <div>Aucun fournisseur</div> : null}
       <SupplierModalForm
         isOpen={!!selected}

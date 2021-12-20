@@ -5,9 +5,8 @@ import { ROUTES } from 'routes'
 
 type ListProps = {
   data: Supplier[]
-  onUpdate: (supplier: Supplier) => void
 }
-const List = ({ data, onUpdate }: ListProps): JSX.Element => {
+const List = ({ data }: ListProps): JSX.Element => {
   const history = useHistory()
   return (
     <div>

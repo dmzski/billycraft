@@ -9,7 +9,6 @@ import { Todo } from 'models/Todo'
 import { useToast } from 'providers/ToastProvider'
 import * as React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useQuery } from 'react-query'
 
 type TodoListProps = {
   data?: Todo[]

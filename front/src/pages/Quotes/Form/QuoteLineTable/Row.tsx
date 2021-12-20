@@ -1,6 +1,5 @@
-import { Icon, Input, List, Select, TextArea } from '@coco-ui/core'
+import { Icon, Input, Select, TextArea } from '@coco-ui/core'
 import { LineTypeEnum } from 'models/LineTypeEnum'
-import { ChangeEvent } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'

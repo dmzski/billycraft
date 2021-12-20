@@ -29,7 +29,6 @@ const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
 
   const value = useMemo(() => ({ user, company }), [user, company])
 
-  console.log('Value', value)
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
