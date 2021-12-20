@@ -1,4 +1,5 @@
-import { DatePicker, Input } from '@coco-ui/core'
+import { DatePicker, Input, Select } from '@coco-ui/core'
+import { BILL_STATUS } from 'constants/bill'
 import { formatISO9075 } from 'date-fns'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -29,29 +30,45 @@ const BillFilterContainer = ({ filters, setFilters }: BillFilterContainerProps):
       value={filters.customer}
       onChange={e => setFilters({ ...filters, customer: e.target.value })}
     />
-    <div className="mr-2">
-      <DatePicker
-        className="w-48"
-        label="Date de création"
-        variant="outside"
-        value={filters.createdAt ? new Date(filters.createdAt) : undefined}
-        onChange={date =>
-          setFilters({
-            ...filters,
-            createdAt: formatISO9075(date, { representation: 'date' }),
-          })
-        }
-      />
-    </div>
-    <DatePicker
-      className="w-48"
-      label="Date d'envoi"
+    <Input
+      className="w-48 mr-2"
+      label="Date de création"
       variant="outside"
-      value={filters.sentAt ? new Date(filters.sentAt) : undefined}
-      onChange={date =>
-        setFilters({ ...filters, sentAt: formatISO9075(date, { representation: 'date' }) })
+      value={filters.createdAt}
+      onChange={event =>
+        setFilters({
+          ...filters,
+          createdAt: event.target.value,
+        })
       }
     />
+    <Input
+      className="w-48 mr-2"
+      label="Date d'envoi"
+      variant="outside"
+      value={filters.sentAt}
+      onChange={event => setFilters({ ...filters, sentAt: event.target.value })}
+    />
+    <div className="w-48">
+      <Select
+        label="Status"
+        variant="outside"
+        value={filters.status}
+        onChange={value => {
+          setFilters(current => ({
+            ...current,
+            status: `${value}`,
+          }))
+        }}
+        options={[
+          { value: 'none', label: 'Sélectionner' },
+          ...Object.values(BILL_STATUS).map(({ enum: statusEnum, text }) => ({
+            value: statusEnum,
+            label: text,
+          })),
+        ]}
+      />
+    </div>
   </div>
 )
 

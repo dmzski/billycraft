@@ -2,16 +2,15 @@ import { ActionButton, Icon, Table } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
 import { STRINGS } from 'constants/strings'
-import { format, formatISO9075, parseJSON } from 'date-fns'
+import { formatISO9075, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from 'models/Bill'
 import Customer from 'models/Customer'
 import { useMemo, useCallback, MouseEvent } from 'react'
 import { useMutation, useQueryCache } from 'react-query'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ROUTES } from 'routes'
 import { BILL_STATUS } from '../../../constants/bill'
 import { useToast } from '../../../providers/ToastProvider'
-import { getBillTotal } from '../../../utils/bill'
 
 type BillTableLineProps = {
   bill: Bill
@@ -20,7 +19,6 @@ type BillTableLineProps = {
 const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
-  const history = useHistory()
 
   const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
     BillApi.updateStatus,
@@ -47,10 +45,6 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
       }
     }
     updateStatus()
-  }
-
-  const editBill = () => {
-    history.push(ROUTES.BILL_FORM.path.replace(':id', bill.id))
   }
 
   const getStatus = useMemo(() => {
@@ -90,8 +84,15 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   }, [bill])
 
   return (
-    <Table.Row onClick={editBill} hoverable>
-      <Table.Cell className="text-xs">{bill.id}</Table.Cell>
+    <Table.Row>
+      <Table.Cell className="text-xs">
+        <Link
+          className="text-primary-700 underline font-bold"
+          to={ROUTES.BILL_FORM.path.replace(':id', bill.id)}
+        >
+          {bill.id}
+        </Link>
+      </Table.Cell>
       <Table.Cell className=" truncate">{bill.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
       <Table.Cell>{bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}</Table.Cell>

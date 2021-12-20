@@ -37,6 +37,9 @@ export function filterQuotes(
     if (filters.id && !quote.id.trim().includes(filters.id.toUpperCase().trim())) {
       takeIt = false
     }
+    if (filters.status && filters.status !== 'none' && quote.status !== filters.status) {
+      takeIt = false
+    }
     if (
       filters.customer &&
       !customer?.name.toLowerCase().trim().includes(filters.customer.toLowerCase().trim())

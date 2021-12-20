@@ -26,6 +26,8 @@ func findAll(c *fiber.Ctx) error {
 		res = DAO.FindAllByTenantByStatusIsNot(*user.CompanyID, "ARCHIVED")
 	case "archived":
 		res = DAO.FindAllByTenantByStatusIs(*user.CompanyID, "ARCHIVED")
+	case "not_paid":
+		res = DAO.FindAllByTenantByNotPaid(*user.CompanyID)
 	default:
 		res = DAO.FindAllByTenant(*user.CompanyID)
 	}
@@ -40,6 +42,7 @@ func findById(c *fiber.Ctx) error {
 		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
 	}
 }
+
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newBill := dtos.Bill{}

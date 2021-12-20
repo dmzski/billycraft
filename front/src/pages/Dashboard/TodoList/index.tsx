@@ -5,21 +5,17 @@ import { STRINGS } from 'constants/strings'
 import { formatRelative } from 'date-fns'
 // eslint-disable-next-line import/no-duplicates
 import { fr } from 'date-fns/locale'
+import { Todo } from 'models/Todo'
 import { useToast } from 'providers/ToastProvider'
 import * as React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
 
-const dateOffset = 24 * 60 * 60 * 1000 * 7 // 5 days
-
-const TodoList = (): JSX.Element => {
-  const { data, refetch } = useQuery(
-    'todos-dashboard',
-    () => TodoApi.findAllFinishedAfter(new Date(Date.now() - dateOffset)),
-    {
-      refetchOnWindowFocus: false,
-    },
-  )
+type TodoListProps = {
+  data?: Todo[]
+  onSubmitSuccess?: () => void
+}
+const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
   const [editMode, setEditMode] = React.useState<number>()
   const [editTodo, setEditTodo] = React.useState('')
   const toast = useToast()
@@ -33,7 +29,7 @@ const TodoList = (): JSX.Element => {
       const fn = async () => {
         try {
           await TodoApi.done(id)
-          refetch()
+          onSubmitSuccess?.()
           toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
         } catch {
           toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
@@ -41,7 +37,7 @@ const TodoList = (): JSX.Element => {
       }
       fn()
     },
-    [toast, refetch],
+    [toast, onSubmitSuccess],
   )
 
   const handleChangeEdit: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(event => {
@@ -54,7 +50,7 @@ const TodoList = (): JSX.Element => {
         try {
           await TodoApi.create(values)
           reset({ description: '' })
-          refetch()
+          onSubmitSuccess?.()
           toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
         } catch {
           toast.show({
@@ -65,7 +61,7 @@ const TodoList = (): JSX.Element => {
       }
       fn()
     },
-    [toast, refetch, reset],
+    [toast, onSubmitSuccess, reset],
   )
 
   const handleEdit = React.useCallback(
@@ -82,7 +78,7 @@ const TodoList = (): JSX.Element => {
         await TodoApi.update(editMode as number, { description: editTodo })
         setEditTodo('')
         setEditMode(undefined)
-        refetch()
+        onSubmitSuccess?.()
         toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
       } catch {
         toast.show({
@@ -92,7 +88,7 @@ const TodoList = (): JSX.Element => {
       }
     }
     fn()
-  }, [toast, refetch, editTodo, editMode])
+  }, [toast, onSubmitSuccess, editTodo, editMode])
 
   const handleCancelEdit = React.useCallback(() => {
     setEditMode(undefined)

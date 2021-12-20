@@ -34,9 +34,9 @@ func findAll(c *fiber.Ctx) error {
 			if err != nil {
 				return fiber.NewError(fiber.ErrBadRequest.Code, "Can't parse date")
 			}
-			return makeArrayResponse(c, DAO.FindAllByTenantStartDateBetween(*user.CompanyID, startDateFromDate, startDateToDate))
+			return makeArrayResponse(c, DAO.FindAllByTenantStartDateBetween(*user.CompanyID, startDateFromDate.Local(), startDateToDate.Local()))
 		} else {
-			return makeArrayResponse(c, DAO.FindAllByTenantStartDateGreaterThan(*user.CompanyID, startDateFromDate))
+			return makeArrayResponse(c, DAO.FindAllByTenantStartDateGreaterThan(*user.CompanyID, startDateFromDate.Local()))
 		}
 
 	}

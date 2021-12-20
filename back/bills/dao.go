@@ -34,6 +34,13 @@ func (dao BillDao) FindAllByTenantByStatusIsNot(tenant int, status string) (bill
 	return
 }
 
+func (dao BillDao) FindAllByTenantByNotPaid(tenant int) (bills []models.Bill) {
+	if err := database.DBConn.Where("company_id = ? AND status = 'SENT' AND paid_at IS NULL", tenant).Find(&bills).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao BillDao) FindOneByIdAndTenant(id string, tenant int) (bill models.Bill) {
 	if err := database.DBConn.Preload("Lines").Find(&bill, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)

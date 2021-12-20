@@ -4,14 +4,13 @@ import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
 import Quote, { QuoteStatusEnum } from 'models/Quote'
 import { useMutation, useQueryCache } from 'react-query'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { MouseEvent, useCallback, useMemo } from 'react'
 import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { QUOTE_STATUS } from '../../constants/quote'
 import { useToast } from '../../providers/ToastProvider'
-import { getQuoteTotal } from '../../utils/quote'
 
 type QuoteTableLineProps = {
   quote: Quote
@@ -20,7 +19,6 @@ type QuoteTableLineProps = {
 const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
-  const history = useHistory()
 
   const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(
     QuoteApi.updateStatus,
@@ -41,10 +39,6 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
       }
     }
     updateStatus()
-  }
-
-  const editQuote = () => {
-    history.push(ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new'))
   }
 
   const getStatus = useMemo(() => {
@@ -95,8 +89,15 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
   }, [quote])
 
   return (
-    <Table.Row hoverable onClick={editQuote}>
-      <Table.Cell className="pl-2 text-xs">{quote.id}</Table.Cell>
+    <Table.Row>
+      <Table.Cell className="pl-2 text-xs">
+        <Link
+          className="text-primary-700 underline font-bold"
+          to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}
+        >
+          {quote.id}
+        </Link>
+      </Table.Cell>
       <Table.Cell className="truncate">{quote.title}</Table.Cell>
       <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
       <Table.Cell className="">

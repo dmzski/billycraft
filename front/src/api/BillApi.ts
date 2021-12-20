@@ -10,6 +10,8 @@ export const BillApi = {
     HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_archived`),
   findAllArchived: async (): Promise<Bill[]> =>
     HttpClient.GET<Bill[]>(`${BILL_URL}?filter=archived`),
+  findAllNotPaid: async (): Promise<Bill[]> =>
+    HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_paid`),
   createOrUpdate: async ({
     id,
     customerId,

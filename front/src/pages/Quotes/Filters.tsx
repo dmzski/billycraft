@@ -1,4 +1,5 @@
-import { DatePicker, Input } from '@coco-ui/core'
+import { DatePicker, Input, Select } from '@coco-ui/core'
+import { QUOTE_STATUS } from 'constants/quote'
 import { formatISO9075 } from 'date-fns'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -43,12 +44,32 @@ const QuoteFilterContainer = ({ filters, setFilters }: QuoteFilterContainerProps
       }
     />
     <Input
-      className="w-48"
+      className="w-48 mr-2"
       label="Date d'envoi"
       variant="outside"
       value={filters.sentAt}
       onChange={event => setFilters({ ...filters, sentAt: event.target.value })}
     />
+    <div className="w-48">
+      <Select
+        label="Status"
+        variant="outside"
+        value={filters.status}
+        onChange={value => {
+          setFilters(current => ({
+            ...current,
+            status: `${value}`,
+          }))
+        }}
+        options={[
+          { value: 'none', label: 'Sélectionner' },
+          ...Object.values(QUOTE_STATUS).map(({ enum: statusEnum, text }) => ({
+            value: statusEnum,
+            label: text,
+          })),
+        ]}
+      />
+    </div>
   </div>
 )
 

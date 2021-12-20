@@ -1,4 +1,4 @@
-import { Loader } from '@coco-ui/core'
+import { Icon, Loader } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
 // eslint-disable-next-line import/no-duplicates
 import { addDays, formatRelative, formatRFC3339, parseJSON } from 'date-fns'
@@ -16,7 +16,10 @@ const NextAppointmentList = () => {
 
   return (
     <div>
-      <h2 className="text-xl mb-2">Prochains rendez-vous (3 prochains jours)</h2>
+      <div className="text-xl mb-2 flex">
+        <Icon name="calendar" className="mr-2" />
+        <h2>Prochains rendez-vous (3 prochains jours)</h2>
+      </div>
       {isLoading ? (
         <div className="flex justify-center">
           <Loader />

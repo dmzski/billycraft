@@ -1,4 +1,4 @@
-import { compareAsc, format, formatISO9075, parseJSON } from 'date-fns'
+import { compareAsc, formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
 import { BILL_STATUS } from '../constants/bill'
 import Bill, { BillLine } from '../models/Bill'
@@ -30,6 +30,9 @@ export function filterBills(
     let takeIt = true
     const customer = customers.find(c => c.id === bill.customerId)
     if (filters.id && !bill.id.trim().includes(filters.id.toUpperCase().trim())) {
+      takeIt = false
+    }
+    if (filters.status && filters.status !== 'none' && bill.status !== filters.status) {
       takeIt = false
     }
     if (
