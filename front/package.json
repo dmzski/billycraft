@@ -7,6 +7,7 @@
     "@heroicons/react": "^1.0.1",
     "@react-hook/media-query": "^1.1.1",
     "@react-keycloak/web": "^3.4.0",
+    "clsx": "^1.1.1",
     "date-fns": "^2.25.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",

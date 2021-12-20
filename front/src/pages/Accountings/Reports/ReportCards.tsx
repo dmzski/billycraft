@@ -1,6 +1,6 @@
-import { ReportDTO } from '../../models/dtos/Report'
+import { ReportDTO } from 'models/dtos/Report'
+import CounterAnimated from 'components/CounterAnimated'
 import DashboardCard from './DashboardCard'
-import CounterAnimated from '../../components/CounterAnimated'
 
 const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => (
   <div className="flex flex-wrap justify-between w-full items-center">

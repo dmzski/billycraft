@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import Loader from '../../components/Loader'
+import Loader from 'components/Loader'
+import { ReportApi } from 'api/ReportApi'
+import { ReportDTO } from 'models/dtos/Report'
 import ReportCards from './ReportCards'
 import YearReportGraph from './YearReportGraph'
-import { ReportApi } from '../../api/ReportApi'
-import { ReportDTO } from '../../models/dtos/Report'
 
 const Reports = () => {
   const [dateTarget] = useState(new Date())

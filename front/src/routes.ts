@@ -1,14 +1,14 @@
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 
-export const ROUTES: Record<
-  string,
-  {
-    exact?: boolean
-    icon?: IconName
-    path: string
-    title: string
-  }
-> = {
+export type Route = {
+  exact?: boolean
+  icon?: IconName
+  path: string
+  title: string
+  routes?: Record<string, Route>
+}
+
+export const ROUTES = {
   BILLS: {
     exact: true,
     icon: 'cash',
@@ -78,10 +78,43 @@ export const ROUTES: Record<
     path: '/support',
     title: 'Support',
   },
-  REPORTS: {
+  SUPPLIERS: {
     exact: true,
+    icon: 'truck',
+    path: '/suppliers',
+    title: 'Fournisseurs',
+  },
+  SUPPLIERS_FORM: {
+    path: '/suppliers/:id',
+    title: 'Fournisseurs',
+  },
+  ACCOUNTINGS: {
+    path: '/accounting',
     icon: 'chart-square-bar',
-    path: '/reports',
-    title: 'Statistiques',
+    title: 'Comptabilité',
+    routes: {
+      OUTGOINGS: {
+        exact: true,
+        path: '/accounting/outgoings',
+        title: "Livrets d'achats",
+        routes: {
+          OVERVIEW: {
+            exact: true,
+            path: '/accounting/outgoings/overview',
+            title: "Livrets d'achats > Vue d'ensemble",
+          },
+          LIST: {
+            exact: true,
+            path: '/accounting/outgoings/list',
+            title: "Livrets d'achats > Tous les livrets d'achats",
+          },
+        },
+      },
+      REPORTS: {
+        exact: true,
+        path: '/accounting/reports',
+        title: 'Statistiques',
+      },
+    },
   },
 }

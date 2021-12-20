@@ -1,4 +1,4 @@
-import { Badge, Icon, Loader } from '@coco-ui/core'
+import { Icon, Loader } from '@coco-ui/core'
 import { BillApi } from 'api/BillApi'
 import { TodoApi } from 'api/TodoApi'
 import { useQuery } from 'react-query'

@@ -18,6 +18,7 @@ import (
 	"backv2/quoteEmailCustomization"
 	"backv2/quotes"
 	"backv2/reports"
+	"backv2/suppliers"
 	"backv2/todos"
 	"backv2/users"
 	"errors"
@@ -131,6 +132,7 @@ func setupRoutes(app *fiber.App) {
 	pdf.InitRoutes(v1)
 	todos.InitRoutes(v1)
 	appointments.InitRoutes(v1)
+	suppliers.InitRoutes(v1)
 
 	// Global API Routes
 	logo.InitRoutes(api)

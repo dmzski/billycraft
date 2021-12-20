@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format, parseJSON } from 'date-fns'
-import { ReportDTO } from '../../models/dtos/Report'
-import { getNormalizedDate } from '../../utils/date'
+import { ReportDTO } from 'models/dtos/Report'
+import { getNormalizedDate } from 'utils/date'
 
 const YearReportGraph = ({ report }: { report: ReportDTO }): JSX.Element => {
   const data = useMemo(() => {
