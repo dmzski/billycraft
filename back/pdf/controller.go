@@ -54,7 +54,7 @@ func getOrGenerateBill(c *fiber.Ctx) error {
 			log.Println("Error when opening the file, err " + err.Error())
 			return generateBill(c)
 		}
-		return c.SendFile(file.Name())
+		return c.Download(file.Name())
 	}
 }
 
@@ -64,9 +64,7 @@ func generateQuote(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		quote := quotes.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
-		if quote.FileName != nil && (quote.Status != "DRAFT") {
-			return c.SendStatus(403)
-		}
+
 		file := generateQuotePDF(quote)
 
 		return c.Download(file.Name())
@@ -79,9 +77,7 @@ func generateBill(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		bill := bills.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
-		if bill.FileName != nil && (bill.Status != "DRAFT") {
-			return c.SendStatus(403)
-		}
+
 		file := generateBillPDF(bill)
 
 		return c.SendFile(file.Name())

@@ -30,28 +30,24 @@ const QuoteFilterContainer = ({ filters, setFilters }: QuoteFilterContainerProps
       value={filters.customer}
       onChange={e => setFilters({ ...filters, customer: e.target.value })}
     />
-    <div className="mr-2">
-      <DatePicker
-        className="w-48"
-        label="Date de création"
-        variant="outside"
-        value={filters.createdAt ? new Date(filters.createdAt) : undefined}
-        onChange={date =>
-          setFilters({
-            ...filters,
-            createdAt: formatISO9075(date, { representation: 'date' }),
-          })
-        }
-      />
-    </div>
-    <DatePicker
+    <Input
+      className="w-48 mr-2"
+      label="Date de création"
+      variant="outside"
+      value={filters.createdAt}
+      onChange={event =>
+        setFilters({
+          ...filters,
+          createdAt: event.target.value,
+        })
+      }
+    />
+    <Input
       className="w-48"
       label="Date d'envoi"
       variant="outside"
-      value={filters.sentAt ? new Date(filters.sentAt) : undefined}
-      onChange={date =>
-        setFilters({ ...filters, sentAt: formatISO9075(date, { representation: 'date' }) })
-      }
+      value={filters.sentAt}
+      onChange={event => setFilters({ ...filters, sentAt: event.target.value })}
     />
   </div>
 )
