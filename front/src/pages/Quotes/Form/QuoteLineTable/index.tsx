@@ -86,80 +86,52 @@ const QuoteLineTable = ({
   }
 
   return (
-    <div tabIndex={0} role="row" onKeyDown={handleKeyDown}>
-      <List
-        className="bg-white w-full"
-        data={fields}
-        columns={[
-          {
-            name: 'Type',
-            className: 'pl-12 w-48',
-          },
-          {
-            name: 'Nom',
-            className: 'w-72 pl-6',
-          },
-          {
-            name: 'Description',
-            className: 'w-full pl-4',
-          },
-          {
-            name: 'Quantité',
-            className: 'w-36',
-          },
-          {
-            name: 'Prix HT',
-            className: 'w-48',
-          },
-          {
-            name: 'Prix TTC',
-            className: 'w-48',
-          },
-          {
-            name: 'Sous Total',
-            className: 'w-52',
-          },
-          {
-            name: '',
-            className: 'w-24',
-          },
-        ]}
-      >
-        {({ data }) => (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="lines">
-              {droppableProvided => (
-                <div
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...droppableProvided.droppableProps}
-                  ref={droppableProvided.innerRef}
+    <>
+      <div className="grid grid-cols-12 gap-2 px-4 mb-4">
+        <div className="col-span-2 pl-4">Type</div>
+        <div className="col-span-3">Nom</div>
+        <div className="col-span-3">Description</div>
+        <div className="col-span-1">Quantité</div>
+        <div className="col-span-1">Prix HT</div>
+        <div className="col-span-1">Prix TTC</div>
+        <div className="col-span-1">Sous total</div>
+      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="lines">
+          {droppableProvided => (
+            <div
+              className="flex flex-col"
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...droppableProvided.droppableProps}
+              ref={droppableProvided.innerRef}
+              onKeyDown={handleKeyDown}
+              role="row"
+              tabIndex={0}
+            >
+              {fields?.map((line, index) => (
+                <Draggable
+                  key={`draggable-${line.line}`}
+                  draggableId={line.line.toString()}
+                  index={index}
+                  isDragDisabled={disabled}
                 >
-                  {(data as QuoteLine[])?.map((line, index) => (
-                    <Draggable
-                      key={`draggable-${line.line}`}
-                      draggableId={line.line.toString()}
+                  {provided => (
+                    <QuoteLineTableLine
+                      provided={provided}
+                      key={`${line.line}`}
+                      disabled={disabled}
                       index={index}
-                      isDragDisabled={disabled}
-                    >
-                      {provided => (
-                        <QuoteLineTableLine
-                          provided={provided}
-                          key={`${line.line}`}
-                          disabled={disabled}
-                          index={index}
-                          control={control}
-                          deleteLine={() => remove(index)}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
-                  {droppableProvided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        )}
-      </List>
+                      control={control}
+                      deleteLine={() => remove(index)}
+                    />
+                  )}
+                </Draggable>
+              ))}
+              {droppableProvided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       {!disabled ? (
         <>
           <Button
@@ -198,7 +170,7 @@ const QuoteLineTable = ({
           </div>
         </>
       ) : null}
-    </div>
+    </>
   )
 }
 
