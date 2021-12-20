@@ -1,14 +1,16 @@
 import { Loader } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
-import { addDays, formatISO9075, formatRFC3339, parseJSON } from 'date-fns'
-import React, { Fragment } from 'react'
+// eslint-disable-next-line import/no-duplicates
+import { addDays, formatRelative, formatRFC3339, parseJSON } from 'date-fns'
+// eslint-disable-next-line import/no-duplicates
+import fr from 'date-fns/locale/fr'
 import { useQuery } from 'react-query'
 
 const NextAppointmentList = () => {
-  const { data: appointments, isLoading } = useQuery('appointment-dashboard', () =>
+  const { data: appointments, isLoading } = useQuery(['appointments', 'dashboard'], () =>
     AppointmentApi.findAllStartDateBetween(
       formatRFC3339(Date.now()),
-      formatRFC3339(addDays(Date.now(), 3)),
+      formatRFC3339(addDays(Date.now(), 4)),
     ),
   )
 
@@ -29,7 +31,12 @@ const NextAppointmentList = () => {
           </div>
           {appointments.map(appointment => (
             <div className="shadow grid grid-cols-3 my-2 p-2" key={appointment.id}>
-              <div>{formatISO9075(parseJSON(appointment.startDate))}</div>
+              <div>
+                {formatRelative(parseJSON(appointment.startDate), Date.now(), {
+                  weekStartsOn: 1,
+                  locale: fr,
+                })}
+              </div>
               <div>
                 {appointment.assignees.map(email => (
                   <p>{email}</p>

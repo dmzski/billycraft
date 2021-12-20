@@ -1,4 +1,4 @@
-import { eachMinuteOfInterval, endOfDay, startOfDay } from 'date-fns'
+import { eachMinuteOfInterval, endOfDay, isSameDay, startOfDay } from 'date-fns'
 import { useMemo } from 'react'
 
 type DayColumnProps = {
@@ -31,7 +31,11 @@ const DayColumn = ({ date, onCellClick }: DayColumnProps): JSX.Element => {
   )
 
   return (
-    <section className="border-r border-b border-gray-300 w-52">
+    <section
+      className={`border-r border-b border-gray-300 w-52 ${
+        isSameDay(Date.now(), date) ? 'bg-primary-50' : ''
+      }`}
+    >
       <h2 className="text-center text-lg h-12 flex justify-center items-center">
         {date.toLocaleString(undefined, { weekday: 'long', day: 'numeric' }).toLocaleUpperCase()}
       </h2>

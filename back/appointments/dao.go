@@ -18,6 +18,20 @@ func (dao AppointmentDao) FindAllByTenant(tenant int) (appointments []models.App
 	return
 }
 
+func (dao AppointmentDao) FindAllByTenantStartDateBetween(tenant int, startDate time.Time, endDate time.Time) (appointments []models.Appointment) {
+	if err := database.DBConn.Preload("Assignees").Find(&appointments, "company_id = ? AND start_date BETWEEN ? AND ? ORDER BY start_date asc", tenant, startDate, endDate).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao AppointmentDao) FindAllByTenantStartDateGreaterThan(tenant int, startDate time.Time) (appointments []models.Appointment) {
+	if err := database.DBConn.Preload("Assignees").Find(&appointments, "company_id = ? AND start_date > ? ORDER BY start_date asc", tenant, startDate).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao AppointmentDao) FindAllByTenantAndIsDone(tenant int) (appointments []models.Appointment) {
 	if err := database.DBConn.Preload("Assignees").Find(&appointments, "company_id = ? AND done_at IS NOT NULL ORDER BY created_at desc", tenant).Error; err != nil {
 		panic(err)

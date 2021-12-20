@@ -14,14 +14,15 @@ import {
 } from 'date-fns'
 import Appointment from 'models/Appointment'
 import { useCallback, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryCache } from 'react-query'
 import AppointmentCell from './AppointmentCalendar'
 import DayColumn from './DayColumn'
 import AddAppointment from './modals/AddAppointment'
 import TimeColumn from './TimeColumn'
 
 const Calendar = () => {
-  const { isLoading, data, refetch } = useQuery(`appointments`, AppointmentApi.findAll)
+  const { data, refetch } = useQuery(`appointments`, AppointmentApi.findAll)
+  const queryCache = useQueryCache()
   const [selectedAppointment, setSelectedAppointment] = useState<Partial<Appointment> | undefined>(
     undefined,
   )
@@ -49,8 +50,9 @@ const Calendar = () => {
   )
 
   const onSubmitSuccess = useCallback(() => {
+    queryCache.invalidateQueries('appointments')
     refetch()
-  }, [refetch])
+  }, [queryCache, refetch])
 
   const goPreviousWeek = useCallback(() => {
     setDate(current => subWeeks(current, 1))
@@ -101,26 +103,26 @@ const Calendar = () => {
       </Grid>
       <div className="relative flex mt-8 ml-6 md:ml-0">
         <TimeColumn />
+        <div className="absolute top-12 left-6 right-0 bottom-0 overflow-y-hidden">
+          {data
+            ?.filter(({ startDate }) => {
+              const parsedDate = parseJSON(startDate)
+              return (
+                (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
+                isEqual(parsedDate, startOfWeekDate) ||
+                isEqual(parsedDate, endOfWeekDate)
+              )
+            })
+            .map((appointment: Appointment) => (
+              <AppointmentCell
+                onAppointmentClick={value => setSelectedAppointment(value)}
+                key={`appointment-${appointment.id}`}
+                appointment={appointment}
+                appointments={data}
+              />
+            ))}
+        </div>
         <div className="absolute flex w-max top-0 left-6 right-0 pr-2">
-          <div className="absolute top-12 left-0 right-0 bottom-0 overflow-y-hidden">
-            {data
-              ?.filter(({ startDate }) => {
-                const parsedDate = parseJSON(startDate)
-                return (
-                  (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
-                  isEqual(parsedDate, startOfWeekDate) ||
-                  isEqual(parsedDate, endOfWeekDate)
-                )
-              })
-              .map((appointment: Appointment) => (
-                <AppointmentCell
-                  onAppointmentClick={value => setSelectedAppointment(value)}
-                  key={`appointment-${appointment.id}`}
-                  appointment={appointment}
-                  appointments={data}
-                />
-              ))}
-          </div>
           {datesOfWeek.map(dateOfWeek => (
             <DayColumn onCellClick={handleCellClick} key={dateOfWeek.getTime()} date={dateOfWeek} />
           ))}
