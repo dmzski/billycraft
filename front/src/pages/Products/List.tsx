@@ -7,8 +7,8 @@ const ProductTable = ({ products }: { products: Product[] }): JSX.Element => (
     <Table.Head>
       <Table.Row>
         <Table.HeadCell className="w-48">Type</Table.HeadCell>
-        <Table.HeadCell className="w-1/3">Nom</Table.HeadCell>
-        <Table.HeadCell className="w-1/3">Description</Table.HeadCell>
+        <Table.HeadCell className="w-96">Nom</Table.HeadCell>
+        <Table.HeadCell className="w-96">Description</Table.HeadCell>
         <Table.HeadCell className="w-44 text-right">Prix Unitaire HT</Table.HeadCell>
         <Table.HeadCell className="w-24" />
       </Table.Row>

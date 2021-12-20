@@ -36,7 +36,7 @@ export const ROUTES: Record<
     title: 'Edition de client',
   },
   DASHBOARD: {
-    icon: 'chart-pie',
+    icon: 'view-grid',
     path: '/dashboard',
     title: 'Accueil',
   },
@@ -77,5 +77,11 @@ export const ROUTES: Record<
     icon: 'support',
     path: '/support',
     title: 'Support',
+  },
+  REPORTS: {
+    exact: true,
+    icon: 'chart-square-bar',
+    path: '/reports',
+    title: 'Statistiques',
   },
 }

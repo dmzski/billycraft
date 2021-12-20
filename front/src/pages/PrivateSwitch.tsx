@@ -17,6 +17,7 @@ import Settings from './Settings'
 import SupportPage from './SupportPage'
 import History from './History'
 import Calendar from './Calendar'
+import Reports from './Reports'
 
 const PrivateSwitch = (): JSX.Element => {
   const user = useUser()
@@ -47,6 +48,7 @@ const PrivateSwitch = (): JSX.Element => {
           <Layout>
             <Switch>
               <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
+              <Route path={ROUTES.REPORTS.path} component={Reports} />
               <Route path={ROUTES.CALENDAR.path} component={Calendar} />
               <Route path={ROUTES.QUOTE_FORM.path} component={QuoteForm} />
               <Route path={ROUTES.QUOTES.path} exact={ROUTES.QUOTES.exact} component={Quote} />

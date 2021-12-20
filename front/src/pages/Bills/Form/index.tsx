@@ -64,8 +64,8 @@ const BillFormPage = (): JSX.Element => {
       <Button variant="inverted-primary" className="mb-4" size="xs" onClick={history.goBack}>
         Retourner à la liste des factures
       </Button>
-      <div className="flex items-center mb-8 border-b">
-        <div className="flex items-end flex-grow">
+      <div className="flex items-center flex-wrap mb-8 border-b">
+        <div className="flex items-end flex-grow mb-4 md:mb-0">
           <h1 className="text-3xl">{!newBill.id ? 'Nouvelle facture' : 'Modifier une facture'}</h1>
           {newBill.status ? (
             <Badge variant="outline" className="text-xs ml-2 my-2 px-2">

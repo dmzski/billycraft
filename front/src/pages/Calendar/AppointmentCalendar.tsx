@@ -116,6 +116,7 @@ const AppointmentCell = ({
       ref={ref}
       key={appointment.id}
       onMouseDown={handleMouseDown}
+      onTouchEnd={() => onAppointmentClick(appointment)}
       onDoubleClick={() => onAppointmentClick(appointment)}
       onBlur={handleBlur}
       type="button"

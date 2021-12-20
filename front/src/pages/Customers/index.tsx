@@ -18,8 +18,8 @@ const CustomerPage = (): JSX.Element => {
 
   return (
     <>
-      <h1 className="text-3xl">Clients</h1>
-      <div className="mt-4 flex flex-row-reverse">
+      <div className="flex flex-wrap justify-between">
+        <h1 className="text-3xl">Clients</h1>
         <Button icon="plus" size="md" onClick={goToNewCustomer}>
           Nouveau client
         </Button>

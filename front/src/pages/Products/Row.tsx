@@ -141,7 +141,6 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
           }}
           render={({ field, fieldState }) => (
             <Input
-              form={formID}
               name={`${formID}-${field.name}`}
               value={field.value}
               onChange={field.onChange}
@@ -160,7 +159,6 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
           control={control}
           render={({ field, fieldState }) => (
             <TextArea
-              form={formID}
               rows={1}
               name={field.name}
               value={field.value ?? ''}
@@ -181,7 +179,6 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             control={control}
             render={({ field }) => (
               <Input
-                form={formID}
                 name={field.name}
                 value={field.value ?? ''}
                 onBlur={event => {

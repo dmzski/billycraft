@@ -129,8 +129,11 @@ const QuoteLineTable = ({
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="lines">
               {droppableProvided => (
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
+                <div
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...droppableProvided.droppableProps}
+                  ref={droppableProvided.innerRef}
+                >
                   {(data as QuoteLine[])?.map((line, index) => (
                     <Draggable
                       key={`draggable-${line.line}`}

@@ -15,7 +15,7 @@ const ProductsPage = (): JSX.Element => {
         Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les
         ajouter plus rapidement lors de la création de vos factures et devis.
       </p>
-      <div className="flex-col justify-center w-full mt-8 items-center">
+      <div className="flex-col justify-center mt-8 items-center">
         {productsQuery.isLoading && (
           <div className="w-full flex justify-center">
             <Loader />

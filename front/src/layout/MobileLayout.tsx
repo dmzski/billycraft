@@ -1,3 +1,4 @@
+import { Drawer, Icon } from '@coco-ui/core'
 import * as React from 'react'
 import SideBar from './SideBar'
 
@@ -9,18 +10,15 @@ const MobileLayout = ({ children }: MobileLayoutProps): JSX.Element => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className=" z-10 bg-white shadow-md flex flex-col fixed w-full top-0 h-auto items-center">
-        {menuOpen && (
-          <button
-            type="button"
-            className="block appearance-none z-10 h-screen w-full"
-            onClick={() => setMenuOpen(false)}
-          >
-            <SideBar />
-          </button>
-        )}
+      <div className="bg-white shadow-md flex flex-col fixed w-full top-0 h-10 justify-center px-2">
+        <Icon name="menu" role="button" onClick={() => setMenuOpen(current => !current)} />
       </div>
-      <div className="pt-10 w-full h-full z-0">{children}</div>
+      <Drawer position="left" onClose={() => setMenuOpen(false)} open={menuOpen} hasBackdrop>
+        <div className="overflow-y-auto h-full">
+          <SideBar />
+        </div>
+      </Drawer>
+      <main className="container mt-14 pb-4 overflow-x-auto h-full px-4">{children}</main>
     </div>
   )
 }
