@@ -22,6 +22,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gorm.io/driver/postgres v1.1.0
 	gorm.io/gorm v1.21.11
+	github.com/google/uuid v1.3.0
 )
 
 require (
