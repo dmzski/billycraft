@@ -123,7 +123,6 @@ const QuoteLineTableLine = ({
               type="number"
               step={0.01}
               name={field.name}
-              value={field.value}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
@@ -143,7 +142,6 @@ const QuoteLineTableLine = ({
               placeholder="Prix"
               type="number"
               step={0.01}
-              value={field.value}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()

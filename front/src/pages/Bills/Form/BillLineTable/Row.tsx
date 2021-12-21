@@ -116,9 +116,8 @@ const BillLineTableLine = ({
                 className="text-right w-full"
                 placeholder="Quantité"
                 type="number"
-                step="0.01"
+                step={0.01}
                 name={field.name}
-                value={field.value}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
@@ -137,8 +136,7 @@ const BillLineTableLine = ({
                 className="text-right w-full"
                 placeholder="Prix"
                 type="number"
-                step="0.01"
-                value={field.value}
+                step={0.01}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
