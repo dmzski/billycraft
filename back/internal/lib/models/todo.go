@@ -28,8 +28,8 @@ func (t *Todo) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (t Todo) ToDTO() dtos.Todo {
-	return dtos.Todo{
+func (t Todo) ToDTO() dtos.TodoResponse {
+	return dtos.TodoResponse{
 		ID:          t.ID,
 		Description: t.Description,
 		CompanyID:   t.CompanyID,

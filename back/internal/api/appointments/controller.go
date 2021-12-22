@@ -1,6 +1,7 @@
 package appointments
 
 import (
+	"backv2/internal/lib/dtos"
 	"backv2/internal/lib/models"
 	"fmt"
 	"time"
@@ -51,7 +52,7 @@ func findById(c *fiber.Ctx) error {
 }
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newAppointment := AppointmentRequest{}
+	newAppointment := dtos.AppointmentRequest{}
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
@@ -73,7 +74,7 @@ func delete(c *fiber.Ctx) error {
 }
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newAppointment := AppointmentRequest{}
+	newAppointment := dtos.AppointmentRequest{}
 	if err := c.BodyParser(&newAppointment); err != nil {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
@@ -90,8 +91,8 @@ func done(c *fiber.Ctx) error {
 	}
 }
 
-func makeArrayResponse(c *fiber.Ctx, array []Appointment) error {
-	res := make([]AppointmentResponse, 0)
+func makeArrayResponse(c *fiber.Ctx, array []models.Appointment) error {
+	res := make([]dtos.AppointmentResponse, 0)
 	for _, x := range array {
 		newDto := x.ToDTO()
 		res = append(res, newDto)

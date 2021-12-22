@@ -91,7 +91,7 @@ func done(c *fiber.Ctx) error {
 }
 
 func makeArrayResponse(c *fiber.Ctx, array []models.Todo) error {
-	var res []dtos.Todo
+	var res []dtos.TodoResponse
 	for _, x := range array {
 		newDto := x.ToDTO()
 		res = append(res, newDto)

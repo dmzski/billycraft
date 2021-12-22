@@ -2,6 +2,7 @@ package suppliers
 
 import (
 	"backv2/database"
+	"backv2/internal/lib/dtos"
 	"backv2/internal/lib/models"
 	"log"
 )
@@ -9,27 +10,27 @@ import (
 type Repository struct {
 }
 
-func (dao Repository) FindAllByTenant(tenant int) (suppliers []Supplier) {
+func (dao Repository) FindAllByTenant(tenant int) (suppliers []models.Supplier) {
 	if err := database.DBConn.Where("company_id = ?", tenant).Order("name asc").Find(&suppliers).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (supplier Supplier) {
+func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (supplier models.Supplier) {
 	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).First(&supplier).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) Update(id string, tenant int, changes SupplierRequest) (supplier Supplier) {
+func (dao Repository) Update(id string, tenant int, changes dtos.SupplierRequest) (supplier models.Supplier) {
 	tx := database.DBConn.Begin()
 	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&supplier)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(Supplier{}.FromDTO(changes))
+	tx = tx.Updates(models.Supplier{}.FromDTO(changes))
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
@@ -38,7 +39,7 @@ func (dao Repository) Update(id string, tenant int, changes SupplierRequest) (su
 	return
 }
 
-func (dao Repository) Create(creator models.User, newSupplier SupplierRequest) (supplier Supplier) {
+func (dao Repository) Create(creator models.User, newSupplier dtos.SupplierRequest) (supplier models.Supplier) {
 	supplier = supplier.FromDTO(newSupplier)
 	supplier.CompanyID = *creator.CompanyID
 	supplier.CreatedBy = creator.Email
@@ -50,7 +51,7 @@ func (dao Repository) Create(creator models.User, newSupplier SupplierRequest) (
 }
 
 func (dao Repository) Delete(id string, tenant int) {
-	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&Supplier{}).Error; err != nil {
+	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Supplier{}).Error; err != nil {
 		panic(err)
 	}
 }

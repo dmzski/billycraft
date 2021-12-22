@@ -1,6 +1,7 @@
-package outgoings
+package models
 
 import (
+	"backv2/internal/lib/dtos"
 	"time"
 
 	"github.com/google/uuid"
@@ -37,7 +38,7 @@ func (o *Outgoing) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (Outgoing) FromDTO(r OutgoingRequest) Outgoing {
+func (Outgoing) FromDTO(r dtos.OutgoingRequest) Outgoing {
 	outgoing := Outgoing{
 		Name:      r.Name,
 		StartDate: r.StartDate.Local(),
@@ -58,20 +59,20 @@ func (Outgoing) FromDTO(r OutgoingRequest) Outgoing {
 	return outgoing
 }
 
-func (o Outgoing) ToDTO() OutgoingResponse {
+func (o Outgoing) ToDTO() dtos.OutgoingResponse {
 
-	dto := OutgoingResponse{
+	dto := dtos.OutgoingResponse{
 		ID:        o.ID,
 		CreatedBy: o.CreatedBy,
 		CompanyID: o.CompanyID,
 		Name:      o.Name,
 		StartDate: o.StartDate,
 		EndDate:   o.EndDate,
-		Lines:     make([]OutgoingLineResponse, 0),
+		Lines:     make([]dtos.OutgoingLineResponse, 0),
 	}
 
 	for _, line := range o.Lines {
-		dto.Lines = append(dto.Lines, OutgoingLineResponse{
+		dto.Lines = append(dto.Lines, dtos.OutgoingLineResponse{
 			SupplierID:            line.SupplierID,
 			SupplierBillReference: line.SupplierBillReference,
 			BillID:                line.BillID,

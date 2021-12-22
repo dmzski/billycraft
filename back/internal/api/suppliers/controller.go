@@ -1,6 +1,7 @@
 package suppliers
 
 import (
+	"backv2/internal/lib/dtos"
 	"backv2/internal/lib/models"
 	"fmt"
 
@@ -18,7 +19,7 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var dtos []SupplierResponse
+	var dtos []dtos.SupplierResponse
 	for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
 		newDto := x.ToDTO()
 		dtos = append(dtos, newDto)
@@ -38,7 +39,7 @@ func findById(c *fiber.Ctx) error {
 }
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newSupplier := SupplierRequest{}
+	newSupplier := dtos.SupplierRequest{}
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
@@ -60,7 +61,7 @@ func delete(c *fiber.Ctx) error {
 }
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newSupplier := SupplierRequest{}
+	newSupplier := dtos.SupplierRequest{}
 	if err := c.BodyParser(&newSupplier); err != nil {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}

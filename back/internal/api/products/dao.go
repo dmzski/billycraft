@@ -2,28 +2,29 @@ package products
 
 import (
 	"backv2/database"
+	"backv2/internal/lib/dtos"
 	"backv2/internal/lib/models"
 	"log"
 )
 
-type ProductDao struct {
+type Repository struct {
 }
 
-func (dao ProductDao) FindAllByTenant(tenant int) (products []Product) {
+func (dao Repository) FindAllByTenant(tenant int) (products []models.Product) {
 	if err := database.DBConn.Find(&products, "company_id = ? ORDER BY name asc", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao ProductDao) FindOneByIdAndTenant(id string, tenant int) (product Product) {
+func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (product models.Product) {
 	if err := database.DBConn.Find(&product, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao ProductDao) Update(id string, tenant int, changes ProductDTO) (product Product) {
+func (dao Repository) Update(id string, tenant int, changes dtos.Product) (product models.Product) {
 	tx := database.DBConn.Begin()
 	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
@@ -38,7 +39,7 @@ func (dao ProductDao) Update(id string, tenant int, changes ProductDTO) (product
 	return
 }
 
-func (dao ProductDao) Create(creator models.User, newProduct ProductDTO) (product Product) {
+func (dao Repository) Create(creator models.User, newProduct dtos.Product) (product models.Product) {
 	product = product.FromDTO(newProduct)
 	product.CompanyID = *creator.CompanyID
 	product.CreatedBy = creator.Email
@@ -49,10 +50,10 @@ func (dao ProductDao) Create(creator models.User, newProduct ProductDTO) (produc
 	return
 }
 
-func (dao ProductDao) Delete(id string, tenant int) {
-	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&Product{}).Error; err != nil {
+func (dao Repository) Delete(id string, tenant int) {
+	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Product{}).Error; err != nil {
 		panic(err)
 	}
 }
 
-var DAO = &ProductDao{}
+var DAO = &Repository{}

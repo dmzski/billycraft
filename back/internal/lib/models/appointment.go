@@ -44,8 +44,8 @@ func (t *Appointment) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (a Appointment) ToDTO() (dto dtos.Appointment) {
-	dto = dtos.Appointment{
+func (a Appointment) ToDTO() (dto dtos.AppointmentResponse) {
+	dto = dtos.AppointmentResponse{
 		ID:          a.ID,
 		Description: a.Description,
 		CreatedBy:   a.CreatedBy,
