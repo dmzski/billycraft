@@ -1,7 +1,7 @@
 package reports
 
 import (
-	"backv2/internal/lib/models"
+	"back/internal/lib/models"
 	"time"
 
 	"github.com/gofiber/fiber/v2"

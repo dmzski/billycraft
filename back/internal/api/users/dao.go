@@ -1,8 +1,8 @@
 package users
 
 import (
-	"backv2/database"
-	"backv2/internal/lib/models"
+	"back/database"
+	"back/internal/lib/models"
 	"log"
 
 	"gorm.io/gorm/clause"

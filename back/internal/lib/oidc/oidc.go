@@ -1,8 +1,8 @@
 package oidc
 
 import (
-	"backv2/internal/api/users"
-	"backv2/internal/lib/models"
+	"back/internal/api/users"
+	"back/internal/lib/models"
 	"context"
 	"log"
 	"math/rand"

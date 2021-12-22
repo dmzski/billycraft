@@ -1,9 +1,9 @@
 package outgoings
 
 import (
-	"backv2/database"
-	"backv2/internal/lib/dtos"
-	"backv2/internal/lib/models"
+	"back/database"
+	"back/internal/lib/dtos"
+	"back/internal/lib/models"
 	"log"
 )
 

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"backv2/config"
-	"backv2/database"
-	"backv2/internal/api"
-	"backv2/internal/lib/dtos"
-	"backv2/internal/lib/oidc"
+	"back/config"
+	"back/database"
+	"back/internal/api"
+	"back/internal/lib/dtos"
+	"back/internal/lib/oidc"
 	"errors"
 	"fmt"
 	"log"

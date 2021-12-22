@@ -1,10 +1,10 @@
 package pdf
 
 import (
-	"backv2/config"
-	"backv2/internal/api/bills"
-	"backv2/internal/api/quotes"
-	"backv2/internal/lib/models"
+	"back/config"
+	"back/internal/api/bills"
+	"back/internal/api/quotes"
+	"back/internal/lib/models"
 	"fmt"
 	"log"
 	"os"

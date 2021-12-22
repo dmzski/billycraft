@@ -1,10 +1,10 @@
 package company
 
 import (
-	"backv2/config"
-	"backv2/internal/api/users"
-	"backv2/internal/lib/dtos"
-	"backv2/internal/lib/models"
+	"back/config"
+	"back/internal/api/users"
+	"back/internal/lib/dtos"
+	"back/internal/lib/models"
 	"fmt"
 	"os"
 

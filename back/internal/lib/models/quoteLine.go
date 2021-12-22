@@ -1,6 +1,6 @@
 package models
 
-import "backv2/internal/lib/dtos"
+import "back/internal/lib/dtos"
 
 type QuoteLine struct {
 	QuoteID     string `gorm:"primaryKey;autoIncrement:false"`

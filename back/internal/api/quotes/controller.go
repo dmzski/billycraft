@@ -1,8 +1,8 @@
 package quotes
 
 import (
-	"backv2/internal/lib/dtos"
-	"backv2/internal/lib/models"
+	"back/internal/lib/dtos"
+	"back/internal/lib/models"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"

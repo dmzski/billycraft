@@ -1,7 +1,7 @@
 package models
 
 import (
-	"backv2/internal/lib/dtos"
+	"back/internal/lib/dtos"
 	"time"
 
 	"github.com/google/uuid"

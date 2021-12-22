@@ -1,8 +1,8 @@
 package logo
 
 import (
-	"backv2/config"
-	"backv2/internal/lib/dtos"
+	"back/config"
+	"back/internal/lib/dtos"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
