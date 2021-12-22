@@ -26,6 +26,6 @@ func MakeMigrations() (err error) {
 	if err != nil {
 		return
 	}
-	err = m.Up()
+	err = m.Migrate(16)
 	return
 }

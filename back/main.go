@@ -1,26 +1,11 @@
 package main
 
 import (
-	"backv2/appointments"
-	"backv2/billCustomization"
-	"backv2/billEmailCustomization"
-	"backv2/bills"
-	"backv2/company"
 	"backv2/config"
-	"backv2/customers"
 	"backv2/database"
-	"backv2/dtos"
-	"backv2/logo"
-	"backv2/oidc"
-	"backv2/pdf"
-	"backv2/products"
-	"backv2/quoteCustomization"
-	"backv2/quoteEmailCustomization"
-	"backv2/quotes"
-	"backv2/reports"
-	"backv2/suppliers"
-	"backv2/todos"
-	"backv2/users"
+	"backv2/internal/api"
+	"backv2/internal/lib/dtos"
+	"backv2/internal/lib/oidc"
 	"errors"
 	"fmt"
 	"log"
@@ -85,7 +70,7 @@ func main() {
 		ClientID:      config.OIDCCLientId,
 		ClientSecret:  config.OIDCClientSecret,
 	}))
-	setupRoutes(app)
+	api.InitApiRoutes(app)
 	initDb(config)
 
 	log.Fatal(app.Listen(config.ServerAddress))
@@ -108,32 +93,8 @@ func initDb(config config.Config) {
 	fmt.Println("Connection Opened to Database")
 	err = database.MakeMigrations()
 	if err != nil && err != migrate.ErrNoChange {
+		log.Panicln(err)
 		panic("Failed to migrate database")
 	}
 	fmt.Println("Migrations successuffly applied")
-}
-
-func setupRoutes(app *fiber.App) {
-	log.Println("Setting up routes")
-	api := app.Group("/api")
-	v1 := api.Group("/v1", oidc.Secure())
-	// V1 Api Routes
-	company.InitRoutes(v1)
-	reports.InitRoutes(v1)
-	customers.InitRoutes(v1)
-	quotes.InitRoutes(v1)
-	products.InitRoutes(v1)
-	bills.InitRoutes(v1)
-	users.InitRoutes(v1)
-	quoteCustomization.InitRoutes(v1)
-	billCustomization.InitRoutes(v1)
-	quoteEmailCustomization.InitRoutes(v1)
-	billEmailCustomization.InitRoutes(v1)
-	pdf.InitRoutes(v1)
-	todos.InitRoutes(v1)
-	appointments.InitRoutes(v1)
-	suppliers.InitRoutes(v1)
-
-	// Global API Routes
-	logo.InitRoutes(api)
 }
