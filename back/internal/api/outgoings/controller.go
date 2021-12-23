@@ -4,6 +4,7 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"fmt"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,6 +12,7 @@ import (
 func InitRoutes(api fiber.Router) {
 	router := api.Group("/outgoings")
 	router.Get("/", findAll)
+	router.Get("/current", findCurrent)
 	router.Get("/:id", findById)
 	router.Post("/", create)
 	router.Patch("/:id", update)
@@ -23,6 +25,11 @@ func findAll(c *fiber.Ctx) error {
 		dtos = append(dtos, x.ToDTO())
 	}
 	return c.JSON(dtos)
+}
+
+func findCurrent(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	return c.JSON(DAO.FindOneByTenantAndDate(*user.CompanyID, time.Now()).ToDTO())
 }
 
 func findById(c *fiber.Ctx) error {

@@ -22,9 +22,9 @@ type OutgoingLineResponse struct {
 }
 
 type OutgoingRequest struct {
-	Name      string                `json:"name"`
-	StartDate time.Time             `json:"startDate"`
-	EndDate   time.Time             `json:"endDate"`
+	Name      *string               `json:"name"`
+	StartDate *time.Time            `json:"startDate"`
+	EndDate   *time.Time            `json:"endDate"`
 	Lines     []OutgoingLineRequest `json:"lines"`
 }
 

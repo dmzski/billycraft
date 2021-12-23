@@ -21,8 +21,8 @@ type Outgoing struct {
 }
 
 type OutgoingLine struct {
-	OutgoingID            string
-	Line                  string
+	OutgoingID            string `gorm:"primaryKey"`
+	Line                  int    `gorm:"primaryKey"`
 	SupplierID            *int64
 	BillID                *string
 	SupplierBillReference *string
@@ -34,6 +34,10 @@ func (Outgoing) TableName() string {
 	return "com_outgoing"
 }
 
+func (OutgoingLine) TableName() string {
+	return "com_outgoing_lines"
+}
+
 func (o *Outgoing) BeforeCreate(tx *gorm.DB) (err error) {
 	o.ID = uuid.New().String()
 	return
@@ -41,10 +45,18 @@ func (o *Outgoing) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (Outgoing) FromDTO(r dtos.OutgoingRequest) Outgoing {
 	outgoing := Outgoing{
-		Name:      r.Name,
-		StartDate: r.StartDate.Local(),
-		EndDate:   r.EndDate.Local(),
-		Lines:     make([]OutgoingLine, 0),
+		Lines: make([]OutgoingLine, 0),
+	}
+
+	if r.Name != nil {
+		outgoing.Name = *r.Name
+	}
+
+	if r.StartDate != nil {
+		outgoing.StartDate = r.StartDate.Local()
+	}
+	if r.EndDate != nil {
+		outgoing.EndDate = r.EndDate.Local()
 	}
 
 	for _, line := range r.Lines {
@@ -83,4 +95,16 @@ func (o Outgoing) ToDTO() dtos.OutgoingResponse {
 	}
 
 	return dto
+}
+
+func (OutgoingLine) FromDTO(r dtos.OutgoingLineRequest) OutgoingLine {
+	line := OutgoingLine{
+		SupplierID:            r.SupplierID,
+		BillID:                r.BillID,
+		SupplierBillReference: r.SupplierBillReference,
+		TotalHT:               r.TotalHT,
+		VAT:                   r.VAT,
+	}
+
+	return line
 }

@@ -1,12 +1,12 @@
 import { OutgoingApi } from 'api/OutgoingApi'
-import { formatRFC3339, isSameMonth, parseJSON } from 'date-fns'
+import { formatRFC3339 } from 'date-fns'
 import { OutgoingResponse } from 'models/Outgoing'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import OutgoingForm from '../Form'
 
 const Overview = () => {
-  const { data, refetch } = useQuery(['outgoings', 'overview'], OutgoingApi.findAll, {
+  const { data, refetch } = useQuery(['outgoings', 'current'], OutgoingApi.findCurrent, {
     refetchOnWindowFocus: false,
   })
 
@@ -23,11 +23,6 @@ const Overview = () => {
     [currentMonth],
   )
 
-  const currentOutgoing = useMemo(
-    () => data?.find(({ startDate }) => isSameMonth(parseJSON(startDate), Date.now())),
-    [data],
-  )
-
   return (
     <div>
       <div className="mb-4 p-2 border-b">
@@ -38,7 +33,7 @@ const Overview = () => {
           refetch()
         }}
         disabledFields={['startDate']}
-        outgoing={currentOutgoing ?? defaultOutgoingOverview}
+        outgoing={data ?? defaultOutgoingOverview}
       />
     </div>
   )

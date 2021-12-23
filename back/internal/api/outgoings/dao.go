@@ -5,20 +5,28 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"log"
+	"time"
 )
 
 type Repository struct {
 }
 
 func (dao Repository) FindAllByTenant(tenant int) (outgoings []models.Outgoing) {
-	if err := database.DBConn.Where("company_id = ?", tenant).Order("name asc").Find(&outgoings).Error; err != nil {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ?", tenant).Order("name asc").Find(&outgoings).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (outgoing models.Outgoing) {
-	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).First(&outgoing).Error; err != nil {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND id = ?", tenant, id).First(&outgoing).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao Repository) FindOneByTenantAndDate(tenant int, date time.Time) (outgoing models.Outgoing) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND start_date < ? AND end_date > ?", tenant, date, date).First(&outgoing).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -26,16 +34,40 @@ func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (outgoing mode
 
 func (dao Repository) Update(id string, tenant int, changes dtos.OutgoingRequest) (outgoing models.Outgoing) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&outgoing)
+	tx.Where("company_id = ? AND id = ?", tenant, id).First(&outgoing)
 	if tx.Error != nil {
+		tx.Rollback()
 		panic(tx.Error)
 	}
-	tx = tx.Updates(models.Outgoing{}.FromDTO(changes))
+	tx.Model(&outgoing).Updates(models.Outgoing{}.FromDTO(changes))
 	if tx.Error != nil {
+		tx.Rollback()
 		panic(tx.Error)
 	}
 
+	// Delete bill lines and add the new ones (Set)
+	if changes.Lines != nil {
+		var lines []models.OutgoingLine
+		for _, x := range changes.Lines {
+			newLine := models.OutgoingLine{}.FromDTO(x)
+			lines = append(lines, newLine)
+		}
+
+		tx.Where("outgoing_id = ?", outgoing.ID).Delete(models.OutgoingLine{})
+		if tx.Error != nil {
+			err := tx.Error
+			tx.Rollback()
+			panic(err)
+		}
+		err := tx.Model(&outgoing).Association("Lines").Append(&lines)
+		if err != nil {
+			tx.Rollback()
+			panic(err)
+		}
+	}
+
 	tx.Commit()
+	outgoing = dao.FindOneByIdAndTenant(id, tenant)
 	return
 }
 
