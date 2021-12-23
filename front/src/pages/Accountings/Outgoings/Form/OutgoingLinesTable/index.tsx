@@ -18,10 +18,10 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
   const addLine = useCallback(() => {
     append({
       line: fields.length + 1,
-      totalHT: 0,
-      vat: 0,
     })
   }, [fields, append])
+
+  console.log(fields)
 
   return (
     <div className="border rounded">
@@ -44,7 +44,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
             <Row key={line.line} index={index} control={control} onDelete={() => remove(index)} />
           ))}
           <div className="mt-4 px-4">
-            <Button className="w-full" variant="secondary" onClick={addLine}>
+            <Button type="button" className="w-full" variant="secondary" onClick={addLine}>
               Ajouter une ligne
             </Button>
           </div>

@@ -12,6 +12,7 @@ import (
 func InitRoutes(api fiber.Router) {
 	router := api.Group("/outgoings")
 	router.Get("/", findAll)
+	router.Get("/first", findFirst)
 	router.Get("/current", findCurrent)
 	router.Get("/:id", findById)
 	router.Post("/", create)
@@ -29,6 +30,18 @@ func findAll(c *fiber.Ctx) error {
 
 func findCurrent(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
+	return c.JSON(DAO.FindOneByTenantAndDate(*user.CompanyID, time.Now()).ToDTO())
+}
+
+func findFirst(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	if c.Query("date") != "" {
+		startDate, err := time.Parse(time.RFC3339, c.Query("date"))
+		if err != nil {
+			return fiber.NewError(400, "Can't parse date")
+		}
+		return c.JSON(DAO.FindOneByTenantAndDate(*user.CompanyID, startDate))
+	}
 	return c.JSON(DAO.FindOneByTenantAndDate(*user.CompanyID, time.Now()).ToDTO())
 }
 

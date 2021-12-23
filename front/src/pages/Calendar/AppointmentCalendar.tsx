@@ -16,7 +16,7 @@ type AppointmentCellProps = {
 }
 
 const BASE_APPOINTMENTS_CLASS =
-  'absolute rounded p-2 appearance-none flex overflow-ellipsis truncate text-left overflow-y-hidden'
+  'absolute rounded p-2 appearance-none flex overflow-ellipsis truncate text-left overflow-y-hidden mt-12 ml-6'
 const AppointmentClassNames = [
   `${BASE_APPOINTMENTS_CLASS} border-l-4 border-primary-700 text-primary-700 bg-primary-100 focus:bg-primary-200`,
   `${BASE_APPOINTMENTS_CLASS} border-l-4 border-error-700 text-error-700 bg-error-100 focus:bg-error-200`,

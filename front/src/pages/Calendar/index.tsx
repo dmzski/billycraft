@@ -103,25 +103,23 @@ const Calendar = () => {
       </Grid>
       <div className="relative flex mt-8 ml-6 md:ml-0">
         <TimeColumn />
-        <div className="absolute top-12 left-6 right-0 bottom-0 overflow-y-hidden">
-          {data
-            ?.filter(({ startDate }) => {
-              const parsedDate = parseJSON(startDate)
-              return (
-                (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
-                isEqual(parsedDate, startOfWeekDate) ||
-                isEqual(parsedDate, endOfWeekDate)
-              )
-            })
-            .map((appointment: Appointment) => (
-              <AppointmentCell
-                onAppointmentClick={value => setSelectedAppointment(value)}
-                key={`appointment-${appointment.id}`}
-                appointment={appointment}
-                appointments={data}
-              />
-            ))}
-        </div>
+        {data
+          ?.filter(({ startDate }) => {
+            const parsedDate = parseJSON(startDate)
+            return (
+              (isAfter(parsedDate, startOfWeekDate) && isBefore(parsedDate, endOfWeekDate)) ||
+              isEqual(parsedDate, startOfWeekDate) ||
+              isEqual(parsedDate, endOfWeekDate)
+            )
+          })
+          .map((appointment: Appointment) => (
+            <AppointmentCell
+              onAppointmentClick={value => setSelectedAppointment(value)}
+              key={`appointment-${appointment.id}`}
+              appointment={appointment}
+              appointments={data}
+            />
+          ))}
         <div className="absolute flex w-max top-0 left-6 right-0 pr-2">
           {datesOfWeek.map(dateOfWeek => (
             <DayColumn onCellClick={handleCellClick} key={dateOfWeek.getTime()} date={dateOfWeek} />

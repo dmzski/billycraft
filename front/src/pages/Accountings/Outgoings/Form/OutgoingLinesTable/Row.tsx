@@ -50,13 +50,13 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
         ? new Intl.NumberFormat(undefined, {
             currency: 'EUR',
             style: 'currency',
-          }).format(totalHT * (1 - vat))
+          }).format(Number(totalHT * (1 - vat)) || 0)
         : '',
     [totalHT, vat],
   )
 
   const billOptions = useMemo(() => {
-    if (bills) return bills.map(({ id, title }) => ({ value: id, label: title }))
+    if (bills) return bills.map(({ id }) => ({ value: id, label: id }))
 
     return []
   }, [bills])
@@ -170,7 +170,6 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
           control={control}
           name={`lines.${index}.vat`}
           rules={{ min: 0, max: 100 }}
-          defaultValue={0}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               className="w-full"

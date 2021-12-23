@@ -1,7 +1,7 @@
 import { Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import { Route, ROUTES } from 'routes'
 import MenuItem from './MenuItem'
@@ -26,7 +26,7 @@ const Menu = ({ route }: MenuProps): JSX.Element => {
   const match = useRouteMatch({
     path: route.path,
   })
-  const [open, setOpen] = useState<boolean>(!!match)
+  const [open, setOpen] = useState<boolean>(!match)
 
   return (
     <div className={clsx('flex flex-col cursor-pointer select-none text-gray-600')}>

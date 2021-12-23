@@ -104,6 +104,7 @@ func (OutgoingLine) FromDTO(r dtos.OutgoingLineRequest) OutgoingLine {
 		SupplierBillReference: r.SupplierBillReference,
 		TotalHT:               r.TotalHT,
 		VAT:                   r.VAT,
+		Line:                  r.Line,
 	}
 
 	return line

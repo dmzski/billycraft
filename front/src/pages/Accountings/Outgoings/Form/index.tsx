@@ -25,12 +25,18 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
   })
 
   const onSubmit = useCallback(
-    async (values: OutgoingRequest) => {
+    async ({ name, lines, startDate }: OutgoingRequest) => {
       const data = {
-        ...values,
-        startDate: formatRFC3339(Date.parse(values.startDate)),
-        endDate: formatRFC3339(endOfMonth(Date.parse(values.startDate))),
-      }
+        lines: lines.map((line, index) => ({
+          ...line,
+          line: index + 1,
+          totalHT: Number(line.totalHT) || 0,
+          vat: Number(line.vat) || 0,
+        })),
+        name,
+        startDate: formatRFC3339(Date.parse(startDate)),
+        endDate: formatRFC3339(endOfMonth(Date.parse(startDate))),
+      } as OutgoingRequest
       try {
         const res = outgoing?.id
           ? await OutgoingApi.update(outgoing.id, data)
@@ -80,22 +86,37 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
       />
       <Controller
         name="startDate"
-        rules={{ required: true }}
+        rules={{
+          required: true,
+          validate: async value => {
+            if (disabledFields?.includes('startDate')) return undefined
+
+            const date = Date.parse(value)
+            try {
+              await OutgoingApi.findFirstWithDateIn(date)
+              return "Un livret d'achat pour cette période existe déjà"
+            } catch {
+              return undefined
+            }
+          },
+        }}
         control={control}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            className="mb-4"
-            value={field.value}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            ref={field.ref}
-            error={invalid}
-            required
-            label="Période du livret"
-            variant="outside"
-            type="month"
-            disabled={disabledFields?.includes(field.name)}
-          />
+        render={({ field, fieldState: { invalid, error } }) => (
+          <div className="flex flex-col mb-4">
+            <Input
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={invalid}
+              required
+              label="Période du livret"
+              variant="outside"
+              type="month"
+              disabled={disabledFields?.includes(field.name)}
+            />
+            {error ? <span className="text-error-600 text-xs">{error.message}</span> : null}
+          </div>
         )}
       />
       <OutgoingLinesTable control={control} />

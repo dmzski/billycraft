@@ -18,7 +18,7 @@ type OutgoingLineResponse struct {
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
-	VAT                   int     `json:"tva"`
+	VAT                   int     `json:"vat"`
 }
 
 type OutgoingRequest struct {
@@ -34,5 +34,5 @@ type OutgoingLineRequest struct {
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
-	VAT                   int     `json:"tva"`
+	VAT                   int     `json:"vat"`
 }
