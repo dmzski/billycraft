@@ -90,7 +90,10 @@ const Form = ({ appointment, onClose, onSubmitSuccess }: AddAppointmentFormProps
         const res = appointment.id
           ? await AppointmentApi.update(appointment.id, data)
           : await AppointmentApi.create(data)
-        toast.show({ variant: 'success', message: STRINGS.APPOINTMENT_CREATED })
+        toast.show({
+          variant: 'success',
+          message: appointment.id ? STRINGS.APPOINTMENT_UPDATED : STRINGS.APPOINTMENT_CREATED,
+        })
         onSubmitSuccess?.(res)
         onClose()
       } catch {

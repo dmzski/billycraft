@@ -1,14 +1,34 @@
-export type OutgoingRequest = {
-  color?: string
-  name: string
+export type OutgoingLineResponse = {
+  supplierId?: number
+  supplierBillReference?: string
+  billId?: string
+  totalHT: number
+  vat: number
+  line: number
 }
 
-type Outgoing = {
-  id: number
+export type OutgoingResponse = {
+  id: string
   name: string
-  color?: string
-  createdBy: string
+  startDate: string
+  endDate: string
+  lines: OutgoingLineResponse[]
   companyId: number
+  createdBy: string
 }
 
-export default Outgoing
+export type OutgoingLineRequest = {
+  supplierId?: number
+  supplierBillReference?: string
+  billId?: string
+  totalHT: number
+  vat: number
+  line: number
+}
+
+export type OutgoingRequest = {
+  name: string
+  startDate: string
+  endDate: string
+  lines: OutgoingLineRequest[]
+}

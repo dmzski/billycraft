@@ -10,7 +10,7 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps): JSX.Element => {
   const breakpoint = useBreakpoint()
 
-  if (!breakpoint.isMd) {
+  if (!breakpoint.isLg) {
     return <MobileLayout>{children}</MobileLayout>
   }
 

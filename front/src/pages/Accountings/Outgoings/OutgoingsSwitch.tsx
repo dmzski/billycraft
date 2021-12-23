@@ -1,6 +1,6 @@
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import { ROUTES } from 'routes'
-import List from './List'
+import ListPage from './ListPage'
 import Overview from './Overview'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
@@ -12,21 +12,21 @@ const OutgoingsSwitch = () => (
       <NavLink
         activeClassName="bg-primary-700 text-white"
         to={routes.OVERVIEW.path}
-        className="shadow rounded text-center py-2"
+        className="shadow rounded py-2 flex items-center justify-center"
       >
         Vue d&apos;ensemble
       </NavLink>
       <NavLink
         activeClassName="bg-primary-700 text-white"
         to={routes.LIST.path}
-        className="shadow rounded text-center py-2"
+        className="shadow rounded text-center py-2 flex items-center justify-center"
       >
         Tous les livrets d&apos;achats
       </NavLink>
     </div>
     <Switch>
       <Route path={routes.OVERVIEW.path} component={Overview} />
-      <Route path={routes.LIST.path} component={List} />
+      <Route path={routes.LIST.path} component={ListPage} />
       <Route path={ROUTES.ACCOUNTINGS.routes?.OUTGOINGS.path}>
         <Redirect to={routes.OVERVIEW.path} />
       </Route>

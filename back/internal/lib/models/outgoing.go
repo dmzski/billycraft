@@ -22,7 +22,8 @@ type Outgoing struct {
 
 type OutgoingLine struct {
 	OutgoingID            string
-	SupplierID            int64
+	Line                  string
+	SupplierID            *int64
 	BillID                *string
 	SupplierBillReference *string
 	TotalHT               float64

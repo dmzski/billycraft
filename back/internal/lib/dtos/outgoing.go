@@ -13,7 +13,8 @@ type OutgoingResponse struct {
 }
 
 type OutgoingLineResponse struct {
-	SupplierID            int64   `json:"supplierId"`
+	Line                  int     `json:"line"`
+	SupplierID            *int64  `json:"supplierId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
@@ -28,7 +29,8 @@ type OutgoingRequest struct {
 }
 
 type OutgoingLineRequest struct {
-	SupplierID            int64   `json:"supplierId"`
+	Line                  int     `json:"line"`
+	SupplierID            *int64  `json:"supplierId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`

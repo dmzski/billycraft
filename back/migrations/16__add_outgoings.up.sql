@@ -13,12 +13,13 @@ CREATE TABLE com_outgoing (
 );
 CREATE TABLE com_outgoing_lines (
     outgoing_id uuid not null,
-    supplier_id bigint not null,
+    line int not null,
+    supplier_id bigint,
     bill_id varchar(100),
     supplier_bill_reference VARCHAR(100),
     total_ht DECIMAL not null,
     vat int not null,
-    CONSTRAINT com_outgoing_lines_pk PRIMARY KEY (outgoing_id, supplier_id),
+    CONSTRAINT com_outgoing_lines_pk PRIMARY KEY (outgoing_id, line),
     CONSTRAINT com_outgoing_lines_outgoing_id_fk FOREIGN KEY (outgoing_id) REFERENCES com_outgoing(id),
     CONSTRAINT com_outgoing_lines_supplier_id_fk FOREIGN KEY (supplier_id) REFERENCES com_supplier(id),
     CONSTRAINT com_outgoing_lines_bill_id_fk FOREIGN KEY (bill_id) REFERENCES com_bill(id)

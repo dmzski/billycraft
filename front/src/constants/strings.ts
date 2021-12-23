@@ -7,4 +7,7 @@ export const STRINGS = {
   APPOINTMENT_CREATED: 'Rendez-vous ajouté',
   APPOINTMENT_UPDATED: 'Rendez-vous modifié',
   APPOINTMENT_DELETED: 'Rendez-vous supprimé',
+  OUTGOING_CREATED: "Livret d'achat ajouté",
+  OUTGOING_UPDATED: "Livret d'achat modifié",
+  OUTGOING_DELETED: "Livret d'achat supprimé",
 }

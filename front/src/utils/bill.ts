@@ -66,7 +66,7 @@ export function filterBills(
 }
 
 export function calculatePriceTTC(price?: number | string | null, tva = 0): number {
-  if (!price) {
+  if (!price || Number.isNaN(price)) {
     return 0
   }
   const finalPrice = Number(`${price}`)

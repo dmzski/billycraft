@@ -4,6 +4,7 @@ import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { LINE_TYPE } from 'constants/line'
 import { calculatePriceTTC } from 'utils/bill'
 import { Control, Controller, useWatch } from 'react-hook-form'
+import { useCallback } from 'react'
 
 type BillLineTableLineProps = {
   deleteLine: () => void
@@ -32,6 +33,14 @@ const BillLineTableLine = ({
     name: `lines.${index}.quantity`,
     defaultValue: 0,
   })
+
+  const formatNumber = useCallback(
+    (priceToFormat: number) =>
+      new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(
+        priceToFormat,
+      ),
+    [],
+  )
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -144,13 +153,9 @@ const BillLineTableLine = ({
             )}
           />
         </List.Cell>
-        <List.Cell className="w-48 py-2">
-          {Math.round(calculatePriceTTC(price, tva) * 100) / 100 || 0}
-          &nbsp;€
-        </List.Cell>
+        <List.Cell className="w-48 py-2">{formatNumber(calculatePriceTTC(price, tva))}</List.Cell>
         <List.Cell className="w-52 py-2">
-          {Math.round(calculatePriceTTC(price, tva) * quantity * 100) / 100 || 0}
-          &nbsp;€
+          {formatNumber(calculatePriceTTC(price, tva) * quantity)}
         </List.Cell>
         <List.Cell className="w-24 py-2">
           {!disabled ? (
