@@ -1,7 +1,6 @@
-import { Button, Input, TextArea } from '@coco-ui/core'
+import { Button, Input, TextArea, useToast } from '@coco-ui/core'
 import { CustomerApi } from 'api/CustomerApi'
 import { STRINGS } from 'constants/strings'
-import { useToast } from 'providers/ToastProvider'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Customer from '../../../models/Customer'
@@ -33,15 +32,18 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
     defaultValues: defaultCustomer,
   })
 
-  const onSubmit = useCallback(async (data: Customer) => {
-    try {
-      const res = await CustomerApi.createOrUpdate(data)
-      onSubmitSuccess?.(res)
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
-    } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
-    }
-  }, [])
+  const onSubmit = useCallback(
+    async (data: Customer) => {
+      try {
+        const res = await CustomerApi.createOrUpdate(data)
+        onSubmitSuccess?.(res)
+        toast.success(STRINGS.SAVE_SUCCESS)
+      } catch {
+        toast.error(STRINGS.SAVE_ERROR)
+      }
+    },
+    [toast],
+  )
 
   const tryDelete = useCallback(() => {
     // eslint-disable-next-line no-alert
@@ -50,15 +52,15 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
       const asyncDelete = async () => {
         try {
           await CustomerApi.delete(customer.id)
-          toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' })
+          toast.success(STRINGS.DELETE_SUCCESS)
           onSubmitSuccess?.({ ...customer, deleted: true })
         } catch {
-          toast.show({ message: STRINGS.DELETE_ERROR, variant: 'error' })
+          toast.error(STRINGS.DELETE_ERROR)
         }
       }
       asyncDelete()
     }
-  }, [])
+  }, [toast, customer])
 
   useEffect(() => {
     if (customer) {

@@ -1,4 +1,4 @@
-import { Button, Input } from '@coco-ui/core'
+import { Button, Input, useToast } from '@coco-ui/core'
 import { TodoApi } from 'api/TodoApi'
 import { STRINGS } from 'constants/strings'
 // eslint-disable-next-line import/no-duplicates
@@ -6,7 +6,6 @@ import { formatRelative } from 'date-fns'
 // eslint-disable-next-line import/no-duplicates
 import { fr } from 'date-fns/locale'
 import { Todo } from 'models/Todo'
-import { useToast } from 'providers/ToastProvider'
 import * as React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -29,9 +28,9 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
         try {
           await TodoApi.done(id)
           onSubmitSuccess?.()
-          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+          toast.success(STRINGS.SAVE_SUCCESS)
         } catch {
-          toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
+          toast.error(STRINGS.SAVE_ERROR)
         }
       }
       fn()
@@ -50,12 +49,9 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           await TodoApi.create(values)
           reset({ description: '' })
           onSubmitSuccess?.()
-          toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+          toast.success(STRINGS.SAVE_SUCCESS)
         } catch {
-          toast.show({
-            message: STRINGS.SAVE_ERROR,
-            variant: 'error',
-          })
+          toast.error(STRINGS.SAVE_ERROR)
         }
       }
       fn()
@@ -78,12 +74,9 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
         setEditTodo('')
         setEditMode(undefined)
         onSubmitSuccess?.()
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+        toast.success(STRINGS.SAVE_SUCCESS)
       } catch {
-        toast.show({
-          message: STRINGS.SAVE_ERROR,
-          variant: 'error',
-        })
+        toast.error(STRINGS.SAVE_ERROR)
       }
     }
     fn()

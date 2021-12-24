@@ -1,4 +1,4 @@
-import { Badge, Button } from '@coco-ui/core'
+import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
 import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
@@ -7,7 +7,6 @@ import { BILL_STATUS } from 'constants/bill'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Bill from '../../../models/Bill'
-import { useToast } from '../../../providers/ToastProvider'
 import { ROUTES } from '../../../routes'
 import BillForm from './Form'
 
@@ -45,10 +44,7 @@ const BillFormPage = (): JSX.Element => {
         pdfState.update('idle')
       }
     } catch {
-      toast.show({
-        message: 'Erreur lors de la génération du PDF',
-        variant: 'error',
-      })
+      toast.error('Erreur lors de la génération du PDF')
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)

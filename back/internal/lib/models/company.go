@@ -8,24 +8,21 @@ import (
 )
 
 type Company struct {
-	ID                      int `gorm:"primaryKey;autoIncrement;<-:create"`
-	Name                    string
-	City                    string
-	Address                 string
-	PostalCode              string
-	PhoneNumber             string
-	Logo                    *string
-	Siret                   string
-	Email                   string
-	CreatedBy               string     `gorm:"<-:create"`
-	CreatedAt               time.Time  `gorm:"<-:create"`
-	UpdatedAt               *time.Time `gorm:"autoUpdateTime"`
-	QuoteCustomization      *QuoteCustomization
-	QuoteEmailCustomization *QuoteEmailCustomization
-	BillCustomization       *BillCustomization
-	BillEmailCustomization  *BillEmailCustomization
-	Users                   []User     `gorm:"foreignkey:CompanyID"`
-	Customers               []Customer `gorm:"foreignkey:CompanyID"`
+	ID          int `gorm:"primaryKey;autoIncrement;<-:create"`
+	Name        string
+	City        string
+	Address     string
+	PostalCode  string
+	PhoneNumber string
+	Logo        *string
+	Siret       string
+	Email       string
+	ArticlesTax *float32
+	ServicesTax *float32
+	OthersTax   *float32
+	CreatedBy   string     `gorm:"<-:create"`
+	CreatedAt   time.Time  `gorm:"<-:create"`
+	UpdatedAt   *time.Time `gorm:"autoUpdateTime"`
 }
 
 func (Company) TableName() string {
@@ -37,8 +34,8 @@ func (c *Company) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (c Company) ToDTO() dtos.Company {
-	return dtos.Company{
+func (c Company) ToDTO() dtos.CompanyResponse {
+	return dtos.CompanyResponse{
 		ID:          c.ID,
 		Name:        c.Name,
 		City:        c.City,
@@ -51,12 +48,14 @@ func (c Company) ToDTO() dtos.Company {
 		CreatedBy:   c.CreatedBy,
 		CreatedAt:   c.CreatedAt,
 		UpdatedAt:   c.UpdatedAt,
+		ArticlesTax: c.ArticlesTax,
+		ServicesTax: c.ServicesTax,
+		OthersTax:   c.OthersTax,
 	}
 }
 
-func (Company) FromDTO(c dtos.Company) Company {
+func (Company) FromDTO(c dtos.CompanyRequest) Company {
 	return Company{
-		ID:          c.ID,
 		Name:        c.Name,
 		City:        c.City,
 		Address:     c.Address,
@@ -65,8 +64,9 @@ func (Company) FromDTO(c dtos.Company) Company {
 		Logo:        c.Logo,
 		Siret:       c.Siret,
 		Email:       c.Email,
-		CreatedBy:   c.CreatedBy,
-		CreatedAt:   c.CreatedAt,
-		UpdatedAt:   c.UpdatedAt,
+		ArticlesTax: c.ArticlesTax,
+		ServicesTax: c.ServicesTax,
+		OthersTax:   c.OthersTax,
 	}
+
 }

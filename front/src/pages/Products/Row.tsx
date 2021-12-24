@@ -1,11 +1,10 @@
-import { Button, Icon, Input, Select, Table, TextArea } from '@coco-ui/core'
+import { Button, Icon, Input, Select, Table, TextArea, useToast } from '@coco-ui/core'
 import * as React from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { LINE_TYPE } from 'constants/line'
 import { LineTypeEnum } from 'models/LineTypeEnum'
 import { Controller, useForm } from 'react-hook-form'
 import { STRINGS } from 'constants/strings'
-import { useToast } from '../../providers/ToastProvider'
 import Product from '../../models/Product'
 import { ProductApi } from '../../api/ProductApi'
 
@@ -43,7 +42,6 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
   })
   const [deleteProductMutation, deleteProductMutationState] = useMutation(ProductApi.delete)
   const queryCache = useQueryCache()
-
   const toast = useToast()
 
   const toggleEditMode = (e: React.MouseEvent) => {
@@ -60,10 +58,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
         type: data.type,
         name: data.name,
       })
-      toast.show({
-        message: STRINGS.SAVE_SUCCESS,
-        variant: 'success',
-      })
+      toast.success(STRINGS.SAVE_SUCCESS)
       if (isNew) {
         reset({
           type: LineTypeEnum.ARTICLE,
@@ -75,10 +70,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
 
       queryCache.refetchQueries('products')
     } catch {
-      toast.show({
-        message: STRINGS.SAVE_ERROR,
-        variant: 'error',
-      })
+      toast.error(STRINGS.SAVE_ERROR)
     }
   }
 
@@ -90,12 +82,9 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
     try {
       await deleteProductMutation(product.id)
       queryCache.invalidateQueries('products')
-      toast.show({ message: STRINGS.DELETE_SUCCESS, variant: 'success' })
+      toast.success(STRINGS.DELETE_SUCCESS)
     } catch {
-      toast.show({
-        message: STRINGS.DELETE_ERROR,
-        variant: 'error',
-      })
+      toast.error(STRINGS.DELETE_ERROR)
     }
   }
 

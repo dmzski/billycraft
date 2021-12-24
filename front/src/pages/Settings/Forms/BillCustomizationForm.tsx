@@ -1,13 +1,10 @@
-import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import { BillCustomizationApi } from 'api/BillCustomizationApi'
 import { STRINGS } from 'constants/strings'
-import { ContentState, EditorState } from 'draft-js'
-import htmlToDraft from 'html-to-draftjs'
 import BillCustomization from 'models/BillCustomization'
 import { ChangeEvent } from 'react'
 import * as React from 'react'
 import { useMutation } from 'react-query'
-import { useToast } from '../../../providers/ToastProvider'
 
 type BillCustomizationFormProps = {
   billCustomization: BillCustomization
@@ -22,23 +19,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
     BillCustomizationApi.updateMine,
     {
       onSuccess: () => {
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+        toast.success(STRINGS.SAVE_SUCCESS)
       },
     },
-  )
-  const [, setAfterTableEditor] = React.useState(() =>
-    EditorState.createWithContent(
-      ContentState.createFromBlockArray(
-        htmlToDraft(newBillCustomization.afterTable || '<div></div>').contentBlocks,
-      ),
-    ),
-  )
-  const [, setFooterEditor] = React.useState(() =>
-    EditorState.createWithContent(
-      ContentState.createFromBlockArray(
-        htmlToDraft(newBillCustomization.footer || '<div></div>').contentBlocks,
-      ),
-    ),
   )
 
   const handleToggle = (property: keyof BillCustomization) => () => {
@@ -58,20 +41,6 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
   React.useEffect(() => {
     if (billCustomization) {
       setNewBillCustomization(billCustomization)
-      setAfterTableEditor(
-        EditorState.createWithContent(
-          ContentState.createFromBlockArray(
-            htmlToDraft(billCustomization.afterTable || '').contentBlocks,
-          ),
-        ),
-      )
-      setFooterEditor(
-        EditorState.createWithContent(
-          ContentState.createFromBlockArray(
-            htmlToDraft(billCustomization.footer || '').contentBlocks,
-          ),
-        ),
-      )
     }
   }, [billCustomization])
 
@@ -152,7 +121,6 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
             placeholder="En dessous du tableau"
             value={newBillCustomization.afterTable}
             className="w-full"
-            maxLength={1000}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewBillCustomization({
                 ...newBillCustomization,
@@ -169,7 +137,6 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
             className="w-full"
             placeholder="Pied de page"
             value={newBillCustomization.footer}
-            maxLength={1000}
             onChange={(e: React.ChangeEvent) =>
               setNewBillCustomization({
                 ...newBillCustomization,

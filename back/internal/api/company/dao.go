@@ -14,9 +14,10 @@ func (dao CompanyDao) FindOneById(id int) (company models.Company) {
 	return
 }
 
-func (dao CompanyDao) Create(dto dtos.Company) (company models.Company) {
+func (dao CompanyDao) Create(creator string, dto dtos.CompanyRequest) (company models.Company) {
 	tx := database.DBConn.Begin()
 	company = company.FromDTO(dto)
+	company.CreatedBy = creator
 	tx.Omit("ID").Create(&company)
 	if tx.Error != nil {
 		err := tx.Error
@@ -33,7 +34,7 @@ func (dao CompanyDao) Create(dto dtos.Company) (company models.Company) {
 	return
 }
 
-func (dao CompanyDao) Update(id int, dto dtos.Company) (company models.Company) {
+func (dao CompanyDao) Update(id int, dto dtos.CompanyRequest) (company models.Company) {
 	tx := database.DBConn.Begin()
 	tx.Where("id = ?", id).First(&company)
 	if tx.Error != nil {
@@ -41,7 +42,7 @@ func (dao CompanyDao) Update(id int, dto dtos.Company) (company models.Company) 
 		tx.Rollback()
 		panic(err)
 	}
-	tx.Updates(&dto)
+	tx.Model(&company).Updates(models.Company{}.FromDTO(dto))
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()

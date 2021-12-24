@@ -1,8 +1,7 @@
-import { Button, Input, Modal } from '@coco-ui/core'
+import { Button, Input, Modal, useToast } from '@coco-ui/core'
 import { SupplierApi } from 'api/SupplierApi'
 import { STRINGS } from 'constants/strings'
 import Supplier, { SupplierRequest } from 'models/Supplier'
-import { useToast } from 'providers/ToastProvider'
 import React, { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -39,11 +38,11 @@ const SupplierModalForm = ({
         const res = supplier.id
           ? await SupplierApi.update(supplier.id, data)
           : await SupplierApi.create(data)
-        toast.show({ variant: 'error', message: STRINGS.SAVE_SUCCESS })
+        toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
         onClose()
       } catch {
-        toast.show({ variant: 'error', message: STRINGS.SAVE_ERROR })
+        toast.error(STRINGS.SAVE_ERROR)
       }
     },
     [toast, onSubmitSuccess, supplier],
@@ -54,11 +53,11 @@ const SupplierModalForm = ({
       if (supplier.id) {
         try {
           await SupplierApi.delete(supplier.id)
-          toast.show({ variant: 'success', message: STRINGS.DELETE_SUCCESS })
+          toast.success(STRINGS.DELETE_SUCCESS)
           onSubmitSuccess?.(supplier)
           onClose()
         } catch {
-          toast.show({ variant: 'error', message: STRINGS.DELETE_ERROR })
+          toast.error(STRINGS.DELETE_ERROR)
         }
       }
     }

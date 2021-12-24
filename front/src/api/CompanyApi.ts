@@ -24,4 +24,5 @@ export const CompanyApi = {
     !id
       ? HttpClient.POST(`${COMPANY_URL}`, company)
       : HttpClient.PATCH(`${COMPANY_URL}/mine`, company),
+  create: (company: Company): Promise<Company> => HttpClient.POST(`${COMPANY_URL}`, company),
 }

@@ -3,7 +3,6 @@ import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { QuoteApi } from 'api/QuoteApi'
-import { useToast } from 'providers/ToastProvider'
 import { Prompt } from 'react-router-dom'
 import useCustomers from 'hooks/useCustomers'
 import { STRINGS } from 'constants/strings'
@@ -35,10 +34,10 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
       const res = await updateQuoteStatusMutation({ id: quote.id, status })
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      toast.success(STRINGS.SAVE_SUCCESS)
       onSubmitSuccess(res as Quote)
     } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
+      toast.error(STRINGS.SAVE_ERROR)
     }
   }
 
@@ -54,12 +53,9 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
       const res = await QuoteApi.createOrUpdate(tmp)
       reset(res)
       onSubmitSuccess(res)
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      toast.success(STRINGS.SAVE_SUCCESS)
     } catch {
-      toast.show({
-        message: STRINGS.SAVE_ERROR,
-        variant: 'error',
-      })
+      toast.error(STRINGS.SAVE_ERROR)
     }
   }
 

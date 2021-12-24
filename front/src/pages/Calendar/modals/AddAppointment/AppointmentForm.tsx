@@ -1,4 +1,4 @@
-import { Button, DateTimePicker, Input, Select, TextArea } from '@coco-ui/core'
+import { Button, DateTimePicker, Input, Select, TextArea, useToast } from '@coco-ui/core'
 import { AppointmentApi } from 'api/AppointmentApi'
 import { BillApi } from 'api/BillApi'
 import { CustomerApi } from 'api/CustomerApi'
@@ -7,7 +7,6 @@ import { UserApi } from 'api/UserApi'
 import { STRINGS } from 'constants/strings'
 import { formatRFC3339, isBefore } from 'date-fns'
 import Appointment, { AppointmentRequest } from 'models/Appointment'
-import { useToast } from 'providers/ToastProvider'
 import { useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
@@ -69,11 +68,11 @@ const Form = ({ appointment, onClose, onSubmitSuccess }: AddAppointmentFormProps
           throw new Error()
         }
         await AppointmentApi.delete(appointment.id)
-        toast.show({ variant: 'success', message: STRINGS.APPOINTMENT_DELETED })
+        toast.success(STRINGS.APPOINTMENT_DELETED)
         onClose()
         onSubmitSuccess?.(appointment as Appointment)
       } catch {
-        toast.show({ variant: 'error', message: STRINGS.DELETE_ERROR })
+        toast.error(STRINGS.DELETE_ERROR)
       }
     }
     deleteFn()
@@ -90,14 +89,11 @@ const Form = ({ appointment, onClose, onSubmitSuccess }: AddAppointmentFormProps
         const res = appointment.id
           ? await AppointmentApi.update(appointment.id, data)
           : await AppointmentApi.create(data)
-        toast.show({
-          variant: 'success',
-          message: appointment.id ? STRINGS.APPOINTMENT_UPDATED : STRINGS.APPOINTMENT_CREATED,
-        })
+        toast.success(appointment.id ? STRINGS.APPOINTMENT_UPDATED : STRINGS.APPOINTMENT_CREATED)
         onSubmitSuccess?.(res)
         onClose()
       } catch {
-        toast.show({ variant: 'error', message: STRINGS.SAVE_ERROR })
+        toast.error(STRINGS.SAVE_ERROR)
       }
     },
     [toast, onSubmitSuccess, appointment, onClose],

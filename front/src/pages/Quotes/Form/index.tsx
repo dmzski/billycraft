@@ -1,4 +1,4 @@
-import { Badge, Button } from '@coco-ui/core'
+import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useCallback, useEffect } from 'react'
 import { useMutation, useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
@@ -9,7 +9,6 @@ import { STRINGS } from 'constants/strings'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Quote from '../../../models/Quote'
-import { useToast } from '../../../providers/ToastProvider'
 import { ROUTES } from '../../../routes'
 import QuoteForm from './Form'
 
@@ -27,7 +26,7 @@ const QuoteCreationPage = (): JSX.Element => {
 
   const [createBillFromQuote, createBillFromQuoteState] = useMutation(QuoteApi.createBill, {
     onSuccess: data => {
-      toast.show({ message: STRINGS.BILL_CREATED, variant: 'success' })
+      toast.success(STRINGS.BILL_CREATED)
       queryCache.invalidateQueries('bills')
       if (data.id) {
         history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
@@ -61,10 +60,7 @@ const QuoteCreationPage = (): JSX.Element => {
         pdfState.update('idle')
       }
     } catch {
-      toast.show({
-        message: 'Erreur lors de la génération du PDF',
-        variant: 'error',
-      })
+      toast.error('Erreur lors de la génération du PDF')
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)

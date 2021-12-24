@@ -1,0 +1,1 @@
+ALTER TABLE com_user DROP COLUMN IF EXISTS role;

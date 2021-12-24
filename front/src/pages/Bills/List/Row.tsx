@@ -1,4 +1,4 @@
-import { ActionButton, Icon, Table } from '@coco-ui/core'
+import { ActionButton, Icon, Table, useToast } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
 import { STRINGS } from 'constants/strings'
@@ -10,7 +10,6 @@ import { useMutation, useQueryCache } from 'react-query'
 import { Link } from 'react-router-dom'
 import { ROUTES } from 'routes'
 import { BILL_STATUS } from '../../../constants/bill'
-import { useToast } from '../../../providers/ToastProvider'
 
 type BillTableLineProps = {
   bill: Bill
@@ -35,13 +34,10 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
     const updateStatus = async () => {
       try {
         if (bill.id) await updateBillStatusMutation({ id: bill.id, status })
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+        toast.success(STRINGS.SAVE_SUCCESS)
         queryCache.invalidateQueries('bills')
       } catch {
-        toast.show({
-          message: STRINGS.SAVE_ERROR,
-          variant: 'error',
-        })
+        toast.error(STRINGS.SAVE_ERROR)
       }
     }
     updateStatus()

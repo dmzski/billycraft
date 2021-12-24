@@ -1,9 +1,9 @@
+import { ToastProvider } from '@coco-ui/core'
 import { ReactKeycloakProvider } from '@react-keycloak/web'
 import * as React from 'react'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { fetchRegister } from '../utils/fetch-interceptor'
 import keycloak from '../utils/keycloak'
-import { ToastProvider } from './ToastProvider'
 import { UserProvider } from './UserProvider'
 
 const queryCache = new QueryCache()

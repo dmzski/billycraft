@@ -29,10 +29,9 @@ func create(c *fiber.Ctx) error {
 	if user.CompanyID != nil {
 		return fiber.NewError(fiber.StatusConflict, "You already have a company")
 	}
-	newCompany := dtos.Company{}
+	newCompany := dtos.CompanyRequest{}
 	c.BodyParser(&newCompany)
-	newCompany.CreatedBy = user.Email
-	company := DAO.Create(newCompany)
+	company := DAO.Create(user.Email, newCompany)
 	user.CompanyID = &company.ID
 	users.DAO.JoinCompany(user.Email, company.ID)
 	return c.JSON(company)
@@ -40,18 +39,23 @@ func create(c *fiber.Ctx) error {
 
 func updateMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newCompany := dtos.Company{}
+	newCompany := dtos.CompanyRequest{}
 	c.BodyParser(&newCompany)
-	dto := DAO.Update(*user.CompanyID, newCompany).ToDTO()
-	user.CompanyID = &newCompany.ID
-	users.DAO.SaveUser(user)
-	return c.JSON(dto)
+	if user.CompanyID == nil || user.Role != "ADMIN" {
+		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
+	}
+
+	company := DAO.Update(*user.CompanyID, newCompany)
+	return c.JSON(company.ToDTO())
 }
 
 func uploadLogo(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	company := DAO.FindOneById(*user.CompanyID)
 	file, err := c.FormFile("logo")
+	if user.Role != "ADMIN" {
+		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
+	}
 	if err != nil {
 		return c.Status(500).SendString("Error when getting logo file")
 	}
@@ -64,7 +68,8 @@ func uploadLogo(c *fiber.Ctx) error {
 		return c.Status(500).SendString("Error when saving logo file : " + err.Error())
 	}
 	newPath := fmt.Sprintf("%s/api/logo/%d", c.BaseURL(), company.ID)
-	company.Logo = &newPath
-	company = DAO.Update(company.ID, company.ToDTO())
+	company = DAO.Update(company.ID, dtos.CompanyRequest{
+		Logo: &newPath,
+	})
 	return c.SendString(newPath)
 }

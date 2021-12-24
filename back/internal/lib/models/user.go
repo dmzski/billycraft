@@ -6,8 +6,9 @@ type User struct {
 	Email     string `gorm:"primaryKey"`
 	FirstName string
 	LastName  string
-	CompanyID *int `gorm:"foreignKey:CreatedBy"`
+	CompanyID *int
 	Company   *Company
+	Role      string
 }
 
 func (User) TableName() string {
@@ -20,6 +21,7 @@ func (u User) ToDTO() dtos.User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		CompanyID: u.CompanyID,
+		Role:      u.Role,
 	}
 }
 
@@ -29,5 +31,6 @@ func (User) FromDTO(u dtos.User) User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		CompanyID: u.CompanyID,
+		Role:      u.Role,
 	}
 }

@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
-import { Button, Input, Select } from '@coco-ui/core'
-import { useToast } from 'providers/ToastProvider'
+import { Button, Input, Select, useToast } from '@coco-ui/core'
 import { Controller, useForm } from 'react-hook-form'
 import { BillApi } from 'api/BillApi'
 import { Prompt } from 'react-router-dom'
@@ -37,10 +36,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   const updateBillStatus = (status: BillStatusEnum) => async () => {
     try {
       const res = await updateBillStatusMutation({ id: bill.id, status })
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      toast.success(STRINGS.SAVE_SUCCESS)
       onSubmitSuccess(res as Bill)
     } catch {
-      toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
+      toast.error(STRINGS.SAVE_ERROR)
     }
   }
 
@@ -56,12 +55,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
       const res = await BillApi.createOrUpdate(tmp)
       reset(res)
       onSubmitSuccess(res)
-      toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+      toast.success(STRINGS.SAVE_SUCCESS)
     } catch {
-      toast.show({
-        message: STRINGS.SAVE_ERROR,
-        variant: 'error',
-      })
+      toast.error(STRINGS.SAVE_ERROR)
     }
   }
 

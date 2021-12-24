@@ -11,6 +11,9 @@ interface Company {
   createdBy: string
   createdAt: string
   updatedAt: string
+  articlesTax: number
+  servicesTax: number
+  othersTax: number
 }
 
 export default Company

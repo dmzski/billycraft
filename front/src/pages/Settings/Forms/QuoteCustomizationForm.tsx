@@ -1,10 +1,9 @@
-import { Button, Input, Switch, TextArea } from '@coco-ui/core'
+import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
 import { STRINGS } from 'constants/strings'
 import QuoteCustomization from 'models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useMutation } from 'react-query'
-import { useToast } from '../../../providers/ToastProvider'
 
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
@@ -20,7 +19,7 @@ const QuoteCustomizationForm = ({
     QuoteCustomizationApi.updateMine,
     {
       onSuccess: () => {
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+        toast.success(STRINGS.SAVE_SUCCESS)
       },
     },
   )
@@ -122,7 +121,6 @@ const QuoteCustomizationForm = ({
             placeholder="En dessous du tableau"
             value={newQuoteCustomization.afterTable}
             className="w-full"
-            maxLength={1000}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewQuoteCustomization({
                 ...newQuoteCustomization,
@@ -139,7 +137,6 @@ const QuoteCustomizationForm = ({
             className="w-full"
             placeholder="Pied de page"
             value={newQuoteCustomization.footer}
-            maxLength={1000}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewQuoteCustomization({
                 ...newQuoteCustomization,

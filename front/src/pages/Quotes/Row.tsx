@@ -1,4 +1,4 @@
-import { ActionButton, Icon, Table } from '@coco-ui/core'
+import { ActionButton, Icon, Table, useToast } from '@coco-ui/core'
 import { QuoteApi } from 'api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
@@ -10,7 +10,6 @@ import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { QUOTE_STATUS } from '../../constants/quote'
-import { useToast } from '../../providers/ToastProvider'
 
 type QuoteTableLineProps = {
   quote: Quote
@@ -32,10 +31,10 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
     const updateStatus = async () => {
       try {
         if (quote.id) await updateQuoteStatusMutation({ id: quote.id, status })
-        toast.show({ message: STRINGS.SAVE_SUCCESS, variant: 'success' })
+        toast.success(STRINGS.SAVE_SUCCESS)
         queryCache.invalidateQueries('quotes')
       } catch {
-        toast.show({ message: STRINGS.SAVE_ERROR, variant: 'error' })
+        toast.error(STRINGS.SAVE_ERROR)
       }
     }
     updateStatus()
