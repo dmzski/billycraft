@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
 
-const CounterAnimated = ({ value }: { value: number }): JSX.Element => {
+const CounterAnimated = ({
+  value,
+  format,
+}: {
+  value: number
+  format?: (value: number) => string
+}): JSX.Element => {
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {
@@ -9,9 +15,12 @@ const CounterAnimated = ({ value }: { value: number }): JSX.Element => {
     const interval = setInterval(() => {
       let speed = 1
       if (value > 1000) {
-        speed = 20
-        if (value > 60000) {
-          speed = 50
+        speed = 10
+        if (value > 10000) {
+          speed = 30
+        }
+        if (value > 100000) {
+          speed = 60
         }
       }
       initialCounter += Math.log(initialCounter + 2) * speed
@@ -27,7 +36,7 @@ const CounterAnimated = ({ value }: { value: number }): JSX.Element => {
     }
   }, [value])
 
-  return <span>{counter.toFixed(2)}</span>
+  return <span>{format ? format(counter) : counter}</span>
 }
 
 export default CounterAnimated

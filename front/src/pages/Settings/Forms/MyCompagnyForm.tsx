@@ -34,7 +34,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           ...values,
           articlesTax: Number(values.articlesTax) || 0,
           servicesTax: Number(values.servicesTax) || 0,
-          othersTax: Number(values.ohtersTax) || 0,
+          othersTax: Number(values.othersTax) || 0,
         }
         const res = company?.id ? await CompanyApi.updateMine(data) : await CompanyApi.create(data)
         queryCache.invalidateQueries('my-information')
@@ -220,7 +220,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
                 <Input
                   variant="outside"
                   label="URL du logo"
-                  className="col-span-9"
+                  className="col-span-12 md:col-span-9"
                   placeholder="URL du logo"
                   name={field.name}
                   value={field.value}
@@ -232,7 +232,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               )}
             />
             <Button
-              className="col-span-3 mt-4"
+              className="col-span-12 md:col-span-3 md:mt-4"
               variant="inverted-primary"
               type="button"
               onClick={selectFileToUpload}
@@ -261,7 +261,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               <Input
                 className="w-full"
                 variant="outside"
-                label="Imposition Ventes"
+                label="Imposition Ventes (%)"
                 type="number"
                 step={0.01}
                 max={100}
@@ -282,7 +282,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               <Input
                 className="w-full"
                 variant="outside"
-                label="Imposition Services"
+                label="Imposition Services (%)"
                 type="number"
                 step={0.01}
                 max={100}
@@ -303,7 +303,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               <Input
                 className="w-full"
                 variant="outside"
-                label="Imposition Autres types de service"
+                label="Imposition Autres types de service (%)"
                 step={0.01}
                 max={100}
                 min={0}

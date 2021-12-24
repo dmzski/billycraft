@@ -117,7 +117,19 @@ export const ROUTES = {
       REPORTS: {
         exact: true,
         path: '/accounting/reports',
-        title: 'Statistiques',
+        title: 'Rapports',
+        routes: {
+          OVERVIEW: {
+            exact: true,
+            path: '/accounting/reports/overview',
+            title: "Rapports > Vue d'ensemble",
+          },
+          LIST: {
+            exact: true,
+            path: '/accounting/reports/list',
+            title: 'Rapports > Tous mes rapports',
+          },
+        },
       },
     },
   },
