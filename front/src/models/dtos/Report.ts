@@ -5,5 +5,9 @@ export type ReportDTO = {
   articleSales: number
   serviceSales: number
   otherSales: number
+  outgoings: number
+  articleTaxes: number
+  serviceTaxes: number
+  otherTaxes: number
   details: ReportDTO[]
 }

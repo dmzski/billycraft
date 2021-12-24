@@ -1,5 +1,6 @@
 export const STRINGS = {
   BILL_CREATED: 'Facture crée',
+  CREATION_ERROR: 'Une erreur est survenue lors de la création',
   SAVE_SUCCESS: 'Enregistrement effectué',
   SAVE_ERROR: "Une erreur est survenue lors de l'enregistrement",
   DELETE_SUCCESS: 'Suppression effectuée',
@@ -10,4 +11,6 @@ export const STRINGS = {
   OUTGOING_CREATED: "Livret d'achat ajouté",
   OUTGOING_UPDATED: "Livret d'achat modifié",
   OUTGOING_DELETED: "Livret d'achat supprimé",
+  REPORT_CREATED: 'Rapport créé',
+  REPORT_DELETED: 'Rapport supprimé',
 }
