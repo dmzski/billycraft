@@ -171,6 +171,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             icon="save"
             size="md"
             type="submit"
+            variant="success"
             disabled={!isValid || isSubmitting || disabled}
           >
             Enregistrer
@@ -181,7 +182,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             size="md"
             icon="mail"
             className="mr-1"
-            variant="success"
+            variant="info"
             type="button"
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}

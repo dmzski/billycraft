@@ -168,7 +168,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
           <Button
             className="mr-4"
-            variant="success"
+            variant="info"
             size="md"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
@@ -179,7 +179,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         ) : null}
         {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
           <Button
-            variant="primary"
+            variant="success"
             size="md"
             type="submit"
             disabled={!isValid || isSubmitting || disabled}

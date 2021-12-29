@@ -52,6 +52,10 @@ const QuoteLineTable = ({
   const addLine = React.useCallback(
     (newLine = defaultLine) => {
       append({ ...newLine, line: (fields || []).length + 1 })
+      document.getElementById('root')?.scrollTo({
+        behavior: 'smooth',
+        top: document.getElementById('root')?.scrollHeight,
+      })
     },
     [append, fields],
   )
@@ -70,9 +74,9 @@ const QuoteLineTable = ({
     if (productIdSelected && productsQuery.data) {
       addLine(productsQuery.data.find(product => product.id === productIdSelected))
       setProductIdSelected(undefined)
-      window.scrollTo({
+      document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
-        top: document.body.scrollHeight,
+        top: document.getElementById('root')?.scrollHeight,
       })
     }
   }
@@ -135,7 +139,7 @@ const QuoteLineTable = ({
         <>
           <Button
             type="button"
-            variant="secondary"
+            variant="inverted-primary"
             className="w-full mt-4"
             size="sm"
             onClick={addLine}
@@ -162,7 +166,7 @@ const QuoteLineTable = ({
               onClick={addExistingProductSelected}
               type="button"
               className="py-2 ml-4 w-1/6"
-              variant="secondary"
+              variant="primary"
             >
               Ajouter
             </Button>
