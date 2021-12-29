@@ -165,11 +165,13 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
           <Controller
             name="price"
             rules={{ min: 0 }}
+            defaultValue={0}
             control={control}
             render={({ field }) => (
               <Input
                 name={field.name}
-                value={field.value ?? ''}
+                value={field.value}
+                onChange={field.onChange}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()

@@ -86,14 +86,14 @@ const QuoteLineTable = ({
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-2 px-4 mb-4">
-        <div className="col-span-2 pl-4">Type</div>
-        <div className="col-span-3">Nom</div>
-        <div className="col-span-3">Description</div>
-        <div className="col-span-1">Quantité</div>
-        <div className="col-span-1">Prix HT</div>
-        <div className="col-span-1">Prix TTC</div>
-        <div className="col-span-1">Sous total</div>
+      <div className="grid md:grid-cols-12 gap-2 px-4 mb-4">
+        <div className="md:col-span-2">Type</div>
+        <div className="md:col-span-3">Nom</div>
+        <div className="md:col-span-3">Description</div>
+        <div className="md:col-span-1">Quantité</div>
+        <div className="md:col-span-1">Prix HT</div>
+        <div className="md:col-span-1">Prix TTC</div>
+        <div className="md:col-span-1">Sous total</div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="lines">

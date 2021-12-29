@@ -1,4 +1,4 @@
-import { ActionButton, Icon, Table, useToast } from '@coco-ui/core'
+import { ActionButton, Icon, useToast } from '@coco-ui/core'
 import { QuoteApi } from 'api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
@@ -9,13 +9,15 @@ import { MouseEvent, useCallback, useMemo } from 'react'
 import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
+import clsx from 'clsx'
 import { QUOTE_STATUS } from '../../constants/quote'
 
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
+  index: number
 }
-const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element => {
+const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -88,29 +90,26 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
   }, [quote])
 
   return (
-    <Table.Row>
-      <Table.Cell className="pl-2 text-xs">
+    <div
+      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-gray-50': index % 2 === 0 })}
+    >
+      <div className="md:col-span-1 text-xs">
         <Link
           className="text-primary-700 underline font-bold"
           to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}
         >
           {quote.id}
         </Link>
-      </Table.Cell>
-      <Table.Cell className="truncate">{quote.title}</Table.Cell>
-      <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
-      <Table.Cell className="">
+      </div>
+      <div className="md:col-span-3 truncate">{quote.title}</div>
+      <div className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</div>
+      <div className="md:col-span-2">
         {quote.createdAt ? formatISO9075(parseJSON(quote.createdAt)) : ''}
-      </Table.Cell>
-      <Table.Cell className="">
+      </div>
+      <div className="md:col-span-2">
         {quote.sentAt ? formatISO9075(parseJSON(quote.sentAt)) : '-'}
-      </Table.Cell>
-      <Table.Cell
-        className=""
-        onClick={event => {
-          event.stopPropagation()
-        }}
-      >
+      </div>
+      <div className="md:col-span-2">
         <ActionButton size="sm" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map(s => (
@@ -125,8 +124,8 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element =
             </ActionButton.Action>
           ))}
         </ActionButton>
-      </Table.Cell>
-    </Table.Row>
+      </div>
+    </div>
   )
 }
 

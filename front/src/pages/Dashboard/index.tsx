@@ -1,6 +1,7 @@
 import { Icon, Loader } from '@coco-ui/core'
 import { BillApi } from 'api/BillApi'
 import { TodoApi } from 'api/TodoApi'
+import clsx from 'clsx'
 import { useQuery } from 'react-query'
 import NextAppointmentList from './NextAppointmentList'
 import NotPaidBillList from './NotPaidBillList'
@@ -20,31 +21,26 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-between">
-        <h1 className="text-3xl mb-8">Accueil</h1>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <span
-              className={
-                notPaid && notPaid.length > 0
-                  ? 'text-background bg-error-700 p-2 rounded'
-                  : 'p-2 bg-success-700 text-background rounded'
-              }
-            >
-              {notPaid?.length} factures impayées
-            </span>
-          </div>
-          <div>
-            <span
-              className={
-                todos && todos.filter(({ doneAt }) => !doneAt).length > 0
-                  ? 'text-background bg-info-700 p-2 rounded'
-                  : 'p-2 bg-success-700 text-background rounded'
-              }
-            >
-              {todos?.filter(({ doneAt }) => !doneAt).length} Tâches à faire
-            </span>
-          </div>
+      <div className="flex flex-col md:flex-row flex-wrap justify-between items-center mb-8">
+        <h1 className="text-3xl mb-4">Accueil</h1>
+        <div className="grid md:grid-cols-2 gap-2 justify-center">
+          <span
+            className={clsx({
+              'text-background bg-error-700 p-2 rounded': notPaid && notPaid?.length > 0,
+              'p-2 bg-success-700 text-background rounded': notPaid?.length === 0,
+            })}
+          >
+            {notPaid?.length} factures impayées
+          </span>
+          <span
+            className={
+              todos && todos.filter(({ doneAt }) => !doneAt).length > 0
+                ? 'text-background bg-info-700 p-2 rounded'
+                : 'p-2 bg-success-700 text-background rounded'
+            }
+          >
+            {todos?.filter(({ doneAt }) => !doneAt).length} Tâches à faire
+          </span>
         </div>
       </div>
       <NextAppointmentList />
@@ -53,7 +49,7 @@ const Dashboard = (): JSX.Element => {
       <div className="flex items-center">
         <Icon className="mr-2" name="pencil" />
         <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
-        <div className="flex items-center ml-2 text-xs text-warning-600">
+        <div className="hidden  md:flex items-center ml-2 text-xs text-warning-600">
           <Icon size={14} name="exclamation" />
           &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
         </div>

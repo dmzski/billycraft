@@ -16,17 +16,22 @@ const NextAppointmentList = () => {
 
   return (
     <div>
-      <div className="text-xl mb-2 flex">
+      <div className="md:pl-2 text-xl mb-2 flex">
         <Icon name="calendar" className="mr-2" />
-        <h2>Prochains rendez-vous (3 prochains jours)</h2>
+        <h2>
+          Prochains rendez-vous <span className="text-xs text-gray-600">(3 prochains jours)</span>
+        </h2>
       </div>
       {isLoading ? (
         <div className="flex justify-center">
           <Loader />
         </div>
       ) : null}
-      {!isLoading && appointments ? (
-        <div className="flex flex-col">
+      {!isLoading && appointments && appointments.length === 0 ? (
+        <div className="text-center">Aucun rendez-vous</div>
+      ) : null}
+      {!isLoading && appointments && appointments.length > 0 ? (
+        <div className="md:pl-4 flex flex-col">
           <div className="grid grid-cols-3 px-2">
             <div>Début</div>
             <div>Assigné à</div>

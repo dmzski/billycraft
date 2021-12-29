@@ -4,7 +4,8 @@ import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { LINE_TYPE } from 'constants/line'
 import { calculatePriceTTC } from 'utils/bill'
 import { Control, Controller, useWatch } from 'react-hook-form'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useFormatCurrency } from 'hooks/useFormatCurrency'
 
 type BillLineTableLineProps = {
   deleteLine: () => void
@@ -21,6 +22,8 @@ const BillLineTableLine = ({
   index,
   control,
 }: BillLineTableLineProps): JSX.Element => {
+  const formatPrice = useFormatCurrency()
+
   const tva = useWatch({ control, name: 'tva' })
 
   const price = useWatch({
@@ -33,14 +36,22 @@ const BillLineTableLine = ({
     name: `lines.${index}.quantity`,
     defaultValue: 0,
   })
+  const priceTTC = useMemo(() => {
+    if (Number.isNaN(price)) {
+      return 0
+    }
+    const computedTva = Number(tva) || 0
 
-  const formatNumber = useCallback(
-    (priceToFormat: number) =>
-      new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(
-        priceToFormat,
-      ),
-    [],
-  )
+    return price * (1 + computedTva / 100)
+  }, [price, tva])
+
+  const totalTTC = useMemo(() => {
+    if (Number.isNaN(quantity)) {
+      return 0
+    }
+
+    return quantity * priceTTC
+  }, [priceTTC, quantity])
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -126,6 +137,8 @@ const BillLineTableLine = ({
                 type="number"
                 step={0.01}
                 name={field.name}
+                value={field.value}
+                onChange={field.onChange}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
@@ -145,6 +158,8 @@ const BillLineTableLine = ({
                 placeholder="Prix"
                 type="number"
                 step={0.01}
+                value={field.value}
+                onChange={field.onChange}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
@@ -153,10 +168,8 @@ const BillLineTableLine = ({
             )}
           />
         </List.Cell>
-        <List.Cell className="w-48 py-2">{formatNumber(calculatePriceTTC(price, tva))}</List.Cell>
-        <List.Cell className="w-52 py-2">
-          {formatNumber(calculatePriceTTC(price, tva) * quantity)}
-        </List.Cell>
+        <List.Cell className="w-48 py-2">{formatPrice(priceTTC)}</List.Cell>
+        <List.Cell className="w-52 py-2">{formatPrice(totalTTC)}</List.Cell>
         <List.Cell className="w-24 py-2">
           {!disabled ? (
             <button

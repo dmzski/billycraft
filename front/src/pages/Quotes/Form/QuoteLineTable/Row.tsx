@@ -1,5 +1,7 @@
 import { Icon, Input, Select, TextArea } from '@coco-ui/core'
+import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { LineTypeEnum } from 'models/LineTypeEnum'
+import { useMemo } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
@@ -21,6 +23,7 @@ const QuoteLineTableLine = ({
   control,
 }: QuoteLineTableLineProps): JSX.Element => {
   const tva = useWatch({ control, name: 'tva' })
+  const formatPrice = useFormatCurrency()
 
   const price = useWatch({
     control,
@@ -33,14 +36,31 @@ const QuoteLineTableLine = ({
     defaultValue: 0,
   })
 
+  const priceTTC = useMemo(() => {
+    if (Number.isNaN(price)) {
+      return 0
+    }
+    const computedTva = Number(tva) || 0
+
+    return price * (1 + computedTva / 100)
+  }, [price, tva])
+
+  const totalTTC = useMemo(() => {
+    if (Number.isNaN(quantity)) {
+      return 0
+    }
+
+    return quantity * priceTTC
+  }, [priceTTC, quantity])
+
   return (
     <div
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...provided?.draggableProps}
-      className="shadow bg-background grid grid-cols-12 mb-2 p-2 gap-2"
+      className="shadow bg-background grid md:grid-cols-12 mb-2 p-2 gap-2"
       ref={provided?.innerRef}
     >
-      <div className="flex col-span-2 overflow-hidden">
+      <div className="flex md:col-span-2 overflow-hidden">
         <div
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
@@ -72,7 +92,7 @@ const QuoteLineTableLine = ({
           />
         </div>
       </div>
-      <div className="col-span-3">
+      <div className="md:col-span-3">
         <Controller
           name={`lines.${index}.name`}
           rules={{ required: true }}
@@ -92,15 +112,15 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="col-span-3">
+      <div className="md:col-span-3">
         <Controller
           name={`lines.${index}.description`}
           control={control}
           render={({ field }) => (
             <TextArea
               placeholder="Description"
-              rows={2}
-              className="w-full"
+              rows={1}
+              className="w-full resize-y"
               disabled={disabled}
               value={field.value}
               onChange={field.onChange}
@@ -110,7 +130,7 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="col-span-1">
+      <div className="md:col-span-1">
         <Controller
           name={`lines.${index}.quantity`}
           control={control}
@@ -122,6 +142,8 @@ const QuoteLineTableLine = ({
               type="number"
               step={0.01}
               name={field.name}
+              value={field.value}
+              onChange={field.onChange}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
@@ -130,7 +152,7 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="col-span-1">
+      <div className="md:col-span-1">
         <Controller
           name={`lines.${index}.price`}
           control={control}
@@ -141,6 +163,8 @@ const QuoteLineTableLine = ({
               placeholder="Prix"
               type="number"
               step={0.01}
+              value={field.value}
+              onChange={field.onChange}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
@@ -149,15 +173,9 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="pt-2">
-        {Math.round(calculatePriceTTC(price, tva) * 100) / 100 || 0}
-        &nbsp;€
-      </div>
+      <div className="pt-2">{formatPrice(priceTTC)}</div>
       <div className="pr-2 pt-2 flex items-start justify-between">
-        <div className="flex-grow">
-          {Math.round(calculatePriceTTC(price, tva) * quantity * 100) / 100 || 0}
-          &nbsp;€
-        </div>
+        <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
           <button type="button" className="ml-2 apperance-none" onClick={deleteLine}>
             <Icon name="trash" className="p-1 text-white rounded-full bg-error-600" />
