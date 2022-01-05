@@ -7,7 +7,7 @@ import CreateReportModal from './modals/CreateReportModal'
 
 const ListPage = () => {
   const [openModal, setOpenModal] = useState(false)
-  const { data, isLoading, refetch } = useQuery(['reports', 'all'], ReportApi.findAll, {
+  const { data, refetch } = useQuery(['reports', 'all'], ReportApi.findAll, {
     refetchOnWindowFocus: false,
   })
   const handleCreate = useCallback(() => {

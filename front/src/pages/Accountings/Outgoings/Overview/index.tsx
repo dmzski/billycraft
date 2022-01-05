@@ -1,4 +1,3 @@
-import { Badge, Icon } from '@coco-ui/core'
 import { OutgoingApi } from 'api/OutgoingApi'
 import { formatRFC3339 } from 'date-fns'
 import { OutgoingResponse } from 'models/Outgoing'

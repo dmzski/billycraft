@@ -5,6 +5,7 @@ import { ReportRequest } from 'models/Report'
 import { useQuery } from 'react-query'
 import { Link, useParams } from 'react-router-dom'
 import ReportOutgoingTable from './components/ReportOutgoingTable'
+import ReportPerSupplierTable from './components/ReportPerSupplierTable'
 import ReportTable from './components/ReportTable'
 import { REPORT_ROUTES } from './constants'
 
@@ -80,6 +81,11 @@ const DetailsPage = () => {
           <section className="md:ml-2">
             <h2 className="text-xl mb-2">Détails</h2>
             <ReportTable report={report} />
+          </section>
+          <hr className="my-4" />
+          <section className="md:ml-2">
+            <h2 className="text-xl mb-2">Détails des dépenses par fournisseur</h2>
+            <ReportPerSupplierTable report={report} />
           </section>
           <hr className="my-4" />
           <section className="md:ml-2">

@@ -1,7 +1,7 @@
 import { Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import { Route, ROUTES } from 'routes'
 import MenuItem from './MenuItem'

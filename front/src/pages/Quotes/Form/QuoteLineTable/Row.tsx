@@ -5,7 +5,6 @@ import { useMemo } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
-import { calculatePriceTTC } from '../../../../utils/quote'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void

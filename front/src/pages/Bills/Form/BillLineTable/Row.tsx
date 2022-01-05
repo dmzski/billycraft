@@ -2,9 +2,8 @@ import { Icon, Input, List, Select, TextArea } from '@coco-ui/core'
 import { LineTypeEnum } from 'models/LineTypeEnum'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { LINE_TYPE } from 'constants/line'
-import { calculatePriceTTC } from 'utils/bill'
 import { Control, Controller, useWatch } from 'react-hook-form'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 
 type BillLineTableLineProps = {

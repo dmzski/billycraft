@@ -1,10 +1,8 @@
-import { Button, Icon, Input, Select } from '@coco-ui/core'
 import { BillApi } from 'api/BillApi'
 import { SupplierApi } from 'api/SupplierApi'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { OutgoingLineResponse, OutgoingRequest } from 'models/Outgoing'
+import { OutgoingLineResponse } from 'models/Outgoing'
 import { useMemo } from 'react'
-import { Control, Controller, useWatch } from 'react-hook-form'
 import { useQuery } from 'react-query'
 
 const DEFAULT_LINE_COLOR = 'initial'
@@ -16,18 +14,14 @@ const Row = ({
   line: { totalHT, vat, billId, supplierBillReference, supplierId },
 }: RowProps): JSX.Element => {
   const formatCurrency = useFormatCurrency()
-  const { data: bills, isLoading: isLoadingBills } = useQuery(['bills'], BillApi.findAll, {
+  const { data: bills } = useQuery(['bills'], BillApi.findAll, {
     refetchOnWindowFocus: false,
     staleTime: 6000,
   })
-  const { data: suppliers, isLoading: isLoadingSuppliers } = useQuery(
-    ['suppliers'],
-    SupplierApi.findAll,
-    {
-      refetchOnWindowFocus: false,
-      staleTime: 6000,
-    },
-  )
+  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
+    refetchOnWindowFocus: false,
+    staleTime: 6000,
+  })
 
   const totalTTC = useMemo(
     () =>
