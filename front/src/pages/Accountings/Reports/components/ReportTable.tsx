@@ -1,9 +1,9 @@
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { ReportDTO } from 'models/dtos/Report'
+import { ReportResponse } from 'models/Report'
 import { ReactNode, useMemo } from 'react'
 
 type ReportTableProps = {
-  report: ReportDTO
+  report: ReportResponse
 }
 
 type OnlyChildrenProps = {
@@ -55,12 +55,12 @@ const ReportTable = ({ report }: ReportTableProps): JSX.Element => {
       </ReportTableRow>
       <ReportTableRow>
         <ReportTableLeft>Dépenses</ReportTableLeft>
-        <ReportTableRight>{formatCurrency(report.outgoings)}</ReportTableRight>
+        <ReportTableRight>{formatCurrency(report.totalOutgoings)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
         <ReportTableLeft>Restant net</ReportTableLeft>
         <ReportTableRight>
-          {formatCurrency(report.sales - allTaxes - report.outgoings)}
+          {formatCurrency(report.sales - allTaxes - report.totalOutgoings)}
         </ReportTableRight>
       </ReportTableRow>
     </div>

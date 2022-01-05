@@ -6,7 +6,6 @@ import (
 	"back/internal/api/outgoings"
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
-	"log"
 	"time"
 )
 
@@ -14,14 +13,14 @@ type Repository struct {
 }
 
 func (Repository) FindAllByTenant(tenant int) (reports []models.Report) {
-	if err := database.DBConn.Preload("Bills").Preload("OutgoingsRefer").Where("company_id = ?", tenant).Find(&reports).Error; err != nil {
+	if err := database.DBConn.Preload("ReportBills").Preload("ReportOutgoings").Preload("ReportOutgoings.Lines").Where("company_id = ?", tenant).Find(&reports).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (Repository) FindOneByTenantAndId(tenant int, id string) (report models.Report) {
-	if err := database.DBConn.Preload("Bills").Preload("OutgoingsRefer").Where("company_id = ? AND id = ?", tenant, id).First(&report).Error; err != nil {
+	if err := database.DBConn.Preload("ReportBills").Preload("ReportOutgoings").Preload("ReportOutgoings.Lines").Where("company_id = ? AND id = ?", tenant, id).First(&report).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -68,22 +67,27 @@ func (Repository) BuildBetweenTwoDates(tenant int, startDate time.Time, endDate 
 	outgoings := outgoings.DAO.FindAllBetweenDates(tenant, startDate, endDate)
 
 	report := models.Report{
-		StartDate:      startDate.Local(),
-		EndDate:        endDate.Local(),
-		OtherSales:     0,
-		ServiceSales:   0,
-		ArticleSales:   0,
-		ArticleTaxes:   0,
-		ServiceTaxes:   0,
-		OtherTaxes:     0,
-		Outgoings:      0,
-		Bills:          make([]models.Bill, 0),
-		OutgoingsRefer: make([]models.Outgoing, 0),
+		StartDate:       startDate.Local(),
+		EndDate:         endDate.Local(),
+		OtherSales:      0,
+		ServiceSales:    0,
+		ArticleSales:    0,
+		ArticleTaxes:    0,
+		ServiceTaxes:    0,
+		OtherTaxes:      0,
+		Outgoings:       0,
+		ReportBills:     make([]models.ReportBill, 0),
+		ReportOutgoings: make([]models.ReportOutgoing, 0),
 	}
 	for _, bill := range bills {
-		billReport := models.Report{
-			StartDate:    bill.PaidAt.Local(),
-			EndDate:      bill.PaidAt.Local(),
+		billReport := models.ReportBill{
+			Title:        bill.Title,
+			BillID:       bill.ID,
+			PaidAt:       *bill.PaidAt,
+			SentAt:       *bill.SentAt,
+			ArticleTaxes: 0,
+			ServiceTaxes: 0,
+			OtherTaxes:   0,
 			OtherSales:   0,
 			ServiceSales: 0,
 			ArticleSales: 0,
@@ -102,18 +106,18 @@ func (Repository) BuildBetweenTwoDates(tenant int, startDate time.Time, endDate 
 				billReport.OtherSales += linePrice
 			}
 		}
-		billReport = addReportTaxes(company, billReport)
-		report.Bills = append(report.Bills, bill)
+		billReport = addBillReportTaxes(company, billReport)
+		report.ReportBills = append(report.ReportBills, billReport)
 
 	}
-	log.Println("Outgoings : ", len(outgoings))
+
 	for _, outgoing := range outgoings {
 		if outgoing.Lines != nil {
 			for _, line := range outgoing.Lines {
 				report.Outgoings += line.TotalHT * (1.0 + (float64(line.VAT) / 100))
 			}
 		}
-		report.OutgoingsRefer = append(report.OutgoingsRefer, outgoing)
+		report.ReportOutgoings = append(report.ReportOutgoings, outgoing.ToReport())
 	}
 	report = addReportTaxes(company, report)
 
@@ -143,6 +147,19 @@ func getLinePrice(bill models.Bill, line models.BillLine) float64 {
 }
 
 func addReportTaxes(company models.Company, report models.Report) models.Report {
+	if company.ArticlesTax != nil {
+		report.ArticleTaxes += float64(*company.ArticlesTax) / 100 * report.ArticleSales
+	}
+	if company.ServicesTax != nil {
+		report.ServiceTaxes += float64(*company.ServicesTax) / 100 * report.ServiceSales
+	}
+	if company.OthersTax != nil {
+		report.OtherTaxes += float64(*company.OthersTax) / 100 * report.OtherSales
+	}
+	return report
+}
+
+func addBillReportTaxes(company models.Company, report models.ReportBill) models.ReportBill {
 	if company.ArticlesTax != nil {
 		report.ArticleTaxes += float64(*company.ArticlesTax) / 100 * report.ArticleSales
 	}

@@ -1,0 +1,46 @@
+import { useFormatDate } from 'hooks/useFormatDate'
+import { ReportResponse } from 'models/Report'
+import { Link } from 'react-router-dom'
+import { injectIdInPath } from 'routes'
+import { REPORT_ROUTES } from '../constants'
+
+type ReportRowProps = {
+  report: ReportResponse
+}
+const ReportRow = ({ report }: ReportRowProps): JSX.Element => {
+  const { toISO9075 } = useFormatDate()
+  return (
+    <div className="grid md:grid-cols-12 p-2 border-t">
+      <div className="md:col-span-3">
+        <Link
+          className="text-primary-700 font-semibold underline"
+          to={injectIdInPath(REPORT_ROUTES.routes.DETAILS.path, report.id)}
+        >
+          {report.name}
+        </Link>
+      </div>
+      <div className="md:col-span-3">{toISO9075(report.startDate)}</div>
+      <div className="md:col-span-3">{toISO9075(report.endDate)}</div>
+      <div className="md:col-span-3">{toISO9075(report.createdAt)}</div>
+    </div>
+  )
+}
+
+type ListProps = {
+  reports: ReportResponse[]
+}
+const List = ({ reports }: ListProps): JSX.Element => (
+  <div className="flex flex-col border rounded">
+    <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-primary-50 text-primary-700">
+      <div className="md:col-span-3">Nom</div>
+      <div className="md:col-span-3">Date de début</div>
+      <div className="md:col-span-3">Date de fin</div>
+      <div className="md:col-span-3">Créé le</div>
+    </div>
+    {reports.map(report => (
+      <ReportRow key={report.id} report={report} />
+    ))}
+  </div>
+)
+
+export default List

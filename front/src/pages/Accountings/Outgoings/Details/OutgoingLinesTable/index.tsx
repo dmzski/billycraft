@@ -14,7 +14,7 @@ const OutgoingLinesTable = ({ lines }: OutgoingTableProps): JSX.Element => (
       <div className="col-span-2">TVA</div>
       <div className="col-span-2">Total TTC</div>
     </div>
-    <div className="pb-4 flex flex-col">
+    <div className="flex flex-col">
       {lines.map(line => (
         <Row key={line.line} line={line} />
       ))}

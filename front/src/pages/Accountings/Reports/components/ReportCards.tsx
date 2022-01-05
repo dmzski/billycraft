@@ -1,9 +1,9 @@
-import { ReportDTO } from 'models/dtos/Report'
 import CounterAnimated from 'components/CounterAnimated'
 import { ReactNode, useMemo } from 'react'
 import { Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import clsx from 'clsx'
+import { ReportResponse } from 'models/Report'
 
 const ReportCardVariants = {
   primary: 'text-primary-700',
@@ -41,7 +41,7 @@ const ReportCard = ({
   </div>
 )
 
-const ReportCards = ({ report }: { report: ReportDTO }): JSX.Element => {
+const ReportCards = ({ report }: { report: ReportResponse }): JSX.Element => {
   const formatter = useMemo(
     () => new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format,
     [],

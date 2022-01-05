@@ -60,14 +60,14 @@ const Row = ({
   return (
     <div
       style={{ backgroundColor: lineColor }}
-      className="p-2 grid grid-cols-1 sm:grid-cols-12 items-center gap-4 border-b"
+      className="p-2 grid grid-cols-1 md:grid-cols-12 items-center gap-4 border-b"
     >
-      <div className="col-span-2">{supplier?.name ?? 'Divers'}</div>
-      <div className="col-span-2">{supplierBillReference}</div>
-      <div className="col-span-2">{bill?.id}</div>
-      <div className="col-span-2">{formatCurrency(totalHT)}</div>
-      <div className="col-span-2">{vat}&nbsp;%</div>
-      <div className="col-span-2 flex justify-between">{totalTTC}</div>
+      <div className="md:col-span-2">{supplier?.name ?? 'Divers'}</div>
+      <div className="md:col-span-2">{supplierBillReference}</div>
+      <div className="md:col-span-2">{bill?.id}</div>
+      <div className="md:col-span-2">{formatCurrency(totalHT)}</div>
+      <div className="md:col-span-2">{vat}&nbsp;%</div>
+      <div className="md:col-span-2 flex justify-between">{totalTTC}</div>
     </div>
   )
 }

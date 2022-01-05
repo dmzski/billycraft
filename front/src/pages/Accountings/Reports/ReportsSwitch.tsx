@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import { ROUTES } from 'routes'
+import DetailsPage from './DetailsPage'
 import ListPage from './ListPage'
 import OverviewPage from './OverviewPage'
 
@@ -37,6 +38,9 @@ const ReportsSwitch = () => (
     <Route path={routes.LIST.path} exact={routes.LIST.exact}>
       <Heading />
       <ListPage />
+    </Route>
+    <Route path={routes.DETAILS.path}>
+      <DetailsPage />
     </Route>
     <Route path={path}>
       <Redirect to={routes.OVERVIEW.path} />

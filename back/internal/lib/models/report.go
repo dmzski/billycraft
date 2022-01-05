@@ -9,23 +9,23 @@ import (
 )
 
 type Report struct {
-	ID             string `gorm:"primaryKey"`
-	Name           string
-	StartDate      time.Time
-	EndDate        time.Time
-	ArticleSales   float64
-	ServiceSales   float64
-	OtherSales     float64
-	ArticleTaxes   float64
-	ServiceTaxes   float64
-	OtherTaxes     float64
-	Outgoings      float64
-	CompanyID      int
-	CreatedBy      string
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
-	Bills          []Bill     `gorm:"many2many:com_report_bills;foreignKey:ID;joinForeignKey:ReportID;References:ID;joinReferences:BillID"`
-	OutgoingsRefer []Outgoing `gorm:"many2many:com_report_outgoings;foreignKey:ID;joinForeignKey:ReportID;References:ID;joinReferences:OutgoingID"`
+	ID              string `gorm:"primaryKey"`
+	Name            string
+	StartDate       time.Time
+	EndDate         time.Time
+	ArticleSales    float64
+	ServiceSales    float64
+	OtherSales      float64
+	ArticleTaxes    float64
+	ServiceTaxes    float64
+	OtherTaxes      float64
+	Outgoings       float64
+	CompanyID       int
+	CreatedBy       string
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+	ReportBills     []ReportBill
+	ReportOutgoings []ReportOutgoing
 }
 
 func (Report) TableName() string {
@@ -39,26 +39,133 @@ func (r *Report) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (r Report) ToDTO() dtos.ReportResponse {
 	dto := dtos.ReportResponse{
-		ID:           r.ID,
-		Name:         r.Name,
-		StartDate:    r.StartDate,
-		EndDate:      r.EndDate,
-		Sales:        r.ArticleSales + r.ServiceSales + r.OtherSales,
+		ID:             r.ID,
+		Name:           r.Name,
+		CreatedAt:      r.CreatedAt,
+		StartDate:      r.StartDate,
+		EndDate:        r.EndDate,
+		Sales:          r.ArticleSales + r.ServiceSales + r.OtherSales,
+		ArticleSales:   r.ArticleSales,
+		ServiceSales:   r.ServiceSales,
+		OtherSales:     r.OtherSales,
+		ArticleTaxes:   r.ArticleTaxes,
+		ServiceTaxes:   r.ServiceTaxes,
+		OtherTaxes:     r.OtherTaxes,
+		TotalOutgoings: r.Outgoings,
+		Bills:          make([]dtos.ReportBillResponse, 0),
+		Outgoings:      make([]dtos.ReportOutgoingResponse, 0),
+	}
+	for _, bill := range r.ReportBills {
+		dto.Bills = append(dto.Bills, bill.ToDTO())
+	}
+	for _, outgoing := range r.ReportOutgoings {
+		dto.Outgoings = append(dto.Outgoings, outgoing.ToDTO())
+	}
+
+	return dto
+}
+
+type ReportOutgoing struct {
+	ID         string `gorm:"primaryKey"`
+	OutgoingID string
+	ReportID   string
+	Name       string
+	StartDate  time.Time
+	EndDate    time.Time
+	CreatedBy  string
+	Lines      []ReportOutgoingLine
+}
+
+func (ReportOutgoing) TableName() string {
+	return "com_report_outgoing"
+}
+
+func (r *ReportOutgoing) BeforeCreate(tx *gorm.DB) (err error) {
+	r.ID = uuid.New().String()
+	return
+}
+
+func (r ReportOutgoing) ToDTO() dtos.ReportOutgoingResponse {
+	dto := dtos.ReportOutgoingResponse{
+		OutgoingID: r.ID,
+		Name:       r.Name,
+		StartDate:  r.StartDate,
+		EndDate:    r.EndDate,
+		Lines:      make([]dtos.ReportOutgoingLineResponse, 0),
+	}
+
+	for _, line := range r.Lines {
+		dto.Lines = append(dto.Lines, line.ToDTO())
+	}
+	return dto
+}
+
+type ReportOutgoingLine struct {
+	ReportOutgoingID      string `gorm:"primaryKey"`
+	Line                  int    `gorm:"primaryKey"`
+	SupplierID            *int64
+	BillID                *string
+	SupplierBillReference *string
+	TotalHT               float64
+	VAT                   int
+}
+
+func (ReportOutgoingLine) TableName() string {
+	return "com_report_outgoing_lines"
+}
+
+func (r ReportOutgoingLine) ToDTO() dtos.ReportOutgoingLineResponse {
+	dto := dtos.ReportOutgoingLineResponse{
+		Line:                  r.Line,
+		SupplierID:            r.SupplierID,
+		BillID:                r.BillID,
+		SupplierBillReference: r.SupplierBillReference,
+		TotalHT:               r.TotalHT,
+		VAT:                   r.VAT,
+	}
+
+	return dto
+}
+
+type ReportBill struct {
+	ID           string `gorm:"primaryKey"`
+	Title        string
+	BillID       string
+	PaidAt       time.Time
+	SentAt       time.Time
+	ArticleSales float64
+	ServiceSales float64
+	OtherSales   float64
+	ArticleTaxes float64
+	ServiceTaxes float64
+	OtherTaxes   float64
+	Outgoings    float64
+	CreatedBy    string
+	ReportID     string
+}
+
+func (ReportBill) TableName() string {
+	return "com_report_bill"
+}
+
+func (r *ReportBill) BeforeCreate(tx *gorm.DB) (err error) {
+	r.ID = uuid.New().String()
+	return
+}
+
+func (r ReportBill) ToDTO() dtos.ReportBillResponse {
+	dto := dtos.ReportBillResponse{
+		Title:        r.Title,
+		BillID:       r.BillID,
+		PaidAt:       r.PaidAt,
+		SentAt:       r.SentAt,
 		ArticleSales: r.ArticleSales,
 		ServiceSales: r.ServiceSales,
 		OtherSales:   r.OtherSales,
 		ArticleTaxes: r.ArticleTaxes,
 		ServiceTaxes: r.ServiceTaxes,
 		OtherTaxes:   r.OtherTaxes,
-		Outgoings:    r.Outgoings,
-		BillIDs:      make([]string, 0),
-		OutgoingIDs:  make([]string, 0),
-	}
-	for _, bill := range r.Bills {
-		dto.BillIDs = append(dto.BillIDs, bill.ID)
-	}
-	for _, outgoing := range r.OutgoingsRefer {
-		dto.OutgoingIDs = append(dto.OutgoingIDs, outgoing.ID)
+		CreatedBy:    r.CreatedBy,
 	}
 
 	return dto

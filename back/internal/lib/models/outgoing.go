@@ -109,3 +109,27 @@ func (OutgoingLine) FromDTO(r dtos.OutgoingLineRequest) OutgoingLine {
 
 	return line
 }
+
+func (o Outgoing) ToReport() ReportOutgoing {
+	r := ReportOutgoing{
+		OutgoingID: o.ID,
+		Name:       o.Name,
+		StartDate:  o.StartDate,
+		EndDate:    o.EndDate,
+		CreatedBy:  o.CreatedBy,
+		Lines:      make([]ReportOutgoingLine, 0),
+	}
+
+	for _, line := range o.Lines {
+		r.Lines = append(r.Lines, ReportOutgoingLine{
+			ReportOutgoingID:      r.ID,
+			Line:                  line.Line,
+			SupplierID:            line.SupplierID,
+			BillID:                line.BillID,
+			SupplierBillReference: line.SupplierBillReference,
+			TotalHT:               line.TotalHT,
+			VAT:                   line.VAT,
+		})
+	}
+	return r
+}

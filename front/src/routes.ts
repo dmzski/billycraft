@@ -8,6 +8,8 @@ export type Route = {
   routes?: Record<string, Route>
 }
 
+export const injectIdInPath = (route: string, id: number | string) => route.replace(':id', `${id}`)
+
 export const ROUTES = {
   BILLS: {
     exact: true,
@@ -127,6 +129,10 @@ export const ROUTES = {
             exact: true,
             path: '/accounting/reports/overview',
             title: "Rapports > Vue d'ensemble",
+          },
+          DETAILS: {
+            path: '/accounting/reports/details/:id',
+            title: 'Rapports > Détails',
           },
           LIST: {
             exact: true,
