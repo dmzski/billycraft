@@ -32,6 +32,13 @@ func (dao Repository) FindOneByTenantAndDate(tenant int, date time.Time) (outgoi
 	return
 }
 
+func (dao Repository) FindAllBetweenDates(tenant int, start time.Time, end time.Time) (outgoings []models.Outgoing) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND start_date >= ? AND end_date <= ?", tenant, start, end).Find(&outgoings).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao Repository) Update(id string, tenant int, changes dtos.OutgoingRequest) (outgoing models.Outgoing) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&outgoing)

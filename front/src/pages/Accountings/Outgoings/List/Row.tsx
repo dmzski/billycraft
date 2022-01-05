@@ -22,7 +22,7 @@ const Row = ({ outgoing }: RowProps): JSX.Element => {
     <div className="grid sm:grid-cols-12 gap-4 px-4 py-4 border-b shadow my-2 rounded">
       <div className="col-span-3 truncate">
         <Link
-          to={routes.FORM.path.replace(':id', outgoing.id)}
+          to={routes.DETAILS.path.replace(':id', outgoing.id)}
           className="text-primary-700 underline font-semibold"
         >
           {outgoing.name}

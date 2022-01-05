@@ -109,8 +109,12 @@ export const ROUTES = {
             title: "Livrets d'achats > Tous les livrets d'achats",
           },
           FORM: {
-            path: '/accounting/outgoings/list/:id',
+            path: '/accounting/outgoings/edit/:id',
             title: "Edition d'un livret d'achat",
+          },
+          DETAILS: {
+            path: '/accounting/outgoings/details/:id',
+            title: "Détail d'un livret d'achat",
           },
         },
       },

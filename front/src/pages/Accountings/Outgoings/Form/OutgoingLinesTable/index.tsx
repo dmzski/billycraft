@@ -21,8 +21,6 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
     })
   }, [fields, append])
 
-  console.log(fields)
-
   return (
     <div className="border rounded">
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 text-primary-700 items-center bg-primary-50 border-b p-4 px-4">
@@ -30,7 +28,9 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
         <div className="col-span-2">Référence facture *</div>
         <div className="col-span-2">Facture liée</div>
         <div className="col-span-2">Total HT *</div>
-        <div className="col-span-2">TVA</div>
+        <div className="col-span-2">
+          TVA <span className="text-xs">(%)</span>
+        </div>
         <div className="col-span-2">Total TTC</div>
       </div>
       {isLoading ? (

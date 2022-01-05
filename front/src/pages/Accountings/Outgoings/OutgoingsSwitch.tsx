@@ -1,6 +1,7 @@
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import { ROUTES } from 'routes'
 import FormPage from './FormPage'
+import Details from './Details'
 import ListPage from './ListPage'
 import Overview from './Overview'
 
@@ -38,6 +39,7 @@ const OutgoingsSwitch = () => (
       <ListPage />
     </Route>
     <Route path={routes.FORM.path} component={FormPage} />
+    <Route path={routes.DETAILS.path} component={Details} />
     <Route path={path}>
       <Redirect to={routes.OVERVIEW.path} />
     </Route>

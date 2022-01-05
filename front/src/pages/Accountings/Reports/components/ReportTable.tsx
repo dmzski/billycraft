@@ -11,15 +11,15 @@ type OnlyChildrenProps = {
 }
 
 const ReportTableRow = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <div className="grid md:grid-cols-12">{children}</div>
+  <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
 const ReportTableLeft = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <div className="md:col-span-6 bg-primary-50 text-primary-700 border p-2">{children}</div>
+  <dt className="md:col-span-6 bg-primary-50 text-primary-700 border p-2">{children}</dt>
 )
 
 const ReportTableRight = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <div className="md:col-span-6 p-2 border border-l-0">{children}</div>
+  <dd className="md:col-span-6 p-2 border border-l-0">{children}</dd>
 )
 const ReportTable = ({ report }: ReportTableProps): JSX.Element => {
   const formatCurrency = useFormatCurrency()

@@ -3,44 +3,87 @@ package reports
 import (
 	"back/database"
 	"back/internal/api/company"
+	"back/internal/api/outgoings"
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"log"
 	"time"
 )
 
-type ReportDAO struct {
+type Repository struct {
 }
 
-func (dao ReportDAO) FindForMonth(tenant int, date time.Time) dtos.Report {
+func (Repository) FindAllByTenant(tenant int) (reports []models.Report) {
+	if err := database.DBConn.Preload("Bills").Preload("OutgoingsRefer").Where("company_id = ?", tenant).Find(&reports).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (Repository) FindOneByTenantAndId(tenant int, id string) (report models.Report) {
+	if err := database.DBConn.Preload("Bills").Preload("OutgoingsRefer").Where("company_id = ? AND id = ?", tenant, id).First(&report).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao Repository) Create(user models.User, dto dtos.ReportRequest) models.Report {
+	startMonth, err := time.Parse(time.RFC3339, dto.StartDate)
+	if err != nil {
+		panic("Can't parse date")
+	}
+	endMonth, err := time.Parse(time.RFC3339, dto.EndDate)
+	if err != nil {
+		panic("Can't parse date")
+	}
+	report := dao.BuildBetweenTwoDates(*user.CompanyID, startMonth, endMonth)
+	report.CompanyID = *user.CompanyID
+	report.CreatedBy = user.Email
+	report.Name = dto.Name
+
+	tx := database.DBConn.Begin()
+	if err := tx.Omit("Bills.*", "Outgoings.*").Create(&report).Error; err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	tx.Commit()
+
+	return report
+}
+func (dao Repository) Delete(tenant int, id string) {
+	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).Delete(&models.Report{}).Error; err != nil {
+		panic(err)
+	}
+}
+
+func (Repository) BuildBetweenTwoDates(tenant int, startDate time.Time, endDate time.Time) models.Report {
 	bills := []models.Bill{}
-	startDate := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.Local)
-	endDate := startDate.AddDate(0, 1, 0).Add(time.Nanosecond * -1)
 	err := database.DBConn.Preload("Lines").Where("company_id = ? AND paid_at BETWEEN ? AND ?", tenant, startDate, endDate).Find(&bills).Error
 	if err != nil {
 		panic(err)
 	}
 	company := company.DAO.FindOneById(tenant)
 
-	outgoing := models.Outgoing{}
-	database.DBConn.Preload("Lines").Where("company_id = ? AND start_date <= ? AND end_date >= ?", tenant, startDate, startDate).First(&outgoing)
+	outgoings := outgoings.DAO.FindAllBetweenDates(tenant, startDate, endDate)
 
-	report := dtos.Report{
-		Details:      make([]dtos.Report, 0),
-		StartDate:    startDate.String(),
-		EndDate:      endDate.String(),
-		OtherSales:   0,
-		ServiceSales: 0,
-		ArticleSales: 0,
-		ArticleTaxes: 0,
-		Sales:        0,
-		ServiceTaxes: 0,
-		OtherTaxes:   0,
-		Outgoings:    0,
+	report := models.Report{
+		StartDate:      startDate.Local(),
+		EndDate:        endDate.Local(),
+		OtherSales:     0,
+		ServiceSales:   0,
+		ArticleSales:   0,
+		ArticleTaxes:   0,
+		ServiceTaxes:   0,
+		OtherTaxes:     0,
+		Outgoings:      0,
+		Bills:          make([]models.Bill, 0),
+		OutgoingsRefer: make([]models.Outgoing, 0),
 	}
 	for _, bill := range bills {
-		billReport := dtos.Report{
-			StartDate:    bill.PaidAt.String(),
-			EndDate:      bill.PaidAt.String(),
+		billReport := models.Report{
+			StartDate:    bill.PaidAt.Local(),
+			EndDate:      bill.PaidAt.Local(),
 			OtherSales:   0,
 			ServiceSales: 0,
 			ArticleSales: 0,
@@ -59,55 +102,34 @@ func (dao ReportDAO) FindForMonth(tenant int, date time.Time) dtos.Report {
 				billReport.OtherSales += linePrice
 			}
 		}
-		billReport.Sales = billReport.ArticleSales + billReport.ServiceSales + billReport.OtherSales
 		billReport = addReportTaxes(company, billReport)
-		report.Details = append(report.Details, billReport)
+		report.Bills = append(report.Bills, bill)
 
 	}
-	if outgoing.Lines != nil {
-		for _, line := range outgoing.Lines {
-			report.Outgoings += line.TotalHT * (1.0 - (float64(line.VAT) / 100))
+	log.Println("Outgoings : ", len(outgoings))
+	for _, outgoing := range outgoings {
+		if outgoing.Lines != nil {
+			for _, line := range outgoing.Lines {
+				report.Outgoings += line.TotalHT * (1.0 + (float64(line.VAT) / 100))
+			}
 		}
+		report.OutgoingsRefer = append(report.OutgoingsRefer, outgoing)
 	}
-	report.Sales = report.OtherSales + report.ArticleSales + report.ServiceSales
 	report = addReportTaxes(company, report)
 
 	return report
 }
 
-func (dao ReportDAO) FindForYear(tenant int, date time.Time) dtos.Report {
+func (dao Repository) BuildForMonth(tenant int, date time.Time) models.Report {
+	startDate := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.Local)
+	endDate := startDate.AddDate(0, 1, 0).Add(time.Nanosecond * -1)
+	return dao.BuildBetweenTwoDates(tenant, startDate, endDate)
+}
+
+func (dao Repository) BuildForYear(tenant int, date time.Time) models.Report {
 	startDate := time.Date(date.Year(), 1, 1, 0, 0, 0, 0, time.Local)
 	endDate := startDate.AddDate(1, 0, 0).Add(time.Nanosecond * -1)
-	company := company.DAO.FindOneById(tenant)
-	report := dtos.Report{
-		Details:      make([]dtos.Report, 0),
-		StartDate:    startDate.String(),
-		EndDate:      endDate.String(),
-		OtherSales:   0,
-		ServiceSales: 0,
-		ArticleSales: 0,
-		Sales:        0,
-		ArticleTaxes: 0,
-		ServiceTaxes: 0,
-		OtherTaxes:   0,
-		Outgoings:    0,
-	}
-
-	for !startDate.After(endDate) {
-		monthReport := dao.FindForMonth(tenant, startDate)
-		report.ArticleSales += monthReport.ArticleSales
-		report.ServiceSales += monthReport.ServiceSales
-		report.OtherSales += monthReport.OtherSales
-		report.Sales += monthReport.Sales
-		report.Details = append(report.Details, monthReport)
-		report.Outgoings += monthReport.Outgoings
-		report.ArticleTaxes += monthReport.ArticleTaxes
-		report.ServiceTaxes += monthReport.ServiceTaxes
-		report.OtherTaxes += monthReport.OtherTaxes
-		startDate = startDate.AddDate(0, 1, 0)
-	}
-	addReportTaxes(company, report)
-	return report
+	return dao.BuildBetweenTwoDates(tenant, startDate, endDate)
 }
 
 func getLinePrice(bill models.Bill, line models.BillLine) float64 {
@@ -120,7 +142,7 @@ func getLinePrice(bill models.Bill, line models.BillLine) float64 {
 
 }
 
-func addReportTaxes(company models.Company, report dtos.Report) dtos.Report {
+func addReportTaxes(company models.Company, report models.Report) models.Report {
 	if company.ArticlesTax != nil {
 		report.ArticleTaxes += float64(*company.ArticlesTax) / 100 * report.ArticleSales
 	}
@@ -133,4 +155,4 @@ func addReportTaxes(company models.Company, report dtos.Report) dtos.Report {
 	return report
 }
 
-var DAO = &ReportDAO{}
+var DAO = &Repository{}
