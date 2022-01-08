@@ -6,7 +6,7 @@ import { ROUTES } from 'routes'
 import { QuoteApi } from 'api/QuoteApi'
 import useCustomers from 'hooks/useCustomers'
 import QuoteFilterContainer from './Filters'
-import { filterQuotes, sortQuotes } from '../../utils/quote'
+import { filterQuotes } from '../../utils/quote'
 import QuoteList from './List'
 
 type QuoteFilters = Record<string, string>
@@ -15,15 +15,15 @@ const QuotePage = (): JSX.Element => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const quotesQuery = useQuery('quotes', QuoteApi.findAllNotArchived, {
+  const quotesQuery = useQuery('quotes', QuoteApi.findAllNotArchivedAndNotRefused, {
     refetchOnWindowFocus: false,
   })
   const history = useHistory()
 
-  const quoteSorted = useCallback(
-    () => sortQuotes(filterQuotes(quotesQuery.data ?? [], filters, customers)),
-    [filters, quotesQuery.data],
-  )
+  const quoteSorted = useCallback(() => filterQuotes(quotesQuery.data ?? [], filters, customers), [
+    filters,
+    quotesQuery.data,
+  ])
 
   const goToNewQuote = () => {
     history.push(ROUTES.QUOTE_FORM.path.replace(':id', 'new'))

@@ -47,6 +47,47 @@ export const ROUTES = {
     icon: 'archive',
     path: '/history',
     title: 'Historique',
+    routes: {
+      QUOTES: {
+        exact: true,
+        path: '/history/quotes',
+        title: 'Devis',
+        routes: {
+          ARCHIVED: {
+            exact: true,
+            path: '/history/quotes/archived',
+            title: 'Devis > Archivés',
+          },
+          REFUSED: {
+            exact: true,
+            path: '/history/quotes/refused',
+            title: 'Devis > Refusés',
+          },
+        },
+      },
+      BILLS: {
+        exact: true,
+        path: '/history/bills',
+        title: 'Factures',
+        routes: {
+          ARCHIVED: {
+            exact: true,
+            path: '/history/bills/archived',
+            title: 'Factures > Archivées',
+          },
+          REFUSED: {
+            exact: true,
+            path: '/history/bills/refused',
+            title: 'Factures > Refusées',
+          },
+        },
+      },
+      TODOS: {
+        exact: true,
+        path: '/history/todos',
+        title: 'Tâches',
+      },
+    },
   },
   ONBOARDING_COMPANY: {
     path: '/onboarding/create-company',
@@ -143,4 +184,4 @@ export const ROUTES = {
       },
     },
   },
-}
+} as const

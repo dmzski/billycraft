@@ -14,7 +14,10 @@ const Row = ({ outgoing }: RowProps): JSX.Element => {
   const total = useMemo(
     () =>
       new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(
-        outgoing.lines.reduce((acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 - vat), 0),
+        outgoing.lines.reduce(
+          (acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 + vat / 100),
+          0,
+        ),
       ),
     [outgoing.lines],
   )

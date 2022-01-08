@@ -3,7 +3,7 @@ import { BillApi } from 'api/BillApi'
 import { SupplierApi } from 'api/SupplierApi'
 import { OutgoingRequest } from 'models/Outgoing'
 import { useMemo } from 'react'
-import { Control, Controller, useWatch } from 'react-hook-form'
+import { Control, Controller, useController, useWatch } from 'react-hook-form'
 import { useQuery } from 'react-query'
 
 const DEFAULT_LINE_COLOR = 'initial'
@@ -19,6 +19,18 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
     refetchOnWindowFocus: false,
     staleTime: 6000,
   })
+
+  const vatController = useController({
+    name: `lines.${index}.vat`,
+    control,
+    defaultValue: 0,
+    rules: {
+      min: 0,
+      max: 100,
+      required: true,
+    },
+  })
+
   const { data: suppliers, isLoading: isLoadingSuppliers } = useQuery(
     ['suppliers'],
     SupplierApi.findAll,
@@ -50,7 +62,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
         ? new Intl.NumberFormat(undefined, {
             currency: 'EUR',
             style: 'currency',
-          }).format(Number(totalHT * (1 - vat)) || 0)
+          }).format(Number(totalHT * (1 + vat / 100)) || 0)
         : '',
     [totalHT, vat],
   )
@@ -93,7 +105,11 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
               className="w-full"
               name={field.name}
               value={field.value}
-              onChange={field.onChange}
+              onChange={value => {
+                field.onChange(value)
+                const vatFound = suppliers?.find(({ id }) => id === value)?.vat
+                vatController.field.onChange(vatFound ?? 0)
+              }}
               options={supplierOptions}
               isLoading={isLoadingSuppliers}
               ref={field.ref}
@@ -166,29 +182,22 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
         />
       </div>
       <div className="col-span-2">
-        <Controller
-          control={control}
-          name={`lines.${index}.vat`}
-          rules={{ min: 0, max: 100 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              className="w-full"
-              type="number"
-              step={1}
-              min={0}
-              max={100}
-              name={field.name}
-              onChange={field.onChange}
-              value={field.value}
-              onBlur={event => {
-                field.onChange(Number(event.target.value))
-                field.onBlur()
-              }}
-              ref={field.ref}
-              error={invalid}
-              disabled={disabled}
-            />
-          )}
+        <Input
+          className="w-full"
+          type="number"
+          step={1}
+          min={0}
+          max={100}
+          name={vatController.field.name}
+          onChange={vatController.field.onChange}
+          value={vatController.field.value}
+          onBlur={event => {
+            vatController.field.onChange(Number(event.target.value))
+            vatController.field.onBlur()
+          }}
+          ref={vatController.field.ref}
+          error={vatController.fieldState.invalid}
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2 flex justify-between">

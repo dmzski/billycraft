@@ -26,7 +26,7 @@ const Row = ({
   const totalTTC = useMemo(
     () =>
       !Number.isNaN(totalHT) && !Number.isNaN(vat)
-        ? formatCurrency(Number(totalHT * (1 - vat)) || 0)
+        ? formatCurrency(Number(totalHT * (1 + vat / 100)) || 0)
         : '',
     [totalHT, vat, formatCurrency],
   )

@@ -5,8 +5,13 @@ import { Dispatch, SetStateAction } from 'react'
 type BillFilterContainerProps = {
   filters: Record<string, string>
   setFilters: Dispatch<SetStateAction<Record<string, string>>>
+  disabledFilters?: string[]
 }
-const BillFilterContainer = ({ filters, setFilters }: BillFilterContainerProps): JSX.Element => (
+const BillFilterContainer = ({
+  filters,
+  setFilters,
+  disabledFilters,
+}: BillFilterContainerProps): JSX.Element => (
   <div className="flex my-2">
     <Input
       className="w-32 mr-2"
@@ -59,12 +64,18 @@ const BillFilterContainer = ({ filters, setFilters }: BillFilterContainerProps):
             status: `${value}`,
           }))
         }}
+        disabled={disabledFilters?.includes('status')}
         options={[
           { value: 'none', label: 'Sélectionner' },
-          ...Object.values(BILL_STATUS).map(({ enum: statusEnum, text }) => ({
-            value: statusEnum,
-            label: text,
-          })),
+          ...Object.values(BILL_STATUS)
+            .filter(
+              ({ enum: statusEnum }) =>
+                ![BILL_STATUS.ARCHIVED.enum, BILL_STATUS.REFUSED.enum].includes(statusEnum),
+            )
+            .map(({ enum: statusEnum, text }) => ({
+              value: statusEnum,
+              label: text,
+            })),
         ]}
       />
     </div>

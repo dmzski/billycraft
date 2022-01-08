@@ -71,6 +71,13 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	pdf.SetY(35)
 	pdf.SetX(marginL)
 	companyStr := fmt.Sprintf("%s\n%s\n%s, %s", c.Name, c.Address, c.PostalCode, c.City)
+	if qc.DisplayCompanyEmail {
+		companyStr += fmt.Sprintf("\n%s", c.Email)
+	}
+	if qc.DisplayCompanyPhoneNumber {
+		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
+	}
+
 	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
 	pdf.MultiCell(cols[0], lineHt+lineMargin, tr(companyStr), "0", "L", false)
@@ -78,7 +85,13 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	pdf.SetY(y)
 	pdf.SetX(pageSize.Wd - marginL - cols[1] - cols[2] - cols[3])
 	if customer.Name != "" {
-		customerStr := customer.Name + "\n" + customer.Address + "\n" + customer.PostalCode + ", " + customer.City
+		customerStr := fmt.Sprintf("%s\n%s\n%s, %s", customer.Name, customer.Address, customer.PostalCode, customer.City)
+		if qc.DisplayCustomerEmail {
+			customerStr += fmt.Sprintf("\n%s", customer.Email)
+		}
+		if qc.DisplayCustomerPhoneNumber {
+			customerStr += fmt.Sprintf("\n%s", customer.PhoneNumber)
+		}
 		pdf.MultiCell(cols[1]+cols[2]+cols[3], lineHt+lineMargin, tr(customerStr), "0", "R", false)
 	}
 	afterCustomerY := pdf.GetY()

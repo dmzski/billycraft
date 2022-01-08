@@ -11,7 +11,7 @@ const HourCell = ({ date, onCellClick }: DayColumnProps): JSX.Element => (
     aria-label="Add appointment"
     onDoubleClick={onCellClick(date, date)}
     type="button"
-    className="w-full appearance-none h-14 flex items-center justify-center border-t border-gray-200"
+    className="w-full appearance-none h-14 flex items-center justify-center border-t border-gray-200 hover:bg-gray-50"
   />
 )
 
@@ -33,7 +33,7 @@ const DayColumn = ({ date, onCellClick }: DayColumnProps): JSX.Element => {
   return (
     <section
       className={`border-r border-b border-gray-300 w-52 ${
-        isSameDay(Date.now(), date) ? 'bg-primary-50' : ''
+        isSameDay(Date.now(), date) ? 'bg-gray-100' : ''
       }`}
     >
       <h2 className="text-center text-lg h-12 flex justify-center items-center">

@@ -68,7 +68,7 @@ func delete(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		DAO.Delete(id, user.Email)
+		DAO.Delete(id, *user.CompanyID)
 		return c.Status(204).SendString("Appointment deleted")
 	}
 }

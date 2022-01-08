@@ -1,13 +1,16 @@
-import { Button, Loader } from '@coco-ui/core'
+import { Button, Loader, useToast } from '@coco-ui/core'
 import { ReportApi } from 'api/ReportApi'
+import { STRINGS } from 'constants/strings'
 import { useFormatDate } from 'hooks/useFormatDate'
 import { ReportRequest } from 'models/Report'
-import { useQuery } from 'react-query'
-import { Link, useParams } from 'react-router-dom'
+import { useCallback, useState } from 'react'
+import { useQuery, useQueryCache } from 'react-query'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import ReportOutgoingTable from './components/ReportOutgoingTable'
 import ReportPerSupplierTable from './components/ReportPerSupplierTable'
 import ReportTable from './components/ReportTable'
 import { REPORT_ROUTES } from './constants'
+import DeleteModal from './modals/DeleteModal'
 
 type DetailTableProps = {
   report: ReportRequest
@@ -42,11 +45,34 @@ const DetailTable = ({ report }: DetailTableProps) => {
   )
 }
 const DetailsPage = () => {
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const toast = useToast()
+  const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
+  const queryCache = useQueryCache()
   const { data: report, isLoading } = useQuery(['reports', id], () => ReportApi.findById(id), {
     refetchOnWindowFocus: false,
     staleTime: 6000,
   })
+
+  const openDeleteModal = useCallback(() => {
+    setDeleteOpen(true)
+  }, [])
+
+  const onDelete = useCallback(() => {
+    const deleteFn = async () => {
+      try {
+        await ReportApi.delete(id)
+        toast.success(STRINGS.DELETE_SUCCESS)
+        push(REPORT_ROUTES.routes.LIST.path)
+        queryCache.invalidateQueries('reports')
+      } catch {
+        toast.error(STRINGS.DELETE_ERROR)
+      }
+    }
+
+    deleteFn()
+  }, [toast, id, push, queryCache])
 
   if (isLoading) {
     return (
@@ -58,18 +84,24 @@ const DetailsPage = () => {
 
   return (
     <>
-      <Link to={REPORT_ROUTES.routes.LIST.path}>
-        <Button
-          type="button"
-          className="md:w-auto w-full mb-4"
-          variant="inverted-primary"
-          icon="arrow-left"
-          iconSize={12}
-          size="xs"
-        >
-          Retourner à la liste des rapports
+      <div className="flex md:justify-between flex-col md:flex-row">
+        <Link to={REPORT_ROUTES.routes.LIST.path}>
+          <Button
+            type="button"
+            className="md:w-auto w-full mb-4"
+            variant="inverted-primary"
+            icon="arrow-left"
+            iconSize={12}
+            size="xs"
+          >
+            Retourner à la liste des rapports
+          </Button>
+        </Link>
+        <Button className="mb-4" size="xs" variant="inverted-error" onClick={openDeleteModal}>
+          Supprimer
         </Button>
-      </Link>
+        <DeleteModal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} onSubmit={onDelete} />
+      </div>
       {report ? (
         <>
           <h1 className="text-2xl text-primary-700 border-b mb-4">{report.name}</h1>

@@ -106,8 +106,8 @@ func (dao Repository) Create(creator models.User, dto dtos.AppointmentRequest) (
 	return
 }
 
-func (dao Repository) Delete(id string, creator string) {
-	if err := database.DBConn.Where("id = ? and created_by = ?", id, creator).Delete(&models.Appointment{}).Error; err != nil {
+func (dao Repository) Delete(id string, tenant int) {
+	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Appointment{}).Error; err != nil {
 		panic(err)
 	}
 }

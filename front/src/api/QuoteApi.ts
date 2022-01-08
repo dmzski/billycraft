@@ -7,10 +7,22 @@ export const QUOTE_URL = `${API_URL}/quotes`
 
 export const QuoteApi = {
   findAll: async (): Promise<Quote[]> => HttpClient.GET<Quote[]>(`${QUOTE_URL}`),
+  findAllNotArchivedAndNotRefused: async (): Promise<Quote[]> =>
+    HttpClient.GET<Quote[]>(
+      `${QUOTE_URL}?${new URLSearchParams({
+        not_status: JSON.stringify(['ARCHIVED', 'REFUSED']),
+      })}`,
+    ),
   findAllNotArchived: async (): Promise<Quote[]> =>
-    HttpClient.GET<Quote[]>(`${QUOTE_URL}?filter=not_archived`),
+    HttpClient.GET<Quote[]>(
+      `${QUOTE_URL}?${new URLSearchParams({
+        not_status: JSON.stringify(['ARCHIVED']),
+      })}`,
+    ),
   findAllArchived: async (): Promise<Quote[]> =>
-    HttpClient.GET<Quote[]>(`${QUOTE_URL}?filter=archived`),
+    HttpClient.GET<Quote[]>(`${QUOTE_URL}?${new URLSearchParams([['status', '["ARCHIVED"]']])}`),
+  findAllRefused: async (): Promise<Quote[]> =>
+    HttpClient.GET<Quote[]>(`${QUOTE_URL}?${new URLSearchParams([['status', '["REFUSED"]']])}`),
   createOrUpdate: async ({ id, customerId, lines, status, title, tva }: Quote): Promise<Quote> => {
     const data = {
       id,

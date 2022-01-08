@@ -7,9 +7,13 @@ export const BILL_URL = `${API_URL}/bills`
 export const BillApi = {
   findAll: async (): Promise<Bill[]> => HttpClient.GET<Bill[]>(`${BILL_URL}`),
   findAllNotArchived: async (): Promise<Bill[]> =>
-    HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_archived`),
+    HttpClient.GET<Bill[]>(`${BILL_URL}?not_status=["ARCHIVED"]`),
+  findAllNotArchivedAndNotRefused: async (): Promise<Bill[]> =>
+    HttpClient.GET<Bill[]>(`${BILL_URL}?not_status=["ARCHIVED", "REFUSED"]`),
   findAllArchived: async (): Promise<Bill[]> =>
-    HttpClient.GET<Bill[]>(`${BILL_URL}?filter=archived`),
+    HttpClient.GET<Bill[]>(`${BILL_URL}?status=["ARCHIVED"]`),
+  findAllRefused: async (): Promise<Bill[]> =>
+    HttpClient.GET<Bill[]>(`${BILL_URL}?status=["REFUSED"]`),
   findAllNotPaid: async (): Promise<Bill[]> =>
     HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_paid`),
   createOrUpdate: async ({

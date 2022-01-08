@@ -10,6 +10,7 @@ type Supplier struct {
 	ID        int64 `gorm:"primaryKey;autoIncrement;<-:create"`
 	Name      string
 	Color     *string
+	Vat       int
 	CompanyID int    `gorm:"<-:create"`
 	CreatedBy string `gorm:"foreignKey:Email;<-:create"`
 	DeletedAt gorm.DeletedAt
@@ -29,6 +30,7 @@ func (p Supplier) ToDTO() dtos.SupplierResponse {
 		ID:        p.ID,
 		Name:      p.Name,
 		Color:     p.Color,
+		Vat:       p.Vat,
 		CompanyID: p.CompanyID,
 		CreatedBy: p.CreatedBy,
 	}
@@ -38,5 +40,6 @@ func (Supplier) FromDTO(p dtos.SupplierRequest) Supplier {
 	return Supplier{
 		Name:  p.Name,
 		Color: p.Color,
+		Vat:   p.Vat,
 	}
 }

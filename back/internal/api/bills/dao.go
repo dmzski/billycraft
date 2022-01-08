@@ -15,27 +15,40 @@ type BillDao struct {
 }
 
 func (dao BillDao) FindAllByTenant(tenant int) (bills []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Find(&bills, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Preload("Lines").Order("created_at desc").Find(&bills, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao BillDao) FindAllByTenantByStatusIs(tenant int, status string) (bill []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status = ?", tenant, status).Find(&bill).Error; err != nil {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status = ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 func (dao BillDao) FindAllByTenantByStatusIsNot(tenant int, status string) (bill []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status <> ?", tenant, status).Find(&bill).Error; err != nil {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status <> ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
+func (dao BillDao) FindAllByTenantByStatusIn(tenant int, statuses []string) (bills []models.Bill) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+func (dao BillDao) FindAllByTenantByStatusNotIn(tenant int, statuses []string) (bills []models.Bill) {
+	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao BillDao) FindAllByTenantByNotPaid(tenant int) (bills []models.Bill) {
-	if err := database.DBConn.Where("company_id = ? AND status = 'SENT' AND paid_at IS NULL", tenant).Find(&bills).Error; err != nil {
+	if err := database.DBConn.Where("company_id = ? AND status = 'SENT' AND paid_at IS NULL", tenant).Order("created_at desc").Find(&bills).Error; err != nil {
 		panic(err)
 	}
 	return

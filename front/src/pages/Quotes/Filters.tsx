@@ -5,9 +5,14 @@ import { Dispatch, SetStateAction } from 'react'
 type QuoteFilterContainerProps = {
   filters: Record<string, string>
   setFilters: Dispatch<SetStateAction<Record<string, string>>>
+  disabledFilters?: string[]
 }
 
-const QuoteFilterContainer = ({ filters, setFilters }: QuoteFilterContainerProps): JSX.Element => (
+const QuoteFilterContainer = ({
+  filters,
+  setFilters,
+  disabledFilters = [],
+}: QuoteFilterContainerProps): JSX.Element => (
   <div className="flex my-2">
     <Input
       className="w-32 mr-2"
@@ -60,12 +65,18 @@ const QuoteFilterContainer = ({ filters, setFilters }: QuoteFilterContainerProps
             status: `${value}`,
           }))
         }}
+        disabled={disabledFilters.includes('status')}
         options={[
           { value: 'none', label: 'Sélectionner' },
-          ...Object.values(QUOTE_STATUS).map(({ enum: statusEnum, text }) => ({
-            value: statusEnum,
-            label: text,
-          })),
+          ...Object.values(QUOTE_STATUS)
+            .filter(
+              ({ enum: statusEnum }) =>
+                ![QUOTE_STATUS.ARCHIVED.enum, QUOTE_STATUS.REFUSED.enum].includes(statusEnum),
+            )
+            .map(({ enum: statusEnum, text }) => ({
+              value: statusEnum,
+              label: text,
+            })),
         ]}
       />
     </div>

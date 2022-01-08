@@ -3,6 +3,7 @@ package bills
 import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"encoding/json"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,18 +20,32 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var res []models.Bill
+	var res = make([]models.Bill, 0)
 	filter := c.Query("filter")
-	switch filter {
-	case "not_archived":
-		res = DAO.FindAllByTenantByStatusIsNot(*user.CompanyID, "ARCHIVED")
-	case "archived":
-		res = DAO.FindAllByTenantByStatusIs(*user.CompanyID, "ARCHIVED")
-	case "not_paid":
-		res = DAO.FindAllByTenantByNotPaid(*user.CompanyID)
-	default:
+	status := c.Query("status")
+	not_status := c.Query("not_status")
+	if filter != "" {
+		switch filter {
+		case "not_paid":
+			res = DAO.FindAllByTenantByNotPaid(*user.CompanyID)
+		}
+	}
+	if status != "" {
+		var arr []string
+		if err := json.Unmarshal([]byte(status), &arr); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
+		}
+		res = DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr)
+	} else if not_status != "" {
+		var arr []string
+		if err := json.Unmarshal([]byte(not_status), &arr); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
+		}
+		res = DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr)
+	} else {
 		res = DAO.FindAllByTenant(*user.CompanyID)
 	}
+
 	return makeArrayResponse(c, res)
 }
 

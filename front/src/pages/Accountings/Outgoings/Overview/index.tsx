@@ -27,7 +27,10 @@ const Overview = () => {
     () =>
       data
         ? new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(
-            data.lines.reduce((acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 - vat), 0),
+            data.lines.reduce(
+              (acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 + vat / 100),
+              0,
+            ),
           )
         : null,
     [data],

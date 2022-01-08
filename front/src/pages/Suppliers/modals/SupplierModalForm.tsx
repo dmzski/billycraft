@@ -28,12 +28,17 @@ const SupplierModalForm = ({
     defaultValues: {
       name: '',
       color: '',
+      vat: 0,
     },
     shouldUnregister: true,
   })
 
   const onSubmit = useCallback(
-    async (data: SupplierRequest) => {
+    async (values: SupplierRequest) => {
+      const data = {
+        ...values,
+        vat: Number(values.vat) || 0,
+      }
       try {
         const res = supplier.id
           ? await SupplierApi.update(supplier.id, data)
@@ -96,6 +101,29 @@ const SupplierModalForm = ({
                 label="Nom du fournisseur"
                 value={field.value}
                 error={invalid}
+                minLength={2}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="vat"
+            rules={{ required: true, min: 0, max: 100 }}
+            render={({ field, fieldState: { invalid } }) => (
+              <Input
+                required
+                name={field.name}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                ref={field.ref}
+                className="mb-4"
+                variant="outside"
+                label="TVA appliquée par le fournisseur (%)"
+                value={field.value}
+                error={invalid}
+                type="number"
+                min={0}
+                max={100}
               />
             )}
           />

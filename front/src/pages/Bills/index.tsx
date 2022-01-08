@@ -6,7 +6,7 @@ import { BillApi } from 'api/BillApi'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from 'routes'
 import BillFilterContainer from './Filters'
-import { filterBills, sortBills } from '../../utils/bill'
+import { filterBills } from '../../utils/bill'
 import BillTable from './List'
 
 type BillFilters = Record<string, string>
@@ -14,13 +14,13 @@ type BillFilters = Record<string, string>
 const BillPage = (): JSX.Element => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const billsQuery = useQuery('bills', BillApi.findAllNotArchived)
+  const billsQuery = useQuery('bills', BillApi.findAllNotArchivedAndNotRefused)
   const history = useHistory()
 
-  const billSorted = useCallback(
-    () => sortBills(filterBills(billsQuery.data ?? [], filters, customers)),
-    [billsQuery.data, filters],
-  )
+  const billSorted = useCallback(() => filterBills(billsQuery.data ?? [], filters, customers), [
+    billsQuery.data,
+    filters,
+  ])
 
   const goToNewBill = () => {
     history.push(ROUTES.BILL_FORM.path.replace(':id', 'new'))

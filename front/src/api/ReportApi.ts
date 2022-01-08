@@ -18,8 +18,7 @@ export const ReportApi = {
         date: formatRFC3339(date),
       })}`,
     ),
-  delete: async (id: number): Promise<undefined> => HttpClient.DELETE(`${REPORT_URL}/${id}`, {}),
-
+  delete: async (id: string): Promise<undefined> => HttpClient.DELETE(`${REPORT_URL}/${id}`),
   findAll: (): Promise<ReportResponse[]> => HttpClient.GET(`${REPORT_URL}`),
   findById: (id: string): Promise<ReportResponse> => HttpClient.GET(`${REPORT_URL}/${id}`),
   create: (request: ReportRequest): Promise<ReportResponse> =>

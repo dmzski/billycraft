@@ -1,0 +1,1 @@
+ALTER TABLE com_supplier DROP COLUMN vat;
