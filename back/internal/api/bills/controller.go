@@ -29,8 +29,7 @@ func findAll(c *fiber.Ctx) error {
 		case "not_paid":
 			res = DAO.FindAllByTenantByNotPaid(*user.CompanyID)
 		}
-	}
-	if status != "" {
+	} else if status != "" {
 		var arr []string
 		if err := json.Unmarshal([]byte(status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")

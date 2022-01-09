@@ -1,10 +1,10 @@
 import { Button, Icon, Input, Select } from '@coco-ui/core'
-import { BillApi } from 'api/BillApi'
 import { SupplierApi } from 'api/SupplierApi'
 import { OutgoingRequest } from 'models/Outgoing'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Control, Controller, useController, useWatch } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import SelectBillModal from './modals/SelectBillModal'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -15,10 +15,7 @@ type RowProps = {
   disabled?: boolean
 }
 const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
-  const { data: bills, isLoading: isLoadingBills } = useQuery(['bills'], BillApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
+  const [billModalOpen, setBillModalOpen] = useState(false)
 
   const vatController = useController({
     name: `lines.${index}.vat`,
@@ -66,12 +63,6 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
         : '',
     [totalHT, vat],
   )
-
-  const billOptions = useMemo(() => {
-    if (bills) return bills.map(({ id }) => ({ value: id, label: id }))
-
-    return []
-  }, [bills])
 
   const supplierOptions = useMemo(() => {
     if (suppliers) return suppliers.map(({ id, name }) => ({ value: id, label: name }))
@@ -141,18 +132,23 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
           control={control}
           name={`lines.${index}.billId`}
           render={({ field, fieldState: { invalid } }) => (
-            <Select
-              className="w-full"
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-              options={billOptions}
-              isLoading={isLoadingBills}
-              isSearchable
-              ref={field.ref}
-              error={invalid}
-              disabled={disabled}
-            />
+            <>
+              <Input
+                className="w-full"
+                name={field.name}
+                value={field.value}
+                readOnly
+                onClick={() => setBillModalOpen(true)}
+                ref={field.ref}
+                error={invalid}
+                disabled={disabled}
+              />
+              <SelectBillModal
+                isOpen={billModalOpen}
+                onClose={() => setBillModalOpen(false)}
+                onSubmit={field.onChange}
+              />
+            </>
           )}
         />
       </div>
