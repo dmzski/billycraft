@@ -8,21 +8,23 @@ import (
 )
 
 type Company struct {
-	ID          int `gorm:"primaryKey;autoIncrement;<-:create"`
-	Name        string
-	City        string
-	Address     string
-	PostalCode  string
-	PhoneNumber string
-	Logo        *string
-	Siret       string
-	Email       string
-	ArticlesTax *float32
-	ServicesTax *float32
-	OthersTax   *float32
-	CreatedBy   string     `gorm:"<-:create"`
-	CreatedAt   time.Time  `gorm:"<-:create"`
-	UpdatedAt   *time.Time `gorm:"autoUpdateTime"`
+	ID              int `gorm:"primaryKey;autoIncrement;<-:create"`
+	Name            string
+	City            string
+	Address         string
+	PostalCode      string
+	PhoneNumber     string
+	Logo            *string
+	Siret           string
+	Email           string
+	ArticlesTax     *float32
+	ServicesTax     *float32
+	OthersTax       *float32
+	AutoMonthReport bool
+	AutoYearReport  bool
+	CreatedBy       string     `gorm:"<-:create"`
+	CreatedAt       time.Time  `gorm:"<-:create"`
+	UpdatedAt       *time.Time `gorm:"autoUpdateTime"`
 }
 
 func (Company) TableName() string {
@@ -36,37 +38,41 @@ func (c *Company) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (c Company) ToDTO() dtos.CompanyResponse {
 	return dtos.CompanyResponse{
-		ID:          c.ID,
-		Name:        c.Name,
-		City:        c.City,
-		Address:     c.Address,
-		PostalCode:  c.PostalCode,
-		PhoneNumber: c.PhoneNumber,
-		Logo:        c.Logo,
-		Siret:       c.Siret,
-		Email:       c.Email,
-		CreatedBy:   c.CreatedBy,
-		CreatedAt:   c.CreatedAt,
-		UpdatedAt:   c.UpdatedAt,
-		ArticlesTax: c.ArticlesTax,
-		ServicesTax: c.ServicesTax,
-		OthersTax:   c.OthersTax,
+		ID:              c.ID,
+		Name:            c.Name,
+		City:            c.City,
+		Address:         c.Address,
+		PostalCode:      c.PostalCode,
+		PhoneNumber:     c.PhoneNumber,
+		Logo:            c.Logo,
+		Siret:           c.Siret,
+		Email:           c.Email,
+		CreatedBy:       c.CreatedBy,
+		CreatedAt:       c.CreatedAt,
+		UpdatedAt:       c.UpdatedAt,
+		ArticlesTax:     c.ArticlesTax,
+		ServicesTax:     c.ServicesTax,
+		OthersTax:       c.OthersTax,
+		AutoMonthReport: c.AutoMonthReport,
+		AutoYearReport:  c.AutoYearReport,
 	}
 }
 
 func (Company) FromDTO(c dtos.CompanyRequest) Company {
 	return Company{
-		Name:        c.Name,
-		City:        c.City,
-		Address:     c.Address,
-		PostalCode:  c.PostalCode,
-		PhoneNumber: c.PhoneNumber,
-		Logo:        c.Logo,
-		Siret:       c.Siret,
-		Email:       c.Email,
-		ArticlesTax: c.ArticlesTax,
-		ServicesTax: c.ServicesTax,
-		OthersTax:   c.OthersTax,
+		Name:            c.Name,
+		City:            c.City,
+		Address:         c.Address,
+		PostalCode:      c.PostalCode,
+		PhoneNumber:     c.PhoneNumber,
+		Logo:            c.Logo,
+		Siret:           c.Siret,
+		Email:           c.Email,
+		ArticlesTax:     c.ArticlesTax,
+		ServicesTax:     c.ServicesTax,
+		OthersTax:       c.OthersTax,
+		AutoMonthReport: c.AutoMonthReport,
+		AutoYearReport:  c.AutoYearReport,
 	}
 
 }

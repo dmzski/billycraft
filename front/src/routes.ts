@@ -110,10 +110,27 @@ export const ROUTES = {
     title: 'Edition de devis',
   },
   SETTINGS: {
-    exact: true,
+    exact: false,
     icon: 'cog',
     path: '/settings',
     title: 'Paramètres',
+    routes: {
+      MY_COMPANY: {
+        exact: true,
+        path: '/settings/my-company',
+        title: 'Mon entreprise',
+      },
+      QUOTE_CUSTOMIZATION: {
+        exact: true,
+        path: '/settings/quote-customization',
+        title: 'Personnalisation des devis',
+      },
+      BILL_CUSTOMIZATION: {
+        exact: true,
+        path: '/settings/bill-customization',
+        title: 'Personnalisation des factures',
+      },
+    },
   },
   SUPPORT: {
     exact: true,

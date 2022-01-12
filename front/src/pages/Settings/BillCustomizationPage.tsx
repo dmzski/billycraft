@@ -1,9 +1,10 @@
 import { Loader } from '@coco-ui/core'
 import { BillCustomizationApi } from 'api/BillCustomizationApi'
+import React from 'react'
 import { useQuery } from 'react-query'
 import BillCustomizationForm from './Forms/BillCustomizationForm'
 
-const BillTab = (): JSX.Element => {
+const BillCustomizationPage = () => {
   const billCustomizationQuery = useQuery('bill-customization', BillCustomizationApi.findMine, {
     refetchOnWindowFocus: false,
   })
@@ -25,4 +26,4 @@ const BillTab = (): JSX.Element => {
   )
 }
 
-export default BillTab
+export default BillCustomizationPage

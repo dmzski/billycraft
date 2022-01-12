@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useEffect, useRef } from 'react'
 import { useQueryCache } from 'react-query'
 import useLoadingState from 'hooks/useLoadingState'
 import { CompanyApi } from 'api/CompanyApi'
-import { Button, Input, TextArea, useToast } from '@coco-ui/core'
+import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import Company from 'models/Company'
 import { STRINGS } from 'constants/strings'
 import { Controller, useForm } from 'react-hook-form'
@@ -77,7 +77,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
   }, [company, reset])
 
   return (
-    <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="text-lg border-b mb-4">Informations de mon entreprise</div>
       <div className="md:pl-2 grid gap-4">
         <Controller
@@ -210,45 +210,42 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             />
           )}
         />
-
-        {company.id ? (
-          <div className="grid grid-cols-12 gap-4 mt-4">
-            <Controller
-              name="logo"
-              control={control}
-              render={({ field, fieldState: { invalid } }) => (
-                <Input
-                  variant="outside"
-                  label="URL du logo"
-                  className="col-span-12 md:col-span-9"
-                  placeholder="URL du logo"
-                  name={field.name}
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  ref={field.ref}
-                  error={invalid}
-                />
-              )}
-            />
-            <Button
-              className="col-span-12 md:col-span-3 md:mt-4"
-              variant="inverted-primary"
-              type="button"
-              onClick={selectFileToUpload}
-              disabled={uploadLogoState.isLoading}
-            >
-              Télécharger une image
-            </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              name="logo-upload"
-              className="sr-only opacity-5"
-              onChange={uploadLogo}
-            />
-          </div>
-        ) : null}
+        <div className="grid grid-cols-12 gap-4 mt-4">
+          <Controller
+            name="logo"
+            control={control}
+            render={({ field, fieldState: { invalid } }) => (
+              <Input
+                variant="outside"
+                label="URL du logo"
+                className="col-span-12 md:col-span-9"
+                placeholder="URL du logo"
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={invalid}
+              />
+            )}
+          />
+          <Button
+            className="col-span-12 md:col-span-3 md:mt-4"
+            variant="inverted-primary"
+            type="button"
+            onClick={selectFileToUpload}
+            disabled={uploadLogoState.isLoading}
+          >
+            Télécharger une image
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            name="logo-upload"
+            className="sr-only opacity-5"
+            onChange={uploadLogo}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 w-full mt-8">
@@ -319,14 +316,36 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           />
         </div>
       </div>
-
-      {!company?.id ? (
-        <div className="mt-2">
-          Vous pourrez télécharger votre logo après la création de l&lsquo;entreprise dans vos
-          paramètres
+      <div>
+        <h2 className="text-lg mb-4 border-b">Automatisme</h2>
+        <div className="md:pl-2 grid md:grid-cols-2 gap-4">
+          <div className="flex">
+            <Controller
+              name="autoMonthReport"
+              rules={{}}
+              control={control}
+              render={({ field }) => (
+                <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
+                  Générer automatiquement les rapports mensuels
+                </Switch>
+              )}
+            />
+          </div>
+          <div className="flex">
+            <Controller
+              name="autoYearReport"
+              rules={{}}
+              control={control}
+              render={({ field }) => (
+                <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
+                  Générer automatiquement les rapports annuels
+                </Switch>
+              )}
+            />
+          </div>
         </div>
-      ) : null}
-      <Button type="submit" className="w-full primary mt-5" disabled={!isValid || isSubmitting}>
+      </div>
+      <Button type="submit" className="w-full primary mt-4" disabled={!isValid || isSubmitting}>
         Enregister
       </Button>
     </form>

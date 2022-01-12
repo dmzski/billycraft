@@ -3,7 +3,7 @@ import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
 import { useQuery } from 'react-query'
 import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
 
-const QuoteTab = (): JSX.Element => {
+const QuoteCustomizationPage = (): JSX.Element => {
   const quoteCustomizationQuery = useQuery('quote-customization', QuoteCustomizationApi.findMine, {
     refetchOnWindowFocus: false,
   })
@@ -25,4 +25,4 @@ const QuoteTab = (): JSX.Element => {
   )
 }
 
-export default QuoteTab
+export default QuoteCustomizationPage

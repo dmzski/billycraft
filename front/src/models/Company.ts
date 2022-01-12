@@ -14,6 +14,8 @@ interface Company {
   articlesTax: number
   servicesTax: number
   othersTax: number
+  autoMonthReport: boolean
+  autoYearReport: boolean
 }
 
 export default Company
