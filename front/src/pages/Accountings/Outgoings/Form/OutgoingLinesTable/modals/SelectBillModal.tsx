@@ -112,6 +112,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             ref={customerController.field.ref}
             label="Client"
             variant="outside"
+            isSearchable
           />
 
           <Input
@@ -132,6 +133,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             label="Facture"
             variant="outside"
             isLoading={isLoadingBills}
+            isSearchable
           />
           <Button
             type="button"
