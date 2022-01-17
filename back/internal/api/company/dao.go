@@ -9,6 +9,20 @@ import (
 type CompanyDao struct {
 }
 
+func (dao CompanyDao) FindAll() (companies []models.Company) {
+	database.DBConn.Find(&companies)
+	return
+}
+
+func (dao CompanyDao) FindAllForMonthCron() (companies []models.Company) {
+	database.DBConn.Where("auto_month_report = true").Find(&companies)
+	return
+}
+func (dao CompanyDao) FindAllForYearCron() (companies []models.Company) {
+	database.DBConn.Where("auto_year_report = true").Find(&companies)
+	return
+}
+
 func (dao CompanyDao) FindOneById(id int) (company models.Company) {
 	database.DBConn.Where("id = ?", id).First(&company)
 	return

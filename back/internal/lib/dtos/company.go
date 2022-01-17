@@ -34,6 +34,6 @@ type CompanyRequest struct {
 	ArticlesTax     *float32 `json:"articlesTax"`
 	ServicesTax     *float32 `json:"servicesTax"`
 	OthersTax       *float32 `json:"othersTax"`
-	AutoMonthReport bool     `json:"autoMonthReport"`
-	AutoYearReport  bool     `json:"autoYearReport"`
+	AutoMonthReport *bool    `json:"autoMonthReport"`
+	AutoYearReport  *bool    `json:"autoYearReport"`
 }

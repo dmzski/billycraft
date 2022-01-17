@@ -7,11 +7,13 @@ require (
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/gofiber/fiber/v2 v2.14.0
 	github.com/golang-migrate/migrate/v4 v4.14.1
+	github.com/google/uuid v1.3.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jackc/pgx/v4 v4.12.0 // indirect
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/klauspost/compress v1.13.1 // indirect
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.8.1
 	github.com/valyala/fasthttp v1.28.0 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
@@ -22,7 +24,6 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gorm.io/driver/postgres v1.1.0
 	gorm.io/gorm v1.21.11
-	github.com/google/uuid v1.3.0
 )
 
 require (

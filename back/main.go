@@ -4,10 +4,10 @@ import (
 	"back/config"
 	"back/database"
 	"back/internal/api"
+	cocoCron "back/internal/cron"
 	"back/internal/lib/dtos"
 	"back/internal/lib/oidc"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -16,6 +16,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/golang-migrate/migrate/v4"
+	"github.com/robfig/cron/v3"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
@@ -25,8 +26,18 @@ func main() {
 	var err error
 	config, err := config.LoadConfig()
 	if err != nil {
-		log.Println("cannot load config:", err)
+		log.Fatalln("Cannot load config:", err)
 	}
+	initDb(config)
+	c := cron.New(cron.WithChain(
+		cron.Recover(cron.DefaultLogger),
+	))
+	if config.Profile != "dev" {
+		c.AddFunc("@monthly", cocoCron.LaunchMonthReportJob)
+		c.AddFunc("@yearly", cocoCron.LaunchYearReportJob)
+	}
+	c.Start()
+	defer c.Stop()
 
 	app := fiber.New(fiber.Config{
 		// Override default error handler
@@ -71,7 +82,6 @@ func main() {
 		ClientSecret:  config.OIDCClientSecret,
 	}))
 	api.InitApiRoutes(app)
-	initDb(config)
 
 	log.Fatal(app.Listen(config.ServerAddress))
 
@@ -88,13 +98,12 @@ func initDb(config config.Config) {
 	})
 
 	if err != nil {
-		panic("Failed to connect database")
+		log.Fatalln("Failed to connect database")
 	}
-	fmt.Println("Connection Opened to Database")
+	log.Println("Connection Opened to Database")
 	err = database.MakeMigrations()
 	if err != nil && err != migrate.ErrNoChange {
-		log.Panicln(err)
-		panic("Failed to migrate database")
+		log.Fatalln(err)
 	}
-	fmt.Println("Migrations successuffly applied")
+	log.Println("Migrations successuffly applied")
 }

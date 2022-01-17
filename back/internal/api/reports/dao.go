@@ -50,6 +50,24 @@ func (dao Repository) Create(user models.User, dto dtos.ReportRequest) models.Re
 
 	return report
 }
+
+func (dao Repository) CreateCron(creator string, tenant int, startTime time.Time, endTime time.Time, name string) models.Report {
+	report := dao.BuildBetweenTwoDates(tenant, startTime, endTime)
+	report.CompanyID = tenant
+	report.CreatedBy = creator
+	report.Name = name
+
+	tx := database.DBConn.Begin()
+	if err := tx.Omit("Bills.*", "Outgoings.*").Create(&report).Error; err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	tx.Commit()
+
+	return report
+}
+
 func (dao Repository) Delete(tenant int, id string) {
 	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).Delete(&models.Report{}).Error; err != nil {
 		panic(err)

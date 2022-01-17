@@ -2,6 +2,7 @@ package models
 
 import (
 	"back/internal/lib/dtos"
+	"log"
 	"time"
 
 	"gorm.io/gorm"
@@ -20,8 +21,8 @@ type Company struct {
 	ArticlesTax     *float32
 	ServicesTax     *float32
 	OthersTax       *float32
-	AutoMonthReport bool
-	AutoYearReport  bool
+	AutoMonthReport *bool
+	AutoYearReport  *bool
 	CreatedBy       string     `gorm:"<-:create"`
 	CreatedAt       time.Time  `gorm:"<-:create"`
 	UpdatedAt       *time.Time `gorm:"autoUpdateTime"`
@@ -37,7 +38,7 @@ func (c *Company) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (c Company) ToDTO() dtos.CompanyResponse {
-	return dtos.CompanyResponse{
+	dto := dtos.CompanyResponse{
 		ID:              c.ID,
 		Name:            c.Name,
 		City:            c.City,
@@ -53,12 +54,22 @@ func (c Company) ToDTO() dtos.CompanyResponse {
 		ArticlesTax:     c.ArticlesTax,
 		ServicesTax:     c.ServicesTax,
 		OthersTax:       c.OthersTax,
-		AutoMonthReport: c.AutoMonthReport,
-		AutoYearReport:  c.AutoYearReport,
+		AutoMonthReport: false,
+		AutoYearReport:  false,
 	}
+
+	if c.AutoMonthReport != nil {
+		dto.AutoMonthReport = *c.AutoMonthReport
+	}
+	if c.AutoYearReport != nil {
+		dto.AutoYearReport = *c.AutoYearReport
+	}
+
+	return dto
 }
 
 func (Company) FromDTO(c dtos.CompanyRequest) Company {
+	log.Println(c.AutoMonthReport)
 	return Company{
 		Name:            c.Name,
 		City:            c.City,
