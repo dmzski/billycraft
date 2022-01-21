@@ -107,9 +107,21 @@ func (dao Repository) Create(creator models.User, dto dtos.AppointmentRequest) (
 }
 
 func (dao Repository) Delete(id string, tenant int) {
-	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Appointment{}).Error; err != nil {
+	tx := database.DBConn.Begin()
+	appointment := models.Appointment{}
+	if err := tx.Model(&appointment).Where("id = ? and company_id = ?", id, tenant).First(&appointment).Error; err != nil {
+		tx.Rollback()
 		panic(err)
 	}
+	if err := tx.Where("appointment_id = ?", appointment.ID).Delete(&models.AppointmentAssignee{}).Error; err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+	if err := tx.Delete(&appointment).Error; err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+	tx.Commit()
 }
 
 func (dao Repository) Done(id string, user models.User) (appointment models.Appointment) {

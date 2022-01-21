@@ -19,6 +19,3 @@ logs:
 
 some-coffee:
 	docker build -f Dockerfile.prod -t maliszewskid/compta-back:v2 . && docker push maliszewskid/compta-back:v2
-
-upload-migrations:
-	 scp migrations/* debian@coco-erp.fr:./app/migrations/
