@@ -1,7 +1,7 @@
 import { Icon, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { LineTypeEnum } from 'models/LineTypeEnum'
-import { useMemo } from 'react'
+import { KeyboardEvent, useCallback, useMemo, useRef } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
@@ -23,6 +23,11 @@ const QuoteLineTableLine = ({
 }: QuoteLineTableLineProps): JSX.Element => {
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
+  const typeRef = useRef<HTMLInputElement | null>()
+  const nameRef = useRef<HTMLInputElement | null>()
+  const descriptionRef = useRef<HTMLTextAreaElement | null>()
+  const quantityRef = useRef<HTMLInputElement | null>()
+  const priceRef = useRef<HTMLInputElement | null>()
 
   const price = useWatch({
     control,
@@ -52,6 +57,17 @@ const QuoteLineTableLine = ({
     return quantity * priceTTC
   }, [priceTTC, quantity])
 
+  const handleLineKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement | HTMLTextAreaElement>) => {
+      if (event.ctrlKey && event.key === '1') typeRef.current?.focus()
+      if (event.ctrlKey && event.key === '2') nameRef.current?.focus()
+      if (event.ctrlKey && event.key === '3') descriptionRef.current?.focus()
+      if (event.ctrlKey && event.key === '4') quantityRef.current?.focus()
+      if (event.ctrlKey && event.key === '5') priceRef.current?.focus()
+    },
+    [index],
+  )
+
   return (
     <div
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -75,11 +91,13 @@ const QuoteLineTableLine = ({
             render={({ field, fieldState: { invalid } }) => (
               <Select
                 disabled={disabled}
-                tabIndex={0}
                 error={invalid}
                 value={field.value}
                 onChange={type => field.onChange(type as LineTypeEnum)}
-                ref={field.ref}
+                ref={node => {
+                  field.ref(node)
+                  typeRef.current = node
+                }}
                 options={Object.values(LINE_TYPE).map(type => ({
                   value: type.enum,
                   label: type.name,
@@ -106,7 +124,12 @@ const QuoteLineTableLine = ({
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}
+              onKeyDown={handleLineKeyDown}
               error={invalid}
+              ref={node => {
+                field.ref(node)
+                nameRef.current = node
+              }}
             />
           )}
         />
@@ -125,6 +148,11 @@ const QuoteLineTableLine = ({
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}
+              onKeyDown={handleLineKeyDown}
+              ref={node => {
+                field.ref(node)
+                descriptionRef.current = node
+              }}
             />
           )}
         />
@@ -143,9 +171,14 @@ const QuoteLineTableLine = ({
               name={field.name}
               value={field.value}
               onChange={field.onChange}
+              onKeyDown={handleLineKeyDown}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
+              }}
+              ref={node => {
+                field.ref(node)
+                quantityRef.current = node
               }}
             />
           )}
@@ -164,9 +197,14 @@ const QuoteLineTableLine = ({
               step={0.01}
               value={field.value}
               onChange={field.onChange}
+              onKeyDown={handleLineKeyDown}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
+              }}
+              ref={node => {
+                field.ref(node)
+                priceRef.current = node
               }}
             />
           )}

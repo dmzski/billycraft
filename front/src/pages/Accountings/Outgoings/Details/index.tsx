@@ -18,30 +18,34 @@ const Details = (): JSX.Element => {
   return (
     <>
       <div className="grid md:grid-cols-12 md:items-center gap-2 mb-2 md:mb-4">
-        <Link className="md:col-span-11" to={OUTGOING_ROUTES.routes.LIST.path}>
-          <Button
-            type="button"
-            className="md:w-auto w-full"
-            variant="inverted-primary"
-            icon="arrow-left"
-            iconSize={12}
-            size="xs"
-          >
-            Retourner à la liste des livrets
-          </Button>
-        </Link>
-        {outgoing ? (
-          <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
+        <div className="md:col-span-11">
+          <Link to={OUTGOING_ROUTES.routes.LIST.path}>
             <Button
-              className="mb-2 w-full md:w-auto"
+              type="button"
+              className="md:w-auto w-full"
+              variant="inverted-primary"
+              icon="arrow-left"
+              iconSize={12}
               size="xs"
-              iconSize={16}
-              variant="info"
-              icon="pencil"
             >
-              Modifier
+              Retourner à la liste des livrets
             </Button>
           </Link>
+        </div>
+        {outgoing ? (
+          <div>
+            <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
+              <Button
+                className="w-full md:w-auto"
+                size="xs"
+                iconSize={16}
+                variant="info"
+                icon="pencil"
+              >
+                Modifier
+              </Button>
+            </Link>
+          </div>
         ) : null}
       </div>
       {isLoading ? (

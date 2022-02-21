@@ -127,10 +127,11 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
           )}
         />
       </div>
-      <div className="col-span-2">
+      <div className="col-span-2 relative">
         <Controller
           control={control}
           name={`lines.${index}.billId`}
+          defaultValue=""
           render={({ field, fieldState: { invalid } }) => (
             <>
               <Input
@@ -143,6 +144,14 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
                 error={invalid}
                 disabled={disabled}
               />
+              {field.value ? (
+                <Icon
+                  name="x"
+                  className="absolute right-2 top-2 cursor-pointer"
+                  role="button"
+                  onClick={() => field.onChange('')}
+                />
+              ) : null}
               <SelectBillModal
                 isOpen={billModalOpen}
                 onClose={() => setBillModalOpen(false)}

@@ -3,7 +3,7 @@ import { LineTypeEnum } from 'models/LineTypeEnum'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { LINE_TYPE } from 'constants/line'
 import { Control, Controller, useWatch } from 'react-hook-form'
-import { useMemo } from 'react'
+import { KeyboardEvent, useCallback, useMemo, useRef } from 'react'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 
 type BillLineTableLineProps = {
@@ -22,6 +22,11 @@ const BillLineTableLine = ({
   control,
 }: BillLineTableLineProps): JSX.Element => {
   const formatPrice = useFormatCurrency()
+  const typeRef = useRef<HTMLInputElement | null>()
+  const nameRef = useRef<HTMLInputElement | null>()
+  const descriptionRef = useRef<HTMLTextAreaElement | null>()
+  const quantityRef = useRef<HTMLInputElement | null>()
+  const priceRef = useRef<HTMLInputElement | null>()
 
   const tva = useWatch({ control, name: 'tva' })
 
@@ -52,6 +57,17 @@ const BillLineTableLine = ({
     return quantity * priceTTC
   }, [priceTTC, quantity])
 
+  const handleLineKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement | HTMLTextAreaElement>) => {
+      if (event.ctrlKey && event.key === '1') typeRef.current?.focus()
+      if (event.ctrlKey && event.key === '2') nameRef.current?.focus()
+      if (event.ctrlKey && event.key === '3') descriptionRef.current?.focus()
+      if (event.ctrlKey && event.key === '4') quantityRef.current?.focus()
+      if (event.ctrlKey && event.key === '5') priceRef.current?.focus()
+    },
+    [index],
+  )
+
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <div ref={provided?.innerRef} {...provided?.draggableProps}>
@@ -75,7 +91,10 @@ const BillLineTableLine = ({
                 tabIndex={0}
                 value={field.value}
                 onChange={type => field.onChange(type as LineTypeEnum)}
-                ref={field.ref}
+                ref={node => {
+                  field.ref(node)
+                  typeRef.current = node
+                }}
                 options={Object.values(LINE_TYPE).map(type => ({
                   value: type.enum,
                   label: type.name,
@@ -100,8 +119,13 @@ const BillLineTableLine = ({
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
+                onKeyDown={handleLineKeyDown}
                 name={field.name}
                 error={invalid}
+                ref={node => {
+                  field.ref(node)
+                  nameRef.current = node
+                }}
               />
             )}
           />
@@ -119,7 +143,12 @@ const BillLineTableLine = ({
                 rows={3}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
+                onKeyDown={handleLineKeyDown}
                 name={field.name}
+                ref={node => {
+                  field.ref(node)
+                  descriptionRef.current = node
+                }}
               />
             )}
           />
@@ -138,9 +167,14 @@ const BillLineTableLine = ({
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
+                onKeyDown={handleLineKeyDown}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
+                }}
+                ref={node => {
+                  field.ref(node)
+                  quantityRef.current = node
                 }}
               />
             )}
@@ -159,9 +193,14 @@ const BillLineTableLine = ({
                 step={0.01}
                 value={field.value}
                 onChange={field.onChange}
+                onKeyDown={handleLineKeyDown}
                 onBlur={event => {
                   field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                   field.onBlur()
+                }}
+                ref={node => {
+                  field.ref(node)
+                  priceRef.current = node
                 }}
               />
             )}
