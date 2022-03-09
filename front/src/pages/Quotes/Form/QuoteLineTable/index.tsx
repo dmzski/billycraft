@@ -7,6 +7,7 @@ import * as React from 'react'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { Control, useFieldArray } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'
 
 const defaultLine = {
@@ -35,7 +36,7 @@ const QuoteLineTable = ({
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
-    keyName: 'line',
+    keyName: 'id',
   })
 
   const onDragEnd = useCallback(
@@ -51,7 +52,7 @@ const QuoteLineTable = ({
 
   const addLine = React.useCallback(
     (newLine = defaultLine) => {
-      append({ ...newLine, line: (fields || []).length + 1 })
+      append({ ...newLine, id: nanoid() })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -113,15 +114,15 @@ const QuoteLineTable = ({
             >
               {fields?.map((line, index) => (
                 <Draggable
-                  key={`draggable-${line.line}`}
-                  draggableId={line.line.toString()}
+                  key={`draggable-${line.id}`}
+                  draggableId={line.id}
                   index={index}
                   isDragDisabled={disabled}
                 >
                   {provided => (
                     <QuoteLineTableLine
                       provided={provided}
-                      key={`${line.line}`}
+                      key={`${line.id}`}
                       disabled={disabled}
                       index={index}
                       control={control}

@@ -1,14 +1,15 @@
 import { Button, List, Select } from '@coco-ui/core'
 import { ValueType } from '@coco-ui/core/dist/components/Select'
 import { ProductApi } from 'api/ProductApi'
-import { BillLine } from 'models/Bill'
 import { LineTypeEnum } from 'models/LineTypeEnum'
 import { useCallback } from 'react'
 import * as React from 'react'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { Control, useFieldArray } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import { nanoid } from 'nanoid'
 import BillLaneTableRow from './Row'
+import { BillFormValues } from '../Form'
 
 const defaultLine = {
   description: '',
@@ -35,7 +36,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps): JSX.Element =
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
-    keyName: 'line',
+    keyName: 'id',
   })
 
   const onDragEnd = useCallback(
@@ -51,7 +52,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps): JSX.Element =
 
   const addLine = React.useCallback(
     (newLine = defaultLine) => {
-      append({ ...newLine, line: (fields || []).length + 1 })
+      append({ ...newLine, line: nanoid() })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -138,17 +139,16 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps): JSX.Element =
                     {...droppableProvided.droppableProps}
                     ref={droppableProvided.innerRef}
                   >
-                    {(data as BillLine[])?.map((line, index) => (
+                    {(data as BillFormValues['lines'])?.map((line, index) => (
                       <Draggable
-                        key={`draggable-${line.line}`}
-                        draggableId={line.line.toString()}
+                        key={`draggable-${line.id}`}
+                        draggableId={line.id}
                         index={index}
                         isDragDisabled={disabled}
                       >
                         {provided => (
                           <BillLaneTableRow
                             provided={provided}
-                            key={`${line.line}`}
                             disabled={disabled}
                             index={index}
                             control={control}

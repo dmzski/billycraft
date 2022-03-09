@@ -9,7 +9,11 @@ import { STRINGS } from 'constants/strings'
 import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
 import BillLineTable from './BillLineTable'
 
-const defaultBill = {} as Partial<Bill>
+export type BillFormValues = {
+  lines: Array<BillLine & { id: string }>
+} & Omit<Bill, 'lines'>
+
+const defaultBill = {} as Partial<BillFormValues>
 
 type BillFormProps = {
   bill: Bill
@@ -43,14 +47,19 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
     }
   }
 
-  const onSubmit = async (data: Bill) => {
-    const tmp = { ...data }
-    tmp.lines = (tmp.lines ?? []).map((line: BillLine, index: number) => ({
-      ...line,
-      line: index + 1,
-      price: line.price ? Number(`${line.price}`) : null,
-      quantity: line.quantity ? Number(`${line.quantity}`) : null,
-    }))
+  const onSubmit = async (data: BillFormValues) => {
+    const tmp: Bill = {
+      ...data,
+      lines: data.lines.map((line: BillLine, index: number) => ({
+        billId: line.billId,
+        description: line.description,
+        name: line.name,
+        type: line.type,
+        line: index + 1,
+        price: line.price ? Number(`${line.price}`) : null,
+        quantity: line.quantity ? Number(`${line.quantity}`) : null,
+      })),
+    }
     try {
       const res = await BillApi.createOrUpdate(tmp)
       reset(res)

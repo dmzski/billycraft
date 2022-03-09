@@ -6,11 +6,13 @@ import { QuoteApi } from 'api/QuoteApi'
 import { Prompt } from 'react-router-dom'
 import useCustomers from 'hooks/useCustomers'
 import { STRINGS } from 'constants/strings'
-import Quote, { QuoteStatusEnum, QuoteLine } from '../../../models/Quote'
+import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
 import QuoteLineTable from './QuoteLineTable'
 
-const defaultQuote = {} as Partial<Quote>
-
+type QuoteFormValues = Omit<Quote, 'lines'> & {
+  lines: Array<QuoteLine & { id: string }>
+}
+const defaultQuote = {} as Partial<QuoteFormValues>
 type QuoteFormProps = {
   quote: Quote
   onSubmitSuccess: (res: Quote) => Promise<void> | void
@@ -41,14 +43,19 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     }
   }
 
-  const onSubmit = async (data: Quote) => {
-    const tmp = { ...data }
-    tmp.lines = (tmp.lines ?? []).map((line: QuoteLine, index: number) => ({
-      ...line,
-      line: index + 1,
-      price: line.price ? Number(`${line.price}`) : null,
-      quantity: line.quantity ? Number(`${line.quantity}`) : null,
-    }))
+  const onSubmit = async (data: QuoteFormValues) => {
+    const tmp: Quote = {
+      ...data,
+      lines: data.lines.map((line, index: number) => ({
+        name: line.name,
+        quoteId: line.quoteId,
+        type: line.type,
+        description: line.description,
+        line: index + 1,
+        price: line.price ? Number(`${line.price}`) : null,
+        quantity: line.quantity ? Number(`${line.quantity}`) : null,
+      })),
+    }
     try {
       const res = await QuoteApi.createOrUpdate(tmp)
       reset(res)

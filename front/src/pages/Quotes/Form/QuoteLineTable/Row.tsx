@@ -1,7 +1,7 @@
 import { Icon, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { LineTypeEnum } from 'models/LineTypeEnum'
-import { KeyboardEvent, useCallback, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
@@ -56,17 +56,6 @@ const QuoteLineTableLine = ({
 
     return quantity * priceTTC
   }, [priceTTC, quantity])
-
-  const handleLineKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLDivElement | HTMLTextAreaElement>) => {
-      if (event.ctrlKey && event.key === '1') typeRef.current?.focus()
-      if (event.ctrlKey && event.key === '2') nameRef.current?.focus()
-      if (event.ctrlKey && event.key === '3') descriptionRef.current?.focus()
-      if (event.ctrlKey && event.key === '4') quantityRef.current?.focus()
-      if (event.ctrlKey && event.key === '5') priceRef.current?.focus()
-    },
-    [index],
-  )
 
   return (
     <div
@@ -124,7 +113,6 @@ const QuoteLineTableLine = ({
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}
-              onKeyDown={handleLineKeyDown}
               error={invalid}
               ref={node => {
                 field.ref(node)
@@ -148,7 +136,6 @@ const QuoteLineTableLine = ({
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}
-              onKeyDown={handleLineKeyDown}
               ref={node => {
                 field.ref(node)
                 descriptionRef.current = node
@@ -171,7 +158,6 @@ const QuoteLineTableLine = ({
               name={field.name}
               value={field.value}
               onChange={field.onChange}
-              onKeyDown={handleLineKeyDown}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
@@ -197,7 +183,6 @@ const QuoteLineTableLine = ({
               step={0.01}
               value={field.value}
               onChange={field.onChange}
-              onKeyDown={handleLineKeyDown}
               onBlur={event => {
                 field.onChange(Number((event.target as HTMLInputElement).value) || 0)
                 field.onBlur()
