@@ -131,7 +131,6 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
         <Controller
           control={control}
           name={`lines.${index}.billId`}
-          defaultValue=""
           render={({ field, fieldState: { invalid } }) => (
             <>
               <Input

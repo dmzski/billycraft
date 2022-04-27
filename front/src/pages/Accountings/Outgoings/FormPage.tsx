@@ -2,28 +2,26 @@ import { Button, Loader } from '@coco-ui/core'
 import { OutgoingApi } from 'api/OutgoingApi'
 import { useCallback } from 'react'
 import { useQuery, useQueryCache } from 'react-query'
-import { Link, useParams } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { Link, useHistory, useParams } from 'react-router-dom'
+import { injectIdInPath, ROUTES } from 'routes'
+import { OutgoingResponse } from 'models/Outgoing'
 import OutgoingForm from './Form'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const FormPage = () => {
   const { id } = useParams<{ id: string }>()
+  const { push } = useHistory()
   const queryCache = useQueryCache()
-  const { data, isLoading, refetch } = useQuery(
-    ['outgoings', id],
-    () => OutgoingApi.findOneById(id),
-    {
-      refetchOnWindowFocus: false,
-      enabled: id !== 'new',
-    },
-  )
+  const { data, isLoading } = useQuery(['outgoings', id], () => OutgoingApi.findOneById(id), {
+    refetchOnWindowFocus: false,
+    enabled: id !== 'new',
+  })
 
-  const onSubmitSuccess = useCallback(() => {
-    refetch()
+  const onSubmitSuccess = useCallback((res: OutgoingResponse) => {
     queryCache.invalidateQueries('outgoings')
-  }, [refetch])
+    push(injectIdInPath(routes.DETAILS.path, res.id))
+  }, [])
   return (
     <div>
       <Link to={routes.LIST.path}>

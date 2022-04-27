@@ -50,7 +50,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps): JSX.Element => {
   const total = useMemo(
     () =>
       outgoing?.lines
-        ? outgoing.lines.reduce((acc, line) => acc + line.totalHT * (1 - line.vat), 0)
+        ? outgoing.lines.reduce((acc, line) => acc + line.totalHT * (1 + line.vat / 100), 0)
         : 0,
     [outgoing],
   )
@@ -62,7 +62,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps): JSX.Element => {
             (acc, line) => ({
               ...acc,
               [line.supplierId ?? -1]:
-                (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 - line.vat),
+                (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
             }),
             {} as Record<number, number>,
           )

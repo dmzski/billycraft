@@ -66,6 +66,7 @@ func (Outgoing) FromDTO(r dtos.OutgoingRequest) Outgoing {
 			SupplierBillReference: line.SupplierBillReference,
 			TotalHT:               line.TotalHT,
 			VAT:                   line.VAT,
+			Line:                  line.Line,
 		})
 	}
 
@@ -91,6 +92,7 @@ func (o Outgoing) ToDTO() dtos.OutgoingResponse {
 			BillID:                line.BillID,
 			TotalHT:               line.TotalHT,
 			VAT:                   line.VAT,
+			Line:                  line.Line,
 		})
 	}
 
