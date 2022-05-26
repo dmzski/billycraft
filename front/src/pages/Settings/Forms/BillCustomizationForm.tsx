@@ -5,6 +5,7 @@ import BillCustomization from 'models/BillCustomization'
 import { ChangeEvent } from 'react'
 import * as React from 'react'
 import { useMutation } from 'react-query'
+import { sendErrorToSentry } from 'utils/errors'
 
 type BillCustomizationFormProps = {
   billCustomization: BillCustomization
@@ -20,6 +21,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
     {
       onSuccess: () => {
         toast.success(STRINGS.SAVE_SUCCESS)
+      },
+      onError: error => {
+        sendErrorToSentry(error)
       },
     },
   )

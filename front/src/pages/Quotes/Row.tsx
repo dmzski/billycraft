@@ -10,6 +10,7 @@ import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import clsx from 'clsx'
+import { sendErrorToSentry } from 'utils/errors'
 import { QUOTE_STATUS } from '../../constants/quote'
 
 type QuoteTableLineProps = {
@@ -35,7 +36,8 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
         if (quote.id) await updateQuoteStatusMutation({ id: quote.id, status })
         toast.success(STRINGS.SAVE_SUCCESS)
         queryCache.invalidateQueries('quotes')
-      } catch {
+      } catch (error) {
+        sendErrorToSentry(error)
         toast.error(STRINGS.SAVE_ERROR)
       }
     }

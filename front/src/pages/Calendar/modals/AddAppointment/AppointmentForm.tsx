@@ -65,7 +65,7 @@ const Form = ({ appointment, onClose, onSubmitSuccess }: AddAppointmentFormProps
     const deleteFn = async () => {
       try {
         if (!appointment.id) {
-          throw new Error()
+          throw new Error('No appointment id')
         }
         await AppointmentApi.delete(appointment.id)
         toast.success(STRINGS.APPOINTMENT_DELETED)

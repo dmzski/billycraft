@@ -9,6 +9,7 @@ import { fr } from 'date-fns/locale'
 import { Todo } from 'models/Todo'
 import * as React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { sendErrorToSentry } from 'utils/errors'
 
 type TodoListProps = {
   data?: Todo[]
@@ -30,7 +31,8 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           await TodoApi.done(id)
           onSubmitSuccess?.()
           toast.success(STRINGS.SAVE_SUCCESS)
-        } catch {
+        } catch (error) {
+          sendErrorToSentry(error)
           toast.error(STRINGS.SAVE_ERROR)
         }
       }
@@ -51,7 +53,8 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           reset({ description: '' })
           onSubmitSuccess?.()
           toast.success(STRINGS.SAVE_SUCCESS)
-        } catch {
+        } catch (error) {
+          sendErrorToSentry(error)
           toast.error(STRINGS.SAVE_ERROR)
         }
       }

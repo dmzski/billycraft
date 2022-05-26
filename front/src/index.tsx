@@ -1,5 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
+import * as Sentry from '@sentry/react'
+import { BrowserTracing } from '@sentry/tracing'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
@@ -9,6 +11,16 @@ import './assets/main.css'
 if (window.localStorage.getItem('theme') === 'dark') {
   document.body.dataset.theme = 'dark'
 }
+
+Sentry.init({
+  dsn: 'https://aeb327770bc44d91900c6250daa08721@o1262999.ingest.sentry.io/6442376',
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+})
 
 ReactDOM.render(
   <StrictMode>

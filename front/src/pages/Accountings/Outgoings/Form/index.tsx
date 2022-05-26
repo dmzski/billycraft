@@ -5,6 +5,7 @@ import { endOfMonth, format, formatRFC3339 } from 'date-fns'
 import { OutgoingRequest, OutgoingResponse } from 'models/Outgoing'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { sendErrorToSentry } from 'utils/errors'
 import OutgoingLinesTable from './OutgoingLinesTable'
 
 type FormProps = {
@@ -42,7 +43,8 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
           : await OutgoingApi.create(data)
         toast.success(outgoing?.id ? STRINGS.OUTGOING_UPDATED : STRINGS.OUTGOING_CREATED)
         onSubmitSuccess?.(res)
-      } catch {
+      } catch (error) {
+        sendErrorToSentry(error)
         toast.error(STRINGS.SAVE_ERROR)
       }
     },

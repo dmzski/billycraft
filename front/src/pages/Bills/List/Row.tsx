@@ -9,6 +9,7 @@ import { useMemo, useCallback, MouseEvent } from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { Link } from 'react-router-dom'
 import { ROUTES } from 'routes'
+import { sendErrorToSentry } from 'utils/errors'
 import { BILL_STATUS } from '../../../constants/bill'
 
 type BillTableLineProps = {
@@ -36,7 +37,8 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
         if (bill.id) await updateBillStatusMutation({ id: bill.id, status })
         toast.success(STRINGS.SAVE_SUCCESS)
         queryCache.invalidateQueries('bills')
-      } catch {
+      } catch (error) {
+        sendErrorToSentry(error)
         toast.error(STRINGS.SAVE_ERROR)
       }
     }

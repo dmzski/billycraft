@@ -7,6 +7,8 @@
     "@heroicons/react": "^1.0.1",
     "@react-hook/media-query": "^1.1.1",
     "@react-keycloak/web": "^3.4.0",
+    "@sentry/react": "^6.19.7",
+    "@sentry/tracing": "^6.19.7",
     "clsx": "^1.1.1",
     "date-fns": "^2.27.0",
     "fetch-intercept": "^2.3.1",

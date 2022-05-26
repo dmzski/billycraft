@@ -64,7 +64,7 @@ const QuoteLineTableLine = ({
       className="shadow bg-background grid md:grid-cols-12 mb-2 p-2 gap-2"
       ref={provided?.innerRef}
     >
-      <div className="flex md:col-span-2 overflow-hidden">
+      <div className="flex md:col-span-2">
         <div
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
@@ -87,6 +87,7 @@ const QuoteLineTableLine = ({
                   field.ref(node)
                   typeRef.current = node
                 }}
+                className="z-10"
                 options={Object.values(LINE_TYPE).map(type => ({
                   value: type.enum,
                   label: type.name,

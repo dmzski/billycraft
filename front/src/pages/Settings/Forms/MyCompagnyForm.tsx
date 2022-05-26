@@ -6,6 +6,7 @@ import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import Company from 'models/Company'
 import { STRINGS } from 'constants/strings'
 import { Controller, useForm } from 'react-hook-form'
+import { sendErrorToSentry } from 'utils/errors'
 
 type MyCompagnyFormProps = {
   company: Company
@@ -41,7 +42,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         queryCache.invalidateQueries('my-company')
         toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
-      } catch {
+      } catch (error) {
+        sendErrorToSentry(error)
         toast.error(STRINGS.SAVE_ERROR)
       }
     },
@@ -64,7 +66,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         uploadLogoState.update('idle')
         toast.success('Logo téléchargé avec succes. Enregistrer les modifications')
       }
-    } catch {
+    } catch (error) {
+      sendErrorToSentry(error)
       toast.error("Erreur lors de l'upload de l'image")
       uploadLogoState.update('idle')
     }

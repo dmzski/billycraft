@@ -125,10 +125,10 @@ const BillLineTableLine = ({
             render={({ field }) => (
               <TextArea
                 placeholder="Description"
-                className="w-full flex resize"
+                className="w-full flex resize-y"
                 disabled={disabled}
                 value={field.value}
-                rows={3}
+                rows={1}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 name={field.name}

@@ -4,6 +4,7 @@ import { STRINGS } from 'constants/strings'
 import QuoteCustomization from 'models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useMutation } from 'react-query'
+import { sendErrorToSentry } from 'utils/errors'
 
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
@@ -20,6 +21,9 @@ const QuoteCustomizationForm = ({
     {
       onSuccess: () => {
         toast.success(STRINGS.SAVE_SUCCESS)
+      },
+      onError: error => {
+        sendErrorToSentry(error)
       },
     },
   )
