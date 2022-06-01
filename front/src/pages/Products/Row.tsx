@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Select, Table, TextArea, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, Select, TextArea, useToast } from '@coco-ui/core'
 import * as React from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { LINE_TYPE } from 'constants/line'
@@ -6,12 +6,14 @@ import { LineTypeEnum } from 'models/LineTypeEnum'
 import { Controller, useForm } from 'react-hook-form'
 import { STRINGS } from 'constants/strings'
 import { sendErrorToSentry } from 'utils/errors'
+import clsx from 'clsx'
 import Product from '../../models/Product'
 import { ProductApi } from '../../api/ProductApi'
 
 type ProductTableLineProps = {
   product: Product
   isNew?: boolean
+  index: number
 }
 
 const MODES = {
@@ -20,7 +22,7 @@ const MODES = {
   DELETE: 'DELETE',
 }
 
-const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Element => {
+const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX.Element => {
   const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ)
   const defaultValues = React.useMemo(
     () => ({
@@ -103,8 +105,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
   }, [product, reset])
 
   return (
-    <Table.Row>
-      <Table.Cell>
+    <div
+      className={clsx('grid md:grid-cols-12 px-2 py-3 gap-2', { 'bg-gray-50': index % 2 === 0 })}
+    >
+      <div className="md:col-span-2">
         <Controller
           name="type"
           control={control}
@@ -113,7 +117,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
               error={invalid}
               value={field.value}
               name={field.name}
-              className="w-full"
+              className=" bg-white"
               onChange={type => {
                 field.onChange(type)
               }}
@@ -125,8 +129,8 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             />
           )}
         />
-      </Table.Cell>
-      <Table.Cell>
+      </div>
+      <div className="md:col-span-3">
         <Controller
           name="name"
           control={control}
@@ -147,8 +151,8 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             />
           )}
         />
-      </Table.Cell>
-      <Table.Cell>
+      </div>
+      <div className="md:col-span-3 flex">
         <Controller
           name="description"
           control={control}
@@ -165,35 +169,33 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             />
           )}
         />
-      </Table.Cell>
-      <Table.Cell className="w-48">
-        <div className="w-full flex">
-          <Controller
-            name="price"
-            rules={{ min: 0 }}
-            defaultValue={0}
-            control={control}
-            render={({ field }) => (
-              <Input
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={event => {
-                  field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                  field.onBlur()
-                }}
-                disabled={mode !== MODES.EDIT}
-                className="w-full text-right"
-                type="number"
-                step={0.1}
-                error={!!errors.price}
-              />
-            )}
-          />
-          <span className="ml-2 pt-2">€</span>
-        </div>
-      </Table.Cell>
-      <Table.Cell className="w-20">
+      </div>
+      <div className="md:col-span-2 flex">
+        <Controller
+          name="price"
+          rules={{ min: 0 }}
+          defaultValue={0}
+          control={control}
+          render={({ field }) => (
+            <Input
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={event => {
+                field.onChange(Number((event.target as HTMLInputElement).value) || 0)
+                field.onBlur()
+              }}
+              disabled={mode !== MODES.EDIT}
+              className="w-full text-right"
+              type="number"
+              step={0.1}
+              error={!!errors.price}
+            />
+          )}
+        />
+        <span className="ml-2 pt-2">€</span>
+      </div>
+      <div className="md:col-span-2 flex justify-end">
         {mode === MODES.DELETE && !isNew ? (
           <div className="flex relative">
             <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
@@ -254,8 +256,8 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             </Button>
           </div>
         ) : null}
-      </Table.Cell>
-    </Table.Row>
+      </div>
+    </div>
   )
 }
 

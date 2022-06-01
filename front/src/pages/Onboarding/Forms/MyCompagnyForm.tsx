@@ -21,7 +21,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
     formState: { isValid, isSubmitting },
     reset,
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: company,
   })
 
@@ -60,6 +60,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         <Controller
           name="name"
           control={control}
+          rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               variant="outside"
@@ -71,12 +72,14 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               onBlur={field.onBlur}
               ref={field.ref}
               error={invalid}
+              required
             />
           )}
         />
         <Controller
           name="address"
           control={control}
+          rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <TextArea
               id="address"
@@ -90,12 +93,14 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               onBlur={field.onBlur}
               ref={field.ref}
               error={invalid}
+              required
             />
           )}
         />
         <Controller
           name="postalCode"
           control={control}
+          rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
@@ -108,6 +113,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               onBlur={field.onBlur}
               ref={field.ref}
               error={invalid}
+              required
             />
           )}
         />
@@ -115,6 +121,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         <Controller
           name="city"
           control={control}
+          rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
@@ -127,6 +134,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               onBlur={field.onBlur}
               ref={field.ref}
               error={invalid}
+              required
             />
           )}
         />
@@ -153,6 +161,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         <Controller
           name="email"
           control={control}
+          rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
@@ -165,6 +174,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
               onBlur={field.onBlur}
               ref={field.ref}
               error={invalid}
+              required
             />
           )}
         />

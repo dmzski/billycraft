@@ -92,14 +92,14 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
   }, [])
 
   return (
-    <div>
-      <div className="mb-4 px-4 grid md:grid-cols-12 font-semibold">
+    <div className="border rounded">
+      <div className="mb-2 px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 rounded-t">
         <div className="md:col-span-2">Crée le</div>
         <div className="md:col-span-2">Crée par</div>
         <div className="md:col-span-4">Description</div>
         <div className="md:col-span-4" />
       </div>
-      <form className="flex mb-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="px-2 flex mb-4" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="description"
           control={control}
@@ -132,7 +132,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           {data?.map((todo, index) => (
             <div
               key={todo.id}
-              className={clsx('border-b grid md:grid-cols-12 p-4 items-center', {
+              className={clsx('grid md:grid-cols-12 py-3 px-4 items-center', {
                 'bg-gray-50': index % 2 === 0,
               })}
             >

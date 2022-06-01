@@ -11,7 +11,7 @@ const List = ({ data }: ListProps): JSX.Element => {
   const history = useHistory()
   return (
     <div>
-      <div className="grid md:grid-cols-12 p-2 font-bold border-b">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 rounded-t">
         <div>Couleur</div>
         <div className="md:col-span-9">Nom</div>
         <div>TVA</div>

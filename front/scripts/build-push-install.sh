@@ -8,7 +8,7 @@ checkSuccess () {
 
 
 echo "Upgrading version...";
-yarn version --patch
+yarn version --minor
 checkSuccess
 
 version=`awk -F\" '/"version":/ {print $4}' package.json`

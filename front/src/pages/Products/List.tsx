@@ -1,25 +1,22 @@
-import { Table } from '@coco-ui/core'
 import ProductTableLine from 'pages/Products/Row'
 import Product from 'models/Product'
 
 const ProductTable = ({ products }: { products: Product[] }): JSX.Element => (
-  <Table className="w-full table-fixed">
-    <Table.Head>
-      <Table.Row>
-        <Table.HeadCell className="w-48">Type</Table.HeadCell>
-        <Table.HeadCell className="w-96">Nom</Table.HeadCell>
-        <Table.HeadCell className="w-96">Description</Table.HeadCell>
-        <Table.HeadCell className="w-44 text-right">Prix Unitaire HT</Table.HeadCell>
-        <Table.HeadCell className="w-24" />
-      </Table.Row>
-    </Table.Head>
-    <Table.Body>
-      <ProductTableLine isNew product={{} as Product} />
-      {products.map((product: Product) => (
-        <ProductTableLine key={product.id || 'new-product'} product={product} />
+  <div>
+    <div className="px-2 py-4 gap-2 grid md:grid-cols-12 bg-primary-50 text-primary-700 rounded-t">
+      <div className="md:col-span-2">Type</div>
+      <div className="md:col-span-3">Nom&nbsp;*</div>
+      <div className="md:col-span-3">Description</div>
+      <div className="md:col-span-2">Prix Unitaire HT</div>
+      <div className="md:col-span-2" />
+    </div>
+    <div>
+      <ProductTableLine index={0} isNew product={{} as Product} />
+      {products.map((product: Product, index) => (
+        <ProductTableLine key={product.id || 'new-product'} product={product} index={index + 1} />
       ))}
-    </Table.Body>
-  </Table>
+    </div>
+  </div>
 )
 
 export default ProductTable
