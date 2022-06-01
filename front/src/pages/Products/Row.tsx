@@ -5,7 +5,6 @@ import { LINE_TYPE } from 'constants/line'
 import { LineTypeEnum } from 'models/LineTypeEnum'
 import { Controller, useForm } from 'react-hook-form'
 import { STRINGS } from 'constants/strings'
-import { sendErrorToSentry } from 'utils/errors'
 import clsx from 'clsx'
 import Product from '../../models/Product'
 import { ProductApi } from '../../api/ProductApi'
@@ -43,11 +42,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
     mode: 'all',
     shouldUnregister: true,
   })
-  const [deleteProductMutation, deleteProductMutationState] = useMutation(ProductApi.delete, {
-    onError: error => {
-      sendErrorToSentry(error)
-    },
-  })
+  const [deleteProductMutation, deleteProductMutationState] = useMutation(ProductApi.delete)
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -76,8 +71,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
       } else setMode(MODES.READ)
 
       queryCache.refetchQueries('products')
-    } catch (error) {
-      sendErrorToSentry(error)
+    } catch {
       toast.error(STRINGS.SAVE_ERROR)
     }
   }

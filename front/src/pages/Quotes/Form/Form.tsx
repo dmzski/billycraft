@@ -6,7 +6,6 @@ import { QuoteApi } from 'api/QuoteApi'
 import { Prompt } from 'react-router-dom'
 import useCustomers from 'hooks/useCustomers'
 import { STRINGS } from 'constants/strings'
-import { sendErrorToSentry } from 'utils/errors'
 import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
 import QuoteLineTable from './QuoteLineTable'
 
@@ -64,8 +63,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
       reset(res)
       onSubmitSuccess(res)
       toast.success(STRINGS.SAVE_SUCCESS)
-    } catch (error) {
-      sendErrorToSentry(error)
+    } catch {
       toast.error(STRINGS.SAVE_ERROR)
     }
   }

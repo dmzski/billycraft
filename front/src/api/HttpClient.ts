@@ -1,3 +1,5 @@
+import { sendErrorToSentry } from 'utils/errors'
+
 type HTTPClientRequest<T> = Promise<T> & {
   cancel?: () => void
 }
@@ -23,14 +25,31 @@ const computeBody = (body: BodyType): string | File | FormData | undefined => {
   return JSON.stringify(body)
 }
 
-const transformBody = async <T>(res: Response): Promise<T | Response> => {
-  if (
-    res.headers.get('Content-type') === 'application/json' &&
-    res.status >= 200 &&
-    res.status < 300
-  )
+const handleFetchResponse = <T>(request: RequestInit) => async (
+  res: Response,
+): Promise<T | Response> => {
+  if (!res.ok) {
+    const error = new Error(`${request.method} - ${res.status} - ${res.statusText} - ${res.url}`)
+
+    const extras = {
+      requestBody: request.body,
+      requestMethod: request.method,
+      requestUrl: res.url,
+      responseStatusText: res.statusText,
+      responseStatus: res.status,
+      responseBody: await (res.headers.get('Content-type') === 'application/json'
+        ? res.json()
+        : res.text()),
+    }
+
+    sendErrorToSentry(error, extras)
+    throw error
+  }
+
+  if (res.headers.get('Content-type') === 'application/json') {
     return res.json() as Promise<T>
-  if (res.status >= 400) throw res
+  }
+
   return res
 }
 
@@ -38,16 +57,15 @@ export const HttpClient = {
   GET: <T = AnyType>(url: string, config?: RequestInit): HTTPClientRequest<T> => {
     const controller = new AbortController()
     const { signal } = controller
-    const promise = fetch(url, { signal, method: 'GET', ...config }).then(
-      transformBody,
-    ) as HTTPClientRequest<T>
+    const request = { signal, method: 'GET', ...config }
+    const promise = fetch(url, request).then(handleFetchResponse(request)) as HTTPClientRequest<T>
     promise.cancel = controller.abort
     return promise
   },
   POST: <T = AnyType>(url: string, body?: BodyType, config?: RequestInit): HTTPClientRequest<T> => {
     const controller = new AbortController()
     const { signal } = controller
-    const promise = fetch(url, {
+    const request = {
       ...config,
       signal,
       method: 'POST',
@@ -56,14 +74,15 @@ export const HttpClient = {
         ...defaultHeaders,
         ...config?.headers,
       },
-    }).then(transformBody) as HTTPClientRequest<T>
+    }
+    const promise = fetch(url, request).then(handleFetchResponse(request)) as HTTPClientRequest<T>
     promise.cancel = controller.abort
     return promise
   },
   PUT: <T = AnyType>(url: string, body?: BodyType, config?: RequestInit): HTTPClientRequest<T> => {
     const controller = new AbortController()
     const { signal } = controller
-    const promise = fetch(url, {
+    const request = {
       ...config,
       signal,
       method: 'PUT',
@@ -72,7 +91,8 @@ export const HttpClient = {
         ...defaultHeaders,
         ...config?.headers,
       },
-    }).then(transformBody) as HTTPClientRequest<T>
+    }
+    const promise = fetch(url, request).then(handleFetchResponse(request)) as HTTPClientRequest<T>
     promise.cancel = controller.abort
     return promise
   },
@@ -83,7 +103,7 @@ export const HttpClient = {
   ): HTTPClientRequest<T> => {
     const controller = new AbortController()
     const { signal } = controller
-    const promise = fetch(url, {
+    const request = {
       ...config,
       signal,
       method: 'PATCH',
@@ -92,7 +112,8 @@ export const HttpClient = {
         ...defaultHeaders,
         ...config?.headers,
       },
-    }).then(transformBody) as HTTPClientRequest<T>
+    }
+    const promise = fetch(url, request).then(handleFetchResponse(request)) as HTTPClientRequest<T>
     promise.cancel = controller.abort
     return promise
   },
@@ -103,7 +124,7 @@ export const HttpClient = {
   ): HTTPClientRequest<T> => {
     const controller = new AbortController()
     const { signal } = controller
-    const promise = fetch(url, {
+    const request = {
       ...config,
       signal,
       method: 'DELETE',
@@ -112,7 +133,8 @@ export const HttpClient = {
         ...defaultHeaders,
         ...config?.headers,
       },
-    }).then(transformBody) as HTTPClientRequest<T>
+    }
+    const promise = fetch(url, request).then(handleFetchResponse(request)) as HTTPClientRequest<T>
     promise.cancel = controller.abort
 
     return promise

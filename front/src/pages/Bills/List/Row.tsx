@@ -1,4 +1,4 @@
-import { ActionButton, Icon, Table, useToast } from '@coco-ui/core'
+import { ActionButton, Icon, useToast } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
 import clsx from 'clsx'
@@ -10,7 +10,6 @@ import { useMemo, useCallback, MouseEvent } from 'react'
 import { useMutation, useQueryCache } from 'react-query'
 import { Link } from 'react-router-dom'
 import { ROUTES } from 'routes'
-import { sendErrorToSentry } from 'utils/errors'
 import { BILL_STATUS } from '../../../constants/bill'
 
 type BillTableLineProps = {
@@ -39,8 +38,7 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
         if (bill.id) await updateBillStatusMutation({ id: bill.id, status })
         toast.success(STRINGS.SAVE_SUCCESS)
         queryCache.invalidateQueries('bills')
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
     }

@@ -2,9 +2,8 @@ import { Button, Input, Modal, useToast } from '@coco-ui/core'
 import { SupplierApi } from 'api/SupplierApi'
 import { STRINGS } from 'constants/strings'
 import Supplier, { SupplierRequest } from 'models/Supplier'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { sendErrorToSentry } from 'utils/errors'
 
 type SupplierModalFormProps = {
   supplier: Supplier
@@ -47,8 +46,7 @@ const SupplierModalForm = ({
         toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
         onClose()
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
     },

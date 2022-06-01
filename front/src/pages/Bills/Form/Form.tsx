@@ -6,7 +6,6 @@ import { BillApi } from 'api/BillApi'
 import { Prompt } from 'react-router-dom'
 import useCustomers from 'hooks/useCustomers'
 import { STRINGS } from 'constants/strings'
-import { sendErrorToSentry } from 'utils/errors'
 import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
 import BillLineTable from './BillLineTable'
 
@@ -45,9 +44,8 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
       const res = await updateBillStatusMutation({ id: bill.id, status })
       toast.success(STRINGS.SAVE_SUCCESS)
       onSubmitSuccess(res as Bill)
-    } catch (error) {
+    } catch {
       toast.error(STRINGS.SAVE_ERROR)
-      sendErrorToSentry(error)
     }
   }
 
@@ -69,9 +67,8 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
       reset(res)
       onSubmitSuccess(res)
       toast.success(STRINGS.SAVE_SUCCESS)
-    } catch (error) {
+    } catch {
       toast.error(STRINGS.SAVE_ERROR)
-      sendErrorToSentry(error)
     }
   }
 

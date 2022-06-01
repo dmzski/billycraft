@@ -3,9 +3,8 @@ import { ReportApi } from 'api/ReportApi'
 import { STRINGS } from 'constants/strings'
 import { endOfMonth, formatRFC3339 } from 'date-fns'
 import { ReportRequest, ReportResponse } from 'models/Report'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { sendErrorToSentry } from 'utils/errors'
 
 type CreateReportModalProps = {
   isOpen?: boolean
@@ -40,8 +39,7 @@ const CreateReportModal = ({
         toast.success(STRINGS.REPORT_CREATED)
         onSubmitSuccess?.(res)
         reset()
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.CREATION_ERROR)
       }
     },

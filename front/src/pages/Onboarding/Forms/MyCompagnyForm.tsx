@@ -5,7 +5,6 @@ import { Button, Input, TextArea, useToast } from '@coco-ui/core'
 import Company from 'models/Company'
 import { STRINGS } from 'constants/strings'
 import { Controller, useForm } from 'react-hook-form'
-import { sendErrorToSentry } from 'utils/errors'
 
 type MyCompagnyFormProps = {
   company: Company
@@ -39,8 +38,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         queryCache.invalidateQueries('my-company')
         toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
     },

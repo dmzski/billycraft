@@ -4,7 +4,6 @@ import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 import { BillApi } from 'api/BillApi'
 import { BILL_STATUS } from 'constants/bill'
-import { sendErrorToSentry } from 'utils/errors'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Bill from '../../../models/Bill'
@@ -44,9 +43,8 @@ const BillFormPage = (): JSX.Element => {
         document.body.removeChild(link)
         pdfState.update('idle')
       }
-    } catch (error) {
+    } catch {
       toast.error('Erreur lors de la génération du PDF')
-      sendErrorToSentry(error)
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)

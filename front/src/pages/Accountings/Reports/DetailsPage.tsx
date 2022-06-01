@@ -6,7 +6,6 @@ import { ReportRequest } from 'models/Report'
 import { useCallback, useState } from 'react'
 import { useQuery, useQueryCache } from 'react-query'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { sendErrorToSentry } from 'utils/errors'
 import ReportOutgoingTable from './components/ReportOutgoingTable'
 import ReportPerSupplierTable from './components/ReportPerSupplierTable'
 import ReportTable from './components/ReportTable'
@@ -67,8 +66,7 @@ const DetailsPage = () => {
         toast.success(STRINGS.DELETE_SUCCESS)
         push(REPORT_ROUTES.routes.LIST.path)
         queryCache.invalidateQueries('reports')
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.DELETE_ERROR)
       }
     }

@@ -3,7 +3,6 @@ import { CustomerApi } from 'api/CustomerApi'
 import { STRINGS } from 'constants/strings'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { sendErrorToSentry } from 'utils/errors'
 import Customer from '../../../models/Customer'
 
 const defaultCustomer = {
@@ -39,8 +38,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
         const res = await CustomerApi.createOrUpdate(data)
         onSubmitSuccess?.(res)
         toast.success(STRINGS.SAVE_SUCCESS)
-      } catch (error) {
-        sendErrorToSentry(error)
+      } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
     },
@@ -56,8 +54,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
           await CustomerApi.delete(customer.id)
           toast.success(STRINGS.DELETE_SUCCESS)
           onSubmitSuccess?.({ ...customer, deleted: true })
-        } catch (error) {
-          sendErrorToSentry(error)
+        } catch {
           toast.error(STRINGS.DELETE_ERROR)
         }
       }

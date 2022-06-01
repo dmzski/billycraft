@@ -6,7 +6,6 @@ import { QuoteApi } from 'api/QuoteApi'
 import { isQuoteMinimumAccepted } from 'utils/quote'
 import { QUOTE_STATUS } from 'constants/quote'
 import { STRINGS } from 'constants/strings'
-import { sendErrorToSentry } from 'utils/errors'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Quote from '../../../models/Quote'
@@ -60,8 +59,7 @@ const QuoteCreationPage = (): JSX.Element => {
         document.body.removeChild(link)
         pdfState.update('idle')
       }
-    } catch (error) {
-      sendErrorToSentry(error)
+    } catch {
       toast.error('Erreur lors de la génération du PDF')
       setTimeout(() => {
         pdfState.update('idle')
@@ -72,8 +70,7 @@ const QuoteCreationPage = (): JSX.Element => {
   const createBill = useCallback(() => {
     try {
       createBillFromQuote({ id: newQuote.id })
-    } catch (error) {
-      sendErrorToSentry(error)
+    } catch {
       toast.error('Erreur lors de la création de la facture')
     }
   }, [newQuote, createBillFromQuote])
