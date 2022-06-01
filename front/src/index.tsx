@@ -14,7 +14,11 @@ if (window.localStorage.getItem('theme') === 'dark') {
 
 Sentry.init({
   dsn: 'https://aeb327770bc44d91900c6250daa08721@o1262999.ingest.sentry.io/6442376',
-  integrations: [new BrowserTracing()],
+  integrations: [
+    new BrowserTracing({
+      tracingOrigins: ['localhost', 'app.coco-erp.fr', 'api.coco-erp.fr'],
+    }),
+  ],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
