@@ -1,5 +1,4 @@
 docker login
-version="v2"
 checkSuccess () {
         if [ $? != 0 ] ; then
                 echo "Non zero code. exiting";
@@ -7,18 +6,12 @@ checkSuccess () {
         fi
 }
 
-# read -p "Entrer le numéro de version que vous voulez build, push et installer sur le serveur : " version
 
-# while [[ "$confirm" != "confirm" ]] && [[ "$confirm" != "N" ]]; do
-#         echo "Etes-vous sûr de vouloir mettre en ligne la version $version ? Si une version est déjà existante elle sera écrasée : Pour confirmer tapez confirm, pour annuler tapez N"
-#         read confirm
-# done
+echo "Upgrading version...";
+yarn version --patch
+checkSuccess
 
-# if [ "$confirm" = "N" ] ; then
-#         echo "Bye bye";
-#         exit 0;
-# fi
-# checkSuccess
+version=`awk -F\" '/"version":/ {print $4}' package.json`
 
 echo "Building image...";
 # Build
