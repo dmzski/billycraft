@@ -1,7 +1,6 @@
 import { Icon } from '@coco-ui/core'
 import { useKeycloak } from '@react-keycloak/web'
 import { Link } from 'react-router-dom'
-import { VERSION } from 'constants/global'
 import { useUser } from 'providers/UserProvider'
 import { ROUTES } from 'routes'
 import SideBarMenu from './SideBarMenu'
@@ -64,7 +63,7 @@ const SideBar = (): JSX.Element => {
             <Icon name="logout" type="outline" />
             <span className="mx-4 font-medium">Déconnexion</span>
           </button>
-          <div className="text-xs text-center">{VERSION}</div>
+          <div className="text-xs text-center">{process.env.VERSION}</div>
         </div>
       </div>
     </div>

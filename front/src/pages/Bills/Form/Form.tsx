@@ -27,10 +27,12 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   const {
     handleSubmit,
     control,
-    formState: { isValid, isSubmitting, isDirty },
+    formState: { isValidating, isSubmitting, isDirty },
     reset,
   } = useForm({
-    mode: 'all',
+    reValidateMode: 'onChange',
+    mode: 'onSubmit',
+    shouldUseNativeValidation: false,
     shouldFocusError: true,
     defaultValues: defaultBill,
   })
@@ -120,7 +122,6 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             label="Titre"
             disabled={disabled}
             error={invalid}
-            aria-label="Titre"
             variant="outside"
             placeholder="Titre du devis"
             onChange={field.onChange}
@@ -128,6 +129,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             name={field.name}
             value={field.value}
             ref={field.ref}
+            required
           />
         )}
       />
@@ -135,12 +137,13 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         name="customerId"
         control={control}
         rules={{ required: true }}
-        render={({ field }) => (
+        render={({ field, fieldState: { invalid } }) => (
           <Select
             tabIndex={0}
-            label="Sélectionner un client"
-            id="customer-select"
+            error={invalid}
+            label="Sélectionner un client *"
             variant="outside"
+            id="customer-select"
             name={field.name}
             disabled={disabled}
             onChange={field.onChange}
@@ -148,7 +151,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             placeholder="Nom du client"
             value={field.value}
             isSearchable
+            isLoading={!customers}
             ref={field.ref}
+            required
           />
         )}
       />
@@ -161,10 +166,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             label="TVA (%)"
             className="my-4"
             disabled={disabled}
-            aria-label="TVA"
+            variant="outside"
             placeholder="TVA en %"
             type="number"
-            variant="outside"
             value={field.value}
             name={field.name}
             onChange={e => field.onChange(Number(e.target.value))}
@@ -184,7 +188,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             size="md"
             type="submit"
             variant="success"
-            disabled={!isValid || isSubmitting || disabled}
+            disabled={!isValidating || isSubmitting || disabled}
           >
             Enregistrer
           </Button>

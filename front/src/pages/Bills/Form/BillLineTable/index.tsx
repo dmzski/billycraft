@@ -8,8 +8,7 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import { Control, useFieldArray } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { nanoid } from 'nanoid'
-import BillLaneTableRow from './Row'
-import { BillFormValues } from '../Form'
+import BillLineTableLine from './Row'
 
 const defaultLine = {
   description: '',
@@ -90,120 +89,91 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps): JSX.Element =
   }
 
   return (
-    <>
-      <div role="row" tabIndex={0} onKeyDown={handleKeyDown}>
-        <List
-          className="bg-white w-full"
-          data={fields}
-          columns={[
-            {
-              name: 'Type',
-              className: 'pl-12 w-48',
-            },
-            {
-              name: 'Nom',
-              className: 'w-72 pl-6',
-            },
-            {
-              name: 'Description',
-              className: 'w-full pl-4',
-            },
-            {
-              name: 'Quantité',
-              className: 'w-36',
-            },
-            {
-              name: 'Prix HT',
-              className: 'w-48',
-            },
-            {
-              name: 'Prix TTC',
-              className: 'w-48',
-            },
-            {
-              name: 'Sous Total',
-              className: 'w-52',
-            },
-            {
-              name: '',
-              className: 'w-24',
-            },
-          ]}
-        >
-          {({ data }) => (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="lines">
-                {droppableProvided => (
-                  <div
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...droppableProvided.droppableProps}
-                    ref={droppableProvided.innerRef}
-                  >
-                    {(data as BillFormValues['lines'])?.map((line, index) => (
-                      <Draggable
-                        key={`draggable-${line.id}`}
-                        draggableId={line.id}
-                        index={index}
-                        isDragDisabled={disabled}
-                      >
-                        {provided => (
-                          <BillLaneTableRow
-                            provided={provided}
-                            disabled={disabled}
-                            index={index}
-                            control={control}
-                            deleteLine={() => remove(index)}
-                          />
-                        )}
-                      </Draggable>
-                    ))}
-                    {droppableProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          )}
-        </List>
-      </div>
+    <div className="border p-2 rounded">
       {!disabled ? (
-        <>
+        <div className="my-4 flex items-end">
+          <Select
+            label="Ajouter un produit existant"
+            tabIndex={0}
+            className="flex-grow"
+            name="existing-product"
+            id="existing-product"
+            options={productOptions}
+            isLoading={productsQuery.isLoading}
+            isSearchable
+            placeholder="Nom du produit"
+            value={productIdSelected}
+            onChange={onProductSelectedChange}
+          />
           <Button
+            onClick={addExistingProductSelected}
             type="button"
-            variant="inverted-primary"
-            className="w-full mt-4"
-            size="sm"
-            onClick={addLine}
-            disabled={disabled}
-            icon="plus"
+            className="py-2 ml-4 w-1/6"
+            variant="primary"
           >
-            Ajouter une ligne
+            Ajouter
           </Button>
-          <div className="my-4 flex items-end">
-            <Select
-              label="Ajouter un produit existant"
-              tabIndex={0}
-              className="flex-grow"
-              name="existing-product"
-              id="existing-product"
-              options={productOptions}
-              isLoading={productsQuery.isLoading}
-              isSearchable
-              placeholder="Nom du produit"
-              value={productIdSelected}
-              onChange={onProductSelectedChange}
-            />
-            <Button
-              onClick={addExistingProductSelected}
-              type="button"
-              className="py-2 ml-4 w-1/6"
-              variant="primary"
-            >
-              Ajouter
-            </Button>
-          </div>
-        </>
+        </div>
       ) : null}
-    </>
+      <div className="rounded bg-primary-50 text-primary-700 grid md:grid-cols-12 gap-2 p-4 mb-1">
+        <div className="pl-4 md:col-span-2">Type</div>
+        <div className="md:col-span-3">Nom&nbsp;*</div>
+        <div className="md:col-span-3">Description</div>
+        <div className="md:col-span-1">Quantité</div>
+        <div className="md:col-span-1">Prix HT</div>
+        <div className="md:col-span-1">Prix TTC</div>
+        <div className="md:col-span-1">Sous total</div>
+      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="lines">
+          {droppableProvided => (
+            <div
+              className="flex flex-col"
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...droppableProvided.droppableProps}
+              ref={droppableProvided.innerRef}
+              onKeyDown={handleKeyDown}
+              role="row"
+              tabIndex={0}
+            >
+              {fields?.map((line, index) => (
+                <Draggable
+                  key={`draggable-${line.id}`}
+                  draggableId={line.id}
+                  index={index}
+                  isDragDisabled={disabled}
+                >
+                  {provided => (
+                    <BillLineTableLine
+                      provided={provided}
+                      key={`${line.id}`}
+                      disabled={disabled}
+                      index={index}
+                      control={control}
+                      deleteLine={() => remove(index)}
+                    />
+                  )}
+                </Draggable>
+              ))}
+              {droppableProvided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+      {!disabled ? (
+        <Button
+          type="button"
+          variant="inverted-primary"
+          className="w-full mt-4"
+          size="sm"
+          onClick={addLine}
+          disabled={disabled}
+          icon="plus"
+        >
+          Ajouter une ligne
+        </Button>
+      ) : null}
+    </div>
   )
 }
 

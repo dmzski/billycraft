@@ -90,10 +90,35 @@ const QuoteLineTable = ({
   }
 
   return (
-    <>
-      <div className="grid md:grid-cols-12 gap-2 px-4 mb-4">
-        <div className="md:col-span-2">Type</div>
-        <div className="md:col-span-3">Nom</div>
+    <div className="border p-2 rounded">
+      {!disabled ? (
+        <div className="my-4 flex items-end">
+          <Select
+            label="Ajouter un produit existant"
+            tabIndex={0}
+            className="flex-grow"
+            name="existing-product"
+            id="existing-product"
+            options={productOptions}
+            isLoading={productsQuery.isLoading}
+            isSearchable
+            placeholder="Nom du produit"
+            value={productIdSelected}
+            onChange={onProductSelectedChange}
+          />
+          <Button
+            onClick={addExistingProductSelected}
+            type="button"
+            className="py-2 ml-4 w-1/6"
+            variant="primary"
+          >
+            Ajouter
+          </Button>
+        </div>
+      ) : null}
+      <div className="rounded bg-primary-50 text-primary-700 grid md:grid-cols-12 gap-2 p-4 mb-1">
+        <div className="pl-4 md:col-span-2">Type</div>
+        <div className="md:col-span-3">Nom&nbsp;*</div>
         <div className="md:col-span-3">Description</div>
         <div className="md:col-span-1">Quantité</div>
         <div className="md:col-span-1">Prix HT</div>
@@ -137,44 +162,19 @@ const QuoteLineTable = ({
         </Droppable>
       </DragDropContext>
       {!disabled ? (
-        <>
-          <Button
-            type="button"
-            variant="inverted-primary"
-            className="w-full mt-4"
-            size="sm"
-            onClick={addLine}
-            disabled={disabled}
-            icon="plus"
-          >
-            Ajouter une ligne
-          </Button>
-          <div className="my-4 flex items-end">
-            <Select
-              label="Ajouter un produit existant"
-              tabIndex={0}
-              className="flex-grow"
-              name="existing-product"
-              id="existing-product"
-              options={productOptions}
-              isLoading={productsQuery.isLoading}
-              isSearchable
-              placeholder="Nom du produit"
-              value={productIdSelected}
-              onChange={onProductSelectedChange}
-            />
-            <Button
-              onClick={addExistingProductSelected}
-              type="button"
-              className="py-2 ml-4 w-1/6"
-              variant="primary"
-            >
-              Ajouter
-            </Button>
-          </div>
-        </>
+        <Button
+          type="button"
+          variant="inverted-primary"
+          className="w-full mt-4"
+          size="sm"
+          onClick={addLine}
+          disabled={disabled}
+          icon="plus"
+        >
+          Ajouter une ligne
+        </Button>
       ) : null}
-    </>
+    </div>
   )
 }
 

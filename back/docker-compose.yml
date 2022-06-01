@@ -13,7 +13,7 @@ services:
       - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:13.0.1
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: db:5432

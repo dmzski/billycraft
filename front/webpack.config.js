@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const pkg = require('./package.json')
+const { DefinePlugin } = require('webpack')
 
 const ENVS = {
   DEV: 'development',
@@ -70,6 +72,9 @@ module.exports = {
       template: 'public/index.html',
     }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: !isDev }),
+    new DefinePlugin({
+      'process.env.VERSION': JSON.stringify(pkg.version),
+    }),
   ].filter(Boolean),
   devServer: {
     allowedHosts: 'all',

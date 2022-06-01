@@ -11,39 +11,26 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   })
 
   return (
-    <Table className="text-left overlay-x-auto w-full table-fixed">
-      <Table.Head>
-        <Table.Row>
-          <Table.HeadCell className="pl-4 w-32" sort={sort} sortable="id" onSort={onSort}>
-            #
-          </Table.HeadCell>
-          <Table.HeadCell className="w-96" sort={sort} sortable="title" onSort={onSort}>
-            Titre
-          </Table.HeadCell>
-          <Table.HeadCell className="w-80" sort={sort} sortable="customer" onSort={onSort}>
-            Client
-          </Table.HeadCell>
-          <Table.HeadCell className="w-48" sort={sort} sortable="createdAt" onSort={onSort}>
-            Création
-          </Table.HeadCell>
-          <Table.HeadCell className="w-48" sort={sort} sortable="sentAt" onSort={onSort}>
-            Envoyé
-          </Table.HeadCell>
-          <Table.HeadCell className="w-48" sort={sort} sortable="status" onSort={onSort}>
-            Status
-          </Table.HeadCell>
-        </Table.Row>
-      </Table.Head>
-      <Table.Body>
-        {bills.map(bill => (
+    <div className="flex flex-col">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 border-b rounded-t">
+        <div className="col-span-1">#</div>
+        <div className="col-span-3">Titre</div>
+        <div className="col-span-2">Client</div>
+        <div className="col-span-2">Création</div>
+        <div className="col-span-2">Envoyé</div>
+        <div className="col-span-2">Status</div>
+      </div>
+      <div className="flex flex-col">
+        {bills.map((bill, index) => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
             bill={bill}
+            index={index}
           />
         ))}
-      </Table.Body>
-    </Table>
+      </div>
+    </div>
   )
 }
 

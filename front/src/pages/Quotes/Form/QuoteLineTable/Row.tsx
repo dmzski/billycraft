@@ -1,4 +1,4 @@
-import { Icon, Input, Select, TextArea } from '@coco-ui/core'
+import { Button, Icon, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { LineTypeEnum } from 'models/LineTypeEnum'
 import { useMemo, useRef } from 'react'
@@ -99,10 +99,11 @@ const QuoteLineTableLine = ({
           />
         </div>
       </div>
-      <div className="md:col-span-3">
+      <div className="flex items-center md:col-span-3">
         <Controller
           name={`lines.${index}.name`}
           rules={{ required: true }}
+          defaultValue=""
           control={control}
           render={({ field, fieldState: { invalid } }) => (
             <Input
@@ -123,7 +124,7 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="md:col-span-3">
+      <div className="flex items-center md:col-span-3">
         <Controller
           name={`lines.${index}.description`}
           control={control}
@@ -145,8 +146,9 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="md:col-span-1">
+      <div className="flex items-center md:col-span-1">
         <Controller
+          defaultValue={0}
           name={`lines.${index}.quantity`}
           control={control}
           render={({ field }) => (
@@ -171,8 +173,9 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="md:col-span-1">
+      <div className="flex items-center md:col-span-1">
         <Controller
+          defaultValue={0}
           name={`lines.${index}.price`}
           control={control}
           render={({ field }) => (
@@ -196,14 +199,10 @@ const QuoteLineTableLine = ({
           )}
         />
       </div>
-      <div className="pt-2">{formatPrice(priceTTC)}</div>
-      <div className="pr-2 pt-2 flex items-start justify-between">
+      <div className="flex items-center">{formatPrice(priceTTC)}</div>
+      <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
-        {!disabled ? (
-          <button type="button" className="ml-2 apperance-none" onClick={deleteLine}>
-            <Icon name="trash" className="p-1 text-white rounded-full bg-error-600" />
-          </button>
-        ) : null}
+        {!disabled ? <Button variant="error" icon="trash" onClick={deleteLine} /> : null}
       </div>
     </div>
   )

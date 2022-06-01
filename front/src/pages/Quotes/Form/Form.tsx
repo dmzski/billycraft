@@ -24,13 +24,15 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   const {
     handleSubmit,
     control,
-    formState: { isValid, isSubmitting, isDirty },
+    formState: { isValidating, isSubmitting, isDirty },
     reset,
   } = useForm({
-    mode: 'all',
     shouldFocusError: true,
     defaultValues: defaultQuote,
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
   })
+
   const [updateQuoteStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
     QuoteApi.updateStatus,
   )
@@ -122,6 +124,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             name={field.name}
             value={field.value}
             ref={field.ref}
+            required
           />
         )}
       />
@@ -133,7 +136,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
           <Select
             tabIndex={0}
             error={invalid}
-            label="Sélectionner un client"
+            label="Sélectionner un client *"
             variant="outside"
             id="customer-select"
             name={field.name}
@@ -145,6 +148,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             isSearchable
             isLoading={!customers}
             ref={field.ref}
+            required
           />
         )}
       />
@@ -191,7 +195,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             variant="success"
             size="md"
             type="submit"
-            disabled={!isValid || isSubmitting || disabled}
+            disabled={isValidating || isSubmitting || disabled}
           >
             Enregistrer
           </Button>

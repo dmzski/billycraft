@@ -1,28 +1,33 @@
-import { Table } from '@coco-ui/core'
-import { useHistory, useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import CustomerModal from 'pages/Customers/Modals/CustomerModal'
 import Customer from 'models/Customer'
 import { ROUTES } from 'routes'
+import clsx from 'clsx'
 
-const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
+const QuoteTableLine = ({
+  customer,
+  index,
+}: {
+  customer: Customer
+  index: number
+}): JSX.Element => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
 
-  const editCustomer = () => {
-    if (customer.id) history.push(ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`))
-  }
-
   return (
-    <Table.Row hoverable onClick={editCustomer}>
-      <Table.Cell className="truncate py-3 pl-2 w-1/3">{customer.name}</Table.Cell>
-      <Table.Cell className="truncate w-1/3">{customer.contact}</Table.Cell>
-      <Table.Cell className="w-48">
-        {customer.phoneNumber
-          ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
-          : ''}
-      </Table.Cell>
-      <Table.Cell className="w-48">
-        {customer.email}
+    <div
+      className={clsx('grid md:grid-cols-12 p-2 py-4 items-center', {
+        'bg-gray-50': index % 2 === 0,
+      })}
+    >
+      <div className="md:col-span-3">
+        <Link
+          className="text-primary-700 underline font-bold text-xs"
+          to={ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`)}
+        >
+          {customer.name}
+        </Link>
+
         <CustomerModal
           isOpen={id === `${customer.id}`}
           onRequestClose={e => {
@@ -31,8 +36,15 @@ const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => {
           }}
           customer={customer}
         />
-      </Table.Cell>
-    </Table.Row>
+      </div>
+      <div className="md:col-span-3">{customer.contact}</div>
+      <div className="md:col-span-3">
+        {customer.phoneNumber
+          ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+          : ''}
+      </div>
+      <div className="md:col-span-3">{customer.email}</div>
+    </div>
   )
 }
 

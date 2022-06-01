@@ -1,6 +1,7 @@
 import { ActionButton, Icon, Table, useToast } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
+import clsx from 'clsx'
 import { STRINGS } from 'constants/strings'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from 'models/Bill'
@@ -15,8 +16,9 @@ import { BILL_STATUS } from '../../../constants/bill'
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
+  index: number
 }
-const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
+const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -82,25 +84,27 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   }, [bill])
 
   return (
-    <Table.Row>
-      <Table.Cell className="text-xs">
+    <div
+      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-gray-50': index % 2 === 0 })}
+    >
+      <div className="md:col-span-1 text-xs">
         <Link
           className="text-primary-700 underline font-bold"
-          to={ROUTES.BILL_FORM.path.replace(':id', bill.id)}
+          to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}
         >
           {bill.id}
         </Link>
-      </Table.Cell>
-      <Table.Cell className=" truncate">{bill.title}</Table.Cell>
-      <Table.Cell className="truncate">{customer?.name ?? 'N.C'}</Table.Cell>
-      <Table.Cell>{bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}</Table.Cell>
-      <Table.Cell>{bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}</Table.Cell>
-      <Table.Cell
-        onClick={event => {
-          event.stopPropagation()
-        }}
-      >
-        <ActionButton size="xs" variant="outline">
+      </div>
+      <div className="md:col-span-3 truncate">{bill.title}</div>
+      <div className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</div>
+      <div className="md:col-span-2">
+        {bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}
+      </div>
+      <div className="md:col-span-2">
+        {bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}
+      </div>
+      <div className="md:col-span-2">
+        <ActionButton size="sm" variant="outline">
           <ActionButton.Content>{getStatus}</ActionButton.Content>
           {getNextStatuses().map(s => (
             <ActionButton.Action key={s.enum} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
@@ -111,8 +115,8 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
             </ActionButton.Action>
           ))}
         </ActionButton>
-      </Table.Cell>
-    </Table.Row>
+      </div>
+    </div>
   )
 }
 
