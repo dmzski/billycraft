@@ -27,7 +27,7 @@ type OutgoingLine struct {
 	BillID                *string
 	SupplierBillReference *string
 	TotalHT               float64
-	VAT                   int
+	VAT                   float32
 }
 
 func (Outgoing) TableName() string {

@@ -49,7 +49,7 @@ type ReportOutgoingLineResponse struct {
 	BillID                *string `json:"billId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	TotalHT               float64 `json:"totalHT"`
-	VAT                   int     `json:"vat"`
+	VAT                   float32 `json:"vat"`
 }
 
 type ReportBillResponse struct {

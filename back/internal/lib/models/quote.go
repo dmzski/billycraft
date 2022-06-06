@@ -12,7 +12,7 @@ import (
 type Quote struct {
 	ID         string `gorm:"primaryKey;<-:create"`
 	Title      string
-	Tva        *int
+	Tva        *float32
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
 	SentAt     *time.Time

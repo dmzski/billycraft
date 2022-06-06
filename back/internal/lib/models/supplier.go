@@ -10,7 +10,7 @@ type Supplier struct {
 	ID        int64 `gorm:"primaryKey;autoIncrement;<-:create"`
 	Name      string
 	Color     *string
-	Vat       int
+	Vat       float32
 	CompanyID int    `gorm:"<-:create"`
 	CreatedBy string `gorm:"foreignKey:Email;<-:create"`
 	DeletedAt gorm.DeletedAt

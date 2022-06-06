@@ -13,7 +13,7 @@ import (
 type Bill struct {
 	ID         string `gorm:"primaryKey"`
 	Title      string
-	Tva        *int
+	Tva        *float32
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
 	PaidAt     *time.Time

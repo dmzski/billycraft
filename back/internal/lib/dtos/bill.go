@@ -7,7 +7,7 @@ import (
 type Bill struct {
 	ID         string     `json:"id"`
 	Title      string     `json:"title"`
-	Tva        *int       `json:"tva"`
+	Tva        *float32   `json:"tva"`
 	CreatedAt  time.Time  `json:"createdAt"`
 	UpdatedAt  *time.Time `json:"updatedAt"`
 	PaidAt     *time.Time `json:"paidAt"`
