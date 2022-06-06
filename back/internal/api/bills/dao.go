@@ -15,33 +15,43 @@ type BillDao struct {
 }
 
 func (dao BillDao) FindAllByTenant(tenant int) (bills []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Order("created_at desc").Find(&bills, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Order("created_at desc").Find(&bills, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao BillDao) FindAllByTenantByStatusIs(tenant int, status string) (bill []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status = ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND status = ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 func (dao BillDao) FindAllByTenantByStatusIsNot(tenant int, status string) (bill []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status <> ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND status <> ?", tenant, status).Order("created_at desc").Find(&bill).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao BillDao) FindAllByTenantByStatusIn(tenant int, statuses []string) (bills []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND status IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 func (dao BillDao) FindAllByTenantByStatusNotIn(tenant int, statuses []string) (bills []models.Bill) {
-	if err := database.DBConn.Preload("Lines").Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -55,7 +65,9 @@ func (dao BillDao) FindAllByTenantByNotPaid(tenant int) (bills []models.Bill) {
 }
 
 func (dao BillDao) FindOneByIdAndTenant(id string, tenant int) (bill models.Bill) {
-	if err := database.DBConn.Preload("Lines").Find(&bill, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Find(&bill, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
@@ -121,7 +133,9 @@ func (dao BillDao) Update(id string, tenant int, changes dtos.Bill) (bill models
 		}
 	}
 
-	tx.Preload("Lines").Where("company_id = ? AND id= ?", tenant, id).First(&bill)
+	tx.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
