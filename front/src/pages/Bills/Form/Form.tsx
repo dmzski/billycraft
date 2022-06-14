@@ -185,7 +185,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             size="md"
             type="submit"
             variant="success"
-            disabled={!isValidating || isSubmitting || disabled}
+            disabled={isValidating || isSubmitting || disabled}
           >
             Enregistrer
           </Button>
