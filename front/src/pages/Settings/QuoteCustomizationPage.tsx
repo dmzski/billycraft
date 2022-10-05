@@ -1,5 +1,6 @@
 import { Loader } from '@coco-ui/core'
 import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
+import QuoteCustomization from 'models/QuoteCustomization'
 import { useQuery } from 'react-query'
 import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
 
@@ -10,17 +11,18 @@ const QuoteCustomizationPage = (): JSX.Element => {
 
   return (
     <div className="w-full flex justify-center flex-col items-center">
-      {quoteCustomizationQuery.data && (
+      {!quoteCustomizationQuery.isLoading ? (
         <div className="w-full">
-          <QuoteCustomizationForm quoteCustomization={quoteCustomizationQuery.data} />
+          <QuoteCustomizationForm
+            quoteCustomization={quoteCustomizationQuery.data ?? ({} as QuoteCustomization)}
+          />
         </div>
-      )}
+      ) : null}
       {quoteCustomizationQuery.isLoading && (
         <div className="mt-4 flex justify-center">
           <Loader />
         </div>
       )}
-      {quoteCustomizationQuery.isError && <div>Une erreur est survenue</div>}
     </div>
   )
 }

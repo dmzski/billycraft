@@ -17,7 +17,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
     reset,
   } = useForm({
     mode: 'onSubmit',
@@ -270,7 +270,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         Vous pourrez télécharger votre logo après la création de l&lsquo;entreprise dans vos
         paramètres
       </div>
-      <Button type="submit" className="w-full primary mt-5" disabled={!isValid || isSubmitting}>
+      <Button type="submit" className="w-full primary mt-5" disabled={isSubmitting}>
         Enregister
       </Button>
     </form>
