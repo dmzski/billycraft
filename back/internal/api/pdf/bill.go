@@ -87,6 +87,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 	if bc.DisplayCompanyPhoneNumber {
 		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
 	}
+  companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
 	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
 	pdf.MultiCell(cols[0], lineHt+lineMargin, tr(companyStr), "0", "L", false)

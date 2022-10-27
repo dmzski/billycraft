@@ -78,6 +78,8 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
 	}
 
+  companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
+
 	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
 	pdf.MultiCell(cols[0], lineHt+lineMargin, tr(companyStr), "0", "L", false)
