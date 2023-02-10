@@ -21,12 +21,6 @@ export const ROUTES = {
     path: '/bills/edit/:id',
     title: 'Edition de facture',
   },
-  CALENDAR: {
-    exact: true,
-    icon: 'calendar',
-    path: '/calendar',
-    title: 'Calendrier',
-  },
   CUSTOMERS: {
     exact: true,
     icon: 'user-group',
@@ -131,12 +125,6 @@ export const ROUTES = {
         title: 'Personnalisation des factures',
       },
     },
-  },
-  SUPPORT: {
-    exact: true,
-    icon: 'support',
-    path: '/support',
-    title: 'Support',
   },
   SUPPLIERS: {
     exact: true,

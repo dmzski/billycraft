@@ -1,4 +1,4 @@
-import { Button, Input, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, useToast } from '@coco-ui/core'
 import { TodoApi } from 'api/TodoApi'
 import clsx from 'clsx'
 import { STRINGS } from 'constants/strings'
@@ -10,6 +10,8 @@ import { Todo } from 'models/Todo'
 import * as React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
+type TodoFormValues = { description: string }
+
 type TodoListProps = {
   data?: Todo[]
   onSubmitSuccess?: () => void
@@ -19,7 +21,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
   const [editTodo, setEditTodo] = React.useState('')
   const toast = useToast()
 
-  const { handleSubmit, control, reset, formState } = useForm({
+  const { handleSubmit, control, reset, formState } = useForm<TodoFormValues>({
     mode: 'all',
   })
 
@@ -44,7 +46,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
   }, [])
 
   const onSubmit = React.useCallback(
-    (values: { description: string }) => {
+    (values: TodoFormValues) => {
       const fn = async () => {
         try {
           await TodoApi.create(values)
@@ -90,13 +92,13 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
 
   return (
     <div className="border rounded">
-      <div className="mb-2 px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 rounded-t">
+      <div className="mb-2 px-2 py-4 grid md:grid-cols-12 bg-primary-content text-primary-700 rounded-t">
         <div className="md:col-span-2">Crée le</div>
         <div className="md:col-span-2">Crée par</div>
         <div className="md:col-span-4">Description</div>
         <div className="md:col-span-4" />
       </div>
-      <form className="px-2 flex mb-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="px-2 flex mb-4 justify-between" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="description"
           control={control}
@@ -104,6 +106,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           rules={{ required: true, minLength: 3 }}
           render={({ field, fieldState }) => (
             <Input
+              type="text"
               className="mr-4 flex-grow"
               placeholder="Nouveau todo"
               name={field.name}
@@ -117,7 +120,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
         <Button
           type="submit"
           disabled={!formState.isValid || formState.isSubmitting}
-          variant="inverted-primary"
+          variant="primary"
           size="md"
         >
           Ajouter
@@ -130,7 +133,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
             <div
               key={todo.id}
               className={clsx('grid md:grid-cols-12 py-3 px-4 items-center', {
-                'bg-gray-50': index % 2 === 0,
+                'bg-base-200': index % 2 === 0,
               })}
             >
               <div className="md:col-span-2">
@@ -153,24 +156,13 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
               <div className="md:col-span-4">
                 {!todo.doneAt && editMode === todo.id ? (
                   <div className="flex items-center">
-                    <Button
-                      className="mr-4"
-                      variant="success"
-                      size="sm"
-                      iconSize={18}
-                      icon="save"
-                      onClick={handleEditTodo}
-                    >
-                      Enregistrer
+                    <Button className="mr-4" variant="success" size="sm" onClick={handleEditTodo}>
+                      <Icon name="save" size={18} />
+                      &nbsp; Enregistrer
                     </Button>
-                    <Button
-                      onClick={handleCancelEdit}
-                      variant="error"
-                      size="sm"
-                      iconSize={18}
-                      icon="x"
-                    >
-                      Annuler
+                    <Button onClick={handleCancelEdit} variant="error" size="sm">
+                      <Icon name="x" size={18} />
+                      &nbsp; Annuler
                     </Button>
                   </div>
                 ) : null}
@@ -181,19 +173,13 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
                       className="mr-4"
                       variant="info"
                       size="sm"
-                      iconSize={18}
-                      icon="pencil"
                     >
-                      Modifier
+                      <Icon name="pencil" size={18} />
+                      &nbsp; Modifier
                     </Button>
-                    <Button
-                      onClick={handleDone(todo.id)}
-                      variant="success"
-                      size="sm"
-                      iconSize={18}
-                      icon="check"
-                    >
-                      Fait
+                    <Button onClick={handleDone(todo.id)} variant="success" size="sm">
+                      <Icon name="check" size={18} />
+                      &nbsp; Fait
                     </Button>
                   </div>
                 ) : null}

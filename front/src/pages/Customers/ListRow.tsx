@@ -17,23 +17,19 @@ const QuoteTableLine = ({
   return (
     <div
       className={clsx('grid md:grid-cols-12 p-2 py-4 items-center', {
-        'bg-gray-50': index % 2 === 0,
+        'bg-base-200': index % 2 !== 0,
       })}
     >
       <div className="md:col-span-3">
-        <Link
-          className="text-primary-700 underline font-bold text-xs"
-          to={ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`)}
-        >
-          {customer.name}
-        </Link>
-
         <CustomerModal
-          isOpen={id === `${customer.id}`}
-          onRequestClose={e => {
-            if (e) e.stopPropagation()
-            history.push(ROUTES.CUSTOMERS.path)
-          }}
+          disclosure={
+            <Link
+              className="text-primary-700 underline font-bold text-xs"
+              to={ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`)}
+            >
+              {customer.name}
+            </Link>
+          }
           customer={customer}
         />
       </div>

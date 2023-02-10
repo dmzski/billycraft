@@ -21,7 +21,7 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps): JSX.Element => {
       {data.map(({ id, title, customerId, sentAt }, index) => (
         <div
           className={clsx('py-4 px-2 mb-2 grid md:grid-cols-12', {
-            'bg-gray-50': index % 2 === 0,
+            'bg-base-100': index % 2 === 0,
           })}
         >
           <div className="md:col-span-1 text-sm">

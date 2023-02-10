@@ -4,20 +4,18 @@ import Customer from '../../../models/Customer'
 import CustomerForm from '../Form/Form'
 
 type CustomerModalProps = {
-  isOpen: boolean
-  onRequestClose: (e?: MouseEvent) => void
   customer?: Customer
+  disclosure: JSX.Element
 }
-const CustomerModal = ({ isOpen, onRequestClose, customer }: CustomerModalProps): JSX.Element => {
+const CustomerModal = ({ customer, disclosure }: CustomerModalProps): JSX.Element => {
   const queryCache = useQueryCache()
 
-  const onSubmitSuccess = (data: Customer) => {
+  const onSubmitSuccess = () => {
     queryCache.invalidateQueries('customers')
-    if (data.deleted) onRequestClose()
   }
 
   return (
-    <Modal open={isOpen} onClose={onRequestClose}>
+    <Modal disclosure={disclosure}>
       <CustomerForm customer={customer} onSubmitSuccess={onSubmitSuccess} />
     </Modal>
   )

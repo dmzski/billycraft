@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useHistory } from 'react-router-dom'
-import { Button, Loader } from '@coco-ui/core'
+import { Button, Icon, Loader } from '@coco-ui/core'
 import { ROUTES } from 'routes'
 import { QuoteApi } from 'api/QuoteApi'
 import useCustomers from 'hooks/useCustomers'
@@ -20,10 +20,10 @@ const QuotePage = (): JSX.Element => {
   })
   const history = useHistory()
 
-  const quoteSorted = useCallback(() => filterQuotes(quotesQuery.data ?? [], filters, customers), [
-    filters,
-    quotesQuery.data,
-  ])
+  const quoteSorted = useCallback(
+    () => filterQuotes(quotesQuery.data ?? [], filters, customers),
+    [filters, quotesQuery.data],
+  )
 
   const goToNewQuote = () => {
     history.push(ROUTES.QUOTE_FORM.path.replace(':id', 'new'))
@@ -33,8 +33,9 @@ const QuotePage = (): JSX.Element => {
     <>
       <div className="flex justify-between mb-4">
         <h2 className="text-3xl">Devis</h2>
-        <Button size="md" onClick={goToNewQuote} icon="plus">
-          <p>Nouveau devis</p>
+        <Button size="md" variant="primary" onClick={goToNewQuote}>
+          <Icon name="plus" />
+          &nbsp; Nouveau devis
         </Button>
       </div>
       <QuoteFilterContainer filters={filters} setFilters={setFilters} />

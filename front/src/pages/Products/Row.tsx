@@ -100,7 +100,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
 
   return (
     <div
-      className={clsx('grid md:grid-cols-12 px-2 py-3 gap-2', { 'bg-gray-50': index % 2 === 0 })}
+      className={clsx('grid md:grid-cols-12 px-2 py-3 gap-2', { 'bg-base-200': index % 2 === 0 })}
     >
       <div className="md:col-span-2">
         <Controller
@@ -191,58 +191,39 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
       </div>
       <div className="md:col-span-2 flex justify-end">
         {mode === MODES.DELETE && !isNew ? (
-          <div className="flex relative">
+          <div className="flex relative gap-2 bg-base-100">
             <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
-            <Button type="button" variant="success" size="md" className="w-8" onClick={onDelete}>
+            <Button type="button" variant="success" size="md" onClick={onDelete}>
               <Icon name="check" />
             </Button>
-            <Button
-              type="button"
-              className="w-8 ml-1"
-              variant="error"
-              size="md"
-              onClick={toggleDeleteMode}
-            >
+            <Button type="button" variant="error" size="md" onClick={toggleDeleteMode}>
               <Icon name="x" />
             </Button>
           </div>
         ) : null}
         {mode === MODES.EDIT || isNew ? (
-          <div className="flex">
+          <div className="flex gap-2">
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <Button
-                type="submit"
-                size="md"
-                variant="success"
-                className="w-8"
-                disabled={!isValid || isSubmitting}
-              >
+              <Button type="submit" size="md" variant="success" disabled={!isValid || isSubmitting}>
                 <Icon name="check" />
               </Button>
             </form>
             {product.id ? (
-              <Button
-                type="button"
-                size="md"
-                variant="error"
-                onClick={toggleEditMode}
-                className="ml-1 w-8"
-              >
+              <Button type="button" size="md" variant="error" onClick={toggleEditMode}>
                 <Icon name="x" />
               </Button>
             ) : null}
           </div>
         ) : null}
         {mode === MODES.READ && !isNew ? (
-          <div className="flex">
-            <Button type="button" onClick={toggleEditMode} className="w-8" variant="info" size="md">
+          <div className="flex gap-2">
+            <Button type="button" onClick={toggleEditMode} variant="info" size="md">
               <Icon name="pencil" />
             </Button>
             <Button
               type="button"
               disabled={deleteProductMutationState.isLoading}
               onClick={toggleDeleteMode}
-              className="ml-1 w-8"
               size="md"
               variant="error"
             >

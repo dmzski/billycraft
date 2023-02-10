@@ -15,17 +15,12 @@ const MenuItem = ({ text, icon, path, exact }: MenuItemProps): JSX.Element => {
   })
 
   return (
-    <Link
-      to={path}
-      className={`flex items-center py-2 px-4 border-r-4 cursor-pointer select-none ${
-        match
-          ? 'border-primary-600 font-bold bg-primary-200 text-primary-600'
-          : 'bg-white border-white hover:border-primary-50 hover:bg-primary-50 text-gray-600'
-      }`}
-    >
-      {icon ? <Icon name={icon} /> : null}
-      <span className="mx-4">{text}</span>
-    </Link>
+    <li>
+      <Link to={path} className={match ? 'active' : ''}>
+        {icon ? <Icon name={icon} /> : null}
+        <span className="ml-4">{text}</span>
+      </Link>
+    </li>
   )
 }
 

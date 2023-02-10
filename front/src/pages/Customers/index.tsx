@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { Button, Loader } from '@coco-ui/core'
+import { Button, Icon, Loader } from '@coco-ui/core'
 import { CustomerApi } from 'api/CustomerApi'
 import CustomerTable from './List'
 import CustomerModal from './Modals/CustomerModal'
@@ -20,9 +20,15 @@ const CustomerPage = (): JSX.Element => {
     <>
       <div className="flex flex-wrap justify-between">
         <h1 className="text-3xl">Clients</h1>
-        <Button icon="plus" size="md" onClick={goToNewCustomer}>
-          Nouveau client
-        </Button>
+        <CustomerModal
+          customer={{} as Customer}
+          disclosure={
+            <Button variant="primary" size="md" onClick={goToNewCustomer}>
+              <Icon name="plus" />
+              &nbsp; Nouveau client
+            </Button>
+          }
+        />
       </div>
       <div>
         <CustomerTable data={customersQuery.data ?? []} />
@@ -31,11 +37,6 @@ const CustomerPage = (): JSX.Element => {
             <Loader />
           </div>
         )}
-        <CustomerModal
-          customer={{} as Customer}
-          isOpen={isOpen}
-          onRequestClose={() => setIsOpen(false)}
-        />
       </div>
     </>
   )

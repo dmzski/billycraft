@@ -5,14 +5,18 @@ import BillTableLine from './Row'
 
 const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   const customers = useCustomers()
-  const { sort, onSort, data: bills } = useTableState({
+  const {
+    sort,
+    onSort,
+    data: bills,
+  } = useTableState({
     data,
     initialSort: { field: 'createdAt', order: 'desc' },
   })
 
   return (
     <div className="flex flex-col">
-      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 border-b rounded-t">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-base-200 border-b rounded-t">
         <div className="col-span-1">#</div>
         <div className="col-span-3">Titre</div>
         <div className="col-span-2">Client</div>

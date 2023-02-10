@@ -9,9 +9,7 @@ import Layout from '../layout/Layout'
 import Onboarding from './Onboarding'
 import ProductsPage from './Products'
 import Settings from './Settings'
-import SupportPage from './SupportPage'
 import History from './History'
-import Calendar from './Calendar'
 import AccountingSwitch from './Accountings/AccountingSwitch'
 import QuoteSwitch from './Quotes/QuoteSwitch'
 import BillSwitch from './Bills/BillSwitch'
@@ -72,7 +70,6 @@ const PrivateSwitch = (): JSX.Element => {
               <SupplierSwitch />
             </Route>
             <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
-            <Route path={ROUTES.CALENDAR.path} component={Calendar} />
             <Route
               path={ROUTES.PRODUCTS.path}
               exact={ROUTES.PRODUCTS.exact}
@@ -80,11 +77,6 @@ const PrivateSwitch = (): JSX.Element => {
             />
             <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
             <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
-            <Route
-              path={ROUTES.SUPPORT.path}
-              exact={ROUTES.SUPPORT.exact}
-              component={SupportPage}
-            />
             <Route>
               <Redirect to={ROUTES.DASHBOARD.path} />
             </Route>

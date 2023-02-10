@@ -1,4 +1,4 @@
-import { ActionButton, Icon, useToast } from '@coco-ui/core'
+import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
 import { QuoteApi } from 'api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
@@ -25,7 +25,7 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
     QuoteApi.updateStatus,
   )
 
-  const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLDivElement>) => {
+  const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     if (updateQuoteStatusMutationState.isLoading) {
       return
@@ -91,7 +91,7 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
 
   return (
     <div
-      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-gray-50': index % 2 === 0 })}
+      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-base-200': index % 2 === 0 })}
     >
       <div className="md:col-span-1 text-xs">
         <Link
@@ -110,20 +110,19 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
         {quote.sentAt ? formatISO9075(parseJSON(quote.sentAt)) : '-'}
       </div>
       <div className="md:col-span-2">
-        <ActionButton size="sm" variant="outline">
-          <ActionButton.Content>{getStatus}</ActionButton.Content>
-          {getNextStatuses().map(s => (
-            <ActionButton.Action
-              key={s.enum}
-              onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
-            >
-              <div className="flex items-center">
-                <Icon className="mr-2" name={s.icon as IconName} />
-                <span>{s.text}</span>
-              </div>
-            </ActionButton.Action>
-          ))}
-        </ActionButton>
+        <Dropdown>
+          <Button>{getStatus}</Button>
+          <Dropdown.Content>
+            {getNextStatuses().map(s => (
+              <Button key={s.enum} onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}>
+                <div className="flex items-center">
+                  <Icon className="mr-2" name={s.icon as IconName} />
+                  <span>{s.text}</span>
+                </div>
+              </Button>
+            ))}
+          </Dropdown.Content>
+        </Dropdown>
       </div>
     </div>
   )

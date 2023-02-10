@@ -16,16 +16,6 @@ const Suppliers = () => {
   const { id } = useParams<{ id: string }>()
   const [selected, setSelected] = useState<Supplier | undefined>()
 
-  const handleCreate = useCallback(() => {
-    setSelected({} as Supplier)
-    history.push(ROUTES.SUPPLIERS_FORM.path.replace(':id', 'new'))
-  }, [history])
-
-  const handleClose = useCallback(() => {
-    setSelected(undefined)
-    history.push(ROUTES.SUPPLIERS.path)
-  }, [history])
-
   const onSubmitSuccess = useCallback(
     (res: Supplier) => {
       refetch()
@@ -44,9 +34,11 @@ const Suppliers = () => {
     <>
       <div className="flex mb-4">
         <h2 className="text-3xl flex-grow">Fournisseurs</h2>
-        <Button variant="primary" onClick={handleCreate}>
-          Créer un fournisseur
-        </Button>
+        <SupplierModalForm
+          disclosure={<Button variant="primary">Créer un fournisseur</Button>}
+          onSubmitSuccess={onSubmitSuccess}
+          supplier={selected ?? ({} as Supplier)}
+        />
       </div>
       {isLoading ? (
         <div className="flex justify-center">
@@ -55,12 +47,6 @@ const Suppliers = () => {
       ) : null}
       {!isLoading && data && data.length > 0 ? <SupplierList data={data} /> : null}
       {!isLoading && (!data || data.length === 0) ? <div>Aucun fournisseur</div> : null}
-      <SupplierModalForm
-        isOpen={!!selected}
-        onClose={handleClose}
-        onSubmitSuccess={onSubmitSuccess}
-        supplier={selected ?? ({} as Supplier)}
-      />
     </>
   )
 }
