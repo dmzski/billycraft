@@ -11,8 +11,8 @@ type NotPaidBillListProps = {
 const NotPaidBillList = ({ data }: NotPaidBillListProps): JSX.Element => {
   const customers = useCustomers()
   return (
-    <div className="border rounded">
-      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 rounded-t gap-2">
+    <div className="border rounded flex flex-col">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-base-300 rounded-t gap-2">
         <div className="pl-1 md:col-span-1">#</div>
         <div className="md:col-span-2">Envoyée le</div>
         <div className="md:col-span-3">Client</div>
@@ -20,15 +20,12 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps): JSX.Element => {
       </div>
       {data.map(({ id, title, customerId, sentAt }, index) => (
         <div
-          className={clsx('py-4 px-2 mb-2 grid md:grid-cols-12', {
-            'bg-gray-50': index % 2 === 0,
+          className={clsx('py-4 px-2 grid md:grid-cols-12', {
+            'bg-base-200': index % 2 !== 0,
           })}
         >
           <div className="md:col-span-1 text-sm">
-            <Link
-              to={ROUTES.BILL_FORM.path.replace(':id', id)}
-              className="text-primary-700 underline font-bold"
-            >
+            <Link to={ROUTES.BILL_FORM.path.replace(':id', id)} className="link-primary">
               {id}
             </Link>
           </div>

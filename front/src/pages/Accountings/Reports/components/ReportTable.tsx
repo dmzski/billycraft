@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { ReportResponse } from 'models/Report'
 import { ReactNode, useMemo } from 'react'
@@ -8,27 +9,29 @@ type ReportTableProps = {
 
 type OnlyChildrenProps = {
   children: ReactNode
+  noBorder?: boolean
 }
 
-const ReportTableRow = ({ children }: OnlyChildrenProps): JSX.Element => (
+const ReportTableRow = ({ children }: { children: ReactNode }): JSX.Element => (
   <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
-const ReportTableLeft = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dt className="md:col-span-6 bg-primary-50 text-primary-700 border p-2">{children}</dt>
+const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+  <dt className={clsx('md:col-span-6 bg-base-300 p-2', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
-const ReportTableRight = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dd className="md:col-span-6 p-2 border border-l-0">{children}</dd>
+const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+  <dd className={clsx('md:col-span-6 p-2', noBorder ? '' : 'border-b')}>{children}</dd>
 )
 const ReportTable = ({ report }: ReportTableProps): JSX.Element => {
   const formatCurrency = useFormatCurrency()
 
-  const allTaxes = useMemo(() => report.serviceTaxes + report.articleTaxes + report.otherTaxes, [
-    report,
-  ])
+  const allTaxes = useMemo(
+    () => report.serviceTaxes + report.articleTaxes + report.otherTaxes,
+    [report],
+  )
   return (
-    <div className="flex flex-col gap-2 md:gap-0">
+    <div className="flex flex-col gap-2 md:gap-0 border rounded">
       <ReportTableRow>
         <ReportTableLeft>Ventes de marchandises</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.articleSales)}</ReportTableRight>
@@ -58,8 +61,8 @@ const ReportTable = ({ report }: ReportTableProps): JSX.Element => {
         <ReportTableRight>{formatCurrency(report.totalOutgoings)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Restant net</ReportTableLeft>
-        <ReportTableRight>
+        <ReportTableLeft noBorder>Restant net</ReportTableLeft>
+        <ReportTableRight noBorder>
           {formatCurrency(report.sales - allTaxes - report.totalOutgoings)}
         </ReportTableRight>
       </ReportTableRow>

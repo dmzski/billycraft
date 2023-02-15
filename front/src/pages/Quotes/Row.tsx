@@ -1,4 +1,4 @@
-import { ActionButton, Icon, useToast } from '@coco-ui/core'
+import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
 import { QuoteApi } from 'api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from 'models/Customer'
@@ -9,15 +9,13 @@ import { MouseEvent, useCallback, useMemo } from 'react'
 import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
-import clsx from 'clsx'
 import { QUOTE_STATUS } from '../../constants/quote'
 
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
-  index: number
 }
-const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.Element => {
+const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -25,7 +23,7 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
     QuoteApi.updateStatus,
   )
 
-  const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLDivElement>) => {
+  const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     if (updateQuoteStatusMutationState.isLoading) {
       return
@@ -90,12 +88,10 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
   }, [quote])
 
   return (
-    <div
-      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-gray-50': index % 2 === 0 })}
-    >
-      <div className="md:col-span-1 text-xs">
+    <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
+      <div className="md:col-span-1 text-sm">
         <Link
-          className="text-primary-700 underline font-bold"
+          className="link-primary"
           to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}
         >
           {quote.id}
@@ -110,20 +106,22 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
         {quote.sentAt ? formatISO9075(parseJSON(quote.sentAt)) : '-'}
       </div>
       <div className="md:col-span-2">
-        <ActionButton size="sm" variant="outline">
-          <ActionButton.Content>{getStatus}</ActionButton.Content>
-          {getNextStatuses().map(s => (
-            <ActionButton.Action
-              key={s.enum}
-              onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
-            >
-              <div className="flex items-center">
-                <Icon className="mr-2" name={s.icon as IconName} />
-                <span>{s.text}</span>
-              </div>
-            </ActionButton.Action>
-          ))}
-        </ActionButton>
+        <Dropdown>
+          <Button>{getStatus}</Button>
+          <Dropdown.Content>
+            {getNextStatuses().map(s => (
+              <Dropdown.ButtonItem
+                key={s.enum}
+                onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
+              >
+                <div className="flex items-center">
+                  <Icon className="mr-2" name={s.icon as IconName} />
+                  <span>{s.text}</span>
+                </div>
+              </Dropdown.ButtonItem>
+            ))}
+          </Dropdown.Content>
+        </Dropdown>
       </div>
     </div>
   )

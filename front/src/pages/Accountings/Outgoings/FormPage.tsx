@@ -25,7 +25,7 @@ const FormPage = () => {
   return (
     <div>
       <Link to={routes.LIST.path}>
-        <Button type="button" size="xs" variant="inverted-primary">
+        <Button type="button" size="xs" variant="ghost">
           Retourner à la liste des livrets d&apos;achats
         </Button>
       </Link>

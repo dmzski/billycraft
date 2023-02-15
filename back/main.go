@@ -9,6 +9,8 @@ import (
 	"back/internal/lib/oidc"
 	"errors"
 	"log"
+	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -21,6 +23,10 @@ import (
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 )
+
+const MAX_RETRY_COUNT = 3
+
+var retryCount = 0
 
 func main() {
 	var err error
@@ -99,11 +105,23 @@ func initDb(config config.Config) {
 
 	if err != nil {
 		log.Fatalln("Failed to connect database")
+		if retryCount == MAX_RETRY_COUNT {
+			log.Fatalln("Cannot connect to DB after 3 retries")
+			os.Exit(3)
+		} else {
+			log.Println("Retry database connection in 3 seconds")
+			retryCount += 1
+			time.AfterFunc(3*time.Second, func() {
+				initDb(config)
+			})
+      return
+		}
 	}
 	log.Println("Connection Opened to Database")
 	err = database.MakeMigrations()
 	if err != nil && err != migrate.ErrNoChange {
 		log.Fatalln(err)
+    os.Exit(3)
 	}
-	log.Println("Migrations successuffly applied")
+	log.Println("Migrations successfully applied")
 }

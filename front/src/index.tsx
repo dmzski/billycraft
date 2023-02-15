@@ -5,8 +5,8 @@ import { BrowserTracing } from '@sentry/tracing'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
-import '@coco-ui/core/dist/index.css'
 import './assets/main.css'
+import '@coco-ui/core/dist/index.css'
 
 if (window.localStorage.getItem('theme') === 'dark') {
   document.body.dataset.theme = 'dark'

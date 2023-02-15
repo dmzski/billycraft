@@ -78,14 +78,13 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-      <div className="text-lg border-b mb-4">Informations de mon entreprise</div>
-      <div className="md:pl-2 grid gap-4">
+      <div className="text-2xl border-b">Informations de mon entreprise</div>
+      <div className="md:pl-2 flex flex-col gap-8">
         <Controller
           name="name"
           control={control}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              variant="outside"
               label="Nom"
               placeholder="Nom"
               name={field.name}
@@ -122,7 +121,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
-              variant="outside"
               label="Code Postal"
               placeholder="Code Postal"
               name={field.name}
@@ -141,7 +139,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
-              variant="outside"
               label="Ville"
               placeholder="Ville"
               name={field.name}
@@ -160,7 +157,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"
-              variant="outside"
               label="Téléphone"
               placeholder="Téléphone"
               name={field.name}
@@ -179,7 +175,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
-              variant="outside"
               label="Email"
               placeholder="Email"
               name={field.name}
@@ -198,7 +193,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="siret"
-              variant="outside"
               label="SIRET"
               placeholder="SIRET"
               name={field.name}
@@ -210,13 +204,12 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             />
           )}
         />
-        <div className="grid grid-cols-12 gap-4 mt-4">
+        <div className="grid grid-cols-12 gap-4 items-end">
           <Controller
             name="logo"
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Input
-                variant="outside"
                 label="URL du logo"
                 className="col-span-12 md:col-span-9"
                 placeholder="URL du logo"
@@ -231,7 +224,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           />
           <Button
             className="col-span-12 md:col-span-3 md:mt-4"
-            variant="inverted-primary"
+            variant="primary"
+            outline
             type="button"
             onClick={selectFileToUpload}
             disabled={uploadLogoState.isLoading}
@@ -250,14 +244,13 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
 
       <div className="flex flex-col gap-4 w-full mt-8">
         <div className="border-b text-lg">Taux d&apos;imposition</div>
-        <div className="md:pl-2 grid md:grid-cols-3 gap-4">
+        <div className="md:pl-2 grid md:grid-cols-3 gap-8">
           <Controller
             name="articlesTax"
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Ventes (%)"
                 type="number"
                 step={0.01}
@@ -278,7 +271,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Services (%)"
                 type="number"
                 step={0.01}
@@ -299,7 +291,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Autres types de service (%)"
                 step={0.01}
                 max={100}
@@ -318,34 +309,30 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
       </div>
       <div>
         <h2 className="text-lg mb-4 border-b">Automatisme</h2>
-        <div className="md:pl-2 grid md:grid-cols-2 gap-4">
-          <div className="flex">
-            <Controller
-              name="autoMonthReport"
-              rules={{}}
-              control={control}
-              render={({ field }) => (
-                <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
-                  Générer automatiquement les rapports mensuels
-                </Switch>
-              )}
-            />
-          </div>
-          <div className="flex">
-            <Controller
-              name="autoYearReport"
-              rules={{}}
-              control={control}
-              render={({ field }) => (
-                <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
-                  Générer automatiquement les rapports annuels
-                </Switch>
-              )}
-            />
-          </div>
+        <div className="md:pl-2 flex flex-col items-start gap-8">
+          <Controller
+            name="autoMonthReport"
+            rules={{}}
+            control={control}
+            render={({ field }) => (
+              <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
+                Générer automatiquement les rapports mensuels
+              </Switch>
+            )}
+          />
+          <Controller
+            name="autoYearReport"
+            rules={{}}
+            control={control}
+            render={({ field }) => (
+              <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
+                Générer automatiquement les rapports annuels
+              </Switch>
+            )}
+          />
         </div>
       </div>
-      <Button type="submit" className="w-full primary mt-4" disabled={!isValid || isSubmitting}>
+      <Button type="submit" variant="success" className="mt-4" disabled={!isValid || isSubmitting}>
         Enregister
       </Button>
     </form>

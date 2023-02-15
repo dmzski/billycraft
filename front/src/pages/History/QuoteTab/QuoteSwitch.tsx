@@ -5,20 +5,20 @@ import RefusedTab from './RefusedTab'
 
 const QUOTE_ROUTES = HISTORY_ROUTES.QUOTES.routes
 const QuoteSwitch = () => (
-  <>
+  <div className="flex flex-col gap-4">
     <h1 className="text-2xl">Historique des devis</h1>
-    <div className="grid md:grid-cols-2 mt-4 mb-4 gap-4">
+    <div className="tabs tabs-boxed">
       <NavLink
-        activeClassName="bg-primary-600 text-white"
+        activeClassName="tab-active"
         to={QUOTE_ROUTES.ARCHIVED.path}
-        className="cursor-pointer hover:font-bold p-3 text-center shadow rounded"
+        className="tab flex-grow"
       >
         Devis archivés
       </NavLink>
       <NavLink
-        activeClassName="bg-primary-600 text-white"
+        activeClassName="tab-active"
         to={QUOTE_ROUTES.REFUSED.path}
-        className="cursor-pointer hover:font-bold p-3 text-center shadow rounded"
+        className="tab flex-grow"
       >
         Devis refusés
       </NavLink>
@@ -28,7 +28,7 @@ const QuoteSwitch = () => (
       <Route path={QUOTE_ROUTES.REFUSED.path} component={RefusedTab} />
       <Redirect to={QUOTE_ROUTES.ARCHIVED.path} />
     </Switch>
-  </>
+  </div>
 )
 
 export default QuoteSwitch

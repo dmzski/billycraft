@@ -1,18 +1,18 @@
-import { Table, useTableState } from '@coco-ui/core'
+import { useTableState } from '@coco-ui/core'
 import useCustomers from 'hooks/useCustomers'
 import Bill from 'models/Bill'
 import BillTableLine from './Row'
 
 const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
   const customers = useCustomers()
-  const { sort, onSort, data: bills } = useTableState({
+  const { data: bills } = useTableState({
     data,
     initialSort: { field: 'createdAt', order: 'desc' },
   })
 
   return (
     <div className="flex flex-col">
-      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 border-b rounded-t">
+      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
         <div className="col-span-1">#</div>
         <div className="col-span-3">Titre</div>
         <div className="col-span-2">Client</div>
@@ -21,12 +21,11 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
         <div className="col-span-2">Status</div>
       </div>
       <div className="flex flex-col">
-        {bills.map((bill, index) => (
+        {bills.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
             bill={bill}
-            index={index}
           />
         ))}
       </div>

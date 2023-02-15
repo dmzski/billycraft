@@ -29,6 +29,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps): JSX.El
     staleTime: 6000,
     refetchOnWindowFocus: false,
   })
+
   const groupBySuppliers = useMemo(
     () =>
       Object.values(
@@ -86,7 +87,9 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps): JSX.El
             <SupplierDetailRow value={total} supplier={supplier} />
           ))}
         </div>
-      ) : null}
+      ) : (
+        <div>Aucune dépense fournisseur</div>
+      )}
     </div>
   )
 }

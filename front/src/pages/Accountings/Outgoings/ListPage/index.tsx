@@ -17,7 +17,7 @@ const ListPage = () => {
       <div className="flex justify-between border-b my-4 pb-2 items-center">
         <h2 className="text-xl">Tous vos livrets d&apos;achat</h2>
         <Link to={routes.FORM.path.replace(':id', 'new')}>
-          <Button>Ajouter un livret d&apos;achat</Button>
+          <Button variant="primary">Ajouter un livret d&apos;achat</Button>
         </Link>
       </div>
       {isLoading ? (

@@ -1,14 +1,14 @@
-import { Icon } from '@coco-ui/core'
+import { Button, Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { useKeycloak } from '@react-keycloak/web'
 import clsx from 'clsx'
 import { useState } from 'react'
-import { NavLink, useRouteMatch } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Route, ROUTES } from 'routes'
 import MenuItem from './MenuItem'
 
 const menuRoutes = [
   ROUTES.DASHBOARD,
-  ROUTES.CALENDAR,
   ROUTES.QUOTES,
   ROUTES.BILLS,
   ROUTES.CUSTOMERS,
@@ -23,58 +23,67 @@ type MenuProps = {
   route: Route
 }
 const Menu = ({ route }: MenuProps): JSX.Element => {
-  const match = useRouteMatch({
-    path: route.path,
-  })
-  const [open, setOpen] = useState<boolean>(!match)
+  const [open, setOpen] = useState(false)
 
+  const handleOpen = () => {
+    setOpen(current => !current)
+  }
   return (
-    <div className={clsx('flex flex-col cursor-pointer select-none text-gray-600')}>
+    <li className={clsx('collapse collapse-arrow flex', open ? 'collapse-open' : 'collapse-close')}>
       <button
-        onClick={() => setOpen(current => !current)}
+        onClick={handleOpen}
         type="button"
-        className={clsx('appearance-none flex py-2 pl-4 pr-2 border-r-4', {
-          'border-primary-600 font-bold bg-primary-200 text-primary-600': match,
-          'bg-white border-white hover:border-primary-100 hover:bg-primary-100': !match,
-        })}
+        className="appearance-none collapse-title flex items-center gap-6 min-h-0"
       >
         {route.icon ? <Icon name={route.icon} /> : null}
-        <div className="ml-2 text-left flex-grow">{route.title}</div>
-        <Icon name={open ? 'chevron-down' : 'chevron-up'} />
+        {route.title}
       </button>
-      <div className={clsx('overflow-hidden bg-gray-100', { 'h-0': open })}>
-        {Object.values(route.routes ?? {}).map(subRoute => (
-          <NavLink
-            activeClassName="text-primary-700"
-            className="pl-8 block py-2 hover:bg-primary-100"
-            key={subRoute.path}
-            to={subRoute.path}
-          >
-            {subRoute.title}
-          </NavLink>
-        ))}
+      <div className="collapse-content bg-base-200 flex p-0">
+        <ul className="menu flex-grow">
+          {Object.values(route.routes ?? {}).map(subRoute => (
+            <li>
+              <NavLink activeClassName="active" key={subRoute.path} to={subRoute.path}>
+                {subRoute.title}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+    </li>
   )
 }
 
-const SideBarMenu = (): JSX.Element => (
-  <>
-    {menuRoutes
-      .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
-      .map(route =>
-        !route.routes ? (
-          <MenuItem
-            key={route.path}
-            text={route.title}
-            icon={route.icon as IconName}
-            path={route.path}
-          />
-        ) : (
-          <Menu route={route} />
-        ),
-      )}
-  </>
-)
+const SideBarMenu = (): JSX.Element => {
+  const { keycloak } = useKeycloak()
+
+  const logout = () => {
+    keycloak.logout()
+  }
+
+  return (
+    <ul className="menu">
+      {menuRoutes
+        .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
+        .map(route =>
+          !route.routes ? (
+            <MenuItem
+              key={route.path}
+              text={route.title}
+              icon={route.icon as IconName}
+              path={route.path}
+            />
+          ) : (
+            <Menu route={route} />
+          ),
+        )}
+      <li>
+        <Button className="mt-8" variant="error" type="button" outline onClick={logout}>
+          <Icon name="logout" type="outline" />
+          &nbsp; Déconnexion
+        </Button>
+      </li>
+    </ul>
+  )
+}
 
 export default SideBarMenu

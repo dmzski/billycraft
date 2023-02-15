@@ -1,9 +1,7 @@
-import { Icon, Loader } from '@coco-ui/core'
+import { Badge, Icon, Loader } from '@coco-ui/core'
 import { BillApi } from 'api/BillApi'
 import { TodoApi } from 'api/TodoApi'
-import clsx from 'clsx'
 import { useQuery } from 'react-query'
-import NextAppointmentList from './NextAppointmentList'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
 
@@ -19,40 +17,26 @@ const Dashboard = (): JSX.Element => {
     },
   )
 
+  const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0
+
   return (
     <div>
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-center mb-8">
         <h1 className="text-3xl mb-4">Accueil</h1>
         <div className="grid md:grid-cols-2 gap-2 justify-center">
-          <span
-            className={clsx({
-              'text-background bg-error-700 p-2 rounded': notPaid && notPaid?.length > 0,
-              'p-2 bg-success-700 text-background rounded': notPaid?.length === 0,
-            })}
-          >
+          <Badge variant={notPaid?.length ? 'error' : 'success'}>
             {notPaid?.length} factures impayées
-          </span>
-          <span
-            className={
-              todos && todos.filter(({ doneAt }) => !doneAt).length > 0
-                ? 'text-background bg-info-700 p-2 rounded'
-                : 'p-2 bg-success-700 text-background rounded'
-            }
-          >
-            {todos?.filter(({ doneAt }) => !doneAt).length} Tâches à faire
-          </span>
+          </Badge>
+          <Badge variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} Tâches à faire</Badge>
         </div>
       </div>
-      <NextAppointmentList />
-      <hr className="my-4" />
-
       <div className="flex items-center">
         <Icon className="mr-2" name="pencil" />
         <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
-        <div className="hidden  md:flex items-center ml-2 text-xs text-warning-600">
+        <Badge variant="warning" className="hidden md:flex">
           <Icon size={14} name="exclamation" />
           &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
-        </div>
+        </Badge>
       </div>
       <div className="mt-4 ml-4">
         <TodoList data={todos} onSubmitSuccess={() => refetch()} />

@@ -8,25 +8,17 @@ import OverviewPage from './OverviewPage'
 const { routes, path } = ROUTES.ACCOUNTINGS.routes.REPORTS
 
 const Heading = (): JSX.Element => (
-  <>
-    <h1 className="text-3xl mb-4">Rapports d&apos;activité</h1>
-    <div className="grid grid-cols-2 gap-4 mb-4">
-      <NavLink
-        activeClassName="bg-primary-700 text-white"
-        to={routes.OVERVIEW.path}
-        className="shadow rounded py-2 flex items-center justify-center"
-      >
+  <div className="flex flex-col gap-4 mb-4">
+    <h1 className="text-3xl">Rapports d&apos;activité</h1>
+    <div className="tabs tabs-boxed flex">
+      <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
         Vue d&apos;ensemble
       </NavLink>
-      <NavLink
-        activeClassName="bg-primary-700 text-white"
-        to={routes.LIST.path}
-        className="shadow rounded text-center py-2 flex items-center justify-center"
-      >
+      <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
         Tous les rapports d&apos;activité
       </NavLink>
     </div>
-  </>
+  </div>
 )
 
 const ReportsSwitch = () => (

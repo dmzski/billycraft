@@ -1,21 +1,19 @@
-import { Button, Input, Modal, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, Modal, useToast } from '@coco-ui/core'
 import { SupplierApi } from 'api/SupplierApi'
 import { STRINGS } from 'constants/strings'
 import Supplier, { SupplierRequest } from 'models/Supplier'
-import { useCallback, useEffect } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 type SupplierModalFormProps = {
   supplier: Supplier
-  isOpen: boolean
-  onClose: () => void
   onSubmitSuccess?: (data: Supplier) => void | Promise<void>
+  disclosure: JSX.Element
 }
 const SupplierModalForm = ({
+  disclosure,
   supplier,
-  onClose,
   onSubmitSuccess,
-  isOpen,
 }: SupplierModalFormProps): JSX.Element => {
   const toast = useToast()
   const {
@@ -45,7 +43,6 @@ const SupplierModalForm = ({
           : await SupplierApi.create(data)
         toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
-        onClose()
       } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
@@ -60,7 +57,6 @@ const SupplierModalForm = ({
           await SupplierApi.delete(supplier.id)
           toast.success(STRINGS.DELETE_SUCCESS)
           onSubmitSuccess?.(supplier)
-          onClose()
         } catch {
           toast.error(STRINGS.DELETE_ERROR)
         }
@@ -74,14 +70,15 @@ const SupplierModalForm = ({
   }, [supplier, reset])
 
   return (
-    <Modal size="sm" onClose={onClose} open={isOpen}>
+    <Modal disclosure={disclosure}>
       <div className="w-full pb-2">
-        <div className="flex border-b px-2 pb-2 mb-4">
+        <div className="flex border-b px-2 pb-2 mb-4 pr-6">
           <h3 className="flex-grow text-xl">
             {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
           </h3>
-          <Button variant="error" icon="trash" disabled={!supplier.id} onClick={handleDelete}>
-            Supprimer
+          <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
+            <Icon name="trash" />
+            &nbsp; Supprimer
           </Button>
         </div>
         <form className="px-4" onSubmit={handleSubmit(onSubmit)}>
@@ -97,7 +94,6 @@ const SupplierModalForm = ({
                 onChange={field.onChange}
                 ref={field.ref}
                 className="mb-4"
-                variant="outside"
                 label="Nom du fournisseur"
                 value={field.value}
                 error={invalid}
@@ -117,7 +113,6 @@ const SupplierModalForm = ({
                 onChange={field.onChange}
                 ref={field.ref}
                 className="mb-4"
-                variant="outside"
                 label="TVA appliquée par le fournisseur (%)"
                 value={field.value}
                 error={invalid}
@@ -140,7 +135,6 @@ const SupplierModalForm = ({
                   onChange={field.onChange}
                   ref={field.ref}
                   className="mb-4 flex-grow"
-                  variant="outside"
                   label="Couleur hexadécimale associée"
                   value={field.value}
                   error={invalid}

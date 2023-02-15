@@ -1,51 +1,31 @@
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import CustomerModal from 'pages/Customers/Modals/CustomerModal'
 import Customer from 'models/Customer'
 import { ROUTES } from 'routes'
-import clsx from 'clsx'
 
-const QuoteTableLine = ({
-  customer,
-  index,
-}: {
-  customer: Customer
-  index: number
-}): JSX.Element => {
-  const { id } = useParams<{ id: string }>()
-  const history = useHistory()
-
-  return (
-    <div
-      className={clsx('grid md:grid-cols-12 p-2 py-4 items-center', {
-        'bg-gray-50': index % 2 === 0,
-      })}
-    >
-      <div className="md:col-span-3">
-        <Link
-          className="text-primary-700 underline font-bold text-xs"
-          to={ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`)}
-        >
-          {customer.name}
-        </Link>
-
-        <CustomerModal
-          isOpen={id === `${customer.id}`}
-          onRequestClose={e => {
-            if (e) e.stopPropagation()
-            history.push(ROUTES.CUSTOMERS.path)
-          }}
-          customer={customer}
-        />
-      </div>
-      <div className="md:col-span-3">{customer.contact}</div>
-      <div className="md:col-span-3">
-        {customer.phoneNumber
-          ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
-          : ''}
-      </div>
-      <div className="md:col-span-3">{customer.email}</div>
+const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => (
+  <div className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
+    <div className="md:col-span-3">
+      <CustomerModal
+        disclosure={
+          <Link
+            className="link-primary"
+            to={ROUTES.CUSTOMER_FORM.path.replace(':id', `${customer.id}`)}
+          >
+            {customer.name}
+          </Link>
+        }
+        customer={customer}
+      />
     </div>
-  )
-}
+    <div className="md:col-span-3">{customer.contact}</div>
+    <div className="md:col-span-3">
+      {customer.phoneNumber
+        ? customer.phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+        : ''}
+    </div>
+    <div className="md:col-span-3">{customer.email}</div>
+  </div>
+)
 
 export default QuoteTableLine

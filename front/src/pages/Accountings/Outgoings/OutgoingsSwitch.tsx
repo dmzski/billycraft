@@ -10,19 +10,11 @@ const { routes, path } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 const Heading = (): JSX.Element => (
   <>
     <h1 className="text-3xl mb-4">Livrets d&apos;achats</h1>
-    <div className="grid grid-cols-2 gap-4 mb-4">
-      <NavLink
-        activeClassName="bg-primary-700 text-white"
-        to={routes.OVERVIEW.path}
-        className="shadow rounded py-2 flex items-center justify-center"
-      >
+    <div className="tabs tabs-boxed">
+      <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
         Vue d&apos;ensemble
       </NavLink>
-      <NavLink
-        activeClassName="bg-primary-700 text-white"
-        to={routes.LIST.path}
-        className="shadow rounded text-center py-2 flex items-center justify-center"
-      >
+      <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
         Tous les livrets d&apos;achats
       </NavLink>
     </div>

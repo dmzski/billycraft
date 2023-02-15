@@ -10,7 +10,7 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
 
   return (
     <div className="flex flex-col">
-      <div className="px-2 py-4 grid md:grid-cols-12 bg-primary-50 text-primary-700 border-b rounded-t">
+      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
         <div className="col-span-1">#</div>
         <div className="col-span-3">Titre</div>
         <div className="col-span-2">Client</div>
@@ -19,12 +19,11 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
         <div className="col-span-2">Status</div>
       </div>
       <div className="flex flex-col">
-        {data.map((quote, index) => (
+        {data.map(quote => (
           <QuoteTableLine
             customer={customers.find(c => c.id === quote.customerId)}
             key={quote.id}
             quote={quote}
-            index={index}
           />
         ))}
       </div>

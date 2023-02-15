@@ -1,4 +1,4 @@
-import { ActionButton, Icon, useToast } from '@coco-ui/core'
+import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { BillApi } from 'api/BillApi'
 import clsx from 'clsx'
@@ -15,9 +15,8 @@ import { BILL_STATUS } from '../../../constants/bill'
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
-  index: number
 }
-const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Element => {
+const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -82,14 +81,9 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
   }, [bill])
 
   return (
-    <div
-      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-gray-50': index % 2 === 0 })}
-    >
-      <div className="md:col-span-1 text-xs">
-        <Link
-          className="text-primary-700 underline font-bold"
-          to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}
-        >
+    <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
+      <div className="md:col-span-1 text-sm">
+        <Link className="link-primary" to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}>
           {bill.id}
         </Link>
       </div>
@@ -102,17 +96,22 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
         {bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}
       </div>
       <div className="md:col-span-2">
-        <ActionButton size="sm" variant="outline">
-          <ActionButton.Content>{getStatus}</ActionButton.Content>
-          {getNextStatuses().map(s => (
-            <ActionButton.Action key={s.enum} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
-              <div className="flex items-center">
-                <Icon className="mr-2" name={s.icon as IconName} />
-                <span>{s.text}</span>
-              </div>
-            </ActionButton.Action>
-          ))}
-        </ActionButton>
+        <Dropdown variant="outline">
+          <Button>{getStatus}</Button>
+          <Dropdown.Content>
+            {getNextStatuses().map(s => (
+              <Dropdown.ButtonItem
+                key={s.enum}
+                onClick={updateBillStatus(s.enum as BillStatusEnum)}
+              >
+                <div className="flex items-center">
+                  <Icon className="mr-2" name={s.icon as IconName} />
+                  <span>{s.text}</span>
+                </div>
+              </Dropdown.ButtonItem>
+            ))}
+          </Dropdown.Content>
+        </Dropdown>
       </div>
     </div>
   )
