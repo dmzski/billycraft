@@ -9,15 +9,13 @@ import { MouseEvent, useCallback, useMemo } from 'react'
 import { ROUTES } from 'routes'
 import { STRINGS } from 'constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
-import clsx from 'clsx'
 import { QUOTE_STATUS } from '../../constants/quote'
 
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
-  index: number
 }
-const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.Element => {
+const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -90,12 +88,8 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
   }, [quote])
 
   return (
-    <div
-      className={clsx('grid md:grid-cols-12 px-4 py-2 items-center', {
-        'bg-base-200': index % 2 !== 0,
-      })}
-    >
-      <div className="md:col-span-1 text-xs">
+    <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
+      <div className="md:col-span-1 text-sm">
         <Link
           className="link-primary"
           to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}

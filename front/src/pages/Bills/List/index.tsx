@@ -21,12 +21,11 @@ const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
         <div className="col-span-2">Status</div>
       </div>
       <div className="flex flex-col">
-        {bills.map((bill, index) => (
+        {bills.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
             bill={bill}
-            index={index}
           />
         ))}
       </div>

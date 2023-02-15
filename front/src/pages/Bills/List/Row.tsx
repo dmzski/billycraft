@@ -15,9 +15,8 @@ import { BILL_STATUS } from '../../../constants/bill'
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
-  index: number
 }
-const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Element => {
+const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
   const queryCache = useQueryCache()
   const toast = useToast()
 
@@ -82,12 +81,8 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
   }, [bill])
 
   return (
-    <div
-      className={clsx('grid md:grid-cols-12 px-4 py-2 items-center', {
-        'bg-base-200': index % 2 !== 0,
-      })}
-    >
-      <div className="md:col-span-1 text-xs">
+    <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
+      <div className="md:col-span-1 text-sm">
         <Link className="link-primary" to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}>
           {bill.id}
         </Link>

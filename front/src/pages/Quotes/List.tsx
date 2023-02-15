@@ -19,12 +19,11 @@ const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
         <div className="col-span-2">Status</div>
       </div>
       <div className="flex flex-col">
-        {data.map((quote, index) => (
+        {data.map(quote => (
           <QuoteTableLine
             customer={customers.find(c => c.id === quote.customerId)}
             key={quote.id}
             quote={quote}
-            index={index}
           />
         ))}
       </div>

@@ -10,8 +10,8 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }): JSX.Element => (
       <div className="md:col-span-3">Email</div>
     </div>
     <div>
-      {data.map((customer, index) => (
-        <CustomerTableLine key={customer.id} index={index} customer={customer} />
+      {data.map(customer => (
+        <CustomerTableLine key={customer.id} customer={customer} />
       ))}
     </div>
   </div>

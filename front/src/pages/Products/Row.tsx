@@ -12,7 +12,6 @@ import { ProductApi } from '../../api/ProductApi'
 type ProductTableLineProps = {
   product: Product
   isNew?: boolean
-  index: number
 }
 
 const MODES = {
@@ -21,7 +20,7 @@ const MODES = {
   DELETE: 'DELETE',
 }
 
-const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX.Element => {
+const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Element => {
   const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ)
   const defaultValues = React.useMemo(
     () => ({
@@ -99,9 +98,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
   }, [product, reset])
 
   return (
-    <div
-      className={clsx('grid md:grid-cols-12 px-2 py-3 gap-2', { 'bg-base-200': index % 2 === 0 })}
-    >
+    <div className={clsx('grid md:grid-cols-12 px-4 py-2 gap-2 border-b')}>
       <div className="md:col-span-2">
         <Controller
           name="type"
@@ -193,41 +190,41 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
         {mode === MODES.DELETE && !isNew ? (
           <div className="flex relative gap-2 bg-base-100">
             <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
-            <Button type="button" variant="success" size="md" onClick={onDelete}>
-              <Icon name="check" />
+            <Button type="button" variant="success" square onClick={onDelete}>
+              <Icon name="check" size={20} />
             </Button>
-            <Button type="button" variant="error" size="md" onClick={toggleDeleteMode}>
-              <Icon name="x" />
+            <Button type="button" variant="error" square onClick={toggleDeleteMode}>
+              <Icon name="x" size={20} />
             </Button>
           </div>
         ) : null}
         {mode === MODES.EDIT || isNew ? (
           <div className="flex gap-2">
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <Button type="submit" size="md" variant="success" disabled={!isValid || isSubmitting}>
-                <Icon name="check" />
+              <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
+                <Icon name="check" size={20} />
               </Button>
             </form>
             {product.id ? (
-              <Button type="button" size="md" variant="error" onClick={toggleEditMode}>
-                <Icon name="x" />
+              <Button type="button" square variant="error" onClick={toggleEditMode}>
+                <Icon name="x" size={20} />
               </Button>
             ) : null}
           </div>
         ) : null}
         {mode === MODES.READ && !isNew ? (
           <div className="flex gap-2">
-            <Button type="button" onClick={toggleEditMode} variant="info" size="md">
-              <Icon name="pencil" />
+            <Button type="button" onClick={toggleEditMode} variant="info" square>
+              <Icon name="pencil" size={20} />
             </Button>
             <Button
               type="button"
               disabled={deleteProductMutationState.isLoading}
               onClick={toggleDeleteMode}
-              size="md"
+              square
               variant="error"
             >
-              <Icon name="trash" />
+              <Icon name="trash" size={20} />
             </Button>
           </div>
         ) : null}
