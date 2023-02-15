@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
-import { Button, Input, Select, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
 import { Controller, useForm } from 'react-hook-form'
 import { BillApi } from 'api/BillApi'
 import { Prompt } from 'react-router-dom'
@@ -28,7 +28,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
     control,
     formState: { isValidating, isSubmitting, isDirty },
     reset,
-  } = useForm({
+  } = useForm<BillFormValues>({
     reValidateMode: 'onChange',
     mode: 'onSubmit',
     shouldUseNativeValidation: false,
@@ -104,7 +104,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   }, [reset, bill])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Prompt
         when={isDirty}
         message="Attention ! Certaines modifications ne sont pas enregistrées"
@@ -115,11 +115,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         rules={{ required: true, minLength: 3 }}
         render={({ field, fieldState: { invalid } }) => (
           <Input
-            className="my-4"
             label="Titre"
             disabled={disabled}
             error={invalid}
-            variant="outside"
             placeholder="Titre du devis"
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -161,9 +159,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
         render={({ field, fieldState: { invalid } }) => (
           <Input
             label="TVA (%)"
-            className="my-4"
             disabled={disabled}
-            variant="outside"
             placeholder="TVA en %"
             type="number"
             value={field.value}
@@ -175,65 +171,57 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
           />
         )}
       />
-      <div className="my-4">
-        <BillLineTable control={control} disabled={disabled} />
-      </div>
-      <div className="flex pt-3 flex-row-reverse">
+      <BillLineTable control={control} disabled={disabled} />
+      <div className="flex flex-row-reverse gap-4">
         {!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status ? (
           <Button
-            icon="save"
             size="md"
             type="submit"
             variant="success"
             disabled={isValidating || isSubmitting || disabled}
           >
-            Enregistrer
+            <Icon name="save" />
+            &nbsp; Enregistrer
           </Button>
         ) : null}
         {bill.id && bill.status === BillStatusEnum.DRAFT ? (
           <Button
             size="md"
-            icon="mail"
-            className="mr-1"
             variant="info"
             type="button"
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
           >
-            Envoyer la facture
+            <Icon name="mail" />
+            &nbsp; Envoyer la facture
           </Button>
         ) : null}
         {bill.status === BillStatusEnum.SENT ? (
           <>
             <Button
-              icon="thumb-up"
               size="md"
               type="button"
               variant="success"
-              className="ml-3"
               onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
             >
-              Facture payée
+              <Icon name="thumb-up" />
+              &nbsp; Facture payée
             </Button>
             <Button
-              icon="thumb-down"
               size="md"
               type="button"
               variant="error"
               onClick={updateBillStatus(BillStatusEnum.REFUSED)}
             >
-              Facture refusée
+              <Icon name="thumb-down" />
+              &nbsp; Facture refusée
             </Button>
           </>
         ) : null}
         {bill.status === BillStatusEnum.PAYMENT_PAID ? (
-          <Button
-            size="md"
-            icon="archive"
-            type="button"
-            onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}
-          >
-            Archiver la facture
+          <Button size="md" type="button" onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
+            <Icon name="archive" />
+            &nbsp; Archiver la facture
           </Button>
         ) : null}
       </div>

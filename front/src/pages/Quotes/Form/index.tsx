@@ -1,4 +1,4 @@
-import { Badge, Button, useToast } from '@coco-ui/core'
+import { Badge, Button, Icon, useToast } from '@coco-ui/core'
 import { useState, useCallback, useEffect } from 'react'
 import { useMutation, useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
@@ -80,43 +80,44 @@ const QuoteCreationPage = (): JSX.Element => {
   }, [quote])
 
   return (
-    <div className="w-full px-4">
-      <Button variant="inverted-primary" className="mb-4" size="xs" onClick={history.goBack}>
-        Retourner à la liste des devis
-      </Button>
-      <div className="flex items-center flex-wrap mb-8 border-b">
-        <div className="flex items-end flex-grow mb-4 md:mb-0">
+    <div className="w-full px-4 flex flex-col gap-4">
+      <div>
+        <Button variant="ghost" className="mb-4" size="sm" onClick={history.goBack}>
+          <Icon name="chevron-left" /> &nbsp; Retourner à la liste des devis
+        </Button>
+      </div>
+      <div className="flex items-center flex-wrap border-b pb-2">
+        <div className="flex items-center gap-4 flex-grow mb-4 md:mb-0">
           <h1 className="text-3xl">{!newQuote.id ? 'Nouveau devis' : 'Modifier un devis'}</h1>
           {newQuote.status ? (
-            <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
-              {QUOTE_STATUS[newQuote.status]?.text}
-            </Badge>
+            <Badge variant="ghost">{QUOTE_STATUS[newQuote.status]?.text}</Badge>
           ) : null}
         </div>
-        <Button
-          variant="success"
-          size="sm"
-          className="mb-2 mr-2"
-          onClick={createBill}
-          title="Créer la facture"
-          disabled={
-            createBillFromQuoteState.isLoading || !isQuoteMinimumAccepted(newQuote) || !newQuote.id
-          }
-          icon="document-add"
-        >
-          Créer la facture
-        </Button>
-        <Button
-          disabled={pdfState.isLoading || !newQuote.id}
-          title="Télécharger le PDF"
-          onClick={downloadPdf}
-          variant="primary"
-          className="mb-2"
-          size="sm"
-          icon="document-download"
-        >
-          Télécharger le PDF
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="success"
+            size="md"
+            onClick={createBill}
+            title="Créer la facture"
+            disabled={
+              createBillFromQuoteState.isLoading ||
+              !isQuoteMinimumAccepted(newQuote) ||
+              !newQuote.id
+            }
+          >
+            <Icon name="document-add" />
+            &nbsp; Créer la facture
+          </Button>
+          <Button
+            disabled={pdfState.isLoading || !newQuote.id}
+            title="Télécharger le PDF"
+            onClick={downloadPdf}
+            variant="primary"
+            size="md"
+          >
+            <Icon name="document-download" /> &nbsp; Télécharger le PDF
+          </Button>
+        </div>
       </div>
       <QuoteForm onSubmitSuccess={onSubmitSuccess} quote={newQuote} />
     </div>

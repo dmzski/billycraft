@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useFormatCurrency } from 'hooks/useFormatCurrency'
 import { useFormatDate } from 'hooks/useFormatDate'
 import { ReportOutgoingResponse, ReportResponse } from 'models/Report'
@@ -12,18 +13,19 @@ type ReportOutgoingTableProps = {
 
 type OnlyChildrenProps = {
   children: ReactNode
+  noBorder?: boolean
 }
 
-const DetailsTableRow = ({ children }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableRow = ({ children }: { children: ReactNode }): JSX.Element => (
   <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
-const DetailsTableLeft = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dt className="md:col-span-6 border p-2 bg-primary-50 text-primary-700">{children}</dt>
+const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+  <dt className={clsx('md:col-span-6 p-2 bg-base-300', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
-const DetailsTableRight = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dd className="md:col-span-6 p-2 border border-t-0 md:border-l-0 md:border-t">{children}</dd>
+const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+  <dd className={clsx('md:col-span-6 p-2', noBorder ? '' : 'border-b')}>{children}</dd>
 )
 
 const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps): JSX.Element => {
@@ -40,7 +42,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps): JSX.Element 
   return (
     <div className="flex flex-col gap-4">
       {report.outgoings.map(outgoing => (
-        <article className="md:ml-2 border shadow">
+        <article className="md:ml-2 border rounded">
           <div className="flex flex-col gap-2 md:gap-0">
             <DetailsTableRow>
               <DetailsTableLeft>Nom du livret</DetailsTableLeft>
@@ -66,8 +68,8 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps): JSX.Element 
               <DetailsTableRight>{outgoing.createdBy}</DetailsTableRight>
             </DetailsTableRow>
             <DetailsTableRow>
-              <DetailsTableLeft>Total TTC</DetailsTableLeft>
-              <DetailsTableRight>{formatCurrency(getTotal(outgoing))}</DetailsTableRight>
+              <DetailsTableLeft noBorder>Total TTC</DetailsTableLeft>
+              <DetailsTableRight noBorder>{formatCurrency(getTotal(outgoing))}</DetailsTableRight>
             </DetailsTableRow>
           </div>
         </article>

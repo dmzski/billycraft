@@ -91,11 +91,13 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
 
   return (
     <div
-      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-base-200': index % 2 === 0 })}
+      className={clsx('grid md:grid-cols-12 px-4 py-2 items-center', {
+        'bg-base-200': index % 2 !== 0,
+      })}
     >
       <div className="md:col-span-1 text-xs">
         <Link
-          className="text-primary-700 underline font-bold"
+          className="link-primary"
           to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}
         >
           {quote.id}
@@ -114,12 +116,15 @@ const QuoteTableLine = ({ quote, customer, index }: QuoteTableLineProps): JSX.El
           <Button>{getStatus}</Button>
           <Dropdown.Content>
             {getNextStatuses().map(s => (
-              <Button key={s.enum} onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}>
+              <Dropdown.ButtonItem
+                key={s.enum}
+                onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
+              >
                 <div className="flex items-center">
                   <Icon className="mr-2" name={s.icon as IconName} />
                   <span>{s.text}</span>
                 </div>
-              </Button>
+              </Dropdown.ButtonItem>
             ))}
           </Dropdown.Content>
         </Dropdown>

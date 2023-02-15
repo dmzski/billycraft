@@ -1,4 +1,4 @@
-import { Button, Loader } from '@coco-ui/core'
+import { Button, Icon, Loader } from '@coco-ui/core'
 import { OutgoingApi } from 'api/OutgoingApi'
 import { useQuery } from 'react-query'
 import { Link, useParams } from 'react-router-dom'
@@ -17,32 +17,21 @@ const Details = (): JSX.Element => {
 
   return (
     <>
-      <div className="grid md:grid-cols-12 md:items-center gap-2 mb-2 md:mb-4">
+      <div className="flex md:justify-between flex-col md:flex-row md:items-center gap-4 mb-4">
         <div className="md:col-span-11">
           <Link to={OUTGOING_ROUTES.routes.LIST.path}>
-            <Button
-              type="button"
-              className="md:w-auto w-full"
-              variant="inverted-primary"
-              icon="arrow-left"
-              iconSize={12}
-              size="xs"
-            >
-              Retourner à la liste des livrets
+            <Button type="button" variant="ghost" size="xs">
+              <Icon name="arrow-left" size={12} />
+              &nbsp; Retourner à la liste des livrets
             </Button>
           </Link>
         </div>
         {outgoing ? (
           <div>
             <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
-              <Button
-                className="w-full md:w-auto"
-                size="xs"
-                iconSize={16}
-                variant="info"
-                icon="pencil"
-              >
-                Modifier
+              <Button variant="info">
+                <Icon name="pencil" size={16} />
+                &nbsp; Modifier
               </Button>
             </Link>
           </div>

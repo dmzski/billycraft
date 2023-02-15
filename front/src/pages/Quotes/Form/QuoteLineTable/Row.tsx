@@ -5,6 +5,7 @@ import { useMemo, useRef } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
+import { QuoteFormValues } from '../Form'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
@@ -12,7 +13,7 @@ type QuoteLineTableLineProps = {
   provided?: DraggableProvided
   snapshot?: DraggableStateSnapshot
   index: number
-  control: Control
+  control: Control<QuoteFormValues>
 }
 const QuoteLineTableLine = ({
   deleteLine,
@@ -41,7 +42,7 @@ const QuoteLineTableLine = ({
   })
 
   const priceTTC = useMemo(() => {
-    if (Number.isNaN(price)) {
+    if (Number.isNaN(price) || !price) {
       return 0
     }
     const computedTva = Number(tva) || 0
@@ -50,7 +51,7 @@ const QuoteLineTableLine = ({
   }, [price, tva])
 
   const totalTTC = useMemo(() => {
-    if (Number.isNaN(quantity)) {
+    if (Number.isNaN(quantity) || !quantity) {
       return 0
     }
 
@@ -61,7 +62,7 @@ const QuoteLineTableLine = ({
     <div
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...provided?.draggableProps}
-      className="shadow bg-background grid md:grid-cols-12 mb-2 p-2 gap-2"
+      className="bg-base-100 grid md:grid-cols-12 mb-2 p-2 gap-2"
       ref={provided?.innerRef}
     >
       <div className="flex md:col-span-2">
@@ -87,7 +88,6 @@ const QuoteLineTableLine = ({
                   field.ref(node)
                   typeRef.current = node
                 }}
-                className="z-10"
                 options={Object.values(LINE_TYPE).map(type => ({
                   value: type.enum,
                   label: type.name,
@@ -99,110 +99,106 @@ const QuoteLineTableLine = ({
           />
         </div>
       </div>
-      <div className="flex items-center md:col-span-3">
-        <Controller
-          name={`lines.${index}.name`}
-          rules={{ required: true }}
-          defaultValue=""
-          control={control}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              required
-              placeholder="Nom"
-              className="w-full"
-              disabled={disabled}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              name={field.name}
-              error={invalid}
-              ref={node => {
-                field.ref(node)
-                nameRef.current = node
-              }}
-            />
-          )}
-        />
-      </div>
-      <div className="flex items-center md:col-span-3">
-        <Controller
-          name={`lines.${index}.description`}
-          control={control}
-          render={({ field }) => (
-            <TextArea
-              placeholder="Description"
-              rows={1}
-              className="w-full resize-y"
-              disabled={disabled}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={node => {
-                field.ref(node)
-                descriptionRef.current = node
-              }}
-            />
-          )}
-        />
-      </div>
-      <div className="flex items-center md:col-span-1">
-        <Controller
-          defaultValue={0}
-          name={`lines.${index}.quantity`}
-          control={control}
-          render={({ field }) => (
-            <Input
-              disabled={disabled}
-              className="text-right w-full"
-              placeholder="Quantité"
-              type="number"
-              step={0.01}
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={event => {
-                field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                field.onBlur()
-              }}
-              ref={node => {
-                field.ref(node)
-                quantityRef.current = node
-              }}
-            />
-          )}
-        />
-      </div>
-      <div className="flex items-center md:col-span-1">
-        <Controller
-          defaultValue={0}
-          name={`lines.${index}.price`}
-          control={control}
-          render={({ field }) => (
-            <Input
-              disabled={disabled}
-              className="text-right w-full"
-              placeholder="Prix"
-              type="number"
-              step={0.01}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={event => {
-                field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                field.onBlur()
-              }}
-              ref={node => {
-                field.ref(node)
-                priceRef.current = node
-              }}
-            />
-          )}
-        />
-      </div>
+      <Controller
+        name={`lines.${index}.name`}
+        rules={{ required: true }}
+        defaultValue=""
+        control={control}
+        render={({ field, fieldState: { invalid } }) => (
+          <Input
+            required
+            placeholder="Nom"
+            className="md:col-span-3"
+            disabled={disabled}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            name={field.name}
+            error={invalid}
+            ref={node => {
+              field.ref(node)
+              nameRef.current = node
+            }}
+          />
+        )}
+      />
+      <Controller
+        name={`lines.${index}.description`}
+        control={control}
+        render={({ field }) => (
+          <TextArea
+            placeholder="Description"
+            className="md:col-span-3"
+            rows={1}
+            disabled={disabled}
+            value={field.value ?? ''}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            name={field.name}
+            ref={node => {
+              field.ref(node)
+              descriptionRef.current = node
+            }}
+          />
+        )}
+      />
+      <Controller
+        defaultValue={0}
+        name={`lines.${index}.quantity`}
+        control={control}
+        render={({ field }) => (
+          <Input
+            disabled={disabled}
+            className="md:col-span-1"
+            placeholder="Quantité"
+            type="number"
+            step={0.01}
+            name={field.name}
+            value={field.value ?? ''}
+            onChange={field.onChange}
+            onBlur={event => {
+              field.onChange(Number((event.target as HTMLInputElement).value) || 0)
+              field.onBlur()
+            }}
+            ref={node => {
+              field.ref(node)
+              quantityRef.current = node
+            }}
+          />
+        )}
+      />
+      <Controller
+        defaultValue={0}
+        name={`lines.${index}.price`}
+        control={control}
+        render={({ field }) => (
+          <Input
+            className="md:col-span-1"
+            disabled={disabled}
+            placeholder="Prix"
+            type="number"
+            step={0.01}
+            value={field.value ?? ''}
+            onChange={field.onChange}
+            onBlur={event => {
+              field.onChange(Number((event.target as HTMLInputElement).value) || 0)
+              field.onBlur()
+            }}
+            ref={node => {
+              field.ref(node)
+              priceRef.current = node
+            }}
+          />
+        )}
+      />
       <div className="flex items-center">{formatPrice(priceTTC)}</div>
       <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
-        {!disabled ? <Button variant="error" icon="trash" onClick={deleteLine} /> : null}
+        {!disabled ? (
+          <Button variant="error" onClick={deleteLine}>
+            <Icon name="trash" />
+          </Button>
+        ) : null}
       </div>
     </div>
   )

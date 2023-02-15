@@ -83,13 +83,12 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
 
   return (
     <div
-      className={clsx('grid md:grid-cols-12 p-2 items-center', { 'bg-base-200': index % 2 !== 0 })}
+      className={clsx('grid md:grid-cols-12 px-4 py-2 items-center', {
+        'bg-base-200': index % 2 !== 0,
+      })}
     >
       <div className="md:col-span-1 text-xs">
-        <Link
-          className="text-primary-700 underline font-bold"
-          to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}
-        >
+        <Link className="link-primary" to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}>
           {bill.id}
         </Link>
       </div>
@@ -106,12 +105,15 @@ const BillTableLine = ({ bill, customer, index }: BillTableLineProps): JSX.Eleme
           <Button>{getStatus}</Button>
           <Dropdown.Content>
             {getNextStatuses().map(s => (
-              <Button key={s.enum} onClick={updateBillStatus(s.enum as BillStatusEnum)}>
+              <Dropdown.ButtonItem
+                key={s.enum}
+                onClick={updateBillStatus(s.enum as BillStatusEnum)}
+              >
                 <div className="flex items-center">
                   <Icon className="mr-2" name={s.icon as IconName} />
                   <span>{s.text}</span>
                 </div>
-              </Button>
+              </Dropdown.ButtonItem>
             ))}
           </Dropdown.Content>
         </Dropdown>

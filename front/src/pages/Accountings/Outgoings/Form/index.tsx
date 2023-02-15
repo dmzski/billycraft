@@ -76,7 +76,6 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
             error={invalid}
             required
             label="Nom du livret"
-            variant="outside"
           />
         )}
       />
@@ -107,7 +106,6 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
               error={invalid}
               required
               label="Période du livret"
-              variant="outside"
               type="month"
               disabled={disabledFields?.includes(field.name)}
             />

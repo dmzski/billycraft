@@ -72,7 +72,7 @@ const SupplierModalForm = ({
   return (
     <Modal disclosure={disclosure}>
       <div className="w-full pb-2">
-        <div className="flex border-b px-2 pb-2 mb-4">
+        <div className="flex border-b px-2 pb-2 mb-4 pr-6">
           <h3 className="flex-grow text-xl">
             {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
           </h3>

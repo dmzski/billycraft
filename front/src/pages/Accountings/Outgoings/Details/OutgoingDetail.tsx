@@ -16,11 +16,11 @@ const DetailsTableRow = ({ children }: OnlyChildrenProps): JSX.Element => (
 )
 
 const DetailsTableLeft = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dt className="md:col-span-6 border p-2 bg-primary-50 text-primary-700">{children}</dt>
+  <dt className="md:col-span-6 border-b p-4 bg-base-200">{children}</dt>
 )
 
 const DetailsTableRight = ({ children }: OnlyChildrenProps): JSX.Element => (
-  <dd className="md:col-span-6 p-2 border border-t-0 md:border-l-0 md:border-t">{children}</dd>
+  <dd className="md:col-span-6 p-4 border-b">{children}</dd>
 )
 
 type SupplierDetailRowProps = {
@@ -73,7 +73,6 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps): JSX.Element => {
   return (
     <div>
       <section className="md:pl-2">
-        <h2 className="text-lg mb-2">Vue d&apos;ensemble</h2>
         <div className="md:pl-2 flex flex-col gap-2 md:gap-0">
           <DetailsTableRow>
             <DetailsTableLeft>Nom du livret</DetailsTableLeft>

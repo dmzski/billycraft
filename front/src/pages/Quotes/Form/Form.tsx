@@ -1,4 +1,4 @@
-import { Button, Input, Select, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
 import { useMemo, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,9 +9,10 @@ import { STRINGS } from 'constants/strings'
 import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
 import QuoteLineTable from './QuoteLineTable'
 
-type QuoteFormValues = Omit<Quote, 'lines'> & {
+export type QuoteFormValues = Omit<Quote, 'lines'> & {
   lines: Array<QuoteLine & { id: string }>
 }
+
 const defaultQuote = {} as Partial<QuoteFormValues>
 type QuoteFormProps = {
   quote: Quote
@@ -25,7 +26,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     control,
     formState: { isValidating, isSubmitting, isDirty },
     reset,
-  } = useForm({
+  } = useForm<QuoteFormValues>({
     shouldFocusError: true,
     defaultValues: defaultQuote,
     mode: 'onSubmit',
@@ -100,7 +101,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   }, [reset, quote])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Prompt
         when={isDirty}
         message="Attention ! Certaines modifications ne sont pas enregistrées"
@@ -111,11 +112,9 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         rules={{ required: true, minLength: 3 }}
         render={({ field, fieldState: { invalid } }) => (
           <Input
-            className="my-4"
             label="Titre"
             disabled={disabled}
             error={invalid}
-            variant="outside"
             placeholder="Titre du devis"
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -157,9 +156,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
         render={({ field, fieldState: { invalid } }) => (
           <Input
             label="TVA (%)"
-            className="my-4"
             disabled={disabled}
-            variant="outside"
             placeholder="TVA en %"
             type="number"
             value={field.value}
@@ -171,14 +168,11 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
           />
         )}
       />
-      <div className="my-4">
-        <QuoteLineTable control={control} disabled={disabled} />
-      </div>
+      <QuoteLineTable control={control} disabled={disabled} />
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end gap-4">
         {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
           <Button
-            className="mr-4"
             variant="info"
             size="md"
             type="button"
@@ -204,22 +198,21 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
               size="md"
               variant="success"
               type="button"
-              icon="thumb-up"
-              className="mr-4"
               onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
               disabled={isUpdatingStatus}
             >
-              Devis accepté
+              <Icon name="thumb-up" />
+              &nbsp; Devis accepté
             </Button>
             <Button
               size="md"
               variant="error"
               type="button"
-              icon="thumb-down"
               onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
               disabled={isUpdatingStatus}
             >
-              Devis refusé
+              <Icon name="thumb-down" />
+              &nbsp; Devis refusé
             </Button>
           </>
         ) : null}
@@ -228,45 +221,42 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             <Button
               size="md"
               variant="secondary"
-              className="mr-4"
-              icon="document"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
               disabled={isUpdatingStatus}
             >
-              Remettre en brouillon
+              <Icon name="document" /> &nbsp; Remettre en brouillon
             </Button>
             <Button
               size="md"
-              icon="currency-euro"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
               disabled={isUpdatingStatus}
             >
-              Demander un accompte
+              <Icon name="currency-euro" /> &nbsp; Demander un accompte
             </Button>
           </>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
           <Button
             size="md"
-            icon="check"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
             disabled={isUpdatingStatus}
           >
-            Accompte payé
+            <Icon name="check" />
+            &nbsp; Accompte payé
           </Button>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID ? (
           <Button
             size="md"
-            icon="archive"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
             disabled={isUpdatingStatus}
           >
-            Archiver le devis
+            <Icon name="archive" />
+            &nbsp; Archiver le devis
           </Button>
         ) : null}
       </div>

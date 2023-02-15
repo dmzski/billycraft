@@ -1,4 +1,4 @@
-import { Badge, Button, useToast } from '@coco-ui/core'
+import { Badge, Button, Icon, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
 import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
@@ -56,15 +56,18 @@ const BillFormPage = (): JSX.Element => {
   }, [bill])
 
   return (
-    <div className="w-full">
-      <Button variant="inverted-primary" className="mb-4" size="xs" onClick={history.goBack}>
-        Retourner à la liste des factures
-      </Button>
-      <div className="flex items-center flex-wrap mb-8 border-b">
-        <div className="flex items-end flex-grow mb-4 md:mb-0">
+    <div className="w-full flex flex-col gap-4">
+      <div>
+        <Button variant="ghost" onClick={history.goBack}>
+          <Icon name="chevron-left" />
+          &nbsp; Retourner à la liste des factures
+        </Button>
+      </div>
+      <div className="flex items-center flex-wrap border-b pb-2">
+        <div className="flex items-center flex-grow gap-2">
           <h1 className="text-3xl">{!newBill.id ? 'Nouvelle facture' : 'Modifier une facture'}</h1>
           {newBill.status ? (
-            <Badge variant="outline" className="text-xs ml-2 my-2 px-2">
+            <Badge variant="info" size="sm">
               {BILL_STATUS[newBill.status]?.text}
             </Badge>
           ) : null}
@@ -75,11 +78,9 @@ const BillFormPage = (): JSX.Element => {
             title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
-            className="mb-1"
-            size="sm"
-            icon="document-download"
           >
-            Télécharger le PDF
+            <Icon name="document-download" />
+            &nbsp; Télécharger le PDF
           </Button>
         ) : null}
       </div>

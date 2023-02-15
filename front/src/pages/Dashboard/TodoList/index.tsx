@@ -91,14 +91,14 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
   }, [])
 
   return (
-    <div className="border rounded">
-      <div className="mb-2 px-2 py-4 grid md:grid-cols-12 bg-primary-content text-primary-700 rounded-t">
+    <div className="border rounded flex flex-col">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-base-300 rounded-t ">
         <div className="md:col-span-2">Crée le</div>
         <div className="md:col-span-2">Crée par</div>
         <div className="md:col-span-4">Description</div>
         <div className="md:col-span-4" />
       </div>
-      <form className="px-2 flex mb-4 justify-between" onSubmit={handleSubmit(onSubmit)}>
+      <form className="p-2 flex justify-between gap-4" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="description"
           control={control}
@@ -107,7 +107,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           render={({ field, fieldState }) => (
             <Input
               type="text"
-              className="mr-4 flex-grow"
+              className="flex-grow"
               placeholder="Nouveau todo"
               name={field.name}
               onChange={field.onChange}

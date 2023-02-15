@@ -13,7 +13,7 @@ const ReportRow = ({ report }: ReportRowProps): JSX.Element => {
     <div className="grid md:grid-cols-12 p-2 border-t">
       <div className="md:col-span-3">
         <Link
-          className="text-primary-700 font-semibold underline"
+          className="link-primary"
           to={injectIdInPath(REPORT_ROUTES.routes.DETAILS.path, report.id)}
         >
           {report.name}
@@ -31,7 +31,7 @@ type ListProps = {
 }
 const List = ({ reports }: ListProps): JSX.Element => (
   <div className="flex flex-col border rounded">
-    <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-primary-50 text-primary-700">
+    <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-base-300">
       <div className="md:col-span-3">Nom</div>
       <div className="md:col-span-3">Date de début</div>
       <div className="md:col-span-3">Date de fin</div>

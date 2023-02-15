@@ -1,6 +1,8 @@
-import { Button, Icon, Link } from '@coco-ui/core'
+import { Button, Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { useKeycloak } from '@react-keycloak/web'
+import clsx from 'clsx'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Route, ROUTES } from 'routes'
 import MenuItem from './MenuItem'
@@ -20,23 +22,36 @@ const menuRoutes = [
 type MenuProps = {
   route: Route
 }
-const Menu = ({ route }: MenuProps): JSX.Element => (
-  <>
-    <li className="menu-title mt-2">
-      <span className="flex items-center">
-        {route.icon ? <Icon name={route.icon} className="mr-1" /> : null}
+const Menu = ({ route }: MenuProps): JSX.Element => {
+  const [open, setOpen] = useState(false)
+
+  const handleOpen = () => {
+    setOpen(current => !current)
+  }
+  return (
+    <li className={clsx('collapse collapse-arrow flex', open ? 'collapse-open' : 'collapse-close')}>
+      <button
+        onClick={handleOpen}
+        type="button"
+        className="appearance-none collapse-title flex items-center gap-6 min-h-0"
+      >
+        {route.icon ? <Icon name={route.icon} /> : null}
         {route.title}
-      </span>
+      </button>
+      <div className="collapse-content bg-base-200 flex p-0">
+        <ul className="menu flex-grow">
+          {Object.values(route.routes ?? {}).map(subRoute => (
+            <li>
+              <NavLink activeClassName="active" key={subRoute.path} to={subRoute.path}>
+                {subRoute.title}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
     </li>
-    {Object.values(route.routes ?? {}).map(subRoute => (
-      <li className="bg-base-200">
-        <NavLink activeClassName="active" key={subRoute.path} to={subRoute.path}>
-          {subRoute.title}
-        </NavLink>
-      </li>
-    ))}
-  </>
-)
+  )
+}
 
 const SideBarMenu = (): JSX.Element => {
   const { keycloak } = useKeycloak()

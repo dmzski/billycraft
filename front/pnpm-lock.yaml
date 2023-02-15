@@ -8,7 +8,7 @@ specifiers:
   '@babel/preset-react': ^7.18.6
   '@babel/preset-typescript': ^7.18.6
   '@babel/runtime': ^7.20.13
-  '@coco-ui/core': ^1.26.0
+  '@coco-ui/core': ^1.27.1
   '@commitlint/cli': ^12.1.4
   '@commitlint/config-conventional': ^12.1.4
   '@heroicons/react': ^1.0.6
@@ -80,7 +80,7 @@ specifiers:
   webpack-dev-server: ^4.11.1
 
 dependencies:
-  '@coco-ui/core': 1.26.0_tgiqhocgbnh3nhtnyipjhwlns4
+  '@coco-ui/core': 1.27.1_tgiqhocgbnh3nhtnyipjhwlns4
   '@heroicons/react': 1.0.6_react@17.0.2
   '@react-hook/media-query': 1.1.1_react@17.0.2
   '@react-keycloak/web': 3.4.0_oj6525sqiagdbsuhtp2yjajx2m
@@ -1582,8 +1582,8 @@ packages:
       minimist: 1.2.8
     dev: false
 
-  /@coco-ui/core/1.26.0_tgiqhocgbnh3nhtnyipjhwlns4:
-    resolution: {integrity: sha512-ONHdOmAWPyGGQb/RbYjyPqcb5tLFEI7YLi5sl2MWObrEo2+EJ903TrUv1Q3EUr6XinBhtRy29RVoOW2a5sVPyA==}
+  /@coco-ui/core/1.27.1_tgiqhocgbnh3nhtnyipjhwlns4:
+    resolution: {integrity: sha512-nHELOX7LPv0oq3ZXEz0zu1PlUH2rokcU3l6QBM9ory1/ir5F9/WsqsWTxWfeQuB4+nzlfxKT7GetHFYfGHnPEg==}
     peerDependencies:
       '@heroicons/react': ^1.0.1
       react: ^17.0.2

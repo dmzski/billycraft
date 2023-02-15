@@ -7,7 +7,7 @@ type ListProps = {
 }
 const List = ({ data }: ListProps): JSX.Element => (
   <div>
-    <div className="grid sm:grid-cols-12 gap-4 text-primary-700 bg-primary-50 p-4 rounded-t">
+    <div className="grid sm:grid-cols-12 gap-4 bg-base-200 p-4 rounded-t">
       <div className="col-span-3">Nom</div>
       <div className="col-span-3">Date de début</div>
       <div className="col-span-3">Date de fin</div>

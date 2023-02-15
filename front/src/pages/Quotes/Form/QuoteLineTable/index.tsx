@@ -1,4 +1,4 @@
-import { Button, Select } from '@coco-ui/core'
+import { Button, Icon, Select } from '@coco-ui/core'
 import { ValueType } from '@coco-ui/core/dist/components/Select'
 import { ProductApi } from 'api/ProductApi'
 import { LineTypeEnum } from 'models/LineTypeEnum'
@@ -9,6 +9,7 @@ import { Control, useFieldArray } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'
+import { QuoteFormValues } from '../Form'
 
 const defaultLine = {
   description: '',
@@ -23,7 +24,7 @@ const QuoteLineTable = ({
   control,
 }: {
   disabled?: boolean
-  control: Control
+  control: Control<QuoteFormValues>
 }): JSX.Element => {
   const productsQuery = useQuery('products', ProductApi.findAll, {
     refetchOnWindowFocus: false,
@@ -90,90 +91,79 @@ const QuoteLineTable = ({
   }
 
   return (
-    <div className="border p-2 rounded">
-      {!disabled ? (
-        <div className="my-4 flex items-end">
-          <Select
-            label="Ajouter un produit existant"
-            tabIndex={0}
-            className="flex-grow"
-            name="existing-product"
-            id="existing-product"
-            options={productOptions}
-            isLoading={productsQuery.isLoading}
-            isSearchable
-            placeholder="Nom du produit"
-            value={productIdSelected}
-            onChange={onProductSelectedChange}
-          />
-          <Button
-            onClick={addExistingProductSelected}
-            type="button"
-            className="py-2 ml-4 w-1/6"
-            variant="primary"
-          >
-            Ajouter
-          </Button>
+    <div className="flex flex-col gap-4 border p-4 rounded">
+      <div>
+        <div className="rounded bg-base-300 grid md:grid-cols-12 gap-2 p-4 mb-1">
+          <div className="pl-4 md:col-span-2">Type</div>
+          <div className="md:col-span-3">Nom&nbsp;*</div>
+          <div className="md:col-span-3">Description</div>
+          <div className="md:col-span-1">Quantité</div>
+          <div className="md:col-span-1">Prix HT</div>
+          <div className="md:col-span-1">Prix TTC</div>
+          <div className="md:col-span-1">Sous total</div>
         </div>
-      ) : null}
-      <div className="rounded bg-primary-50 text-primary-700 grid md:grid-cols-12 gap-2 p-4 mb-1">
-        <div className="pl-4 md:col-span-2">Type</div>
-        <div className="md:col-span-3">Nom&nbsp;*</div>
-        <div className="md:col-span-3">Description</div>
-        <div className="md:col-span-1">Quantité</div>
-        <div className="md:col-span-1">Prix HT</div>
-        <div className="md:col-span-1">Prix TTC</div>
-        <div className="md:col-span-1">Sous total</div>
-      </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="lines">
-          {droppableProvided => (
-            <div
-              className="flex flex-col"
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              {...droppableProvided.droppableProps}
-              ref={droppableProvided.innerRef}
-              onKeyDown={handleKeyDown}
-              role="row"
-              tabIndex={0}
-            >
-              {fields?.map((line, index) => (
-                <Draggable
-                  key={`draggable-${line.id}`}
-                  draggableId={line.id}
-                  index={index}
-                  isDragDisabled={disabled}
-                >
-                  {provided => (
-                    <QuoteLineTableLine
-                      provided={provided}
-                      key={`${line.id}`}
-                      disabled={disabled}
-                      index={index}
-                      control={control}
-                      deleteLine={() => remove(index)}
-                    />
-                  )}
-                </Draggable>
-              ))}
-              {droppableProvided.placeholder}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="lines">
+            {droppableProvided => (
+              <div
+                className="flex flex-col"
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
+                onKeyDown={handleKeyDown}
+                role="row"
+                tabIndex={0}
+              >
+                {fields?.map((line, index) => (
+                  <Draggable
+                    key={`draggable-${line.id}`}
+                    draggableId={line.id}
+                    index={index}
+                    isDragDisabled={disabled}
+                  >
+                    {provided => (
+                      <QuoteLineTableLine
+                        provided={provided}
+                        key={`${line.id}`}
+                        disabled={disabled}
+                        index={index}
+                        control={control}
+                        deleteLine={() => remove(index)}
+                      />
+                    )}
+                  </Draggable>
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        {!disabled ? (
+          <div className="flex flex-col gap-2">
+            <Button type="button" variant="ghost" block onClick={addLine} disabled={disabled}>
+              <Icon name="plus" />
+              &nbsp; Ajouter une ligne
+            </Button>
+            <div className="grid md:grid-cols-4 items-end gap-4">
+              <Select
+                tabIndex={0}
+                className="md:col-span-3"
+                name="existing-product"
+                id="existing-product"
+                options={productOptions}
+                isLoading={productsQuery.isLoading}
+                isSearchable
+                placeholder="Sélectionner un produit existant"
+                value={productIdSelected}
+                onChange={onProductSelectedChange}
+              />
+              <Button block onClick={addExistingProductSelected} type="button" variant="primary">
+                Ajouter
+              </Button>
             </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {!disabled ? (
-        <Button
-          type="button"
-          variant="inverted-primary"
-          className="w-full mt-4"
-          size="sm"
-          onClick={addLine}
-          disabled={disabled}
-          icon="plus"
-        >
-          Ajouter une ligne
-        </Button>
-      ) : null}
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }

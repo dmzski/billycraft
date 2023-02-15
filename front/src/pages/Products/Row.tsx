@@ -37,7 +37,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
     control,
     formState: { errors, isValid, isSubmitting },
     reset,
-  } = useForm({
+  } = useForm<Product>({
     defaultValues,
     mode: 'all',
     shouldUnregister: true,
@@ -111,7 +111,7 @@ const ProductTableLine = ({ product, isNew, index }: ProductTableLineProps): JSX
               error={invalid}
               value={field.value}
               name={field.name}
-              className=" bg-white"
+              className="flex-grow"
               onChange={type => {
                 field.onChange(type)
               }}
