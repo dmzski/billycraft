@@ -28,9 +28,9 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     reset,
   } = useForm<QuoteFormValues>({
     shouldFocusError: true,
-    defaultValues: defaultQuote,
     mode: 'onSubmit',
     reValidateMode: 'onChange',
+    defaultValues: defaultQuote,
   })
 
   const [updateQuoteStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
@@ -95,7 +95,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   }, [customers, quote.customerId])
 
   useEffect(() => {
-    if (quote) {
+    if (quote?.id) {
       reset(quote)
     }
   }, [reset, quote])

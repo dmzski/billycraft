@@ -3,7 +3,7 @@
   "version": "2.15.0",
   "private": true,
   "dependencies": {
-    "@coco-ui/core": "^1.27.1",
+    "@coco-ui/core": "^1.27.2",
     "@heroicons/react": "^1.0.6",
     "@react-hook/media-query": "^1.1.1",
     "@react-keycloak/web": "^3.4.0",
