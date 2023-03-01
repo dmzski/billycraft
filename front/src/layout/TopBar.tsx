@@ -2,14 +2,11 @@ import { Drawer, Icon } from '@coco-ui/core'
 import * as React from 'react'
 import SideBar from './SideBar'
 
-type MobileLayoutProps = {
-  children: React.ReactNode
-}
-const MobileLayout = ({ children }: MobileLayoutProps): JSX.Element => {
+const TopBar = (): JSX.Element => {
   const [menuOpen, setMenuOpen] = React.useState(false)
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex">
       <div className="bg-white shadow-md flex flex-col fixed w-full top-0 h-10 justify-center px-2">
         <Icon name="menu" role="button" onClick={() => setMenuOpen(current => !current)} />
       </div>
@@ -18,9 +15,8 @@ const MobileLayout = ({ children }: MobileLayoutProps): JSX.Element => {
           <SideBar />
         </div>
       </Drawer>
-      <main className="container mt-14 pb-4 overflow-x-auto h-full px-4">{children}</main>
     </div>
   )
 }
 
-export default MobileLayout
+export default TopBar

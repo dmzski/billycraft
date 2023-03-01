@@ -36,7 +36,7 @@ const PrivateSwitch = (): JSX.Element => {
   return keycloak.authenticated ? (
     <>
       {!user.user ? (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-screen">
           <Loader />
           <span className="ml-3">Chargement de vos données...</span>
         </div>

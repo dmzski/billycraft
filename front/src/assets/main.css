@@ -5776,6 +5776,10 @@ html {
   padding-top: 0px;
 }
 
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
 .pt-12 {
   padding-top: 3rem;
 }
@@ -5794,6 +5798,10 @@ html {
 
 .pt-5 {
   padding-top: 1.25rem;
+}
+
+.pt-64 {
+  padding-top: 16rem;
 }
 
 .text-left {
@@ -6046,10 +6054,6 @@ body,
 .hover\:bg-primary:hover {
   --tw-bg-opacity: 1;
   background-color: hsl(var(--p) / var(--tw-bg-opacity));
-}
-
-.hover\:font-bold:hover {
-  font-weight: 700;
 }
 
 .hover\:text-primary-content:hover {
