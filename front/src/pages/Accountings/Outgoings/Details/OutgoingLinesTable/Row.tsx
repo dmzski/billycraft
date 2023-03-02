@@ -54,7 +54,7 @@ const Row = ({
   return (
     <div
       style={{ backgroundColor: lineColor }}
-      className="p-2 grid grid-cols-1 md:grid-cols-12 items-center gap-4 border-b"
+      className="py-2 px-4 grid grid-cols-1 md:grid-cols-12 items-center gap-4 border-b"
     >
       <div className="md:col-span-2">{supplier?.name ?? 'Divers'}</div>
       <div className="md:col-span-2">{supplierBillReference}</div>

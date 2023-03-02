@@ -61,28 +61,28 @@ const SideBarMenu = (): JSX.Element => {
   }
 
   return (
-    <ul className="menu">
-      {menuRoutes
-        .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
-        .map(route =>
-          !route.routes ? (
-            <MenuItem
-              key={route.path}
-              text={route.title}
-              icon={route.icon as IconName}
-              path={route.path}
-            />
-          ) : (
-            <Menu route={route} />
-          ),
-        )}
-      <li>
-        <Button className="mt-8" variant="error" type="button" outline onClick={logout}>
-          <Icon name="logout" type="outline" />
-          &nbsp; Déconnexion
-        </Button>
-      </li>
-    </ul>
+    <div className="flex flex-col h-full gap-8">
+      <ul className="menu flex-grow">
+        {menuRoutes
+          .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
+          .map(route =>
+            !route.routes ? (
+              <MenuItem
+                key={route.path}
+                text={route.title}
+                icon={route.icon as IconName}
+                path={route.path}
+              />
+            ) : (
+              <Menu route={route} />
+            ),
+          )}
+      </ul>
+      <Button className="rounded-none" block variant="error" type="button" outline onClick={logout}>
+        <Icon name="logout" type="outline" />
+        &nbsp; Déconnexion
+      </Button>
+    </div>
   )
 }
 

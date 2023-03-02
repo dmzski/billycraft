@@ -1,4 +1,4 @@
-import { Button, Input, TextArea, useToast } from '@coco-ui/core'
+import { Button, Icon, Input, TextArea, useToast } from '@coco-ui/core'
 import { CustomerApi } from 'api/CustomerApi'
 import { STRINGS } from 'constants/strings'
 import { useCallback, useEffect } from 'react'
@@ -27,15 +27,15 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
     control,
     formState: { isValid, isSubmitting },
     reset,
-  } = useForm({
+  } = useForm<Partial<Customer>>({
     mode: 'all',
     defaultValues: defaultCustomer,
   })
 
   const onSubmit = useCallback(
-    async (data: Customer) => {
+    async (data: Partial<Customer>) => {
       try {
-        const res = await CustomerApi.createOrUpdate(data)
+        const res = await CustomerApi.createOrUpdate(data as Customer)
         onSubmitSuccess?.(res)
         toast.success(STRINGS.SAVE_SUCCESS)
       } catch {
@@ -70,13 +70,12 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex items-center border-b-2 border-gray-400 pb-3 w-full">
-        <h1 className="ml-4 text-xl flex-grow">
-          {!customer?.id ? 'Nouveau client' : `Modifier un client #${customer.id}`}
-        </h1>
+      <div className="flex items-center justify-between border-b-2 border-base-200 pr-6 pb-2 w-full">
+        <h1 className="ml-4 text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
         {customer?.id ? (
-          <Button variant="error" icon="trash" onClick={tryDelete}>
-            Supprimer
+          <Button variant="error" onClick={tryDelete}>
+            <Icon name="trash" />
+            &nbsp; Supprimer
           </Button>
         ) : null}
       </div>
@@ -88,7 +87,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
           render={({ field, fieldState: { invalid } }) => (
             <Input
               label="Nom"
-              variant="outside"
               placeholder="Nom du client"
               name={field.name}
               value={field.value}
@@ -129,7 +127,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             <Input
               className="mt-3"
               label="Email"
-              variant="outside"
               placeholder="Adresse email"
               name={field.name}
               value={field.value}
@@ -149,7 +146,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             <Input
               className="mt-3"
               label="Téléphone"
-              variant="outside"
               placeholder="Téléphone"
               name={field.name}
               value={field.value}
@@ -169,7 +165,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             <Input
               className="mt-3"
               label="Ville"
-              variant="outside"
               placeholder="Ville"
               name={field.name}
               value={field.value}
@@ -189,7 +184,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             <Input
               className="mt-3"
               label="Code Postal"
-              variant="outside"
               placeholder="Code Postal"
               name={field.name}
               value={field.value}
@@ -209,7 +203,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             <Input
               className="mt-3"
               label="Contact"
-              variant="outside"
               placeholder="Nom complet"
               name={field.name}
               value={field.value}
@@ -221,11 +214,16 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
             />
           )}
         />
-        <div className="mt-3 flex flex-row-reverse">
-          <Button size="md" disabled={!isValid || isSubmitting} type="submit">
-            Enregistrer
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          block
+          className="mt-3"
+          size="md"
+          disabled={!isValid || isSubmitting}
+          type="submit"
+        >
+          Enregistrer
+        </Button>
       </form>
     </div>
   )

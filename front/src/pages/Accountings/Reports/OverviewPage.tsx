@@ -1,5 +1,5 @@
 import { ReportApi } from 'api/ReportApi'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import ReportTable from './components/ReportTable'
 

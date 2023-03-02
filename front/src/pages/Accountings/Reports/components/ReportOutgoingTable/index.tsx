@@ -47,10 +47,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps): JSX.Element 
             <DetailsTableRow>
               <DetailsTableLeft>Nom du livret</DetailsTableLeft>
               <DetailsTableRight>
-                <Link
-                  className="text-lg font-semibold underline text-primary-700"
-                  to={injectIdInPath(OUTGOING_ROUTES.routes.DETAILS.path, outgoing.outgoingId)}
-                >
+                <Link to={injectIdInPath(OUTGOING_ROUTES.routes.DETAILS.path, outgoing.outgoingId)}>
                   {outgoing.name}
                 </Link>
               </DetailsTableRight>

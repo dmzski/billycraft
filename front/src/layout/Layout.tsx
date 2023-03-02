@@ -14,8 +14,8 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
   return (
     <div className="min-h-screen w-screen flex overflow-hidden">
       {!breakpoint.isLg ? <TopBar /> : <SideBar />}
-      <div className={clsx('w-full', breakpoint.isLg ? 'pl-64' : 'pt-10')}>
-        <main className={clsx('w-full flex flex-col h-full', breakpoint.isLg ? 'p-10' : 'p-4')}>
+      <div className={clsx('w-full', breakpoint.isLg ? 'pl-72' : 'pt-10')}>
+        <main className={clsx('w-full flex flex-col h-full', breakpoint.isLg ? 'p-8' : 'p-4')}>
           {children}
         </main>
       </div>

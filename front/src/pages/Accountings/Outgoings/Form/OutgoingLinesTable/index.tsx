@@ -17,13 +17,15 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
 
   const addLine = useCallback(() => {
     append({
+      vat: 0,
+      totalHT: 0,
       line: fields.length + 1,
     })
   }, [fields, append])
 
   return (
     <div className="border rounded">
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 text-primary-700 items-center bg-primary-50 border-b p-4 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-base-300 border-b p-4">
         <div className="col-span-2">Fournisseur *</div>
         <div className="col-span-2">Référence facture *</div>
         <div className="col-span-2">Facture liée</div>
@@ -44,7 +46,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
             <Row key={line.line} index={index} control={control} onDelete={() => remove(index)} />
           ))}
           <div className="mt-4 px-4">
-            <Button type="button" className="w-full" variant="secondary" onClick={addLine}>
+            <Button type="button" className="w-full" variant="ghost" onClick={addLine}>
               Ajouter une ligne
             </Button>
           </div>

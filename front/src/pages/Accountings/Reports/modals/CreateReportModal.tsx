@@ -51,7 +51,7 @@ const CreateReportModal = ({
   }, [isOpen, reset])
 
   return (
-    <Modal onClose={onClose} open={isOpen} size="xs">
+    <Modal onClose={onClose} open={isOpen}>
       <div className="w-full p-2">
         <h3 className="mb-4 text-lg border-b pb-2">Création d&apos;un rapport</h3>
         <form className="grid grid-cols-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -62,7 +62,6 @@ const CreateReportModal = ({
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 label="Nom du rapport"
-                variant="outside"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -78,7 +77,6 @@ const CreateReportModal = ({
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 label="Mois de début"
-                variant="outside"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -95,7 +93,6 @@ const CreateReportModal = ({
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 label="Mois de fin"
-                variant="outside"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

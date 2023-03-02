@@ -5,7 +5,7 @@ import ProductTable from './List'
 import Product from '../../models/Product'
 
 const ProductsPage = (): JSX.Element => {
-  const productsQuery = useQuery('products', ProductApi.findAll, {
+  const productsQuery = useQuery('products', () => ProductApi.findAll(), {
     refetchOnWindowFocus: false,
   })
   return (
@@ -16,19 +16,19 @@ const ProductsPage = (): JSX.Element => {
         ajouter plus rapidement lors de la création de vos factures et devis.
       </p>
       <div className="flex-col justify-center mt-8 items-center">
-        {productsQuery.isLoading && (
+        {productsQuery.isLoading ? (
           <div className="w-full flex justify-center">
             <Loader />
           </div>
-        )}
-        {productsQuery.isError && <div>Une erreur est survenue</div>}
-        {productsQuery.data && (
+        ) : null}
+        {productsQuery.isError ? <div>Une erreur est survenue</div> : null}
+        {productsQuery.data && !productsQuery.isLoading ? (
           <ProductTable
             products={productsQuery.data.sort((a: Product, b: Product) =>
               a.name.localeCompare(b.name),
             )}
           />
-        )}
+        ) : null}
       </div>
     </>
   )

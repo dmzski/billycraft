@@ -30,33 +30,35 @@ const Dashboard = (): JSX.Element => {
           <Badge variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} Tâches à faire</Badge>
         </div>
       </div>
-      <div className="flex items-center">
-        <Icon className="mr-2" name="pencil" />
-        <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
-        <Badge variant="warning" className="hidden md:flex">
-          <Icon size={14} name="exclamation" />
-          &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
-        </Badge>
-      </div>
-      <div className="mt-4 ml-4">
-        <TodoList data={todos} onSubmitSuccess={() => refetch()} />
-      </div>
-      <hr className="my-10" />
-      <div>
-        <div className="flex text-xl mb-4">
-          <Icon name="cash" className="mr-2" />
-          <h2>Factures impayées</h2>
-        </div>
-        {isLoading ? (
-          <div className="flex justify-center">
-            <Loader />
+      <div className="flex flex-col gap-10">
+        <section className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <Icon name="pencil" />
+            <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
+            <Badge variant="warning" className="hidden md:flex">
+              <Icon size={14} name="exclamation" />
+              &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
+            </Badge>
           </div>
-        ) : null}
-        {!isLoading && notPaid && notPaid.length > 0 ? (
-          <NotPaidBillList data={notPaid} />
-        ) : (
-          <div>Aucun impayé</div>
-        )}
+          <TodoList data={todos} onSubmitSuccess={() => refetch()} />
+        </section>
+        <hr />
+        <section className="flex flex-col gap-4">
+          <div className="flex text-xl gap-2">
+            <Icon name="cash" />
+            <h2>Factures impayées</h2>
+          </div>
+          {isLoading ? (
+            <div className="flex justify-center">
+              <Loader />
+            </div>
+          ) : null}
+          {!isLoading && notPaid && notPaid.length > 0 ? (
+            <NotPaidBillList data={notPaid} />
+          ) : (
+            <div>Aucun impayé</div>
+          )}
+        </section>
       </div>
     </div>
   )

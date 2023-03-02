@@ -28,14 +28,10 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
     },
   })
 
-  const { data: suppliers, isLoading: isLoadingSuppliers } = useQuery(
-    ['suppliers'],
-    SupplierApi.findAll,
-    {
-      refetchOnWindowFocus: false,
-      staleTime: 6000,
-    },
-  )
+  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
+    refetchOnWindowFocus: false,
+    staleTime: 6000,
+  })
   const totalHT = useWatch({
     name: `lines.${index}.totalHT`,
     control,
@@ -81,7 +77,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
   return (
     <div
       style={{ backgroundColor: lineColor }}
-      className="p-2 grid grid-cols-1 sm:grid-cols-12 items-center gap-4 border-b"
+      className="px-4 py-2 grid grid-cols-1 sm:grid-cols-12 items-center gap-4 border-b"
     >
       <div className="col-span-2">
         <Controller
@@ -102,7 +98,6 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
                 vatController.field.onChange(vatFound ?? 0)
               }}
               options={supplierOptions}
-              isLoading={isLoadingSuppliers}
               ref={field.ref}
               error={invalid}
               disabled={disabled}
