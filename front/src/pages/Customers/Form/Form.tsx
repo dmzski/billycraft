@@ -107,7 +107,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
               rows={4}
               className="mt-3"
               label="Adresse"
-              variant="outside"
+              
               placeholder="Adresse du client"
               name={field.name}
               value={field.value}

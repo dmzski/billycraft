@@ -2,8 +2,8 @@ import Company from 'models/Company'
 import MyCompagnyForm from './Forms/MyCompagnyForm'
 
 const Onboarding = (): JSX.Element => (
-  <div className="flex items-center justify-center from-primary-500 to-primary-300 bg-gradient-to-t min-h-screen min-w-full">
-    <div className="bg-white flex items-center flex-col p-5 rounded-lg shadow-2xl">
+  <div className="flex items-center justify-center from-primary to-accent bg-gradient-to-b min-h-screen min-w-full">
+    <div className="bg-white flex items-center flex-col p-5 my-5 rounded-lg shadow-2xl">
       <div className="text-4xl pb-3">
         <h1>Bienvenue dans votre espace 🚀</h1>
       </div>

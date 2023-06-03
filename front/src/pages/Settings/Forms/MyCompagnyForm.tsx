@@ -103,7 +103,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             <TextArea
               id="address"
               rows={3}
-              variant="outside"
+              
               label="Adresse"
               placeholder="Adresse"
               name={field.name}

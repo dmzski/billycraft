@@ -2,7 +2,7 @@ package enums
 
 type QuoteStatus string
 
-var QuoteEnums = map[string]QuoteStatus{
+var QuoteEnums = map[QuoteStatus]QuoteStatus{
 	"DRAFT":        "DRAFT",
 	"SENT":         "SENT",
 	"REFUSED":      "REFUSED",

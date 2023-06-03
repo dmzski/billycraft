@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 DROP TABLE IF EXISTS com_user;
 CREATE TABLE com_user
 (

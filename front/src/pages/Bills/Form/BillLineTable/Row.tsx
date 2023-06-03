@@ -69,7 +69,7 @@ const BillLineTableLine = ({
         <div
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
-          className="items-center flex mr-2"
+          className="items-center flex p-2"
         >
           <Icon name="selector" size={12} />
         </div>
@@ -87,7 +87,7 @@ const BillLineTableLine = ({
                 field.ref(node)
                 typeRef.current = node
               }}
-              className="flex-grow"
+                className='min-w-0'
               options={Object.values(LINE_TYPE).map(type => ({
                 value: type.enum,
                 label: type.name,
@@ -194,7 +194,7 @@ const BillLineTableLine = ({
       <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
-          <Button variant="error" onClick={deleteLine}>
+          <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
             <Icon name="trash" />
           </Button>
         ) : null}

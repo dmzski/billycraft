@@ -2,6 +2,7 @@ import { Badge, Icon, Loader } from '@coco-ui/core'
 import { BillApi } from 'api/BillApi'
 import { TodoApi } from 'api/TodoApi'
 import { useQuery } from 'react-query'
+import { getBillTotal } from 'utils/bill'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
 
@@ -16,6 +17,8 @@ const Dashboard = (): JSX.Element => {
       refetchOnWindowFocus: false,
     },
   )
+
+  const totalNotPaid = notPaid ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100 : 0
 
   const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0
 
@@ -44,9 +47,15 @@ const Dashboard = (): JSX.Element => {
         </section>
         <hr />
         <section className="flex flex-col gap-4">
+          <div className='flex justify-between'>
           <div className="flex text-xl gap-2">
             <Icon name="cash" />
             <h2>Factures impayées</h2>
+          </div>
+          {totalNotPaid > 0 ? (
+          <Badge variant="info">{totalNotPaid} €</Badge>
+
+          ) : null}
           </div>
           {isLoading ? (
             <div className="flex justify-center">

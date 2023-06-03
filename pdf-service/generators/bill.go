@@ -123,11 +123,9 @@ func GenerateBillPDF(b *models.Bill, c *models.Company, bc *models.BillCustomiza
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
-	if b.Tva > 0 {
-		pdf.SetX(left + 135 + 20)
-		pdf.CellFormat(20, 8, "TVA", "1", 0, "C", true, 0, "")
-		pdf.CellFormat(25, 8, tr(fmt.Sprintf("%d", b.Tva)+"%"), "1", 0, "C", false, 0, "")
-	}
+  pdf.SetX(left + 135 + 20)
+  pdf.CellFormat(20, 8, "TVA", "1", 0, "C", true, 0, "")
+  pdf.CellFormat(25, 8, tr(fmt.Sprintf("%d", b.Tva)+"%"), "1", 0, "C", false, 0, "")
 
 	pdf.SetFont("Arial", "B", 10)
 	pdf.Ln(-1)

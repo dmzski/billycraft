@@ -111,7 +111,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={customerController.field.onChange}
             ref={customerController.field.ref}
             label="Client"
-            variant="outside"
+            
             isSearchable
           />
 
@@ -121,7 +121,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={titleController.field.onChange}
             ref={titleController.field.ref}
             label="Titre"
-            variant="outside"
+            
           />
 
           <Select
@@ -131,7 +131,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={billIdController.field.onChange}
             ref={billIdController.field.ref}
             label="Facture"
-            variant="outside"
+            
             isLoading={isLoadingBills}
             isSearchable
           />

@@ -2,7 +2,6 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
-    CREATE EXTENSION "uuid-ossp";
     CREATE USER keycloak WITH PASSWORD 'keycloak';
     CREATE DATABASE keycloak;
     GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;

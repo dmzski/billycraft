@@ -6,6 +6,7 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -30,8 +31,15 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusConflict, "You already have a company")
 	}
 	newCompany := dtos.CompanyRequest{}
-	c.BodyParser(&newCompany)
+  err := c.BodyParser(&newCompany)
+  if err != nil {
+    return fiber.NewError(fiber.StatusBadRequest, "Malformed company")
+  }
 	company := DAO.Create(user.Email, newCompany)
+  log.Println(company)
+  if (company.ID == 0) {
+		return fiber.NewError(fiber.StatusInternalServerError, "Company creation error")
+  }
 	user.CompanyID = &company.ID
 	users.DAO.JoinCompany(user.Email, company.ID)
 	return c.JSON(company)

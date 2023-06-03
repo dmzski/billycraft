@@ -137,7 +137,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             tabIndex={0}
             error={invalid}
             label="Sélectionner un client *"
-            variant="outside"
+            
             id="customer-select"
             name={field.name}
             disabled={disabled}

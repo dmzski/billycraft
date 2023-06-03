@@ -126,7 +126,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
           Ajouter
         </Button>
       </form>
-      {data && data.length === 0 ? <div>Aucune tâche à faire</div> : null}
+      {data && data.length === 0 ? <div className='p-2'>Aucune tâche à faire</div> : null}
       {data && data.length > 0 ? (
         <div className="flex flex-col">
           {data?.map((todo, index) => (

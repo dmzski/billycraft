@@ -69,17 +69,17 @@ const QuoteLineTableLine = ({
         <div
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
-          className="items-center flex mr-2"
+          className="items-center flex p-2"
         >
           <Icon name="selector" size={12} />
         </div>
-        <div className="flex-grow">
           <Controller
             name={`lines.${index}.type`}
             control={control}
             rules={{ required: true }}
             render={({ field, fieldState: { invalid } }) => (
               <Select
+                className='min-w-0'
                 disabled={disabled}
                 error={invalid}
                 value={field.value}
@@ -97,7 +97,6 @@ const QuoteLineTableLine = ({
               />
             )}
           />
-        </div>
       </div>
       <Controller
         name={`lines.${index}.name`}
@@ -195,7 +194,7 @@ const QuoteLineTableLine = ({
       <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
-          <Button variant="error" onClick={deleteLine}>
+          <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
             <Icon name="trash" />
           </Button>
         ) : null}

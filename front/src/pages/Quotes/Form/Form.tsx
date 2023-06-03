@@ -134,16 +134,14 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             tabIndex={0}
             error={invalid}
             label="Sélectionner un client *"
-            variant="outside"
             id="customer-select"
             name={field.name}
-            disabled={disabled}
+            disabled={disabled || !customers}
             onChange={field.onChange}
             options={customerOptions}
             placeholder="Nom du client"
             value={field.value}
             isSearchable
-            isLoading={!customers}
             ref={field.ref}
             required
           />

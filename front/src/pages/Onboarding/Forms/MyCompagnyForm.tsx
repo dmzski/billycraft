@@ -17,7 +17,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     reset,
   } = useForm({
     mode: 'onSubmit',
@@ -53,17 +53,35 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
 
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-      <div className="text-lg border-b mb-4">Informations de mon entreprise</div>
-      <div className="md:pl-2 grid gap-4">
+      <div className="text-xl border-b mb-4">Informations de mon entreprise</div>
+        <div className=' md:pl-2 grid grid-cols-2 gap-x-4 gap-y-2'>
         <Controller
           name="name"
           control={control}
           rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              variant="outside"
-              label="Nom"
-              placeholder="Nom"
+              label="Nom de l'entreprise"
+              placeholder="Mon entreprise"
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={invalid}
+              required
+            />
+          )}
+        />
+        <Controller
+          name="siret"
+          control={control}
+          rules={{required: true}}
+          render={({ field, fieldState: { invalid } }) => (
+            <Input
+              id="siret"
+              label="SIRET"
+              placeholder="SIRET"
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -82,9 +100,10 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             <TextArea
               id="address"
               rows={3}
-              variant="outside"
+              
               label="Adresse"
               placeholder="Adresse"
+              className='col-span-2'
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -95,6 +114,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             />
           )}
         />
+
         <Controller
           name="postalCode"
           control={control}
@@ -102,7 +122,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
-              variant="outside"
               label="Code Postal"
               placeholder="Code Postal"
               name={field.name}
@@ -123,7 +142,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
-              variant="outside"
               label="Ville"
               placeholder="Ville"
               name={field.name}
@@ -143,7 +161,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"
-              variant="outside"
               label="Téléphone"
               placeholder="Téléphone"
               name={field.name}
@@ -163,7 +180,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
-              variant="outside"
               label="Email"
               placeholder="Email"
               name={field.name}
@@ -176,26 +192,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             />
           )}
         />
+        </div>
 
-        <Controller
-          name="siret"
-          control={control}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              id="siret"
-              variant="outside"
-              label="SIRET"
-              placeholder="SIRET"
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              ref={field.ref}
-              error={invalid}
-            />
-          )}
-        />
-      </div>
 
       <div className="flex flex-col gap-4 w-full mt-8">
         <div className="border-b text-lg">Taux d&apos;imposition</div>
@@ -206,7 +204,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Ventes (%)"
                 type="number"
                 step={0.01}
@@ -227,7 +224,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Services (%)"
                 type="number"
                 step={0.01}
@@ -248,7 +244,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                variant="outside"
                 label="Imposition Autres types de service (%)"
                 step={0.01}
                 max={100}
@@ -270,7 +265,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         Vous pourrez télécharger votre logo après la création de l&lsquo;entreprise dans vos
         paramètres
       </div>
-      <Button type="submit" className="w-full primary mt-5" disabled={isSubmitting}>
+      <Button type="submit" className="w-full mt-5" variant='primary' disabled={isSubmitting || !isValid}>
         Enregister
       </Button>
     </form>
