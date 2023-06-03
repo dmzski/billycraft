@@ -10,3 +10,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE DATABASE compta;
     GRANT ALL PRIVILEGES ON DATABASE compta TO compta;
 EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname compta <<-EOSQL
+    CREATE EXTENSION "uuid-ossp";
+EOSQL

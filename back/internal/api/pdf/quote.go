@@ -78,7 +78,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
 	}
 
-  companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
+	companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
 
 	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
@@ -205,11 +205,9 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
-	if quote.Tva != nil && *quote.Tva > 0 {
-		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
-		pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%d", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
-	}
+	pdf.SetX(marginL + cols[0] + cols[1])
+	pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
+	pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
 
 	pdf.SetFont("Arial", "B", 10)
 	pdf.Ln(-1)
