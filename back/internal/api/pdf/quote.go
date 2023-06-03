@@ -70,15 +70,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.SetY(35)
 	pdf.SetX(marginL)
-	companyStr := fmt.Sprintf("%s\n%s\n%s, %s", c.Name, c.Address, c.PostalCode, c.City)
-	if qc.DisplayCompanyEmail {
-		companyStr += fmt.Sprintf("\n%s", c.Email)
-	}
-	if qc.DisplayCompanyPhoneNumber {
-		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
-	}
-
-	companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
+	companyStr := getCompagnyStr(c, qc.DisplayCompanyEmail, qc.DisplayCompanyPhoneNumber)
 
 	pdf.SetY(pdf.GetY() + lineHt)
 	y := pdf.GetY()
@@ -115,11 +107,6 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	addQuoteHeaders(pdf, qc)
 
 	reportTotal := 0.0
-	totalAndTvaHeight := totalAndTvaCellHeight
-
-	if quote.Tva != nil && *quote.Tva > 0 {
-		totalAndTvaHeight *= 2
-	}
 
 	for i, line := range quote.Lines {
 		pdf.SetFont("Arial", "", 10)
@@ -205,9 +192,11 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.SetFillColor(int(rgba.R), int(rgba.G), int(rgba.B))
 
-	pdf.SetX(marginL + cols[0] + cols[1])
-	pdf.CellFormat(20, float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(25, float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
+	if quote.Tva != nil && *quote.Tva > 0 {
+		pdf.SetX(marginL + cols[0] + cols[1])
+		pdf.CellFormat(cols[2], float64(totalAndTvaCellHeight), "TVA", "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
+	}
 
 	pdf.SetFont("Arial", "B", 10)
 	pdf.Ln(-1)

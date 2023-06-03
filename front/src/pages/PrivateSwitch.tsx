@@ -33,8 +33,6 @@ const PrivateSwitch = (): JSX.Element => {
     }
   }, [user, history, keycloak.authenticated])
 
-  console.log(user.user)
-
   return keycloak.authenticated ? (
     <>
       {!user.user ? (

@@ -18,7 +18,7 @@ const Dashboard = (): JSX.Element => {
     },
   )
 
-  const totalNotPaid = notPaid ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100 : 0
+  const totalNotPaid = notPaid && Array.isArray(notPaid) ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100 : 0
 
   const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0
 

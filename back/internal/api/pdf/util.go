@@ -1,7 +1,9 @@
 package pdf
 
 import (
+	"back/internal/lib/models"
 	"errors"
+	"fmt"
 	"image/color"
 )
 
@@ -40,4 +42,19 @@ func parseHexColor(s string) (c color.RGBA, err error) {
 		err = errInvalidFormat
 	}
 	return
+}
+
+func getCompagnyStr(c models.Company, displayCompanyEmail bool, displayCompanyPhoneNumber bool) string {
+
+	companyStr := fmt.Sprintf("%s\n%s\n%s, %s", c.Name, c.Address, c.PostalCode, c.City)
+	if displayCompanyEmail {
+		companyStr += fmt.Sprintf("\n%s", c.Email)
+	}
+	if displayCompanyPhoneNumber {
+		companyStr += fmt.Sprintf("\n%s", c.PhoneNumber)
+	}
+
+  companyStr += fmt.Sprintf("\nSIRET: %s", c.Siret)
+
+  return companyStr
 }

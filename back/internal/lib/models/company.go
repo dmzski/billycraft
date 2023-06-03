@@ -2,7 +2,6 @@ package models
 
 import (
 	"back/internal/lib/dtos"
-	"log"
 	"time"
 
 	"gorm.io/gorm"
@@ -69,7 +68,6 @@ func (c Company) ToDTO() dtos.CompanyResponse {
 }
 
 func (Company) FromDTO(c dtos.CompanyRequest) Company {
-	log.Println(c.AutoMonthReport)
 	return Company{
 		Name:            c.Name,
 		City:            c.City,

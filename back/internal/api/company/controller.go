@@ -6,7 +6,6 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -36,7 +35,6 @@ func create(c *fiber.Ctx) error {
     return fiber.NewError(fiber.StatusBadRequest, "Malformed company")
   }
 	company := DAO.Create(user.Email, newCompany)
-  log.Println(company)
   if (company.ID == 0) {
 		return fiber.NewError(fiber.StatusInternalServerError, "Company creation error")
   }
@@ -48,7 +46,10 @@ func create(c *fiber.Ctx) error {
 func updateMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newCompany := dtos.CompanyRequest{}
-	c.BodyParser(&newCompany)
+  err := c.BodyParser(&newCompany)
+  if err != nil {
+    return fiber.NewError(fiber.StatusBadRequest, "Can't parse company")
+  }
 	if user.CompanyID == nil || user.Role != "ADMIN" {
 		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
 	}
