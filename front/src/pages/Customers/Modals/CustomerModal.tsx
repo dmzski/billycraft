@@ -16,7 +16,12 @@ const CustomerModal = ({ customer, disclosure }: CustomerModalProps): JSX.Elemen
 
   return (
     <Modal disclosure={disclosure}>
-      <CustomerForm customer={customer} onSubmitSuccess={onSubmitSuccess} />
+      {({ close }) => (
+        <CustomerForm customer={customer} onSubmitSuccess={() => {
+          close()
+          onSubmitSuccess()
+        }} />
+      )}
     </Modal>
   )
 }

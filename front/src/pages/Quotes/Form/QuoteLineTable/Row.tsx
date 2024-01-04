@@ -47,7 +47,7 @@ const QuoteLineTableLine = ({
     }
     const computedTva = Number(tva) || 0
 
-    return price * (1 + computedTva / 100)
+    return Math.round(price * (1 + computedTva / 100) * 100) / 100
   }, [price, tva])
 
   const totalTTC = useMemo(() => {

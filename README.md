@@ -2,11 +2,10 @@
 
 ## Prerequisite
 
-- Java 11
-- Node JS : 12.x.x
-- Yarn : 1.19.2
-- Docker :
-- Docker-compose :
+- Go 19
+- Node JS : 20.x.x
+- Pnpm : >= 8
+- Docker
 
 ## Frontend
 
@@ -14,15 +13,15 @@
 
 ```sh
 cd front
-yarn install
-yarn start
+pnpm install
+pnpm start
 ```
 
 ### Next launch
 
 ```
 cd front
-yarn start
+pnpm start
 ```
 
 ### Update from Tailwind.scss
@@ -31,14 +30,14 @@ yarn start
 
 ```sh
 cd front
-yarn watch:css
+pnpm watch:css
 ```
 
 - Build new main.scss
 
 ```sh
 cd front
-yarn build:css
+pnpm build:css
 ```
 
 ## Backend

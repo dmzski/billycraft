@@ -19,9 +19,15 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
     handleSubmit,
     formState: { isSubmitting, isValid },
     reset,
-  } = useForm({
+  } = useForm<Company>({
     mode: 'onSubmit',
-    defaultValues: company,
+    defaultValues: {
+      articlesTax: 0,
+      servicesTax: 0,
+      othersTax: 0,
+      ...company,
+
+    },
   })
 
   const onSubmit = useCallback(
@@ -100,7 +106,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             <TextArea
               id="address"
               rows={3}
-              
+
               label="Adresse"
               placeholder="Adresse"
               className='col-span-2'
@@ -158,6 +164,9 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
         <Controller
           name="phoneNumber"
           control={control}
+          rules={{
+            maxLength: 10,
+          }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"

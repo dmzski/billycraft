@@ -29,7 +29,13 @@ func findAll(c *fiber.Ctx) error {
 
 func updateMe(c *fiber.Ctx) error {
 	newUser := dtos.User{}
-	c.BodyParser(&newUser)
+	err := c.BodyParser(&newUser)
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+			Code:    fiber.ErrBadRequest.Code,
+			Message: "Can't parse user",
+		})
+	}
 	user := c.Locals("user").(models.User)
 	user.FirstName = newUser.FirstName
 	user.LastName = newUser.LastName

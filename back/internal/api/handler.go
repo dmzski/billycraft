@@ -1,7 +1,6 @@
 package api
 
 import (
-	"back/internal/api/appointments"
 	"back/internal/api/billCustomization"
 	"back/internal/api/billEmailCustomization"
 	"back/internal/api/bills"
@@ -40,7 +39,6 @@ func InitApiRoutes(app *fiber.App) {
 	billEmailCustomization.InitRoutes(v1)
 	pdf.InitRoutes(v1)
 	todos.InitRoutes(v1)
-	appointments.InitRoutes(v1)
 	suppliers.InitRoutes(v1)
 	outgoings.InitRoutes(v1)
 
