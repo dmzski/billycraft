@@ -20,7 +20,7 @@ import (
 
 func generateQuotePDF(quote models.Quote) *os.File {
 	var TITLE = QUOTE_TITLE
-  var FOLDER = QUOTES_FOLDER
+	var FOLDER = QUOTES_FOLDER
 	var tva = 0.0
 	var hasVat = quote.Tva != nil && *quote.Tva > 0
 	if hasVat {
@@ -139,7 +139,8 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		linePrice := getLinePrice(line.Price, line.Quantity, tva)
+		priceTTC := fmt.Sprintf("%.2f€", getTTCPrice(line.Price, tva/100))
+		linePrice := getLinePrice(line.Price, line.Quantity, tva/100)
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
@@ -176,6 +177,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 			pdf.SetCellMargin(lineMargin)
 			quantity = ""
 			price = ""
+			priceTTC = ""
 			subtotal = ""
 		}
 
@@ -204,8 +206,8 @@ func generateQuotePDF(quote models.Quote) *os.File {
 			pdf.CellFormat(cols[3], height, tr(subtotal), "", 0, "C", true, 0, "")
 		} else {
 			pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")
-			pdf.CellFormat(cols[2], height, tr(fmt.Sprintf("%.2f€", line.Price)), "", 0, "C", true, 0, "")
 			pdf.CellFormat(cols[3], height, tr(price), "", 0, "C", true, 0, "")
+			pdf.CellFormat(cols[2], height, tr(priceTTC), "", 0, "C", true, 0, "")
 			pdf.CellFormat(cols[4], height, tr(subtotal), "", 0, "C", true, 0, "")
 		}
 
@@ -235,7 +237,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	if hasVat {
 		pdf.SetX(marginL + cols[0] + cols[1] + cols[2])
 		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), VAT_TITLE, "1", 0, "C", true, 0, "")
-		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", *quote.Tva)+"%"), "1", 0, "C", false, 0, "")
+		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", tva)+"%"), "1", 0, "C", false, 0, "")
 	}
 
 	pdf.Ln(-1)

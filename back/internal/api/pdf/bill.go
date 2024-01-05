@@ -20,7 +20,7 @@ import (
 
 func generateBillPDF(bill models.Bill) *os.File {
 	var TITLE = BILL_TITLE
-  var FOLDER = BILLS_FOLDER
+	var FOLDER = BILLS_FOLDER
 	var tva = 0.0
 	var hasVat = bill.Tva != nil && *bill.Tva > 0
 	if hasVat {
@@ -139,7 +139,8 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		linePrice := getLinePrice(line.Price, line.Quantity, tva)
+		priceTTC := fmt.Sprintf("%.2f€", getTTCPrice(line.Price, tva/100))
+		linePrice := getLinePrice(line.Price, line.Quantity, tva/100)
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
@@ -176,6 +177,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 			pdf.SetCellMargin(lineMargin)
 			quantity = ""
 			price = ""
+			priceTTC = ""
 			subtotal = ""
 		}
 
@@ -204,8 +206,8 @@ func generateBillPDF(bill models.Bill) *os.File {
 			pdf.CellFormat(cols[3], height, tr(subtotal), "", 0, "C", true, 0, "")
 		} else {
 			pdf.CellFormat(cols[1], height, quantity, "", 0, "C", true, 0, "")
-			pdf.CellFormat(cols[2], height, tr(fmt.Sprintf("%.2f€", line.Price)), "", 0, "C", true, 0, "")
 			pdf.CellFormat(cols[3], height, tr(price), "", 0, "C", true, 0, "")
+			pdf.CellFormat(cols[2], height, tr(priceTTC), "", 0, "C", true, 0, "")
 			pdf.CellFormat(cols[4], height, tr(subtotal), "", 0, "C", true, 0, "")
 		}
 

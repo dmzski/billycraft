@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"image/color"
+	"math"
 
 	"github.com/jung-kurt/gofpdf"
 )
@@ -23,24 +24,24 @@ var (
 	colsWithoutVat        = []float64{135, 20, 20, 25}
 	totalAndTvaCellHeight = 8.0
 	reportTotalCellWidth  = 40
-  fontSize = 10.0
-  fontFamily = "Arial"
-  QUOTE_TITLE = "DEVIS"
-  BILL_TITLE = "FACTURE"
-  DESIGNATION_TITLE = "Désignation"
-  QUANTITY_TITLE = "Quantité"
-  PRICE_TTC_TITLE = "Prix TTC"
-  PRICE_HT_TITLE = "Prix HT"
-  SUBTOTAL_TITLE = "Sous total"
-  REPORTED_TOTAL_TITLE = "Total reporté"
-  DATE_TITLE = "Date d'émission"
-  REFERENCE_TITLE = "Référence"
-  OBJECT_TITLE = "Objet"
-  FREE_STR = "OFFERT"
-  TOTAL_TITLE = "Total"
-  VAT_TITLE = "TVA"
-  QUOTES_FOLDER = "%s/%d/quotes"
-  BILLS_FOLDER = "%s/%d/bills"
+	fontSize              = 10.0
+	fontFamily            = "Arial"
+	QUOTE_TITLE           = "DEVIS"
+	BILL_TITLE            = "FACTURE"
+	DESIGNATION_TITLE     = "Désignation"
+	QUANTITY_TITLE        = "Quantité"
+	PRICE_TTC_TITLE       = "Prix TTC"
+	PRICE_HT_TITLE        = "Prix HT"
+	SUBTOTAL_TITLE        = "Sous total"
+	REPORTED_TOTAL_TITLE  = "Total reporté"
+	DATE_TITLE            = "Date d'émission"
+	REFERENCE_TITLE       = "Référence"
+	OBJECT_TITLE          = "Objet"
+	FREE_STR              = "OFFERT"
+	TOTAL_TITLE           = "Total"
+	VAT_TITLE             = "TVA"
+	QUOTES_FOLDER         = "%s/%d/quotes"
+	BILLS_FOLDER          = "%s/%d/bills"
 )
 
 func parseHexColor(s string) (c color.RGBA, err error) {
@@ -101,13 +102,10 @@ func sumArrayWithoutDesignation(array []float64) float64 {
 	return result
 }
 
-
-// truncate a float to two levels of precision
-func truncateTwoDecimals(some float64) float64 {
-	return float64(int(some * 100)) / 100
+func roundTwoDecimals(num float64) float64 {
+	ratio := math.Pow(10, float64(2))
+	return math.Round(num*ratio) / ratio
 }
-
-
 
 func addHeaders(pdf gofpdf.Pdf, rgba color.RGBA, cols []float64) {
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
@@ -128,11 +126,9 @@ func addHeaders(pdf gofpdf.Pdf, rgba color.RGBA, cols []float64) {
 		pdf.CellFormat(cols[3], 10, tr(SUBTOTAL_TITLE), "1", 0, "C", true, 0, "")
 	}
 	pdf.Ln(-1)
-  pdf.SetFillColor(currentR, currentG, currentB)
-  pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
+	pdf.SetFillColor(currentR, currentG, currentB)
+	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 }
-
-
 
 func addTotal(pdf gofpdf.Pdf, reportTotal float64, cols []float64) {
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
@@ -145,8 +141,10 @@ func addTotal(pdf gofpdf.Pdf, reportTotal float64, cols []float64) {
 	pdf.SetFont(fontFamily, "", fontSize)
 }
 
-
-
 func getLinePrice(price float64, quantity float64, tva float64) float64 {
-	return quantity * (truncateTwoDecimals(price + (price * tva)))
+	return roundTwoDecimals(quantity * getTTCPrice(price, tva))
+}
+
+func getTTCPrice(price float64, tva float64) float64 {
+	return roundTwoDecimals(price + (price * tva))
 }
