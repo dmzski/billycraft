@@ -24,6 +24,13 @@ func (dao BillCustomizationDao) FindFirstByTenant(tenant int) (billCustomization
 	return
 }
 
+func (dao BillCustomizationDao) FindFirstOrInitByTenant(tenant int) (billCustomization models.BillCustomization) {
+	if err := database.DBConn.Where("company_id = ?", tenant).FirstOrInit(&billCustomization).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao BillCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (billCustomization models.BillCustomization) {
 	if err := database.DBConn.Find(&billCustomization, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)

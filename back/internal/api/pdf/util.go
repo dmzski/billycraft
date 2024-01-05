@@ -22,7 +22,7 @@ var (
 	lineMargin            = 1.0
 	colsWithVat           = []float64{115, 20, 20, 20, 25}
 	colsWithoutVat        = []float64{135, 20, 20, 25}
-	totalAndTvaCellHeight = 8.0
+	totalAndTvaCellHeight = 10.0
 	reportTotalCellWidth  = 40
 	fontSize              = 10.0
 	fontFamily            = "Arial"
@@ -32,13 +32,16 @@ var (
 	QUANTITY_TITLE        = "Quantité"
 	PRICE_TTC_TITLE       = "Prix TTC"
 	PRICE_HT_TITLE        = "Prix HT"
-	SUBTOTAL_TITLE        = "Sous total"
-	REPORTED_TOTAL_TITLE  = "Total reporté"
+	SUBTOTALTTC_TITLE     = "Sous total TTC"
+	SUBTOTALHT_TITLE      = "Sous total HT"
+	REPORTED_TOTALTTC_TITLE  = "Total reporté TTC"
+	REPORTED_TOTALHT_TITLE  = "Total reporté HT"
 	DATE_TITLE            = "Date d'émission"
 	REFERENCE_TITLE       = "Référence"
 	OBJECT_TITLE          = "Objet"
 	FREE_STR              = "OFFERT"
-	TOTAL_TITLE           = "Total"
+	TOTALTTC_TITLE        = "Total TTC"
+	TOTALHT_TITLE         = "Total HT"
 	VAT_TITLE             = "TVA"
 	QUOTES_FOLDER         = "%s/%d/quotes"
 	BILLS_FOLDER          = "%s/%d/bills"
@@ -121,9 +124,9 @@ func addHeaders(pdf gofpdf.Pdf, rgba color.RGBA, cols []float64) {
 	// Differ when quote has VAT so cols has a length of 5 instead of 4
 	if len(cols) > 4 {
 		pdf.CellFormat(cols[3], 10, tr(PRICE_TTC_TITLE), "1", 0, "C", true, 0, "")
-		pdf.CellFormat(cols[4], 10, tr(SUBTOTAL_TITLE), "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[4], 10, tr(SUBTOTALTTC_TITLE), "1", 0, "C", true, 0, "")
 	} else {
-		pdf.CellFormat(cols[3], 10, tr(SUBTOTAL_TITLE), "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[3], 10, tr(SUBTOTALHT_TITLE), "1", 0, "C", true, 0, "")
 	}
 	pdf.Ln(-1)
 	pdf.SetFillColor(currentR, currentG, currentB)
@@ -136,7 +139,11 @@ func addTotal(pdf gofpdf.Pdf, reportTotal float64, cols []float64) {
 	pdf.SetY(height - float64(marginB) - fontSize)
 	pdf.SetFont(fontFamily, "B", fontSize)
 	pdf.SetX(marginL + cols[0] + cols[1] + cols[2] - float64(reportTotalCellWidth))
-	pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTAL_TITLE), "1", 0, "C", true, 0, "")
+  if len(cols) > 4 {
+    pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALTTC_TITLE), "1", 0, "C", true, 0, "")
+  } else {
+    pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALHT_TITLE), "1", 0, "C", true, 0, "")
+  }
 	pdf.CellFormat(cols[3], 10, tr(fmt.Sprintf("%.2f€", reportTotal)), "1", 0, "C", false, 0, "")
 	pdf.SetFont(fontFamily, "", fontSize)
 }
@@ -146,5 +153,5 @@ func getLinePrice(price float64, quantity float64, tva float64) float64 {
 }
 
 func getTTCPrice(price float64, tva float64) float64 {
-	return roundTwoDecimals(price + (price * tva))
+	return roundTwoDecimals(price * (1 + tva))
 }

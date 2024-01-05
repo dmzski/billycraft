@@ -28,7 +28,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 	}
 
 	company := company.DAO.FindOneById(bill.CompanyID)
-	customization := billCustomization.DAO.FindFirstByTenant(bill.CompanyID)
+	customization := billCustomization.DAO.FindFirstOrInitByTenant(bill.CompanyID)
 	customer := models.Customer{}
 	if bill.CustomerID != nil {
 		customer = customers.DAO.FindOneByIdAndTenant(*bill.CustomerID, bill.CompanyID)
@@ -148,6 +148,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height of the row more the height of total and tva
+		// Go to new page and write HEADERS again
 		if pdf.GetY()+height+(lineHt+lineMargin*4)*2 > pageSize.Ht-float64(marginB)-cellMarginLarge {
 			pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 			addTotal(pdf, reportTotal, cols)
@@ -168,6 +169,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 		if line.Price == 0 {
 			price = FREE_STR
 			subtotal = FREE_STR
+			priceTTC = FREE_STR
 		}
 
 		// If no price, quantity and no description write the line as a title so reset all strings and change font
@@ -230,31 +232,40 @@ func generateBillPDF(bill models.Bill) *os.File {
 		}
 	}
 
-	// Go to next line
+  // End the table witht he bottom line
 	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 	pdf.SetFillColor(int(mainColor.R), int(mainColor.G), int(mainColor.B))
+  // Go to next line
+  pdf.Ln(-1)
+
+	// Insert TVA and total HT, TTC
+	var totalTTC = getBillTotal(bill)
+	var totalHT = getBillTotalHT(bill)
+	var totalTVA = totalTTC - totalHT
 
 	if hasVat {
-		pdf.SetX(marginL + cols[0] + cols[1] + cols[2])
-		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), VAT_TITLE, "1", 0, "C", true, 0, "")
-		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f", *bill.Tva)+"%"), "1", 0, "C", false, 0, "")
+		pdf.SetX(marginL + cols[0] + cols[1])
+		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
+		pdf.Ln(-1)
+		pdf.SetX(marginL + cols[0] + cols[1])
+		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%s (%.2f)%%", VAT_TITLE, tva)), "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTVA)), "1", 0, "C", false, 0, "")
+    pdf.Ln(-1)
 	}
 
-	pdf.Ln(-1)
-
-	// Insert the bill total
+	// Insert the quote total
 	pdf.SetFont(fontFamily, "B", fontSize)
 	if !hasVat {
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2], float64(totalAndTvaCellHeight), TOTAL_TITLE, "1", 0, "C", true, 0, "")
-		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", getBillTotal(bill))), "1", 0, "C", false, 0, "")
+		pdf.CellFormat(cols[2], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
 	} else {
-		pdf.SetX(marginL + cols[0] + cols[1] + cols[2])
-		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), TOTAL_TITLE, "1", 0, "C", true, 0, "")
-		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", getBillTotal(bill))), "1", 0, "C", false, 0, "")
+		pdf.SetX(marginL + cols[0] + cols[1])
+		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALTTC_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTTC)), "1", 0, "C", false, 0, "")
 
 	}
-
 	pdf.SetY(pdf.GetY() + lineHt*3)
 
 	// Insert a new page if afterTableLines doesnt fit on the current one
@@ -302,6 +313,15 @@ func getBillTotal(bill models.Bill) float64 {
 	}
 	for _, line := range bill.Lines {
 		total += getLinePrice(line.Price, line.Quantity, tva)
+	}
+	return total
+}
+
+
+func getBillTotalHT(bill models.Bill) float64 {
+	total := 0.0
+	for _, line := range bill.Lines {
+		total += getLinePrice(line.Price, line.Quantity, 0)
 	}
 	return total
 }

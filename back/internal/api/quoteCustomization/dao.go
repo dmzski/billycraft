@@ -24,6 +24,13 @@ func (dao QuoteCustomizationDao) FindFirstByTenant(tenant int) (quoteCustomizati
 	return
 }
 
+func (dao QuoteCustomizationDao) FindFirstOrInitByTenant(tenant int) (quoteCustomization models.QuoteCustomization) {
+	if err := database.DBConn.Where("company_id = ?", tenant).FirstOrInit(&quoteCustomization).Error; err != nil {
+		panic(err)
+	}
+	return
+}
+
 func (dao QuoteCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (quoteCustomization models.QuoteCustomization) {
 	if err := database.DBConn.Find(&quoteCustomization, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
