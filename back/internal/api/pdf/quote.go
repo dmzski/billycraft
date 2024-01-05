@@ -168,6 +168,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		if line.Price == 0 {
 			price = FREE_STR
 			subtotal = FREE_STR
+      priceTTC = FREE_STR
 		}
 
 		// If no price, quantity and no description write the line as a title so reset all strings and change font
