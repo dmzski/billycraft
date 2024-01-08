@@ -149,9 +149,9 @@ func addTotal(pdf gofpdf.Pdf, reportTotal float64, cols []float64) {
 }
 
 func getLinePrice(price float64, quantity float64, tva float64) float64 {
-	return roundTwoDecimals(quantity * getTTCPrice(price, tva))
+	return quantity * getTTCPrice(price, tva)
 }
 
 func getTTCPrice(price float64, tva float64) float64 {
-	return roundTwoDecimals(price * (1 + tva))
+	return price * (1 + tva)
 }

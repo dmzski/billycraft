@@ -139,8 +139,8 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		priceTTC := fmt.Sprintf("%.2f€", getTTCPrice(line.Price, tva/100))
-		linePrice := getLinePrice(line.Price, line.Quantity, tva/100)
+		priceTTC := fmt.Sprintf("%.2f€", roundTwoDecimals(getTTCPrice(line.Price, tva/100)))
+		linePrice := roundTwoDecimals(getLinePrice(line.Price, line.Quantity, tva/100))
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
@@ -315,7 +315,7 @@ func getQuoteTotal(quote models.Quote) float64 {
 	for _, line := range quote.Lines {
 		total += getLinePrice(line.Price, line.Quantity, tva)
 	}
-	return total
+	return roundTwoDecimals(total)
 }
 
 func getQuoteTotalHT(quote models.Quote) float64 {
@@ -323,5 +323,5 @@ func getQuoteTotalHT(quote models.Quote) float64 {
 	for _, line := range quote.Lines {
 		total += getLinePrice(line.Price, line.Quantity, 0)
 	}
-	return total
+	return roundTwoDecimals(total)
 }

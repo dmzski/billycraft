@@ -139,8 +139,8 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 		quantity := fmt.Sprintf("%.2f", line.Quantity)
 		price := fmt.Sprintf("%.2f€", line.Price)
-		priceTTC := fmt.Sprintf("%.2f€", getTTCPrice(line.Price, tva/100))
-		linePrice := getLinePrice(line.Price, line.Quantity, tva/100)
+		priceTTC := fmt.Sprintf("%.2f€", roundTwoDecimals(getTTCPrice(line.Price, tva/100)))
+		linePrice := roundTwoDecimals(getLinePrice(line.Price, line.Quantity, tva/100))
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
@@ -232,11 +232,11 @@ func generateBillPDF(bill models.Bill) *os.File {
 		}
 	}
 
-  // End the table witht he bottom line
+	// End the table witht he bottom line
 	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 	pdf.SetFillColor(int(mainColor.R), int(mainColor.G), int(mainColor.B))
-  // Go to next line
-  pdf.Ln(-1)
+	// Go to next line
+	pdf.Ln(-1)
 
 	// Insert TVA and total HT, TTC
 	var totalTTC = getBillTotal(bill)
@@ -245,13 +245,13 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	if hasVat {
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%s (%.2f)%%", VAT_TITLE, tva)), "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%s (%.2f)%%", VAT_TITLE, tva)), "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTVA)), "1", 0, "C", false, 0, "")
-    pdf.Ln(-1)
+		pdf.Ln(-1)
 	}
 
 	// Insert the quote total
@@ -262,7 +262,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
 	} else {
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALTTC_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), TOTALTTC_TITLE, "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTTC)), "1", 0, "C", false, 0, "")
 
 	}
@@ -314,14 +314,13 @@ func getBillTotal(bill models.Bill) float64 {
 	for _, line := range bill.Lines {
 		total += getLinePrice(line.Price, line.Quantity, tva)
 	}
-	return total
+	return roundTwoDecimals(total)
 }
-
 
 func getBillTotalHT(bill models.Bill) float64 {
 	total := 0.0
 	for _, line := range bill.Lines {
 		total += getLinePrice(line.Price, line.Quantity, 0)
 	}
-	return total
+	return roundTwoDecimals(total)
 }
