@@ -1,5 +1,11 @@
 # back
 
+## 1.5.0
+
+### Minor Changes
+
+- afc7a58: fix: try fixing tva on bills
+
 ## 1.4.0
 
 ### Minor Changes
