@@ -309,7 +309,7 @@ func getBillTotal(bill models.Bill) float64 {
 	total := 0.0
 	tva := 0.0
 	if bill.Tva != nil && *bill.Tva > 0 {
-		tva = float64(int(*bill.Tva) / 100)
+		tva = float64(*bill.Tva / 100)
 	}
 	for _, line := range bill.Lines {
 		total += getLinePrice(line.Price, line.Quantity, tva)

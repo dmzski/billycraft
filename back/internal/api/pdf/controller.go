@@ -84,12 +84,3 @@ func generateBill(c *fiber.Ctx) error {
 		return c.SendFile(file.Name())
 	}
 }
-
-func generateReport(c *fiber.Ctx) error {
-	// user := c.Locals("user").(models.User)
-	if id := c.Params("id", ""); id == "" {
-		return fiber.NewError(400, "No id provided")
-	} else {
-		return c.SendString("Hello")
-	}
-}
