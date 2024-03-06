@@ -24,6 +24,7 @@
     "react-transition-group": "^4.4.5",
     "recharts": "^1.8.6"
   },
+  "packageManager": "^pnpm@8.14.0",
   "scripts": {
     "start": "webpack serve --config webpack.config.js --env env=development --node-env=development",
     "build": "pnpm run build:css && webpack --config webpack.config.js --env env=production --node-env=production",
