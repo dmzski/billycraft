@@ -15,5 +15,4 @@
 
 # Deploy
 
-- Increment in package.json (need to improve that)
-- Run `make some-coffee`
+- make deploy-docker

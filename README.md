@@ -4,19 +4,21 @@
 
 ## Prerequisite
 
-- Go 19
 - Node JS : 20.x.x
 - Pnpm : >= 8
 - Docker
-- Rust for auth
+- Rust (auth)
+- Go (back)
 
 ## Folder structure
 
-- docker-compose.yml : The docker-compose exemple used in production
+- docker-compose.yml : The docker-compose to mount the stack excluding front
+- auth: The auth server (auth.coco-erp.fr)
+- back: The coco erp API (api.coco-erp.fr)
+- front: The coco erp Application (app.coco-erp.fr)
+- www: The public website (coco-erp.fr)
 
 ## Frontend
-
-### First launch
 
 ```sh
 cd front
@@ -24,24 +26,15 @@ pnpm install
 pnpm start
 ```
 
-### Next launch
+### Update tailwind classes
 
-```
-cd front
-pnpm start
-```
-
-### Update from Tailwind.scss
-
-- Realtime changes in main.scss
-
+- Build when changes
 ```sh
 cd front
 pnpm watch:css
 ```
 
-- Build new main.scss
-
+- Build only
 ```sh
 cd front
 pnpm build:css
@@ -49,21 +42,8 @@ pnpm build:css
 
 ## Backend
 
-### First launch
-
 ```sh
 cd back
-make update-docker
-sleep 30 #Keycloak is launching
-make up
-```
-
-### Next launch
-
-```sh
-cd back
-make up
-sleep 30 # Keycloak is launching
 make up
 ```
 
@@ -73,3 +53,20 @@ make up
 cd back
 make dev
 ```
+
+## Auth
+
+```sh
+cd auth
+make up
+make start
+```
+
+## WWW
+
+Open the index.html in your browser directly
+
+### Build CSS
+
+- `pnpm build:css` : One shot build
+- `pnpm build:css:watch` : Rebuild when changes are detcted

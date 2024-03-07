@@ -1,3 +1,3 @@
 
 release:
-	cd back && make some-coffee && cd ../front && make some-coffee
+	cd back && make deploy-docker && cd ../front && make deploy-docker

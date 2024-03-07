@@ -9,8 +9,7 @@
 - Make sure these ports are free :
   - 5432 : Postgres
   - 8080 : API
-  - 8081 : Keycloak
-  - 1025 and 8025 : Fakesmtp
+  - 8090 : Auth
   - 80 : Traefik
 - Run `make` or `make dev`
 
@@ -21,5 +20,5 @@
 
 ## Deploy
 
-- Run `make some-coffee`
+- Run `make deploy-docker`
 - Go on the server and run the script at $HOME/update-app

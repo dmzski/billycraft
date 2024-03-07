@@ -1,8 +1,3 @@
-build-image:
-	./scripts/build-image.sh
 
-push-image:
-	./scripts/push-image.sh
-
-some-coffee:
+deploy-docker:
 	./scripts/build-push-install.sh

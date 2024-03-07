@@ -11,19 +11,19 @@ version=`awk -F\" '/"version":/ {print $4}' package.json`
 
 echo "Building image...";
 # Build
-docker build -t compta-front:latest -f ./Dockerfile ./
+docker build -t coco-front:latest -f ./Dockerfile ./
 checkSuccess
 
 echo "Image built...";
 
 echo "Pushing image...";
 # Push
-docker tag compta-front:latest maliszewskid/compta-front:$version
-docker tag compta-front:latest maliszewskid/compta-front:latest
+docker tag compta-front:latest maliszewskid/coco-front:$version
+docker tag compta-front:latest maliszewskid/coco-front:latest
 checkSuccess
 
-docker push maliszewskid/compta-front:$version
-docker push maliszewskid/compta-front:latest
+docker push maliszewskid/coco-front:$version
+docker push maliszewskid/coco-front:latest
 checkSuccess
 
 echo "Image pushed...";

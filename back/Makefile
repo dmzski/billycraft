@@ -1,4 +1,3 @@
-
 dev:
 	docker compose up -d && docker compose logs -f back
 
@@ -14,5 +13,5 @@ upload-migrations:
 logs:
 	docker-compose logs -f --tail=200 back
 
-deploy-registry:
+deploy-docker:
 	docker build -f Dockerfile.prod -t maliszewskid/coco-api:latest . && docker push maliszewskid/coco-api:latest
