@@ -1,11 +1,18 @@
 # Coco-erp
 
+## Disclaimers : CI will be improved actually use each Makefile to upload images on registry then go on the server and do `./update`
+
 ## Prerequisite
 
 - Go 19
 - Node JS : 20.x.x
 - Pnpm : >= 8
 - Docker
+- Rust for auth
+
+## Folder structure
+
+- docker-compose.yml : The docker-compose exemple used in production
 
 ## Frontend
 

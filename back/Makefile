@@ -8,14 +8,11 @@ up:
 down:
 	docker compose down
 
-build-preprod:
-	docker build -f Dockerfile.prod -t maliszewskid/compta-back:local .
-
 upload-migrations:
-	scp migrations/* debian@coco-erp.fr:./app/migrations/
+	scp migrations/* debian@coco-erp.fr:./api/migrations/
 
 logs:
 	docker-compose logs -f --tail=200 back
 
-some-coffee:
-	docker build -f Dockerfile.prod -t maliszewskid/compta-back:v2 . && docker push maliszewskid/compta-back:v2
+deploy-registry:
+	docker build -f Dockerfile.prod -t maliszewskid/coco-api:latest . && docker push maliszewskid/coco-api:latest

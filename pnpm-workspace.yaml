@@ -1,3 +1,5 @@
 packages:
+  - auth
   - back
   - front
+  - www

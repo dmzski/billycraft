@@ -1,0 +1,7 @@
+{
+  "name": "@coco/auth",
+  "version": "1.0.0",
+  "description": "Auth server for coco-erp",
+  "author": "",
+  "license": "ISC"
+}
