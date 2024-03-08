@@ -7,8 +7,6 @@ CREATE TABLE
         email VARCHAR(255) NOT NULL UNIQUE,
         verified BOOLEAN NOT NULL DEFAULT FALSE,
         password VARCHAR(100) NOT NULL,
-        role VARCHAR(50) NOT NULL DEFAULT 'user',
-        level INT DEFAULT 0,
         created_at TIMESTAMP
         WITH
             TIME ZONE DEFAULT NOW(),

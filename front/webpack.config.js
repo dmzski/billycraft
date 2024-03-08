@@ -74,7 +74,8 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: !isDev }),
     new DefinePlugin({
       'process.env.VERSION': JSON.stringify(pkg.version),
-      'process.env.API_URL': JSON.stringify(process.env.NODE_ENV === "production" ? "https://api.coco-erp.fr/api/v1" : "http://api.coco-erp.lan/api/v1")
+      'process.env.API_URL': JSON.stringify(process.env.NODE_ENV === "production" ? "https://api.coco-erp.fr/api/v1" : "http://api.coco-erp.lan/api/v1"),
+      'process.env.AUTH_API_URL': JSON.stringify(process.env.NODE_ENV === "production" ? "https://auth.coco-erp.fr/api" : "http://auth.coco-erp.lan/api"),
     }),
   ].filter(Boolean),
   devServer: {

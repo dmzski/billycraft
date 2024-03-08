@@ -1,7 +1,7 @@
 import { Button, Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
-import { useKeycloak } from '@react-keycloak/web'
 import clsx from 'clsx'
+import { useAuth } from 'providers/AuthProvider'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Route, ROUTES } from 'routes'
@@ -54,11 +54,7 @@ const Menu = ({ route }: MenuProps): JSX.Element => {
 }
 
 const SideBarMenu = (): JSX.Element => {
-  const { keycloak } = useKeycloak()
-
-  const logout = () => {
-    keycloak.logout()
-  }
+  const {logout} = useAuth()
 
   return (
     <div className="flex flex-col h-full gap-8">
@@ -78,9 +74,9 @@ const SideBarMenu = (): JSX.Element => {
             ),
           )}
       </ul>
-      <Button className="rounded-none" block variant="error" type="button" outline onClick={logout}>
+      <Button className="rounded-none flex gap-2 items-center" block variant="error" type="button" outline onClick={logout}>
         <Icon name="logout" type="outline" />
-        &nbsp; Déconnexion
+        Déconnexion
       </Button>
     </div>
   )

@@ -11,6 +11,12 @@ export type Route = {
 export const injectIdInPath = (route: string, id: number | string) => route.replace(':id', `${id}`)
 
 export const ROUTES = {
+  LOGIN: {
+    path: "/login",
+  },
+  REGISTER: {
+    path: "/register",
+  },
   BILLS: {
     exact: true,
     icon: 'cash',
@@ -83,9 +89,17 @@ export const ROUTES = {
       },
     },
   },
-  ONBOARDING_COMPANY: {
-    path: '/onboarding/create-company',
+  ONBOARDING: {
+    path: '/onboarding',
+    title: 'Bienvenue sur Coco ERP',
+  },
+  ONBOARDING_CREATE: {
+    path: '/onboarding/create-organization',
     title: 'Créer mon entreprise',
+  },
+  ONBOARDING_JOIN: {
+    path: '/onboarding/join-organization',
+    title: 'Rejoindre une entreprise',
   },
   PRODUCTS: {
     exact: true,

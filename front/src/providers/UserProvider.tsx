@@ -1,4 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web'
 import { CompanyApi } from 'api/CompanyApi'
 import { UserApi } from 'api/UserApi'
 import Company from 'models/Company'
@@ -7,6 +6,7 @@ import { useMemo } from 'react'
 import * as React from 'react'
 import { useQuery } from 'react-query'
 import * as Sentry from '@sentry/react'
+import { useAuth } from './AuthProvider'
 
 type UserContextType = {
   user?: User
@@ -18,14 +18,14 @@ type UserProviderProps = {
   children: React.ReactNode
 }
 const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
-  const { keycloak } = useKeycloak()
+  const { isAuthenticated } = useAuth()
   const { data: user } = useQuery('my-information', UserApi.getMyInformation, {
-    enabled: keycloak.authenticated,
+    enabled: isAuthenticated,
     refetchOnWindowFocus: false,
     refetchInterval: 10000,
   })
   const { data: company } = useQuery('my-company', CompanyApi.getMine, {
-    enabled: user?.companyId && keycloak.authenticated,
+    enabled: user?.companyId && isAuthenticated,
     refetchOnWindowFocus: false,
     refetchInterval: 10000,
   })

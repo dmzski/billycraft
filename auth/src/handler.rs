@@ -157,7 +157,7 @@ pub async fn login_user_handler(
         .http_only(true)
         .finish();
 
-    let mut response = Response::new(json!({"status": "success", "token": token}).to_string());
+    let mut response = Response::new(json!({"token": token}).to_string());
     response
         .headers_mut()
         .insert(header::SET_COOKIE, cookie.to_string().parse().unwrap());
@@ -229,7 +229,6 @@ fn filter_user_record(user: &User) -> FilteredUser {
         id: user.id.to_string(),
         email: user.email.to_owned(),
         name: user.name.to_owned(),
-        role: user.role.to_owned(),
         verified: user.verified,
         created_at: user.created_at.unwrap(),
         updated_at: user.updated_at.unwrap(),

@@ -1,5 +1,5 @@
 dev:
-	docker compose up
+	docker compose up -d postgres
 
 up:
 	docker compose up -d

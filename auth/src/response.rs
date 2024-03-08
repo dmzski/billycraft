@@ -7,7 +7,6 @@ pub struct FilteredUser {
     pub id: String,
     pub name: String,
     pub email: String,
-    pub role: String,
     pub verified: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,

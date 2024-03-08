@@ -1,0 +1,5 @@
+.gitignore
+.env
+migrations/
+Makefile
+README.md
