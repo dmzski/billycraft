@@ -1,12 +1,13 @@
 import { Button, Input, useToast } from "@coco-ui/core"
-import { SUPPORT_EMAIL } from "constants/global"
-import { useI18n } from "i18n"
-import { useAuth } from "providers/AuthProvider"
+import { SUPPORT_EMAIL } from "@/constants/global"
+import { useI18n } from "@/i18n"
+import { ApiError } from "@/models/ApiError"
+import { useAuth } from "@/providers/AuthProvider"
 import { useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Link, useHistory } from "react-router-dom"
-import { ROUTES } from "routes"
-import { sendErrorToSentry } from "utils/errors"
+import { ROUTES } from "@/routes"
+import { sendErrorToSentry } from "@/utils/errors"
 
 type RegisterFormValues = {
   email: string,
@@ -38,8 +39,14 @@ export const Register = () => {
       toast.success(t('register.success'))
       push(ROUTES.LOGIN.path)
     } catch (err) {
-      sendErrorToSentry(err)
-      toast.error(t('genericFormError'))
+      if (!(err instanceof ApiError) || err.code === 500){
+        sendErrorToSentry(err)
+      }
+      if (err instanceof ApiError) {
+        toast.error(err.message)
+      } else {
+        toast.error(t('genericFormError'))
+      }
     }
 
   }

@@ -1,5 +1,5 @@
-import { API_URL } from 'constants/global'
-import Bill, { BillStatusEnum } from 'models/Bill'
+import { API_URL } from '@/constants/global'
+import Bill, { BillStatusEnum } from '@/models/Bill'
 import { HttpClient } from './HttpClient'
 
 export const BILL_URL = `${API_URL}/bills`

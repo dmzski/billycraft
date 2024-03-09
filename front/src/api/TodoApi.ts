@@ -1,5 +1,5 @@
 import { formatRFC3339 } from 'date-fns'
-import { Todo, TodoRequest } from 'models/Todo'
+import { Todo, TodoRequest } from '@/models/Todo'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

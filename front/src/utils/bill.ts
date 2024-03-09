@@ -1,5 +1,5 @@
 import { compareAsc, formatISO9075, parseJSON } from 'date-fns'
-import Customer from 'models/Customer'
+import Customer from '@/models/Customer'
 import { BILL_STATUS } from '../constants/bill'
 import Bill, { BillLine } from '../models/Bill'
 

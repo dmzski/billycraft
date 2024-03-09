@@ -1,13 +1,13 @@
 import { Button, Icon, Input, Select, TextArea, useToast } from '@coco-ui/core'
-import * as React from 'react'
-import { useMutation, useQueryCache } from 'react-query'
-import { LINE_TYPE } from 'constants/line'
-import { LineTypeEnum } from 'models/LineTypeEnum'
+import { LINE_TYPE } from '@/constants/line'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { Controller, useForm } from 'react-hook-form'
-import { STRINGS } from 'constants/strings'
+import { STRINGS } from '@/constants/strings'
 import clsx from 'clsx'
 import Product from '../../models/Product'
 import { ProductApi } from '../../api/ProductApi'
+import { useDataLoaderContext } from '@scaleway/use-dataloader'
+import { MouseEvent, useEffect, useMemo, useState } from 'react'
 
 type ProductTableLineProps = {
   product: Product
@@ -20,9 +20,9 @@ const MODES = {
   DELETE: 'DELETE',
 }
 
-const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Element => {
-  const [mode, setMode] = React.useState(isNew ? MODES.EDIT : MODES.READ)
-  const defaultValues = React.useMemo(
+const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
+  const [mode, setMode] = useState(isNew ? MODES.EDIT : MODES.READ)
+  const defaultValues = useMemo(
     () => ({
       type: LineTypeEnum.ARTICLE,
       name: '',
@@ -41,11 +41,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
     mode: 'all',
     shouldUnregister: true,
   })
-  const [deleteProductMutation, deleteProductMutationState] = useMutation(ProductApi.delete)
-  const queryCache = useQueryCache()
+  const {reload} = useDataLoaderContext()
   const toast = useToast()
 
-  const toggleEditMode = (e: React.MouseEvent) => {
+  const toggleEditMode = (e: MouseEvent) => {
     e.stopPropagation()
     setMode(current => (current === MODES.EDIT ? MODES.READ : MODES.EDIT))
   }
@@ -69,7 +68,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
         })
       } else setMode(MODES.READ)
 
-      queryCache.refetchQueries('products')
+      reload('products')
     } catch {
       toast.error(STRINGS.SAVE_ERROR)
     }
@@ -81,8 +80,8 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
 
   const onDelete = async () => {
     try {
-      await deleteProductMutation(product.id)
-      queryCache.invalidateQueries('products')
+      await ProductApi.delete(product.id)
+      reload('products')
       toast.success(STRINGS.DELETE_SUCCESS)
     } catch {
       toast.error(STRINGS.DELETE_ERROR)
@@ -91,7 +90,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
 
   const formID = `form-product-${product.id ?? 'new'}`
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (product.id) {
       reset(product)
     }
@@ -219,7 +218,6 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps): JSX.Elemen
             </Button>
             <Button
               type="button"
-              disabled={deleteProductMutationState.isLoading}
               onClick={toggleDeleteMode}
               square
               variant="error"

@@ -1,5 +1,5 @@
 import { Input, Select } from '@coco-ui/core'
-import { QUOTE_STATUS } from 'constants/quote'
+import { QUOTE_STATUS } from '@/constants/quote'
 import { Dispatch, SetStateAction } from 'react'
 
 type QuoteFilterContainerProps = {
@@ -12,7 +12,7 @@ const QuoteFilterContainer = ({
   filters,
   setFilters,
   disabledFilters = [],
-}: QuoteFilterContainerProps): JSX.Element => (
+}: QuoteFilterContainerProps) => (
   <div className="flex my-2">
     <Input
       className="w-32 mr-2"

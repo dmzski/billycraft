@@ -6,7 +6,6 @@ import (
 	"back/internal/api"
 	cocoCron "back/internal/cron"
 	"back/internal/lib/dtos"
-	"back/internal/lib/oidc"
 	"errors"
 	"log"
 	"os"
@@ -81,11 +80,6 @@ func main() {
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
 		Format: "${pid} ${locals:requestid} ${status} ${method} ${path}\n",
-	}))
-	app.Use(oidc.New(oidc.OidcConfig{
-		AuthServerURL: config.OIDCAuthServerUrl,
-		ClientID:      config.OIDCCLientId,
-		ClientSecret:  config.OIDCClientSecret,
 	}))
 	api.InitApiRoutes(app)
 

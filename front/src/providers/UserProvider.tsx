@@ -1,38 +1,37 @@
-import { CompanyApi } from 'api/CompanyApi'
-import { UserApi } from 'api/UserApi'
-import Company from 'models/Company'
-import User from 'models/User'
-import { useMemo } from 'react'
-import * as React from 'react'
-import { useQuery } from 'react-query'
+import { CompanyApi } from '@/api/CompanyApi'
+import { UserApi } from '@/api/UserApi'
+import Company from '@/models/Company'
+import User from '@/models/User'
+import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react'
 import * as Sentry from '@sentry/react'
 import { useAuth } from './AuthProvider'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type UserContextType = {
   user?: User
   company?: Company
 }
-const UserContext = React.createContext<UserContextType>({} as UserContextType)
+const UserContext = createContext<UserContextType>({})
 
 type UserProviderProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
-const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
+const UserProvider = ({ children }: UserProviderProps) => {
   const { isAuthenticated } = useAuth()
-  const { data: user } = useQuery('my-information', UserApi.getMyInformation, {
+  const { data: user } = useDataLoader('my-information', () => UserApi.getMyInformation(), {
     enabled: isAuthenticated,
-    refetchOnWindowFocus: false,
-    refetchInterval: 10000,
+    pollingInterval: 10000,
+    needPolling: isAuthenticated
   })
-  const { data: company } = useQuery('my-company', CompanyApi.getMine, {
-    enabled: user?.companyId && isAuthenticated,
-    refetchOnWindowFocus: false,
-    refetchInterval: 10000,
+  const { data: company } = useDataLoader('my-company', () => CompanyApi.getMine(), {
+    enabled: !!user?.companyId && isAuthenticated,
+    pollingInterval: 10000,
+    needPolling: isAuthenticated
   })
 
   const value = useMemo(() => ({ user, company }), [user, company])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       Sentry.setUser({ email: user.email })
       Sentry.setExtra('companyId', user.companyId)
@@ -42,6 +41,6 @@ const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
-const useUser = (): UserContextType => React.useContext(UserContext)
+const useUser = (): UserContextType => useContext(UserContext)
 
 export { UserProvider, useUser }

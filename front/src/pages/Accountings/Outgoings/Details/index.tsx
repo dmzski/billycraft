@@ -1,14 +1,14 @@
 import { Button, Icon, Loader } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
-import { useQuery } from 'react-query'
+import { OutgoingApi } from '@/api/OutgoingApi'
 import { Link, useParams } from 'react-router-dom'
 import { OUTGOING_ROUTES } from '../constants'
 import OutgoingDetail from './OutgoingDetail'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const Details = (): JSX.Element => {
+const Details = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: outgoing, isLoading } = useQuery(
-    `outgoing-${id}`,
+  const { data: outgoing, isLoading } = useDataLoader(
+    ["outgoing", id],
     () => OutgoingApi.findOneById(id),
     {
       enabled: !!id,

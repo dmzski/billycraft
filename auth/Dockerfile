@@ -20,6 +20,5 @@ WORKDIR /
 COPY --from=builder /app/target/release/auth /auth
 
 EXPOSE 80
-EXPOSE 443
 
 ENTRYPOINT ["/auth"]

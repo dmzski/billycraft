@@ -1,10 +1,11 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from "react"
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react"
 import Cookies from 'js-cookie'
+import { ApiError } from "@/models/ApiError"
 
 type AuthContextType = {
-  login: (params: {email: string, password: string}) => Promise<void>,
+  login: (params: { email: string, password: string }) => Promise<void>,
   logout: () => Promise<void>,
-  register: (params: {email: string, password: string, name: string}) => Promise<void>
+  register: (params: { email: string, password: string, name: string }) => Promise<void>
   refreshSession: () => Promise<void>,
   isAuthenticated: boolean,
 }
@@ -26,15 +27,15 @@ const AuthContext = createContext<AuthContextType>({
 })
 
 const COOKIE_NAME = "coco_at"
-const API_URL = process.env.AUTH_API_URL ?? ""
+const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
 
 export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefreshSuccess, onRegisterSuccess }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get(COOKIE_NAME))
 
-  const login: AuthContextType['login'] = async ({email, password}) => {
-    console.log(API_URL)
+  const login: AuthContextType['login'] = useCallback(async ({ email, password }) => {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({
         email,
         password
@@ -46,11 +47,14 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
     if (res.ok) {
       setIsAuthenticated(true)
       await onLoginSuccess?.()
+    } else {
+      const { message } = await res.json()
+      throw new ApiError(res.status, message)
     }
 
-  }
+  }, [onLoginSuccess])
 
-  const register: AuthContextType['register'] = async ({email, password, name}) => {
+  const register: AuthContextType['register'] = useCallback(async ({ email, password, name }) => {
     const res = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       body: JSON.stringify({
@@ -64,21 +68,27 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
     })
     if (res.ok) {
       await onRegisterSuccess?.()
+    } else {
+      const { message } = await res.json()
+      throw new ApiError(res.status, message)
     }
 
-  }
+  }, [onRegisterSuccess])
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     Cookies.remove(COOKIE_NAME)
     await onLogoutSuccess?.()
-  }
+  }, [onLogoutSuccess])
 
-  const refreshSession = async () => {
+  const refreshSession = useCallback(async () => {
     const res = await fetch(`${API_URL}/auth/refresh`)
     if (res.ok) {
       onRefreshSuccess?.()
+    } else {
+      const { message } = await res.json()
+      throw new ApiError(res.status, message)
     }
-  }
+  }, [onRefreshSuccess])
 
   const value = useMemo(() => ({
     isAuthenticated,
@@ -86,10 +96,10 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
     register,
     logout,
     login
-  } as AuthContextType), [])
+  } as AuthContextType), [isAuthenticated, refreshSession, register, logout, login])
 
   if (!API_URL || API_URL.endsWith("/")) {
-    throw new Error("process.env.AUTH_API_URL need to be set with no trailing slash")
+    throw new Error("VITE_AUTH_API_URL need to be set with no trailing slash")
   }
 
   return (

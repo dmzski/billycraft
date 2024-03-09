@@ -1,5 +1,5 @@
-import { API_URL } from 'constants/global'
-import BillCustomization from 'models/BillCustomization'
+import { API_URL } from '@/constants/global'
+import BillCustomization from '@/models/BillCustomization'
 import { HttpClient } from './HttpClient'
 
 export const BILL_CUSTOMIZATION_URL = `${API_URL}/bill-customization`

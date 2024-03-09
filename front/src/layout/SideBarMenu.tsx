@@ -1,10 +1,10 @@
 import { Button, Icon } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import clsx from 'clsx'
-import { useAuth } from 'providers/AuthProvider'
+import { useAuth } from '@/providers/AuthProvider'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Route, ROUTES } from 'routes'
+import { Route, ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
 
 const menuRoutes = [
@@ -22,7 +22,7 @@ const menuRoutes = [
 type MenuProps = {
   route: Route
 }
-const Menu = ({ route }: MenuProps): JSX.Element => {
+const Menu = ({ route }: MenuProps) => {
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
@@ -53,7 +53,7 @@ const Menu = ({ route }: MenuProps): JSX.Element => {
   )
 }
 
-const SideBarMenu = (): JSX.Element => {
+const SideBarMenu = () => {
   const {logout} = useAuth()
 
   return (

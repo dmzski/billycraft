@@ -1,9 +1,9 @@
-import { SupplierApi } from 'api/SupplierApi'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { ReportResponse } from 'models/Report'
-import Supplier from 'models/Supplier'
+import { SupplierApi } from '@/api/SupplierApi'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { ReportResponse } from '@/models/Report'
+import Supplier from '@/models/Supplier'
+import { useDataLoader } from '@scaleway/use-dataloader'
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 
 type SupplierDetailRowProps = {
   value: number
@@ -24,11 +24,8 @@ type ReportPerSupplierTableProps = {
   report: ReportResponse
 }
 
-const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps): JSX.Element => {
-  const { data: suppliers } = useQuery(`suppliers`, SupplierApi.findAll, {
-    staleTime: 6000,
-    refetchOnWindowFocus: false,
-  })
+const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
+  const { data: suppliers } = useDataLoader(`suppliers`, () => SupplierApi.findAll())
 
   const groupBySuppliers = useMemo(
     () =>

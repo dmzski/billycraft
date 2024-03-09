@@ -1,13 +1,11 @@
 import { Loader } from '@coco-ui/core'
-import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
-import QuoteCustomization from 'models/QuoteCustomization'
-import { useQuery } from 'react-query'
+import { QuoteCustomizationApi } from '@/api/QuoteCustomizationApi'
+import QuoteCustomization from '@/models/QuoteCustomization'
 import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const QuoteCustomizationPage = (): JSX.Element => {
-  const quoteCustomizationQuery = useQuery('quote-customization', QuoteCustomizationApi.findMine, {
-    refetchOnWindowFocus: false,
-  })
+const QuoteCustomizationPage = () => {
+  const quoteCustomizationQuery = useDataLoader('quote-customization', QuoteCustomizationApi.findMine)
 
   return (
     <div className="w-full flex justify-center flex-col items-center">

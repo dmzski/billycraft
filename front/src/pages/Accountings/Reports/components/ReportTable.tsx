@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { ReportResponse } from 'models/Report'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { ReportResponse } from '@/models/Report'
 import { ReactNode, useMemo } from 'react'
 
 type ReportTableProps = {
@@ -12,18 +12,18 @@ type OnlyChildrenProps = {
   noBorder?: boolean
 }
 
-const ReportTableRow = ({ children }: { children: ReactNode }): JSX.Element => (
+const ReportTableRow = ({ children }: { children: ReactNode }) => (
   <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
-const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
   <dt className={clsx('md:col-span-6 bg-base-300 p-2', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
-const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
   <dd className={clsx('md:col-span-6 p-2', noBorder ? '' : 'border-b')}>{children}</dd>
 )
-const ReportTable = ({ report }: ReportTableProps): JSX.Element => {
+const ReportTable = ({ report }: ReportTableProps) => {
   const formatCurrency = useFormatCurrency()
 
   const allTaxes = useMemo(

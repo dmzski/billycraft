@@ -1,14 +1,12 @@
 import { Button, Icon, Input, useToast } from '@coco-ui/core'
-import { TodoApi } from 'api/TodoApi'
+import { TodoApi } from '@/api/TodoApi'
 import clsx from 'clsx'
-import { STRINGS } from 'constants/strings'
-// eslint-disable-next-line import/no-duplicates
+import { STRINGS } from '@/constants/strings'
 import { formatRelative } from 'date-fns'
-// eslint-disable-next-line import/no-duplicates
 import { fr } from 'date-fns/locale'
-import { Todo } from 'models/Todo'
-import * as React from 'react'
+import { Todo } from '@/models/Todo'
 import { Controller, useForm } from 'react-hook-form'
+import { ChangeEventHandler, useCallback, useState } from 'react'
 
 type TodoFormValues = { description: string }
 
@@ -16,16 +14,16 @@ type TodoListProps = {
   data?: Todo[]
   onSubmitSuccess?: () => void
 }
-const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
-  const [editMode, setEditMode] = React.useState<number>()
-  const [editTodo, setEditTodo] = React.useState('')
+const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
+  const [editMode, setEditMode] = useState<number>()
+  const [editTodo, setEditTodo] = useState('')
   const toast = useToast()
 
   const { handleSubmit, control, reset, formState } = useForm<TodoFormValues>({
     mode: 'all',
   })
 
-  const handleDone = React.useCallback(
+  const handleDone = useCallback(
     (id: number) => () => {
       const fn = async () => {
         try {
@@ -41,11 +39,11 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
     [toast, onSubmitSuccess],
   )
 
-  const handleChangeEdit: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(event => {
+  const handleChangeEdit: ChangeEventHandler<HTMLInputElement> = useCallback(event => {
     setEditTodo(event.target.value)
   }, [])
 
-  const onSubmit = React.useCallback(
+  const onSubmit = useCallback(
     (values: TodoFormValues) => {
       const fn = async () => {
         try {
@@ -62,7 +60,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
     [toast, onSubmitSuccess, reset],
   )
 
-  const handleEdit = React.useCallback(
+  const handleEdit = useCallback(
     (id: number, description: string) => () => {
       setEditMode(id)
       setEditTodo(description)
@@ -70,7 +68,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
     [],
   )
 
-  const handleEditTodo = React.useCallback(() => {
+  const handleEditTodo = useCallback(() => {
     const fn = async () => {
       try {
         await TodoApi.update(editMode as number, { description: editTodo })
@@ -85,7 +83,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps): JSX.Element => {
     fn()
   }, [toast, onSubmitSuccess, editTodo, editMode])
 
-  const handleCancelEdit = React.useCallback(() => {
+  const handleCancelEdit = useCallback(() => {
     setEditMode(undefined)
     setEditTodo('')
   }, [])

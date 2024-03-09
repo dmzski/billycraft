@@ -1,25 +1,25 @@
 import { useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
 import { Button, Icon, Loader } from '@coco-ui/core'
-import useCustomers from 'hooks/useCustomers'
-import { BillApi } from 'api/BillApi'
+import useCustomers from '@/hooks/useCustomers'
+import { BillApi } from '@/api/BillApi'
 import { useHistory } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import BillFilterContainer from './Filters'
 import { filterBills } from '../../utils/bill'
 import BillTable from './List'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type BillFilters = Record<string, string>
 
-const BillPage = (): JSX.Element => {
+const BillPage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const billsQuery = useQuery('bills', BillApi.findAllNotArchivedAndNotRefused)
+  const { data, isLoading } = useDataLoader('bills', () => BillApi.findAllNotArchivedAndNotRefused())
   const history = useHistory()
 
   const billSorted = useCallback(
-    () => filterBills(billsQuery.data ?? [], filters, customers),
-    [billsQuery.data, filters],
+    () => filterBills(data ?? [], filters, customers),
+    [customers, data, filters],
   )
 
   const goToNewBill = () => {
@@ -37,7 +37,7 @@ const BillPage = (): JSX.Element => {
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
       <BillTable data={billSorted()} />
-      {billsQuery.isLoading ? (
+      {isLoading ? (
         <div className="mt-2 flex justify-center">
           <Loader />
         </div>

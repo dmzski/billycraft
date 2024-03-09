@@ -1,6 +1,6 @@
 import { Button, Input, useToast } from "@coco-ui/core"
-import { SUPPORT_EMAIL } from "constants/global"
-import { useI18n } from "i18n"
+import { SUPPORT_EMAIL } from "@/constants/global"
+import { useI18n } from "@/i18n"
 import { Controller, useForm } from "react-hook-form"
 
 type JoinOrganizationFormValues = {

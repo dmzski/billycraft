@@ -1,16 +1,16 @@
 import { Button, Icon, Loader, useToast } from '@coco-ui/core'
-import { ReportApi } from 'api/ReportApi'
-import { STRINGS } from 'constants/strings'
-import { useFormatDate } from 'hooks/useFormatDate'
-import { ReportRequest } from 'models/Report'
+import { ReportApi } from '@/api/ReportApi'
+import { STRINGS } from '@/constants/strings'
+import { useFormatDate } from '@/hooks/useFormatDate'
+import { ReportRequest } from '@/models/Report'
 import { useCallback, useState } from 'react'
-import { useQuery, useQueryCache } from 'react-query'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import ReportOutgoingTable from './components/ReportOutgoingTable'
 import ReportPerSupplierTable from './components/ReportPerSupplierTable'
 import ReportTable from './components/ReportTable'
 import { REPORT_ROUTES } from './constants'
 import DeleteModal from './modals/DeleteModal'
+import { useDataLoader, useDataLoaderContext } from '@scaleway/use-dataloader'
 
 type DetailTableProps = {
   report: ReportRequest
@@ -39,30 +39,23 @@ const DetailsPage = () => {
   const toast = useToast()
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
-  const queryCache = useQueryCache()
-  const { data: report, isLoading } = useQuery(['reports', id], () => ReportApi.findById(id), {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
+  const { reload } = useDataLoaderContext()
+  const { data: report, isLoading } = useDataLoader(['reports', id], () => ReportApi.findById(id))
 
   const openDeleteModal = useCallback(() => {
     setDeleteOpen(true)
   }, [])
 
-  const onDelete = useCallback(() => {
-    const deleteFn = async () => {
-      try {
-        await ReportApi.delete(id)
-        toast.success(STRINGS.DELETE_SUCCESS)
-        push(REPORT_ROUTES.routes.LIST.path)
-        queryCache.invalidateQueries('reports')
-      } catch {
-        toast.error(STRINGS.DELETE_ERROR)
-      }
+  const onDelete = useCallback(async () => {
+    try {
+      await ReportApi.delete(id)
+      toast.success(STRINGS.DELETE_SUCCESS)
+      push(REPORT_ROUTES.routes.LIST.path)
+      reload('reports')
+    } catch {
+      toast.error(STRINGS.DELETE_ERROR)
     }
-
-    deleteFn()
-  }, [toast, id, push, queryCache])
+  }, [id, toast, push, reload])
 
   if (isLoading) {
     return (

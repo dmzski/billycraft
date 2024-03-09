@@ -1,12 +1,12 @@
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import DetailsPage from './DetailsPage'
 import ListPage from './ListPage'
 import OverviewPage from './OverviewPage'
 
 const { routes, path } = ROUTES.ACCOUNTINGS.routes.REPORTS
 
-const Heading = (): JSX.Element => (
+const Heading = () => (
   <div className="flex flex-col gap-4 mb-4">
     <h1 className="text-3xl">Rapports d&apos;activité</h1>
     <div className="tabs tabs-boxed flex">

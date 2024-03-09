@@ -10,46 +10,39 @@ services:
       - 5432:5432
     volumes:
       - cocoData:/var/lib/postgresql/data
-      - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./auth/migrations:/docker-entrypoint-initdb.d/auth/
 
   auth:
     env_file:
-      - ../.env
-    build:
-      context: ./auth
-      dockerfile: ./Dockerfile
-    ports:
-      - 8090:8090
+      - ./.env
+    image: coco-erp/auth:local
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.back.rule=Host(`auth.coco-erp.lan`)"
+      - "traefik.http.routers.auth.rule=Host(`auth.coco-erp.lan`)"
       - "traefik.http.middlewares.auth.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
       - "traefik.http.middlewares.auth.headers.accesscontrolalloworiginlist=http://localhost:3000"
       - "traefik.http.middlewares.auth.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.auth.headers.addvaryheader=true"
 
-  back:
-    build:
-      context: ./back
-      dockerfile: ./Dockerfile.dev
-    ports:
-      - 8080:8080
+  api:
+    image: coco-erp/api:local
     volumes:
-      - ./:/app
-      - ./generated:/upload
+      - ./back:/app
+      - ./upload:/upload
     env_file:
-      - ./docker.env
+      - ./.env
     links:
       - "reverse-proxy:auth.coco-erp.lan"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.back.rule=Host(`api.coco-erp.lan`)"
-      - "traefik.http.middlewares.back.forwardauth.address=http://auth.coco-erp.lan/api/auth/check"
-      - "traefik.http.middlewares.back.forwardauth.authResponseHeaders=X-Auth-User"
-      - "traefik.http.middlewares.back.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
-      - "traefik.http.middlewares.back.headers.accesscontrolalloworiginlist=http://localhost:3000"
-      - "traefik.http.middlewares.back.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.back.headers.addvaryheader=true"
+      - "traefik.http.routers.api.rule=Host(`api.coco-erp.lan`)"
+      - "traefik.http.middlewares.api.forwardauth.address=http://auth.coco-erp.lan/api/auth/check"
+      - "traefik.http.middlewares.api.forwardauth.authResponseHeaders=X-Auth-User"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
+      - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=http://localhost:3000"
+      - "traefik.http.middlewares.api.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.api.headers.addvaryheader=true"
 
   reverse-proxy:
     # The official v2 Traefik docker image

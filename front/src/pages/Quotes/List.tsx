@@ -1,11 +1,11 @@
-import useCustomers from 'hooks/useCustomers'
-import Quote from 'models/Quote'
+import useCustomers from '@/hooks/useCustomers'
+import Quote from '@/models/Quote'
 import QuoteTableLine from './Row'
 
 type QuoteListProps = {
   data: Quote[]
 }
-const QuoteList = ({ data }: QuoteListProps): JSX.Element => {
+const QuoteList = ({ data }: QuoteListProps) => {
   const customers = useCustomers()
 
   return (

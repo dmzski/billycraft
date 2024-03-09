@@ -1,25 +1,25 @@
-import { SupplierApi } from 'api/SupplierApi'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { OutgoingResponse } from 'models/Outgoing'
-import { ReportOutgoingResponse } from 'models/Report'
-import Supplier from 'models/Supplier'
+import { SupplierApi } from '@/api/SupplierApi'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { OutgoingResponse } from '@/models/Outgoing'
+import { ReportOutgoingResponse } from '@/models/Report'
+import Supplier from '@/models/Supplier'
 import { ReactNode, useMemo } from 'react'
-import { useQuery } from 'react-query'
 import OutgoingLinesTable from './OutgoingLinesTable'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type OnlyChildrenProps = {
   children: ReactNode
 }
 
-const DetailsTableRow = ({ children }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableRow = ({ children }: OnlyChildrenProps) => (
   <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
-const DetailsTableLeft = ({ children }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableLeft = ({ children }: OnlyChildrenProps) => (
   <dt className="md:col-span-6 border-b p-4 bg-base-200">{children}</dt>
 )
 
-const DetailsTableRight = ({ children }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableRight = ({ children }: OnlyChildrenProps) => (
   <dd className="md:col-span-6 p-4 border-b">{children}</dd>
 )
 
@@ -41,10 +41,8 @@ const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 type OutgoingDetailProps = {
   outgoing: OutgoingResponse | ReportOutgoingResponse
 }
-const OutgoingDetail = ({ outgoing }: OutgoingDetailProps): JSX.Element => {
-  const { data: suppliers } = useQuery(`suppliers`, SupplierApi.findAll, {
-    staleTime: 6000,
-  })
+const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
+  const { data: suppliers } = useDataLoader(`suppliers`, () => SupplierApi.findAll())
   const formatCurrency = useFormatCurrency()
 
   const total = useMemo(
@@ -59,13 +57,13 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps): JSX.Element => {
     () =>
       outgoing?.lines
         ? outgoing.lines.reduce(
-            (acc, line) => ({
-              ...acc,
-              [line.supplierId ?? -1]:
-                (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
-            }),
-            {} as Record<number, number>,
-          )
+          (acc, line) => ({
+            ...acc,
+            [line.supplierId ?? -1]:
+              (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
+          }),
+          {} as Record<number, number>,
+        )
         : ({} as Record<number, number>),
     [outgoing],
   )

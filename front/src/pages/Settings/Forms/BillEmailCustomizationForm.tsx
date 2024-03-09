@@ -16,7 +16,7 @@ type BillEmailCustomizationFormProps = {
 const BillEmailCustomizationForm = ({
   billEmailCustomization,
   onSubmit,
-}: BillEmailCustomizationFormProps): JSX.Element => {
+}: BillEmailCustomizationFormProps) => {
   const [
     newBillEmailCustomization,
     setNewBillEmailCustomization,

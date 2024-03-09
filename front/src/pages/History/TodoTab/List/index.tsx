@@ -1,12 +1,12 @@
 import { Table } from '@coco-ui/core'
 import { formatISO9075 } from 'date-fns'
-import { Todo } from 'models/Todo'
+import { Todo } from '@/models/Todo'
 
 type TodoListProps = {
   data: Todo[]
 }
 
-const TodoList = ({ data }: TodoListProps): JSX.Element => (
+const TodoList = ({ data }: TodoListProps) => (
   <Table className="w-full table-fixed">
     <Table.Head>
       <Table.Row>

@@ -1,11 +1,10 @@
 import { useMemo, useEffect } from 'react'
-import { useMutation } from 'react-query'
 import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
 import { Controller, useForm } from 'react-hook-form'
-import { BillApi } from 'api/BillApi'
+import { BillApi } from '@/api/BillApi'
 import { Prompt } from 'react-router-dom'
-import useCustomers from 'hooks/useCustomers'
-import { STRINGS } from 'constants/strings'
+import useCustomers from '@/hooks/useCustomers'
+import { STRINGS } from '@/constants/strings'
 import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
 import BillLineTable from './BillLineTable'
 
@@ -20,7 +19,7 @@ type BillFormProps = {
   onSubmitSuccess: (res: Bill) => Promise<void> | void
 }
 
-const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
+const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
   const toast = useToast()
   const customers = useCustomers()
   const {
@@ -35,13 +34,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
     shouldFocusError: true,
     defaultValues: defaultBill,
   })
-  const [updateBillStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
-    BillApi.updateStatus,
-  )
 
   const updateBillStatus = (status: BillStatusEnum) => async () => {
     try {
-      const res = await updateBillStatusMutation({ id: bill.id, status })
+      const res = await BillApi.updateStatus({ id: bill.id, status })
       toast.success(STRINGS.SAVE_SUCCESS)
       onSubmitSuccess(res as Bill)
     } catch {
@@ -73,8 +69,8 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
   }
 
   const disabled = useMemo(
-    () => !!((bill.id && bill.status !== BillStatusEnum.DRAFT) || isUpdatingStatus),
-    [bill, isUpdatingStatus],
+    () => !!((bill.id && bill.status !== BillStatusEnum.DRAFT)),
+    [bill],
   )
 
   const customerOptions = useMemo(() => {
@@ -137,7 +133,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             tabIndex={0}
             error={invalid}
             label="Sélectionner un client *"
-            
+
             id="customer-select"
             name={field.name}
             disabled={disabled}
@@ -146,7 +142,6 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps): JSX.Element => {
             placeholder="Nom du client"
             value={field.value}
             isSearchable
-            isLoading={!customers}
             ref={field.ref}
             required
           />

@@ -1,15 +1,14 @@
 import { Button, Icon, Select } from '@coco-ui/core'
 import { ValueType } from '@coco-ui/core/dist/components/Select'
-import { ProductApi } from 'api/ProductApi'
-import { LineTypeEnum } from 'models/LineTypeEnum'
-import { useCallback } from 'react'
-import * as React from 'react'
+import { ProductApi } from '@/api/ProductApi'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { useCallback, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { Control, useFieldArray } from 'react-hook-form'
-import { useQuery } from 'react-query'
 import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'
 import { QuoteFormValues } from '../Form'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const defaultLine = {
   description: '',
@@ -25,12 +24,10 @@ const QuoteLineTable = ({
 }: {
   disabled?: boolean
   control: Control<QuoteFormValues>
-}): JSX.Element => {
-  const productsQuery = useQuery('products', ProductApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
-  const [productIdSelected, setProductIdSelected] = React.useState<number>()
-  const onProductSelectedChange = React.useCallback((option: ValueType) => {
+}) => {
+  const productsQuery = useDataLoader('products', () => ProductApi.findAll())
+  const [productIdSelected, setProductIdSelected] = useState<number>()
+  const onProductSelectedChange = useCallback((option: ValueType) => {
     setProductIdSelected(Number(option))
   }, [])
 
@@ -51,9 +48,9 @@ const QuoteLineTable = ({
     [move],
   )
 
-  const addLine = React.useCallback(
+  const addLine = useCallback(
     (newLine = defaultLine) => {
-      append({ ...newLine, id: nanoid() })
+      append({ ...newLine, quoteId: "", line: fields.length, id: nanoid() })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -62,7 +59,7 @@ const QuoteLineTable = ({
     [append, fields],
   )
 
-  const productOptions = React.useMemo(() => {
+  const productOptions = useMemo(() => {
     if (productsQuery.data) {
       return productsQuery.data.map(product => ({
         value: product.id,
@@ -74,7 +71,7 @@ const QuoteLineTable = ({
 
   const addExistingProductSelected = () => {
     if (productIdSelected && productsQuery.data) {
-      addLine(productsQuery.data.find(product => product.id === productIdSelected))
+      addLine({...defaultLine, ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {})})
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
@@ -107,7 +104,6 @@ const QuoteLineTable = ({
             {droppableProvided => (
               <div
                 className="flex flex-col"
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
                 onKeyDown={handleKeyDown}
@@ -140,7 +136,7 @@ const QuoteLineTable = ({
         </DragDropContext>
         {!disabled ? (
           <div className="flex flex-col gap-2">
-            <Button type="button" variant="ghost" block onClick={addLine} disabled={disabled}>
+            <Button type="button" variant="ghost" block onClick={() => addLine()} disabled={disabled}>
               <Icon name="plus" />
               &nbsp; Ajouter une ligne
             </Button>
@@ -151,7 +147,6 @@ const QuoteLineTable = ({
                 name="existing-product"
                 id="existing-product"
                 options={productOptions}
-                isLoading={productsQuery.isLoading}
                 isSearchable
                 placeholder="Sélectionner un produit existant"
                 value={productIdSelected}

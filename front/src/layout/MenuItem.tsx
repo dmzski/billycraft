@@ -8,7 +8,7 @@ type MenuItemProps = {
   path: string
   exact?: boolean
 }
-const MenuItem = ({ text, icon, path, exact }: MenuItemProps): JSX.Element => {
+const MenuItem = ({ text, icon, path, exact }: MenuItemProps) => {
   const match = useRouteMatch({
     path,
     exact,

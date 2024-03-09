@@ -1,10 +1,9 @@
 import { Button, Icon, Input, useToast } from "@coco-ui/core"
-import { CompanyApi } from "api/CompanyApi"
-import { useI18n } from "i18n"
-import Company from "models/Company"
+import { CompanyApi } from "@/api/CompanyApi"
+import { useI18n } from "@/i18n"
+import Company from "@/models/Company"
 import { Controller, useForm } from "react-hook-form"
-import { useQueryCache } from "react-query"
-import { sendErrorToSentry } from "utils/errors"
+import { sendErrorToSentry } from "@/utils/errors"
 
 type CreateOrganizationFormValues = {
   articlesTax: number,
@@ -20,7 +19,6 @@ type CreateOrganizationFormValues = {
 }
 
 export const CreateOrganization = () => {
-  const queryCache = useQueryCache()
   const toast = useToast()
   const { t } = useI18n()
 
@@ -53,8 +51,6 @@ export const CreateOrganization = () => {
         othersTax: Number(values.othersTax) || 0,
       } as Company
       await CompanyApi.create(data)
-      queryCache.invalidateQueries('my-information')
-      queryCache.invalidateQueries('my-company')
       toast.success(t("onboarding.create.success"))
     } catch (err) {
       sendErrorToSentry(err)

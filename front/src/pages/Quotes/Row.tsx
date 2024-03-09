@@ -1,38 +1,31 @@
 import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
-import { QuoteApi } from 'api/QuoteApi'
+import { QuoteApi } from '@/api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
-import Customer from 'models/Customer'
-import Quote, { QuoteStatusEnum } from 'models/Quote'
-import { useMutation, useQueryCache } from 'react-query'
+import Customer from '@/models/Customer'
+import Quote, { QuoteStatusEnum } from '@/models/Quote'
 import { Link } from 'react-router-dom'
 import { MouseEvent, useCallback, useMemo } from 'react'
-import { ROUTES } from 'routes'
-import { STRINGS } from 'constants/strings'
+import { ROUTES } from '@/routes'
+import { STRINGS } from '@/constants/strings'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { QUOTE_STATUS } from '../../constants/quote'
+import { useDataLoaderContext } from '@scaleway/use-dataloader'
 
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
 }
-const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps): JSX.Element => {
-  const queryCache = useQueryCache()
+const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
+  const {reload} = useDataLoaderContext()
   const toast = useToast()
-
-  const [updateQuoteStatusMutation, updateQuoteStatusMutationState] = useMutation(
-    QuoteApi.updateStatus,
-  )
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    if (updateQuoteStatusMutationState.isLoading) {
-      return
-    }
     const updateStatus = async () => {
       try {
-        if (quote.id) await updateQuoteStatusMutation({ id: quote.id, status })
+        if (quote.id) await QuoteApi.updateStatus({ id: quote.id, status })
         toast.success(STRINGS.SAVE_SUCCESS)
-        queryCache.invalidateQueries('quotes')
+        reload('quotes')
       } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }

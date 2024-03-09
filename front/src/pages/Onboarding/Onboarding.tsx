@@ -1,10 +1,10 @@
-import { useI18n } from 'i18n'
+import { useI18n } from '@/i18n'
 import { Link, Route, Switch } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import { CreateOrganization } from './CreateOrganization'
 import { JoinOrganization } from './JoinOrganization'
 
-export const Onboarding = (): JSX.Element => {
+export const Onboarding = () => {
   const { t } = useI18n()
 
   return (

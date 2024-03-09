@@ -1,8 +1,8 @@
 import { Button, Input, Modal, useToast } from '@coco-ui/core'
-import { ReportApi } from 'api/ReportApi'
-import { STRINGS } from 'constants/strings'
+import { ReportApi } from '@/api/ReportApi'
+import { STRINGS } from '@/constants/strings'
 import { endOfMonth, formatRFC3339 } from 'date-fns'
-import { ReportRequest, ReportResponse } from 'models/Report'
+import { ReportRequest, ReportResponse } from '@/models/Report'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -15,7 +15,7 @@ const CreateReportModal = ({
   isOpen,
   onClose,
   onSubmitSuccess,
-}: CreateReportModalProps): JSX.Element => {
+}: CreateReportModalProps) => {
   const {
     control,
     handleSubmit,

@@ -1,7 +1,7 @@
-import { useUser } from 'providers/UserProvider'
+import { useUser } from '@/providers/UserProvider'
 import SideBarMenu from './SideBarMenu'
 
-const SideBar = (): JSX.Element => {
+const SideBar = () => {
   const user = useUser()
 
   return (
@@ -32,7 +32,7 @@ const SideBar = (): JSX.Element => {
           <div className="flex-grow">
             <SideBarMenu />
           </div>
-          <div className="text-xs text-center">{process.env.VERSION}</div>
+          <div className="text-xs text-center">{APP_VERSION}</div>
         </div>
       </div>
     </aside>

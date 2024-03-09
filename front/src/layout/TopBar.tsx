@@ -1,9 +1,9 @@
 import { Drawer, Icon } from '@coco-ui/core'
-import * as React from 'react'
 import SideBar from './SideBar'
+import { useState } from 'react'
 
-const TopBar = (): JSX.Element => {
-  const [menuOpen, setMenuOpen] = React.useState(false)
+const TopBar = () => {
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <div className="flex">

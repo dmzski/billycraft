@@ -1,11 +1,10 @@
-import { OutgoingResponse } from 'models/Outgoing'
-import React from 'react'
+import { OutgoingResponse } from '@/models/Outgoing'
 import Row from './Row'
 
 type ListProps = {
   data?: OutgoingResponse[]
 }
-const List = ({ data }: ListProps): JSX.Element => (
+const List = ({ data }: ListProps) => (
   <div>
     <div className="grid sm:grid-cols-12 gap-4 bg-base-200 p-4 rounded-t">
       <div className="col-span-3">Nom</div>

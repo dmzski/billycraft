@@ -1,4 +1,4 @@
-import { BillStatusEnum } from 'models/Bill'
+import { BillStatusEnum } from '@/models/Bill'
 
 type BillStatusObject = {
   enum: string

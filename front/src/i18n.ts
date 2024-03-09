@@ -1,5 +1,5 @@
-import fr from "locales/fr"
-import { GlobalLocale } from "locales/types"
+import fr from "@/locales/fr"
+import { GlobalLocale } from "@/locales/types"
 
 export const useI18n = () => {
 

@@ -1,13 +1,13 @@
-import { useFormatDate } from 'hooks/useFormatDate'
-import { ReportResponse } from 'models/Report'
+import { useFormatDate } from '@/hooks/useFormatDate'
+import { ReportResponse } from '@/models/Report'
 import { Link } from 'react-router-dom'
-import { injectIdInPath } from 'routes'
+import { injectIdInPath } from '@/routes'
 import { REPORT_ROUTES } from '../constants'
 
 type ReportRowProps = {
   report: ReportResponse
 }
-const ReportRow = ({ report }: ReportRowProps): JSX.Element => {
+const ReportRow = ({ report }: ReportRowProps) => {
   const { toISO9075 } = useFormatDate()
   return (
     <div className="grid md:grid-cols-12 p-2 border-t">
@@ -29,7 +29,7 @@ const ReportRow = ({ report }: ReportRowProps): JSX.Element => {
 type ListProps = {
   reports: ReportResponse[]
 }
-const List = ({ reports }: ListProps): JSX.Element => (
+const List = ({ reports }: ListProps) => (
   <div className="flex flex-col border rounded">
     <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-base-300">
       <div className="md:col-span-3">Nom</div>

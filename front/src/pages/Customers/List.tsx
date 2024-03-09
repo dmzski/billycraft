@@ -1,7 +1,7 @@
-import Customer from 'models/Customer'
+import Customer from '@/models/Customer'
 import CustomerTableLine from './ListRow'
 
-const CustomerTable = ({ data = [] }: { data: Customer[] }): JSX.Element => (
+const CustomerTable = ({ data = [] }: { data: Customer[] }) => (
   <div className="mt-2 flex flex-col">
     <div className="px-2 py-4 grid md:grid-cols-12 bg-base-200 border-b rounded-t">
       <div className="md:col-span-3">Nom</div>

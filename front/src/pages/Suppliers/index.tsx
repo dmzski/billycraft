@@ -1,17 +1,15 @@
 import { Button, Loader } from '@coco-ui/core'
-import { SupplierApi } from 'api/SupplierApi'
-import Supplier from 'models/Supplier'
-import { useQuery } from 'react-query'
+import { SupplierApi } from '@/api/SupplierApi'
+import Supplier from '@/models/Supplier'
 import SupplierList from './List'
 import SupplierModalForm from './modals/SupplierModalForm'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const Suppliers = () => {
-  const { data, isLoading, refetch } = useQuery(['suppliers'], SupplierApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
+  const { data, isLoading, reload } = useDataLoader(['suppliers'], SupplierApi.findAll)
 
   const reloadData = async () => {
-    await refetch()
+    await reload()
   }
 
   return (

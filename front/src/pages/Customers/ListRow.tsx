@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import CustomerModal from 'pages/Customers/Modals/CustomerModal'
-import Customer from 'models/Customer'
-import { ROUTES } from 'routes'
+import CustomerModal from '@/pages/Customers/Modals/CustomerModal'
+import Customer from '@/models/Customer'
+import { ROUTES } from '@/routes'
 
-const QuoteTableLine = ({ customer }: { customer: Customer }): JSX.Element => (
+const QuoteTableLine = ({ customer }: { customer: Customer }) => (
   <div className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
     <div className="md:col-span-3">
       <CustomerModal

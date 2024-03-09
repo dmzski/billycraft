@@ -1,11 +1,10 @@
 import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
 import { useMemo, useEffect } from 'react'
-import { useMutation } from 'react-query'
 import { Controller, useForm } from 'react-hook-form'
-import { QuoteApi } from 'api/QuoteApi'
+import { QuoteApi } from '@/api/QuoteApi'
 import { Prompt } from 'react-router-dom'
-import useCustomers from 'hooks/useCustomers'
-import { STRINGS } from 'constants/strings'
+import useCustomers from '@/hooks/useCustomers'
+import { STRINGS } from '@/constants/strings'
 import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
 import QuoteLineTable from './QuoteLineTable'
 
@@ -18,7 +17,7 @@ type QuoteFormProps = {
   quote: Quote
   onSubmitSuccess: (res: Quote) => Promise<void> | void
 }
-const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
+const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
   const toast = useToast()
   const customers = useCustomers()
   const {
@@ -33,12 +32,9 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     defaultValues: defaultQuote,
   })
 
-  const [updateQuoteStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
-    QuoteApi.updateStatus,
-  )
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
-      const res = await updateQuoteStatusMutation({ id: quote.id, status })
+      const res = await QuoteApi.updateStatus({ id: quote.id, status })
       toast.success(STRINGS.SAVE_SUCCESS)
       onSubmitSuccess(res as Quote)
     } catch {
@@ -70,8 +66,8 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
   }
 
   const disabled = useMemo(
-    () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT) || isUpdatingStatus),
-    [quote, isUpdatingStatus],
+    () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT)),
+    [quote],
   )
 
   const customerOptions = useMemo(() => {
@@ -197,7 +193,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
               variant="success"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
-              disabled={isUpdatingStatus}
             >
               <Icon name="thumb-up" />
               &nbsp; Devis accepté
@@ -207,7 +202,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
               variant="error"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
-              disabled={isUpdatingStatus}
             >
               <Icon name="thumb-down" />
               &nbsp; Devis refusé
@@ -221,7 +215,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
               variant="secondary"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
-              disabled={isUpdatingStatus}
             >
               <Icon name="document" /> &nbsp; Remettre en brouillon
             </Button>
@@ -229,7 +222,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
               size="md"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
-              disabled={isUpdatingStatus}
             >
               <Icon name="currency-euro" /> &nbsp; Demander un accompte
             </Button>
@@ -240,7 +232,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             size="md"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
-            disabled={isUpdatingStatus}
           >
             <Icon name="check" />
             &nbsp; Accompte payé
@@ -251,7 +242,6 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
             size="md"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
-            disabled={isUpdatingStatus}
           >
             <Icon name="archive" />
             &nbsp; Archiver le devis

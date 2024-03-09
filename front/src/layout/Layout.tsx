@@ -1,14 +1,14 @@
-import * as React from 'react'
-import useBreakpoint from 'hooks/useBreakpoint'
+import useBreakpoint from '@/hooks/useBreakpoint'
 import clsx from 'clsx'
 import SideBar from './SideBar'
 import TopBar from './TopBar'
+import { ReactNode } from 'react'
 
 type LayoutProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-const Layout = ({ children }: LayoutProps): JSX.Element => {
+const Layout = ({ children }: LayoutProps) => {
   const breakpoint = useBreakpoint()
 
   return (

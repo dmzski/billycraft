@@ -1,17 +1,17 @@
 import { Modal } from '@coco-ui/core'
-import { useQueryCache } from 'react-query'
 import Customer from '../../../models/Customer'
 import CustomerForm from '../Form/Form'
+import { useDataLoaderContext } from '@scaleway/use-dataloader'
 
 type CustomerModalProps = {
   customer?: Customer
   disclosure: JSX.Element
 }
-const CustomerModal = ({ customer, disclosure }: CustomerModalProps): JSX.Element => {
-  const queryCache = useQueryCache()
+const CustomerModal = ({ customer, disclosure }: CustomerModalProps) => {
+  const {reload} = useDataLoaderContext()
 
   const onSubmitSuccess = () => {
-    queryCache.invalidateQueries('customers')
+    reload('customers')
   }
 
   return (

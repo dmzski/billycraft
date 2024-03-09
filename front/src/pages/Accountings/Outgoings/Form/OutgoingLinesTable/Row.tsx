@@ -1,10 +1,10 @@
 import { Button, Icon, Input, Select } from '@coco-ui/core'
-import { SupplierApi } from 'api/SupplierApi'
-import { OutgoingRequest } from 'models/Outgoing'
+import { SupplierApi } from '@/api/SupplierApi'
+import { OutgoingRequest } from '@/models/Outgoing'
 import { useMemo, useState } from 'react'
 import { Control, Controller, useController, useWatch } from 'react-hook-form'
-import { useQuery } from 'react-query'
 import SelectBillModal from './modals/SelectBillModal'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -14,7 +14,7 @@ type RowProps = {
   onDelete: () => void
   disabled?: boolean
 }
-const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
+const Row = ({ control, index, onDelete, disabled }: RowProps) => {
   const [billModalOpen, setBillModalOpen] = useState(false)
 
   const vatController = useController({
@@ -28,10 +28,8 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
     },
   })
 
-  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
+  const { data: suppliers } = useDataLoader(['suppliers'], () => SupplierApi.findAll())
+
   const totalHT = useWatch({
     name: `lines.${index}.totalHT`,
     control,

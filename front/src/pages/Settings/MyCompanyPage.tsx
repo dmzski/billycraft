@@ -1,19 +1,17 @@
-import { CompanyApi } from 'api/CompanyApi'
-import { useQuery } from 'react-query'
+import { CompanyApi } from '@/api/CompanyApi'
 import MyCompagnyForm from './Forms/MyCompagnyForm'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const MyCompanyPage = () => {
-  const { data: company, refetch } = useQuery('my-company', CompanyApi.getMine, {
-    refetchOnWindowFocus: false,
-  })
+  const { data: company, reload } = useDataLoader('my-company', CompanyApi.getMine)
 
   return (
     <div>
       {company ? (
         <MyCompagnyForm
           company={company}
-          onSubmitSuccess={() => {
-            refetch()
+          onSubmitSuccess={async () => {
+            await reload()
           }}
         />
       ) : null}

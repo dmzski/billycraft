@@ -1,5 +1,5 @@
 import { Button, Loader } from '@coco-ui/core'
-import { OutgoingRequest } from 'models/Outgoing'
+import { OutgoingRequest } from '@/models/Outgoing'
 import { useCallback } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import Row from './Row'
@@ -8,7 +8,7 @@ type OutgoingTableProps = {
   isLoading?: boolean
   control: Control<OutgoingRequest>
 }
-const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Element => {
+const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
   const { fields, append, remove } = useFieldArray({
     name: 'lines',
     control,

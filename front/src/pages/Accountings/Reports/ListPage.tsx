@@ -1,15 +1,13 @@
 import { Button } from '@coco-ui/core'
-import { ReportApi } from 'api/ReportApi'
+import { ReportApi } from '@/api/ReportApi'
 import { useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
 import List from './components/List'
 import CreateReportModal from './modals/CreateReportModal'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const ListPage = () => {
   const [openModal, setOpenModal] = useState(false)
-  const { data, refetch } = useQuery(['reports', 'all'], ReportApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
+  const { data, reload } = useDataLoader(['reports', 'all'], () => ReportApi.findAll())
   const handleCreate = useCallback(() => {
     setOpenModal(true)
   }, [])
@@ -23,7 +21,7 @@ const ListPage = () => {
           isOpen={openModal}
           onClose={() => setOpenModal(false)}
           onSubmitSuccess={() => {
-            refetch()
+            reload()
           }}
         />
       </div>

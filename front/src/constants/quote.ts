@@ -1,4 +1,4 @@
-import { QuoteStatusEnum } from 'models/Quote'
+import { QuoteStatusEnum } from '@/models/Quote'
 
 type QuoteStatusObject = {
   enum: string

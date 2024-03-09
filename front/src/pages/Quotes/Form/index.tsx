@@ -1,48 +1,34 @@
 import { Badge, Button, Icon, useToast } from '@coco-ui/core'
 import { useState, useCallback, useEffect } from 'react'
-import { useMutation, useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
-import { QuoteApi } from 'api/QuoteApi'
-import { isQuoteMinimumAccepted } from 'utils/quote'
-import { QUOTE_STATUS } from 'constants/quote'
-import { STRINGS } from 'constants/strings'
+import { QuoteApi } from '@/api/QuoteApi'
+import { isQuoteMinimumAccepted } from '@/utils/quote'
+import { QUOTE_STATUS } from '@/constants/quote'
+import { STRINGS } from '@/constants/strings'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Quote from '../../../models/Quote'
 import { ROUTES } from '../../../routes'
 import QuoteForm from './Form'
+import { useDataLoader, useDataLoaderContext } from '@scaleway/use-dataloader'
 
-const QuoteCreationPage = (): JSX.Element => {
+const QuoteCreationPage = () => {
   const [newQuote, setNewQuote] = useState<Quote>({} as Quote)
-  const queryCache = useQueryCache()
+  const {reload} = useDataLoaderContext()
   const toast = useToast()
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: quote, refetch } = useQuery(`quote-${id}`, () => QuoteApi.findById(id), {
+  const { data: quote, reload: reloadQuote } = useDataLoader(`quote-${id}`, () => QuoteApi.findById(id), {
     enabled: id !== 'new',
-    refetchOnWindowFocus: false,
-  })
-
-  const [createBillFromQuote, createBillFromQuoteState] = useMutation(QuoteApi.createBill, {
-    onSuccess: data => {
-      toast.success(STRINGS.BILL_CREATED)
-      queryCache.invalidateQueries('bills')
-      if (data.id) {
-        history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
-      } else {
-        history.push(ROUTES.BILLS.path)
-      }
-    },
-    throwOnError: true,
   })
 
   const onSubmitSuccess = async (data: Quote) => {
     if (data.id !== id) {
       history.push(ROUTES.QUOTE_FORM.path.replace(':id', data.id))
     } else {
-      queryCache.invalidateQueries('quotes')
-      refetch()
+      reload('quotes')
+      reloadQuote()
     }
   }
 
@@ -67,17 +53,23 @@ const QuoteCreationPage = (): JSX.Element => {
     }
   }
 
-  const createBill = useCallback(() => {
+  const createBill = useCallback(async () => {
     try {
-      createBillFromQuote({ id: newQuote.id })
+      const data = await QuoteApi.createBill({ id: newQuote.id })
+      toast.success(STRINGS.BILL_CREATED)
+      if (data.id) {
+        history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
+      } else {
+        history.push(ROUTES.BILLS.path)
+      }
     } catch {
       toast.error('Erreur lors de la création de la facture')
     }
-  }, [newQuote, createBillFromQuote])
+  }, [history, newQuote.id, toast])
 
   useEffect(() => {
     setNewQuote(quote && id !== 'new' ? quote : ({} as Quote))
-  }, [quote])
+  }, [id, quote])
 
   return (
     <div className="w-full px-4 flex flex-col gap-4">
@@ -100,7 +92,6 @@ const QuoteCreationPage = (): JSX.Element => {
             onClick={createBill}
             title="Créer la facture"
             disabled={
-              createBillFromQuoteState.isLoading ||
               !isQuoteMinimumAccepted(newQuote) ||
               !newQuote.id
             }

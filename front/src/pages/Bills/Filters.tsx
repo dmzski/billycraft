@@ -1,5 +1,5 @@
 import { Input, Select } from '@coco-ui/core'
-import { BILL_STATUS } from 'constants/bill'
+import { BILL_STATUS } from '@/constants/bill'
 import { Dispatch, SetStateAction } from 'react'
 
 type BillFilterContainerProps = {
@@ -11,7 +11,7 @@ const BillFilterContainer = ({
   filters,
   setFilters,
   disabledFilters,
-}: BillFilterContainerProps): JSX.Element => (
+}: BillFilterContainerProps) => (
   <div className="flex my-2">
     <Input
       className="w-32 mr-2"

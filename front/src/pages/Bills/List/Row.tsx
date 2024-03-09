@@ -1,42 +1,31 @@
 import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
 import { IconName } from '@coco-ui/core/dist/components/Icon'
-import { BillApi } from 'api/BillApi'
-import clsx from 'clsx'
-import { STRINGS } from 'constants/strings'
+import { BillApi } from '@/api/BillApi'
+import { STRINGS } from '@/constants/strings'
 import { formatISO9075, parseJSON } from 'date-fns'
-import Bill, { BillStatusEnum } from 'models/Bill'
-import Customer from 'models/Customer'
+import Bill, { BillStatusEnum } from '@/models/Bill'
+import Customer from '@/models/Customer'
 import { useMemo, useCallback, MouseEvent } from 'react'
-import { useMutation, useQueryCache } from 'react-query'
 import { Link } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import { BILL_STATUS } from '../../../constants/bill'
+import { useDataLoaderContext } from '@scaleway/use-dataloader'
 
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
 }
-const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
-  const queryCache = useQueryCache()
+const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
+  const {reload} =useDataLoaderContext()
   const toast = useToast()
-
-  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
-    BillApi.updateStatus,
-    {
-      throwOnError: true,
-    },
-  )
 
   const updateBillStatus = (status: BillStatusEnum) => (e: MouseEvent) => {
     e.stopPropagation()
-    if (updateBillStatusMutationState.isLoading) {
-      return
-    }
     const updateStatus = async () => {
       try {
-        if (bill.id) await updateBillStatusMutation({ id: bill.id, status })
+        if (bill.id) await BillApi.updateStatus({ id: bill.id, status })
         toast.success(STRINGS.SAVE_SUCCESS)
-        queryCache.invalidateQueries('bills')
+        reload('bills')
       } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }

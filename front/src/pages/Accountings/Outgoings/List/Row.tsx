@@ -1,8 +1,8 @@
 import { formatISO9075, parseJSON } from 'date-fns'
-import { OutgoingResponse } from 'models/Outgoing'
+import { OutgoingResponse } from '@/models/Outgoing'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
@@ -10,7 +10,7 @@ type RowProps = {
   outgoing: OutgoingResponse
 }
 
-const Row = ({ outgoing }: RowProps): JSX.Element => {
+const Row = ({ outgoing }: RowProps) => {
   const total = useMemo(
     () =>
       new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(

@@ -1,7 +1,7 @@
 import { Button, Icon, Input, Modal, useToast } from '@coco-ui/core'
-import { SupplierApi } from 'api/SupplierApi'
-import { STRINGS } from 'constants/strings'
-import Supplier, { SupplierRequest } from 'models/Supplier'
+import { SupplierApi } from '@/api/SupplierApi'
+import { STRINGS } from '@/constants/strings'
+import Supplier, { SupplierRequest } from '@/models/Supplier'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -14,7 +14,7 @@ const SupplierModalForm = ({
   disclosure,
   supplier,
   onSubmitSuccess,
-}: SupplierModalFormProps): JSX.Element => {
+}: SupplierModalFormProps) => {
   const toast = useToast()
   const {
     handleSubmit,

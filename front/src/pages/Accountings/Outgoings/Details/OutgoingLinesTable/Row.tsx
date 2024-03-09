@@ -1,9 +1,9 @@
-import { BillApi } from 'api/BillApi'
-import { SupplierApi } from 'api/SupplierApi'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { OutgoingLineResponse } from 'models/Outgoing'
+import { BillApi } from '@/api/BillApi'
+import { SupplierApi } from '@/api/SupplierApi'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { OutgoingLineResponse } from '@/models/Outgoing'
+import { useDataLoader } from '@scaleway/use-dataloader'
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -12,16 +12,10 @@ type RowProps = {
 }
 const Row = ({
   line: { totalHT, vat, billId, supplierBillReference, supplierId },
-}: RowProps): JSX.Element => {
+}: RowProps) => {
   const formatCurrency = useFormatCurrency()
-  const { data: bills } = useQuery(['bills'], BillApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
-  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
+  const { data: bills } = useDataLoader(['bills'],() => BillApi.findAll())
+  const { data: suppliers } = useDataLoader(['suppliers'], () => SupplierApi.findAll())
 
   const totalTTC = useMemo(
     () =>
@@ -35,13 +29,13 @@ const Row = ({
     if (bills) return bills.find(({ id }) => id === billId)
 
     return undefined
-  }, [bills])
+  }, [billId, bills])
 
   const supplier = useMemo(() => {
     if (suppliers) return suppliers?.find(({ id }) => id === supplierId)
 
     return undefined
-  }, [suppliers])
+  }, [supplierId, suppliers])
 
   const lineColor = useMemo(() => {
     if (supplierId && suppliers) {

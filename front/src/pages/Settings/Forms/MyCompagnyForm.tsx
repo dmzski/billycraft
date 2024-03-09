@@ -1,18 +1,18 @@
 import { ChangeEvent, useCallback, useEffect, useRef } from 'react'
-import { useQueryCache } from 'react-query'
-import useLoadingState from 'hooks/useLoadingState'
-import { CompanyApi } from 'api/CompanyApi'
+import useLoadingState from '@/hooks/useLoadingState'
+import { CompanyApi } from '@/api/CompanyApi'
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
-import Company from 'models/Company'
-import { STRINGS } from 'constants/strings'
+import Company from '@/models/Company'
+import { STRINGS } from '@/constants/strings'
 import { Controller, useForm } from 'react-hook-form'
+import { useDataLoaderContext } from '@scaleway/use-dataloader'
 
 type MyCompagnyFormProps = {
   company: Company
   onSubmitSuccess?: (res: Company) => void | Promise<void>
 }
-const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.Element => {
-  const queryCache = useQueryCache()
+const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
+  const {reload} = useDataLoaderContext()
   const toast = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadLogoState = useLoadingState()
@@ -28,7 +28,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
   })
 
   const onSubmit = useCallback(
-    async values => {
+    async (values: Company) => {
       try {
         const data = {
           ...values,
@@ -37,15 +37,15 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
           othersTax: Number(values.othersTax) || 0,
         }
         const res = company?.id ? await CompanyApi.updateMine(data) : await CompanyApi.create(data)
-        queryCache.invalidateQueries('my-information')
-        queryCache.invalidateQueries('my-company')
+        reload('my-information')
+        reload('my-company')
         toast.success(STRINGS.SAVE_SUCCESS)
         onSubmitSuccess?.(res)
       } catch {
         toast.error(STRINGS.SAVE_ERROR)
       }
     },
-    [company, toast, queryCache],
+    [company?.id, reload, toast, onSubmitSuccess],
   )
 
   const selectFileToUpload = useCallback(() => {
@@ -103,7 +103,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps): JSX.
             <TextArea
               id="address"
               rows={3}
-              
+
               label="Adresse"
               placeholder="Adresse"
               name={field.name}

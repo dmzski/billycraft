@@ -1,6 +1,6 @@
 import { Button, Icon, Input, TextArea, useToast } from '@coco-ui/core'
-import { CustomerApi } from 'api/CustomerApi'
-import { STRINGS } from 'constants/strings'
+import { CustomerApi } from '@/api/CustomerApi'
+import { STRINGS } from '@/constants/strings'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Customer from '../../../models/Customer'
@@ -20,7 +20,7 @@ type CustomerFormProps = {
   onSubmitSuccess?: (data: Customer) => Promise<void> | void
 }
 
-const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Element => {
+const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
   const toast = useToast()
   const {
     handleSubmit,
@@ -42,11 +42,10 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
         toast.error(STRINGS.SAVE_ERROR)
       }
     },
-    [toast],
+    [onSubmitSuccess, toast],
   )
 
   const tryDelete = useCallback(() => {
-    // eslint-disable-next-line no-alert
     const deleteCustomer = window.confirm('Êtes-vous sur de vouloir supprimer ce client')
     if (deleteCustomer && customer?.id) {
       const asyncDelete = async () => {
@@ -60,7 +59,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
       }
       asyncDelete()
     }
-  }, [toast, customer])
+  }, [customer, toast, onSubmitSuccess])
 
   useEffect(() => {
     if (customer) {
@@ -107,7 +106,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps): JSX.Ele
               rows={4}
               className="mt-3"
               label="Adresse"
-              
+
               placeholder="Adresse du client"
               name={field.name}
               value={field.value}

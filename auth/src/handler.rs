@@ -37,7 +37,7 @@ pub async fn register_user_handler(
             .await
             .map_err(|e| {
                 let error_response = AppError {
-                    message: format!("Database error: {}", e),
+                    message: format!("Error: {}", e),
                 };
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
@@ -79,7 +79,7 @@ pub async fn register_user_handler(
     .await
     .map_err(|e| {
         let error_response = AppError {
-            message: format!("Database error: {}", e),
+            message: format!("Error: {}", e),
         };
         (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -116,7 +116,7 @@ pub async fn login_user_handler(
         let error_response = AppError {
             message: "Invalid email or password".to_string(),
         };
-        (StatusCode::BAD_REQUEST, Json(json!(error_response)))
+        (StatusCode::NOT_FOUND, Json(json!(error_response)))
     })?;
 
     let is_valid = match PasswordHash::new(&user.password) {
@@ -130,7 +130,7 @@ pub async fn login_user_handler(
         let error_response = AppError {
             message: "Invalid email or password".to_string(),
         };
-        return Err((StatusCode::BAD_REQUEST, Json(json!(error_response))));
+        return Err((StatusCode::NOT_FOUND, Json(json!(error_response))));
     }
 
     let now = chrono::Utc::now();
@@ -182,7 +182,6 @@ pub async fn logout_handler() -> Result<impl IntoResponse, (StatusCode, String)>
 pub async fn check_session(
     Extension(user): Extension<User>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-
     let mut response = Response::new(json!("Ok").to_string());
     response
         .headers_mut()

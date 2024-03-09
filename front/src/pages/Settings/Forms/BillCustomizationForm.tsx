@@ -1,28 +1,18 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
-import { BillCustomizationApi } from 'api/BillCustomizationApi'
-import { STRINGS } from 'constants/strings'
-import BillCustomization from 'models/BillCustomization'
-import { ChangeEvent } from 'react'
-import * as React from 'react'
-import { useMutation } from 'react-query'
+import { BillCustomizationApi } from '@/api/BillCustomizationApi'
+import { STRINGS } from '@/constants/strings'
+import BillCustomization from '@/models/BillCustomization'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 type BillCustomizationFormProps = {
   billCustomization: BillCustomization
 }
 
-const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps): JSX.Element => {
-  const [newBillCustomization, setNewBillCustomization] = React.useState<BillCustomization>(
+const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps) => {
+  const [newBillCustomization, setNewBillCustomization] = useState(
     {} as BillCustomization,
   )
   const toast = useToast()
-  const [updateBillCustomizationMutation, updateBillCustomizationMutationState] = useMutation(
-    BillCustomizationApi.updateMine,
-    {
-      onSuccess: () => {
-        toast.success(STRINGS.SAVE_SUCCESS)
-      },
-    },
-  )
 
   const handleToggle = (property: keyof BillCustomization) => () => {
     setNewBillCustomization(current => ({
@@ -31,14 +21,13 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
     }))
   }
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!updateBillCustomizationMutationState.isLoading) {
-      updateBillCustomizationMutation(newBillCustomization)
-    }
+    await BillCustomizationApi.updateMine(newBillCustomization)
+    toast.success(STRINGS.SAVE_SUCCESS)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (billCustomization) {
       setNewBillCustomization(billCustomization)
     }
@@ -126,10 +115,10 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           className="w-full"
           placeholder="Pied de page"
           value={newBillCustomization.footer}
-          onChange={(e: React.ChangeEvent) =>
+          onChange={(e) =>
             setNewBillCustomization({
               ...newBillCustomization,
-              footer: (e.target as HTMLTextAreaElement).value,
+              footer: e.target.value,
             })
           }
         />
@@ -138,7 +127,6 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           size="md"
           block
           variant="success"
-          disabled={updateBillCustomizationMutationState.isLoading}
           onClick={onSubmit}
         >
           Enregister la personnalisation du PDF

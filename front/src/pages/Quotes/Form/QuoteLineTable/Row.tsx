@@ -1,6 +1,6 @@
 import { Button, Icon, Input, Select, TextArea } from '@coco-ui/core'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { LineTypeEnum } from 'models/LineTypeEnum'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useMemo, useRef } from 'react'
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
@@ -21,7 +21,7 @@ const QuoteLineTableLine = ({
   provided,
   index,
   control,
-}: QuoteLineTableLineProps): JSX.Element => {
+}: QuoteLineTableLineProps) => {
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
   const typeRef = useRef<HTMLInputElement | null>()
@@ -60,14 +60,12 @@ const QuoteLineTableLine = ({
 
   return (
     <div
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...provided?.draggableProps}
       className="bg-base-100 grid md:grid-cols-12 mb-2 p-2 gap-2"
       ref={provided?.innerRef}
     >
       <div className="flex md:col-span-2">
         <div
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...provided?.dragHandleProps}
           className="items-center flex p-2"
         >

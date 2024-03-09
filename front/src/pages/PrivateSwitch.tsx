@@ -1,9 +1,8 @@
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
-import { ROUTES } from 'routes'
-import { useEffect } from 'react'
-import { useUser } from 'providers/UserProvider'
-import { useAuth } from 'providers/AuthProvider'
-import { PageLoader } from 'components/PageLoader'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { ROUTES } from '@/routes'
+import { useUser } from '@/providers/UserProvider'
+import { useAuth } from '@/providers/AuthProvider'
+import { PageLoader } from '@/components/PageLoader'
 import Dashboard from './Dashboard'
 import Layout from '../layout/Layout'
 import Onboarding from './Onboarding/Onboarding'
@@ -20,21 +19,10 @@ import { Register } from './Auth/Register'
 
 
 
-const PrivateSwitch = (): JSX.Element => {
+const PrivateSwitch = () => {
   const user = useUser()
-  const { location, push } = useHistory()
   const { isAuthenticated } = useAuth()
 
-  useEffect(() => {
-    if (user.user && isAuthenticated) {
-      if (!user.user.companyId && location.pathname !== ROUTES.ONBOARDING.path) {
-        push(ROUTES.ONBOARDING.path)
-      }
-      if (user.user.companyId && location.pathname === ROUTES.ONBOARDING.path) {
-        push(ROUTES.DASHBOARD.path)
-      }
-    }
-  }, [user, push, location, isAuthenticated])
 
   if (!isAuthenticated) {
     return (
@@ -58,7 +46,7 @@ const PrivateSwitch = (): JSX.Element => {
 
   if (user.user && user.user.companyId === null) {
     return (
-      <Switch location={location}>
+      <Switch>
         <Route path={ROUTES.ONBOARDING.path} component={Onboarding} />
         <Route render={() =>
           <Redirect to={ROUTES.ONBOARDING.path} />
@@ -69,22 +57,12 @@ const PrivateSwitch = (): JSX.Element => {
   }
   return (
     <Layout>
-      <Switch location={location}>
-        <Route path={ROUTES.ACCOUNTINGS.path}>
-          <AccountingSwitch />
-        </Route>
-        <Route path={ROUTES.QUOTES.path}>
-          <QuoteSwitch />
-        </Route>
-        <Route path={ROUTES.BILLS.path}>
-          <BillSwitch />
-        </Route>
-        <Route path={ROUTES.CUSTOMERS.path}>
-          <CustomerSwitch />
-        </Route>
-        <Route path={ROUTES.SUPPLIERS.path}>
-          <SupplierSwitch />
-        </Route>
+      <Switch>
+        <Route path={ROUTES.ACCOUNTINGS.path} component={AccountingSwitch} />
+        <Route path={ROUTES.QUOTES.path} component={QuoteSwitch} />
+        <Route path={ROUTES.BILLS.path} component={BillSwitch} />
+        <Route path={ROUTES.CUSTOMERS.path} component={CustomerSwitch} />
+        <Route path={ROUTES.SUPPLIERS.path} component={SupplierSwitch} />
         <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
         <Route
           path={ROUTES.PRODUCTS.path}
@@ -93,9 +71,9 @@ const PrivateSwitch = (): JSX.Element => {
         />
         <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
         <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
-        <Route>
+        <Route render={() =>
           <Redirect to={ROUTES.DASHBOARD.path} />
-        </Route>
+        } />
       </Switch>
     </Layout>
   )

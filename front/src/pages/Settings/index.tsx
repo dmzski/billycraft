@@ -1,5 +1,5 @@
 import SettingsSwitch from './SettingsSwitch'
 
-const Settings = (): JSX.Element => <SettingsSwitch />
+const Settings = () => <SettingsSwitch />
 
 export default Settings

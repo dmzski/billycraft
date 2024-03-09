@@ -1,14 +1,12 @@
-import { OutgoingApi } from 'api/OutgoingApi'
+import { OutgoingApi } from '@/api/OutgoingApi'
 import { formatRFC3339 } from 'date-fns'
-import { OutgoingResponse } from 'models/Outgoing'
+import { OutgoingResponse } from '@/models/Outgoing'
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 import OutgoingForm from '../Form'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const Overview = () => {
-  const { data, refetch } = useQuery(['outgoings', 'current'], OutgoingApi.findCurrent, {
-    refetchOnWindowFocus: false,
-  })
+  const { data, reload } = useDataLoader(['outgoings', 'current'], () => OutgoingApi.findCurrent())
 
   const currentMonth = useMemo(
     () =>
@@ -49,7 +47,7 @@ const Overview = () => {
       </div>
       <OutgoingForm
         onSubmitSuccess={() => {
-          refetch()
+          reload()
         }}
         disabledFields={['startDate']}
         outgoing={data ?? defaultOutgoingOverview}

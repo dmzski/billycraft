@@ -7,6 +7,12 @@ up:
 down:
 	docker compose down
 
+prepare:
+	cargo sqlx prepare
+
+build:
+	docker build -f ./Dockerfile -t coco-erp/auth:local .
+
 migrate-up:
 	sqlx migrate run
 

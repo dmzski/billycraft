@@ -1,21 +1,18 @@
 import { Badge, Icon, Loader } from '@coco-ui/core'
-import { BillApi } from 'api/BillApi'
-import { TodoApi } from 'api/TodoApi'
-import { useQuery } from 'react-query'
-import { getBillTotal } from 'utils/bill'
+import { BillApi } from '@/api/BillApi'
+import { TodoApi } from '@/api/TodoApi'
+import { getBillTotal } from '@/utils/bill'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const dateOffset = 24 * 60 * 60 * 1000 * 7 // 5 days
 
-const Dashboard = (): JSX.Element => {
-  const { data: notPaid, isLoading } = useQuery(['bills', 'not-paid'], BillApi.findAllNotPaid)
-  const { data: todos, refetch } = useQuery(
+const Dashboard = () => {
+  const { data: notPaid, isLoading } = useDataLoader(['bills', 'not-paid'], BillApi.findAllNotPaid)
+  const { data: todos, reload } = useDataLoader(
     'todos-dashboard',
     () => TodoApi.findAllFinishedAfter(new Date(Date.now() - dateOffset)),
-    {
-      refetchOnWindowFocus: false,
-    },
   )
 
   const totalNotPaid = notPaid && Array.isArray(notPaid) ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100 : 0
@@ -43,7 +40,7 @@ const Dashboard = (): JSX.Element => {
               &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
             </Badge>
           </div>
-          <TodoList data={todos} onSubmitSuccess={() => refetch()} />
+          <TodoList data={todos} onSubmitSuccess={() => reload()} />
         </section>
         <hr />
         <section className="flex flex-col gap-4">

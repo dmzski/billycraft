@@ -1,6 +1,5 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
-import { ChangeEvent, FormEvent } from 'react'
-import * as React from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import QuoteEmailCustomization from '../../../models/QuoteEmailCustomization'
 
 const defaultValues = {
@@ -16,14 +15,14 @@ type QuoteEmailCustomizationFormProps = {
 const QuoteEmailCustomizationForm = ({
   quoteEmailCustomization,
   onSubmit,
-}: QuoteEmailCustomizationFormProps): JSX.Element => {
+}: QuoteEmailCustomizationFormProps) => {
   const [
     newQuoteEmailCustomization,
     setNewQuoteEmailCustomization,
-  ] = React.useState<QuoteEmailCustomization>(quoteEmailCustomization || defaultValues)
+  ] = useState(quoteEmailCustomization ?? defaultValues)
 
-  React.useEffect(() => {
-    setNewQuoteEmailCustomization(quoteEmailCustomization || defaultValues)
+  useEffect(() => {
+    setNewQuoteEmailCustomization(quoteEmailCustomization ?? defaultValues)
   }, [quoteEmailCustomization])
 
   const handleToggle = (field: string) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +61,7 @@ const QuoteEmailCustomizationForm = ({
             id="email-subject"
             label="Objet du mail"
             value={newQuoteEmailCustomization.object}
-            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewQuoteEmailCustomization({
                 ...newQuoteEmailCustomization,
                 object: e.target.value,
@@ -78,7 +77,7 @@ const QuoteEmailCustomizationForm = ({
             label="Corps du mail"
             rows={5}
             value={newQuoteEmailCustomization.body}
-            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setNewQuoteEmailCustomization({
                 ...newQuoteEmailCustomization,
                 body: e.target.value,

@@ -1,23 +1,22 @@
 import { ToastProvider } from '@coco-ui/core'
-import * as React from 'react'
-import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { AuthProvider } from './AuthProvider'
 import { UserProvider } from './UserProvider'
+import { DataLoaderProvider } from '@scaleway/use-dataloader'
+import { ReactNode } from 'react'
 
-const queryCache = new QueryCache()
 
 
 type MainProviderProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
-const MainProvider = ({ children }: MainProviderProps): JSX.Element => (
-    <ReactQueryCacheProvider queryCache={queryCache}>
+const MainProvider = ({ children }: MainProviderProps) => (
+    <DataLoaderProvider>
       <AuthProvider>
         <ToastProvider>
           <UserProvider>{children}</UserProvider>
         </ToastProvider>
       </AuthProvider>
-    </ReactQueryCacheProvider>
+    </DataLoaderProvider>
   )
 
 export default MainProvider

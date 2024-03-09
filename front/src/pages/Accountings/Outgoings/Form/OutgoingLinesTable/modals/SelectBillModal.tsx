@@ -1,9 +1,9 @@
 import { Button, Input, Modal, Select } from '@coco-ui/core'
-import { BillApi } from 'api/BillApi'
-import useCustomers from 'hooks/useCustomers'
+import { BillApi } from '@/api/BillApi'
+import useCustomers from '@/hooks/useCustomers'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useController, useForm } from 'react-hook-form'
-import { useQuery } from 'react-query'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type SelectBillModalProps = {
   isOpen?: boolean
@@ -16,10 +16,8 @@ type SelectBillModalForm = {
   title?: string
   billId?: string
 }
-const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): JSX.Element => {
-  const { data: bills, isLoading: isLoadingBills } = useQuery(['bills'], BillApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
+const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) => {
+  const { data: bills } = useDataLoader(['bills'], () => BillApi.findAll(), {
     enabled: isOpen,
   })
   const customers = useCustomers()
@@ -83,7 +81,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
           return false
         })
         ?.map(({ id, title }) => ({ value: id, label: `${id} - ${title}` })) ?? [],
-    [titleController.field.value, customerController.field.value, bills, customers],
+    [titleController.field.value, customerController.field.value, bills],
   )
 
   const beforeSubmit = useCallback(
@@ -92,12 +90,12 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
       onSubmit?.(billId)
       return false
     },
-    [onClose],
+    [onClose, onSubmit],
   )
 
   useEffect(() => {
     reset()
-  }, [isOpen])
+  }, [isOpen, reset])
 
   return (
     <Modal onClose={onClose} open={isOpen}>
@@ -111,7 +109,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={customerController.field.onChange}
             ref={customerController.field.ref}
             label="Client"
-            
+
             isSearchable
           />
 
@@ -121,7 +119,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={titleController.field.onChange}
             ref={titleController.field.ref}
             label="Titre"
-            
+
           />
 
           <Select
@@ -131,8 +129,6 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps): J
             onChange={billIdController.field.onChange}
             ref={billIdController.field.ref}
             label="Facture"
-            
-            isLoading={isLoadingBills}
             isSearchable
           />
           <Button

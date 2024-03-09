@@ -1,11 +1,11 @@
 import clsx from 'clsx'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { useFormatDate } from 'hooks/useFormatDate'
-import { ReportOutgoingResponse, ReportResponse } from 'models/Report'
-import { OUTGOING_ROUTES } from 'pages/Accountings/Outgoings/constants'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useFormatDate } from '@/hooks/useFormatDate'
+import { ReportOutgoingResponse, ReportResponse } from '@/models/Report'
+import { OUTGOING_ROUTES } from '@/pages/Accountings/Outgoings/constants'
 import { ReactNode, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { injectIdInPath } from 'routes'
+import { injectIdInPath } from '@/routes'
 
 type ReportOutgoingTableProps = {
   report: ReportResponse
@@ -16,19 +16,19 @@ type OnlyChildrenProps = {
   noBorder?: boolean
 }
 
-const DetailsTableRow = ({ children }: { children: ReactNode }): JSX.Element => (
+const DetailsTableRow = ({ children }: { children: ReactNode }) => (
   <dl className="grid md:grid-cols-12">{children}</dl>
 )
 
-const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
   <dt className={clsx('md:col-span-6 p-2 bg-base-300', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
-const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps): JSX.Element => (
+const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
   <dd className={clsx('md:col-span-6 p-2', noBorder ? '' : 'border-b')}>{children}</dd>
 )
 
-const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps): JSX.Element => {
+const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
   const formatCurrency = useFormatCurrency()
   const { toISO9075 } = useFormatDate()
 

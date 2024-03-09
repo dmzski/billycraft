@@ -1,27 +1,25 @@
 import { Button, Loader } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
+import { OutgoingApi } from '@/api/OutgoingApi'
 import { useCallback } from 'react'
-import { useQuery, useQueryCache } from 'react-query'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { injectIdInPath, ROUTES } from 'routes'
-import { OutgoingResponse } from 'models/Outgoing'
+import { injectIdInPath, ROUTES } from '@/routes'
+import { OutgoingResponse } from '@/models/Outgoing'
 import OutgoingForm from './Form'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const FormPage = () => {
   const { id } = useParams<{ id: string }>()
   const { push } = useHistory()
-  const queryCache = useQueryCache()
-  const { data, isLoading } = useQuery(['outgoings', id], () => OutgoingApi.findOneById(id), {
-    refetchOnWindowFocus: false,
+  const { data, isLoading } = useDataLoader(['outgoings', id], () => OutgoingApi.findOneById(id), {
     enabled: id !== 'new',
   })
 
   const onSubmitSuccess = useCallback((res: OutgoingResponse) => {
-    queryCache.invalidateQueries('outgoings')
     push(injectIdInPath(routes.DETAILS.path, res.id))
-  }, [])
+  }, [push])
+
   return (
     <div>
       <Link to={routes.LIST.path}>

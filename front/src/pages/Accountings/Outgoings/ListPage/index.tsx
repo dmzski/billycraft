@@ -1,16 +1,14 @@
-import { useQuery } from 'react-query'
-import { OutgoingApi } from 'api/OutgoingApi'
+import { OutgoingApi } from '@/api/OutgoingApi'
 import { Button, Loader } from '@coco-ui/core'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import { Link } from 'react-router-dom'
 import OutgoingList from '../List'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const ListPage = () => {
-  const { data, isLoading } = useQuery(['outgoings'], OutgoingApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
+  const { data, isLoading } = useDataLoader(['outgoings'], () => OutgoingApi.findAll())
 
   return (
     <div>

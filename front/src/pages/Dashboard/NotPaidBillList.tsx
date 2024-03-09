@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import { formatISO9075, parseJSON } from 'date-fns'
-import useCustomers from 'hooks/useCustomers'
-import Bill from 'models/Bill'
+import useCustomers from '@/hooks/useCustomers'
+import Bill from '@/models/Bill'
 import { Link } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 
 type NotPaidBillListProps = {
   data: Bill[]
 }
-const NotPaidBillList = ({ data }: NotPaidBillListProps): JSX.Element => {
+const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
   const customers = useCustomers()
   return (
     <div className="border rounded flex flex-col">

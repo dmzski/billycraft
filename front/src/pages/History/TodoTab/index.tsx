@@ -1,10 +1,10 @@
-import { TodoApi } from 'api/TodoApi'
-import Loader from 'components/Loader'
-import { useQuery } from 'react-query'
+import { TodoApi } from '@/api/TodoApi'
+import Loader from '@/components/Loader'
 import TodoList from './List'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const TodoTab = (): JSX.Element => {
-  const { data, isLoading } = useQuery('todos-done', TodoApi.findAllFinished)
+const TodoTab = () => {
+  const { data, isLoading } = useDataLoader('todos-done', () => TodoApi.findAllFinished())
 
   return (
     <>

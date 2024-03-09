@@ -21,7 +21,7 @@ export const useFormatDate = (): UseFormatDateReturn => {
       toISO9075,
       toRFC3339,
     }),
-    [],
+    [toISO9075, toRFC3339],
   )
 
   return value

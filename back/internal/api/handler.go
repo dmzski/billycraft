@@ -17,14 +17,14 @@ import (
 	"back/internal/api/suppliers"
 	"back/internal/api/todos"
 	"back/internal/api/users"
-	"back/internal/lib/oidc"
+	"back/internal/lib/auth"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func InitApiRoutes(app *fiber.App) {
 	api := app.Group("/api")
-	v1 := api.Group("/v1", oidc.Secure())
+	v1 := api.Group("/v1", auth.Secure())
 	// V1 Api Routes
 	company.InitRoutes(v1)
 	reports.InitRoutes(v1)

@@ -1,28 +1,19 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
-import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
-import { STRINGS } from 'constants/strings'
-import QuoteCustomization from 'models/QuoteCustomization'
+import { QuoteCustomizationApi } from '@/api/QuoteCustomizationApi'
+import { STRINGS } from '@/constants/strings'
+import QuoteCustomization from '@/models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import { useMutation } from 'react-query'
 
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
 }
 const QuoteCustomizationForm = ({
   quoteCustomization,
-}: QuoteCustomizationFormProps): JSX.Element => {
+}: QuoteCustomizationFormProps) => {
   const [newQuoteCustomization, setNewQuoteCustomization] = useState<QuoteCustomization>(
     {} as QuoteCustomization,
   )
   const toast = useToast()
-  const [updateQuoteCustomizationMutation, updateQuoteCustomizationMutationState] = useMutation(
-    QuoteCustomizationApi.updateMine,
-    {
-      onSuccess: () => {
-        toast.success(STRINGS.SAVE_SUCCESS)
-      },
-    },
-  )
 
   const handleToggle = (property: keyof QuoteCustomization) => () => {
     setNewQuoteCustomization(current => ({
@@ -31,11 +22,10 @@ const QuoteCustomizationForm = ({
     }))
   }
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!updateQuoteCustomizationMutationState.isLoading) {
-      updateQuoteCustomizationMutation(newQuoteCustomization)
-    }
+    await QuoteCustomizationApi.updateMine(newQuoteCustomization)
+    toast.success(STRINGS.SAVE_SUCCESS)
   }
 
   useEffect(() => {
@@ -139,7 +129,6 @@ const QuoteCustomizationForm = ({
           block
           size="md"
           onClick={onSubmit}
-          disabled={updateQuoteCustomizationMutationState.isLoading}
         >
           Enregister la personnalisation du PDF
         </Button>

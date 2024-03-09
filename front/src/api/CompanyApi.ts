@@ -1,4 +1,4 @@
-import Company from 'models/Company'
+import Company from '@/models/Company'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

@@ -1,9 +1,9 @@
 import { useTableState } from '@coco-ui/core'
-import useCustomers from 'hooks/useCustomers'
-import Bill from 'models/Bill'
+import useCustomers from '@/hooks/useCustomers'
+import Bill from '@/models/Bill'
 import BillTableLine from './Row'
 
-const BillList = ({ data }: { data: Bill[] }): JSX.Element => {
+const BillList = ({ data }: { data: Bill[] }) => {
   const customers = useCustomers()
   const { data: bills } = useTableState({
     data,

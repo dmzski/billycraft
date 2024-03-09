@@ -1,23 +1,22 @@
 import { Badge, Button, Icon, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
-import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
-import { BillApi } from 'api/BillApi'
-import { BILL_STATUS } from 'constants/bill'
+import { BillApi } from '@/api/BillApi'
+import { BILL_STATUS } from '@/constants/bill'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Bill from '../../../models/Bill'
 import { ROUTES } from '../../../routes'
 import BillForm from './Form'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const BillFormPage = (): JSX.Element => {
+const BillFormPage = () => {
   const [newBill, setNewBill] = useState<Bill>({} as Bill)
-  const queryCache = useQueryCache()
   const toast = useToast()
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: bill, refetch } = useQuery(`bill-${id}`, () => BillApi.findById(id), {
+  const { data: bill, reload } = useDataLoader(["bill", id], () => BillApi.findById(id), {
     enabled: id !== 'new',
   })
 
@@ -25,8 +24,7 @@ const BillFormPage = (): JSX.Element => {
     if (data.id !== id) {
       history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
     } else {
-      queryCache.invalidateQueries('bills')
-      refetch()
+      reload()
     }
   }
 
@@ -53,7 +51,7 @@ const BillFormPage = (): JSX.Element => {
 
   useEffect(() => {
     setNewBill(bill && id !== 'new' ? bill : ({} as Bill))
-  }, [bill])
+  }, [bill, id])
 
   return (
     <div className="w-full flex flex-col gap-4">

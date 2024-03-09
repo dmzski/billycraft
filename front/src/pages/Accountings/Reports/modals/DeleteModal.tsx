@@ -1,5 +1,4 @@
 import { Button, Modal } from '@coco-ui/core'
-import React from 'react'
 
 type DeleteModalProps = {
   isOpen?: boolean
@@ -8,7 +7,7 @@ type DeleteModalProps = {
 }
 
 const DeleteModal = ({ onClose, isOpen, onSubmit }: DeleteModalProps) => (
-  <Modal onClose={onClose} open={isOpen} size="sm">
+  <Modal onClose={onClose} open={isOpen}>
     <div className="w-full">
       <h2 className="text-error-600 text-xl font-bold border-b mb-4 pb-2">Supprimer un rapport</h2>
       <p className="mb-2">Êtes-vous sûr de vouloir supprimer ce rapport ?</p>

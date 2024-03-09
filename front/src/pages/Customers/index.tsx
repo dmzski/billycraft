@@ -1,20 +1,12 @@
-import { useState } from 'react'
-import { useQuery } from 'react-query'
 import { Button, Icon, Loader } from '@coco-ui/core'
-import { CustomerApi } from 'api/CustomerApi'
+import { CustomerApi } from '@/api/CustomerApi'
 import CustomerTable from './List'
 import CustomerModal from './Modals/CustomerModal'
 import Customer from '../../models/Customer'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const CustomerPage = (): JSX.Element => {
-  const customersQuery = useQuery(['customers', 'not-deleted'], CustomerApi.findAllNotDeleted, {
-    refetchOnWindowFocus: false,
-  })
-  const [isOpen, setIsOpen] = useState(false)
-
-  const goToNewCustomer = () => {
-    setIsOpen(true)
-  }
+const CustomerPage = () => {
+  const customersQuery = useDataLoader(['customers', 'not-deleted'], CustomerApi.findAllNotDeleted)
 
   return (
     <>
@@ -23,7 +15,7 @@ const CustomerPage = (): JSX.Element => {
         <CustomerModal
           customer={{} as Customer}
           disclosure={
-            <Button variant="primary" size="md" onClick={goToNewCustomer}>
+            <Button variant="primary" size="md">
               <Icon name="plus" />
               &nbsp; Nouveau client
             </Button>

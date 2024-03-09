@@ -1,13 +1,11 @@
-import { ProductApi } from 'api/ProductApi'
-import { useQuery } from 'react-query'
+import { ProductApi } from '@/api/ProductApi'
 import Loader from '../../components/Loader'
 import ProductTable from './List'
 import Product from '../../models/Product'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
-const ProductsPage = (): JSX.Element => {
-  const productsQuery = useQuery('products', () => ProductApi.findAll(), {
-    refetchOnWindowFocus: false,
-  })
+const ProductsPage = () => {
+  const productsQuery = useDataLoader('products', () => ProductApi.findAll())
   return (
     <>
       <h2 className="text-3xl">Articles</h2>

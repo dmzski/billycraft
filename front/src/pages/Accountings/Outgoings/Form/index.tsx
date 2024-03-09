@@ -1,8 +1,8 @@
 import { Button, Input, useToast } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
-import { STRINGS } from 'constants/strings'
+import { OutgoingApi } from '@/api/OutgoingApi'
+import { STRINGS } from '@/constants/strings'
 import { endOfMonth, format, formatRFC3339 } from 'date-fns'
-import { OutgoingRequest, OutgoingResponse } from 'models/Outgoing'
+import { OutgoingRequest, OutgoingResponse } from '@/models/Outgoing'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import OutgoingLinesTable from './OutgoingLinesTable'
@@ -12,7 +12,7 @@ type FormProps = {
   onSubmitSuccess?: (res: OutgoingResponse) => void | Promise<void>
   disabledFields?: string[]
 }
-const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Element => {
+const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
   const toast = useToast()
   const {
     handleSubmit,
@@ -46,7 +46,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
         toast.error(STRINGS.SAVE_ERROR)
       }
     },
-    [outgoing, reset, toast],
+    [onSubmitSuccess, outgoing.id, toast],
   )
 
   useEffect(() => {
