@@ -1,14 +1,14 @@
-import React from 'react'
+import { ReactNode } from "react";
 
 type TableHeadProps = {
   columns?: { name: string; className?: string }[]
-  children?: React.ReactNode
+  children?: ReactNode
 }
 const TableHead = ({
   columns,
   children,
   ...props
-}: TableHeadProps): JSX.Element => {
+}: TableHeadProps) => {
   if (columns)
     return (
       <thead {...props}>

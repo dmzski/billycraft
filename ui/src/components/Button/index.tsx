@@ -1,8 +1,7 @@
-import React, {
+import {
   ButtonHTMLAttributes,
   ForwardedRef,
   forwardRef,
-  RefObject,
   useMemo,
 } from 'react'
 import clsx from 'clsx'
@@ -14,14 +13,14 @@ const roundedClasses = 'btn-circle'
 const loadingClasses = 'loading'
 const blockClasses = 'btn-block'
 
-export const BUTTON_SIZES = {
+const BUTTON_SIZES = {
   lg: 'btn-lg',
   md: 'btn-md',
   sm: 'btn-sm',
   xs: 'btn-xs',
 } as const
 
-export const BUTTON_VARIANTS = {
+const BUTTON_VARIANTS = {
   default: '',
   primary: 'btn-primary',
   secondary: 'btn-secondary',
@@ -46,7 +45,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   block?: boolean
 }
 
-function Button(
+const Button = forwardRef((
   {
     variant = 'default',
     size = 'md',
@@ -62,7 +61,7 @@ function Button(
     ...props
   }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>
-): JSX.Element {
+) => {
   const computeClassName = useMemo(
     () =>
       clsx([
@@ -89,6 +88,6 @@ function Button(
       {children}
     </button>
   )
-}
+})
 
-export default forwardRef(Button)
+export default Button

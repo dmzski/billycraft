@@ -1,15 +1,18 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Loader, { LoaderProps } from '.'
+import Loader from '.'
+import { StoryObj } from '@storybook/react'
 
 export default {
   title: 'Components/Loader',
   component: Loader,
-} as Meta
+}
 
-const Template: Story<LoaderProps> = (args) => <Loader {...args} />
+type Story = StoryObj<typeof Loader>
 
-export const Basic = Template.bind({})
-Basic.args = {
-  size: 'md',
+const render: Story['render'] = (args) => <Loader {...args} />
+
+export const Basic: Story = {
+  render,
+  args: {
+    size: 'md',
+  }
 }

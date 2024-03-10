@@ -1,4 +1,4 @@
-import React, {
+import {
   ComponentProps,
   createContext,
   ReactNode,
@@ -13,8 +13,8 @@ import Toast from './Toast'
 
 type ToastOptions = {
   variant: ComponentProps<typeof Toast>['variant']
-  callback?: () => any
-  duration: number
+  callback?: () => void
+  duration?: number
 }
 type ToastInfo = {
   render: ReactNode
@@ -23,7 +23,7 @@ type ToastInfo = {
 } & ToastOptions
 
 export type ToastProviderProps = {
-  children: any
+  children: ReactNode
   duration?: number
   maxConcurrent?: number
 }
@@ -41,7 +41,7 @@ const ToastProvider = ({
   children,
   duration = 3000,
   maxConcurrent = 5,
-}: ToastProviderProps): JSX.Element => {
+}: ToastProviderProps) => {
   const counterRef = useRef(0)
   const [toasts, setToasts] = useState<ToastInfo[]>([])
 
@@ -123,7 +123,7 @@ const ToastProvider = ({
             <Toast
               id={toast.id}
               key={toast.id}
-              duration={toast.duration}
+              duration={toast.duration ?? duration}
               variant={toast.variant}
               onClose={onCloseToast}
             >
@@ -135,8 +135,14 @@ const ToastProvider = ({
   )
 }
 
-export const useToast = (): any => {
-  return useContext(ToastContext)
+export const useToast = () => {
+  const context = useContext(ToastContext)
+
+  if (!context) {
+    throw new Error('useToast must be used inside ToastProvider')
+  }
+
+  return context
 }
 
 export default ToastProvider

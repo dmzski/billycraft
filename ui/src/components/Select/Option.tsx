@@ -1,12 +1,12 @@
-import React, { MouseEvent, useMemo } from 'react'
+import { MouseEvent, useMemo } from 'react'
 import { SelectOptionType, ValueType } from '.'
 
-export interface RenderSelectOptionProps {
+export type RenderSelectOptionProps = {
   option: SelectOptionType
   isSelected?: boolean
 }
 
-interface OptionProps {
+type OptionProps = {
   isMulti?: boolean
   value?: ValueType
   option: SelectOptionType
@@ -20,7 +20,7 @@ const Option = ({
   option,
   focused,
   onOptionClick,
-}: OptionProps): JSX.Element => {
+}: OptionProps) => {
   const isSelected = useMemo(() => {
     return isMulti && Array.isArray(value)
       ? value.includes(option.value)

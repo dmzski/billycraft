@@ -1,5 +1,5 @@
 import Select, { SelectOptionType } from '../Select'
-import React, { forwardRef, useMemo } from 'react'
+import{ forwardRef, useMemo } from 'react'
 
 export type TimePickerProps = {
   value?: string
@@ -26,7 +26,6 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       step = 30,
       onChange,
       label,
-      variant,
       locales,
       required,
     },
@@ -74,7 +73,6 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         error={error}
         className={className}
         label={label}
-        variant={variant}
         ref={ref}
         required={required}
       />

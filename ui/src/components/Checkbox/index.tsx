@@ -1,5 +1,5 @@
-import React from 'react'
 import clsx from 'clsx'
+import { ChangeEventHandler, ForwardedRef, forwardRef } from 'react'
 
 const classes = {
   label: 'label cursor-pointer',
@@ -14,7 +14,7 @@ const classes = {
   },
 } as const
 
-export interface CheckboxProps {
+export type CheckboxProps = {
   label?: string
   labelPosition?: 'left' | 'right'
   checked: boolean
@@ -23,14 +23,14 @@ export interface CheckboxProps {
   'aria-label'?: string
   'aria-labelledby'?: string
   value?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
+  onChange?: ChangeEventHandler<HTMLInputElement>
   disabled?: boolean
   name?: string
   id?: string
   className?: string
 }
 
-const Checkbox = React.forwardRef(
+const Checkbox = forwardRef(
   (
     {
       id,
@@ -47,7 +47,7 @@ const Checkbox = React.forwardRef(
       className,
       size,
     }: CheckboxProps,
-    ref: React.ForwardedRef<HTMLInputElement>
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     return !label ? (
       <input

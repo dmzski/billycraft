@@ -1,27 +1,24 @@
 import clsx from 'clsx'
-import Button from 'components/Button'
-import React from 'react'
+import { ButtonHTMLAttributes, LinkHTMLAttributes, ReactNode } from 'react'
 
 const dropdownContentClasses =
   'dropdown-content menu p-2 shadow bg-base-100 rounded-box'
 
 export type DropdownProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
+type DropdownContentProps =  {
+  children: ReactNode
+  className?: string
+}
+type DropdownLinkItemProps = LinkHTMLAttributes<HTMLAnchorElement>
+type DropdownButtonItemProps = ButtonHTMLAttributes<HTMLButtonElement>
 
-const Dropdown = ({ children }: DropdownProps): JSX.Element => (
+const Dropdown = ({ children }: DropdownProps) => (
   <div className="dropdown">{children}</div>
 )
 
-Dropdown.defaultProps = {
-  variant: 'primary',
-}
-
-interface IContentProps {
-  children: React.ReactNode
-  className?: string
-}
-const Content = ({ children, className }: IContentProps) => {
+const DropdownContent = ({ children, className }: DropdownContentProps) => {
   return (
     <ul tabIndex={0} className={clsx(dropdownContentClasses, className)}>
       {children}
@@ -29,17 +26,13 @@ const Content = ({ children, className }: IContentProps) => {
   )
 }
 
-Content.displayName = 'Dropdown.Content'
-
-type LinkItemProps = React.LinkHTMLAttributes<HTMLAnchorElement>
-const LinkItem = (props: LinkItemProps) => (
+const DropdownLink = (props: DropdownLinkItemProps) => (
   <li>
     <a {...props}>{props.children}</a>
   </li>
 )
 
-type ButtonItemProps = React.ButtonHTMLAttributes<HTMLButtonElement>
-const ButtonItem = (props: ButtonItemProps) => (
+const DropdownButton = (props: DropdownButtonItemProps) => (
   <li>
     <button type="button" {...props}>
       {props.children}
@@ -47,14 +40,13 @@ const ButtonItem = (props: ButtonItemProps) => (
   </li>
 )
 
-ButtonItem.displayName = 'Dropdown.ButtonItem'
-Content.displayName = 'Dropdown.Content'
-LinkItem.displayName = 'Dropdown.LinkItem'
-Button.displayName = 'Dropdown.Button'
+DropdownContent.displayName = 'Dropdown.Content'
+DropdownButton.displayName = 'Dropdown.Button'
+DropdownContent.displayName = 'Dropdown.Content'
+DropdownLink.displayName = 'Dropdown.Link'
 
-Dropdown.Content = Content
-Dropdown.Button = Button
-Dropdown.LinkItem = LinkItem
-Dropdown.ButtonItem = ButtonItem
+Dropdown.Content = DropdownContent
+Dropdown.Link = DropdownLink
+Dropdown.Button = DropdownButton
 
 export default Dropdown

@@ -1,14 +1,16 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
+import { useState } from 'react'
 import DatePicker, { DatePickerProps } from '.'
+import { StoryObj } from '@storybook/react'
 
 export default {
   title: 'Components/DatePicker',
   component: DatePicker,
-} as Meta
+}
 
-const Template: Story<DatePickerProps> = ({ ...args }: DatePickerProps) => {
-  const [value, setValue] = React.useState<Date | undefined>()
+type Story = StoryObj<typeof DatePicker>
+
+const render = ({ ...args }: DatePickerProps) => {
+  const [value, setValue] = useState<Date | undefined>()
   return (
     <DatePicker
       {...args}
@@ -18,25 +20,32 @@ const Template: Story<DatePickerProps> = ({ ...args }: DatePickerProps) => {
   )
 }
 
-export const Basic = Template.bind({})
-Basic.args = {
-  label: 'Basic',
+export const Basic: Story = {
+  render,
+  args: {
+    label: 'Basic',
+  }
 }
 
-export const Labeled = Template.bind({})
-Labeled.args = {
-  label: 'Labeled',
-  variant: 'outside',
+export const Labeled: Story = {
+  render,
+  args: {
+    label: 'Labeled',
+  }
 }
 
-export const Disabled = Template.bind({})
-Disabled.args = {
-  label: 'Disabled',
-  disabled: true,
+export const Disabled: Story = {
+  render,
+  args: {
+    label: 'Disabled',
+    disabled: true,
+  }
 }
 
-export const Error = Template.bind({})
-Error.args = {
-  label: 'Error',
-  error: true,
+export const Error: Story = {
+  render,
+  args: {
+    label: 'Error',
+    error: true,
+  }
 }

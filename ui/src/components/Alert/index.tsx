@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode, useMemo } from 'react'
+import { MouseEventHandler, ReactNode, useMemo } from 'react'
 import clsx from 'clsx'
 
 const classes = {
@@ -18,12 +18,12 @@ export type AlertProps = {
   onClick?: MouseEventHandler<HTMLDivElement>
 }
 
-export const Alert = ({
+const Alert = ({
   variant,
   className,
   children,
   onClick,
-}: AlertProps): JSX.Element => {
+}: AlertProps) => {
   const computedClassName = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant] : undefined
 
@@ -36,3 +36,5 @@ export const Alert = ({
     </div>
   )
 }
+
+export default Alert

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 const classes = {
   base: 'badge',
@@ -22,10 +22,10 @@ const classes = {
   },
 } as const
 
-export interface BadgeProps {
+export type BadgeProps = {
   size?: keyof typeof classes['sizes']
   className?: string
-  children?: React.ReactNode
+  children?: ReactNode
   variant?: keyof typeof classes['variants']
   outline?: boolean
 }
@@ -37,7 +37,7 @@ const Badge = ({
   outline,
   variant,
   ...props
-}: BadgeProps): JSX.Element => {
+}: BadgeProps) => {
   const badgeClassName = useMemo(() => {
     const sizeClass = size ? classes.sizes[size] : ''
     const variantClass = variant ? classes.variants[variant] : ''

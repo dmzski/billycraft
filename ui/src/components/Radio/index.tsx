@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { ReactNode, useMemo } from 'react'
+import { InputHTMLAttributes, ReactNode, useMemo } from 'react'
 
 const classes = {
   base: 'radio',
@@ -22,7 +22,7 @@ const classes = {
 } as const
 
 export type RadioProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
+  InputHTMLAttributes<HTMLInputElement>,
   'type'
 > & {
   children?: ReactNode
@@ -41,7 +41,7 @@ const Radio = ({
   size,
   labelPosition = 'right',
   ...props
-}: RadioProps): JSX.Element => {
+}: RadioProps) => {
   const computedClasses = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant] : ''
     const sizeClasses = size ? classes.sizes[size] : ''

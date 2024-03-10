@@ -1,4 +1,4 @@
-import React, {
+import {
   ChangeEvent,
   KeyboardEvent,
   ForwardedRef,
@@ -62,7 +62,7 @@ const filterOptions = ({
     option.label.toLowerCase().includes(search.toLowerCase())
   )
 
-function Select(
+const Select = (
   {
     'aria-label': ariaLabel,
     className,
@@ -81,7 +81,7 @@ function Select(
     required,
   }: SelectProps,
   ref: ForwardedRef<HTMLInputElement>
-): JSX.Element {
+) => {
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState<string>('')
   const [focused, setFocused] = useState<OptionValue>(options[0]?.value)
@@ -211,7 +211,7 @@ function Select(
     [handleOpen]
   )
 
-  const handleInputKeyPress = useCallback((event: KeyboardEvent) => {
+  const handleInputKeyUp = useCallback((event: KeyboardEvent) => {
     if ([KEYS.Enter].includes(event.key)) {
       event.preventDefault()
     }
@@ -257,7 +257,7 @@ function Select(
           role="combobox"
           className={inputClassName}
           disabled={disabled}
-          onKeyPress={handleInputKeyPress}
+          onKeyUp={handleInputKeyUp}
           onChange={handleInputChange}
           readOnly={!isSearchable}
           aria-label={ariaLabel}

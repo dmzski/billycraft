@@ -1,12 +1,10 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Table, { TableProps } from '.'
+import Table from '.'
 import useTableState from './useTableState'
 
 export default {
   title: 'Components/Table',
   component: Table,
-} as Meta
+}
 
 const fakeDataGenerator = (length: number) => {
   return Array.from({ length }, (_, i) => i).map((index) => ({
@@ -18,7 +16,7 @@ const fakeDataGenerator = (length: number) => {
 
 const fakeData = fakeDataGenerator(10)
 
-export const Basic: Story<TableProps> = () => {
+export const Basic = () => {
   return (
     <Table>
       <Table.Head
@@ -37,7 +35,7 @@ export const Basic: Story<TableProps> = () => {
   )
 }
 
-export const Composition: Story<TableProps> = () => {
+export const Composition = () => {
   return (
     <Table>
       <Table.Head>
@@ -60,8 +58,8 @@ export const Composition: Story<TableProps> = () => {
   )
 }
 
-export const Sortable: Story<TableProps> = () => {
-  const { data, sort, onSort } = useTableState({
+export const Sortable = () => {
+  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
     data: fakeData,
     initialSort: { field: 'id', order: 'asc' },
   })
@@ -93,7 +91,7 @@ export const Sortable: Story<TableProps> = () => {
   )
 }
 
-export const Example: Story<TableProps> = () => {
+export const Example = () => {
   const { data, sort, onSort } = useTableState({
     data: fakeData,
     initialSort: { field: 'id', order: 'asc' },

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { useMemo } from 'react'
+import { ComponentProps, ComponentType, ElementType, ReactNode, useMemo } from 'react'
 
 const classes = {
   base: 'link',
@@ -16,42 +16,42 @@ const classes = {
   },
 } as const
 
-export interface LinkProps {
-  as?: string
-  className: string
-  children: React.ReactNode
-  to: string
-  variant: keyof typeof classes.variants
-  type?: 'hover' | 'normal'
-}
+type Variant = keyof typeof classes.variants
 
-const Link = ({
+export type LinkProps<T extends ComponentType | ElementType> ={
+  as?: T
+  className: string
+  children: ReactNode
+  href: string
+  variant: Variant
+  linkType?: 'hover' | 'normal'
+} & ComponentProps<T>
+
+const Link = <T extends ComponentType | ElementType = "a">({
   className,
   children,
   variant = 'primary',
-  type = 'normal',
+  linkType = 'normal',
+  as,
   ...props
-}: LinkProps): JSX.Element => {
+}: LinkProps<T>) => {
+  const Component = as ?? "a"
   const computedClasses = useMemo(() => {
-    const variantClasses = variant ? classes.variants[variant] : ''
+    const variantClasses = variant ? classes.variants[variant as Variant] : ''
 
     return clsx(
       classes.base,
       variantClasses,
-      type === 'hover' && classes.hover,
+      linkType === 'hover' && classes.hover,
       className
     )
-  }, [type, variant, className])
+  }, [linkType, variant, className])
 
   return (
-    <a className={computedClasses} {...props}>
+    <Component className={computedClasses} {...props}>
       {children}
-    </a>
+    </Component>
   )
 }
-
-Link.defaultProps = {
-  className: '',
-} as Partial<LinkProps>
 
 export default Link

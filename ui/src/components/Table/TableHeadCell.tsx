@@ -1,13 +1,16 @@
-import Icon from 'components/Icon'
-import React from 'react'
+import { ThHTMLAttributes, useState } from "react";
+import ChevronUpIcon from '@heroicons/react/24/solid/ChevronUpIcon'
+import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon'
+import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon'
+import clsx from "clsx";
 
-type TableHeadCellProps = React.ThHTMLAttributes<HTMLTableHeaderCellElement> & {
-  sortable?: string
-  onSort?: (field: string, order: 'asc' | 'desc') => any
-  sort?: { field: string; order: 'asc' | 'desc' }
+type TableHeadCellProps<T extends object> = ThHTMLAttributes<HTMLTableCellElement> & {
+  sortable?: keyof T
+  onSort?: (field: keyof T, order: 'asc' | 'desc') => void
+  sort?: { field: keyof T; order: 'asc' | 'desc' }
 }
 
-const TableHeadCell = ({
+const TableHeadCell = <T extends object,>({
   children,
   className,
   sortable,
@@ -17,9 +20,9 @@ const TableHeadCell = ({
   onMouseEnter,
   onMouseLeave,
   ...props
-}: TableHeadCellProps): JSX.Element => {
+}: TableHeadCellProps<T>) => {
   const isCurrentSort = sort?.field === sortable
-  const [isHover, setIsHover] = React.useState(false)
+  const [isHover, setIsHover] = useState(false)
   return (
     <th
       onMouseEnter={(e) => {
@@ -52,17 +55,14 @@ const TableHeadCell = ({
         <div className="table-head-cell">
           <span>{children}</span>
           {isCurrentSort ? (
-            <Icon
-              size={16}
-              className="m-1"
-              name={
-                sort?.order === 'asc' ? 'sort-ascending' : 'sort-descending'
-              }
-            />
+            <>
+              {sort?.order === "asc" ? (
+                <ChevronUpIcon />
+              ) : <ChevronDownIcon />}
+            </>
           ) : (
-            <Icon
-              size={16}
-              className={['m-1', !isHover ? 'opacity-0' : undefined].join(' ')}
+            <ChevronUpDownIcon
+              className={clsx(['m-1', !isHover ? 'opacity-0' : undefined])}
               name="sort-ascending"
             />
           )}

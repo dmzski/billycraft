@@ -1,18 +1,19 @@
-import injectClassNames from 'helpers/injectClassNames'
-import React from 'react'
+import clsx from 'clsx'
+import { InputHTMLAttributes, ReactNode } from 'react'
 
-export interface TopBarProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export type TopBarProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string
-  children: React.ReactNode
+  children: ReactNode
 }
 
-const StyledTopBar = injectClassNames(
-  'div'
-)`fixed top-0 left-0 h-16 right-0 shadow-md px-3 flex items-center border-b border-primary-500`
-
-const TopBar = ({ children, ...props }: TopBarProps): JSX.Element => (
-  <StyledTopBar {...props}>{children}</StyledTopBar>
-)
+const TopBar = ({ children, className, ...props }: TopBarProps) => {
+  const finalClassName = clsx(
+    "navbar",
+    className
+  )
+  return (
+    <div className={finalClassName} {...props}>{children}</div>
+  )
+}
 
 export default TopBar

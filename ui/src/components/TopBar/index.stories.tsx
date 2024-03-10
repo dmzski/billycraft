@@ -1,15 +1,17 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import TopBar, { TopBarProps } from '.'
+import { StoryObj } from '@storybook/react'
+import TopBar from '.'
 
 export default {
   title: 'Components/TopBar',
   component: TopBar,
-} as Meta
+}
+type Story = StoryObj<typeof TopBar>
 
-const Template: Story<TopBarProps> = (args) => <TopBar {...args} />
+export const Basic: Story = {
+  render: (args) => <TopBar {...args} />,
+  args: {
+    children: "Test navbar",
+    className: 'border rounded-box shadow-xl'
+  }
 
-export const Basic = Template.bind({})
-Basic.args = {
-  children: 'Test',
 }

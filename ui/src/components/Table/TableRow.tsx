@@ -1,15 +1,14 @@
-import React from 'react'
+import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from "react"
 
-export interface TableRowProps
-  extends React.HTMLAttributes<HTMLTableRowElement> {
+export type TableRowProps = HTMLAttributes<HTMLTableRowElement> & {
   hoverable?: boolean
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 const TableRow = (
   { children, hoverable, className, ...props }: TableRowProps,
-  ref: React.ForwardedRef<HTMLTableRowElement>
-): JSX.Element => (
+  ref: ForwardedRef<HTMLTableRowElement>
+) => (
   <tr
     ref={ref}
     className={[
@@ -23,4 +22,4 @@ const TableRow = (
   </tr>
 )
 
-export default React.forwardRef(TableRow)
+export default forwardRef(TableRow)

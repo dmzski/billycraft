@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 type HourButtonProps = {
   selected?: Date
@@ -11,7 +11,7 @@ const HourButton = ({
   selected,
   hour,
   onHourClick,
-}: HourButtonProps): JSX.Element => {
+}: HourButtonProps) => {
   const isSelected = useMemo(
     () => selected?.getHours() === hour,
     [selected, hour]
@@ -21,9 +21,9 @@ const HourButton = ({
     <button
       type="button"
       onClick={() => onHourClick?.(hour)}
-      className={clsx('py-2 w-full outline-none focus:bg-primary-200', {
-        ['bg-primary-200']: isSelected,
-        ['hover:bg-primary-200']: !isSelected,
+      className={clsx('py-2 w-full outline-none focus:bg-primary focus:text-primary-content', {
+        ['bg-primary text-primary-content']: isSelected,
+        ['hover:bg-primary hover:text-primary-content']: true,
       })}
     >
       {`${hour}`.padStart(2, '0')}
@@ -41,7 +41,7 @@ const MinuteButton = ({
   selected,
   minute,
   onMinuteClick,
-}: MinuteButtonProps): JSX.Element => {
+}: MinuteButtonProps) => {
   const isSelected = useMemo(
     () => selected?.getMinutes() === minute,
     [selected, minute]
@@ -51,9 +51,9 @@ const MinuteButton = ({
     <button
       type="button"
       onClick={() => onMinuteClick?.(minute)}
-      className={clsx('py-2 w-full outline-none', {
-        ['bg-primary-200']: isSelected,
-        ['hover:bg-primary-200']: !isSelected,
+      className={clsx('py-2 w-full outline-none focus:bg-primary focus:text-primary-content', {
+        ['bg-primary text-primary-content']: isSelected,
+        ['hover:bg-primary hover:text-primary-content']: true,
       })}
     >
       {`${minute}`.padStart(2, '0')}
@@ -68,7 +68,7 @@ type TimeCalendarProps = {
 const TimeCalendar = ({
   selected,
   onTimeClick,
-}: TimeCalendarProps): JSX.Element => {
+}: TimeCalendarProps) => {
   const options = useMemo(
     () => ({
       hours: Array.from({ length: 24 }, (_, index) => index),
@@ -94,8 +94,8 @@ const TimeCalendar = ({
   return (
     <div className="w-40 overflow-hidden">
       <div className="h-12 bg-primary-700"></div>
-      <div className="grid grid-cols-2 mt-2">
-        <div className="flex flex-col items-center border-l">
+      <div className="grid grid-cols-2 pt-2 border">
+        <div className="flex flex-col items-center h-60">
           <div className="text-gray-500 mb-2">Heures</div>
           <div className="text-sm flex flex-col items-center overflow-y-auto w-20 max-h-56">
             {options.hours.map((hour) => (

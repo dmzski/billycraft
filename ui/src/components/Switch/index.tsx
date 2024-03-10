@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { InputHTMLAttributes, ReactNode, useMemo } from 'react'
+import { InputHTMLAttributes, ReactNode, useMemo } from 'react'
 
 const classes = {
   base: 'toggle',
@@ -37,7 +37,7 @@ const Switch = ({
   labelPosition = 'right',
   className,
   ...props
-}: SwitchProps): JSX.Element => {
+}: SwitchProps) => {
   const computedClasses = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant] : ''
     const sizeClasses = size ? classes.sizes[size] : ''

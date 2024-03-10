@@ -1,6 +1,7 @@
 import clsx from 'clsx'
-import React, {
+import {
   ChangeEventHandler,
+  createElement,
   FocusEventHandler,
   forwardRef,
   KeyboardEventHandler,
@@ -97,7 +98,7 @@ const TextAreaLabelInside = forwardRef<
       readOnly,
     },
     ref
-  ): JSX.Element => {
+  ) => {
     const classes = VARIANTS.inside
     const containerClassNames = useMemo(
       () =>
@@ -185,7 +186,7 @@ const TextAreaLabelOutside = forwardRef<
       readOnly,
     },
     ref
-  ): JSX.Element => {
+  ) => {
     const classes = VARIANTS.outside
 
     const containerClassNames = useMemo(
@@ -271,7 +272,7 @@ const TextAreaDefault = forwardRef<HTMLTextAreaElement, InternalTextAreaProps>(
       readOnly,
     },
     ref
-  ): JSX.Element => {
+  ) => {
     const classes = VARIANTS.default
 
     const inputClassNames = useMemo(
@@ -320,8 +321,8 @@ const TextArea = forwardRef<
     variant?: TextAreaVariants
   }
 >(
-  ({ variant = 'default', ...props }, ref): JSX.Element =>
-    React.createElement(variants[variant] ?? variants.default, {
+  ({ variant = 'default', ...props }, ref) =>
+    createElement(variants[variant] ?? variants.default, {
       ...props,
       ref,
     })

@@ -1,14 +1,14 @@
-import React from 'react'
+import { RefObject, useEffect, useRef } from "react"
 
 const useClickOutsideHandler = (
-  ref: React.RefObject<any>,
-  callback: (event: MouseEvent | TouchEvent) => any
+  ref: RefObject<HTMLElement>,
+  callback: (event: MouseEvent | TouchEvent) => void
 ): void => {
-  const callbackFnRef = React.useRef(callback)
+  const callbackFnRef = useRef(callback)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = (event: MouseEvent | TouchEvent) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target as HTMLElement)) {
         callbackFnRef.current?.(event)
       }
     }
@@ -23,7 +23,7 @@ const useClickOutsideHandler = (
     }
   }, [ref])
 
-  React.useEffect(() => {
+  useEffect(() => {
     callbackFnRef.current = callback
   }, [callback])
 }

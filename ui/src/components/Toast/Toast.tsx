@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, {
+import {
   ComponentProps,
   ReactNode,
   SyntheticEvent,
@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { Alert } from '../Alert'
+import Alert from '../Alert'
 
 const classes: {
   progressBar: {
@@ -21,7 +21,7 @@ const classes: {
   }
 } = {
   progressBar: {
-    base: 'absolute bottom-0 left-0 w-full h-1 ease-linear opacity-30',
+    base: 'absolute bottom-0 left-0 w-full h-1 ease-linear opacity-40',
     default: 'bg-base-content',
     variants: {
       error: 'bg-error-content',
@@ -33,7 +33,7 @@ const classes: {
 }
 
 export type ToastProps = {
-  onClose: (index: number) => any
+  onClose: (index: number) => void
   duration: number
   children?: ReactNode
   variant: ComponentProps<typeof Alert>['variant']
@@ -46,7 +46,7 @@ const Toast = ({
   children,
   variant,
   id,
-}: ToastProps): JSX.Element => {
+}: ToastProps) => {
   const [mounted, setMounted] = useState(false)
   const onCloseRef = useRef(onClose)
   const handleClose = (_event?: SyntheticEvent, reason?: string) => {

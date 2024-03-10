@@ -1,25 +1,29 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
+import { useState } from 'react'
 import Checkbox, { CheckboxProps } from '.'
+import { StoryObj } from '@storybook/react'
 
 export default {
   title: 'Components/Checkbox',
   component: Checkbox,
-} as Meta
+}
 
-export const Basic: Story<CheckboxProps> = ({
-  checked,
-  ...props
-}: CheckboxProps) => {
-  const [isChecked, setChecked] = React.useState(checked)
+type Story = StoryObj<typeof Checkbox>
 
-  const onChange = () => {
-    setChecked(!isChecked)
+export const Basic: Story = {
+  render: ({
+    checked,
+    ...props
+  }: CheckboxProps) => {
+    const [isChecked, setChecked] = useState(checked)
+
+    const onChange = () => {
+      setChecked(!isChecked)
+    }
+
+    return <Checkbox {...props} checked={isChecked} onChange={onChange} />
+  },
+  args: {
+    checked: true
   }
-
-  return <Checkbox {...props} checked={isChecked} onChange={onChange} />
 }
 
-Basic.args = {
-  checked: true,
-}

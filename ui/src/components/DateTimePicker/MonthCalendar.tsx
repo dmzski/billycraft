@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from './helpers'
-import React from 'react'
-import Icon from '../Icon'
 import Button from '../Button'
+import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon'
+import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon'
 
 type MonthCalendarButtonProps = {
   date?: Date
@@ -51,7 +51,7 @@ type MonthCalendarProps = {
 const MonthCalendar = ({
   selected,
   onDateClick,
-}: MonthCalendarProps): JSX.Element => {
+}: MonthCalendarProps) => {
   const [dateView, setDateView] = useState(selected ?? new Date())
 
   const goPrevious = useCallback(() => {
@@ -73,7 +73,7 @@ const MonthCalendar = ({
   const daysOfWeekStrings = useMemo(() => daysOfWeek(undefined), [])
 
   return (
-    <div className="w-60">
+    <div className="w-60 border">
       <div className="flex flex-col">
         <div className="h-12 bg-primary text-primary-content flex items-center justify-between">
           <Button
@@ -82,9 +82,9 @@ const MonthCalendar = ({
             variant="ghost"
             onClick={goPrevious}
           >
-            <Icon name="arrow-left" size={10} />
+            <ArrowLeftIcon className='h-5 fill-current' />
           </Button>
-          <div className="text-center my-2">
+          <div className="text-center">
             {dateView
               .toLocaleDateString(undefined, {
                 month: 'long',
@@ -98,11 +98,11 @@ const MonthCalendar = ({
             variant="ghost"
             onClick={goNext}
           >
-            <Icon name="arrow-right" size={10} />
+            <ArrowRightIcon className='h-5 fill-current' />
           </Button>
         </div>
       </div>
-      <div className="mt-2 mx-2 grid grid-cols-7 gap-2">
+      <div className="pt-2 h-60 px-2 grid grid-cols-7 gap-2">
         {daysOfWeekStrings.map((dayString, dayIndex) => (
           <div
             key={`${dateView.getMonth()}-weekday-${dayIndex}`}

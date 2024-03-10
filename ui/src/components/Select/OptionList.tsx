@@ -1,7 +1,7 @@
 import clsx from 'clsx'
-import React from 'react'
 import { SelectOptionType, ValueType } from '.'
 import Option from './Option'
+import { MouseEvent } from 'react'
 
 const listContainerClasses =
   'menu dropdown-content shadow bg-base-300 rounded-box w-52'
@@ -9,7 +9,7 @@ type OptionListProps = {
   focused: string | number
   isOpen?: boolean
   options: SelectOptionType[]
-  onOptionClick: (option: SelectOptionType, event: React.MouseEvent) => void
+  onOptionClick: (option: SelectOptionType, event: MouseEvent) => void
   value?: ValueType
   isMulti?: boolean
 }
@@ -21,7 +21,7 @@ const OptionList = ({
   onOptionClick,
   value,
   isMulti,
-}: OptionListProps): JSX.Element => (
+}: OptionListProps) => (
   <ul
     className={clsx(listContainerClasses, { 'sr-only': !isOpen })}
     role="listbox"
@@ -38,7 +38,5 @@ const OptionList = ({
     ))}
   </ul>
 )
-
-OptionList.displayName = 'OptionList'
 
 export default OptionList

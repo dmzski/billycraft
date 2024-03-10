@@ -1,15 +1,28 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Link, { LinkProps } from '.'
+import { StoryObj } from '@storybook/react'
+import Link from '.'
+import Button from 'components/Button'
 
 export default {
   title: 'Components/Link',
   component: Link,
-} as Meta
+}
 
-const Template: Story<LinkProps> = (args) => <Link {...args} />
+type Story = StoryObj<typeof Link>
 
-export const Basic = Template.bind({})
-Basic.args = {
-  children: 'Basic',
+export const Basic: Story = {
+  render: (args) => <Link {...args} />,
+  args: {
+    children: 'Basic',
+  }
+}
+
+type Story2 = StoryObj<typeof Link<typeof Button>>
+
+export const CustomComponent: Story2 = {
+  render: (args) => <Link {...args} />,
+  args: {
+    children: 'Basic',
+    as: Button,
+    type: "button"
+  }
 }

@@ -1,5 +1,5 @@
-import React, { MouseEventHandler, ReactNode, ReactPortal } from 'react'
-import { XIcon } from '@heroicons/react/solid'
+import { MouseEventHandler, ReactNode, useEffect, useState } from 'react'
+import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 import clsx from 'clsx'
 import { createPortal } from 'react-dom'
 const positions = {
@@ -24,7 +24,7 @@ const positions = {
 const classes = {
   drawerContainer: (hasPortal?: boolean) =>
     hasPortal ? `` : `z-10 select-none`,
-  backdrop: `fixed left-0 top-0 bg-opacity-30 bg-neutral-focus w-full h-full`,
+  backdrop: `fixed left-0 top-0 bg-opacity-20 bg-black w-full h-full`,
   containerWithBackdrop: `bg-base-100 fixed p-2 shadow`,
   containerWithoutBackgrop: (hasPortal?: boolean) =>
     `${hasPortal ? '' : 'z-10'} bg-base-100 fixed p-2 shadow`,
@@ -54,7 +54,7 @@ const animations = {
   },
 }
 
-export interface DrawerProps {
+export type DrawerProps = {
   open: boolean
   onClose?: MouseEventHandler<HTMLDivElement | SVGSVGElement>
   position: keyof typeof positions
@@ -66,15 +66,16 @@ export interface DrawerProps {
 
 const Drawer = ({
   children,
-  open,
-  hasBackdrop,
-  hasCloseButton,
-  position,
+  open = false,
+  hasBackdrop = false,
+  hasCloseButton = true,
+  position = "right",
   onClose,
-  withoutPortal,
-}: DrawerProps): JSX.Element | ReactPortal => {
-  const [isVisible, setIsVisible] = React.useState(open)
-  React.useEffect(() => {
+  withoutPortal = false,
+}: DrawerProps) => {
+  const [isVisible, setIsVisible] = useState(open)
+
+  useEffect(() => {
     const handler = setTimeout(
       () => {
         setIsVisible(open)
@@ -101,7 +102,7 @@ const Drawer = ({
         {isVisible ? (
           <>
             {hasCloseButton ? (
-              <XIcon
+              <XMarkIcon
                 className={clsx(
                   positions[position]?.closeButton,
                   classes.closeButton
@@ -126,7 +127,7 @@ const Drawer = ({
       {isVisible ? (
         <>
           {hasCloseButton ? (
-            <XIcon
+            <XMarkIcon
               className={clsx(
                 positions[position]?.closeButton,
                 classes.closeButton
@@ -145,12 +146,5 @@ const Drawer = ({
     ? modalRendered
     : createPortal(modalRendered, document.body)
 }
-
-Drawer.defaultProps = {
-  open: false,
-  position: 'right',
-  hasBackdrop: false,
-  hasCloseButton: true,
-} as Partial<DrawerProps>
 
 export default Drawer

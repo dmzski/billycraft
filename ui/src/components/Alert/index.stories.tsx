@@ -1,16 +1,19 @@
-import React from 'react'
-import { Alert } from '.'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import { StoryObj } from '@storybook/react'
+import Alert from './index'
 
 export default {
+  title: "components/Alert",
   component: Alert,
-} as ComponentMeta<typeof Alert>
-
-export const Default: ComponentStory<typeof Alert> = ({
-  children,
-  ...props
-}) => <Alert {...props}>{children}</Alert>
-
-Default.args = {
-  children: 'It gonna be legen wait for it... legendary !',
 }
+
+type Story = StoryObj<typeof Alert>
+
+export const Default: Story = {
+  render: ({ children, ...props }) => (
+    <Alert {...props}>{children}</Alert>
+  ),
+  args: {
+    children: 'It gonna be legen wait for it... legendary !',
+  }
+}
+

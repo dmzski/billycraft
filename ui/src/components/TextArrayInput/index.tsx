@@ -1,29 +1,31 @@
-import { XIcon } from '@heroicons/react/solid'
+import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 import Badge from '../Badge'
-import React, { AriaAttributes } from 'react'
+import { AriaAttributes, ChangeEventHandler, FocusEventHandler, KeyboardEventHandler, ReactNode, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
-type RenderSelectedProps = { array: string[]; onDelete: (index: number) => any }
+type RenderSelectedProps = { array: string[]; onDelete: (index: number) => () => void }
 export type TextArrayInputProps = AriaAttributes & {
-  onInputChange?: (event: React.ChangeEvent<any>) => any
-  onChange?: (strings: string[]) => any
-  onFocus?: React.FocusEventHandler
-  onBlur?: React.FocusEventHandler
-  onKeyDown?: React.KeyboardEventHandler
-  onKeyPress?: React.KeyboardEventHandler
-  onKeyUp?: React.KeyboardEventHandler
+  onInputChange?: ChangeEventHandler<HTMLInputElement>
+  onChange?: (strings: string[]) => void
+  onFocus?: FocusEventHandler<HTMLInputElement>
+  onBlur?: FocusEventHandler<HTMLInputElement>
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>
+  onKeyPress?: KeyboardEventHandler<HTMLInputElement>
+  onKeyUp?: KeyboardEventHandler<HTMLInputElement>
   value?: string[]
   className?: string
   placeholder?: string
-  ref?: React.Ref<HTMLInputElement>
-  renderSelected?: (props: RenderSelectedProps) => React.ReactNode
+  ref?: Ref<HTMLInputElement>
+  renderSelected?: (props: RenderSelectedProps) => ReactNode
   disabled?: boolean
 }
 
 const defaultRender = ({ array, onDelete }: RenderSelectedProps) =>
   array?.map((string, index) => (
     <Badge key={index} outline variant="primary">
-      <span>{string}</span>
-      <XIcon onClick={onDelete(index)} className="w-4 cursor-pointer" />
+      <p className='flex gap-1 items-center'>
+        <span>{string}</span>
+        <XMarkIcon onClick={onDelete(index)} className="w-4 cursor-pointer" />
+      </p>
     </Badge>
   ))
 
@@ -37,18 +39,18 @@ const TextArrayInput = ({
   ref,
   renderSelected = defaultRender,
   ...props
-}: TextArrayInputProps): JSX.Element => {
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
-  const [inputValue, setInputValue] = React.useState('')
-  const [array, setArray] = React.useState(value ?? [])
+}: TextArrayInputProps) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
+  const [inputValue, setInputValue] = useState('')
+  const [array, setArray] = useState(value ?? [])
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     onInputChange?.(event)
     if (!event.defaultPrevented) setInputValue(event.target.value)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     onKeyDown?.(event)
     if (event.key === 'Enter' && !event.defaultPrevented && inputValue.length) {
       const tmp = [...array]
@@ -76,14 +78,14 @@ const TextArrayInput = ({
     setArray(tmp)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     value && setArray(value)
   }, [value])
+
   return (
     <div
-      className={`flex w-full border focus-within:border-primary-600 gap-2 p-2 rounded outline-none focus-within:ring-2 ring-primary-200 text-black ${
-        disabled ? 'opacity-50 pointer-event-none' : ''
-      }`}
+      className={`flex w-full border focus-within:border-primary gap-2 p-2 rounded outline-none focus-within:ring-2 ring-primary text-black ${disabled ? 'opacity-50 pointer-event-none' : ''
+        }`}
     >
       <div className="flex gap-1">
         {renderSelected({ array, onDelete: handleDelete })}

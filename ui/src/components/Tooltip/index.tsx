@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { useMemo } from 'react'
+import { InputHTMLAttributes, ReactNode, useMemo } from 'react'
 
 const classes = {
   base: 'tooltip',
@@ -21,10 +21,9 @@ const classes = {
   },
 } as const
 
-export interface TooltipProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export type TooltipProps = InputHTMLAttributes<HTMLInputElement> & {
   text?: string
-  children?: React.ReactNode
+  children?: ReactNode
   position?: keyof typeof classes.positions
   forceOpen?: boolean
   variant: keyof typeof classes.variants
@@ -37,7 +36,7 @@ const Tooltip = ({
   forceOpen,
   className,
   variant,
-}: TooltipProps): JSX.Element => {
+}: TooltipProps) => {
   const computedClassNames = useMemo(() => {
     const variantClasses = variant
       ? classes.variants[variant] ?? undefined

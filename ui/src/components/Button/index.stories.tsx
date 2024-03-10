@@ -1,21 +1,42 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Button, { ButtonProps, BUTTON_SIZES, BUTTON_VARIANTS } from '.'
+import { StoryObj } from '@storybook/react'
+import Button, { ButtonProps } from '.'
 
 export default {
   title: 'Components/Button',
-  component: Button,
-} as Meta
+  component: Button
+}
+type Story = StoryObj<typeof Button>
 
-const Template: Story<ButtonProps> = (args) => <Button {...args} />
 
-export const Basic = Template.bind({})
-Basic.args = {
-  children: 'Basic',
-  size: 'md',
+const BUTTON_SIZES = {
+  lg: 'btn-lg',
+  md: 'btn-md',
+  sm: 'btn-sm',
+  xs: 'btn-xs',
+} as const
+
+const BUTTON_VARIANTS = {
+  default: '',
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  accent: 'btn-accent',
+  info: 'btn-info',
+  success: 'btn-success',
+  warning: 'btn-warning',
+  error: 'btn-error',
+  ghost: 'btn-ghost',
+  link: 'btn-link',
+  glass: 'glass',
+} as const
+
+export const Basic: Story = {
+  args: {
+    children: 'Basic',
+    size: 'md',
+  }
 }
 
-export const Variants = (): JSX.Element => (
+export const Variants = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button key={variant} variant={variant as ButtonProps['variant']}>
@@ -25,7 +46,7 @@ export const Variants = (): JSX.Element => (
   </div>
 )
 
-export const Outlined = (): JSX.Element => (
+export const Outlined = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button key={variant} outline variant={variant as ButtonProps['variant']}>
@@ -35,7 +56,7 @@ export const Outlined = (): JSX.Element => (
   </div>
 )
 
-export const Rounded = (): JSX.Element => (
+export const Rounded = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button key={variant} rounded variant={variant as ButtonProps['variant']}>
@@ -45,7 +66,7 @@ export const Rounded = (): JSX.Element => (
   </div>
 )
 
-export const Square = (): JSX.Element => (
+export const Square = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button key={variant} square variant={variant as ButtonProps['variant']}>
@@ -55,7 +76,7 @@ export const Square = (): JSX.Element => (
   </div>
 )
 
-export const Block = (): JSX.Element => (
+export const Block = () => (
   <>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button
@@ -70,7 +91,7 @@ export const Block = (): JSX.Element => (
   </>
 )
 
-export const Sizes = (): JSX.Element => (
+export const Sizes = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_SIZES).map((size) => (
       <Button key={size} size={size as ButtonProps['size']}>
@@ -80,7 +101,7 @@ export const Sizes = (): JSX.Element => (
   </div>
 )
 
-export const Disabled = (): JSX.Element => (
+export const Disabled = () => (
   <div style={{ display: 'flex', gap: 4 }}>
     {Object.keys(BUTTON_VARIANTS).map((variant) => (
       <Button

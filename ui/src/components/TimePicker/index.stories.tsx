@@ -1,14 +1,17 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
+import { StoryObj } from '@storybook/react'
 import TimePicker, { TimePickerProps } from '.'
+import { useState } from 'react'
 
 export default {
   title: 'Components/TimePicker',
   component: TimePicker,
-} as Meta
+}
 
-const Template: Story<TimePickerProps> = ({ ...args }: TimePickerProps) => {
-  const [value, setValue] = React.useState<string>('')
+type Story = StoryObj<typeof TimePicker>
+
+const render: Story['render'] = ({ ...args }: TimePickerProps) => {
+  const [value, setValue] = useState('')
+
   return (
     <TimePicker
       {...args}
@@ -18,19 +21,25 @@ const Template: Story<TimePickerProps> = ({ ...args }: TimePickerProps) => {
   )
 }
 
-export const Basic = Template.bind({})
-Basic.args = {
-  id: 'test',
+export const Basic: Story = {
+  render,
+  args: {
+    id: 'test',
+  }
 }
 
-export const Disabled = Template.bind({})
-Disabled.args = {
-  id: 'test',
-  disabled: true,
+export const Disabled: Story = {
+  render,
+  args: {
+    id: 'test',
+    disabled: true,
+  }
 }
 
-export const Error = Template.bind({})
-Error.args = {
-  id: 'test',
-  error: true,
+export const Error: Story = {
+  render,
+  args: {
+    id: 'test',
+    error: true,
+  }
 }

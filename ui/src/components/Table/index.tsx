@@ -1,14 +1,14 @@
-import React from 'react'
+import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from 'react'
 import TableBody from './TableBody'
 import TableHead from './TableHead'
 import TableHeadCell from './TableHeadCell'
 import TableRow from './TableRow'
-import './index.css'
-export interface TableProps {
-  children: React.ReactNode
+
+export type TableProps = {
+  children: ReactNode
   className?: string
 }
-const Table = ({ children, className, ...props }: TableProps): JSX.Element => (
+const Table = ({ children, className, ...props }: TableProps) => (
   <table className={['table-container', className].join(' ')} {...props}>
     {children}
   </table>
@@ -19,18 +19,18 @@ Table.HeadCell = TableHeadCell
 Table.Body = TableBody
 Table.Row = TableRow
 
-interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {
-  children: React.ReactNode
+type TableCellProps = HTMLAttributes<HTMLTableCellElement> & {
+  children: ReactNode
 }
 const TableCell = (
   { children, className, ...props }: TableCellProps,
-  ref: React.ForwardedRef<HTMLTableCellElement>
+  ref: ForwardedRef<HTMLTableCellElement>
 ) => (
   <td ref={ref} className={[className].join(' ')} {...props}>
     {children}
   </td>
 )
 
-Table.Cell = React.forwardRef(TableCell)
+Table.Cell = forwardRef(TableCell)
 
 export default Table

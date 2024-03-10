@@ -1,5 +1,5 @@
 import Input from '../Input'
-import React, {
+import {
   FocusEventHandler,
   forwardRef,
   useCallback,
@@ -8,10 +8,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import Icon from '../Icon'
 import useClickOutsideHandler from '../../hooks/useClickOutsideHandler'
 import MonthCalendar from './MonthCalendar'
 import clsx from 'clsx'
+import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon'
 
 export type DatePickerProps = {
   name?: string
@@ -69,7 +69,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     }, [disabled])
 
     const handleDateClick = useCallback(
-      (newDate) => {
+      (newDate: Date) => {
         onChange?.(newDate)
         setOpen(false)
       },
@@ -88,17 +88,17 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
     const iconClassNames = useMemo(
       () =>
-        clsx('absolute right-2', {
+        clsx('absolute h-5 right-2', {
           'text-gray-400': !error && !open,
-          'text-primary-700': !error && open,
-          'text-error-600': error,
+          'text-primary': !error && open,
+          'text-error': error,
           'bottom-3': label,
         }),
       [error, label, open]
     )
 
     return (
-      <div ref={containerRef} className="flex relative items-center">
+      <div ref={containerRef} className="relative">
         <Input
           className={className}
           label={label}
@@ -113,10 +113,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         />
         {!disabled ? (
           <>
-            <Icon
-              name="calendar"
-              type="outline"
-              size={18}
+            <CalendarIcon
               className={iconClassNames}
             />
             <div className={containerClassNames}>

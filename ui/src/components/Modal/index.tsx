@@ -1,4 +1,4 @@
-import React, {
+import {
   cloneElement,
   ReactNode,
   useEffect,
@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { createPortal } from 'react-dom'
 import Button from '../Button'
+import MarkXIcon from '@heroicons/react/24/solid/XMarkIcon'
 
 export type ModalProps = {
   disclosure?: JSX.Element
@@ -18,16 +19,16 @@ export type ModalProps = {
   onClose?: () => void
 }
 
-function Modal({
+const Modal = ({
   disclosure,
   children,
   withoutPortal,
   hideOnClickOutside,
   open: openProp,
   onClose,
-}: ModalProps): JSX.Element {
+}: ModalProps) => {
   const [open, setOpen] = useState(openProp && onClose ? openProp : false)
-  const ref = useRef<any>()
+  const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
     if (!openProp && !onClose) {
@@ -35,12 +36,12 @@ function Modal({
         setOpen(true)
       }
       if (ref.current) {
-        ;(ref.current as HTMLElement).addEventListener('click', handleClick)
+        ref.current.addEventListener('click', handleClick)
       }
 
       return () => {
         if (ref.current) {
-          ;(ref.current as HTMLElement).removeEventListener(
+          ref.current.removeEventListener(
             'click',
             handleClick
           )
@@ -48,7 +49,6 @@ function Modal({
       }
     }
 
-    console.log(open, openProp)
     if (onClose && openProp !== open) {
       setOpen(!!openProp)
     }
@@ -56,8 +56,8 @@ function Modal({
 
   const Component = disclosure
     ? cloneElement(disclosure, {
-        ref,
-      })
+      ref,
+    })
     : undefined
 
   const close = () => {
@@ -85,11 +85,12 @@ function Modal({
         >
           <Button
             onClick={close}
-            variant="ghost"
             size="sm"
+            outline
+            rounded
             className="absolute right-2 top-2"
           >
-            ✕
+            <MarkXIcon className='h-5' />
           </Button>
           {typeof children === 'function' ? children({ close }) : children}
         </dialog>
@@ -108,7 +109,7 @@ function Modal({
   )
 }
 
-function ModalActions({ children }: { children: ReactNode }) {
+const ModalActions = ({ children }: { children: ReactNode }) => {
   return <div className="modal-action">{children}</div>
 }
 

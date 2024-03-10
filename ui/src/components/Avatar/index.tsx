@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React from 'react'
+import { HTMLAttributes } from 'react'
 
 const classes = {
   base: 'rounded-full flex justify-center items-center',
@@ -10,13 +10,12 @@ export const getStringFromAlt = (altStr: string): string => {
   if (!altStr) return ''
   const array = altStr.split(' ')
   if (array.length > 1) {
-    return `${array[0].substr(0, 1) + array[1].substr(0, 1)}`.toUpperCase()
+    return `${array[0].substring(0, 1) + array[1].substring(0, 1)}`.toUpperCase()
   }
-  return array.length ? `${array[0].substr(0, 1)}`.toUpperCase() : ''
+  return array.length ? `${array[0].substring(0, 1)}`.toUpperCase() : ''
 }
 
-export interface AvatarProps
-  extends React.HTMLAttributes<HTMLImageElement | HTMLDivElement> {
+export type AvatarProps = HTMLAttributes<HTMLImageElement | HTMLDivElement> & {
   size: number
   src?: string
   className?: string
@@ -24,12 +23,12 @@ export interface AvatarProps
 }
 
 const Avatar = ({
-  size,
+  size = 24,
   src,
   alt,
   className,
   ...props
-}: AvatarProps): JSX.Element => {
+}: AvatarProps) => {
   return src ? (
     <img
       src={src}
@@ -47,10 +46,6 @@ const Avatar = ({
       {getStringFromAlt(alt)}
     </div>
   )
-}
-
-Avatar.defaultProps = {
-  size: 24,
 }
 
 export default Avatar

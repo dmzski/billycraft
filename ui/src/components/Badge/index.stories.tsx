@@ -1,21 +1,23 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Badge, { BadgeProps } from '.'
+import { StoryObj } from '@storybook/react'
+import Badge from '.'
 
 export default {
   title: 'Components/Badge',
-  component: Badge,
-} as Meta
-
-const Template: Story<BadgeProps> = (args) => <Badge {...args} />
-
-export const Basic = Template.bind({})
-Basic.args = {
-  children: 'Basic',
+  component: Badge
 }
 
-export const Outline = Template.bind({})
-Outline.args = {
-  children: 'outline',
-  outline: true,
+type Story = StoryObj<typeof Badge>
+
+
+export const Basic: Story = {
+  args: {
+    children: 'Basic',
+  }
+}
+
+export const Outline: Story = {
+  args: {
+    children: 'outline',
+    outline: true,
+  }
 }

@@ -1,17 +1,16 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import TextArrayInput, { TextArrayInputProps } from '.'
+import { StoryObj } from '@storybook/react'
+import TextArrayInput from '.'
 
 export default {
   title: 'Components/TextArrayInput',
   component: TextArrayInput,
-} as Meta
+}
 
-const Template: Story<TextArrayInputProps> = (args) => (
-  <TextArrayInput {...args} />
-)
+type Story = StoryObj<typeof TextArrayInput>
 
-export const Basic = Template.bind({})
-Basic.args = {
-  value: ['This', 'is', 'awesome'],
+export const Basic: Story = {
+  render: (args) => <TextArrayInput {...args} />,
+  args: {
+    value: ['This', 'is', 'awesome'],
+  }
 }

@@ -1,18 +1,16 @@
-import React from 'react'
+import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from "react"
 
-type RowRenderFn = (renderProps: { row: any }) => React.ReactNode
-export interface TableBodyProps
-  extends React.HTMLAttributes<HTMLTableSectionElement> {
-  children: React.ReactNode | RowRenderFn
+export type TableBodyProps = HTMLAttributes<HTMLTableSectionElement> & {
+  children: ReactNode
 }
 
 const TableBody = (
   { children, ...props }: TableBodyProps,
-  ref: React.ForwardedRef<HTMLTableSectionElement>
-): JSX.Element => (
+  ref: ForwardedRef<HTMLTableSectionElement>
+) => (
   <tbody ref={ref} {...props}>
     {children}
   </tbody>
 )
 
-export default React.forwardRef(TableBody)
+export default forwardRef(TableBody)

@@ -1,5 +1,5 @@
 import Input from '../Input'
-import React, {
+import {
   FocusEventHandler,
   forwardRef,
   KeyboardEvent,
@@ -10,9 +10,9 @@ import React, {
   useState,
 } from 'react'
 import clsx from 'clsx'
-import Icon from '../Icon'
 import useClickOutsideHandler from '../../hooks/useClickOutsideHandler'
 import MonthCalendar from './MonthCalendar'
+import CalendarIcon from '@heroicons/react/24/solid/CalendarIcon'
 import TimeCalendar from './TimeCalendar'
 
 export type DateTimePickerProps = {
@@ -89,7 +89,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
     )
 
     const handleDateClick = useCallback(
-      (newDate) => {
+      (newDate: Date) => {
         onChange?.(newDate)
       },
       [onChange]
@@ -112,7 +112,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
     const containerClassNames = useMemo(
       () =>
         clsx({
-          ['absolute top-full shadow rounded overflow-hidden z-100 bg-background']:
+          ['absolute top-full shadow-xl rounded overflow-hidden z-100 bg-background']:
             true,
           ['sr-only']: !open,
         }),
@@ -121,10 +121,10 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 
     const iconClassNames = useMemo(
       () =>
-        clsx('absolute right-2 bottom-3', {
+        clsx('h-6 absolute right-2 bottom-3', {
           'text-gray-400': !error && !open,
-          'text-primary-700': !error && open,
-          'text-error-600': error,
+          'text-primary': !error && open,
+          'text-error': error,
         }),
       [error, variant, label, open]
     )
@@ -133,12 +133,11 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
       <div
         onKeyDown={handleKeyDown}
         ref={containerRef}
-        className="flex relative items-center"
+        className="relative"
       >
         <Input
           className={className}
           label={label}
-          variant={variant}
           onFocus={handleFocus}
           onClick={handleClick}
           onBlur={onBlur}
@@ -157,12 +156,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
         />
         {!disabled ? (
           <>
-            <Icon
-              name="calendar"
-              type="outline"
-              size={18}
-              className={iconClassNames}
-            />
+            <CalendarIcon className={iconClassNames} />
             <div className={containerClassNames}>
               <div className="flex">
                 <MonthCalendar

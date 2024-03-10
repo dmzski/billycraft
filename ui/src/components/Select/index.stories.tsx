@@ -1,7 +1,7 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import Select, { SelectProps, ValueType } from '.'
+import { StoryObj } from '@storybook/react'
+import Select, { ValueType } from '.'
 import Button from 'components/Button'
+import { useRef, useState } from 'react'
 
 export default {
   title: 'Components/Select',
@@ -9,7 +9,7 @@ export default {
   args: {
     variant: 'inside',
   },
-} as Meta<SelectProps>
+}
 
 const fakeOptions = [
   { label: 'Option 1', value: 1 },
@@ -22,9 +22,11 @@ const fakeOptions = [
   },
 ]
 
-const Template: Story<SelectProps> = ({ ...props }: SelectProps) => {
-  const ref = React.useRef<HTMLInputElement>(null)
-  const [value, setValue] = React.useState<ValueType>()
+type Story = StoryObj<typeof Select>
+
+const render: Story['render'] = (props) => {
+  const ref = useRef<HTMLInputElement>(null)
+  const [value, setValue] = useState<ValueType>()
 
   return (
     <div className="flex gap-2 items-center">
@@ -39,70 +41,76 @@ const Template: Story<SelectProps> = ({ ...props }: SelectProps) => {
   )
 }
 
-Template.args = {}
-
-export const Basic = Template.bind({})
-Basic.decorators = [
-  (Story) => (
-    <div style={{ minHeight: '10rem' }} className="w-full items-start flex">
-      <Story />
-    </div>
-  ),
-]
-
-Basic.args = {
-  options: fakeOptions,
+export const Basic: Story = {
+  render,
+  args: {
+    options: fakeOptions
+  },
+  decorators: [
+    (Component) => (
+      <div style={{ minHeight: '10rem' }} className="w-full items-start flex">
+        <Component />
+      </div>
+    ),
+  ]
 }
 
-export const Searchable = Template.bind({})
-Searchable.decorators = [
-  (Story) => (
-    <>
-      <Story />
-    </>
-  ),
-]
-
-Searchable.args = {
-  options: fakeOptions,
-  isSearchable: true,
+export const Searchable: Story = {
+  render,
+  args: {
+    isSearchable: true,
+    options: fakeOptions
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <Story />
+      </>
+    ),
+  ]
 }
 
-export const Labeled = Template.bind({})
-Labeled.args = {
-  label: 'My awesome label',
-  options: fakeOptions,
-}
-
-export const Multi = Template.bind({})
-Multi.args = {
-  label: 'Multi select',
-  options: fakeOptions,
-  isMulti: true,
-}
-
-export const Controlled: Story<SelectProps> = ({ ...props }: SelectProps) => {
-  const [value, setValue] = React.useState<any>(1)
-
-  const handleReset = () => {
-    setValue(undefined)
+export const Labeled: Story = {
+  render,
+  args: {
+    label: 'My awesome label',
+    options: fakeOptions,
   }
-  return (
-    <div className="w-full">
-      <Button size="md" className="m-2" onClick={handleReset}>
-        Reset
-      </Button>
-      <Select
-        {...props}
-        value={value}
-        isSearchable
-        onChange={(result) => setValue(result)}
-      />
-      <p>Value is {JSON.stringify(value)}</p>
-    </div>
-  )
 }
-Controlled.args = {
-  label: 'My awesome label',
-  options: fakeOptions,
+
+export const Multi: Story = {
+  render,
+  args: {
+    label: 'Multi select',
+    options: fakeOptions,
+    isMulti: true,
+  }
+}
+
+export const Controlled: Story = {
+  render: (props) => {
+    const [value, setValue] = useState<number | undefined>(1)
+
+    const handleReset = () => {
+      setValue(undefined)
+    }
+    return (
+      <div className="w-full flex items-center gap-2">
+        <Button size="md" className="m-2" onClick={handleReset}>
+          Reset
+        </Button>
+        <Select
+          {...props}
+          value={value}
+          isSearchable
+          onChange={(result) => setValue(result as number)}
+        />
+        <p>Value is {JSON.stringify(value)}</p>
+      </div>
+    )
+  },
+  args: {
+    "aria-label": 'My awesome label',
+    options: fakeOptions,
+  }
 }

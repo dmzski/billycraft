@@ -1,38 +1,40 @@
-import React from 'react'
+import { useEffect, useState } from "react";
 
-export type useTableStateProps = {
-  data: any[]
-  initialSort?: { field: string; order: 'asc' | 'desc' }
+export type useTableStateProps<T extends object> = {
+  data: T[]
+  initialSort?: { field: keyof T; order: 'asc' | 'desc' }
 }
 
-export type useTableStateResult = {
-  data: any[]
-  sort?: { field: string; order: 'asc' | 'desc' }
-  onSort: (field: string, order: 'asc' | 'desc') => any
+export type useTableStateResult<T extends object> = {
+  data: T[]
+  sort?: { field: keyof T; order: 'asc' | 'desc' }
+  onSort: (field: keyof T, order: 'asc' | 'desc') => void
 }
 
-const sortData = (data: any[], field: string, order = 'asc') => {
-  const sortedData: any[] = [
+const isNumber = (value: unknown): value is number => !Number.isNaN(value)
+
+const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') => {
+  const sortedData = [
     ...data.sort((currentRow, nextRow) =>
-      typeof currentRow[field] === 'number'
-        ? currentRow[field] - nextRow[field]
-        : `${currentRow[field]}`.localeCompare(nextRow[field])
+      isNumber(currentRow[field]) && isNumber(nextRow[field])
+        ? (currentRow[field] as number) - (nextRow[field] as number)
+        : `${currentRow[field] as string ?? ""}`.localeCompare(nextRow[field] as string ?? "")
     ),
   ]
 
   return order === 'asc' ? sortedData : sortedData.reverse()
 }
 
-export const useTableState = ({
+export const useTableState = <T extends object,>({
   data,
   initialSort,
-}: useTableStateProps): useTableStateResult => {
-  const [state, setState] = React.useState({
+}: useTableStateProps<T>): useTableStateResult<T> => {
+  const [state, setState] = useState({
     data,
     sort: initialSort,
   })
 
-  const onSort = (field: string, order: 'asc' | 'desc') => {
+  const onSort = (field: keyof T, order: 'asc' | 'desc') => {
     setState({
       data: sortData(data, field, order),
       sort: {
@@ -42,7 +44,7 @@ export const useTableState = ({
     })
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setState({
       ...state,
       data: state.sort?.field

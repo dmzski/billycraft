@@ -4,8 +4,7 @@ export { default as Badge } from './components/Badge'
 export { default as Button } from './components/Button'
 export { default as Checkbox } from './components/Checkbox'
 export { default as Drawer } from './components/Drawer'
-export { default as Grid } from './components/Grid'
-export { default as Icon } from './components/Icon'
+export { default as Row } from './components/Row'
 export { default as Link } from './components/Link'
 export { default as Loader } from './components/Loader'
 export { default as Modal } from './components/Modal'
@@ -19,6 +18,8 @@ export { default as Table } from './components/Table'
 export { default as TextArrayInput } from './components/TextArrayInput'
 export { default as Input } from './components/Input'
 export { default as TextArea } from './components/TextArea'
+export { default as Alert } from './components/Alert'
+
 export {
   useToast,
   default as ToastProvider,

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, {
+import {
   ChangeEventHandler,
   FocusEventHandler,
   forwardRef,
@@ -41,14 +41,14 @@ export type InputProps = {
   autoComplete?: string
   autoCorrect?: string
   inputMode?:
-    | 'text'
-    | 'none'
-    | 'search'
-    | 'email'
-    | 'tel'
-    | 'numeric'
-    | 'decimal'
-    | 'url'
+  | 'text'
+  | 'none'
+  | 'search'
+  | 'email'
+  | 'tel'
+  | 'numeric'
+  | 'decimal'
+  | 'url'
   pattern?: string
   autoCapitalize?: string
   min?: number
@@ -60,49 +60,27 @@ export type InputProps = {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, id, className, error, ...props }, ref): JSX.Element =>
-    label ? (
-      <div className={clsx(classes.container, className)}>
-        <label htmlFor={id} className={classes.label}>
-          <span className={classes.labelText}>{label}</span>
-        </label>
-        <input
-          className={clsx(
-            classes.input,
-            !error && 'focus:border-primary',
-            error && classes.inputError
-          )}
-          {...props}
-          ref={ref}
-          id={id}
-        />
-        {error && typeof error === 'string' ? (
-          <span className="label-text-alt text-error mt-1">{error}</span>
-        ) : null}
-      </div>
-    ) : (
-      <div className={clsx(classes.container, className)}>
-        <input
-          className={clsx(
-            classes.input,
-            error && classes.inputError,
-            !error && 'focus:border-primary'
-          )}
-          {...props}
-          ref={ref}
-          id={id}
-          aria-label={label}
-        />
-        {error && typeof error === 'string' ? (
-          <span className="label-text-alt text-error mt-1">{error}</span>
-        ) : null}
-      </div>
-    )
+  ({ label, id, className, error, ...props }, ref) => (
+    <div className={clsx(classes.container, className)}>
+      <label htmlFor={id} className={classes.label}>
+        <span className={classes.labelText}>{label}</span>
+      </label>
+      <input
+        className={clsx(
+          classes.input,
+          !error && 'focus:border-primary focus:outline-primary',
+          error && classes.inputError
+        )}
+        {...props}
+        ref={ref}
+        id={id}
+      />
+      {error && typeof error === 'string' ? (
+        <span className="label-text-alt text-error mt-1">{error}</span>
+      ) : null}
+    </div>
+  )
 )
-
-Input.defaultProps = {
-  type: 'text',
-}
 
 Input.displayName = 'Input'
 

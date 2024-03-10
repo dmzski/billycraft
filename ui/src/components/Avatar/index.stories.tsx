@@ -1,24 +1,25 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
 import example from './example.jpeg'
-import Avatar, { AvatarProps } from '.'
+import Avatar from '.'
+import { StoryObj } from '@storybook/react'
 
 export default {
   title: 'Components/Avatar',
   component: Avatar,
-} as Meta
-
-const Template: Story<AvatarProps> = (args) => <Avatar {...args} />
-
-export const Basic = Template.bind({})
-Basic.args = {
-  src: example,
-  alt: 'Example with image',
-  size: 30,
 }
 
-export const WithoutImage = Template.bind({})
-WithoutImage.args = {
-  alt: 'Dorian Maliszewski',
-  size: 30,
+type Story = StoryObj<typeof Avatar>
+
+export const Basic: Story = {
+  args: {
+    src: example,
+    alt: 'Example with image',
+    size: 30,
+  }
+}
+
+export const WithoutImage: Story = {
+  args: {
+    alt: 'Dorian Maliszewski',
+    size: 30,
+  }
 }

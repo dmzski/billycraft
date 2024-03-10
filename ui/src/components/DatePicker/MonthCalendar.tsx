@@ -1,9 +1,9 @@
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from './helpers'
-import React from 'react'
-import Icon from '../Icon'
 import Button from '../Button'
 import clsx from 'clsx'
+import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon'
+import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon'
 
 type MonthCalendarButtonProps = {
   date?: Date
@@ -49,7 +49,7 @@ type MonthCalendarProps = {
 const MonthCalendar = ({
   selected,
   onDateClick,
-}: MonthCalendarProps): JSX.Element => {
+}: MonthCalendarProps) => {
   const [dateView, setDateView] = useState(selected ?? new Date())
 
   const goPrevious = useCallback(() => {
@@ -85,9 +85,9 @@ const MonthCalendar = ({
             variant="ghost"
             onClick={goPrevious}
           >
-            <Icon name="arrow-left" size={10} />
+            <ArrowLeftIcon className='fill-current h-5' />
           </Button>
-          <div className="text-center my-2">
+          <div className="text-center">
             {dateView
               .toLocaleDateString(undefined, {
                 month: 'long',
@@ -101,7 +101,7 @@ const MonthCalendar = ({
             variant="ghost"
             onClick={goNext}
           >
-            <Icon name="arrow-right" size={10} />
+            <ArrowRightIcon className='fill-current h-5' />
           </Button>
         </div>
       </div>
