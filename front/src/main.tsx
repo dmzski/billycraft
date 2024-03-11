@@ -5,7 +5,6 @@ import { BrowserTracing } from '@sentry/tracing'
 import App from './App'
 
 import './index.css'
-import '@coco-ui/core/dist/index.css'
 
 Sentry.init({
   dsn: 'https://aeb327770bc44d91900c6250daa08721@o1262999.ingest.sentry.io/6442376',

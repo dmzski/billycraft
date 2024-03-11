@@ -10,6 +10,12 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/core.js",
+      "require": "./dist/core.cjs"
+    }
+  },
   "author": {
     "email": "maliszewskid3@gmail.com",
     "name": "Dorian Maliszewski",
@@ -61,8 +67,8 @@
   },
   "scripts": {
     "start": "storybook dev -p 6006",
-    "generate:type": "tsc --declaration",
-    "build": "vite build",
+    "generate:type": "tsc -p tsconfig.build.json",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o docs",
     "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix",

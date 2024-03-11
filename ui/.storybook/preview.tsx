@@ -1,4 +1,5 @@
 import '../src/index.css'
+import { ComponentType, ReactNode } from 'react'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -20,7 +21,7 @@ export const parameters = {
   },
 }
 
-const Root = ({ children }) => {
+const Root = ({ children }: { children: ReactNode }) => {
   const firstHtml = document.querySelector('html')
 
   if (firstHtml) firstHtml.setAttribute('data-theme', 'light')
@@ -29,7 +30,7 @@ const Root = ({ children }) => {
 }
 
 export const decorators = [
-  (Story) => (
+  (Story: ComponentType) => (
     <Root>
       <Story />
     </Root>

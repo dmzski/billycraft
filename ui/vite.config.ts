@@ -32,15 +32,16 @@ export const defaultConfig: UserConfig = {
       'es2020',
     ],
     lib: {
-      name: pkg.name,
       entry: 'src/index.ts',
       formats: ['es', 'cjs'],
+      name: pkg.name,
+      fileName: pkg.name,
     },
     rollupOptions: {
       external,
       output: {
         preserveModules: true,
-        exports: "named"
+        entryFileNames: '[name].js',
       }
     },
   },

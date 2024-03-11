@@ -22,7 +22,7 @@ export { default as Alert } from './components/Alert'
 
 export {
   useToast,
-  default as ToastProvider,
+  ToastProvider,
 } from './components/Toast/ToastProvider'
 export { default as Tooltip } from './components/Tooltip'
 export { default as TopBar } from './components/TopBar'

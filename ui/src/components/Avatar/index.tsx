@@ -6,7 +6,7 @@ const classes = {
   withoutSrc: 'p-4 select-none bg-base-300',
 }
 
-export const getStringFromAlt = (altStr: string): string => {
+const getStringFromAlt = (altStr: string): string => {
   if (!altStr) return ''
   const array = altStr.split(' ')
   if (array.length > 1) {

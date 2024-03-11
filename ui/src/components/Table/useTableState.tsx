@@ -25,7 +25,7 @@ const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') =
   return order === 'asc' ? sortedData : sortedData.reverse()
 }
 
-export const useTableState = <T extends object,>({
+const useTableState = <T extends object,>({
   data,
   initialSort,
 }: useTableStateProps<T>): useTableStateResult<T> => {

@@ -19,7 +19,7 @@ importers:
   front:
     dependencies:
       '@coco-ui/core':
-        specifier: ^1.27.2
+        specifier: workspace:*
         version: link:../ui
       '@heroicons/react':
         specifier: ^1.0.6

@@ -37,7 +37,7 @@ type ToastContextType = {
 }
 const ToastContext = createContext<ToastContextType>({} as ToastContextType)
 
-const ToastProvider = ({
+export const ToastProvider = ({
   children,
   duration = 3000,
   maxConcurrent = 5,
@@ -144,5 +144,3 @@ export const useToast = () => {
 
   return context
 }
-
-export default ToastProvider
