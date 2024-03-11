@@ -151,8 +151,9 @@ pub async fn login_user_handler(
     .unwrap();
 
     let cookie = Cookie::build("coco_at", token.to_owned())
+        .domain(data.env.domain.to_string())
         .path("/")
-        .max_age(time::Duration::hours(1))
+        .max_age(time::Duration::hours(2))
         .same_site(SameSite::Lax)
         .http_only(true)
         .finish();

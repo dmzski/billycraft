@@ -80,7 +80,7 @@ const SupplierModalForm = ({
           {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
         </h3>
         <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
-          <TrashIcon />
+          <TrashIcon className='w-5' />
           &nbsp; Supprimer
         </Button>
       </div>

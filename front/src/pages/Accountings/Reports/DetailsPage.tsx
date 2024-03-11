@@ -71,7 +71,7 @@ const DetailsPage = () => {
       <div className="flex md:justify-between flex-col md:flex-row">
         <Link to={REPORT_ROUTES.routes.LIST.path}>
           <Button type="button" className="md:w-auto w-full mb-4" variant="ghost">
-            <ArrowLeftIcon />
+            <ArrowLeftIcon className='w-5' />
             &nbsp; Retourner à la liste des rapports
           </Button>
         </Link>

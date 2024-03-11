@@ -32,15 +32,15 @@ const BillPage = () => {
       <div className="flex justify-between mb-4">
         <h1 className="text-3xl">Factures</h1>
         <Button size="md" variant="primary" onClick={goToNewBill}>
-          <PlusIcon />
+          <PlusIcon className='w-5' />
           &nbsp; Nouvelle facture
         </Button>
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
       <BillTable data={billSorted()} />
-      {isLoading ? (
+      {!isLoading ? (
         <div className="mt-2 flex justify-center">
-          <Loader />
+          <Loader variant='primary' />
         </div>
       ) : null}
     </>

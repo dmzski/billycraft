@@ -8,13 +8,8 @@ mod route;
 use config::Config;
 use std::sync::Arc;
 
-use axum::http::{
-    header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
-    HeaderValue, Method,
-};
 use dotenv::dotenv;
 use route::create_router;
-use tower_http::cors::CorsLayer;
 
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
@@ -44,17 +39,10 @@ async fn main() {
         }
     };
 
-    let cors = CorsLayer::new()
-        .allow_origin(config.origin.parse::<HeaderValue>().unwrap())
-        .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
-        .allow_credentials(true)
-        .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE]);
-
     let app = create_router(Arc::new(AppState {
         db: pool.clone(),
         env: config.clone(),
-    }))
-    .layer(cors);
+    }));
 
     println!("🚀 Server started successfully");
     axum::Server::bind(&config.listen_addr.parse().unwrap())

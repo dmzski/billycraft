@@ -26,7 +26,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const { data: company } = useDataLoader('my-company', () => CompanyApi.getMine(), {
     enabled: !!user?.companyId && isAuthenticated,
     pollingInterval: 10000,
-    needPolling: isAuthenticated
+    needPolling: isAuthenticated && !!user?.companyId
   })
 
   const value = useMemo(() => ({ user, company }), [user, company])

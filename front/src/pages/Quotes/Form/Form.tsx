@@ -195,7 +195,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
             >
-              <HandThumbUpIcon />
+              <HandThumbUpIcon className='w-5' />
               &nbsp; Devis accepté
             </Button>
             <Button
@@ -204,7 +204,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
             >
-              <HandThumbDownIcon />
+              <HandThumbDownIcon className='w-5' />
               &nbsp; Devis refusé
             </Button>
           </>
@@ -217,14 +217,14 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
             >
-              <DocumentIcon /> &nbsp; Remettre en brouillon
+              <DocumentIcon className='w-5' /> &nbsp; Remettre en brouillon
             </Button>
             <Button
               size="md"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
             >
-              <CurrencyEuroIcon /> &nbsp; Demander un accompte
+              <CurrencyEuroIcon className='w-5' /> &nbsp; Demander un accompte
             </Button>
           </>
         ) : null}
@@ -234,7 +234,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
           >
-            <CheckIcon />
+            <CheckIcon className='w-5' />
             &nbsp; Accompte payé
           </Button>
         ) : null}
@@ -244,7 +244,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
           >
-            <ArchiveBoxArrowDownIcon />
+            <ArchiveBoxArrowDownIcon className='w-5' />
             &nbsp; Archiver le devis
           </Button>
         ) : null}

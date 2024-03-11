@@ -17,7 +17,7 @@ const CustomerPage = () => {
           customer={{} as Customer}
           disclosure={
             <Button variant="primary" size="md">
-              <PlusIcon />
+              <PlusIcon className='w-5' />
               &nbsp; Nouveau client
             </Button>
           }

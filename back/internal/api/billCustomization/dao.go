@@ -53,9 +53,9 @@ func (dao BillCustomizationDao) Update(id string, tenant int, changes dtos.BillC
 	return
 }
 
-func (dao BillCustomizationDao) Create(creator models.User, newBillCustomization dtos.BillCustomization) (billCustomization models.BillCustomization) {
+func (dao BillCustomizationDao) Create(companyId int, newBillCustomization dtos.BillCustomization) (billCustomization models.BillCustomization) {
 	billCustomization = billCustomization.FromDTO(newBillCustomization)
-	billCustomization.CompanyID = *creator.CompanyID
+	billCustomization.CompanyID = companyId
 
 	if err := database.DBConn.Omit("Company").Create(&billCustomization).Error; err != nil {
 		log.Println("Error : ", err.Error())

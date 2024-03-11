@@ -7,7 +7,7 @@ import { fr } from 'date-fns/locale'
 import { Todo } from '@/models/Todo'
 import { Controller, useForm } from 'react-hook-form'
 import { ChangeEventHandler, useCallback, useState } from 'react'
-import { CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { ArchiveBoxArrowDownIcon, CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 type TodoFormValues = { description: string }
 
@@ -131,7 +131,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
           {data?.map((todo, index) => (
             <div
               key={todo.id}
-              className={clsx('grid md:grid-cols-12 py-3 px-4 items-center', {
+              className={clsx('grid gap-2 md:grid-cols-12 py-3 px-4 items-center', {
                 'bg-base-200': index % 2 === 0,
               })}
             >
@@ -141,7 +141,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                 })}
               </div>
               <div className="md:col-span-2">{todo.createdBy}</div>
-              <div className="md:col-span-4 break-all">
+              <div className="md:col-span-6 break-all">
                 {editMode !== todo.id ? (
                   todo.description
                 ) : (
@@ -152,32 +152,28 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                   />
                 )}
               </div>
-              <div className="md:col-span-4">
+              <div className="md:col-span-2 justify-end items-end flex">
                 {!todo.doneAt && editMode === todo.id ? (
-                  <div className="flex items-center">
-                    <Button className="mr-4" variant="success" size="sm" onClick={handleEditTodo}>
-                      Enregistrer
+                  <div className="flex gap-2 items-center">
+                    <Button variant="success" onClick={handleEditTodo}>
+                      <CheckIcon className='w-5' />
                     </Button>
-                    <Button onClick={handleCancelEdit} variant="error" size="sm">
-                      <XMarkIcon />
-                      &nbsp; Annuler
+                    <Button onClick={handleCancelEdit} variant="error">
+                      <XMarkIcon className='w-5' />
                     </Button>
                   </div>
                 ) : null}
                 {!todo.doneAt && editMode !== todo.id ? (
-                  <div className="flex">
+                  <div className="flex gap-2">
                     <Button
                       onClick={handleEdit(todo.id, todo.description)}
-                      className="mr-4"
                       variant="info"
-                      size="sm"
+                      outline
                     >
-                      <PencilIcon />
-                      &nbsp; Modifier
+                      <PencilIcon className='w-5' />
                     </Button>
-                    <Button onClick={handleDone(todo.id)} variant="success" size="sm">
-                      <CheckIcon />
-                      &nbsp; Fait
+                    <Button outline onClick={handleDone(todo.id)} variant="primary">
+                      <ArchiveBoxArrowDownIcon className='w-5' />
                     </Button>
                   </div>
                 ) : null}

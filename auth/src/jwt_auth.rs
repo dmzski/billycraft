@@ -12,7 +12,7 @@ use axum_extra::extract::cookie::CookieJar;
 use jsonwebtoken::{decode, DecodingKey, Validation};
 
 use crate::{
-    model::{TokenClaims, User, AppError},
+    model::{AppError, TokenClaims, User},
     AppState,
 };
 

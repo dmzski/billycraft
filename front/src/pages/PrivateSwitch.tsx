@@ -21,7 +21,11 @@ import { Register } from './Auth/Register'
 
 const PrivateSwitch = () => {
   const user = useUser()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isInitializing } = useAuth()
+
+  if (isInitializing) {
+    return null
+  }
 
 
   if (!isAuthenticated) {

@@ -11,6 +11,9 @@ prepare:
 	cargo sqlx prepare
 
 build:
+	docker build -f ./Dockerfile.dev -t coco-erp/auth:local .
+
+build-prod:
 	docker build -f ./Dockerfile -t coco-erp/auth:local .
 
 migrate-up:

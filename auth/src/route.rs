@@ -27,12 +27,12 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
         )
         .route(
             "/api/auth/check",
-            get(refresh_session)
+            get(check_session)
                 .route_layer(middleware::from_fn_with_state(app_state.clone(), auth)),
         )
         .route(
             "/api/auth/refresh",
-            get(check_session)
+            get(refresh_session)
                 .route_layer(middleware::from_fn_with_state(app_state.clone(), auth)),
         )
         .with_state(app_state)

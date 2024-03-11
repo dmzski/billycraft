@@ -187,7 +187,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
           >
-            <EnvelopeIcon />
+            <EnvelopeIcon className='w-5' />
             &nbsp; Envoyer la facture
           </Button>
         ) : null}
@@ -199,7 +199,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               variant="success"
               onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
             >
-              <HandThumbUpIcon />
+              <HandThumbUpIcon className='w-5' />
               &nbsp; Facture payée
             </Button>
             <Button
@@ -208,14 +208,14 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               variant="error"
               onClick={updateBillStatus(BillStatusEnum.REFUSED)}
             >
-              <HandThumbDownIcon />
+              <HandThumbDownIcon className='w-5' />
               &nbsp; Facture refusée
             </Button>
           </>
         ) : null}
         {bill.status === BillStatusEnum.PAYMENT_PAID ? (
           <Button size="md" type="button" onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
-            <ArchiveBoxArrowDownIcon />
+            <ArchiveBoxArrowDownIcon className='w-5' />
             &nbsp; Archiver la facture
           </Button>
         ) : null}

@@ -25,19 +25,19 @@ const Dashboard = () => {
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-center mb-8">
         <h1 className="text-3xl mb-4">Accueil</h1>
         <div className="grid md:grid-cols-2 gap-2 justify-center">
-          <Badge variant={notPaid?.length ? 'error' : 'success'}>
+          <Badge size='lg' variant={notPaid?.length ? 'error' : 'success'}>
             {notPaid?.length} factures impayées
           </Badge>
-          <Badge variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} Tâches à faire</Badge>
+          <Badge size="lg" variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} Tâches à faire</Badge>
         </div>
       </div>
       <div className="flex flex-col gap-10">
         <section className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <PencilIcon />
+            <PencilIcon className='w-5' />
             <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
             <Badge variant="warning" className="hidden md:flex">
-              <ExclamationTriangleIcon />
+              <ExclamationTriangleIcon className='w-4' />
               &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
             </Badge>
           </div>
@@ -47,7 +47,7 @@ const Dashboard = () => {
         <section className="flex flex-col gap-4">
           <div className='flex justify-between'>
           <div className="flex text-xl gap-2">
-            <BanknotesIcon />
+            <BanknotesIcon className='w-5' />
             <h2>Factures impayées</h2>
           </div>
           {totalNotPaid > 0 ? (

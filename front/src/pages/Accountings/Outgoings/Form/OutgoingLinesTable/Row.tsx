@@ -200,7 +200,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
       <div className="col-span-2 flex justify-between">
         <Input className="w-full mr-2" readOnly value={totalTTC} />
         <Button variant="error" onClick={onDelete} type="button">
-          <TrashIcon />
+          <TrashIcon className='w-5' />
         </Button>
       </div>
     </div>

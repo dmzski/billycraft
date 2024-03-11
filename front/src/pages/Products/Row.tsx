@@ -191,10 +191,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
           <div className="flex relative gap-2 bg-base-100">
             <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
             <Button type="button" variant="success" square onClick={onDelete}>
-              <CheckIcon />
+              <CheckIcon className='w-5' />
             </Button>
             <Button type="button" variant="error" square onClick={toggleDeleteMode}>
-              <XMarkIcon />
+              <XMarkIcon className='w-5' />
             </Button>
           </div>
         ) : null}
@@ -202,12 +202,12 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
           <div className="flex gap-2">
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
-                <CheckIcon />
+                <CheckIcon className='w-5' />
               </Button>
             </form>
             {product.id ? (
               <Button type="button" square variant="error" onClick={toggleEditMode}>
-                <XMarkIcon />
+                <XMarkIcon className='w-5' />
               </Button>
             ) : null}
           </div>
@@ -215,7 +215,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
         {mode === MODES.READ && !isNew ? (
           <div className="flex gap-2">
             <Button type="button" onClick={toggleEditMode} variant="info" square>
-              <PencilIcon />
+              <PencilIcon className='w-5' />
             </Button>
             <Button
               type="button"
@@ -223,7 +223,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               square
               variant="error"
             >
-              <TrashIcon />
+              <TrashIcon className='w-5' />
             </Button>
           </div>
         ) : null}

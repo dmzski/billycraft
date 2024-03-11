@@ -74,7 +74,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
         <h1 className="ml-4 text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
         {customer?.id ? (
           <Button variant="error" onClick={tryDelete}>
-            <TrashIcon />
+            <TrashIcon className='w-5' />
             &nbsp; Supprimer
           </Button>
         ) : null}

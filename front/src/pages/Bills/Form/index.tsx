@@ -58,7 +58,7 @@ const BillFormPage = () => {
     <div className="w-full flex flex-col gap-4">
       <div>
         <Button variant="ghost" onClick={history.goBack}>
-          <ChevronLeftIcon />
+          <ChevronLeftIcon className='w-5' />
           &nbsp; Retourner à la liste des factures
         </Button>
       </div>
@@ -78,7 +78,7 @@ const BillFormPage = () => {
             onClick={downloadPdf}
             variant="primary"
           >
-            <DocumentArrowDownIcon />
+            <DocumentArrowDownIcon className='w-5' />
             &nbsp; Télécharger le PDF
           </Button>
         ) : null}

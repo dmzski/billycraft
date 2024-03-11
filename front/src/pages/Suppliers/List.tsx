@@ -32,7 +32,7 @@ const List = ({ data, reloadData }: ListProps) => (
           <SupplierModalForm
             disclosure={
               <Button size="sm" variant="info">
-                <PencilIcon />
+                <PencilIcon className='w-5' />
                 &nbsp; Modifier
               </Button>
             }

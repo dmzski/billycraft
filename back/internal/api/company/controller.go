@@ -2,6 +2,8 @@ package company
 
 import (
 	"back/config"
+	"back/internal/api/billCustomization"
+	"back/internal/api/quoteCustomization"
 	"back/internal/api/users"
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
@@ -35,11 +37,15 @@ func create(c *fiber.Ctx) error {
     return fiber.NewError(fiber.StatusBadRequest, "Malformed company")
   }
 	company := DAO.Create(user.Email, newCompany)
+  users.DAO.JoinCompany(user.Email, company.ID)
+
+	quoteCustomization.DAO.Create(company.ID, dtos.QuoteCustomization{})
+	billCustomization.DAO.Create(company.ID, dtos.BillCustomization{})
+
   if (company.ID == 0) {
 		return fiber.NewError(fiber.StatusInternalServerError, "Company creation error")
   }
 	user.CompanyID = &company.ID
-	users.DAO.JoinCompany(user.Email, company.ID)
 	return c.JSON(company)
 }
 

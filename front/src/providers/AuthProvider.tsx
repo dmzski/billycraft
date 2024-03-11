@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react"
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import Cookies from 'js-cookie'
 import { ApiError } from "@/models/ApiError"
 
@@ -8,6 +8,7 @@ type AuthContextType = {
   register: (params: { email: string, password: string, name: string }) => Promise<void>
   refreshSession: () => Promise<void>,
   isAuthenticated: boolean,
+  isInitializing: boolean
 }
 
 type AuthProviderProps = {
@@ -20,6 +21,7 @@ type AuthProviderProps = {
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
+  isInitializing: true,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
@@ -30,7 +32,7 @@ const COOKIE_NAME = "coco_at"
 const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
 
 export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefreshSuccess, onRegisterSuccess }: AuthProviderProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get(COOKIE_NAME))
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined)
 
   const login: AuthContextType['login'] = useCallback(async ({ email, password }) => {
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -81,16 +83,29 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
   }, [onLogoutSuccess])
 
   const refreshSession = useCallback(async () => {
-    const res = await fetch(`${API_URL}/auth/refresh`)
+    const res = await fetch(`${API_URL}/auth/refresh`, {credentials: "include"})
     if (res.ok) {
       onRefreshSuccess?.()
+      if (!isAuthenticated){
+        setIsAuthenticated(true)
+      }
     } else {
+      if (isAuthenticated){
+        setIsAuthenticated(false)
+      }
       const { message } = await res.json()
       throw new ApiError(res.status, message)
     }
-  }, [onRefreshSuccess])
+  }, [onRefreshSuccess, isAuthenticated])
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      refreshSession().catch(() => null)
+    }
+    }, [refreshSession, isAuthenticated])
 
   const value = useMemo(() => ({
+    isInitializing: isAuthenticated === undefined,
     isAuthenticated,
     refreshSession,
     register,

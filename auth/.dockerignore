@@ -2,4 +2,7 @@
 .env
 migrations/
 Makefile
+Dockerfile
+Dockerfile.dev
+docker.env
 README.md

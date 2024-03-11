@@ -70,7 +70,7 @@ const BillLineTableLine = ({
           {...provided?.dragHandleProps}
           className="items-center flex p-2"
         >
-          <ArrowsUpDownIcon />
+          <ArrowsUpDownIcon className='w-5' />
         </div>
         <Controller
           name={`lines.${index}.type`}
@@ -194,7 +194,7 @@ const BillLineTableLine = ({
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
           <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
-            <TrashIcon />
+            <TrashIcon className='w-5' />
           </Button>
         ) : null}
       </div>

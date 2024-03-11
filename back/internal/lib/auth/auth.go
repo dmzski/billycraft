@@ -3,6 +3,7 @@ package auth
 import (
 	"back/internal/api/users"
 	"back/internal/lib/models"
+
 	"github.com/gofiber/fiber/v2"
 )
 

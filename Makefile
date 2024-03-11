@@ -1,26 +1,31 @@
-
 up:
-	docker compose up -d
+	cd scripts && ./up.sh && cd ../ && docker compose up -d
 
 logs:
 	docker compose logs -f
 
 down:
-	docker compose down
+	cd scripts && ./down.sh
 
 dev:
-	docker compose up
+	docker compose up -d && docker compose logs -f
+
+dev-auth:
+	docker compose up -d && docker compose logs -f auth
 
 dev-back:
 	docker compose up -d && docker compose logs -f api
 
-clean-db:
-	docker compose down -v
-
 prepare:
+	cd scripts && ./prepare.sh
+
+clean:
+	cd scripts && ./clean.sh
+
+build:
 	cd ./auth && make build && cd ../back && make build-dev
 
-prepare-prod:
+build-prod:
 	cd ./auth && make build && cd ../back && make build-prod
 
 release-back:

@@ -33,7 +33,7 @@ const ReportCard = ({
         ReportCardVariants[variant] ?? ReportCardVariants.primary,
       )}
     >
-      <IconComponent className="mb-2 text-4xl" />
+      <IconComponent className="mb-2 text-4xl w-8" />
       <span>{title}</span>
     </div>
     <div className="font-bold mt-2 flex justify-center items-center">{children}</div>

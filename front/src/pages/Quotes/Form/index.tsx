@@ -76,7 +76,7 @@ const QuoteCreationPage = () => {
     <div className="w-full px-4 flex flex-col gap-4">
       <div>
         <Button variant="ghost" className="mb-4" size="sm" onClick={history.goBack}>
-          <ChevronLeftIcon /> &nbsp; Retourner à la liste des devis
+          <ChevronLeftIcon className='w-5' /> &nbsp; Retourner à la liste des devis
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
@@ -97,7 +97,7 @@ const QuoteCreationPage = () => {
               !newQuote.id
             }
           >
-            <DocumentPlusIcon />
+            <DocumentPlusIcon className='w-5' />
             &nbsp; Créer la facture
           </Button>
           <Button
@@ -107,7 +107,7 @@ const QuoteCreationPage = () => {
             variant="primary"
             size="md"
           >
-            <DocumentArrowDownIcon /> &nbsp; Télécharger le PDF
+            <DocumentArrowDownIcon className='w-5' /> &nbsp; Télécharger le PDF
           </Button>
         </div>
       </div>

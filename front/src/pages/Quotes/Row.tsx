@@ -39,7 +39,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
 
     return (
       <div className="flex items-center">
-        <IconComponent />
+        <IconComponent className='w-5'/>
         <span className="ml-1">{status?.text}</span>
       </div>
     )
@@ -111,7 +111,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
                   onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
                 >
                   <div className="flex items-center">
-                    <IconComponent className="mr-2" />
+                    <IconComponent className="mr-2 w-5" />
                     <span>{s.text}</span>
                   </div>
                 </Dropdown.Button>

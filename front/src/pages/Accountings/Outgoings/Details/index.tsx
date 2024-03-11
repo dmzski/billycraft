@@ -22,7 +22,7 @@ const Details = () => {
         <div className="md:col-span-11">
           <Link to={OUTGOING_ROUTES.routes.LIST.path}>
             <Button type="button" variant="ghost" size="xs">
-              <ArrowLeftIcon />
+              <ArrowLeftIcon className='w-5' />
               &nbsp; Retourner à la liste des livrets
             </Button>
           </Link>
@@ -31,7 +31,7 @@ const Details = () => {
           <div>
             <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
               <Button variant="info">
-                <PencilIcon />
+                <PencilIcon className='w-5' />
                 &nbsp; Modifier
               </Button>
             </Link>

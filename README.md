@@ -27,19 +27,25 @@ Here is all you need usually to dev back folder or front
 ## Start the stack
 
 ```sh
+make build # create local images in dev mode
 make prepare
-make dev # make up instead if you don't want the console output but trust me use make dev
+make dev # or make up for detached process
 ```
 
-## Clean database
+## Stop all (without cleaning db)
 ```sh
-make clean-db
+make down
+```
+
+## Clean
+```sh
+make clean
 ```
 
 ## Start the stack only for front with iso prod build
 
 ```sh
-make prepare-prod
+make build-prod
 make up
 ```
 
@@ -64,24 +70,7 @@ pnpm install
 pnpm start
 ```
 
-### Update tailwind classes (TO IMPROVE YEAH)
-
-Sometimes if you use a classes that havent be used before you need to rerun tailwinf because I didn't put postcss in webpack
-
-- Build when changes
-```sh
-cd front
-pnpm watch:css
-```
-
-- Build only
-```sh
-cd front
-pnpm build:css
-```
-
-
-## To dev on Auth
+## Auth
 
 ```sh
 cd auth

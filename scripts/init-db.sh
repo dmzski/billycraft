@@ -15,8 +15,3 @@ EOSQL
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname coco <<-EOSQL
   CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 EOSQL
-
-MIGRATION_AUTH_DIR="/docker-entrypoint-initdb.d/auth"
-for file in $YOUR_DIR/*.sql; do
-    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname coco_auth "${file}"
-done

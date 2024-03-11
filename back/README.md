@@ -7,11 +7,8 @@
 ## How to start in dev
 
 - Make sure these ports are free :
-  - 5432 : Postgres
   - 8080 : API
-  - 8090 : Auth
   - 80 : Traefik
-- Run `make` or `make dev`
 
 ## API Testing
 

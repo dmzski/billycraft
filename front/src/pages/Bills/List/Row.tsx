@@ -40,7 +40,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
 
     return (
       <div className="flex items-center">
-        <IconComponent />
+        <IconComponent className='w-5' />
         <span className="ml-1">{status?.text}</span>
       </div>
     )
@@ -99,7 +99,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
                 onClick={updateBillStatus(s.enum as BillStatusEnum)}
               >
                 <div className="flex items-center">
-                  <IconComponent className="mr-2" />
+                  <IconComponent className="mr-2 w-5" />
                   <span>{s.text}</span>
                 </div>
               </Dropdown.Button>

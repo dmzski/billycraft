@@ -33,7 +33,7 @@ const QuotePage = () => {
       <div className="flex justify-between mb-4">
         <h2 className="text-3xl">Devis</h2>
         <Button size="md" variant="primary" onClick={goToNewQuote}>
-          <PlusIcon />
+          <PlusIcon className='w-5' />
           &nbsp; Nouveau devis
         </Button>
       </div>

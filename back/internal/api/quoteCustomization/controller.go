@@ -72,5 +72,5 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
 
-	return c.JSON(DAO.Create(user, newQuoteCustomization).ToDTO())
+	return c.JSON(DAO.Create(*user.CompanyID, newQuoteCustomization).ToDTO())
 }

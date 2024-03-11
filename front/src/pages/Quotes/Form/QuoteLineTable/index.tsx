@@ -137,7 +137,7 @@ const QuoteLineTable = ({
         {!disabled ? (
           <div className="flex flex-col gap-2">
             <Button type="button" variant="ghost" block onClick={() => addLine()} disabled={disabled}>
-              <PlusIcon />
+              <PlusIcon className='w-5' />
               &nbsp; Ajouter une ligne
             </Button>
             <div className="grid md:grid-cols-4 items-end gap-4">
