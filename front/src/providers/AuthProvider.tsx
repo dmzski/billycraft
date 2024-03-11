@@ -83,18 +83,26 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
   }, [onLogoutSuccess])
 
   const refreshSession = useCallback(async () => {
-    const res = await fetch(`${API_URL}/auth/refresh`, {credentials: "include"})
-    if (res.ok) {
-      onRefreshSuccess?.()
-      if (!isAuthenticated){
-        setIsAuthenticated(true)
+    try {
+      const res = await fetch(`${API_URL}/auth/refresh`, { credentials: "include" })
+      if (res.ok) {
+        onRefreshSuccess?.()
+        if (!isAuthenticated) {
+          setIsAuthenticated(true)
+        }
+      } else {
+        if (isAuthenticated || isAuthenticated === undefined) {
+          setIsAuthenticated(false)
+        }
+        const { message } = await res.json()
+        throw new ApiError(res.status, message)
       }
-    } else {
-      if (isAuthenticated){
+
+    } catch (err) {
+      if (isAuthenticated || isAuthenticated === undefined) {
         setIsAuthenticated(false)
       }
-      const { message } = await res.json()
-      throw new ApiError(res.status, message)
+      throw err
     }
   }, [onRefreshSuccess, isAuthenticated])
 
@@ -102,7 +110,7 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
     if (!isAuthenticated) {
       refreshSession().catch(() => null)
     }
-    }, [refreshSession, isAuthenticated])
+  }, [refreshSession, isAuthenticated])
 
   const value = useMemo(() => ({
     isInitializing: isAuthenticated === undefined,
