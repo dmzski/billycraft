@@ -1,7 +1,8 @@
-import { Button, Icon } from '@coco-ui/core'
+import { Button } from '@coco-ui/core'
 import clsx from 'clsx'
 import Supplier from '@/models/Supplier'
 import SupplierModalForm from './modals/SupplierModalForm'
+import { PencilIcon } from '@heroicons/react/24/solid'
 
 type ListProps = {
   data: Supplier[]
@@ -31,7 +32,7 @@ const List = ({ data, reloadData }: ListProps) => (
           <SupplierModalForm
             disclosure={
               <Button size="sm" variant="info">
-                <Icon name="pencil" />
+                <PencilIcon />
                 &nbsp; Modifier
               </Button>
             }

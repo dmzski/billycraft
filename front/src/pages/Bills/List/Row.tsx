@@ -1,5 +1,4 @@
-import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { Button, Dropdown, useToast } from '@coco-ui/core'
 import { BillApi } from '@/api/BillApi'
 import { STRINGS } from '@/constants/strings'
 import { formatISO9075, parseJSON } from 'date-fns'
@@ -10,13 +9,14 @@ import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import { BILL_STATUS } from '../../../constants/bill'
 import { useDataLoaderContext } from '@scaleway/use-dataloader'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
 }
 const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
-  const {reload} =useDataLoaderContext()
+  const { reload } = useDataLoaderContext()
   const toast = useToast()
 
   const updateBillStatus = (status: BillStatusEnum) => (e: MouseEvent) => {
@@ -33,12 +33,14 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
     updateStatus()
   }
 
+
   const getStatus = useMemo(() => {
     const status = Object.values(BILL_STATUS).find(s => s.enum === bill.status)
+    const IconComponent = status?.icon ?? QuestionMarkCircleIcon
 
     return (
       <div className="flex items-center">
-        <Icon name={(status?.icon as IconName) || 'question-mark-circle'} />
+        <IconComponent />
         <span className="ml-1">{status?.text}</span>
       </div>
     )
@@ -85,20 +87,24 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
         {bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}
       </div>
       <div className="md:col-span-2">
-        <Dropdown variant="outline">
+        <Dropdown>
           <Button>{getStatus}</Button>
           <Dropdown.Content>
-            {getNextStatuses().map(s => (
-              <Dropdown.ButtonItem
+            {getNextStatuses().map(s => {
+              const IconComponent = s.icon
+
+              return (
+              <Dropdown.Button
                 key={s.enum}
                 onClick={updateBillStatus(s.enum as BillStatusEnum)}
               >
                 <div className="flex items-center">
-                  <Icon className="mr-2" name={s.icon as IconName} />
+                  <IconComponent className="mr-2" />
                   <span>{s.text}</span>
                 </div>
-              </Dropdown.ButtonItem>
-            ))}
+              </Dropdown.Button>
+            )}
+            )}
           </Dropdown.Content>
         </Dropdown>
       </div>

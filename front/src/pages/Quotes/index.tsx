@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Icon, Loader } from '@coco-ui/core'
+import { Button, Loader } from '@coco-ui/core'
 import { ROUTES } from '@/routes'
 import { QuoteApi } from '@/api/QuoteApi'
 import useCustomers from '@/hooks/useCustomers'
@@ -8,6 +8,7 @@ import QuoteFilterContainer from './Filters'
 import { filterQuotes } from '../../utils/quote'
 import QuoteList from './List'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 type QuoteFilters = Record<string, string>
 
@@ -32,7 +33,7 @@ const QuotePage = () => {
       <div className="flex justify-between mb-4">
         <h2 className="text-3xl">Devis</h2>
         <Button size="md" variant="primary" onClick={goToNewQuote}>
-          <Icon name="plus" />
+          <PlusIcon />
           &nbsp; Nouveau devis
         </Button>
       </div>

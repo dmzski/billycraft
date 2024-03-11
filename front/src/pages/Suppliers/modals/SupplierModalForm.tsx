@@ -1,9 +1,10 @@
-import { Button, Icon, Input, Modal, useToast } from '@coco-ui/core'
+import { Button, Input, Modal, useToast } from '@coco-ui/core'
 import { SupplierApi } from '@/api/SupplierApi'
 import { STRINGS } from '@/constants/strings'
 import Supplier, { SupplierRequest } from '@/models/Supplier'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { TrashIcon } from '@heroicons/react/24/solid'
 
 type SupplierModalFormProps = {
   supplier: Supplier
@@ -79,7 +80,7 @@ const SupplierModalForm = ({
           {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
         </h3>
         <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
-          <Icon name="trash" />
+          <TrashIcon />
           &nbsp; Supprimer
         </Button>
       </div>

@@ -1,10 +1,11 @@
-import { Button, Icon, Input, Select } from '@coco-ui/core'
+import { Button, Input, Select } from '@coco-ui/core'
 import { SupplierApi } from '@/api/SupplierApi'
 import { OutgoingRequest } from '@/models/Outgoing'
 import { useMemo, useState } from 'react'
 import { Control, Controller, useController, useWatch } from 'react-hook-form'
 import SelectBillModal from './modals/SelectBillModal'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -137,8 +138,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
                 disabled={disabled}
               />
               {field.value ? (
-                <Icon
-                  name="x"
+                <XMarkIcon
                   className="absolute right-2 top-2 cursor-pointer"
                   role="button"
                   onClick={() => field.onChange('')}
@@ -200,7 +200,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
       <div className="col-span-2 flex justify-between">
         <Input className="w-full mr-2" readOnly value={totalTTC} />
         <Button variant="error" onClick={onDelete} type="button">
-          <Icon name="trash" />
+          <TrashIcon />
         </Button>
       </div>
     </div>

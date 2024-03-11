@@ -1,4 +1,4 @@
-import { Badge, Button, Icon, useToast } from '@coco-ui/core'
+import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useCallback, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from '@/api/QuoteApi'
@@ -11,6 +11,7 @@ import Quote from '../../../models/Quote'
 import { ROUTES } from '../../../routes'
 import QuoteForm from './Form'
 import { useDataLoader, useDataLoaderContext } from '@scaleway/use-dataloader'
+import { ChevronLeftIcon, DocumentArrowDownIcon, DocumentPlusIcon } from '@heroicons/react/24/solid'
 
 const QuoteCreationPage = () => {
   const [newQuote, setNewQuote] = useState<Quote>({} as Quote)
@@ -75,7 +76,7 @@ const QuoteCreationPage = () => {
     <div className="w-full px-4 flex flex-col gap-4">
       <div>
         <Button variant="ghost" className="mb-4" size="sm" onClick={history.goBack}>
-          <Icon name="chevron-left" /> &nbsp; Retourner à la liste des devis
+          <ChevronLeftIcon /> &nbsp; Retourner à la liste des devis
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
@@ -96,7 +97,7 @@ const QuoteCreationPage = () => {
               !newQuote.id
             }
           >
-            <Icon name="document-add" />
+            <DocumentPlusIcon />
             &nbsp; Créer la facture
           </Button>
           <Button
@@ -106,7 +107,7 @@ const QuoteCreationPage = () => {
             variant="primary"
             size="md"
           >
-            <Icon name="document-download" /> &nbsp; Télécharger le PDF
+            <DocumentArrowDownIcon /> &nbsp; Télécharger le PDF
           </Button>
         </div>
       </div>

@@ -29,11 +29,11 @@ export type ToastProviderProps = {
 }
 
 type ToastContextType = {
-  show: (render: ReactNode, info: ToastOptions) => void
-  success: (render: ReactNode, info: ToastOptions) => void
-  error: (render: ReactNode, info: ToastOptions) => void
-  info: (render: ReactNode, info: ToastOptions) => void
-  warning: (render: ReactNode, info: ToastOptions) => void
+  show: (render: ReactNode, info?: ToastOptions) => void
+  success: (render: ReactNode, info?: ToastOptions) => void
+  error: (render: ReactNode, info?: ToastOptions) => void
+  info: (render: ReactNode, info?: ToastOptions) => void
+  warning: (render: ReactNode, info?: ToastOptions) => void
 }
 const ToastContext = createContext<ToastContextType>({} as ToastContextType)
 
@@ -46,7 +46,7 @@ export const ToastProvider = ({
   const [toasts, setToasts] = useState<ToastInfo[]>([])
 
   const show = useCallback(
-    (render: ReactNode, info: ToastOptions) => {
+    (render: ReactNode, info: ToastOptions = { variant: "info" }) => {
       const newToast = {} as ToastInfo
       newToast.id = counterRef.current
       counterRef.current += 1
@@ -61,28 +61,28 @@ export const ToastProvider = ({
   )
 
   const success = useCallback(
-    (render: ReactNode, info: ToastOptions) => {
+    (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'success' })
     },
     [show]
   )
 
   const error = useCallback(
-    (render: ReactNode, info: ToastOptions) => {
+    (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'error' })
     },
     [show]
   )
 
   const warning = useCallback(
-    (render: ReactNode, info: ToastOptions) => {
+    (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'warning' })
     },
     [show]
   )
 
   const info = useCallback(
-    (render: ReactNode, info: ToastOptions) => {
+    (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'info' })
     },
     [show]

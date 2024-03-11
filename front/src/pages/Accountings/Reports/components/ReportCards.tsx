@@ -1,9 +1,8 @@
 import CounterAnimated from '@/components/CounterAnimated'
-import { ReactNode, useMemo } from 'react'
-import { Icon } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { ComponentType, ReactNode, useMemo } from 'react'
 import clsx from 'clsx'
 import { ReportResponse } from '@/models/Report'
+import { BanknotesIcon, CubeIcon, HandRaisedIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 
 const ReportCardVariants = {
   primary: 'text-primary-700',
@@ -15,14 +14,14 @@ const ReportCardVariants = {
 } as const
 
 type ReportCardProps = {
-  icon: string
+  icon: ComponentType<{className: string}>
   title: string
   children?: ReactNode
   variant?: keyof typeof ReportCardVariants
 }
 
 const ReportCard = ({
-  icon,
+  icon: IconComponent,
   title,
   children,
   variant = 'primary',
@@ -34,7 +33,7 @@ const ReportCard = ({
         ReportCardVariants[variant] ?? ReportCardVariants.primary,
       )}
     >
-      <Icon name={icon as IconName} className="mb-2 text-4xl" />
+      <IconComponent className="mb-2 text-4xl" />
       <span>{title}</span>
     </div>
     <div className="font-bold mt-2 flex justify-center items-center">{children}</div>
@@ -48,22 +47,22 @@ const ReportCards = ({ report }: { report: ReportResponse }) => {
   )
   return (
     <div className="flex flex-wrap justify-between w-full items-center">
-      <ReportCard icon="cash" title="Chiffre d'affaire" variant="primary">
+      <ReportCard icon={BanknotesIcon} title="Chiffre d'affaire" variant="primary">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.sales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon="cube" title="Matériels" variant="info">
+      <ReportCard icon={CubeIcon} title="Matériels" variant="info">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.articleSales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon="hand" title="Services" variant="success">
+      <ReportCard icon={HandRaisedIcon} title="Services" variant="success">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.serviceSales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon="question-mark-circle" title="Autres" variant="secondary">
+      <ReportCard icon={QuestionMarkCircleIcon} title="Autres" variant="secondary">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.otherSales * 100) / 100} />
         </span>

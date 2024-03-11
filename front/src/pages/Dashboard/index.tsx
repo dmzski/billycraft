@@ -1,10 +1,11 @@
-import { Badge, Icon, Loader } from '@coco-ui/core'
+import { Badge, Loader } from '@coco-ui/core'
 import { BillApi } from '@/api/BillApi'
 import { TodoApi } from '@/api/TodoApi'
 import { getBillTotal } from '@/utils/bill'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { BanknotesIcon, ExclamationTriangleIcon, PencilIcon } from '@heroicons/react/24/solid'
 
 const dateOffset = 24 * 60 * 60 * 1000 * 7 // 5 days
 
@@ -33,10 +34,10 @@ const Dashboard = () => {
       <div className="flex flex-col gap-10">
         <section className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <Icon name="pencil" />
+            <PencilIcon />
             <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
             <Badge variant="warning" className="hidden md:flex">
-              <Icon size={14} name="exclamation" />
+              <ExclamationTriangleIcon />
               &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
             </Badge>
           </div>
@@ -46,7 +47,7 @@ const Dashboard = () => {
         <section className="flex flex-col gap-4">
           <div className='flex justify-between'>
           <div className="flex text-xl gap-2">
-            <Icon name="cash" />
+            <BanknotesIcon />
             <h2>Factures impayées</h2>
           </div>
           {totalNotPaid > 0 ? (

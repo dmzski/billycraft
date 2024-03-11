@@ -1,9 +1,10 @@
-import { Button, Icon, Loader } from '@coco-ui/core'
+import { Button, Loader } from '@coco-ui/core'
 import { CustomerApi } from '@/api/CustomerApi'
 import CustomerTable from './List'
 import CustomerModal from './Modals/CustomerModal'
 import Customer from '../../models/Customer'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 const CustomerPage = () => {
   const customersQuery = useDataLoader(['customers', 'not-deleted'], CustomerApi.findAllNotDeleted)
@@ -16,7 +17,7 @@ const CustomerPage = () => {
           customer={{} as Customer}
           disclosure={
             <Button variant="primary" size="md">
-              <Icon name="plus" />
+              <PlusIcon />
               &nbsp; Nouveau client
             </Button>
           }

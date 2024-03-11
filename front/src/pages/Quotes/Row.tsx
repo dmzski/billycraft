@@ -1,4 +1,4 @@
-import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
+import { Button, Dropdown, useToast } from '@coco-ui/core'
 import { QuoteApi } from '@/api/QuoteApi'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from '@/models/Customer'
@@ -7,16 +7,16 @@ import { Link } from 'react-router-dom'
 import { MouseEvent, useCallback, useMemo } from 'react'
 import { ROUTES } from '@/routes'
 import { STRINGS } from '@/constants/strings'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
 import { QUOTE_STATUS } from '../../constants/quote'
 import { useDataLoaderContext } from '@scaleway/use-dataloader'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
 }
 const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
-  const {reload} = useDataLoaderContext()
+  const { reload } = useDataLoaderContext()
   const toast = useToast()
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
@@ -35,10 +35,11 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
 
   const getStatus = useMemo(() => {
     const status = Object.values(QUOTE_STATUS).find(s => s.enum === quote.status)
+    const IconComponent = status?.icon ?? QuestionMarkCircleIcon
 
     return (
       <div className="flex items-center">
-        <Icon name={(status?.icon as IconName) || 'question-mark-circle'} />
+        <IconComponent />
         <span className="ml-1">{status?.text}</span>
       </div>
     )
@@ -102,17 +103,20 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
         <Dropdown>
           <Button>{getStatus}</Button>
           <Dropdown.Content>
-            {getNextStatuses().map(s => (
-              <Dropdown.ButtonItem
-                key={s.enum}
-                onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
-              >
-                <div className="flex items-center">
-                  <Icon className="mr-2" name={s.icon as IconName} />
-                  <span>{s.text}</span>
-                </div>
-              </Dropdown.ButtonItem>
-            ))}
+            {getNextStatuses().map(s => {
+              const IconComponent = s.icon
+              return (
+                <Dropdown.Button
+                  key={s.enum}
+                  onClick={updateQuoteStatus(s.enum as QuoteStatusEnum)}
+                >
+                  <div className="flex items-center">
+                    <IconComponent className="mr-2" />
+                    <span>{s.text}</span>
+                  </div>
+                </Dropdown.Button>
+              )
+            })}
           </Dropdown.Content>
         </Dropdown>
       </div>

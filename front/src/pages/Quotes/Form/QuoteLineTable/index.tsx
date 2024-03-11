@@ -1,5 +1,4 @@
-import { Button, Icon, Select } from '@coco-ui/core'
-import { ValueType } from '@coco-ui/core/dist/components/Select'
+import { Button, Select } from '@coco-ui/core'
 import { ProductApi } from '@/api/ProductApi'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useCallback, useMemo, useState } from 'react'
@@ -9,6 +8,7 @@ import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'
 import { QuoteFormValues } from '../Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 const defaultLine = {
   description: '',
@@ -27,7 +27,7 @@ const QuoteLineTable = ({
 }) => {
   const productsQuery = useDataLoader('products', () => ProductApi.findAll())
   const [productIdSelected, setProductIdSelected] = useState<number>()
-  const onProductSelectedChange = useCallback((option: ValueType) => {
+  const onProductSelectedChange = useCallback((option: string) => {
     setProductIdSelected(Number(option))
   }, [])
 
@@ -137,7 +137,7 @@ const QuoteLineTable = ({
         {!disabled ? (
           <div className="flex flex-col gap-2">
             <Button type="button" variant="ghost" block onClick={() => addLine()} disabled={disabled}>
-              <Icon name="plus" />
+              <PlusIcon />
               &nbsp; Ajouter une ligne
             </Button>
             <div className="grid md:grid-cols-4 items-end gap-4">

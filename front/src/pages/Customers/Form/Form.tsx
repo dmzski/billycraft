@@ -1,9 +1,10 @@
-import { Button, Icon, Input, TextArea, useToast } from '@coco-ui/core'
+import { Button, Input, TextArea, useToast } from '@coco-ui/core'
 import { CustomerApi } from '@/api/CustomerApi'
 import { STRINGS } from '@/constants/strings'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Customer from '../../../models/Customer'
+import { TrashIcon } from '@heroicons/react/24/solid'
 
 const defaultCustomer = {
   address: '',
@@ -73,7 +74,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
         <h1 className="ml-4 text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
         {customer?.id ? (
           <Button variant="error" onClick={tryDelete}>
-            <Icon name="trash" />
+            <TrashIcon />
             &nbsp; Supprimer
           </Button>
         ) : null}

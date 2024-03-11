@@ -1,9 +1,10 @@
-import { Button, Icon, Loader } from '@coco-ui/core'
+import { Button, Loader } from '@coco-ui/core'
 import { OutgoingApi } from '@/api/OutgoingApi'
 import { Link, useParams } from 'react-router-dom'
 import { OUTGOING_ROUTES } from '../constants'
 import OutgoingDetail from './OutgoingDetail'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/solid'
 
 const Details = () => {
   const { id } = useParams<{ id: string }>()
@@ -21,7 +22,7 @@ const Details = () => {
         <div className="md:col-span-11">
           <Link to={OUTGOING_ROUTES.routes.LIST.path}>
             <Button type="button" variant="ghost" size="xs">
-              <Icon name="arrow-left" size={12} />
+              <ArrowLeftIcon />
               &nbsp; Retourner à la liste des livrets
             </Button>
           </Link>
@@ -30,7 +31,7 @@ const Details = () => {
           <div>
             <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
               <Button variant="info">
-                <Icon name="pencil" size={16} />
+                <PencilIcon />
                 &nbsp; Modifier
               </Button>
             </Link>

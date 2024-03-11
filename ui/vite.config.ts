@@ -33,7 +33,7 @@ export const defaultConfig: UserConfig = {
     ],
     lib: {
       entry: 'src/index.ts',
-      formats: ['es', 'cjs'],
+      formats: ['es'],
       name: pkg.name,
       fileName: pkg.name,
     },

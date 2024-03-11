@@ -1,4 +1,4 @@
-import { Button, Icon, Input, useToast } from '@coco-ui/core'
+import { Button, Input, useToast } from '@coco-ui/core'
 import { TodoApi } from '@/api/TodoApi'
 import clsx from 'clsx'
 import { STRINGS } from '@/constants/strings'
@@ -7,6 +7,7 @@ import { fr } from 'date-fns/locale'
 import { Todo } from '@/models/Todo'
 import { Controller, useForm } from 'react-hook-form'
 import { ChangeEventHandler, useCallback, useState } from 'react'
+import { CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 type TodoFormValues = { description: string }
 
@@ -155,11 +156,10 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                 {!todo.doneAt && editMode === todo.id ? (
                   <div className="flex items-center">
                     <Button className="mr-4" variant="success" size="sm" onClick={handleEditTodo}>
-                      <Icon name="save" size={18} />
-                      &nbsp; Enregistrer
+                      Enregistrer
                     </Button>
                     <Button onClick={handleCancelEdit} variant="error" size="sm">
-                      <Icon name="x" size={18} />
+                      <XMarkIcon />
                       &nbsp; Annuler
                     </Button>
                   </div>
@@ -172,11 +172,11 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                       variant="info"
                       size="sm"
                     >
-                      <Icon name="pencil" size={18} />
+                      <PencilIcon />
                       &nbsp; Modifier
                     </Button>
                     <Button onClick={handleDone(todo.id)} variant="success" size="sm">
-                      <Icon name="check" size={18} />
+                      <CheckIcon />
                       &nbsp; Fait
                     </Button>
                   </div>

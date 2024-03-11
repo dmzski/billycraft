@@ -1,5 +1,4 @@
-import { Button, Icon } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { Button } from '@coco-ui/core'
 import clsx from 'clsx'
 import { useAuth } from '@/providers/AuthProvider'
 import { useState } from 'react'
@@ -35,7 +34,6 @@ const Menu = ({ route }: MenuProps) => {
         type="button"
         className="appearance-none collapse-title flex items-center gap-6 min-h-0"
       >
-        {route.icon ? <Icon name={route.icon} /> : null}
         {route.title}
       </button>
       <div className="collapse-content bg-base-200 flex p-0">
@@ -66,7 +64,6 @@ const SideBarMenu = () => {
               <MenuItem
                 key={route.path}
                 text={route.title}
-                icon={route.icon as IconName}
                 path={route.path}
               />
             ) : (
@@ -75,7 +72,6 @@ const SideBarMenu = () => {
           )}
       </ul>
       <Button className="rounded-none flex gap-2 items-center" block variant="error" type="button" outline onClick={logout}>
-        <Icon name="logout" type="outline" />
         Déconnexion
       </Button>
     </div>

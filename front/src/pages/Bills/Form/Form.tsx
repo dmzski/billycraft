@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react'
-import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
+import { Button, Input, Select, useToast } from '@coco-ui/core'
 import { Controller, useForm } from 'react-hook-form'
 import { BillApi } from '@/api/BillApi'
 import { Prompt } from 'react-router-dom'
@@ -7,6 +7,7 @@ import useCustomers from '@/hooks/useCustomers'
 import { STRINGS } from '@/constants/strings'
 import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
 import BillLineTable from './BillLineTable'
+import { ArchiveBoxArrowDownIcon, EnvelopeIcon, HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid'
 
 export type BillFormValues = {
   lines: Array<BillLine & { id: string }>
@@ -175,8 +176,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             variant="success"
             disabled={isValidating || isSubmitting || disabled}
           >
-            <Icon name="save" />
-            &nbsp; Enregistrer
+            Enregistrer
           </Button>
         ) : null}
         {bill.id && bill.status === BillStatusEnum.DRAFT ? (
@@ -187,7 +187,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
           >
-            <Icon name="mail" />
+            <EnvelopeIcon />
             &nbsp; Envoyer la facture
           </Button>
         ) : null}
@@ -199,7 +199,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               variant="success"
               onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
             >
-              <Icon name="thumb-up" />
+              <HandThumbUpIcon />
               &nbsp; Facture payée
             </Button>
             <Button
@@ -208,14 +208,14 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               variant="error"
               onClick={updateBillStatus(BillStatusEnum.REFUSED)}
             >
-              <Icon name="thumb-down" />
+              <HandThumbDownIcon />
               &nbsp; Facture refusée
             </Button>
           </>
         ) : null}
         {bill.status === BillStatusEnum.PAYMENT_PAID ? (
           <Button size="md" type="button" onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
-            <Icon name="archive" />
+            <ArchiveBoxArrowDownIcon />
             &nbsp; Archiver la facture
           </Button>
         ) : null}

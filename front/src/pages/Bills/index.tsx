@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Button, Icon, Loader } from '@coco-ui/core'
+import { Button, Loader } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
 import { BillApi } from '@/api/BillApi'
 import { useHistory } from 'react-router-dom'
@@ -8,6 +8,7 @@ import BillFilterContainer from './Filters'
 import { filterBills } from '../../utils/bill'
 import BillTable from './List'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 type BillFilters = Record<string, string>
 
@@ -31,7 +32,7 @@ const BillPage = () => {
       <div className="flex justify-between mb-4">
         <h1 className="text-3xl">Factures</h1>
         <Button size="md" variant="primary" onClick={goToNewBill}>
-          <Icon name="plus" />
+          <PlusIcon />
           &nbsp; Nouvelle facture
         </Button>
       </div>

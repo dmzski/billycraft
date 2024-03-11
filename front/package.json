@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@coco-ui/core": "workspace:*",
-    "@heroicons/react": "^1.0.6",
+    "@heroicons/react": "^2.1.1",
     "@react-hook/media-query": "^1.1.1",
     "@scaleway/use-dataloader": "^5.0.0",
     "@sentry/react": "^6.19.7",

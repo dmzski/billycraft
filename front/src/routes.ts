@@ -1,8 +1,6 @@
-import { IconName } from '@coco-ui/core/dist/components/Icon'
 
 export type Route = {
   exact?: boolean
-  icon?: IconName
   path: string
   title: string
   routes?: Record<string, Route>
@@ -19,7 +17,6 @@ export const ROUTES = {
   },
   BILLS: {
     exact: true,
-    icon: 'cash',
     path: '/bills',
     title: 'Factures',
   },
@@ -29,7 +26,6 @@ export const ROUTES = {
   },
   CUSTOMERS: {
     exact: true,
-    icon: 'user-group',
     path: '/customers',
     title: 'Clients',
   },
@@ -38,13 +34,11 @@ export const ROUTES = {
     title: 'Edition de client',
   },
   DASHBOARD: {
-    icon: 'view-grid',
     path: '/dashboard',
     title: 'Accueil',
   },
   HISTORY: {
     exact: false,
-    icon: 'archive',
     path: '/history',
     title: 'Historique',
     routes: {
@@ -103,13 +97,11 @@ export const ROUTES = {
   },
   PRODUCTS: {
     exact: true,
-    icon: 'cube',
     path: '/products',
     title: 'Articles',
   },
   QUOTES: {
     exact: true,
-    icon: 'document-text',
     path: '/quotes',
     title: 'Devis',
   },
@@ -119,7 +111,6 @@ export const ROUTES = {
   },
   SETTINGS: {
     exact: false,
-    icon: 'cog',
     path: '/settings',
     title: 'Paramètres',
     routes: {
@@ -142,7 +133,6 @@ export const ROUTES = {
   },
   SUPPLIERS: {
     exact: true,
-    icon: 'truck',
     path: '/suppliers',
     title: 'Fournisseurs',
   },
@@ -152,7 +142,6 @@ export const ROUTES = {
   },
   ACCOUNTINGS: {
     path: '/accounting',
-    icon: 'chart-square-bar',
     title: 'Comptabilité',
     routes: {
       OUTGOINGS: {

@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Select, TextArea, useToast } from '@coco-ui/core'
+import { Button, Input, Select, TextArea, useToast } from '@coco-ui/core'
 import { LINE_TYPE } from '@/constants/line'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { Controller, useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import Product from '../../models/Product'
 import { ProductApi } from '../../api/ProductApi'
 import { useDataLoaderContext } from '@scaleway/use-dataloader'
 import { MouseEvent, useEffect, useMemo, useState } from 'react'
+import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 type ProductTableLineProps = {
   product: Product
@@ -190,10 +191,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
           <div className="flex relative gap-2 bg-base-100">
             <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
             <Button type="button" variant="success" square onClick={onDelete}>
-              <Icon name="check" size={20} />
+              <CheckIcon />
             </Button>
             <Button type="button" variant="error" square onClick={toggleDeleteMode}>
-              <Icon name="x" size={20} />
+              <XMarkIcon />
             </Button>
           </div>
         ) : null}
@@ -201,12 +202,12 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
           <div className="flex gap-2">
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
-                <Icon name="check" size={20} />
+                <CheckIcon />
               </Button>
             </form>
             {product.id ? (
               <Button type="button" square variant="error" onClick={toggleEditMode}>
-                <Icon name="x" size={20} />
+                <XMarkIcon />
               </Button>
             ) : null}
           </div>
@@ -214,7 +215,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
         {mode === MODES.READ && !isNew ? (
           <div className="flex gap-2">
             <Button type="button" onClick={toggleEditMode} variant="info" square>
-              <Icon name="pencil" size={20} />
+              <PencilIcon />
             </Button>
             <Button
               type="button"
@@ -222,7 +223,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               square
               variant="error"
             >
-              <Icon name="trash" size={20} />
+              <TrashIcon />
             </Button>
           </div>
         ) : null}

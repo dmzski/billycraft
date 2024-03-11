@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Select, TextArea } from '@coco-ui/core'
+import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useMemo, useRef } from 'react'
@@ -6,6 +6,7 @@ import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
 import { QuoteFormValues } from '../Form'
+import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
@@ -69,7 +70,7 @@ const QuoteLineTableLine = ({
           {...provided?.dragHandleProps}
           className="items-center flex p-2"
         >
-          <Icon name="selector" size={12} />
+          <ArrowsUpDownIcon />
         </div>
           <Controller
             name={`lines.${index}.type`}
@@ -193,7 +194,7 @@ const QuoteLineTableLine = ({
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
           <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
-            <Icon name="trash" />
+            <TrashIcon />
           </Button>
         ) : null}
       </div>

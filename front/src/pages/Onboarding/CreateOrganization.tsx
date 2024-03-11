@@ -1,9 +1,10 @@
-import { Button, Icon, Input, useToast } from "@coco-ui/core"
+import { Button, Input, useToast } from "@coco-ui/core"
 import { CompanyApi } from "@/api/CompanyApi"
 import { useI18n } from "@/i18n"
 import Company from "@/models/Company"
 import { Controller, useForm } from "react-hook-form"
 import { sendErrorToSentry } from "@/utils/errors"
+import { InformationCircleIcon } from "@heroicons/react/24/solid"
 
 type CreateOrganizationFormValues = {
   articlesTax: number,
@@ -273,7 +274,7 @@ export const CreateOrganization = () => {
         </div>
       </div>
       <div className="alert flex flex-row gap-1 justify-start items-center">
-        <Icon name="information-circle" />
+        <InformationCircleIcon />
         <p>{t('onboarding.create.uploadLogoNotice')}</p>
       </div>
 

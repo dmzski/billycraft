@@ -1,4 +1,4 @@
-import { Button, Icon, Loader, useToast } from '@coco-ui/core'
+import { Button, Loader, useToast } from '@coco-ui/core'
 import { ReportApi } from '@/api/ReportApi'
 import { STRINGS } from '@/constants/strings'
 import { useFormatDate } from '@/hooks/useFormatDate'
@@ -11,6 +11,7 @@ import ReportTable from './components/ReportTable'
 import { REPORT_ROUTES } from './constants'
 import DeleteModal from './modals/DeleteModal'
 import { useDataLoader, useDataLoaderContext } from '@scaleway/use-dataloader'
+import { ArrowLeftIcon } from '@heroicons/react/24/solid'
 
 type DetailTableProps = {
   report: ReportRequest
@@ -70,7 +71,7 @@ const DetailsPage = () => {
       <div className="flex md:justify-between flex-col md:flex-row">
         <Link to={REPORT_ROUTES.routes.LIST.path}>
           <Button type="button" className="md:w-auto w-full mb-4" variant="ghost">
-            <Icon name="arrow-left" />
+            <ArrowLeftIcon />
             &nbsp; Retourner à la liste des rapports
           </Button>
         </Link>

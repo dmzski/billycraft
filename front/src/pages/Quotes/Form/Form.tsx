@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
+import { Button, Input, Select, useToast } from '@coco-ui/core'
 import { useMemo, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { QuoteApi } from '@/api/QuoteApi'
@@ -7,6 +7,7 @@ import useCustomers from '@/hooks/useCustomers'
 import { STRINGS } from '@/constants/strings'
 import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
 import QuoteLineTable from './QuoteLineTable'
+import { ArchiveBoxArrowDownIcon, CheckIcon, CurrencyEuroIcon, DocumentIcon, HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid'
 
 export type QuoteFormValues = Omit<Quote, 'lines'> & {
   lines: Array<QuoteLine & { id: string }>
@@ -194,7 +195,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
             >
-              <Icon name="thumb-up" />
+              <HandThumbUpIcon />
               &nbsp; Devis accepté
             </Button>
             <Button
@@ -203,7 +204,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
             >
-              <Icon name="thumb-down" />
+              <HandThumbDownIcon />
               &nbsp; Devis refusé
             </Button>
           </>
@@ -216,14 +217,14 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
             >
-              <Icon name="document" /> &nbsp; Remettre en brouillon
+              <DocumentIcon /> &nbsp; Remettre en brouillon
             </Button>
             <Button
               size="md"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
             >
-              <Icon name="currency-euro" /> &nbsp; Demander un accompte
+              <CurrencyEuroIcon /> &nbsp; Demander un accompte
             </Button>
           </>
         ) : null}
@@ -233,7 +234,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
           >
-            <Icon name="check" />
+            <CheckIcon />
             &nbsp; Accompte payé
           </Button>
         ) : null}
@@ -243,7 +244,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
           >
-            <Icon name="archive" />
+            <ArchiveBoxArrowDownIcon />
             &nbsp; Archiver le devis
           </Button>
         ) : null}

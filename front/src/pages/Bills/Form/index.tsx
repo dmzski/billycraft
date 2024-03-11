@@ -1,4 +1,4 @@
-import { Badge, Button, Icon, useToast } from '@coco-ui/core'
+import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { BillApi } from '@/api/BillApi'
@@ -9,6 +9,7 @@ import Bill from '../../../models/Bill'
 import { ROUTES } from '../../../routes'
 import BillForm from './Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
 
 const BillFormPage = () => {
   const [newBill, setNewBill] = useState<Bill>({} as Bill)
@@ -57,7 +58,7 @@ const BillFormPage = () => {
     <div className="w-full flex flex-col gap-4">
       <div>
         <Button variant="ghost" onClick={history.goBack}>
-          <Icon name="chevron-left" />
+          <ChevronLeftIcon />
           &nbsp; Retourner à la liste des factures
         </Button>
       </div>
@@ -77,7 +78,7 @@ const BillFormPage = () => {
             onClick={downloadPdf}
             variant="primary"
           >
-            <Icon name="document-download" />
+            <DocumentArrowDownIcon />
             &nbsp; Télécharger le PDF
           </Button>
         ) : null}
