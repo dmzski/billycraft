@@ -2,25 +2,25 @@ import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useMemo, useRef } from 'react'
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
 import { QuoteFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
   disabled?: boolean
-  provided?: DraggableProvided
-  snapshot?: DraggableStateSnapshot
   index: number
   control: Control<QuoteFormValues>
+  id: string
 }
 const QuoteLineTableLine = ({
   deleteLine,
   disabled,
-  provided,
   index,
+  id,
   control,
 }: QuoteLineTableLineProps) => {
   const tva = useWatch({ control, name: 'tva' })
@@ -30,6 +30,16 @@ const QuoteLineTableLine = ({
   const descriptionRef = useRef<HTMLTextAreaElement | null>()
   const quantityRef = useRef<HTMLInputElement | null>()
   const priceRef = useRef<HTMLInputElement | null>()
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id,
+    data: {
+      lineIndex: index
+    }
+  });
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
 
   const price = useWatch({
     control,
@@ -61,41 +71,40 @@ const QuoteLineTableLine = ({
 
   return (
     <div
-      {...provided?.draggableProps}
       className="bg-base-100 grid md:grid-cols-12 mb-2 p-2 gap-2"
-      ref={provided?.innerRef}
+      ref={setNodeRef} style={style}  {...attributes}
     >
       <div className="flex md:col-span-2">
         <div
-          {...provided?.dragHandleProps}
           className="items-center flex p-2"
+          {...listeners}
         >
           <ArrowsUpDownIcon className='w-5' />
         </div>
-          <Controller
-            name={`lines.${index}.type`}
-            control={control}
-            rules={{ required: true }}
-            render={({ field, fieldState: { invalid } }) => (
-              <Select
-                className='min-w-0'
-                disabled={disabled}
-                error={invalid}
-                value={field.value}
-                onChange={type => field.onChange(type as LineTypeEnum)}
-                ref={node => {
-                  field.ref(node)
-                  typeRef.current = node
-                }}
-                options={Object.values(LINE_TYPE).map(type => ({
-                  value: type.enum,
-                  label: type.name,
-                }))}
-                name={field.name}
-                id={`${field.name}-select`}
-              />
-            )}
-          />
+        <Controller
+          name={`lines.${index}.type`}
+          control={control}
+          rules={{ required: true }}
+          render={({ field, fieldState: { invalid } }) => (
+            <Select
+              className='min-w-0'
+              disabled={disabled}
+              error={invalid}
+              value={field.value}
+              onChange={type => field.onChange(type as LineTypeEnum)}
+              ref={node => {
+                field.ref(node)
+                typeRef.current = node
+              }}
+              options={Object.values(LINE_TYPE).map(type => ({
+                value: type.enum,
+                label: type.name,
+              }))}
+              name={field.name}
+              id={`${field.name}-select`}
+            />
+          )}
+        />
       </div>
       <Controller
         name={`lines.${index}.name`}

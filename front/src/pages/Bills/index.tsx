@@ -38,7 +38,7 @@ const BillPage = () => {
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
       <BillTable data={billSorted()} />
-      {!isLoading ? (
+      {isLoading ? (
         <div className="mt-2 flex justify-center">
           <Loader variant='primary' />
         </div>

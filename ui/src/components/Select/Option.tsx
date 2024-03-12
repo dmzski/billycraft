@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo } from 'react'
+import { MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { SelectOptionType, ValueType } from '.'
 
 export type RenderSelectOptionProps = {
@@ -28,18 +28,27 @@ const Option = ({
   }, [value, option, isMulti])
 
   const isFocused = useMemo(() => focused === option.value, [option, focused])
+  const optionRef = useRef<HTMLLIElement>(null)
+
+  useEffect(() => {
+    if (isFocused && optionRef.current) {
+      optionRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "nearest",
+        block: "nearest"
+      })
+    }
+  }, [isFocused])
 
   return (
-    <li className={isSelected ? 'bordered' : ''}>
+    <li ref={optionRef}>
       <button
         role="option"
         tabIndex={-1}
-        className={isFocused ? 'active' : ''}
+        className={isFocused || isSelected ? 'active' : ''}
         onClick={(event) => onOptionClick(option, event)}
       >
-        <div className="flex items-center">
-          <span className="flex-grow">{option.label}</span>
-        </div>
+        {option.label}
       </button>
     </li>
   )

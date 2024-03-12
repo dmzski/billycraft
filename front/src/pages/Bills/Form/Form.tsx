@@ -134,7 +134,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             tabIndex={0}
             error={invalid}
             label="Sélectionner un client *"
-
+            autoComplete='off'
             id="customer-select"
             name={field.name}
             disabled={disabled}

@@ -2,26 +2,26 @@ import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useMemo, useRef } from 'react'
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
 import { BillFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
+import {CSS} from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable'
 
 type BillLineTableLineProps = {
   deleteLine: () => void
   disabled?: boolean
-  provided?: DraggableProvided
-  snapshot?: DraggableStateSnapshot
   index: number
   control: Control<BillFormValues>
+  id: string
 }
 const BillLineTableLine = ({
   deleteLine,
   disabled,
-  provided,
   index,
   control,
+  id,
 }: BillLineTableLineProps) => {
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
@@ -30,6 +30,16 @@ const BillLineTableLine = ({
   const descriptionRef = useRef<HTMLTextAreaElement | null>()
   const quantityRef = useRef<HTMLInputElement | null>()
   const priceRef = useRef<HTMLInputElement | null>()
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id,
+    data: {
+      lineIndex: index
+    }
+  });
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
 
   const price = useWatch({
     control,
@@ -61,14 +71,13 @@ const BillLineTableLine = ({
 
   return (
     <div
-      {...provided?.draggableProps}
-      className="bg-base-100 grid md:grid-cols-12 mb-2 p-4 gap-2"
-      ref={provided?.innerRef}
+      className="bg-base-100 grid md:grid-cols-12 px-4 py-2 gap-2"
+      ref={setNodeRef} style={style}  {...attributes}
     >
       <div className="flex md:col-span-2">
         <div
-          {...provided?.dragHandleProps}
           className="items-center flex p-2"
+          {...listeners}
         >
           <ArrowsUpDownIcon className='w-5' />
         </div>
@@ -86,7 +95,7 @@ const BillLineTableLine = ({
                 field.ref(node)
                 typeRef.current = node
               }}
-                className='min-w-0'
+              className='min-w-0'
               options={Object.values(LINE_TYPE).map(type => ({
                 value: type.enum,
                 label: type.name,

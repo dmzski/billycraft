@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { ButtonHTMLAttributes, LinkHTMLAttributes, ReactNode } from 'react'
 
 const dropdownContentClasses =
-  'dropdown-content menu p-2 shadow bg-base-100 rounded-box'
+  'dropdown-content menu p-2 shadow bg-base-100 rounded-box z-10'
 
 export type DropdownProps = {
   children: ReactNode

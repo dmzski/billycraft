@@ -29,8 +29,8 @@ const Menu = ({ route }: MenuProps) => {
         </summary>
         <ul>
           {Object.values(route.routes ?? {}).map(subRoute => (
-            <li>
-              <NavLink activeClassName="active" key={subRoute.path} to={subRoute.path}>
+            <li key={`submenu-${subRoute.path}-${subRoute.title}`}>
+              <NavLink activeClassName="active" to={subRoute.path}>
                 {subRoute.title}
               </NavLink>
             </li>
@@ -52,13 +52,13 @@ const SideBarMenu = () => {
           .map(route =>
             !route.routes ? (
               <MenuItem
-                key={route.path}
+                key={route.path + route.title}
                 text={route.title}
                 path={route.path}
                 icon={route.icon}
               />
             ) : (
-              <Menu route={route} />
+              <Menu key={route.path} route={route} />
             ),
           )}
       </ul>

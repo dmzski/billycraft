@@ -14,7 +14,7 @@ const SideBar = () => {
               <BuildingOfficeIcon className='w-6 fill-primary-content' />
             </div>
             <p>
-              {user.company.name}
+              {user.company?.name}
             </p>
           </div>
         </div>

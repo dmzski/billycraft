@@ -141,6 +141,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             isSearchable
             ref={field.ref}
             required
+            autoComplete='off'
           />
         )}
       />

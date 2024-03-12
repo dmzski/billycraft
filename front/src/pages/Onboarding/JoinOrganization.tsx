@@ -14,8 +14,7 @@ export const JoinOrganization = () => {
     mode: "onChange"
   })
 
-  const onSubmit = async ({ code }: JoinOrganizationFormValues) => {
-    console.log(code)
+  const onSubmit = async () => {
     toast.success(t('onboarding.join.success'))
   }
 

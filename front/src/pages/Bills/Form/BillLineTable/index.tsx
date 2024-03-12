@@ -1,14 +1,15 @@
 import { Button, Select } from '@coco-ui/core'
 import { ProductApi } from '@/api/ProductApi'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { useCallback, useMemo, useState } from 'react'
-import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
+import { ComponentProps, useCallback, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import { nanoid } from 'nanoid'
 import BillLineTableLine from './Row'
 import { BillFormValues } from '../Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext } from '@dnd-kit/sortable'
 
 const defaultLine = {
   description: '',
@@ -36,20 +37,26 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
     keyName: 'id',
   })
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      if (!result.destination) {
+  const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = useCallback(
+    (event) => {
+      if (
+        !event.over.id ||
+        !event.active.id ||
+        !event.active.data.current.lineIndex === undefined ||
+        !event.over.data.current.lineIndex === undefined
+      ) {
         return
       }
 
-      move(result.source.index, result.destination.index)
+
+      move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
     },
     [move],
   )
 
   const addLine = useCallback(
     (newLine = defaultLine) => {
-      append({...defaultLine, ...newLine, line: fields.length, billId: "", id: nanoid() })
+      append({ ...defaultLine, ...newLine, line: fields.length, billId: "", id: nanoid() })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -70,7 +77,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
 
   const addExistingProductSelected = () => {
     if (productIdSelected && productsQuery.data) {
-      addLine({...defaultLine, ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {})})
+      addLine({ ...defaultLine, ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}) })
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
@@ -79,15 +86,24 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.ctrlKey && e.key === 'Enter' && !disabled) {
-      e.stopPropagation()
-      addLine()
-    }
-  }
-
   return (
-    <div className="flex flex-col border p-2">
+    <div className="flex flex-col border p-2 gap-2">
+      <div className="grid md:grid-cols-4 items-end gap-4">
+        <Select
+          autoComplete='off'
+          className="md:col-span-3"
+          name="existing-product"
+          id="existing-product"
+          options={productOptions}
+          isSearchable
+          placeholder="Sélectionner un produit existant"
+          value={productIdSelected}
+          onChange={onProductSelectedChange}
+        />
+        <Button block onClick={addExistingProductSelected} type="button" variant="primary">
+          Ajouter
+        </Button>
+      </div>
       <div className="rounded-t bg-base-200 grid md:grid-cols-12 gap-2 p-4 mb-1">
         <div className="pl-4 md:col-span-2">Type</div>
         <div className="md:col-span-3">Nom&nbsp;*</div>
@@ -97,63 +113,28 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
         <div className="md:col-span-1">Prix TTC</div>
         <div className="md:col-span-1">Sous total</div>
       </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="lines">
-          {droppableProvided => (
-            <div
-              className="flex flex-col"
-              {...droppableProvided.droppableProps}
-              ref={droppableProvided.innerRef}
-              onKeyDown={handleKeyDown}
-              role="row"
-              tabIndex={0}
-            >
-              {fields?.map((line, index) => (
-                <Draggable
-                  key={`draggable-${line.id}`}
-                  draggableId={line.id}
-                  index={index}
-                  isDragDisabled={disabled}
-                >
-                  {provided => (
-                    <BillLineTableLine
-                      provided={provided}
-                      key={`${line.id}`}
-                      disabled={disabled}
-                      index={index}
-                      control={control}
-                      deleteLine={() => remove(index)}
-                    />
-                  )}
-                </Draggable>
-              ))}
-              {droppableProvided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DndContext onDragEnd={onDragEnd}>
+        <SortableContext items={fields}>
+          {fields?.map((line, index) => (
+            <BillLineTableLine
+              key={line.id}
+              id={line.id}
+              disabled={disabled}
+              index={index}
+              control={control}
+              deleteLine={() => remove(index)}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
       {!disabled ? (
         <div className="flex flex-col gap-2">
-          <Button type="button" variant="ghost" block onClick={() => addLine()} disabled={disabled}>
+          <Button className='gap-2' type="button" block onClick={() => addLine()} disabled={disabled}>
             <PlusIcon className='w-5' />
-            &nbsp; Ajouter une ligne
+            <span>
+              Ajouter une ligne
+            </span>
           </Button>
-          <div className="grid md:grid-cols-4 items-end gap-4">
-            <Select
-              tabIndex={0}
-              className="md:col-span-3"
-              name="existing-product"
-              id="existing-product"
-              options={productOptions}
-              isSearchable
-              placeholder="Sélectionner un produit existant"
-              value={productIdSelected}
-              onChange={onProductSelectedChange}
-            />
-            <Button block onClick={addExistingProductSelected} type="button" variant="primary">
-              Ajouter
-            </Button>
-          </div>
         </div>
       ) : null}
     </div>

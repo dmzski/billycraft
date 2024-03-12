@@ -4,26 +4,26 @@ import Option from './Option'
 import { MouseEvent } from 'react'
 
 const listContainerClasses =
-  'menu dropdown-content shadow bg-base-300 rounded-box w-52'
+  'menu max-h-40 flex-nowrap overflow-x-none overflow-y-auto dropdown-content shadow bg-base-300 rounded-box w-full z-10'
 type OptionListProps = {
   focused: string | number
-  isOpen?: boolean
   options: SelectOptionType[]
   onOptionClick: (option: SelectOptionType, event: MouseEvent) => void
   value?: ValueType
   isMulti?: boolean
+  isOpen?: boolean
 }
 
 const OptionList = ({
   focused,
-  isOpen,
   options,
   onOptionClick,
   value,
   isMulti,
+  isOpen
 }: OptionListProps) => (
   <ul
-    className={clsx(listContainerClasses, { 'sr-only': !isOpen })}
+    className={clsx(listContainerClasses, isOpen ? "" : "sr-only")}
     role="listbox"
   >
     {options.map((option: SelectOptionType) => (

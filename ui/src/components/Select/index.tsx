@@ -1,21 +1,23 @@
 import {
-  ChangeEvent,
-  KeyboardEvent,
   ForwardedRef,
   forwardRef,
   MouseEvent,
   useMemo,
   useState,
-  useRef,
   useCallback,
+  InputHTMLAttributes,
+  KeyboardEventHandler,
+  ChangeEventHandler,
+  useRef,
+  useImperativeHandle,
 } from 'react'
 import OptionList from './OptionList'
-import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
 import clsx from 'clsx'
+import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
 
 const errorClasses = 'select-error'
 const disabledClasses = 'select-disabled'
-const inputClasses = 'select select-bordered'
+const inputClasses = 'select select-bordered focus:select-primary'
 
 export type OptionValue = string | number
 export type SelectOptionType = {
@@ -24,23 +26,15 @@ export type SelectOptionType = {
 }
 
 export type ValueType = OptionValue | Array<OptionValue> | undefined
-export type SelectProps = {
-  className?: string
-  id?: string
-  name?: string
+export type SelectProps = Pick<InputHTMLAttributes<HTMLInputElement>, "placeholder" | "readOnly" | "disabled" | "required" | "className" | "id" | "aria-label" | "tabIndex" | "name" | "autoComplete"> & {
   options: SelectOptionType[]
-  placeholder?: string
   label?: string
   onChange?: (result: ValueType) => unknown
   value: ValueType
-  disabled?: boolean
   readOnly?: boolean
-  tabIndex?: number
   isSearchable?: boolean
   isMulti?: boolean
   error?: boolean | string
-  required?: boolean
-  'aria-label'?: string
 }
 
 const KEYS = {
@@ -65,6 +59,8 @@ const filterOptions = ({
 const Select = (
   {
     'aria-label': ariaLabel,
+    readOnly,
+    autoComplete,
     className,
     id,
     name,
@@ -85,12 +81,14 @@ const Select = (
   const [isOpen, setOpen] = useState(false)
   const [search, setSearch] = useState<string>('')
   const [focused, setFocused] = useState<OptionValue>(options[0]?.value)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const containerRef = useRef<HTMLLabelElement>(null)
+  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
 
   useClickOutsideHandler(containerRef, () => {
-    setOpen(false)
     setSearch('')
+    setOpen(false)
   })
 
   const filteredOptions = useMemo(
@@ -131,13 +129,14 @@ const Select = (
     (option: SelectOptionType) => {
       onChange?.(option.value)
       setSearch('')
+      inputRef.current?.focus()
       setOpen(false)
     },
     [onChange]
   )
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
+  const handleKeyDown: KeyboardEventHandler = useCallback(
+    (event) => {
       if (!isOpen) {
         if (event.key === KEYS.ArrowDown) handleOpen()
       } else if (
@@ -150,6 +149,7 @@ const Select = (
         ].includes(event.key)
       ) {
         event.stopPropagation()
+        event.preventDefault()
         switch (event.key) {
           case KEYS.Tab:
           case KEYS.Escape:
@@ -203,17 +203,18 @@ const Select = (
     ]
   )
 
-  const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
       setSearch(event.currentTarget.value ?? '')
       handleOpen()
     },
     [handleOpen]
   )
 
-  const handleInputKeyUp = useCallback((event: KeyboardEvent) => {
+  const handleInputKeyUp: KeyboardEventHandler = useCallback((event) => {
     if ([KEYS.Enter].includes(event.key)) {
       event.preventDefault()
+      event.stopPropagation()
     }
   }, [])
 
@@ -226,26 +227,24 @@ const Select = (
     () =>
       Array.isArray(value)
         ? options
-            .filter((option) => value.includes(option.value))
-            .map((option) => option.label)
-            .join(', ')
+          .filter((option) => value.includes(option.value))
+          .map((option) => option.label)
+          .join(', ')
         : options.find((option) => value === option.value)?.label,
     [options, value]
   )
 
   return (
     <div
-      onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
       className={clsx('dropdown', className)}
       aria-expanded={isOpen}
       aria-disabled={disabled}
+      ref={containerRef}
     >
       <div
         className="form-control"
         aria-invalid={required && !value}
         onKeyDown={handleKeyDown}
-        onClick={handleOpen}
       >
         {label ? (
           <label htmlFor={id} className="label">
@@ -253,29 +252,32 @@ const Select = (
           </label>
         ) : null}
         <input
+          onFocus={handleOpen}
+          onClick={handleOpen}
           name={name}
           role="combobox"
           className={inputClassName}
           disabled={disabled}
           onKeyUp={handleInputKeyUp}
           onChange={handleInputChange}
-          readOnly={!isSearchable}
+          readOnly={readOnly || !isSearchable}
           aria-label={ariaLabel}
           placeholder={placeholder ?? 'Select...'}
           type="text"
           id={id}
           tabIndex={tabIndex}
-          ref={ref}
+          ref={inputRef}
           value={isOpen && search.length > 0 ? search : valueRender ?? ''}
           aria-haspopup="listbox"
+          autoComplete={autoComplete}
         />
       </div>
       <OptionList
         isMulti={isMulti}
-        isOpen={isOpen}
         options={filteredOptions}
         value={value}
         focused={focused}
+        isOpen={isOpen}
         onOptionClick={(option: SelectOptionType, event: MouseEvent) => {
           event.preventDefault()
           event.stopPropagation()
