@@ -5,6 +5,7 @@ export default {
   "genericFormError": "Une erreur est survenue, veuillez réessayer ou contactez le support",
   "supportPrefix": "Support : ",
   "login.title": "Se connecter",
+  "login.migrationMotd": "Notre processus d'authentification a changé, réinscrivez-vous avec le même email. En cas de problème contactez le support",
   "login.fields.email.label": "Email",
   "login.fields.password.label": "Mot de passe",
   "login.submit": "Se connecter",

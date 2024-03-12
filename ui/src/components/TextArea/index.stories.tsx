@@ -18,7 +18,6 @@ export const WithLabel: Story = {
   render,
   args: {
     label: 'My awesome label',
-    variant: 'inside',
   }
 }
 

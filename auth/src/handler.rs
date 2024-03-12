@@ -165,8 +165,11 @@ pub async fn login_user_handler(
     Ok(response)
 }
 
-pub async fn logout_handler() -> Result<impl IntoResponse, (StatusCode, String)> {
+pub async fn logout_handler(
+    State(data): State<Arc<AppState>>,
+    ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let cookie = Cookie::build("coco_at", "")
+        .domain(data.env.domain.to_string())
         .path("/")
         .max_age(time::Duration::hours(-1))
         .same_site(SameSite::Lax)
@@ -211,8 +214,9 @@ pub async fn refresh_session(
     .unwrap();
 
     let cookie = Cookie::build("coco_at", token.to_owned())
+        .domain(data.env.domain.to_string())
         .path("/")
-        .max_age(time::Duration::hours(1))
+        .max_age(time::Duration::hours(2))
         .same_site(SameSite::Lax)
         .http_only(true)
         .finish();

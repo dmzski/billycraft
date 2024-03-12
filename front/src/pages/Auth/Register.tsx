@@ -52,8 +52,8 @@ export const Register = () => {
   }
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4">
-      <h1 className="text-3xl text-center">{t('appName')}</h1>
-      <div>
+      <h1 className="text-5xl text-center">{t('appName')}</h1>
+      <div className="md:w-1/3">
         <form className="border rounded p-8 flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="text-3xl text-center">{t('register.title')}</h2>
           <div className="flex flex-col">

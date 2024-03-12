@@ -1,9 +1,12 @@
+import { HomeIcon } from "@heroicons/react/24/solid"
+import { ComponentProps, ComponentType } from "react"
 
 export type Route = {
   exact?: boolean
   path: string
   title: string
   routes?: Record<string, Route>
+  icon?: ComponentType<ComponentProps<typeof HomeIcon>>
 }
 
 export const injectIdInPath = (route: string, id: number | string) => route.replace(':id', `${id}`)

@@ -10,6 +10,11 @@
 - Rust (auth)
 - Go (back)
 
+Add in your host file (/etc/hosts):
+```
+127.0.0.1       auth.coco-erp.lan api.coco-erp.lan app.coco-erp.lan
+```
+
 ## Folder structure
 
 - docker-compose.yml : The docker-compose to mount the stack excluding front
@@ -68,6 +73,7 @@ After starting the stack
 cd front
 pnpm install
 pnpm start
+# go to app.coco-erp.lan:3000
 ```
 
 ## Auth

@@ -1,4 +1,4 @@
-import { Button, Input, useToast } from "@coco-ui/core"
+import { Alert, Button, Input, useToast } from "@coco-ui/core"
 import { SUPPORT_EMAIL } from "@/constants/global"
 import { useI18n } from "@/i18n"
 import { ApiError } from "@/models/ApiError"
@@ -34,7 +34,7 @@ export const Login = () => {
       toast.success(t('login.success'))
       push(ROUTES.DASHBOARD.path)
     } catch (err) {
-      if (!(err instanceof ApiError) || err.code === 500){
+      if (!(err instanceof ApiError) || err.code === 500) {
         sendErrorToSentry(err)
       }
       if (err instanceof ApiError) {
@@ -48,8 +48,13 @@ export const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4">
-      <h1 className="text-3xl text-center">{t('appName')}</h1>
-      <div>
+      <h1 className="text-5xl text-center">{t('appName')}</h1>
+      <div className="flex md:w-1/2">
+        <Alert variant="warning">
+          {t('login.migrationMotd')}
+        </Alert>
+      </div>
+      <div className="md:w-1/3">
         <form className="border rounded p-8 flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="text-3xl text-center">{t('login.title')}</h2>
           <div className="flex flex-col">

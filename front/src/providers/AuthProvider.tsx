@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react"
-import Cookies from 'js-cookie'
 import { ApiError } from "@/models/ApiError"
 
 type AuthContextType = {
@@ -28,7 +27,6 @@ const AuthContext = createContext<AuthContextType>({
   refreshSession: () => Promise.resolve()
 })
 
-const COOKIE_NAME = "coco_at"
 const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
 
 export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefreshSuccess, onRegisterSuccess }: AuthProviderProps) => {
@@ -78,8 +76,17 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
   }, [onRegisterSuccess])
 
   const logout = useCallback(async () => {
-    Cookies.remove(COOKIE_NAME)
-    await onLogoutSuccess?.()
+    const res = await fetch(`${API_URL}/auth/logout`, {
+      method: "GET",
+      credentials: "include",
+    })
+    if (res.ok) {
+      await onLogoutSuccess?.()
+    } else {
+      const { message } = await res.json()
+      throw new ApiError(res.status, message)
+    }
+    setIsAuthenticated(false)
   }, [onLogoutSuccess])
 
   const refreshSession = useCallback(async () => {

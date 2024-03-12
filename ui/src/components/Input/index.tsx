@@ -62,9 +62,9 @@ export type InputProps = {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, id, className, error, ...props }, ref) => (
     <div className={clsx(classes.container, className)}>
-      <label htmlFor={id} className={classes.label}>
+      {label ? (<label htmlFor={id} className={classes.label}>
         <span className={classes.labelText}>{label}</span>
-      </label>
+      </label>) : null}
       <input
         className={clsx(
           classes.input,

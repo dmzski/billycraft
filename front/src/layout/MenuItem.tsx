@@ -1,11 +1,14 @@
+import { Route } from '@/routes'
+import clsx from 'clsx'
 import { Link, useRouteMatch } from 'react-router-dom'
 
 type MenuItemProps = {
   text?: string
   path: string
   exact?: boolean
+  icon?: Route['icon']
 }
-const MenuItem = ({ text, path, exact }: MenuItemProps) => {
+const MenuItem = ({ text, path, exact, icon: IconComponent }: MenuItemProps) => {
   const match = useRouteMatch({
     path,
     exact,
@@ -13,8 +16,8 @@ const MenuItem = ({ text, path, exact }: MenuItemProps) => {
 
   return (
     <li>
-      <Link to={path} className={match ? 'active' : ''}>
-        <span className="ml-4">{text}</span>
+      <Link to={path} className={clsx(match ? 'active' : '', IconComponent ? "flex items-center gap-3" : "")}>
+        {IconComponent ? <IconComponent className='w-4' /> : null}{text}
       </Link>
     </li>
   )

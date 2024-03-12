@@ -11,6 +11,7 @@ export const CompanyApi = {
     return fetch(`${COMPANY_URL}/upload-logo`, {
       method: 'POST',
       body: formData,
+      credentials: "include",
     })
       .then((res: Response) =>
         res.status === 200 ? res.text() : Promise.reject(new Error('Error when uploading file')),

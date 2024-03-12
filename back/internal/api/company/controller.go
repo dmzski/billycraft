@@ -51,16 +51,17 @@ func create(c *fiber.Ctx) error {
 
 func updateMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
+  company := DAO.FindOneById(*user.CompanyID)
 	newCompany := dtos.CompanyRequest{}
   err := c.BodyParser(&newCompany)
   if err != nil {
     return fiber.NewError(fiber.StatusBadRequest, "Can't parse company")
   }
-	if user.CompanyID == nil || user.Role != "ADMIN" {
+	if user.Email != company.CreatedBy {
 		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
 	}
 
-	company := DAO.Update(*user.CompanyID, newCompany)
+	company = DAO.Update(*user.CompanyID, newCompany)
 	return c.JSON(company.ToDTO())
 }
 
@@ -68,7 +69,7 @@ func uploadLogo(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	company := DAO.FindOneById(*user.CompanyID)
 	file, err := c.FormFile("logo")
-	if user.Role != "ADMIN" {
+	if company.CreatedBy != user.Email {
 		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
 	}
 	if err != nil {

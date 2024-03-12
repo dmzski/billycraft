@@ -11,7 +11,7 @@ const CustomerModal = ({ customer, disclosure }: CustomerModalProps) => {
   const {reload} = useDataLoaderContext()
 
   const onSubmitSuccess = () => {
-    reload('customers')
+    reload('customers.not-deleted')
   }
 
   return (

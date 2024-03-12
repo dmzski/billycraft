@@ -11,8 +11,14 @@ import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 type ProductTableLineProps = {
-  product: Product
-  isNew?: boolean
+  product?: Product
+}
+
+type ProductFormValues = {
+  type: LineTypeEnum,
+  name: string,
+  description: string,
+  price: number
 }
 
 const MODES = {
@@ -21,9 +27,10 @@ const MODES = {
   DELETE: 'DELETE',
 }
 
-const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
+const ProductTableLine = ({ product }: ProductTableLineProps) => {
+  const isNew = !product
   const [mode, setMode] = useState(isNew ? MODES.EDIT : MODES.READ)
-  const defaultValues = useMemo(
+  const initialValues = useMemo(
     () => ({
       type: LineTypeEnum.ARTICLE,
       name: '',
@@ -37,12 +44,12 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
     control,
     formState: { errors, isValid, isSubmitting },
     reset,
-  } = useForm<Product>({
-    defaultValues,
+  } = useForm<ProductFormValues>({
+    values: initialValues,
     mode: 'all',
     shouldUnregister: true,
   })
-  const {reload} = useDataLoaderContext()
+  const { reload } = useDataLoaderContext()
   const toast = useToast()
 
   const toggleEditMode = (e: MouseEvent) => {
@@ -50,10 +57,10 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
     setMode(current => (current === MODES.EDIT ? MODES.READ : MODES.EDIT))
   }
 
-  const onSubmit = async (data: Product) => {
+  const onSubmit = async (data: ProductFormValues) => {
     try {
       await ProductApi.createOrUpdate({
-        id: product.id,
+        id: product?.id,
         description: data.description,
         price: `${data.price}` !== '' ? parseFloat(`${data.price}`) : 0,
         type: data.type,
@@ -81,7 +88,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
 
   const onDelete = async () => {
     try {
-      await ProductApi.delete(product.id)
+      await ProductApi.delete(product?.id ?? 0)
       reload('products')
       toast.success(STRINGS.DELETE_SUCCESS)
     } catch {
@@ -89,16 +96,16 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
     }
   }
 
-  const formID = `form-product-${product.id ?? 'new'}`
+  const formID = `form-product-${product?.id ?? 'new'}`
 
   useEffect(() => {
-    if (product.id) {
+    if (product?.id) {
       reset(product)
     }
   }, [product, reset])
 
   return (
-    <div className={clsx('grid md:grid-cols-12 px-4 py-2 gap-2 border-b')}>
+    <div className={clsx('grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center', mode === MODES.DELETE ? "bg-error bg-opacity-50" : null)}>
       <div className="md:col-span-2">
         <Controller
           name="type"
@@ -108,7 +115,8 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               error={invalid}
               value={field.value}
               name={field.name}
-              className="flex-grow"
+              /* Otherwise it will be to large */
+              className='w-full'
               onChange={type => {
                 field.onChange(type)
               }}
@@ -137,13 +145,12 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               onBlur={field.onBlur}
               disabled={mode !== MODES.EDIT}
               ref={field.ref}
-              className="w-full"
               error={fieldState.invalid}
             />
           )}
         />
       </div>
-      <div className="md:col-span-3 flex">
+      <div className="md:col-span-4 flex">
         <Controller
           name="description"
           control={control}
@@ -155,13 +162,13 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               onChange={field.onChange}
               onBlur={field.onBlur}
               disabled={mode !== MODES.EDIT}
-              className="w-full"
               error={fieldState.invalid}
+              className='w-full'
             />
           )}
         />
       </div>
-      <div className="md:col-span-2 flex">
+      <div className="md:col-span-2 flex relative">
         <Controller
           name="price"
           rules={{ min: 0 }}
@@ -177,19 +184,17 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
                 field.onBlur()
               }}
               disabled={mode !== MODES.EDIT}
-              className="w-full text-right"
               type="number"
               step={0.1}
               error={!!errors.price}
             />
           )}
         />
-        <span className="ml-2 pt-2">€</span>
+        <span className={clsx("right-0 inset-y-2 absolute flex items-center", mode !== MODES.EDIT ? 'bg-base-200' : "bg-base-100")}>€</span>
       </div>
-      <div className="md:col-span-2 flex justify-end">
+      <div className="md:col-span-1 flex justify-end">
         {mode === MODES.DELETE && !isNew ? (
-          <div className="flex relative gap-2 bg-base-100">
-            <span className="w-28 absolute pt-2 -top-full font-bold">Supprimer ?</span>
+          <div className="flex relative gap-2">
             <Button type="button" variant="success" square onClick={onDelete}>
               <CheckIcon className='w-5' />
             </Button>
@@ -205,7 +210,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
                 <CheckIcon className='w-5' />
               </Button>
             </form>
-            {product.id ? (
+            {product?.id ? (
               <Button type="button" square variant="error" onClick={toggleEditMode}>
                 <XMarkIcon className='w-5' />
               </Button>
@@ -214,7 +219,7 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
         ) : null}
         {mode === MODES.READ && !isNew ? (
           <div className="flex gap-2">
-            <Button type="button" onClick={toggleEditMode} variant="info" square>
+            <Button outline type="button" onClick={toggleEditMode} variant="primary" square>
               <PencilIcon className='w-5' />
             </Button>
             <Button
@@ -222,13 +227,14 @@ const ProductTableLine = ({ product, isNew }: ProductTableLineProps) => {
               onClick={toggleDeleteMode}
               square
               variant="error"
+              outline
             >
               <TrashIcon className='w-5' />
             </Button>
           </div>
         ) : null}
       </div>
-    </div>
+    </div >
   )
 }
 

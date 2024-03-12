@@ -5,6 +5,7 @@ import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Customer from '../../../models/Customer'
 import { TrashIcon } from '@heroicons/react/24/solid'
+import clsx from 'clsx'
 
 const defaultCustomer = {
   address: '',
@@ -69,17 +70,9 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
   }, [reset, customer])
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center justify-between border-b-2 border-base-200 pr-6 pb-2 w-full">
-        <h1 className="ml-4 text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
-        {customer?.id ? (
-          <Button variant="error" onClick={tryDelete}>
-            <TrashIcon className='w-5' />
-            &nbsp; Supprimer
-          </Button>
-        ) : null}
-      </div>
-      <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex flex-col w-full gap-5">
+      <h1 className="text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
+      <form className='flex flex-col gap-3' onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="name"
           control={control}
@@ -105,9 +98,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <TextArea
               rows={4}
-              className="mt-3"
               label="Adresse"
-
               placeholder="Adresse du client"
               name={field.name}
               value={field.value}
@@ -125,7 +116,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              className="mt-3"
               label="Email"
               placeholder="Adresse email"
               name={field.name}
@@ -144,7 +134,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              className="mt-3"
               label="Téléphone"
               placeholder="Téléphone"
               name={field.name}
@@ -163,7 +152,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              className="mt-3"
               label="Ville"
               placeholder="Ville"
               name={field.name}
@@ -182,7 +170,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              className="mt-3"
               label="Code Postal"
               placeholder="Code Postal"
               name={field.name}
@@ -201,7 +188,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              className="mt-3"
               label="Contact"
               placeholder="Nom complet"
               name={field.name}
@@ -214,16 +200,21 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
             />
           )}
         />
-        <Button
-          variant="primary"
-          block
-          className="mt-3"
-          size="md"
-          disabled={!isValid || isSubmitting}
-          type="submit"
-        >
-          Enregistrer
-        </Button>
+        <div className={clsx('grid gap-3 mt-5', customer?.id ? "md:grid-cols-2" : "")}>
+          {customer?.id ? (
+            <Button type="button" variant="error" onClick={tryDelete}>
+              <TrashIcon className='w-5' />
+              &nbsp; Supprimer
+            </Button>
+          ) : null}
+          <Button
+            variant="primary"
+            disabled={!isValid || isSubmitting}
+            type="submit"
+          >
+            Enregistrer
+          </Button>
+        </div>
       </form>
     </div>
   )
