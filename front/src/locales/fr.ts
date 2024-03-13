@@ -1,9 +1,26 @@
 export default {
+  // Global
   "appName": "Coco ERP",
   "underDevelopment": "Fonctionnalité en cours de développment",
   "contactSupport": "Contactez le support",
   "genericFormError": "Une erreur est survenue, veuillez réessayer ou contactez le support",
   "supportPrefix": "Support : ",
+  "etTotal": "Total HT",
+  "itTotal": "Total TTC",
+  "vat": "TVA",
+  "customer": "Client",
+  "organization": "Entreprise",
+  "title": "Titre",
+  "bill": "Facture",
+  "quote": "Devis",
+  "accounting": "Comptabilité",
+  "select": "Sélectionner",
+  "supplier": "Fournisseur",
+  "save": "Enregistrer",
+  "update": "Mettre à jour",
+  "logout": "Déconnexion",
+
+  // Login
   "login.title": "Se connecter",
   "login.migrationMotd": "Notre processus d'authentification a changé, réinscrivez-vous avec le même email. En cas de problème contactez le support",
   "login.fields.email.label": "Email",
@@ -11,12 +28,15 @@ export default {
   "login.submit": "Se connecter",
   "login.success": "Connexion réussie",
   "login.register": "Créer un compte",
+
+  // Register
   "register.title": "Créer un compte",
   "register.submit": "Créer un compte",
   "register.success": "Compte crée avec succès",
   "register.fields.email.label": "Email",
   "register.fields.password.label": "Mot de passe",
   "register.fields.name.label": "Nom complet",
+
 
   // Onboarding
   "onboarding.home.title": "Bienvenue dans Coco ERP",
@@ -47,4 +67,39 @@ export default {
   "onboarding.join.submit": "Rejoindre",
   "onboarding.join.fields.code.label": "Code d'invitation",
   "onboarding.join.success": "Vous avez rejoint l'entreprise",
+
+  // Accounting > Outgoings
+  "accounting.outgoings.title": "Livrets d'achats",
+  "accounting.outgoings.links.overview": "Vue d'ensemble",
+  "accounting.outgoings.links.list": "Tous les livrets d'achats",
+  "accounting.outgoings.pages.overview.currentMonth": "Mois en cours : ",
+  "accounting.outgoings.pages.overview.totalThisMonth": "Total des dépenses du mois :",
+  "accounting.outgoings.pages.list.title": "Livrets d'achats",
+  "accounting.outgoings.pages.list.add": "Ajouter un livret d'achat",
+  "accounting.outgoings.pages.form.goBack": "Retourner à la liste des livrets d'achats",
+  "accounting.outgoings.pages.form.edit.title": "Modification d'un livret d'achat",
+  "accounting.outgoings.pages.form.create.title": "Création d'un livret d'achat",
+  "accounting.outgoings.list.headers.name": "Nom",
+  "accounting.outgoings.list.headers.startDate": "Date de début",
+  "accounting.outgoings.list.headers.endDate": "Date de fin",
+  "accounting.outgoings.list.headers.itTotal": "Total TTC",
+  "accounting.outgoings.details.headers.name": "Nom du livret",
+  "accounting.outgoings.details.headers.startDate": "Date de début",
+  "accounting.outgoings.details.headers.endDate": "Date de fin",
+  "accounting.outgoings.details.headers.createdBy": "Créé par",
+  "accounting.outgoings.details.headers.itTotal": "Total TTC",
+  "accounting.outgoings.details.supplierDetail.title": "Détail par fournisseur",
+  "accounting.outgoings.details.lines.title": "Détail des lignes",
+  "accounting.outgoings.details.lines.defaultSupplier": "Divers",
+  "accounting.outgoings.details.lines.headers.supplier": "Fournisseur",
+  "accounting.outgoings.details.lines.headers.billReference": "Réf. Facture",
+  "accounting.outgoings.details.lines.headers.linkedBill": "Facture liée",
+  "accounting.outgoings.modals.selectBill.title": "Rechercher une facture",
+  "accounting.outgoings.forms.add.fields.name": "Nom du livret",
+  "accounting.outgoings.forms.add.fields.period": "Période du livret",
+  "accounting.outgoings.forms.add.submit": "Nom du livret",
+  "accounting.outgoings.forms.add.submit.new.success": "Livret créé",
+  "accounting.outgoings.forms.add.submit.edit.success": "Livret mis à jour",
+  "accounting.outgoings.forms.add.lines.add": "Ajouter une ligne",
+  "accounting.outgoings.forms.add.error.alreadyExist": "Un livret d'achat pour cette période existe déjà"
 } as const

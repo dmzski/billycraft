@@ -1,16 +1,20 @@
 import { OutgoingResponse } from '@/models/Outgoing'
 import Row from './Row'
+import { useI18n } from '@/i18n'
 
 type ListProps = {
   data?: OutgoingResponse[]
 }
-const List = ({ data }: ListProps) => (
+const List = ({ data }: ListProps) => {
+  const {t} = useI18n()
+
+  return (
   <div>
     <div className="grid sm:grid-cols-12 gap-4 bg-base-200 p-4 rounded-t">
-      <div className="col-span-3">Nom</div>
-      <div className="col-span-3">Date de début</div>
-      <div className="col-span-3">Date de fin</div>
-      <div className="col-span-3">Total</div>
+      <div className="col-span-3">{t('accounting.outgoings.list.headers.name')}</div>
+      <div className="col-span-3">{t('accounting.outgoings.list.headers.startDate')}</div>
+      <div className="col-span-3">{t('accounting.outgoings.list.headers.endDate')}</div>
+      <div className="col-span-3">{t('accounting.outgoings.list.headers.itTotal')}</div>
     </div>
     {data && data.length > 0 ? (
       <div>
@@ -22,6 +26,6 @@ const List = ({ data }: ListProps) => (
       <div>Aucun livret enregistré</div>
     )}
   </div>
-)
+)}
 
 export default List

@@ -3,7 +3,7 @@ import SideBarMenu from './SideBarMenu'
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid'
 
 const SideBar = () => {
-  const user = useUser()
+  const {organization} = useUser()
 
   return (
     <aside className="bg-base-200 bg-opacity-20 border-r w-72 overflow-y-auto fixed h-screen">
@@ -14,7 +14,7 @@ const SideBar = () => {
               <BuildingOfficeIcon className='w-6 fill-primary-content' />
             </div>
             <p>
-              {user.company?.name}
+              {organization?.name}
             </p>
           </div>
         </div>

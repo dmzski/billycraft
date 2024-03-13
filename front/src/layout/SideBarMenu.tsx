@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { Route, ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 const menuRoutes = [
   ROUTES.DASHBOARD,
@@ -43,6 +44,7 @@ const Menu = ({ route }: MenuProps) => {
 
 const SideBarMenu = () => {
   const { logout } = useAuth()
+  const { t } = useI18n()
 
   return (
     <div className="flex flex-col h-full gap-8">
@@ -66,7 +68,7 @@ const SideBarMenu = () => {
         <li>
           <Button className="flex gap-2" variant="error" type="button" outline onClick={logout}>
             <ArrowRightStartOnRectangleIcon className='w-5' />
-            Déconnexion
+            {t('logout')}
           </Button>
         </li>
       </ul>

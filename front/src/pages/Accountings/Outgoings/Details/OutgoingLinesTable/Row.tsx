@@ -1,6 +1,7 @@
 import { BillApi } from '@/api/BillApi'
 import { SupplierApi } from '@/api/SupplierApi'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useI18n } from '@/i18n'
 import { OutgoingLineResponse } from '@/models/Outgoing'
 import { useDataLoader } from '@scaleway/use-dataloader'
 import { useMemo } from 'react'
@@ -16,6 +17,7 @@ const Row = ({
   const formatCurrency = useFormatCurrency()
   const { data: bills } = useDataLoader(['bills'],() => BillApi.findAll())
   const { data: suppliers } = useDataLoader(['suppliers'], () => SupplierApi.findAll())
+  const {t} = useI18n()
 
   const totalTTC = useMemo(
     () =>
@@ -50,11 +52,11 @@ const Row = ({
       style={{ backgroundColor: lineColor }}
       className="py-2 px-4 grid grid-cols-1 md:grid-cols-12 items-center gap-4 border-b"
     >
-      <div className="md:col-span-2">{supplier?.name ?? 'Divers'}</div>
+      <div className="md:col-span-2">{supplier?.name ?? t('accounting.outgoings.details.lines.defaultSupplier')}</div>
       <div className="md:col-span-2">{supplierBillReference}</div>
       <div className="md:col-span-2">{bill?.id}</div>
       <div className="md:col-span-2">{formatCurrency(totalHT)}</div>
-      <div className="md:col-span-2">{vat}&nbsp;%</div>
+      <div className="md:col-span-2">{vat}%</div>
       <div className="md:col-span-2 flex justify-between">{totalTTC}</div>
     </div>
   )

@@ -1,35 +1,39 @@
-import { CompanyApi } from '@/api/CompanyApi'
-import { UserApi } from '@/api/UserApi'
 import Company from '@/models/Company'
 import User from '@/models/User'
-import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react'
+import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import * as Sentry from '@sentry/react'
 import { useAuth } from './AuthProvider'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useMyInformationQuery } from '@/queries/useMyInformationQuery'
+import { useMyOrganizationQuery } from '@/queries/useMyOrganizationQuery'
 
 type UserContextType = {
   user?: User
-  company?: Company
+  organization?: Company
+  reload: () => Promise<void>
 }
-const UserContext = createContext<UserContextType>({})
+const UserContext = createContext<UserContextType>({ reload: () => Promise.resolve() })
 
 type UserProviderProps = {
   children: ReactNode
 }
 const UserProvider = ({ children }: UserProviderProps) => {
   const { isAuthenticated } = useAuth()
-  const { data: user } = useDataLoader('my-information', () => UserApi.getMyInformation(), {
+  const { data: user, reload: reloadUser } = useMyInformationQuery({
     enabled: isAuthenticated,
     pollingInterval: 10000,
     needPolling: isAuthenticated
   })
-  const { data: company } = useDataLoader('my-company', () => CompanyApi.getMine(), {
+  const { data: organization, reload: reloadOrganization } = useMyOrganizationQuery({
     enabled: !!user?.companyId && isAuthenticated,
     pollingInterval: 10000,
     needPolling: isAuthenticated && !!user?.companyId
   })
 
-  const value = useMemo(() => ({ user, company }), [user, company])
+  const fullReload = useCallback(async () => {
+    await Promise.all([reloadUser(), reloadOrganization()])
+  }, [reloadOrganization, reloadUser])
+
+  const value = useMemo(() => ({ user, organization, reload: fullReload }), [user, organization, fullReload])
 
   useEffect(() => {
     if (user) {

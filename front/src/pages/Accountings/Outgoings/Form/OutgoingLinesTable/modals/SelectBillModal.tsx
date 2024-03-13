@@ -4,6 +4,7 @@ import useCustomers from '@/hooks/useCustomers'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useController, useForm } from 'react-hook-form'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { useI18n } from '@/i18n'
 
 type SelectBillModalProps = {
   isOpen?: boolean
@@ -17,6 +18,7 @@ type SelectBillModalForm = {
   billId?: string
 }
 const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) => {
+  const { t } = useI18n()
   const { data: bills } = useDataLoader(['bills'], () => BillApi.findAll(), {
     enabled: isOpen,
   })
@@ -100,7 +102,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) =>
   return (
     <Modal onClose={onClose} open={isOpen}>
       <div className="w-full">
-        <h2 className="text-xl border-b mb-4 pb-2">Rechercher une facture</h2>
+        <h2 className="text-xl border-b mb-4 pb-2">{t('accounting.outgoings.modals.selectBill.title')}</h2>
         <div className="ml-2 mb-2 flex flex-col gap-4">
           <Select
             options={customerOptions}
@@ -108,27 +110,23 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) =>
             name={customerController.field.name}
             onChange={customerController.field.onChange}
             ref={customerController.field.ref}
-            label="Client"
-
+            label={t('customer')}
             isSearchable
           />
-
           <Input
             value={titleController.field.value}
             name={titleController.field.name}
             onChange={titleController.field.onChange}
             ref={titleController.field.ref}
-            label="Titre"
-
+            label={t('title')}
           />
-
           <Select
             options={billOptions}
             value={billIdController.field.value}
             name={billIdController.field.name}
             onChange={billIdController.field.onChange}
             ref={billIdController.field.ref}
-            label="Facture"
+            label={t('bill')}
             isSearchable
           />
           <Button
@@ -136,7 +134,7 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) =>
             onClick={handleSubmit(beforeSubmit)}
             disabled={!isValid || isSubmitting}
           >
-            Sélectionner
+            {t('select')}
           </Button>
         </div>
       </div>

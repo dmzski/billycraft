@@ -20,7 +20,7 @@ import { Register } from './Auth/Register'
 
 
 const PrivateSwitch = () => {
-  const user = useUser()
+  const {organization, user} = useUser()
   const { isAuthenticated, isInitializing } = useAuth()
 
   if (isInitializing) {
@@ -38,7 +38,7 @@ const PrivateSwitch = () => {
     )
   }
 
-  if (!user.user) {
+  if (!user || user.companyId && !organization) {
     return (
       <div className="flex justify-center items-center h-screen max-w-screen">
         <div className='w-1/2'>
@@ -48,7 +48,7 @@ const PrivateSwitch = () => {
     )
   }
 
-  if (user.user && user.user.companyId === null) {
+  if (user && user.companyId === null) {
     return (
       <Switch>
         <Route path={ROUTES.ONBOARDING.path} component={Onboarding} />

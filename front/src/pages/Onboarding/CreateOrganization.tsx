@@ -5,6 +5,7 @@ import Company from "@/models/Company"
 import { Controller, useForm } from "react-hook-form"
 import { sendErrorToSentry } from "@/utils/errors"
 import { InformationCircleIcon } from "@heroicons/react/24/solid"
+import { useUser } from "@/providers/UserProvider"
 
 type CreateOrganizationFormValues = {
   articlesTax: number,
@@ -22,6 +23,7 @@ type CreateOrganizationFormValues = {
 export const CreateOrganization = () => {
   const toast = useToast()
   const { t } = useI18n()
+  const {reload} = useUser()
 
   const {
     control,
@@ -52,6 +54,7 @@ export const CreateOrganization = () => {
         othersTax: Number(values.othersTax) || 0,
       } as Company
       await CompanyApi.create(data)
+      await reload()
       toast.success(t("onboarding.create.success"))
     } catch (err) {
       sendErrorToSentry(err)

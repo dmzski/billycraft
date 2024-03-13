@@ -6,11 +6,13 @@ import { injectIdInPath, ROUTES } from '@/routes'
 import { OutgoingResponse } from '@/models/Outgoing'
 import OutgoingForm from './Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { useI18n } from '@/i18n'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const FormPage = () => {
   const { id } = useParams<{ id: string }>()
+  const { t } = useI18n()
   const { push } = useHistory()
   const { data, isLoading } = useDataLoader(['outgoings', id], () => OutgoingApi.findOneById(id), {
     enabled: id !== 'new',
@@ -24,12 +26,12 @@ const FormPage = () => {
     <div>
       <Link to={routes.LIST.path}>
         <Button type="button" size="xs" variant="ghost">
-          Retourner à la liste des livrets d&apos;achats
+          {t('accounting.outgoings.pages.form.goBack')}
         </Button>
       </Link>
       <div className="border-b py-2 my-4">
         <h1 className="text-2xl">
-          {id !== 'new' ? "Modification d'un livret d'achat" : "Création d'un livret d'achat"}
+          {t(id !== 'new' ? "accounting.outgoings.pages.form.edit.title" : "accounting.outgoings.pages.form.create.title")}
         </h1>
       </div>
       {isLoading ? (
