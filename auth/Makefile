@@ -14,7 +14,13 @@ build:
 	docker build -f ./Dockerfile.dev -t coco-erp/auth:local .
 
 build-prod:
-	docker build -f ./Dockerfile -t coco-erp/auth:local .
+	docker build -f ./Dockerfile -t coco-erp/auth:latest .
+
+build-migrator:
+	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:local .
+
+build-migrator-prod:
+	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:latest .
 
 migrate-up:
 	sqlx migrate run
@@ -44,3 +50,9 @@ install:
 	cargo install cargo-watch
 	# SQLX-CLI
 	cargo install sqlx-cli
+
+deploy-docker:
+	docker build -f ./Dockerfile -t coco-erp/auth:latest . && docker push coco-erp/auth:latest
+
+deploy-migrator:
+	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:latest . && docker push coco-erp/migrator:latest

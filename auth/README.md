@@ -8,6 +8,7 @@
 ## Run in dev
 
 - `make dev` : Start postgres
+- `make migrate-up` : Run migrations on db
 - `make start` : Start with cargo-watch
 
 ## Build for prod

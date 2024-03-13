@@ -1,0 +1,75 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - coco_data:/var/lib/postgresql/data
+      - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
+
+  migrate-db:
+    image: coco-erp/migrator:latest
+    env:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      db:
+        condition: service_started
+
+  auth:
+    env_file:
+      - ./.env
+    image: coco-erp/auth:latest
+    volumes:
+      - ./auth:/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=Host(`${AUTH_DOMAIN}`)"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
+      - "traefik.http.middlewares.auth.headers.accesscontrolalloworiginlist=${ORIGIN}"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowheaders=Origin,X-Requested-With,Content-Type,Accept,Authorization,Cookie"
+      - "traefik.http.middlewares.auth.headers.accesscontrolexposeheaders=*"
+      - "traefik.http.middlewares.auth.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.auth.headers.addvaryheader=true"
+      - "traefik.http.routers.auth.middlewares=auth@docker"
+    depends_on:
+      migrate-db:
+        conition: service_completed_successfully
+
+  api:
+    image: coco-erp/api:latest
+    volumes:
+      - ./back:/app
+      - ./upload:/upload
+    env_file:
+      - ./.env
+    links:
+      - "traefik:${AUTH_DOMAIN}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.middlewares.api-auth.forwardauth.address=http://auth:8080/api/auth/check"
+      - "traefik.http.middlewares.api-auth.forwardauth.authResponseHeaders=X-Auth-User"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
+      - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=${ORIGIN}"
+      - "traefik.http.middlewares.api.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowheaders=Origin,X-Requested-With,Content-Type,Accept,Authorization,Cookie"
+      - "traefik.http.middlewares.api.headers.addvaryheader=true"
+      - "traefik.http.routers.api.middlewares=api@docker,api-auth@docker"
+    depends_on:
+      db:
+        condition: service_started
+
+networks:
+  default:
+    name: coco_net
+    external: true
+
+volumes:
+  coco_data:

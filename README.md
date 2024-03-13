@@ -17,10 +17,12 @@ Add in your host file (/etc/hosts):
 
 ## Folder structure
 
-- docker-compose.yml : The docker-compose to mount the stack excluding front
+- docker-compose.yml : The docker-compose to mount the stack excluding front (to dev)
 - auth: The auth server (auth.coco-erp.fr)
 - back: The coco erp API (api.coco-erp.fr)
 - front: The coco erp Application (app.coco-erp.fr)
+- deploy: files to deploy the app on a server
+- docs: Some documentation
 - www: The public website (coco-erp.fr)
 - Makefile: all you need to start the stack for back or front dev
 

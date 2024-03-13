@@ -4,7 +4,6 @@ pub struct Config {
     pub jwt_secret: String,
     pub jwt_expires_in: String,
     pub jwt_max_age: i32,
-    pub origin: String,
     pub listen_addr: String,
     pub domain: String
 }
@@ -15,7 +14,6 @@ impl Config {
         let jwt_secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
         let jwt_expires_in = std::env::var("JWT_EXPIRED_IN").expect("JWT_EXPIRED_IN must be set");
         let jwt_max_age = std::env::var("JWT_MAX_AGE").expect("JWT_MAX_AGE must be set");
-        let origin = std::env::var("ORIGIN").expect("ORIGIN must be set");
         let listen_addr = std::env::var("LISTEN_ADDR").expect("LISTEN_ADDR must be set");
         let domain = std::env::var("DOMAIN").expect("DOMAIN must be set");
 
@@ -24,7 +22,6 @@ impl Config {
             jwt_secret,
             jwt_expires_in,
             jwt_max_age: jwt_max_age.parse::<i32>().unwrap(),
-            origin,
             listen_addr,
             domain
         }

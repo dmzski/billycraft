@@ -1,11 +1,14 @@
 up:
-	cd scripts && ./up.sh && cd ../ && docker compose up -d
+	docker compose up -d
+
+prepare:
+	cd ./auth && make build && make build-migrator && cd ../back && make build-dev
 
 logs:
 	docker compose logs -f
 
 down:
-	cd scripts && ./down.sh
+	docker compose down
 
 dev:
 	docker compose up -d && docker compose logs -f
@@ -16,17 +19,26 @@ dev-auth:
 dev-back:
 	docker compose up -d && docker compose logs -f api
 
-prepare:
-	cd scripts && ./prepare.sh
-
 clean:
-	cd scripts && ./clean.sh
+	docker compose down -v
 
 build:
 	cd ./auth && make build && cd ../back && make build-dev
 
+build-back:
+	cd ../back && make build-dev
+
+build-back-prod:
+	cd ../back && make build-prod
+
+build-auth-prod:
+	cd ./auth && make build-prod
+
+build-auth:
+	cd ./auth && make build
+
 build-prod:
-	cd ./auth && make build && cd ../back && make build-prod
+	cd ./auth && make build-prod && cd ../back && make build-prod
 
 release-back:
 	cd back && make deploy-docker
@@ -36,3 +48,9 @@ release-front:
 
 release-auth:
 	cd auth && make deploy-docker
+
+release-migrator:
+	cd auth && make deploy-migrator
+
+release-www:
+	cd www && ./push-site.sh
