@@ -16,14 +16,16 @@ import CustomerSwitch from './Customers/CustomerSwitch'
 import SupplierSwitch from './Suppliers/SupplierSwitch'
 import { Login } from './Auth/Login'
 import { Register } from './Auth/Register'
+import { useTranslation } from '@scaleway/use-i18n'
 
 
 
 const PrivateSwitch = () => {
-  const {organization, user} = useUser()
+  const { isLoaded } = useTranslation([])
+  const { organization, user } = useUser()
   const { isAuthenticated, isInitializing } = useAuth()
 
-  if (isInitializing) {
+  if (isInitializing || !isLoaded) {
     return null
   }
 

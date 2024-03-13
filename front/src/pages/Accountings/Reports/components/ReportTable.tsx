@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { ReportResponse } from '@/models/Report'
 import { ReactNode, useMemo } from 'react'
+import { useI18n } from '@/i18n'
 
 type ReportTableProps = {
   report: ReportResponse
@@ -25,6 +26,7 @@ const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
 )
 const ReportTable = ({ report }: ReportTableProps) => {
   const formatCurrency = useFormatCurrency()
+  const {t} = useI18n()
 
   const allTaxes = useMemo(
     () => report.serviceTaxes + report.articleTaxes + report.otherTaxes,
@@ -33,35 +35,35 @@ const ReportTable = ({ report }: ReportTableProps) => {
   return (
     <div className="flex flex-col gap-2 md:gap-0 border rounded">
       <ReportTableRow>
-        <ReportTableLeft>Ventes de marchandises</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.articleSells')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.articleSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Services commerciaux ou artisanaux</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.serviceSells')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.serviceSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Autres types de service</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.otherSells')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.otherSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Chifre d&apos;affaire</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.salesRevenue')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.sales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>A déclarer</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.toDeclare')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(allTaxes)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Bénéfices net</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.etIncome')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.sales - allTaxes)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>Dépenses</ReportTableLeft>
+        <ReportTableLeft>{t('accounting.reports.components.table.headers.outcomes')}</ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.totalOutgoings)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft noBorder>Restant net</ReportTableLeft>
+        <ReportTableLeft noBorder>{t('accounting.reports.components.table.headers.etRemaining')}</ReportTableLeft>
         <ReportTableRight noBorder>
           {formatCurrency(report.sales - allTaxes - report.totalOutgoings)}
         </ReportTableRight>

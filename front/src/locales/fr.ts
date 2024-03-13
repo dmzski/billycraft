@@ -43,6 +43,7 @@ export default {
   "onboarding.home.description": "Souhaitez vous créer une nouvelle entreprise ou rejoindre une entreprise existante ?",
   "onboarding.home.button.create": "Créer mon entreprise",
   "onboarding.home.button.join": "Rejoindre une entreprise",
+
   // Create
   "onboarding.create.title": "Créer mon entreprise",
   "onboarding.create.submit": "Créer mon entreprise",
@@ -101,5 +102,32 @@ export default {
   "accounting.outgoings.forms.add.submit.new.success": "Livret créé",
   "accounting.outgoings.forms.add.submit.edit.success": "Livret mis à jour",
   "accounting.outgoings.forms.add.lines.add": "Ajouter une ligne",
-  "accounting.outgoings.forms.add.error.alreadyExist": "Un livret d'achat pour cette période existe déjà"
+  "accounting.outgoings.forms.add.error.alreadyExist": "Un livret d'achat pour cette période existe déjà",
+
+  // Accounting > Reports
+  "accounting.reports.components.outgoing.headers.name": "Nom du livret",
+  "accounting.reports.components.outgoing.headers.startDate": "Date de début",
+  "accounting.reports.components.outgoing.headers.endDate": "Date de fin",
+  "accounting.reports.components.outgoing.headers.createdBy": "Créé par",
+  "accounting.reports.components.outgoing.headers.itTotal": "Total TTC",
+  "accounting.reports.components.perSupplier.headers.supplier": "Nom du livret",
+  "accounting.reports.components.perSupplier.headers.itTotal": "Total TTC",
+  "accounting.reports.components.perSupplier.emptyText": "Aucune dépense fournisseur",
+  "accounting.reports.components.perSupplier.supplier.empty": "Aucun fournisseur",
+  "accounting.reports.components.table.headers.articleSells": "Ventes de marchandises",
+  "accounting.reports.components.table.headers.serviceSells": "Services commerciaux ou artisanaux",
+  "accounting.reports.components.table.headers.otherSells": "Autres types de service",
+  "accounting.reports.components.table.headers.salesRevenue": "Chiffre d'affaire",
+  "accounting.reports.components.table.headers.toDeclare": "A déclarer",
+  "accounting.reports.components.table.headers.etIncome": "Bénéfices net",
+  "accounting.reports.components.table.headers.outcomes": "Dépenses",
+  "accounting.reports.components.table.headers.etRemaining": "Restant net",
+  "accounting.reports.components.list.headers.name": "Nom",
+  "accounting.reports.components.list.headers.startDate": "Date de début",
+  "accounting.reports.components.list.headers.endDate": "Date de fin",
+  "accounting.reports.components.list.headers.createdAt": "Créé le",
+  "accounting.reports.components.card.salesRevenue": "Chiffre d'affaire",
+  "accounting.reports.components.card.articles": "Matériels",
+  "accounting.reports.components.card.services": "Services",
+  "accounting.reports.components.card.others": "Autres",
 } as const

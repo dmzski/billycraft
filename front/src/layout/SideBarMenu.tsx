@@ -44,7 +44,7 @@ const Menu = ({ route }: MenuProps) => {
 
 const SideBarMenu = () => {
   const { logout } = useAuth()
-  const { t } = useI18n()
+  const {t} = useI18n()
 
   return (
     <div className="flex flex-col h-full gap-8">

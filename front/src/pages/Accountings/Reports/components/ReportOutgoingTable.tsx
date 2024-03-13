@@ -6,6 +6,7 @@ import { OUTGOING_ROUTES } from '@/pages/Accountings/Outgoings/constants'
 import { ReactNode, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { injectIdInPath } from '@/routes'
+import { useI18n } from '@/i18n'
 
 type ReportOutgoingTableProps = {
   report: ReportResponse
@@ -29,6 +30,7 @@ const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
 )
 
 const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
+  const {t} = useI18n()
   const formatCurrency = useFormatCurrency()
   const { toISO9075 } = useFormatDate()
 
@@ -45,7 +47,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
         <article className="md:ml-2 border rounded">
           <div className="flex flex-col gap-2 md:gap-0">
             <DetailsTableRow>
-              <DetailsTableLeft>Nom du livret</DetailsTableLeft>
+              <DetailsTableLeft>{t('accounting.reports.components.outgoing.headers.name')}</DetailsTableLeft>
               <DetailsTableRight>
                 <Link to={injectIdInPath(OUTGOING_ROUTES.routes.DETAILS.path, outgoing.outgoingId)}>
                   {outgoing.name}
@@ -53,19 +55,19 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
               </DetailsTableRight>
             </DetailsTableRow>
             <DetailsTableRow>
-              <DetailsTableLeft>Date de début</DetailsTableLeft>
+              <DetailsTableLeft>{t('accounting.reports.components.outgoing.headers.startDate')}</DetailsTableLeft>
               <DetailsTableRight>{toISO9075(outgoing.startDate)}</DetailsTableRight>
             </DetailsTableRow>
             <DetailsTableRow>
-              <DetailsTableLeft>Date de fin</DetailsTableLeft>
+              <DetailsTableLeft>{t('accounting.reports.components.outgoing.headers.endDate')}</DetailsTableLeft>
               <DetailsTableRight>{toISO9075(outgoing.endDate)}</DetailsTableRight>
             </DetailsTableRow>
             <DetailsTableRow>
-              <DetailsTableLeft>Créé par</DetailsTableLeft>
+              <DetailsTableLeft>{t('accounting.reports.components.outgoing.headers.createdBy')}</DetailsTableLeft>
               <DetailsTableRight>{outgoing.createdBy}</DetailsTableRight>
             </DetailsTableRow>
             <DetailsTableRow>
-              <DetailsTableLeft noBorder>Total TTC</DetailsTableLeft>
+              <DetailsTableLeft noBorder>{t('accounting.reports.components.outgoing.headers.itTotal')}</DetailsTableLeft>
               <DetailsTableRight noBorder>{formatCurrency(getTotal(outgoing))}</DetailsTableRight>
             </DetailsTableRow>
           </div>

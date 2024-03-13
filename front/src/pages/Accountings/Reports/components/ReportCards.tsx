@@ -3,6 +3,7 @@ import { ComponentType, ReactNode, useMemo } from 'react'
 import clsx from 'clsx'
 import { ReportResponse } from '@/models/Report'
 import { BanknotesIcon, CubeIcon, HandRaisedIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 const ReportCardVariants = {
   primary: 'text-primary-700',
@@ -14,7 +15,7 @@ const ReportCardVariants = {
 } as const
 
 type ReportCardProps = {
-  icon: ComponentType<{className: string}>
+  icon: ComponentType<{ className: string }>
   title: string
   children?: ReactNode
   variant?: keyof typeof ReportCardVariants
@@ -41,28 +42,29 @@ const ReportCard = ({
 )
 
 const ReportCards = ({ report }: { report: ReportResponse }) => {
+  const { t } = useI18n()
   const formatter = useMemo(
     () => new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format,
     [],
   )
   return (
     <div className="flex flex-wrap justify-between w-full items-center">
-      <ReportCard icon={BanknotesIcon} title="Chiffre d'affaire" variant="primary">
+      <ReportCard icon={BanknotesIcon} title={t('accounting.reports.components.card.salesRevenue')} variant="primary">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.sales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon={CubeIcon} title="Matériels" variant="info">
+      <ReportCard icon={CubeIcon} title={t('accounting.reports.components.card.articles')} variant="info">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.articleSales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon={HandRaisedIcon} title="Services" variant="success">
+      <ReportCard icon={HandRaisedIcon} title={t('accounting.reports.components.card.services')} variant="success">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.serviceSales * 100) / 100} />
         </span>
       </ReportCard>
-      <ReportCard icon={QuestionMarkCircleIcon} title="Autres" variant="secondary">
+      <ReportCard icon={QuestionMarkCircleIcon} title={t('accounting.reports.components.card.others')} variant="secondary">
         <span>
           <CounterAnimated format={formatter} value={Math.round(report.otherSales * 100) / 100} />
         </span>

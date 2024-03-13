@@ -1,8 +1,14 @@
 up:
 	docker compose up -d
 
+up-prod:
+	docker compose up -d
+
 prepare:
 	cd ./auth && make build && make build-migrator && cd ../back && make build-dev
+
+prepare-prod:
+	cd ./auth && make build-prod && make build-migrator && cd ../back && make build-prod
 
 logs:
 	docker compose logs -f
