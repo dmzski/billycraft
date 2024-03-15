@@ -76,24 +76,26 @@ const Modal = ({
           open ? 'modal visible opacity-100 pointer-events-auto' : 'sr-only'
         }
       >
-        <dialog
-          open={open}
-          onClick={(event) => {
-            event.stopPropagation()
-          }}
-          className="select-all modal-box relative"
-        >
-          <Button
-            onClick={close}
-            size="sm"
-            outline
-            rounded
-            className="absolute right-2 top-2"
+        {open ? (
+          <dialog
+            open={open}
+            onClick={(event) => {
+              event.stopPropagation()
+            }}
+            className="modal-box relative"
           >
-            <MarkXIcon className='h-5' />
-          </Button>
-          {typeof children === 'function' ? children({ close }) : children}
-        </dialog>
+            <Button
+              onClick={close}
+              size="sm"
+              outline
+              rounded
+              className="absolute right-2 top-2"
+            >
+              <MarkXIcon className='h-5' />
+            </Button>
+            {typeof children === 'function' ? children({ close }) : children}
+          </dialog>
+        ) : null}
       </div>
     ),
     [open, children, close]
@@ -101,7 +103,7 @@ const Modal = ({
 
   return (
     <>
-      {Component ? Component : null}
+      {Component}
       {withoutPortal
         ? modalContentRendered
         : createPortal(modalContentRendered, document.body)}
