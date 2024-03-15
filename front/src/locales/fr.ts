@@ -3,6 +3,7 @@ export default {
   "appName": "Coco ERP",
   "underDevelopment": "Fonctionnalité en cours de développment",
   "contactSupport": "Contactez le support",
+  "dataloaderError": "Une erreur est survenue lors de la récupération de vos données, veuillez réessayer ou contactez le support",
   "genericFormError": "Une erreur est survenue, veuillez réessayer ou contactez le support",
   "supportPrefix": "Support : ",
   "etTotal": "Total HT",
@@ -104,7 +105,7 @@ export default {
   "accounting.outgoings.forms.add.lines.add": "Ajouter une ligne",
   "accounting.outgoings.forms.add.error.alreadyExist": "Un livret d'achat pour cette période existe déjà",
 
-  // Accounting > Reports
+  // Accounting > Reports > Components
   "accounting.reports.components.outgoing.headers.name": "Nom du livret",
   "accounting.reports.components.outgoing.headers.startDate": "Date de début",
   "accounting.reports.components.outgoing.headers.endDate": "Date de fin",
@@ -130,4 +131,32 @@ export default {
   "accounting.reports.components.card.articles": "Matériels",
   "accounting.reports.components.card.services": "Services",
   "accounting.reports.components.card.others": "Autres",
+
+  // Accounting > Reports > Modals
+  "accounting.reports.modals.create.title": "Création d'un rapport",
+  "accounting.reports.modals.create.fields.name": "Nom du rapport",
+  "accounting.reports.modals.create.fields.startDate": "Mois de début",
+  "accounting.reports.modals.create.fields.endDate": "Mois de fin",
+  "accounting.reports.modals.create.fields.submit": "Créer le rapport",
+  "accounting.reports.modals.create.fields.submit.success": "Rapport créé",
+  "accounting.reports.modals.delete.title": "Supprimer un rapport",
+  "accounting.reports.modals.delete.description": "Êtes-vous sûr de vouloir supprimer ce rapport ?",
+  "accounting.reports.modals.delete.warning": "Cette action est irréversible est vos données seront définitivement supprimées.",
+  "accounting.reports.modals.delete.submit": "Supprimer",
+  "accounting.reports.modals.delete.submit.success": "Rapport supprimé",
+
+  // Accounting > Reports > Details
+  "accounting.reports.details.backTo": "Retourner à la liste des rapports",
+  "accounting.reports.details.delete": "Supprimer",
+  "accounting.reports.details.overview": "Vue d'ensemble",
+  "accounting.reports.details.details": "Détails",
+  "accounting.reports.details.supplierDetails": "Détails des dépenses par fournisseur",
+  "accounting.reports.details.outgoingDetails": "Détails des livret d'achats",
+  "accounting.reports.details.details.table.headers.name": "Nom du rapport",
+  "accounting.reports.details.details.table.headers.startDate": "Date de début",
+  "accounting.reports.details.details.table.headers.endDate": "Date de fin",
+
+  // Accounting > Reports > List
+  "accounting.reports.list.title": "Rapports",
+  "accounting.reports.list.create": "Créer un rapport",
 } as const
