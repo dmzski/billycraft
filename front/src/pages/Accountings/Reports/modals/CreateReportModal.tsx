@@ -1,114 +1,114 @@
 import { Button, Input, Modal, useToast } from '@coco-ui/core'
 import { ReportApi } from '@/api/ReportApi'
-import { STRINGS } from '@/constants/strings'
 import { endOfMonth, formatRFC3339 } from 'date-fns'
-import { ReportRequest, ReportResponse } from '@/models/Report'
-import { useCallback, useEffect } from 'react'
+import { ReportRequest } from '@/models/Report'
+import { ComponentProps } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useI18n } from '@/i18n'
 
 type CreateReportModalProps = {
-  isOpen?: boolean
-  onClose: () => void
-  onSubmitSuccess?: (res: ReportResponse) => void | Promise<void>
+  onSubmitSuccess?: () => void | Promise<void>
+  disclosure?: ComponentProps<typeof Modal>['disclosure']
 }
-const CreateReportModal = ({
-  isOpen,
-  onClose,
-  onSubmitSuccess,
-}: CreateReportModalProps) => {
+
+type CreateReportFormProps = Omit<CreateReportModalProps, "disclosure">
+
+const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
+  const { t } = useI18n()
   const {
     control,
     handleSubmit,
     formState: { isValid, isSubmitting },
-    reset,
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
   })
   const toast = useToast()
 
-  const onSubmit = useCallback(
-    async ({ startDate, endDate, name }) => {
-      try {
-        const data = {
-          name,
-          startDate: formatRFC3339(Date.parse(startDate)),
-          endDate: formatRFC3339(endOfMonth(Date.parse(endDate))),
-        } as ReportRequest
-        const res = await ReportApi.create(data)
-        onClose()
-        toast.success(STRINGS.REPORT_CREATED)
-        onSubmitSuccess?.(res)
-        reset()
-      } catch {
-        toast.error(STRINGS.CREATION_ERROR)
-      }
-    },
-    [reset, onClose, onSubmitSuccess, toast],
-  )
-
-  useEffect(() => {
-    if (reset) reset()
-  }, [isOpen, reset])
+  const onSubmit = async ({ startDate, endDate, name }) => {
+    try {
+      const data = {
+        name,
+        startDate: formatRFC3339(Date.parse(startDate)),
+        endDate: formatRFC3339(endOfMonth(Date.parse(endDate))),
+      } as ReportRequest
+      await ReportApi.create(data)
+      toast.success(t('accounting.reports.modals.create.fields.submit.success'))
+      await onSubmitSuccess?.()
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
 
   return (
-    <Modal onClose={onClose} open={isOpen}>
-      <div className="w-full p-2">
-        <h3 className="mb-4 text-lg border-b pb-2">Création d&apos;un rapport</h3>
-        <form className="grid grid-cols-1 gap-4" onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            control={control}
-            name="name"
-            rules={{ required: true, minLength: 3 }}
-            render={({ field, fieldState: { invalid } }) => (
-              <Input
-                label="Nom du rapport"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={invalid}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="startDate"
-            rules={{ required: true }}
-            render={({ field, fieldState: { invalid } }) => (
-              <Input
-                label="Mois de début"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={invalid}
-                type="month"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="endDate"
-            rules={{ required: true }}
-            render={({ field, fieldState: { invalid } }) => (
-              <Input
-                label="Mois de fin"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={invalid}
-                type="month"
-              />
-            )}
-          />
-          <Button type="submit" disabled={!isValid || isSubmitting}>
-            Créer le rapport
-          </Button>
-        </form>
+    <form className="grid grid-cols-1 gap-10" onSubmit={handleSubmit(onSubmit)}>
+      <h3 className="text-2xl border-b pb-2">{t('accounting.reports.modals.create.title')}</h3>
+      <div className='flex flex-col gap-2'>
+        <Controller
+          control={control}
+          name="name"
+          rules={{ required: true, minLength: 3 }}
+          render={({ field, fieldState: { invalid } }) => (
+            <Input
+              label={t('accounting.reports.modals.create.fields.name')}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={invalid}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="startDate"
+          rules={{ required: true }}
+          render={({ field, fieldState: { invalid } }) => (
+            <Input
+              label={t('accounting.reports.modals.create.fields.startDate')}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={invalid}
+              type="month"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="endDate"
+          rules={{ required: true }}
+          render={({ field, fieldState: { invalid } }) => (
+            <Input
+              label={t('accounting.reports.modals.create.fields.endDate')}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={invalid}
+              type="month"
+            />
+          )}
+        />
       </div>
-    </Modal>
+      <Button type="submit" disabled={!isValid || isSubmitting}>
+        {t('accounting.reports.modals.create.fields.submit')}
+      </Button>
+    </form>
   )
 }
+const CreateReportModal = ({
+  onSubmitSuccess,
+  disclosure,
+}: CreateReportModalProps) => (
+  <Modal disclosure={disclosure}>
+    {({ close }) => (
+      <CreateReportForm onSubmitSuccess={async () => {
+        await onSubmitSuccess()
+        close()
+      }} />
+    )}
+  </Modal>
+)
 
 export default CreateReportModal

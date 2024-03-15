@@ -1,28 +1,23 @@
 import { Button } from '@coco-ui/core'
 import { ReportApi } from '@/api/ReportApi'
-import { useCallback, useState } from 'react'
 import List from './components/List'
 import CreateReportModal from './modals/CreateReportModal'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { useI18n } from '@/i18n'
 
 const ListPage = () => {
-  const [openModal, setOpenModal] = useState(false)
+  const {t} = useI18n()
   const { data, reload } = useDataLoader(['reports', 'all'], () => ReportApi.findAll())
-  const handleCreate = useCallback(() => {
-    setOpenModal(true)
-  }, [])
 
   return (
-    <div>
-      <div className="flex flex-col items-center md:flex-row pb-2 mb-4 border-b">
-        <h2 className="text-2xl flex-grow">Rapports</h2>
-        <Button onClick={handleCreate}>Créer un rapport</Button>
+    <div className='flex flex-col gap-5'>
+      <div className="flex items-center pb-2 border-b">
+        <h2 className="text-2xl flex-grow">{t('accounting.reports.list.title')}</h2>
         <CreateReportModal
-          isOpen={openModal}
-          onClose={() => setOpenModal(false)}
-          onSubmitSuccess={() => {
-            reload()
-          }}
+          disclosure={
+            <Button variant="primary">{t('accounting.reports.list.create')}</Button>
+          }
+          onSubmitSuccess={reload}
         />
       </div>
       {data ? (
