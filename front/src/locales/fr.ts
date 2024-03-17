@@ -1,6 +1,6 @@
 export default {
   // Global
-  "appName": "Coco ERP",
+  "appName": "CocoBilling",
   "underDevelopment": "Fonctionnalité en cours de développment",
   "contactSupport": "Contactez le support",
   "dataloaderError": "Une erreur est survenue lors de la récupération de vos données, veuillez réessayer ou contactez le support",
@@ -37,6 +37,7 @@ export default {
   "register.fields.email.label": "Email",
   "register.fields.password.label": "Mot de passe",
   "register.fields.name.label": "Nom complet",
+  "register.fields.tos.label": "J'accepte les Conditions Générales d'Utilisation",
 
 
   // Onboarding

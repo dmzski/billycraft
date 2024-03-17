@@ -91,6 +91,72 @@ export const Sortable = () => {
   )
 }
 
+export const Zebra = () => {
+  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
+    data: fakeData,
+    initialSort: { field: 'id', order: 'asc' },
+  })
+  return (
+    <Table zebra>
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="id">
+            Id
+          </Table.HeadCell>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="name">
+            Name
+          </Table.HeadCell>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="skill">
+            Skill
+          </Table.HeadCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        {data.map((row) => (
+          <Table.Row key={row.id}>
+            <Table.Cell>{row.id}</Table.Cell>
+            <Table.Cell>{row.name}</Table.Cell>
+            <Table.Cell>{row.skill}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  )
+}
+
+export const Hoverable = () => {
+  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
+    data: fakeData,
+    initialSort: { field: 'id', order: 'asc' },
+  })
+  return (
+    <Table>
+      <Table.Head>
+        <Table.Row>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="id">
+            Id
+          </Table.HeadCell>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="name">
+            Name
+          </Table.HeadCell>
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="skill">
+            Skill
+          </Table.HeadCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        {data.map((row) => (
+          <Table.Row key={row.id} hoverable>
+            <Table.Cell>{row.id}</Table.Cell>
+            <Table.Cell>{row.name}</Table.Cell>
+            <Table.Cell>{row.skill}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  )
+}
+
 export const Example = () => {
   const { data, sort, onSort } = useTableState({
     data: fakeData,
@@ -109,7 +175,6 @@ export const Example = () => {
             Id
           </Table.HeadCell>
           <Table.HeadCell
-            className="py-1"
             onSort={onSort}
             sort={sort}
             sortable="name"
@@ -117,7 +182,6 @@ export const Example = () => {
             Name
           </Table.HeadCell>
           <Table.HeadCell
-            className="text-center"
             onSort={onSort}
             sort={sort}
             sortable="skill"

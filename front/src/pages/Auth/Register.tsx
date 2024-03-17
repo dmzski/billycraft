@@ -1,4 +1,4 @@
-import { Button, Input, useToast } from "@coco-ui/core"
+import { Button, Checkbox, Input, useToast } from "@coco-ui/core"
 import { SUPPORT_EMAIL } from "@/constants/global"
 import { useI18n } from "@/i18n"
 import { ApiError } from "@/models/ApiError"
@@ -13,6 +13,7 @@ type RegisterFormValues = {
   email: string,
   password: string,
   name: string
+  tos: boolean
 }
 
 export const Register = () => {
@@ -25,9 +26,10 @@ export const Register = () => {
     name: "",
     email: "",
     password: "",
+    tos: false
   } as RegisterFormValues), [])
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm({
     values: initialValues,
     mode: "onChange",
     shouldUseNativeValidation: true
@@ -39,7 +41,7 @@ export const Register = () => {
       toast.success(t('register.success'))
       push(ROUTES.LOGIN.path)
     } catch (err) {
-      if (!(err instanceof ApiError) || err.code === 500){
+      if (!(err instanceof ApiError) || err.code === 500) {
         sendErrorToSentry(err)
       }
       if (err instanceof ApiError) {
@@ -56,7 +58,7 @@ export const Register = () => {
       <div className="md:w-1/3">
         <form className="border rounded p-8 flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="text-3xl text-center">{t('register.title')}</h2>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <Controller
               control={control}
               name="email"
@@ -89,7 +91,20 @@ export const Register = () => {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Button variant="primary" type="submit">{t('register.submit')}</Button>
+            <Controller
+              control={control}
+              name="tos"
+              rules={{
+                required: true
+              }}
+              render={({ field }) => (
+                <div className="flex gap-2">
+                  <Checkbox name={field.name} onChange={field.onChange} checked={field.value} labelPosition="right" />
+                  <a href="/tos.txt" target="_blank" className="link">{t('register.fields.tos.label')}</a>
+                </div>
+              )}
+            />
+            <Button variant="primary" type="submit" disabled={!isValid || isSubmitting}>{t('register.submit')}</Button>
             <div className="flex justify-center">
               <Link to={ROUTES.LOGIN.path} className="link link-info">{t('login.title')}</Link>
             </div>

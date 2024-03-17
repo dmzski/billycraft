@@ -11,14 +11,13 @@ export type useTableStateResult<T extends object> = {
   onSort: (field: keyof T, order: 'asc' | 'desc') => void
 }
 
-const isNumber = (value: unknown): value is number => !Number.isNaN(value)
 
 const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') => {
   const sortedData = [
     ...data.sort((currentRow, nextRow) =>
-      isNumber(currentRow[field]) && isNumber(nextRow[field])
-        ? (currentRow[field] as number) - (nextRow[field] as number)
-        : `${currentRow[field] as string ?? ""}`.localeCompare(nextRow[field] as string ?? "")
+      typeof currentRow[field] === 'number' && typeof nextRow[field] === "number"
+        ? currentRow[field] - nextRow[field]
+        : `${currentRow[field].toString() ?? ""}`.localeCompare(nextRow[field].toString() ?? "")
     ),
   ]
 

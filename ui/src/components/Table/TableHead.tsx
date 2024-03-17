@@ -15,7 +15,7 @@ const TableHead = ({
         <tr className="table-head-row">
           {columns.map((column) => (
             <th
-              className={['table-head', column.className].join(' ')}
+              className={column.className}
               key={column.name}
             >
               {column.name}

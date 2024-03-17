@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from "react"
 
 export type TableRowProps = HTMLAttributes<HTMLTableRowElement> & {
@@ -11,11 +12,10 @@ const TableRow = (
 ) => (
   <tr
     ref={ref}
-    className={[
-      'table-body-row',
-      hoverable ? 'hoverable' : undefined,
+    className={clsx(
+      hoverable ? 'hover cursor-pointer' : null,
       className,
-    ].join(' ')}
+    )}
     {...props}
   >
     {children}
