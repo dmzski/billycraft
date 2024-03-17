@@ -5,7 +5,6 @@
 Actually not a good CI is implemented so :
 
 - Go on the server
-- Upload the deploy/traefik.sh
 - Upload the deploy/docker-compose.yml
 - Upload deploy/.env
 - Upload db/init-db.sh
@@ -18,5 +17,6 @@ Actually not a good CI is implemented so :
 - `docker compose pull back`: To update back
 - `docker compose pull front`: To update front
 - `docker compose pull auth`: To update auth
+- `docker compose pull migrate-auth-db`: To update auth migrator container
 
-Then run `docker-compose up -d` it will update the servics you have downloaded previously
+Then run `docker-compose up -d` it will update the services you have downloaded previously

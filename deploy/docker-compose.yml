@@ -1,19 +1,25 @@
 version: "3"
 
 services:
+  front:
+    image: coco-erp/front:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.front.rule=Host(`${FRONT_DOMAIN}`)"
+      - "traefik.http.routers.front.entrypoints=websecure"
+      - "traefik.http.routers.front.tls.certresolver=cocoresolver"
+
   db:
     image: postgres:10
     environment:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-    ports:
-      - 5432:5432
     volumes:
       - coco_data:/var/lib/postgresql/data
       - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
-  migrate-db:
-    image: coco-erp/migrator:latest
+  migrate-auth-db:
+    image: coco-erp/auth-migrator:latest
     env:
       DATABASE_URL: ${DATABASE_URL}
     depends_on:
@@ -29,6 +35,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.auth.rule=Host(`${AUTH_DOMAIN}`)"
+      - "traefik.http.routers.auth.entrypoints=websecure"
+      - "traefik.http.routers.auth.tls.certresolver=cocoresolver"
       - "traefik.http.middlewares.auth.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
       - "traefik.http.middlewares.auth.headers.accesscontrolalloworiginlist=${ORIGIN}"
       - "traefik.http.middlewares.auth.headers.accesscontrolallowcredentials=true"
@@ -38,7 +46,7 @@ services:
       - "traefik.http.middlewares.auth.headers.addvaryheader=true"
       - "traefik.http.routers.auth.middlewares=auth@docker"
     depends_on:
-      migrate-db:
+      migrate-auth-db:
         conition: service_completed_successfully
 
   api:
@@ -53,6 +61,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=cocoresolver"
       - "traefik.http.middlewares.api-auth.forwardauth.address=http://auth:8080/api/auth/check"
       - "traefik.http.middlewares.api-auth.forwardauth.authResponseHeaders=X-Auth-User"
       - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
@@ -66,10 +76,24 @@ services:
       db:
         condition: service_started
 
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.coco.acme.tlschallenge=true"
+      - "--certificatesresolvers.coco.acme.email=maliszewskid3@gmail.com"
+      - "--certificatesresolvers.coco.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
 networks:
   default:
     name: coco_net
-    external: true
 
 volumes:
   coco_data:

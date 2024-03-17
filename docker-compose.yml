@@ -13,7 +13,7 @@ services:
       - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
   db-migrator:
-    image: coco-erp/migrator:local
+    image: coco-erp/auth-migrator:local
     environment:
       DATABASE_URL: ${DATABASE_URL}
     depends_on:
@@ -45,7 +45,7 @@ services:
     image: coco-erp/api:local
     volumes:
       - ./back:/app
-      - ./upload:/upload
+      - coco_uploads:/upload
     env_file:
       - ./.env
     links:
@@ -85,3 +85,4 @@ networks:
 
 volumes:
   coco_data:
+  coco_uploads:

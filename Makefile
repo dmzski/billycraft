@@ -28,9 +28,6 @@ dev-back:
 clean:
 	docker compose down -v
 
-build:
-	cd ./auth && make build && cd ../back && make build-dev
-
 build-back:
 	cd ../back && make build-dev
 
@@ -55,7 +52,7 @@ release-front:
 release-auth:
 	cd auth && make deploy-docker
 
-release-migrator:
+release-auth-migrator:
 	cd auth && make deploy-migrator
 
 release-www:

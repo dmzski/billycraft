@@ -17,10 +17,10 @@ build-prod:
 	docker build -f ./Dockerfile -t coco-erp/auth:latest .
 
 build-migrator:
-	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:local .
+	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:local .
 
 build-migrator-prod:
-	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:latest .
+	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:latest .
 
 migrate-up:
 	sqlx migrate run
@@ -55,4 +55,4 @@ deploy-docker:
 	docker build -f ./Dockerfile -t coco-erp/auth:latest . && docker push coco-erp/auth:latest
 
 deploy-migrator:
-	docker build -f ./Dockerfile.migrator -t coco-erp/migrator:latest . && docker push coco-erp/migrator:latest
+	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:latest . && docker push coco-erp/migrator:latest
