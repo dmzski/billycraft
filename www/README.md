@@ -1,3 +1,13 @@
+# WWW
+
+## Dev
+
+```sh
+pnpm install
+pnpm run dev
+```
+
 # Deploy website
 
-- Just use the push-site.sh that copy the website on the server
+- `pnpm run build`
+- `./push-site.sh`

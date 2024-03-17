@@ -32,7 +32,7 @@ Add in your host file (/etc/hosts):
 
 ## Changeset used here !
 
-When making any changes run : `pnpm changeset` complete the command then add it in git commit to generate a changelog entry
+When making changes run : `pnpm changeset` complete the command then add it in git commit to generate a changelog entry
 
 ## Lets go dev
 
@@ -66,15 +66,8 @@ pnpm start
 
 ## WWW
 
-Open the index.html in your browser directly
-
-### Build CSS
-
-Use this when you use a tailwind class for the first time in the page. (NEED TO IMPROVE YEAH)
-
-- `pnpm build:css` : One shot build
-- `pnpm build:css:watch` : Rebuild when changes are detected
-
+- `pnpm install` : Install deps
+- `pnpm run dev` : Launch vite server to dev
 
 
 ## Release

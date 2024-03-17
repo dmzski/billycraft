@@ -1,6 +1,6 @@
 export default {
   // Global
-  "appName": "CocoBilling",
+  "appName": "Coco ERP",
   "underDevelopment": "Fonctionnalité en cours de développment",
   "contactSupport": "Contactez le support",
   "dataloaderError": "Une erreur est survenue lors de la récupération de vos données, veuillez réessayer ou contactez le support",

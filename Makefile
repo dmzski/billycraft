@@ -56,4 +56,4 @@ release-auth-migrator:
 	cd auth && make deploy-migrator
 
 release-www:
-	cd www && ./push-site.sh
+	cd www && pnpm run build && ./push-site.sh

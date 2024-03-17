@@ -1,2 +1,2 @@
 #!/bin/bash
-scp -r ./src debian@coco-erp.fr:~/site
+scp -r ./dist debian@coco-erp.fr:~/site
