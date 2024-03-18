@@ -4,12 +4,12 @@
 FROM golang:1.17 AS build
 
 WORKDIR /app
-ADD . /app
-COPY go.mod ./
-COPY go.sum ./
+ADD ./back /app
+COPY ./back/go.mod ./
+COPY ./back/go.sum ./
 RUN go mod download
 
-COPY *.go ./
+COPY ./back/*.go ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 

@@ -13,13 +13,16 @@ export type useTableStateResult<T extends object> = {
 
 
 const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') => {
-  const sortedData = [
-    ...data.sort((currentRow, nextRow) =>
-      typeof currentRow[field] === 'number' && typeof nextRow[field] === "number"
-        ? currentRow[field] - nextRow[field]
-        : `${currentRow[field].toString() ?? ""}`.localeCompare(nextRow[field].toString() ?? "")
-    ),
-  ]
+  const sortedData = [...data].sort((currentRow, nextRow) => {
+    if (typeof currentRow[field] === 'number' && typeof nextRow[field] === "number") {
+      return (currentRow[field] as number) - (nextRow[field] as number)
+    }
+    if (typeof currentRow[field] === "string" && typeof nextRow[field] === "string") {
+      return `${currentRow[field] as string ?? ""}`.localeCompare(nextRow[field] as string ?? "")
+    }
+
+    return 0
+  })
 
   return order === 'asc' ? sortedData : sortedData.reverse()
 }

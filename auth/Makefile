@@ -1,3 +1,6 @@
+REGISTRY=rg.fr-par.scw.cloud/coco-erp
+AUTH_DOCKERFILES_FOLDER=../dockers/auth
+
 dev:
 	docker compose up -d postgres
 
@@ -11,16 +14,16 @@ prepare:
 	cargo sqlx prepare
 
 build:
-	docker build -f ./Dockerfile.dev -t coco-erp/auth:local .
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.dev -t coco-erp/auth:local ../
 
 build-prod:
-	docker build -f ./Dockerfile -t coco-erp/auth:latest .
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t coco-erp/auth:latest ../
 
 build-migrator:
-	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:local .
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t coco-erp/auth-migrator:local ../
 
 build-migrator-prod:
-	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:latest .
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t coco-erp/auth-migrator:latest ../
 
 migrate-up:
 	sqlx migrate run
@@ -52,7 +55,7 @@ install:
 	cargo install sqlx-cli
 
 deploy-docker:
-	docker build -f ./Dockerfile -t coco-erp/auth:latest . && docker push coco-erp/auth:latest
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t ${REGISTRY}/auth:latest ../ && docker push ${REGISTRY}/auth:latest
 
 deploy-migrator:
-	docker build -f ./Dockerfile.migrator -t coco-erp/auth-migrator:latest . && docker push coco-erp/migrator:latest
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t ${REGISTRY}/auth-migrator:latest ../ && docker push ${REGISTRY}/auth-migrator:latest

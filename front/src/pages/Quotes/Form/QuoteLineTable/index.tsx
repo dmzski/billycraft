@@ -1,7 +1,7 @@
 import { Button, Select } from '@coco-ui/core'
 import { ProductApi } from '@/api/ProductApi'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { useCallback, useMemo, useState } from 'react'
+import { ComponentProps, useCallback, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'

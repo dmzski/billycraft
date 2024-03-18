@@ -2,7 +2,7 @@ version: "3"
 
 services:
   front:
-    image: coco-erp/front:latest
+    image: coco-erp/app:latest
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host(`${FRONT_DOMAIN}`)"
