@@ -8,4 +8,4 @@
 node_modules/
 
 upload/
-.env.local
+.env

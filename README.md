@@ -34,11 +34,17 @@ Add in your host file (/etc/hosts):
 
 When making changes run : `pnpm changeset` complete the command then add it in git commit to generate a changelog entry
 
+---
+
 ## Lets go dev
 
-Here is all you need usually to dev auth, back or front
+Here is all you need usually to dev auth, back, front or website
 
-## Dev back and auth
+### Setup env
+
+- copy paste .env.dist into .env and changes value for SCW_SECRET_KEY (if you need it)
+
+### Dev back and auth
 
 - Start back and auth for the first time 
 ```sh
@@ -55,7 +61,7 @@ make clean
 make down
 ```
 
-## Frontend
+### Frontend
 
 ```sh
 cd front
@@ -64,22 +70,24 @@ pnpm start
 # go to app.coco-erp.lan:3000
 ```
 
-## WWW
+### WWW
 
 - `pnpm install` : Install deps
 - `pnpm run dev` : Launch vite server to dev
+
+---
 
 
 ## Release
 
 You have a make command to deploy each services on registry then pull the images on the server.
 
-- Login in the registry : copy .env.local.dist and add your key
-- `./deploy/login.sh`
+- Login to docker registry : `./deploy/login.sh`
+- Generate changelogs : `pnpm changeset version` 
+- Commit changes : `git add . && git commit -m "chore: release" && git push`
 
+- Choose what you want to deploy
 ```sh
-pnpm changeset version
-# Commit changes in changelogs and push them
 make release-auth-migrator
 make release-auth
 make release-back
