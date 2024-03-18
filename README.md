@@ -74,6 +74,9 @@ pnpm start
 
 You have a make command to deploy each services on registry then pull the images on the server.
 
+- Login in the registry : copy .env.local.dist and add your key
+- `./deploy/login.sh`
+
 ```sh
 pnpm changeset version
 # Commit changes in changelogs and push them

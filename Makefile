@@ -43,6 +43,9 @@ build-auth:
 build-prod:
 	cd ./auth && make build-prod && cd ../back && make build-prod
 
+docker-login:
+	source .env.local && ./deploy/login.sh
+
 release-back:
 	cd back && make deploy-docker
 
