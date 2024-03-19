@@ -40,17 +40,21 @@ func LoadConfig() (config Config, err error) {
 		viper.AddConfigPath(".")
 		viper.SetConfigName("app")
 		viper.SetConfigType("env")
+    err = viper.ReadInConfig()
+    if err != nil {
+      return config, err
+    }
 	}
 
 	// Override with env variable
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
-	if err != nil {
-		return
-	}
 
 	err = viper.Unmarshal(&config)
+  if err != nil {
+    return
+  }
+
 	appConfig = config
 	return
 }

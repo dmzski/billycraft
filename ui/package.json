@@ -73,7 +73,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o docs",
     "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}'"
+    "lint": "eslint 'src/**/*.{js,ts,tsx}'",
+    "prepare": "pnpm run build"
   },
   "publishConfig": {
     "access": "public",
