@@ -2,10 +2,7 @@ REGISTRY=rg.fr-par.scw.cloud/coco-erp
 AUTH_DOCKERFILES_FOLDER=../dockers/auth
 
 dev:
-	docker compose up -d postgres
-
-up:
-	docker compose up -d
+	cd ../ && docker compose up -d db
 
 down:
 	docker compose down

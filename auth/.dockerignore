@@ -5,3 +5,5 @@ Dockerfile
 Dockerfile.dev
 docker.env
 README.md
+CHANGELOG.ms
+package.json

@@ -15,3 +15,7 @@ EOSQL
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname coco <<-EOSQL
   CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname coco_auth <<-EOSQL
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+EOSQL
