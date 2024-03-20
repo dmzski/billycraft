@@ -6,9 +6,9 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE DATABASE coco_auth;
     GRANT ALL PRIVILEGES ON DATABASE coco_auth TO auth;
 
-    CREATE USER coco_api WITH PASSWORD 'coco_api';
+    CREATE USER coco WITH PASSWORD 'coco';
     CREATE DATABASE coco;
-    GRANT ALL PRIVILEGES ON DATABASE coco TO coco_api;
+    GRANT ALL PRIVILEGES ON DATABASE coco TO coco;
 
 EOSQL
 

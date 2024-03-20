@@ -23,6 +23,7 @@
   "packageManager": "^pnpm@8.14.0",
   "scripts": {
     "start": "vite",
+    "start:lan": "MODE=lan vite --mode lan",
     "start:staging": "vite --mode staging",
     "build": "tsc && vite build",
     "build:staging": "tsc && vite build --mode staging",

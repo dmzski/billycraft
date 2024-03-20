@@ -11,7 +11,7 @@ type MainProviderProps = {
 }
 const MainProvider = ({ children }: MainProviderProps) => (
     <DataLoaderProvider>
-      <AuthProvider>
+      <AuthProvider useAuthorizationHeader={window.location.hostname.includes("localhost")}>
         <ToastProvider>
           <UserProvider>{children}</UserProvider>
         </ToastProvider>

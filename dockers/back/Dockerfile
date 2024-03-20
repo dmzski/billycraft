@@ -26,6 +26,7 @@ WORKDIR /app/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=build /app/main .
+COPY ./back/migrations /app/migrations
 
 # Expose port 8080
 EXPOSE 8080

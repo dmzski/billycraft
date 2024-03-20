@@ -9,7 +9,6 @@ COPY ./pnpm-workspace.yaml ./
 COPY ./package.json ./
 RUN npm install -g pnpm
 RUN pnpm install
-RUN cd ./ui/ && pnpm run build
 RUN cd ./front && pnpm run build
 
 # production environment

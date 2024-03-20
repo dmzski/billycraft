@@ -135,7 +135,7 @@ pub async fn login_user_handler(
 
     let now = chrono::Utc::now();
     let iat = now.timestamp() as usize;
-    let exp = (now + chrono::Duration::minutes(60)).timestamp() as usize;
+    let exp = (now + chrono::Duration::hours(2)).timestamp() as usize;
     let claims: TokenClaims = TokenClaims {
         sub: user.id.to_string(),
         exp,
@@ -150,13 +150,7 @@ pub async fn login_user_handler(
     )
     .unwrap();
 
-    let cookie = Cookie::build("coco_at", token.to_owned())
-        .domain(data.env.domain.to_string())
-        .path("/")
-        .max_age(time::Duration::hours(2))
-        .same_site(SameSite::Lax)
-        .http_only(true)
-        .finish();
+    let cookie = build_cookie(data, token.to_owned(), time::Duration::hours(2));
 
     let mut response = Response::new(json!({"token": token}).to_string());
     response
@@ -167,14 +161,8 @@ pub async fn login_user_handler(
 
 pub async fn logout_handler(
     State(data): State<Arc<AppState>>,
-    ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let cookie = Cookie::build("coco_at", "")
-        .domain(data.env.domain.to_string())
-        .path("/")
-        .max_age(time::Duration::hours(-1))
-        .same_site(SameSite::Lax)
-        .http_only(true)
-        .finish();
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let cookie = build_cookie(data, "".to_string(), time::Duration::hours(-1));
 
     let mut response = Response::new("success".to_string());
     response
@@ -198,7 +186,7 @@ pub async fn refresh_session(
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
     let now = chrono::Utc::now();
     let iat = now.timestamp() as usize;
-    let exp = (now + chrono::Duration::minutes(60)).timestamp() as usize;
+    let exp = (now + chrono::Duration::hours(2)).timestamp() as usize;
     let claims: TokenClaims = TokenClaims {
         sub: user.id.to_string(),
         exp,
@@ -213,13 +201,7 @@ pub async fn refresh_session(
     )
     .unwrap();
 
-    let cookie = Cookie::build("coco_at", token.to_owned())
-        .domain(data.env.domain.to_string())
-        .path("/")
-        .max_age(time::Duration::hours(2))
-        .same_site(SameSite::Lax)
-        .http_only(true)
-        .finish();
+    let cookie = build_cookie(data, token.to_owned(), time::Duration::hours(2));
 
     let mut response = Response::new(json!({"status": "success", "token": token}).to_string());
     response
@@ -237,4 +219,27 @@ fn filter_user_record(user: &User) -> FilteredUser {
         created_at: user.created_at.unwrap(),
         updated_at: user.updated_at.unwrap(),
     }
+}
+
+fn build_cookie<'a>(data: Arc<AppState>, token: String, duration: time::Duration) -> Cookie<'a> {
+    // This is the test domain when developping locally
+    if data.env.domain == "coco-erp.lan" {
+        return Cookie::build("coco_at", token)
+            .domain(data.env.domain.to_string())
+            .http_only(true)
+            .max_age(duration)
+            .path("/")
+            .secure(false)
+            .same_site(SameSite::None)
+            .finish();
+    }
+
+    return Cookie::build("coco_at", token)
+        .path("/")
+        .secure(true)
+        .domain(data.env.domain.to_string())
+        .same_site(SameSite::Strict)
+        .max_age(duration)
+        .http_only(true)
+        .finish();
 }

@@ -10,7 +10,7 @@ services:
       - 5432:5432
     volumes:
       - coco_data:/var/lib/postgresql/data
-      - ./db/init-db.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./deploy/init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
   db-migrator:
     image: coco-erp/auth-migrator:local

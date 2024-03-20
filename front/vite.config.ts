@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    host: "app.coco-erp.lan"
+    host: process.env.MODE === "lan" ? "app.coco-erp.lan" : "localhost"
   },
   resolve: {
     alias: [

@@ -1,5 +1,4 @@
 .dockerignore
-app.env
 .env
 Makefile
 Insomnia.json

@@ -42,7 +42,7 @@ Here is all you need usually to dev auth, back, front or website
 
 ### Setup env
 
-- copy paste .env.dist into .env and changes value for SCW_SECRET_KEY (if you need it)
+- copy paste .env.dist into .env
 
 ### Dev back and auth
 
@@ -52,22 +52,33 @@ make prepare # build dev images
 make dev # or make up for detached process
 ```
 - Then usually when you work on the api (no auth db changes) just do `make dev`
-- Cleaning database
-```sh
-make clean
-```
+
 - Stop all (without cleaning db)
 ```sh
 make down
 ```
+- Cleaning database
+```sh
+make clean
+```
 
 ### Frontend
+
+- By default it will start in staging mode. If you dev APIs switch to lan mode (see below)
 
 ```sh
 cd front
 pnpm install
 pnpm start
-# go to app.coco-erp.lan:3000
+# go to localhost:3000
+```
+
+### Using lan mode
+
+```sh
+cd front
+pnpm install
+pnpm start:lan
 ```
 
 ### WWW
@@ -82,15 +93,16 @@ pnpm start
 
 You have a make command to deploy each services on registry then pull the images on the server.
 
-- Login to docker registry : `./deploy/login.sh`
+- Login to docker registry with `SCW_SECRET_KEY=XXXX ./deploy/login.sh`
 - Generate changelogs : `pnpm changeset version` 
 - Commit changes : `git add . && git commit -m "chore: release" && git push`
 
 - Choose what you want to deploy
 ```sh
-make release-auth-migrator
-make release-auth
-make release-back
-make release-front
-make release-www
+make auth-migrator-release
+make auth-release
+make back-release
+make front-release
+make front-stg-release
+make www-release
 ```

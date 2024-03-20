@@ -1,14 +1,18 @@
-up:
-	docker compose up -d
 
-up-prod:
-	docker compose up -d
-
+#
+# General
+#
 prepare:
 	cd ./auth && make build && make build-migrator && cd ../back && make build-dev
 
 prepare-prod:
 	cd ./auth && make build-prod && make build-migrator && cd ../back && make build-prod
+
+up:
+	docker compose up -d
+
+dev:
+	docker compose up -d && docker compose logs -f
 
 logs:
 	docker compose logs -f
@@ -16,47 +20,55 @@ logs:
 down:
 	docker compose down
 
-dev:
-	docker compose up -d && docker compose logs -f
-
-dev-auth:
-	docker compose up -d && docker compose logs -f auth
-
-dev-back:
-	docker compose up -d && docker compose logs -f api
-
 clean:
 	docker compose down -v
 
-build-back:
+#
+# Back
+#
+back-dev:
+	docker compose up -d && docker compose logs -f api
+
+back-build:
 	cd ./back && make build-dev
 
-build-back-prod:
+back-build-prod:
 	cd ./back && make build-prod
 
-build-auth-prod:
-	cd ./auth && make build-prod
-
-build-auth:
-	cd ./auth && make build
-
-build-prod:
-	cd ./auth && make build-prod && cd ../back && make build-prod
-
-release-back:
+back-release:
 	cd back && make deploy-docker
 
-release-front:
-	cd front && make deploy-docker
+#
+# Auth
+#
+auth-dev:
+	docker compose up -d && docker compose logs -f auth
 
-release-stg-front:
-	cd front && make stg-deploy-docker
+auth-build-prod:
+	cd ./auth && make build-prod
 
-release-auth:
+auth-build:
+	cd ./auth && make build
+
+auth-release:
 	cd auth && make deploy-docker
 
-release-auth-migrator:
+# Auth Migrator
+auth-migrator-release:
 	cd auth && make deploy-migrator
 
-release-www:
+#
+# Front
+#
+front-release:
+	cd front && make deploy-docker
+
+front-stg-release:
+	cd front && make stg-deploy-docker
+
+
+#
+# WWW
+#
+www-release:
 	cd www && pnpm run build && ./push-site.sh
