@@ -1,11 +1,11 @@
-import { Table, useTableState } from '@coco-ui/core'
+import { useTableState } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
 import Bill from '@/models/Bill'
 import BillTableLine from './Row'
 import { useI18n } from '@/i18n'
 
 const BillList = ({ data }: { data: Bill[] }) => {
-  const { t } = useI18n()
+  const {t} = useI18n()
   const customers = useCustomers()
   const { data: bills } = useTableState({
     data,
@@ -13,18 +13,16 @@ const BillList = ({ data }: { data: Bill[] }) => {
   })
 
   return (
-    <Table>
-      <Table.Head
-       columns={[
-        {name: t('bills.list.headers.reference')},
-        {name: t('bills.list.headers.title')},
-        {name: t('bills.list.headers.customer')},
-        {name: t('bills.list.headers.createdAt')},
-        {name: t('bills.list.headers.updatedAt')},
-        {name: t('bills.list.headers.status')}
-       ]}
-      />
-      <Table.Body>
+    <div className="flex flex-col">
+      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
+        <div className="col-span-1">{t('bills.list.headers.reference')}</div>
+        <div className="col-span-3">{t('bills.list.headers.title')}</div>
+        <div className="col-span-2">{t('bills.list.headers.customer')}</div>
+        <div className="col-span-2">{t('bills.list.headers.createdAt')}</div>
+        <div className="col-span-2">{t('bills.list.headers.updatedAt')}</div>
+        <div className="col-span-2">{t('bills.list.headers.status')}</div>
+      </div>
+      <div className="flex flex-col">
         {bills.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
@@ -32,8 +30,8 @@ const BillList = ({ data }: { data: Bill[] }) => {
             bill={bill}
           />
         ))}
-      </Table.Body>
-    </Table>
+      </div>
+    </div>
   )
 }
 

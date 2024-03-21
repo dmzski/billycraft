@@ -1,4 +1,4 @@
-import { Button, Dropdown, Table, useToast } from '@coco-ui/core'
+import { Button, Dropdown, useToast } from '@coco-ui/core'
 import { BillApi } from '@/api/BillApi'
 import { STRINGS } from '@/constants/strings'
 import { formatISO9075, parseJSON } from 'date-fns'
@@ -58,21 +58,21 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
   }, [bill])
 
   return (
-    <Table.Row>
-      <Table.Cell className="md:col-span-1 text-sm">
+    <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
+      <div className="md:col-span-1 text-sm">
         <Link className="link-primary" to={ROUTES.BILL_FORM.path.replace(':id', bill.id ?? 'new')}>
           {bill.id}
         </Link>
-      </Table.Cell>
-      <Table.Cell className="md:col-span-3 truncate">{bill.title}</Table.Cell>
-      <Table.Cell className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</Table.Cell>
-      <Table.Cell className="md:col-span-2">
+      </div>
+      <div className="md:col-span-3 truncate">{bill.title}</div>
+      <div className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</div>
+      <div className="md:col-span-2">
         {formatISO9075(parseJSON(bill.createdAt))}
-      </Table.Cell>
-      <Table.Cell className="md:col-span-2">
+      </div>
+      <div className="md:col-span-2">
         {bill.updatedAt ? formatISO9075(parseJSON(bill.updatedAt)) : '-'}
-      </Table.Cell>
-      <Table.Cell className="md:col-span-2">
+      </div>
+      <div className="md:col-span-2">
         <Dropdown>
           <Button>{t(`bills.status.${bill.status}`)}</Button>
           <Dropdown.Content>
@@ -86,8 +86,8 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
             ))}
           </Dropdown.Content>
         </Dropdown>
-      </Table.Cell>
-    </Table.Row>
+      </div>
+    </div>
   )
 }
 
