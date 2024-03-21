@@ -160,4 +160,76 @@ export default {
   // Accounting > Reports > List
   "accounting.reports.list.title": "Rapports",
   "accounting.reports.list.create": "Créer un rapport",
+
+  // Acounting > Switch
+  "accounting.heaging.overview": "Vue d'ensemble",
+  "accounting.heaging.list": "Tous les rapports d'activité",
+
+  // Accounting > Overview
+  "accounting.overview.currentMonth": "Mois en cours : ",
+  "accounting.overview.currentYear": "Année en cours",
+
+  // Bills > Status
+  "bills.status.DRAFT": "Brouillon",
+  "bills.status.SENT": "Envoyée",
+  "bills.status.REFUSED": "Refusée",
+  "bills.status.PAYMENT_PAID": "Payée",
+  "bills.status.TO_DECLARE": "A déclarer",
+  "bills.status.ACCEPTED": "Acceptée",
+  "bills.status.ARCHIVED": "Archivée",
+
+  // Bills > List
+  "bills.list.title": "Factures",
+  "bills.list.add": "Nouvelle Facture",
+  "bills.list.headers.reference": "#",
+  "bills.list.headers.title": "Title",
+  "bills.list.headers.customer": "Client",
+  "bills.list.headers.createdAt": "Créée le",
+  "bills.list.headers.updatedAt": "Mise à jour le",
+  "bills.list.headers.status": "Statut",
+
+  // Bills > List > Filters
+  "bills.list.filters.fields.reference.label": "#",
+  "bills.list.filters.fields.title.label": "Titre",
+  "bills.list.filters.fields.customer.label": "Client",
+  "bills.list.filters.fields.createdAt.label": "Créée le",
+  "bills.list.filters.fields.sentAt.label": "Envoyée le",
+  "bills.list.filters.fields.status.label": "Statut",
+
+  // Bills > Form
+  "bills.form.backTo": "Retourner à la liste des factures",
+  "bills.form.pdfError": "Erreur lors de la génération du PDF",
+  "bills.form.title.new": "Nouvelle facture",
+  "bills.form.title.edit": "Modification de facture",
+  "bills.form.downloadPdfButton": "Télécharger le PDF",
+  "bills.form.exitWarning": "Attention ! Certaines modifications ne sont pas enregistrées",
+  "bills.form.fields.title.label": "Titre",
+  "bills.form.fields.title.placeholder": "Titre de la facture",
+  "bills.form.fields.customerId.label": "Client",
+  "bills.form.fields.customerId.placeholder": "Nom du client",
+  "bills.form.fields.vat.label": "TVA (%)",
+  "bills.form.fields.vat.placeholder": "0",
+  "bills.form.submit": "Enregistrer",
+  "bills.form.submit.success": "Facture enregistré",
+  "bills.form.submit.edit.success": "État de la facture mis à jour",
+  "bills.form.actions.sent": "Facture envoyée",
+  "bills.form.actions.paid": "Facture payée",
+  "bills.form.actions.refused": "Facture refusée",
+  "bills.form.actions.archive": "Archiver la facture",
+  // Bills > Form > LineTable
+  "bills.form.lines.existingProduct.label": "Sélectionner un produit existant",
+  "bills.form.lines.existingProduct.add": "Ajouter",
+  "bills.form.lines.headers.type": "Type",
+  "bills.form.lines.headers.name": "Nom",
+  "bills.form.lines.headers.description": "Description",
+  "bills.form.lines.headers.quantity": "Quantité",
+  "bills.form.lines.headers.etPrice": "Total HT",
+  "bills.form.lines.headers.itPrice": "Total TTC",
+  "bills.form.lines.headers.subTotal": "Sous total",
+  "bills.form.lines.add": "Ajouter une ligne",
+  "bills.form.lines.fields.name.placeholder": "Nom",
+  "bills.form.lines.fields.description.placeholder": "Description",
+  "bills.form.lines.fields.quantity.placeholder": "Quantité",
+  "bills.form.lines.fields.etPrice.placeholder": "Prix HT",
+
 } as const

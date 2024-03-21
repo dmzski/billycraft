@@ -4,10 +4,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { BillApi } from '@/api/BillApi'
 import { Prompt } from 'react-router-dom'
 import useCustomers from '@/hooks/useCustomers'
-import { STRINGS } from '@/constants/strings'
 import Bill, { BillStatusEnum, BillLine } from '../../../models/Bill'
 import BillLineTable from './BillLineTable'
 import { ArchiveBoxArrowDownIcon, EnvelopeIcon, HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 export type BillFormValues = {
   lines: Array<BillLine & { id: string }>
@@ -21,6 +21,7 @@ type BillFormProps = {
 }
 
 const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
+  const { t } = useI18n()
   const toast = useToast()
   const customers = useCustomers()
   const {
@@ -39,10 +40,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
   const updateBillStatus = (status: BillStatusEnum) => async () => {
     try {
       const res = await BillApi.updateStatus({ id: bill.id, status })
-      toast.success(STRINGS.SAVE_SUCCESS)
+      toast.success(t('bills.form.submit.edit.success'))
       onSubmitSuccess(res as Bill)
     } catch {
-      toast.error(STRINGS.SAVE_ERROR)
+      toast.error(t('genericFormError'))
     }
   }
 
@@ -63,9 +64,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
       const res = await BillApi.createOrUpdate(tmp)
       reset(res)
       onSubmitSuccess(res)
-      toast.success(STRINGS.SAVE_SUCCESS)
+      toast.success(t('bills.form.submit.success'))
     } catch {
-      toast.error(STRINGS.SAVE_ERROR)
+      toast.error(t('genericFormError'))
     }
   }
 
@@ -104,7 +105,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Prompt
         when={isDirty}
-        message="Attention ! Certaines modifications ne sont pas enregistrées"
+        message={t('bills.form.exitWarning')}
       />
       <Controller
         name="title"
@@ -112,10 +113,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
         rules={{ required: true, minLength: 3 }}
         render={({ field, fieldState: { invalid } }) => (
           <Input
-            label="Titre"
+            label={t('bills.form.fields.title.label')}
             disabled={disabled}
             error={invalid}
-            placeholder="Titre du devis"
+            placeholder={t('bills.form.fields.title.placeholder')}
             onChange={field.onChange}
             onBlur={field.onBlur}
             name={field.name}
@@ -133,14 +134,14 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
           <Select
             tabIndex={0}
             error={invalid}
-            label="Sélectionner un client *"
+            label={t('bills.form.fields.customerId.label')}
             autoComplete='off'
             id="customer-select"
             name={field.name}
             disabled={disabled}
             onChange={field.onChange}
             options={customerOptions}
-            placeholder="Nom du client"
+            placeholder={t('bills.form.fields.customerId.placeholder')}
             value={field.value}
             isSearchable
             ref={field.ref}
@@ -154,9 +155,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
         rules={{ min: 0, max: 100 }}
         render={({ field, fieldState: { invalid } }) => (
           <Input
-            label="TVA (%)"
+            label={t('bills.form.fields.vat.label')}
             disabled={disabled}
-            placeholder="TVA en %"
+            placeholder={t('bills.form.fields.vat.placeholder')}
             type="number"
             value={field.value}
             name={field.name}
@@ -176,7 +177,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             variant="success"
             disabled={isValidating || isSubmitting || disabled}
           >
-            Enregistrer
+            {t('bills.form.submit')}
           </Button>
         ) : null}
         {bill.id && bill.status === BillStatusEnum.DRAFT ? (
@@ -186,9 +187,12 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             type="button"
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
+            className='gap-1'
           >
             <EnvelopeIcon className='w-5' />
-            &nbsp; Envoyer la facture
+            <span>
+              {t('bills.form.actions.sent')}
+            </span>
           </Button>
         ) : null}
         {bill.status === BillStatusEnum.SENT ? (
@@ -198,25 +202,27 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               type="button"
               variant="success"
               onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
+              className='gap-1'
             >
               <HandThumbUpIcon className='w-5' />
-              &nbsp; Facture payée
+              <span>{t('bills.form.actions.paid')}</span>
             </Button>
             <Button
               size="md"
               type="button"
               variant="error"
               onClick={updateBillStatus(BillStatusEnum.REFUSED)}
+              className='gap-1'
             >
               <HandThumbDownIcon className='w-5' />
-              &nbsp; Facture refusée
+              <span>{t('bills.form.actions.refused')}</span>
             </Button>
           </>
         ) : null}
         {bill.status === BillStatusEnum.PAYMENT_PAID ? (
-          <Button size="md" type="button" onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
+          <Button size="md" type="button" className='gap-1' onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
             <ArchiveBoxArrowDownIcon className='w-5' />
-            &nbsp; Archiver la facture
+            <span>{t('bills.form.actions.archive')}</span>
           </Button>
         ) : null}
       </div>

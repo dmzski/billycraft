@@ -2,7 +2,6 @@ import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { BillApi } from '@/api/BillApi'
-import { BILL_STATUS } from '@/constants/bill'
 import { PdfApi } from '../../../api/PdfApi'
 import useLoadingState from '../../../hooks/useLoadingState'
 import Bill from '../../../models/Bill'
@@ -10,8 +9,10 @@ import { ROUTES } from '../../../routes'
 import BillForm from './Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
 import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 const BillFormPage = () => {
+  const { t } = useI18n()
   const [newBill, setNewBill] = useState<Bill>({} as Bill)
   const toast = useToast()
   const pdfState = useLoadingState()
@@ -43,7 +44,7 @@ const BillFormPage = () => {
         pdfState.update('idle')
       }
     } catch {
-      toast.error('Erreur lors de la génération du PDF')
+      toast.error(t('bills.form.pdfError'))
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)
@@ -57,29 +58,29 @@ const BillFormPage = () => {
   return (
     <div className="w-full flex flex-col gap-4">
       <div>
-        <Button variant="ghost" onClick={history.goBack}>
+        <Button className='gap-1' variant="ghost" onClick={history.goBack}>
           <ChevronLeftIcon className='w-5' />
-          &nbsp; Retourner à la liste des factures
+          <span>{t('bills.form.backTo')}</span>
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center flex-grow gap-2">
-          <h1 className="text-3xl">{!newBill.id ? 'Nouvelle facture' : 'Modifier une facture'}</h1>
+          <h1 className="text-3xl">{!newBill.id ? t('bills.form.title.new') : t('bills.form.title.edit')}</h1>
           {newBill.status ? (
             <Badge variant="info" size="sm">
-              {BILL_STATUS[newBill.status]?.text}
+              {t(`bills.status.${newBill.status}`)}
             </Badge>
           ) : null}
         </div>
-        {newBill && newBill.id ? (
+        {newBill?.id !== undefined ? (
           <Button
             disabled={pdfState.isLoading}
-            title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
+            className='gap-1'
           >
             <DocumentArrowDownIcon className='w-5' />
-            &nbsp; Télécharger le PDF
+            <span>{t('bills.form.downloadPdfButton')}</span>
           </Button>
         ) : null}
       </div>

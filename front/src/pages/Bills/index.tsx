@@ -9,6 +9,7 @@ import { filterBills } from '../../utils/bill'
 import BillTable from './List'
 import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 type BillFilters = Record<string, string>
 
@@ -17,6 +18,7 @@ const BillPage = () => {
   const [filters, setFilters] = useState<BillFilters>({})
   const { data, isLoading } = useDataLoader('bills', () => BillApi.findAllNotArchivedAndNotRefused())
   const history = useHistory()
+  const { t } = useI18n()
 
   const billSorted = useCallback(
     () => filterBills(data ?? [], filters, customers),
@@ -28,12 +30,12 @@ const BillPage = () => {
   }
 
   return (
-    <>
-      <div className="flex justify-between mb-4">
-        <h1 className="text-3xl">Factures</h1>
-        <Button size="md" variant="primary" onClick={goToNewBill}>
+    <div className='flex flex-col gap-4'>
+      <div className="flex justify-between">
+        <h1 className="text-3xl">{t('bills.list.title')}</h1>
+        <Button size="md" className='gap-1' variant="primary" onClick={goToNewBill}>
           <PlusIcon className='w-5' />
-          &nbsp; Nouvelle facture
+          <span>{t('bills.list.add')}</span>
         </Button>
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
@@ -43,7 +45,7 @@ const BillPage = () => {
           <Loader variant='primary' />
         </div>
       ) : null}
-    </>
+    </div>
   )
 }
 

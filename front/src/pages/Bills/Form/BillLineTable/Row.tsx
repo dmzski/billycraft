@@ -8,6 +8,7 @@ import { BillFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
 import {CSS} from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable'
+import { useI18n } from '@/i18n'
 
 type BillLineTableLineProps = {
   deleteLine: () => void
@@ -23,6 +24,7 @@ const BillLineTableLine = ({
   control,
   id,
 }: BillLineTableLineProps) => {
+  const {t} = useI18n()
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
   const typeRef = useRef<HTMLInputElement | null>()
@@ -114,7 +116,7 @@ const BillLineTableLine = ({
         render={({ field, fieldState: { invalid } }) => (
           <Input
             required
-            placeholder="Nom"
+            placeholder={t('bills.form.lines.fields.name.placeholder')}
             className="md:col-span-3"
             disabled={disabled}
             value={field.value}
@@ -134,7 +136,7 @@ const BillLineTableLine = ({
         control={control}
         render={({ field }) => (
           <TextArea
-            placeholder="Description"
+            placeholder={t('bills.form.lines.fields.description.placeholder')}
             rows={1}
             className="md:col-span-3"
             disabled={disabled}
@@ -157,7 +159,7 @@ const BillLineTableLine = ({
           <Input
             disabled={disabled}
             className="md:col-span-1"
-            placeholder="Quantité"
+            placeholder={t('bills.form.lines.fields.quantity.placeholder')}
             type="number"
             step={0.01}
             name={field.name}
@@ -182,7 +184,7 @@ const BillLineTableLine = ({
           <Input
             disabled={disabled}
             className="md:col-span-1"
-            placeholder="Prix"
+            placeholder={t('bills.form.lines.fields.etPrice.placeholder')}
             type="number"
             step={0.01}
             value={field.value ?? ''}

@@ -3,13 +3,13 @@ import { ProductApi } from '@/api/ProductApi'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useCallback, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
-import { nanoid } from 'nanoid'
 import BillLineTableLine from './Row'
 import { BillFormValues } from '../Form'
 import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { DndContext } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
+import { useI18n } from '@/i18n'
 
 const defaultLine = {
   description: '',
@@ -25,6 +25,7 @@ type BillLineTableProps = {
 }
 
 const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
+  const {t} = useI18n()
   const productsQuery = useDataLoader('products', ProductApi.findAll)
   const [productIdSelected, setProductIdSelected] = useState<number>()
   const onProductSelectedChange = useCallback((option: string) => {
@@ -56,7 +57,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
 
   const addLine = useCallback(
     (newLine = defaultLine) => {
-      append({ ...defaultLine, ...newLine, line: fields.length, billId: "", id: nanoid() })
+      append({ ...defaultLine, ...newLine, line: fields.length, billId: "", id: '' })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -96,22 +97,22 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
           id="existing-product"
           options={productOptions}
           isSearchable
-          placeholder="Sélectionner un produit existant"
+          placeholder={t('bills.form.lines.existingProduct.label')}
           value={productIdSelected}
           onChange={onProductSelectedChange}
         />
         <Button block onClick={addExistingProductSelected} type="button" variant="primary">
-          Ajouter
+          {t('bills.form.lines.existingProduct.add')}
         </Button>
       </div>
       <div className="rounded-t bg-base-200 grid md:grid-cols-12 gap-2 p-4 mb-1">
-        <div className="pl-4 md:col-span-2">Type</div>
-        <div className="md:col-span-3">Nom&nbsp;*</div>
-        <div className="md:col-span-3">Description</div>
-        <div className="md:col-span-1">Quantité</div>
-        <div className="md:col-span-1">Prix HT</div>
-        <div className="md:col-span-1">Prix TTC</div>
-        <div className="md:col-span-1">Sous total</div>
+        <div className="pl-4 md:col-span-2">{t('bills.form.lines.headers.type')}</div>
+        <div className="md:col-span-3">{t('bills.form.lines.headers.name')}</div>
+        <div className="md:col-span-3">{t('bills.form.lines.headers.description')}</div>
+        <div className="md:col-span-1">{t('bills.form.lines.headers.quantity')}</div>
+        <div className="md:col-span-1">{t('bills.form.lines.headers.etPrice')}</div>
+        <div className="md:col-span-1">{t('bills.form.lines.headers.itPrice')}</div>
+        <div className="md:col-span-1">{t('bills.form.lines.headers.subTotal')}</div>
       </div>
       <DndContext onDragEnd={onDragEnd}>
         <SortableContext items={fields}>
@@ -132,7 +133,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
           <Button className='gap-2' type="button" block onClick={() => addLine()} disabled={disabled}>
             <PlusIcon className='w-5' />
             <span>
-              Ajouter une ligne
+              {t('bills.form.lines.add')}
             </span>
           </Button>
         </div>

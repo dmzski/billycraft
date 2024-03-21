@@ -1,9 +1,11 @@
-import { useTableState } from '@coco-ui/core'
+import { Table, useTableState } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
 import Bill from '@/models/Bill'
 import BillTableLine from './Row'
+import { useI18n } from '@/i18n'
 
 const BillList = ({ data }: { data: Bill[] }) => {
+  const { t } = useI18n()
   const customers = useCustomers()
   const { data: bills } = useTableState({
     data,
@@ -11,16 +13,18 @@ const BillList = ({ data }: { data: Bill[] }) => {
   })
 
   return (
-    <div className="flex flex-col">
-      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
-        <div className="col-span-1">#</div>
-        <div className="col-span-3">Titre</div>
-        <div className="col-span-2">Client</div>
-        <div className="col-span-2">Création</div>
-        <div className="col-span-2">Envoyé</div>
-        <div className="col-span-2">Status</div>
-      </div>
-      <div className="flex flex-col">
+    <Table>
+      <Table.Head
+       columns={[
+        {name: t('bills.list.headers.reference')},
+        {name: t('bills.list.headers.title')},
+        {name: t('bills.list.headers.customer')},
+        {name: t('bills.list.headers.createdAt')},
+        {name: t('bills.list.headers.updatedAt')},
+        {name: t('bills.list.headers.status')}
+       ]}
+      />
+      <Table.Body>
         {bills.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
@@ -28,8 +32,8 @@ const BillList = ({ data }: { data: Bill[] }) => {
             bill={bill}
           />
         ))}
-      </div>
-    </div>
+      </Table.Body>
+    </Table>
   )
 }
 

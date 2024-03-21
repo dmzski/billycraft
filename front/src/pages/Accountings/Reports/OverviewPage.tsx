@@ -2,8 +2,10 @@ import { ReportApi } from '@/api/ReportApi'
 import { useMemo } from 'react'
 import ReportTable from './components/ReportTable'
 import { useDataLoader } from '@scaleway/use-dataloader'
+import { useI18n } from '@/i18n'
 
 const OverviewPage = () => {
+  const { t } = useI18n()
   const { data: monthData } = useDataLoader(
     ['reports', 'current-month'],
     () => ReportApi.getMonthReport(Date.now()),
@@ -25,11 +27,11 @@ const OverviewPage = () => {
   return (
     <div>
       <div className="mb-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">
-        <h2 className="text-xl col-span-full">Mois en cours : {currentMonth}</h2>
+        <h2 className="text-xl col-span-full">{t('accounting.overview.currentMonth')}{currentMonth}</h2>
       </div>
       {monthData ? <ReportTable report={monthData} /> : null}
       <div className="my-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">
-        <h2 className="text-xl col-span-full">Année en cours</h2>
+        <h2 className="text-xl col-span-full">{t('accounting.overview.currentYear')}</h2>
       </div>
       {yearData ? <ReportTable report={yearData} /> : null}
     </div>

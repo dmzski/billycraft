@@ -1,6 +1,7 @@
 import { Input, Select } from '@coco-ui/core'
-import { BILL_STATUS } from '@/constants/bill'
-import { Dispatch, SetStateAction } from 'react'
+import { ChangeEventHandler, Dispatch, SetStateAction, useMemo } from 'react'
+import { useI18n } from '@/i18n'
+import { BillStatusEnum } from '@/models/Bill'
 
 type BillFilterContainerProps = {
   filters: Record<string, string>
@@ -11,52 +12,56 @@ const BillFilterContainer = ({
   filters,
   setFilters,
   disabledFilters,
-}: BillFilterContainerProps) => (
-  <div className="flex my-2">
-    <Input
-      className="w-32 mr-2"
-      label="Référence"
-      
-      value={filters.id}
-      onChange={e => setFilters({ ...filters, id: e.target.value })}
-    />
-    <Input
-      className="w-96 mr-2"
-      label="Titre"
-      
-      value={filters.title}
-      onChange={e => setFilters({ ...filters, title: e.target.value })}
-    />
-    <Input
-      label="Client"
-      className="w-80 mr-2"
-      
-      value={filters.customer}
-      onChange={e => setFilters({ ...filters, customer: e.target.value })}
-    />
-    <Input
-      className="w-48 mr-2"
-      label="Date de création"
-      
-      value={filters.createdAt}
-      onChange={event =>
-        setFilters({
-          ...filters,
-          createdAt: event.target.value,
-        })
-      }
-    />
-    <Input
-      className="w-48 mr-2"
-      label="Date d'envoi"
-      
-      value={filters.sentAt}
-      onChange={event => setFilters({ ...filters, sentAt: event.target.value })}
-    />
-    <div className="w-48">
+}: BillFilterContainerProps) => {
+  const { t } = useI18n()
+
+  const handleChange = (field: keyof typeof filters): ChangeEventHandler<HTMLInputElement> => (e) => {
+    setFilters({ ...filters, [field]: e.target.value })
+  }
+
+  const statusOptions = useMemo(() => ([
+    { value: 'none', label: t('select') },
+    ...([
+      BillStatusEnum.DRAFT,
+      BillStatusEnum.SENT,
+      BillStatusEnum.PAYMENT_PAID,
+      BillStatusEnum.TO_DECLARE,
+      BillStatusEnum.REFUSED,
+    ].map((status) => ({
+      value: status,
+      label: t(`bills.status.${status}`),
+    }))),
+  ]), [t])
+
+  return (
+    <div className="grid gap-4 md:grid-cols-12">
+      <Input
+        className='md:col-span-2'
+        label={t('bills.list.filters.fields.reference.label')}
+        value={filters.id}
+        onChange={handleChange('id')}
+      />
+      <Input
+        className="md:col-span-3"
+        label={t('bills.list.filters.fields.title.label')}
+        value={filters.title}
+        onChange={handleChange('title')}
+      />
+      <Input
+        label={t('bills.list.filters.fields.customer.label')}
+        className="md:col-span-3"
+        value={filters.customer}
+        onChange={handleChange('customer')}
+      />
+      <Input
+        className="md:col-span-2"
+        label={t('bills.list.filters.fields.createdAt.label')}
+        value={filters.createdAt}
+        onChange={handleChange('createdAt')}
+      />
       <Select
-        label="Status"
-        
+        className='md:col-span-2'
+        label={t('bills.list.filters.fields.status.label')}
         value={filters.status}
         onChange={value => {
           setFilters(current => ({
@@ -65,21 +70,10 @@ const BillFilterContainer = ({
           }))
         }}
         disabled={disabledFilters?.includes('status')}
-        options={[
-          { value: 'none', label: 'Sélectionner' },
-          ...Object.values(BILL_STATUS)
-            .filter(
-              ({ enum: statusEnum }) =>
-                ![BILL_STATUS.ARCHIVED.enum, BILL_STATUS.REFUSED.enum].includes(statusEnum),
-            )
-            .map(({ enum: statusEnum, text }) => ({
-              value: statusEnum,
-              label: text,
-            })),
-        ]}
+        options={statusOptions}
       />
     </div>
-  </div>
-)
+  )
+}
 
 export default BillFilterContainer
