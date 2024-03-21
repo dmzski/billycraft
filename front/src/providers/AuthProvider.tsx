@@ -52,7 +52,7 @@ const clearFetch = () => {
 }
 
 export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefreshSuccess, onRegisterSuccess, useAuthorizationHeader }: AuthProviderProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined)
 
   const login: AuthContextType['login'] = useCallback(async ({ email, password }) => {
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -170,7 +170,7 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
 
   const value = useMemo(() => ({
     isInitializing: isAuthenticated === undefined,
-    isAuthenticated,
+    isAuthenticated: !!isAuthenticated,
     refreshSession,
     register,
     logout,

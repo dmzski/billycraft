@@ -20,13 +20,9 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const { isAuthenticated } = useAuth()
   const { data: user, reload: reloadUser } = useMyInformationQuery({
     enabled: isAuthenticated,
-    pollingInterval: 10000,
-    needPolling: isAuthenticated
   })
   const { data: organization, reload: reloadOrganization } = useMyOrganizationQuery({
     enabled: !!user?.companyId && isAuthenticated,
-    pollingInterval: 10000,
-    needPolling: isAuthenticated && !!user?.companyId
   })
 
   const fullReload = useCallback(async () => {
