@@ -1,6 +1,6 @@
 import { Button } from '@coco-ui/core'
 import { useAuth } from '@/providers/AuthProvider'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Route, ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
@@ -31,9 +31,9 @@ const Menu = ({ route }: MenuProps) => {
         <ul>
           {Object.values(route.routes ?? {}).map(subRoute => (
             <li key={`submenu-${subRoute.path}-${subRoute.title}`}>
-              <NavLink activeClassName="active" to={subRoute.path}>
+              <Link to={subRoute.path}>
                 {subRoute.title}
-              </NavLink>
+              </Link>
             </li>
           ))}
         </ul>
@@ -48,7 +48,7 @@ const SideBarMenu = () => {
 
   return (
     <div className="flex flex-col h-full gap-8">
-      <ul className="menu flex-grow">
+      <ul className="menu flex-grow gap-2">
         {menuRoutes
           .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
           .map(route =>
