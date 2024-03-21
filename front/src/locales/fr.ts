@@ -187,6 +187,7 @@ export default {
   "bills.list.headers.createdAt": "Créée le",
   "bills.list.headers.updatedAt": "Mise à jour le",
   "bills.list.headers.status": "Statut",
+  "bills.list.statusUpdated": "Statut mis à jour",
 
   // Bills > List > Filters
   "bills.list.filters.fields.reference.label": "#",

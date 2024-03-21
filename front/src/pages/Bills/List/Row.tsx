@@ -1,6 +1,5 @@
 import { Button, Dropdown, useToast } from '@coco-ui/core'
 import { BillApi } from '@/api/BillApi'
-import { STRINGS } from '@/constants/strings'
 import { formatISO9075, parseJSON } from 'date-fns'
 import Bill, { BillStatusEnum } from '@/models/Bill'
 import Customer from '@/models/Customer'
@@ -24,10 +23,10 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
     const updateStatus = async () => {
       try {
         if (bill.id) await BillApi.updateStatus({ id: bill.id, status })
-        toast.success(STRINGS.SAVE_SUCCESS)
+        toast.success(t('bills.list.statusUpdated'))
         reload('bills')
       } catch {
-        toast.error(STRINGS.SAVE_ERROR)
+        toast.error(t('genericFormError'))
       }
     }
     updateStatus()
@@ -65,7 +64,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
         </Link>
       </div>
       <div className="md:col-span-3 truncate">{bill.title}</div>
-      <div className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</div>
+      <div className="md:col-span-2 truncate">{customer?.name ?? '-'}</div>
       <div className="md:col-span-2">
         {formatISO9075(parseJSON(bill.createdAt))}
       </div>

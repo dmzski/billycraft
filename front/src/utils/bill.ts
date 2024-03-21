@@ -1,19 +1,8 @@
 import Customer from '@/models/Customer'
 import Bill, { BillLine } from '../models/Bill'
-import compareDesc from 'date-fns/compareDesc'
 import formatISO9075 from 'date-fns/formatISO9075'
 import parseJSON from 'date-fns/parseJSON'
 
-
-export function sortBills(array: Bill[]): Bill[] {
-  return array.sort((billA, billB) => {
-    const updateAtCompare = compareDesc(new Date(billA.updatedAt), new Date(billB.updatedAt))
-    if (updateAtCompare === 0) {
-      return compareDesc(new Date(billA.createdAt), new Date(billB.createdAt))
-    }
-    return updateAtCompare
-  })
-}
 
 export function filterBills(
   array: Bill[],

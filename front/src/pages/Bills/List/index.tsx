@@ -1,4 +1,3 @@
-import { useTableState } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
 import Bill from '@/models/Bill'
 import BillTableLine from './Row'
@@ -7,10 +6,6 @@ import { useI18n } from '@/i18n'
 const BillList = ({ data }: { data: Bill[] }) => {
   const {t} = useI18n()
   const customers = useCustomers()
-  const { data: bills } = useTableState({
-    data,
-    initialSort: { field: 'createdAt', order: 'desc' },
-  })
 
   return (
     <div className="flex flex-col">
@@ -23,7 +18,7 @@ const BillList = ({ data }: { data: Bill[] }) => {
         <div className="col-span-2">{t('bills.list.headers.status')}</div>
       </div>
       <div className="flex flex-col">
-        {bills.map(bill => (
+        {data.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
