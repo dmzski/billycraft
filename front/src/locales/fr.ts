@@ -302,4 +302,53 @@ export default {
   "quotes.form.lines.fields.quantity.placeholder": "Quantité",
   "quotes.form.lines.fields.etPrice.placeholder": "Prix HT",
 
+  // Customers > Form > Form
+  "customers.form.form.name": "Nom",
+  "customers.form.form.address": "Adresse",
+  "customers.form.form.email": "Email",
+  "customers.form.form.phoneNumber": "Téléphone",
+  "customers.form.form.city": "Ville",
+  "customers.form.form.postalCode": "Code Postal",
+  "customers.form.form.contact": "Contact",
+
+
+  // Supplier > modals > SupplierModalForm
+  "suppliers.modals.SupplierModalForm.title.edit": "Modifier un fournisseur",
+  "suppliers.modals.SupplierModalForm.title.create": "Ajouter un fournisseur",
+  "suppliers.modals.SupplierModalForm.field.name": "Nom du fournisseur",
+  "suppliers.modals.SupplierModalForm.field.vat": "TVA appliquée par le fournisseur (%)",
+  "suppliers.modals.SupplierModalForm.field.color": "Couleur hexadécimale associée",
+   
+  // Settings > Forms > BillCustomizationForm
+  "settings.forms.billcustomizationform.mainColor" : "Couleur principale",
+  "settings.forms.billcustomizationform.afterTable" : "Après le tableau",
+  "settings.forms.billcustomizationform.footer" : "Pied de page",
+
+  // Settings > Forms > BillEmailCustomizationForm 
+  "settings.forms.billemailcustomizationform.object": "Objet du mail",
+  "settings.forms.billemailcustomizationform.body": "Corps du mail",
+
+  // Settings > Forms > MyCompagnyForm
+  "settings.forms.mycompagnyform.name": "Nom",
+  "settings.forms.mycompagnyform.address": "Adresse",
+  "settings.forms.mycompagnyform.postalCode": "Code Postal",
+  "settings.forms.mycompagnyform.city": "Ville",
+  "settings.forms.mycompagnyform.phoneNumber": "Téléphone",
+  "settings.forms.mycompagnyform.email": "Email",
+  "settings.forms.mycompagnyform.siret": "SIRET",
+  "settings.forms.mycompagnyform.logo": "URL du logo",
+  "settings.forms.mycompagnyform.articlesTax": "Imposition Ventes (%)",
+  "settings.forms.mycompagnyform.servicesTax": "Imposition Services (%)",
+  "settings.forms.mycompagnyform.othersTax": "Imposition Autres types de service (%)",
+
+  // Settings > Forms > QuoteCustomizationForm
+  "settings.forms.quotecustomizationform.mainColor": "Couleur principale",
+  "settings.forms.mycompagnyform.afterTable": "Après le tableau",
+  "settings.forms.mycompagnyform.footer": "Pied de page",
+
+  // Settings > Forms > QuoteEmailCustomizationForm
+  "settings.forms.quoteemailcustomizationform.email-subject": "Objet du mail",
+  "settings.forms.quoteemailcustomizationform.email-body": "Corps du mail",
+
+  
 } as const

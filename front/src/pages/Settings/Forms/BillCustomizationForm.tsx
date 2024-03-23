@@ -3,12 +3,14 @@ import { BillCustomizationApi } from '@/api/BillCustomizationApi'
 import { STRINGS } from '@/constants/strings'
 import BillCustomization from '@/models/BillCustomization'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n'
 
 type BillCustomizationFormProps = {
   billCustomization: BillCustomization
 }
 
 const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps) => {
+  const {t}=useI18n()
   const [newBillCustomization, setNewBillCustomization] = useState(
     {} as BillCustomization,
   )
@@ -53,7 +55,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
                 mainColor: e.target.value,
               })
             }}
-            label="Couleur principale"
+            label={t("settings.forms.billcustomizationform.mainColor")}
             placeholder="Couleur en hexadecimale : #000000"
             className="w-full"
           />
@@ -96,7 +98,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
         </div>
         <TextArea
           id="afterTable"
-          label="Après le tableau"
+          label={t("settings.forms.billcustomizationform.afterTable")}
           rows={5}
           placeholder="En dessous du tableau"
           value={newBillCustomization.afterTable}
@@ -109,7 +111,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <TextArea
-          label="Pied de page"
+          label={t("settings.forms.billcustomizationform.footer")}
           id="footer"
           rows={5}
           className="w-full"

@@ -6,12 +6,14 @@ import Company from '@/models/Company'
 import { STRINGS } from '@/constants/strings'
 import { Controller, useForm } from 'react-hook-form'
 import { useDataLoaderContext } from '@scaleway/use-dataloader'
+import { useI18n } from '@/i18n'
 
 type MyCompagnyFormProps = {
   company: Company
   onSubmitSuccess?: (res: Company) => void | Promise<void>
 }
 const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
+  const {t}=useI18n()
   const {reload} = useDataLoaderContext()
   const toast = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -85,7 +87,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           control={control}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Nom"
+              label={t("settings.forms.mycompagnyform.name")}
               placeholder="Nom"
               name={field.name}
               value={field.value}
@@ -104,7 +106,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
               id="address"
               rows={3}
 
-              label="Adresse"
+              label={t("settings.forms.mycompagnyform.address")}
               placeholder="Adresse"
               name={field.name}
               value={field.value}
@@ -121,7 +123,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
-              label="Code Postal"
+              label={t("settings.forms.mycompagnyform.postalCode")}
               placeholder="Code Postal"
               name={field.name}
               value={field.value}
@@ -139,7 +141,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
-              label="Ville"
+              label={t("settings.forms.mycompagnyform.city")}
               placeholder="Ville"
               name={field.name}
               value={field.value}
@@ -157,7 +159,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"
-              label="Téléphone"
+              label={t("settings.forms.mycompagnyform.phoneNumber")}
               placeholder="Téléphone"
               name={field.name}
               value={field.value}
@@ -175,7 +177,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
-              label="Email"
+              label={t("settings.forms.mycompagnyform.email")}
               placeholder="Email"
               name={field.name}
               value={field.value}
@@ -193,7 +195,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="siret"
-              label="SIRET"
+              label={t("settings.forms.mycompagnyform.siret")}
               placeholder="SIRET"
               name={field.name}
               value={field.value}
@@ -210,7 +212,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Input
-                label="URL du logo"
+                label={t("settings.forms.mycompagnyform.logo")}
                 className="col-span-12 md:col-span-9"
                 placeholder="URL du logo"
                 name={field.name}
@@ -251,7 +253,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label="Imposition Ventes (%)"
+                label={t("settings.forms.mycompagnyform.articlesTax")}
                 type="number"
                 step={0.01}
                 max={100}
@@ -271,7 +273,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label="Imposition Services (%)"
+                label={t("settings.forms.mycompagnyform.servicesTax")}
                 type="number"
                 step={0.01}
                 max={100}
@@ -291,7 +293,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label="Imposition Autres types de service (%)"
+                label={t("settings.forms.mycompagnyform.othersTax")}
                 step={0.01}
                 max={100}
                 min={0}

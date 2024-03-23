@@ -5,6 +5,7 @@ import Supplier, { SupplierRequest } from '@/models/Supplier'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { TrashIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 type SupplierModalFormProps = {
   supplier: Supplier
@@ -16,6 +17,7 @@ const SupplierModalForm = ({
   supplier,
   onSubmitSuccess,
 }: SupplierModalFormProps) => {
+  const {t}=useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -77,7 +79,7 @@ const SupplierModalForm = ({
     <div className="w-full pb-2">
       <div className="flex border-b px-2 pb-2 mb-4 pr-6">
         <h3 className="flex-grow text-xl">
-          {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
+        {supplier.id ? t("suppliers.modals.SupplierModalForm.title.edit") : t("suppliers.modals.SupplierModalForm.title.create")}
         </h3>
         <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
           <TrashIcon className='w-5' />
@@ -97,7 +99,7 @@ const SupplierModalForm = ({
               onChange={field.onChange}
               ref={field.ref}
               className="mb-4"
-              label="Nom du fournisseur"
+              label= {t('suppliers.modals.SupplierModalForm.field.name')}
               value={field.value}
               error={invalid}
               minLength={2}
@@ -116,7 +118,7 @@ const SupplierModalForm = ({
               onChange={field.onChange}
               ref={field.ref}
               className="mb-4"
-              label="TVA appliquée par le fournisseur (%)"
+              label={t('suppliers.modals.SupplierModalForm.field.vat')}
               value={field.value}
               error={invalid}
               type="number"
@@ -138,7 +140,7 @@ const SupplierModalForm = ({
                 onChange={field.onChange}
                 ref={field.ref}
                 className="mb-4 flex-grow"
-                label="Couleur hexadécimale associée"
+                label={t('suppliers.modals.SupplierModalForm.field.color')}
                 value={field.value}
                 error={invalid}
               />

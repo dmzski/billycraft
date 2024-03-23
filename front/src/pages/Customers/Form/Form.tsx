@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import Customer from '@/models/Customer'
 import { TrashIcon } from '@heroicons/react/24/solid'
 import clsx from 'clsx'
+import { useI18n } from '@/i18n'
 
 const defaultCustomer = {
   address: '',
@@ -23,6 +24,7 @@ type CustomerFormProps = {
 }
 
 const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
+  const {t}=useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -79,7 +81,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Nom"
+              label={t("customers.form.form.name")}
               placeholder="Nom du client"
               name={field.name}
               value={field.value}
@@ -98,7 +100,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <TextArea
               rows={4}
-              label="Adresse"
+              label={t("customers.form.form.address")}
               placeholder="Adresse du client"
               name={field.name}
               value={field.value}
@@ -116,7 +118,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Email"
+              label={t("customers.form.form.email")}
               placeholder="Adresse email"
               name={field.name}
               value={field.value}
@@ -134,7 +136,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Téléphone"
+              label={t("customers.form.form.phoneNumber")}
               placeholder="Téléphone"
               name={field.name}
               value={field.value}
@@ -152,7 +154,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Ville"
+              label={t("customers.form.form.city")}
               placeholder="Ville"
               name={field.name}
               value={field.value}
@@ -170,7 +172,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Code Postal"
+              label={t("customers.form.form.postalCode")}
               placeholder="Code Postal"
               name={field.name}
               value={field.value}
@@ -188,7 +190,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label="Contact"
+              label={t("customers.form.form.contact")}
               placeholder="Nom complet"
               name={field.name}
               value={field.value}

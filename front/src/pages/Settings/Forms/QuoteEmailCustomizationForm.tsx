@@ -1,6 +1,7 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import QuoteEmailCustomization from '@/models/QuoteEmailCustomization'
+import { useI18n } from '@/i18n'
 
 const defaultValues = {
   body: '',
@@ -16,6 +17,7 @@ const QuoteEmailCustomizationForm = ({
   quoteEmailCustomization,
   onSubmit,
 }: QuoteEmailCustomizationFormProps) => {
+  const {t}=useI18n()
   const [
     newQuoteEmailCustomization,
     setNewQuoteEmailCustomization,
@@ -59,7 +61,7 @@ const QuoteEmailCustomizationForm = ({
         <div>
           <Input
             id="email-subject"
-            label="Objet du mail"
+            label={t("settings.forms.quoteemailcustomizationform.email-subject")}
             value={newQuoteEmailCustomization.object}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewQuoteEmailCustomization({
@@ -74,7 +76,7 @@ const QuoteEmailCustomizationForm = ({
         <div className="mt-2">
           <TextArea
             id="email-body"
-            label="Corps du mail"
+            label={t("settings.forms.quoteemailcustomizationform.email-body")}
             rows={5}
             value={newQuoteEmailCustomization.body}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

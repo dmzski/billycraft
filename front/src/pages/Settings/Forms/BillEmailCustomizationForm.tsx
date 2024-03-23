@@ -1,6 +1,7 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import BillEmailCustomization from '@/models/BillEmailCustomization'
+import { useI18n } from '@/i18n'
 
 const defaultValues = {
   body: '',
@@ -17,6 +18,7 @@ const BillEmailCustomizationForm = ({
   billEmailCustomization,
   onSubmit,
 }: BillEmailCustomizationFormProps) => {
+  const {t}  = useI18n()
   const [
     newBillEmailCustomization,
     setNewBillEmailCustomization,
@@ -61,7 +63,7 @@ const BillEmailCustomizationForm = ({
           <Input
             id="object"
             name="object"
-            label="Objet du mail"
+            label={t("settings.forms.billemailcustomizationform.object")}
             value={newBillEmailCustomization.object}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewBillEmailCustomization({
@@ -77,7 +79,7 @@ const BillEmailCustomizationForm = ({
           <TextArea
             id="body"
             name="body"
-            label="Corps du mail"
+            label={t("settings.forms.billemailcustomizationform.body")}
             rows={5}
             value={newBillEmailCustomization.body}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

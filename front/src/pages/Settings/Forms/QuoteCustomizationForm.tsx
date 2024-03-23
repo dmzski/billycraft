@@ -3,6 +3,7 @@ import { QuoteCustomizationApi } from '@/api/QuoteCustomizationApi'
 import { STRINGS } from '@/constants/strings'
 import QuoteCustomization from '@/models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import { useI18n } from '@/i18n'
 
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
@@ -10,6 +11,7 @@ type QuoteCustomizationFormProps = {
 const QuoteCustomizationForm = ({
   quoteCustomization,
 }: QuoteCustomizationFormProps) => {
+  const {t}=useI18n()
   const [newQuoteCustomization, setNewQuoteCustomization] = useState<QuoteCustomization>(
     {} as QuoteCustomization,
   )
@@ -54,7 +56,7 @@ const QuoteCustomizationForm = ({
                 mainColor: e.target.value,
               })
             }}
-            label="Couleur principale"
+            label={t("settings.forms.quotecustomizationform.mainColor")}
             placeholder="Couleur en hexadecimale : #000000"
             className="w-full"
           />
@@ -98,7 +100,7 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="afterTable"
           rows={5}
-          label="Après le tableau"
+          label={t("settings.forms.mycompagnyform.afterTable")}
           placeholder="En dessous du tableau"
           value={newQuoteCustomization.afterTable}
           className="w-full"
@@ -112,7 +114,7 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="footer"
           rows={5}
-          label="Pied de page"
+          label={t("settings.forms.mycompagnyform.footer")}
           className="w-full"
           placeholder="Pied de page"
           value={newQuoteCustomization.footer}
