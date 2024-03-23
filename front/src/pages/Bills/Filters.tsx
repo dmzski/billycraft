@@ -27,7 +27,7 @@ const BillFilterContainer = ({
       BillStatusEnum.PAYMENT_PAID,
       BillStatusEnum.TO_DECLARE,
       BillStatusEnum.REFUSED,
-    ].map((status) => ({
+    ].sort().map((status) => ({
       value: status,
       label: t(`bills.status.${status}`),
     }))),

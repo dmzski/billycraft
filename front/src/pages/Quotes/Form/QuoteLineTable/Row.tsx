@@ -1,13 +1,14 @@
 import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { Control, Controller, useWatch } from 'react-hook-form'
-import { LINE_TYPE } from '../../../../constants/line'
+import { LINE_TYPE } from '@/constants/line'
 import { QuoteFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useI18n } from '@/i18n'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
@@ -23,13 +24,9 @@ const QuoteLineTableLine = ({
   id,
   control,
 }: QuoteLineTableLineProps) => {
+  const { t } = useI18n()
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
-  const typeRef = useRef<HTMLInputElement | null>()
-  const nameRef = useRef<HTMLInputElement | null>()
-  const descriptionRef = useRef<HTMLTextAreaElement | null>()
-  const quantityRef = useRef<HTMLInputElement | null>()
-  const priceRef = useRef<HTMLInputElement | null>()
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id,
     data: {
@@ -92,10 +89,7 @@ const QuoteLineTableLine = ({
               error={invalid}
               value={field.value}
               onChange={type => field.onChange(type as LineTypeEnum)}
-              ref={node => {
-                field.ref(node)
-                typeRef.current = node
-              }}
+              ref={field.ref}
               options={Object.values(LINE_TYPE).map(type => ({
                 value: type.enum,
                 label: type.name,
@@ -114,7 +108,7 @@ const QuoteLineTableLine = ({
         render={({ field, fieldState: { invalid } }) => (
           <Input
             required
-            placeholder="Nom"
+            placeholder={t('quotes.form.lines.fields.name.placeholder')}
             className="md:col-span-3"
             disabled={disabled}
             value={field.value}
@@ -122,10 +116,7 @@ const QuoteLineTableLine = ({
             onBlur={field.onBlur}
             name={field.name}
             error={invalid}
-            ref={node => {
-              field.ref(node)
-              nameRef.current = node
-            }}
+            ref={field.ref}
           />
         )}
       />
@@ -134,7 +125,7 @@ const QuoteLineTableLine = ({
         control={control}
         render={({ field }) => (
           <TextArea
-            placeholder="Description"
+            placeholder={t('quotes.form.lines.fields.description.placeholder')}
             className="md:col-span-3"
             rows={1}
             disabled={disabled}
@@ -142,10 +133,7 @@ const QuoteLineTableLine = ({
             onChange={field.onChange}
             onBlur={field.onBlur}
             name={field.name}
-            ref={node => {
-              field.ref(node)
-              descriptionRef.current = node
-            }}
+            ref={field.ref}
           />
         )}
       />
@@ -157,7 +145,7 @@ const QuoteLineTableLine = ({
           <Input
             disabled={disabled}
             className="md:col-span-1"
-            placeholder="Quantité"
+            placeholder={t('quotes.form.lines.fields.quantity.placeholder')}
             type="number"
             step={0.01}
             name={field.name}
@@ -167,10 +155,7 @@ const QuoteLineTableLine = ({
               field.onChange(Number((event.target as HTMLInputElement).value) || 0)
               field.onBlur()
             }}
-            ref={node => {
-              field.ref(node)
-              quantityRef.current = node
-            }}
+            ref={field.ref}
           />
         )}
       />
@@ -182,7 +167,7 @@ const QuoteLineTableLine = ({
           <Input
             className="md:col-span-1"
             disabled={disabled}
-            placeholder="Prix"
+            placeholder={t('quotes.form.lines.fields.etPrice.placeholder')}
             type="number"
             step={0.01}
             value={field.value ?? ''}
@@ -191,10 +176,7 @@ const QuoteLineTableLine = ({
               field.onChange(Number((event.target as HTMLInputElement).value) || 0)
               field.onBlur()
             }}
-            ref={node => {
-              field.ref(node)
-              priceRef.current = node
-            }}
+            ref={field.ref}
           />
         )}
       />

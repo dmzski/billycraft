@@ -1,6 +1,6 @@
 import { Button, Input, Switch, TextArea } from '@coco-ui/core'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import BillEmailCustomization from '../../../models/BillEmailCustomization'
+import BillEmailCustomization from '@/models/BillEmailCustomization'
 
 const defaultValues = {
   body: '',

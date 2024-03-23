@@ -3,7 +3,7 @@ import { CustomerApi } from '@/api/CustomerApi'
 import { STRINGS } from '@/constants/strings'
 import { useCallback, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import Customer from '../../../models/Customer'
+import Customer from '@/models/Customer'
 import { TrashIcon } from '@heroicons/react/24/solid'
 import clsx from 'clsx'
 

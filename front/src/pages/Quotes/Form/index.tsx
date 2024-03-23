@@ -1,21 +1,20 @@
 import { Badge, Button, useToast } from '@coco-ui/core'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from '@/api/QuoteApi'
 import { isQuoteMinimumAccepted } from '@/utils/quote'
-import { QUOTE_STATUS } from '@/constants/quote'
-import { STRINGS } from '@/constants/strings'
-import { PdfApi } from '../../../api/PdfApi'
-import useLoadingState from '../../../hooks/useLoadingState'
-import Quote from '../../../models/Quote'
-import { ROUTES } from '../../../routes'
+import { PdfApi } from '@/api/PdfApi'
+import useLoadingState from '@/hooks/useLoadingState'
+import Quote from '@/models/Quote'
+import { ROUTES } from '@/routes'
 import QuoteForm from './Form'
-import { useDataLoader, useDataLoaderContext } from '@scaleway/use-dataloader'
-import { ChevronLeftIcon, DocumentArrowDownIcon, DocumentPlusIcon } from '@heroicons/react/24/solid'
+import { useDataLoader } from '@scaleway/use-dataloader'
+import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 const QuoteCreationPage = () => {
+  const { t } = useI18n()
   const [newQuote, setNewQuote] = useState<Quote>({} as Quote)
-  const {reload} = useDataLoaderContext()
   const toast = useToast()
   const pdfState = useLoadingState()
   const history = useHistory()
@@ -28,7 +27,6 @@ const QuoteCreationPage = () => {
     if (data.id !== id) {
       history.push(ROUTES.QUOTE_FORM.path.replace(':id', data.id))
     } else {
-      reload('quotes')
       reloadQuote()
     }
   }
@@ -47,26 +45,26 @@ const QuoteCreationPage = () => {
         pdfState.update('idle')
       }
     } catch {
-      toast.error('Erreur lors de la génération du PDF')
+      toast.error(t('quotes.form.pdfError'))
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)
     }
   }
 
-  const createBill = useCallback(async () => {
+  const createBill = async () => {
     try {
       const data = await QuoteApi.createBill({ id: newQuote.id })
-      toast.success(STRINGS.BILL_CREATED)
+      toast.success(t('quotes.form.createBill'))
       if (data.id) {
         history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
       } else {
         history.push(ROUTES.BILLS.path)
       }
     } catch {
-      toast.error('Erreur lors de la création de la facture')
+      toast.error(t('quotes.form.createBillError'))
     }
-  }, [history, newQuote.id, toast])
+  }
 
   useEffect(() => {
     setNewQuote(quote && id !== 'new' ? quote : ({} as Quote))
@@ -75,15 +73,15 @@ const QuoteCreationPage = () => {
   return (
     <div className="w-full px-4 flex flex-col gap-4">
       <div>
-        <Button variant="ghost" className="mb-4" size="sm" onClick={history.goBack}>
+        <Button variant="ghost" className="gap-1" size="sm" onClick={history.goBack}>
           <ChevronLeftIcon className='w-5' /> &nbsp; Retourner à la liste des devis
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
-        <div className="flex items-center gap-4 flex-grow mb-4 md:mb-0">
-          <h1 className="text-3xl">{!newQuote.id ? 'Nouveau devis' : 'Modifier un devis'}</h1>
+        <div className="flex items-center gap-4 flex-grow">
+          <h1 className="text-3xl">{!newQuote.id ? t('quotes.form.title.new') : t('quotes.form.title.edit')}</h1>
           {newQuote.status ? (
-            <Badge variant="ghost">{QUOTE_STATUS[newQuote.status]?.text}</Badge>
+            <Badge variant="ghost">{t(`quotes.status.${newQuote.status}`)}</Badge>
           ) : null}
         </div>
         <div className="flex gap-2">
@@ -97,17 +95,17 @@ const QuoteCreationPage = () => {
               !newQuote.id
             }
           >
-            <DocumentPlusIcon className='w-5' />
-            &nbsp; Créer la facture
+            {t('quotes.form.createBill')}
           </Button>
           <Button
             disabled={pdfState.isLoading || !newQuote.id}
-            title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
             size="md"
+            className='gap-1'
           >
-            <DocumentArrowDownIcon className='w-5' /> &nbsp; Télécharger le PDF
+            <DocumentArrowDownIcon className='w-5' />
+            {t('quotes.form.downloadPdfButton')}
           </Button>
         </div>
       </div>

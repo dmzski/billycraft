@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button, Loader } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
 import { BillApi } from '@/api/BillApi'
@@ -20,7 +20,7 @@ const BillPage = () => {
   const history = useHistory()
   const { t } = useI18n()
 
-  const billSorted = useCallback(
+  const billSorted = useMemo(
     () => filterBills(data ?? [], filters, customers),
     [customers, data, filters],
   )
@@ -39,7 +39,7 @@ const BillPage = () => {
         </Button>
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
-      <BillTable data={billSorted()} />
+      <BillTable data={billSorted} />
       {isLoading ? (
         <div className="mt-2 flex justify-center">
           <Loader variant='primary' />

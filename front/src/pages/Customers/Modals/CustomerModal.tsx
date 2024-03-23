@@ -1,5 +1,5 @@
 import { Modal } from '@coco-ui/core'
-import Customer from '../../../models/Customer'
+import Customer from '@/models/Customer'
 import CustomerForm from '../Form/Form'
 import { useDataLoaderContext } from '@scaleway/use-dataloader'
 
