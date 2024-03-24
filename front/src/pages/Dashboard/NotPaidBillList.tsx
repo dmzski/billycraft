@@ -4,19 +4,21 @@ import useCustomers from '@/hooks/useCustomers'
 import Bill from '@/models/Bill'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
+import { useI18n } from '@/i18n'
 
 type NotPaidBillListProps = {
   data: Bill[]
 }
 const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
   const customers = useCustomers()
+  const {t} = useI18n()
   return (
     <div className="border rounded flex flex-col">
       <div className="px-2 py-4 grid md:grid-cols-12 bg-base-300 rounded-t gap-2">
-        <div className="pl-1 md:col-span-1">#</div>
-        <div className="md:col-span-2">Envoyée le</div>
-        <div className="md:col-span-3">Client</div>
-        <div className="md:col-span-6">Titre</div>
+        <div className="pl-1 md:col-span-1">{t('dashboard.notPaidBills.headers.reference')}</div>
+        <div className="md:col-span-2">{t('dashboard.notPaidBills.headers.sentAt')}</div>
+        <div className="md:col-span-3">{t('dashboard.notPaidBills.headers.customer')}</div>
+        <div className="md:col-span-6">{t('dashboard.notPaidBills.headers.title')}</div>
       </div>
       {data.map(({ id, title, customerId, sentAt }, index) => (
         <div
@@ -24,7 +26,7 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
             'bg-base-200': index % 2 !== 0,
           })}
         >
-          <div className="md:col-span-1 text-sm">
+          <div>
             <Link to={ROUTES.BILL_FORM.path.replace(':id', id)} className="link-primary">
               {id}
             </Link>

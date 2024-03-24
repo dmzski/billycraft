@@ -350,5 +350,28 @@ export default {
   "settings.forms.quoteemailcustomizationform.email-subject": "Objet du mail",
   "settings.forms.quoteemailcustomizationform.email-body": "Corps du mail",
 
+  // Dashboard
+  'dashboard.title': 'Accueil',
+  'dashboard.notPaidBillsBadge': 'Factures impayées',
+  'dashboard.todosBadge': 'Tâches à faire',
+  'dashboard.todosWarning': 'Les tâches effectuées depuis une 1 semaine ne seront plus affichées',
+  'dashboard.todos.title': 'Vos tâches à faire',
+  'dashboard.notPaidBills.title': 'Factures impayées',
+  'dashboard.noNotPaidBills': 'Aucune facture impayée',
+  'dashboard.notPaidBills.headers.reference': '#',
+  'dashboard.notPaidBills.headers.sentAt': 'Envoyée le',
+  'dashboard.notPaidBills.headers.customer': 'Client',
+  'dashboard.notPaidBills.headers.title': 'Titre',
+  'dashboard.todos.form.submit': 'Ajouter',
+  'dashboard.todos.form.submit.success': 'Tâche ajoutée',
+  'dashboard.todos.form.submit.edit.success': 'Tâche mise à jour',
+  'dashboard.todos.form.fields.description.placeholder': 'Entrez à une tâche à faire',
+  'dashboard.todos.headers.createdAt': 'Crée le',
+  'dashboard.todos.headers.createdBy': 'Crée par',
+  'dashboard.todos.headers.description': 'Description',
+  'dashboard.todos.headers.doneAt': 'Fait le',
+  'dashboard.todos.headers.doneBy': 'Fait par',
+  'dashboard.todos.empty': 'Aucune tâche à faire',
+
   
 } as const

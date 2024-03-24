@@ -1,19 +1,21 @@
 import { Badge, Loader } from '@coco-ui/core'
-import { BillApi } from '@/api/BillApi'
-import { TodoApi } from '@/api/TodoApi'
 import { getBillTotal } from '@/utils/bill'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { BanknotesIcon, ExclamationTriangleIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { useAllBillsNotPaidQuery } from '@/queries/useAllBillsNotPaidQuery'
+import { useAllTodosFinishedAfter } from '@/queries/useAllTodosFinishedAfter'
+import { useI18n } from '@/i18n'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 
-const dateOffset = 24 * 60 * 60 * 1000 * 7 // 5 days
+const DATE_OFFSET_TODOS = 24 * 60 * 60 * 1000 * 7 // 5 days
 
 const Dashboard = () => {
-  const { data: notPaid, isLoading } = useDataLoader(['bills', 'not-paid'], BillApi.findAllNotPaid)
-  const { data: todos, reload } = useDataLoader(
-    'todos-dashboard',
-    () => TodoApi.findAllFinishedAfter(new Date(Date.now() - dateOffset)),
+  const {t} = useI18n()
+  const formatCurrency = useFormatCurrency()
+  const { data: notPaid, isLoading } = useAllBillsNotPaidQuery()
+  const { data: todos, reload } = useAllTodosFinishedAfter(
+    new Date(Date.now() - DATE_OFFSET_TODOS)
   )
 
   const totalNotPaid = notPaid && Array.isArray(notPaid) ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100 : 0
@@ -23,37 +25,37 @@ const Dashboard = () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-center mb-8">
-        <h1 className="text-3xl mb-4">Accueil</h1>
+        <h1 className="text-3xl mb-4">{t('dashboard.title')}</h1>
         <div className="grid md:grid-cols-2 gap-2 justify-center">
           <Badge size='lg' variant={notPaid?.length ? 'error' : 'success'}>
-            {notPaid?.length} factures impayées
+            {notPaid?.length} {t('dashboard.notPaidBillsBadge')}
           </Badge>
-          <Badge size="lg" variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} Tâches à faire</Badge>
+          <Badge size="lg" variant={todoCount > 0 ? 'info' : 'success'}>{todoCount} {t('dashboard.todosBadge')}</Badge>
         </div>
       </div>
       <div className="flex flex-col gap-10">
         <section className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <PencilIcon className='w-5' />
-            <h2 className="text-xl flex-grow">Vos tâches en cours</h2>
-            <Badge variant="warning" className="hidden md:flex">
+            <h2 className="text-xl flex-grow">{t('dashboard.todos.title')}</h2>
+            <Badge variant="warning" className="hidden md:flex gap-1">
               <ExclamationTriangleIcon className='w-4' />
-              &nbsp;Les tâches effectuées depuis une 1 semaine ne seront plus affichées
+              {t('dashboard.todosWarning')}
             </Badge>
           </div>
-          <TodoList data={todos} onSubmitSuccess={() => reload()} />
+          <TodoList data={todos} onSubmitSuccess={reload} />
         </section>
         <hr />
         <section className="flex flex-col gap-4">
           <div className='flex justify-between'>
-          <div className="flex text-xl gap-2">
-            <BanknotesIcon className='w-5' />
-            <h2>Factures impayées</h2>
-          </div>
-          {totalNotPaid > 0 ? (
-          <Badge variant="info">{totalNotPaid} €</Badge>
+            <div className="flex text-xl gap-2">
+              <BanknotesIcon className='w-5' />
+              <h2>{t('dashboard.notPaidBills.title')}</h2>
+            </div>
+            {totalNotPaid > 0 ? (
+              <Badge variant="info">{formatCurrency(totalNotPaid)}</Badge>
 
-          ) : null}
+            ) : null}
           </div>
           {isLoading ? (
             <div className="flex justify-center">
@@ -63,7 +65,7 @@ const Dashboard = () => {
           {!isLoading && notPaid && notPaid.length > 0 ? (
             <NotPaidBillList data={notPaid} />
           ) : (
-            <div>Aucun impayé</div>
+            <div>{t('dashboard.noNotPaidBills')}</div>
           )}
         </section>
       </div>

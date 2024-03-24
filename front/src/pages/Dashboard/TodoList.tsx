@@ -1,113 +1,108 @@
 import { Button, Input, useToast } from '@coco-ui/core'
 import { TodoApi } from '@/api/TodoApi'
 import clsx from 'clsx'
-import { STRINGS } from '@/constants/strings'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Todo } from '@/models/Todo'
 import { Controller, useForm } from 'react-hook-form'
-import { ChangeEventHandler, useCallback, useState } from 'react'
-import { ArchiveBoxArrowDownIcon, CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
+import { CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 type TodoFormValues = { description: string }
 
 type TodoListProps = {
   data?: Todo[]
-  onSubmitSuccess?: () => void
+  onSubmitSuccess?: () => Promise<void>
 }
 const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
+  const { t } = useI18n()
   const [editMode, setEditMode] = useState<number>()
-  const [editTodo, setEditTodo] = useState('')
   const toast = useToast()
 
-  const { handleSubmit, control, reset, formState } = useForm<TodoFormValues>({
-    mode: 'all',
+  const methodsCreate = useForm<TodoFormValues>({
+    mode: 'onChange',
+    values: {
+      description: ''
+    }
   })
 
-  const handleDone = useCallback(
-    (id: number) => () => {
-      const fn = async () => {
-        try {
-          await TodoApi.done(id)
-          onSubmitSuccess?.()
-          toast.success(STRINGS.SAVE_SUCCESS)
-        } catch {
-          toast.error(STRINGS.SAVE_ERROR)
-        }
-      }
-      fn()
-    },
-    [toast, onSubmitSuccess],
-  )
+  const methodsUpdate = useForm<TodoFormValues>({
+    mode: 'onChange',
+    values: {
+      description: ''
+    }
+  })
 
-  const handleChangeEdit: ChangeEventHandler<HTMLInputElement> = useCallback(event => {
-    setEditTodo(event.target.value)
-  }, [])
-
-  const onSubmit = useCallback(
-    (values: TodoFormValues) => {
-      const fn = async () => {
-        try {
-          await TodoApi.create(values)
-          reset({ description: '' })
-          onSubmitSuccess?.()
-          toast.success(STRINGS.SAVE_SUCCESS)
-        } catch {
-          toast.error(STRINGS.SAVE_ERROR)
-        }
-      }
-      fn()
-    },
-    [toast, onSubmitSuccess, reset],
-  )
-
-  const handleEdit = useCallback(
-    (id: number, description: string) => () => {
-      setEditMode(id)
-      setEditTodo(description)
-    },
-    [],
-  )
-
-  const handleEditTodo = useCallback(() => {
+  const handleDone = (id: number) => () => {
     const fn = async () => {
       try {
-        await TodoApi.update(editMode as number, { description: editTodo })
-        setEditTodo('')
-        setEditMode(undefined)
-        onSubmitSuccess?.()
-        toast.success(STRINGS.SAVE_SUCCESS)
+        await TodoApi.done(id)
+        await onSubmitSuccess?.()
+        toast.success(t('dashboard.todos.form.submit.edit.success'))
       } catch {
-        toast.error(STRINGS.SAVE_ERROR)
+        toast.error(t('genericFormError'))
       }
     }
     fn()
-  }, [toast, onSubmitSuccess, editTodo, editMode])
+  }
 
-  const handleCancelEdit = useCallback(() => {
+  const onSubmit = (values: TodoFormValues) => {
+    const fn = async () => {
+      try {
+        await TodoApi.create(values)
+        await onSubmitSuccess?.()
+        methodsCreate.reset({ description: '' })
+        toast.success(t('dashboard.todos.form.submit.success'))
+      } catch {
+        toast.error(t('genericFormError'))
+      }
+    }
+    fn()
+  }
+
+  const handleEdit = (id: number, description: string) => () => {
+    setEditMode(id)
+    methodsUpdate.reset({ description })
+  }
+
+  const onSubmitUpdate = async ({ description }: TodoFormValues) => {
+    try {
+      if (editMode) {
+        await TodoApi.update(editMode, { description })
+        await onSubmitSuccess?.()
+        setEditMode(undefined)
+        toast.success(t('dashboard.todos.form.submit.edit.success'))
+      }
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
+
+  const handleCancelEdit = () => {
     setEditMode(undefined)
-    setEditTodo('')
-  }, [])
+    methodsUpdate.reset({ description: '' })
+  }
 
   return (
     <div className="border rounded flex flex-col">
       <div className="px-2 py-4 grid md:grid-cols-12 bg-base-300 rounded-t ">
-        <div className="md:col-span-2">Crée le</div>
-        <div className="md:col-span-2">Crée par</div>
-        <div className="md:col-span-4">Description</div>
-        <div className="md:col-span-4" />
+        <div className="md:col-span-2">{t('dashboard.todos.headers.createdAt')}</div>
+        <div className="md:col-span-2">{t('dashboard.todos.headers.createdBy')}</div>
+        <div className="md:col-span-4">{t('dashboard.todos.headers.description')}</div>
+        <div className="md:col-span-2">{t('dashboard.todos.headers.doneAt')}</div>
+        <div className="md:col-span-2">{t('dashboard.todos.headers.doneBy')}</div>
       </div>
-      <form className="p-2 flex justify-between gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="p-2 flex justify-between gap-4" onSubmit={methodsCreate.handleSubmit(onSubmit)}>
         <Controller
           name="description"
-          control={control}
-          defaultValue=""
+          control={methodsCreate.control}
           rules={{ required: true, minLength: 3 }}
           render={({ field, fieldState }) => (
             <Input
               type="text"
               className="flex-grow"
-              placeholder="Nouveau todo"
+              placeholder={t('dashboard.todos.form.fields.description.placeholder')}
               name={field.name}
               onChange={field.onChange}
               onBlur={field.onBlur}
@@ -118,21 +113,23 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
         />
         <Button
           type="submit"
-          disabled={!formState.isValid || formState.isSubmitting}
+          disabled={!methodsCreate.formState.isValid || methodsCreate.formState.isSubmitting}
           variant="primary"
           size="md"
         >
           Ajouter
         </Button>
       </form>
-      {data && data.length === 0 ? <div className='p-2'>Aucune tâche à faire</div> : null}
+      {data && data.length === 0 ? <div className='p-2'>{t('dashboard.todos.empty')}</div> : null}
       {data && data.length > 0 ? (
         <div className="flex flex-col">
-          {data?.map((todo, index) => (
-            <div
+          {data?.map((todo) => editMode === todo.id && !todo.doneAt ? (
+            <form
+              onSubmit={methodsUpdate.handleSubmit(onSubmitUpdate)}
+              name={`edit-todo-${todo.id}`}
               key={todo.id}
               className={clsx('grid gap-2 md:grid-cols-12 py-3 px-4 items-center', {
-                'bg-base-200': index % 2 === 0,
+                'bg-success text-success-content': !!todo.doneAt
               })}
             >
               <div className="md:col-span-2">
@@ -141,59 +138,79 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                 })}
               </div>
               <div className="md:col-span-2">{todo.createdBy}</div>
-              <div className="md:col-span-6 break-all">
-                {editMode !== todo.id ? (
-                  todo.description
-                ) : (
+              <div className="md:col-span-6">
+                <Controller name="description" rules={{ required: true, minLength: 3 }} control={methodsUpdate.control} render={({ field, fieldState }) => (
                   <Input
-                    onChange={handleChangeEdit}
-                    value={editTodo}
-                    name={`description-${todo.id}`}
+                    type="text"
+                    placeholder={t('dashboard.todos.form.fields.description.placeholder')}
+                    name={field.name}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field.value}
+                    error={fieldState.invalid}
                   />
-                )}
+                )} />
               </div>
-              <div className="md:col-span-2 justify-end items-end flex">
-                {!todo.doneAt && editMode === todo.id ? (
-                  <div className="flex gap-2 items-center">
-                    <Button variant="success" onClick={handleEditTodo}>
-                      <CheckIcon className='w-5' />
-                    </Button>
-                    <Button onClick={handleCancelEdit} variant="error">
-                      <XMarkIcon className='w-5' />
-                    </Button>
-                  </div>
-                ) : null}
-                {!todo.doneAt && editMode !== todo.id ? (
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleEdit(todo.id, todo.description)}
-                      variant="info"
-                      outline
-                    >
-                      <PencilIcon className='w-5' />
-                    </Button>
-                    <Button outline onClick={handleDone(todo.id)} variant="primary">
-                      <ArchiveBoxArrowDownIcon className='w-5' />
-                    </Button>
-                  </div>
-                ) : null}
-                {todo.doneAt ? (
-                  <div className="text-success-600 py-2">
-                    <div>
-                      Fait&nbsp;
-                      {formatRelative(new Date(todo.doneAt), Date.now(), {
-                        locale: fr,
-                      })}
-                      &nbsp; par <span className="font-bold">{todo.doneBy}</span>
-                    </div>
-                  </div>
-                ) : null}
+              <div className="md:col-span-2 justify-end items-center flex gap-2">
+                <Button variant="success" type="submit"
+                  disabled={!methodsUpdate.formState.isValid || methodsUpdate.formState.isSubmitting}
+                >
+                  <CheckIcon className='w-5' />
+                </Button>
+                <Button onClick={handleCancelEdit} type="button" variant="error"
+                  disabled={methodsUpdate.formState.isSubmitting}
+                >
+                  <XMarkIcon className='w-5' />
+                </Button>
               </div>
+            </form>
+          ) : (
+            <div
+              key={todo.id}
+              className={clsx('grid gap-2 min-h-16 md:grid-cols-12 py-3 px-4 items-center', {
+                'bg-success text-success-content': !!todo.doneAt
+              })}
+            >
+              <div className="md:col-span-2">
+                {formatRelative(new Date(todo.createdAt), Date.now(), {
+                  locale: fr,
+                })}
+              </div>
+              <div className="md:col-span-2">{todo.createdBy}</div>
+              <div className="md:col-span-4 break-all">
+                {todo.description}
+              </div>
+              {!todo.doneAt ? (
+                <div className='md:col-span-4 justify-end items-center flex gap-2'>
+                  <Button
+                    onClick={handleEdit(todo.id, todo.description)}
+                    variant="info"
+                    outline
+                  >
+                    <PencilIcon className='w-5' />
+                  </Button>
+                  <Button outline onClick={handleDone(todo.id)} variant="success">
+                    <CheckIcon className='w-5' />
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className='md:col-span-2'>
+                    {formatRelative(new Date(todo.doneAt), Date.now(), {
+                      locale: fr,
+                    })}
+                  </div>
+                  <div className='md:col-span-2'>
+                    {todo.doneBy}
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
-      ) : null}
-    </div>
+      ) : null
+      }
+    </div >
   )
 }
 
