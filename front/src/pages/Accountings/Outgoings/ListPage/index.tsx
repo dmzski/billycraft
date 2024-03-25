@@ -1,16 +1,15 @@
-import { OutgoingApi } from '@/api/OutgoingApi'
 import { Button, Loader } from '@coco-ui/core'
 import { ROUTES } from '@/routes'
 import { Link } from 'react-router-dom'
 import OutgoingList from '../List'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useAllOutgoingsQuery } from '@/queries/useAllOutgoingsQuery'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const ListPage = () => {
   const {t} = useI18n()
-  const { data, isLoading } = useDataLoader(['outgoings'], () => OutgoingApi.findAll())
+  const { data, isLoading } = useAllOutgoingsQuery()
 
   return (
     <div>

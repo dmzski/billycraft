@@ -1,16 +1,15 @@
-import { OutgoingApi } from '@/api/OutgoingApi'
 import { formatRFC3339 } from 'date-fns'
 import { OutgoingResponse } from '@/models/Outgoing'
 import { useMemo } from 'react'
 import OutgoingForm from '../Form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useOutgoingCurrentQuery } from '@/queries/useOutgoingCurrentQuery'
 
 const Overview = () => {
   const { t } = useI18n()
   const formatCurrency = useFormatCurrency()
-  const { data, reload } = useDataLoader(['outgoings', 'current'], () => OutgoingApi.findCurrent())
+  const { data, reload } = useOutgoingCurrentQuery()
 
   const currentMonth = useMemo(
     () =>

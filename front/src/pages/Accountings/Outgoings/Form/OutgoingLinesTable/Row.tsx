@@ -1,11 +1,11 @@
 import { Button, Input, Select } from '@coco-ui/core'
-import { SupplierApi } from '@/api/SupplierApi'
 import { OutgoingRequest } from '@/models/Outgoing'
 import { useMemo, useState } from 'react'
 import { Control, Controller, useController, useWatch } from 'react-hook-form'
 import SelectBillModal from './modals/SelectBillModal'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -16,6 +16,7 @@ type RowProps = {
   disabled?: boolean
 }
 const Row = ({ control, index, onDelete, disabled }: RowProps) => {
+  const formatCurrency = useFormatCurrency()
   const [billModalOpen, setBillModalOpen] = useState(false)
 
   const vatController = useController({
@@ -29,49 +30,27 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
     },
   })
 
-  const { data: suppliers } = useDataLoader(['suppliers'], () => SupplierApi.findAll())
+  const { data: suppliers } = useAllSuppliersQuery()
 
-  const totalHT = useWatch({
-    name: `lines.${index}.totalHT`,
+  const [totalHT, supplierId, vat] = useWatch({
+    name: [`lines.${index}.totalHT`, `lines.${index}.supplierId`, `lines.${index}.vat`],
     control,
-    defaultValue: 0,
-  })
-
-  const supplierId = useWatch({
-    name: `lines.${index}.supplierId`,
-    control,
-  })
-
-  const vat = useWatch({
-    name: `lines.${index}.vat`,
-    control,
-    defaultValue: 0,
   })
 
   const totalTTC = useMemo(
     () =>
       !Number.isNaN(totalHT) && !Number.isNaN(vat)
-        ? new Intl.NumberFormat(undefined, {
-            currency: 'EUR',
-            style: 'currency',
-          }).format(Number(totalHT * (1 + vat / 100)) || 0)
+        ? formatCurrency(Number(totalHT * (1 + vat / 100)) || 0)
         : '',
-    [totalHT, vat],
+    [formatCurrency, totalHT, vat],
   )
 
-  const supplierOptions = useMemo(() => {
-    if (suppliers) return suppliers.map(({ id, name }) => ({ value: id, label: name }))
+  const supplierOptions = useMemo(() => suppliers ? suppliers.map(({ id, name }) => ({ value: id, label: name })) : [], [suppliers])
 
-    return []
-  }, [suppliers])
-
-  const lineColor = useMemo(() => {
-    if (supplierId && suppliers) {
-      return suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR
-    }
-
-    return DEFAULT_LINE_COLOR
-  }, [supplierId, suppliers])
+  const lineColor = useMemo(() =>
+    supplierId && suppliers ?
+      suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR : DEFAULT_LINE_COLOR
+    , [supplierId, suppliers])
 
   return (
     <div

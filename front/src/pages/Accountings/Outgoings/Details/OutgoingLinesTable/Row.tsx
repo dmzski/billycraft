@@ -1,9 +1,8 @@
-import { BillApi } from '@/api/BillApi'
-import { SupplierApi } from '@/api/SupplierApi'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { useI18n } from '@/i18n'
 import { OutgoingLineResponse } from '@/models/Outgoing'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import { useMemo } from 'react'
 
 const DEFAULT_LINE_COLOR = 'initial'
@@ -15,9 +14,9 @@ const Row = ({
   line: { totalHT, vat, billId, supplierBillReference, supplierId },
 }: RowProps) => {
   const formatCurrency = useFormatCurrency()
-  const { data: bills } = useDataLoader(['bills'],() => BillApi.findAll())
-  const { data: suppliers } = useDataLoader(['suppliers'], () => SupplierApi.findAll())
-  const {t} = useI18n()
+  const { data: bills } = useAllBillsQuery()
+  const { data: suppliers } = useAllSuppliersQuery()
+  const { t } = useI18n()
 
   const totalTTC = useMemo(
     () =>

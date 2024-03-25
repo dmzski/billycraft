@@ -1,10 +1,9 @@
 import { Button, Input, Modal, Select } from '@coco-ui/core'
-import { BillApi } from '@/api/BillApi'
 import useCustomers from '@/hooks/useCustomers'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useController, useForm } from 'react-hook-form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
 
 type SelectBillModalProps = {
   isOpen?: boolean
@@ -19,7 +18,7 @@ type SelectBillModalForm = {
 }
 const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) => {
   const { t } = useI18n()
-  const { data: bills } = useDataLoader(['bills'], () => BillApi.findAll(), {
+  const { data: bills } = useAllBillsQuery({
     enabled: isOpen,
   })
   const customers = useCustomers()

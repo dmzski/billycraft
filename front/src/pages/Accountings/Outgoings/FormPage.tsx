@@ -1,12 +1,11 @@
 import { Button, Loader } from '@coco-ui/core'
-import { OutgoingApi } from '@/api/OutgoingApi'
 import { useCallback } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { injectIdInPath, ROUTES } from '@/routes'
 import { OutgoingResponse } from '@/models/Outgoing'
 import OutgoingForm from './Form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useOutgoingByIdQuery } from '@/queries/useOutgoingByIdQuery'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
@@ -14,7 +13,7 @@ const FormPage = () => {
   const { id } = useParams<{ id: string }>()
   const { t } = useI18n()
   const { push } = useHistory()
-  const { data, isLoading } = useDataLoader(['outgoings', id], () => OutgoingApi.findOneById(id), {
+  const { data, isLoading } = useOutgoingByIdQuery(id, {
     enabled: id !== 'new',
   })
 

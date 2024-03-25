@@ -1,19 +1,17 @@
-import { ReportApi } from '@/api/ReportApi'
 import { useMemo } from 'react'
 import ReportTable from './components/ReportTable'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useReportByYearQuery } from '@/queries/useReportByYearQuery'
+import { useReportByMonthQuery } from '@/queries/useReportByMonthQuery'
 
 const OverviewPage = () => {
   const { t } = useI18n()
-  const { data: monthData } = useDataLoader(
-    ['reports', 'current-month'],
-    () => ReportApi.getMonthReport(Date.now()),
+  const { data: monthData } = useReportByMonthQuery(
+    Date.now()
   )
 
-  const { data: yearData } = useDataLoader(
-    ['reports', 'current-year'],
-    () => ReportApi.getYearReport(Date.now()),
+  const { data: yearData } = useReportByYearQuery(
+    Date.now(),
   )
 
   const currentMonth = useMemo(

@@ -1,5 +1,4 @@
 import { Alert, Button, Loader } from '@coco-ui/core'
-import { ReportApi } from '@/api/ReportApi'
 import { useFormatDate } from '@/hooks/useFormatDate'
 import { ReportRequest } from '@/models/Report'
 import { Link, useHistory, useParams } from 'react-router-dom'
@@ -8,9 +7,9 @@ import ReportPerSupplierTable from './components/ReportPerSupplierTable'
 import ReportTable from './components/ReportTable'
 import { REPORT_ROUTES } from './constants'
 import DeleteModal from './modals/DeleteModal'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { ArrowLeftIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { useReportByIdQuery } from '@/queries/useReportByIdQuery'
 
 type DetailTableProps = {
   report: ReportRequest
@@ -38,7 +37,7 @@ const DetailTable = ({ report }: DetailTableProps) => {
 const DetailsPage = () => {
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: report, isLoading } = useDataLoader(['reports', id], () => ReportApi.findById(id))
+  const { data: report, isLoading } = useReportByIdQuery(id)
   const { t } = useI18n()
 
   const onSubmitSuccess = async () => {

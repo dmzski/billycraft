@@ -1,9 +1,8 @@
-import { SupplierApi } from '@/api/SupplierApi'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { useI18n } from '@/i18n'
 import { ReportResponse } from '@/models/Report'
 import Supplier from '@/models/Supplier'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import { useMemo } from 'react'
 
 type SupplierDetailRowProps = {
@@ -28,7 +27,7 @@ type ReportPerSupplierTableProps = {
 
 const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
   const {t} = useI18n()
-  const { data: suppliers } = useDataLoader(`suppliers`, () => SupplierApi.findAll())
+  const { data: suppliers } = useAllSuppliersQuery()
 
   const groupBySuppliers = useMemo(
     () =>

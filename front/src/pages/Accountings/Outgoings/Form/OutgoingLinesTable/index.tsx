@@ -1,6 +1,5 @@
 import { Button, Loader } from '@coco-ui/core'
 import { OutgoingRequest } from '@/models/Outgoing'
-import { useCallback } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import Row from './Row'
 import { useI18n } from '@/i18n'
@@ -17,13 +16,13 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
     keyName: 'line',
   })
 
-  const addLine = useCallback(() => {
+  const addLine = () => {
     append({
       vat: 0,
       totalHT: 0,
       line: fields.length + 1,
     })
-  }, [fields, append])
+  }
 
   return (
     <div className="border rounded">

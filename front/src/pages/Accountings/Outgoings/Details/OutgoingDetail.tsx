@@ -1,12 +1,11 @@
-import { SupplierApi } from '@/api/SupplierApi'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { OutgoingResponse } from '@/models/Outgoing'
 import { ReportOutgoingResponse } from '@/models/Report'
 import Supplier from '@/models/Supplier'
 import { ReactNode, useMemo } from 'react'
 import OutgoingLinesTable from './OutgoingLinesTable'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 
 type OnlyChildrenProps = {
   children: ReactNode
@@ -45,7 +44,7 @@ type OutgoingDetailProps = {
 }
 const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
   const { t } = useI18n()
-  const { data: suppliers } = useDataLoader(`suppliers`, () => SupplierApi.findAll())
+  const { data: suppliers } = useAllSuppliersQuery()
   const formatCurrency = useFormatCurrency()
 
   const total = useMemo(
