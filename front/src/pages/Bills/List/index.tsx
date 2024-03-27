@@ -4,7 +4,7 @@ import BillTableLine from './Row'
 import { useI18n } from '@/i18n'
 
 const BillList = ({ data }: { data: Bill[] }) => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const customers = useCustomers()
 
   return (

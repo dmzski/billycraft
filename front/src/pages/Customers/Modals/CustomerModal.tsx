@@ -8,7 +8,7 @@ type CustomerModalProps = {
   disclosure: JSX.Element
 }
 const CustomerModal = ({ customer, disclosure }: CustomerModalProps) => {
-  const {reload} = useDataLoaderContext()
+  const { reload } = useDataLoaderContext()
 
   const onSubmitSuccess = () => {
     reload('customers.not-deleted')
@@ -17,10 +17,13 @@ const CustomerModal = ({ customer, disclosure }: CustomerModalProps) => {
   return (
     <Modal disclosure={disclosure}>
       {({ close }) => (
-        <CustomerForm customer={customer} onSubmitSuccess={() => {
-          close()
-          onSubmitSuccess()
-        }} />
+        <CustomerForm
+          customer={customer}
+          onSubmitSuccess={() => {
+            close()
+            onSubmitSuccess()
+          }}
+        />
       )}
     </Modal>
   )

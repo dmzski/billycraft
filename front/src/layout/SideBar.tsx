@@ -3,19 +3,17 @@ import SideBarMenu from './SideBarMenu'
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid'
 
 const SideBar = () => {
-  const {organization} = useUser()
+  const { organization } = useUser()
 
   return (
     <aside className="bg-base-200 bg-opacity-20 border-r w-72 overflow-y-auto fixed h-screen">
       <div className="w-full h-full flex flex-col gap-4">
         <div className="flex flex-col gap-4">
-          <div className='bg-primary shadow-box flex gap-3 items-center text-lg p-3 text-primary-content'>
-            <div className='rounded-full p-3 mask mask-hexagon-2 bg-primary bg-opacity-50'>
-              <BuildingOfficeIcon className='w-6' />
+          <div className="bg-primary shadow-box flex gap-3 items-center text-lg p-3 text-primary-content">
+            <div className="rounded-full p-3 mask mask-hexagon-2 bg-primary bg-opacity-50">
+              <BuildingOfficeIcon className="w-6" />
             </div>
-            <p>
-              {organization?.name}
-            </p>
+            <p>{organization?.name}</p>
           </div>
         </div>
         <div className="flex flex-col flex-grow gap-2">

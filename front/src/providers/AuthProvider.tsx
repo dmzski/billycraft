@@ -1,12 +1,20 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react"
-import { ApiError } from "@/models/ApiError"
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { ApiError } from '@/models/ApiError'
 
 type AuthContextType = {
-  login: (params: { email: string, password: string }) => Promise<void>,
-  logout: () => Promise<void>,
-  register: (params: { email: string, password: string, name: string }) => Promise<void>
-  refreshSession: () => Promise<void>,
-  isAuthenticated: boolean,
+  login: (params: { email: string; password: string }) => Promise<void>
+  logout: () => Promise<void>
+  register: (params: { email: string; password: string; name: string }) => Promise<void>
+  refreshSession: () => Promise<void>
+  isAuthenticated: boolean
   isInitializing: boolean
 }
 
@@ -28,22 +36,23 @@ const AuthContext = createContext<AuthContextType>({
   refreshSession: () => Promise.resolve(),
 })
 
-const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
-const LOCAL_STORAGE_KEY = "coco_at"
-const { fetch: originalFetch } = window;
+const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ''
+const LOCAL_STORAGE_KEY = 'coco_at'
+const { fetch: originalFetch } = window
 
 const addInterceptFetch = (token: string) => {
   window.fetch = async (...args: Parameters<typeof originalFetch>) => {
-    const [resource, config = {}] = args;
+    const [resource, config = {}] = args
 
     const response = await originalFetch(resource, {
-      ...config, headers: {
+      ...config,
+      headers: {
         ...(config.headers ?? {}),
-        Authorization: "Bearer " + token
-      }
-    });
+        Authorization: 'Bearer ' + token,
+      },
+    })
 
-    return response;
+    return response
   }
 }
 
@@ -51,61 +60,72 @@ const clearFetch = () => {
   window.fetch = originalFetch
 }
 
-export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefreshSuccess, onRegisterSuccess, useAuthorizationHeader }: AuthProviderProps) => {
+export const AuthProvider = ({
+  children,
+  onLoginSuccess,
+  onLogoutSuccess,
+  onRefreshSuccess,
+  onRegisterSuccess,
+  useAuthorizationHeader,
+}: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined)
 
-  const login: AuthContextType['login'] = useCallback(async ({ email, password }) => {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        email,
-        password
-      }),
-      headers: {
-        "Content-Type": "application/json"
+  const login: AuthContextType['login'] = useCallback(
+    async ({ email, password }) => {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (res.ok) {
+        if (useAuthorizationHeader) {
+          const { token } = await res.json()
+          addInterceptFetch(token)
+          localStorage.setItem(LOCAL_STORAGE_KEY, token)
+          setIsAuthenticated(true)
+          await onLoginSuccess?.()
+        } else {
+          const { message } = await res.json()
+          throw new ApiError(res.status, message)
+        }
       }
-    })
-    if (res.ok) {
-      if (useAuthorizationHeader) {
-        const { token } = await res.json()
-        addInterceptFetch(token)
-        localStorage.setItem(LOCAL_STORAGE_KEY, token)
-        setIsAuthenticated(true)
-        await onLoginSuccess?.()
+    },
+    [onLoginSuccess, useAuthorizationHeader],
+  )
+
+  const register: AuthContextType['register'] = useCallback(
+    async ({ email, password, name }) => {
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          password,
+          name,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (res.ok) {
+        await onRegisterSuccess?.()
       } else {
         const { message } = await res.json()
         throw new ApiError(res.status, message)
       }
-    }
-
-  }, [onLoginSuccess, useAuthorizationHeader])
-
-  const register: AuthContextType['register'] = useCallback(async ({ email, password, name }) => {
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-        name
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    if (res.ok) {
-      await onRegisterSuccess?.()
-    } else {
-      const { message } = await res.json()
-      throw new ApiError(res.status, message)
-    }
-
-  }, [onRegisterSuccess])
+    },
+    [onRegisterSuccess],
+  )
 
   const logout = useCallback(async () => {
     const res = await fetch(`${API_URL}/auth/logout`, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
     })
     if (res.ok) {
       if (useAuthorizationHeader) {
@@ -123,7 +143,10 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
   const refreshSession = useCallback(async () => {
     try {
       if (useAuthorizationHeader && localStorage.getItem(LOCAL_STORAGE_KEY)) {
-        const res = await fetch(`${API_URL}/auth/refresh`, { credentials: "include", headers: { Authorization: "Bearer " + localStorage.getItem(LOCAL_STORAGE_KEY) } })
+        const res = await fetch(`${API_URL}/auth/refresh`, {
+          credentials: 'include',
+          headers: { Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_KEY) },
+        })
         if (res.ok) {
           const { token } = await res.json()
           addInterceptFetch(token)
@@ -140,7 +163,7 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
           throw new ApiError(res.status, message)
         }
       } else {
-        const res = await fetch(`${API_URL}/auth/refresh`, { credentials: "include" })
+        const res = await fetch(`${API_URL}/auth/refresh`, { credentials: 'include' })
         if (res.ok) {
           onRefreshSuccess?.()
           if (!isAuthenticated) {
@@ -168,24 +191,24 @@ export const AuthProvider = ({ children, onLoginSuccess, onLogoutSuccess, onRefr
     }
   }, [refreshSession, isAuthenticated])
 
-  const value = useMemo(() => ({
-    isInitializing: isAuthenticated === undefined,
-    isAuthenticated: !!isAuthenticated,
-    refreshSession,
-    register,
-    logout,
-    login
-  } as AuthContextType), [isAuthenticated, refreshSession, register, logout, login])
+  const value = useMemo(
+    () =>
+      ({
+        isInitializing: isAuthenticated === undefined,
+        isAuthenticated: !!isAuthenticated,
+        refreshSession,
+        register,
+        logout,
+        login,
+      } as AuthContextType),
+    [isAuthenticated, refreshSession, register, logout, login],
+  )
 
-  if (!API_URL || API_URL.endsWith("/")) {
-    throw new Error("VITE_AUTH_API_URL need to be set with no trailing slash")
+  if (!API_URL || API_URL.endsWith('/')) {
+    throw new Error('VITE_AUTH_API_URL need to be set with no trailing slash')
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {

@@ -66,10 +66,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
     }
   }
 
-  const disabled = useMemo(
-    () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT)),
-    [quote],
-  )
+  const disabled = useMemo(() => !!(quote.id && quote.status !== QuoteStatusEnum.DRAFT), [quote])
 
   const customerOptions = useMemo(() => {
     const array = []
@@ -99,10 +96,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Prompt
-        when={isDirty}
-        message={t('quotes.form.exitWarning')}
-      />
+      <Prompt when={isDirty} message={t('quotes.form.exitWarning')} />
       <Controller
         name="title"
         control={control}
@@ -141,7 +135,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             isSearchable
             ref={field.ref}
             required
-            autoComplete='off'
+            autoComplete="off"
           />
         )}
       />
@@ -218,11 +212,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
             >
               {t('quotes.form.actions.backToDraft')}
             </Button>
-            <Button
-              size="md"
-              type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
-            >
+            <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
               {t('quotes.form.actions.archive')}
             </Button>
           </>
@@ -247,20 +237,12 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
           </>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
-          <Button
-            size="md"
-            type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
-          >
+          <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
             {t('quotes.form.actions.depositPaid')}
           </Button>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID ? (
-          <Button
-            size="md"
-            type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
-          >
+          <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
             {t('quotes.form.actions.archive')}
           </Button>
         ) : null}

@@ -101,7 +101,9 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) =>
   return (
     <Modal onClose={onClose} open={isOpen}>
       <div className="w-full">
-        <h2 className="text-xl border-b mb-4 pb-2">{t('accounting.outgoings.modals.selectBill.title')}</h2>
+        <h2 className="text-xl border-b mb-4 pb-2">
+          {t('accounting.outgoings.modals.selectBill.title')}
+        </h2>
         <div className="ml-2 mb-2 flex flex-col gap-4">
           <Select
             options={customerOptions}

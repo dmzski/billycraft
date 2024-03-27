@@ -6,7 +6,12 @@ import { Prompt } from 'react-router-dom'
 import useCustomers from '@/hooks/useCustomers'
 import Bill, { BillStatusEnum, BillLine } from '@/models/Bill'
 import BillLineTable from './BillLineTable'
-import { ArchiveBoxArrowDownIcon, EnvelopeIcon, HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid'
+import {
+  ArchiveBoxArrowDownIcon,
+  EnvelopeIcon,
+  HandThumbDownIcon,
+  HandThumbUpIcon,
+} from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 
 export type BillFormValues = {
@@ -70,10 +75,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
     }
   }
 
-  const disabled = useMemo(
-    () => !!((bill.id && bill.status !== BillStatusEnum.DRAFT)),
-    [bill],
-  )
+  const disabled = useMemo(() => !!(bill.id && bill.status !== BillStatusEnum.DRAFT), [bill])
 
   const customerOptions = useMemo(() => {
     const array = []
@@ -103,10 +105,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Prompt
-        when={isDirty}
-        message={t('bills.form.exitWarning')}
-      />
+      <Prompt when={isDirty} message={t('bills.form.exitWarning')} />
       <Controller
         name="title"
         control={control}
@@ -135,7 +134,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             tabIndex={0}
             error={invalid}
             label={t('bills.form.fields.customerId.label')}
-            autoComplete='off'
+            autoComplete="off"
             id="customer-select"
             name={field.name}
             disabled={disabled}
@@ -187,12 +186,10 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             type="button"
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
-            className='gap-1'
+            className="gap-1"
           >
-            <EnvelopeIcon className='w-5' />
-            <span>
-              {t('bills.form.actions.sent')}
-            </span>
+            <EnvelopeIcon className="w-5" />
+            <span>{t('bills.form.actions.sent')}</span>
           </Button>
         ) : null}
         {bill.status === BillStatusEnum.SENT ? (
@@ -202,9 +199,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               type="button"
               variant="success"
               onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
-              className='gap-1'
+              className="gap-1"
             >
-              <HandThumbUpIcon className='w-5' />
+              <HandThumbUpIcon className="w-5" />
               <span>{t('bills.form.actions.paid')}</span>
             </Button>
             <Button
@@ -212,16 +209,21 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
               type="button"
               variant="error"
               onClick={updateBillStatus(BillStatusEnum.REFUSED)}
-              className='gap-1'
+              className="gap-1"
             >
-              <HandThumbDownIcon className='w-5' />
+              <HandThumbDownIcon className="w-5" />
               <span>{t('bills.form.actions.refused')}</span>
             </Button>
           </>
         ) : null}
         {bill.status === BillStatusEnum.PAYMENT_PAID ? (
-          <Button size="md" type="button" className='gap-1' onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
-            <ArchiveBoxArrowDownIcon className='w-5' />
+          <Button
+            size="md"
+            type="button"
+            className="gap-1"
+            onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}
+          >
+            <ArchiveBoxArrowDownIcon className="w-5" />
             <span>{t('bills.form.actions.archive')}</span>
           </Button>
         ) : null}

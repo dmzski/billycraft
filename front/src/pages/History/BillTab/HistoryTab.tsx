@@ -14,7 +14,10 @@ const HistoryTab = () => {
   const [filters, setFilters] = useState<BillFilters>({})
   const { data, isLoading } = useDataLoader(['bills', 'archived'], () => BillApi.findAllArchived())
 
-  const billSorted = useMemo(() => filterBills(data ?? [], filters, customers), [customers, data, filters])
+  const billSorted = useMemo(
+    () => filterBills(data ?? [], filters, customers),
+    [customers, data, filters],
+  )
 
   return (
     <>

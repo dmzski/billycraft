@@ -23,15 +23,15 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
   const methodsCreate = useForm<TodoFormValues>({
     mode: 'onChange',
     values: {
-      description: ''
-    }
+      description: '',
+    },
   })
 
   const methodsUpdate = useForm<TodoFormValues>({
     mode: 'onChange',
     values: {
-      description: ''
-    }
+      description: '',
+    },
   })
 
   const handleDone = (id: number) => () => {
@@ -93,7 +93,10 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
         <div className="md:col-span-2">{t('dashboard.todos.headers.doneAt')}</div>
         <div className="md:col-span-2">{t('dashboard.todos.headers.doneBy')}</div>
       </div>
-      <form className="p-2 flex justify-between gap-4" onSubmit={methodsCreate.handleSubmit(onSubmit)}>
+      <form
+        className="p-2 flex justify-between gap-4"
+        onSubmit={methodsCreate.handleSubmit(onSubmit)}
+      >
         <Controller
           name="description"
           control={methodsCreate.control}
@@ -120,97 +123,102 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
           Ajouter
         </Button>
       </form>
-      {data && data.length === 0 ? <div className='p-2'>{t('dashboard.todos.empty')}</div> : null}
+      {data && data.length === 0 ? <div className="p-2">{t('dashboard.todos.empty')}</div> : null}
       {data && data.length > 0 ? (
         <div className="flex flex-col">
-          {data?.map((todo) => editMode === todo.id && !todo.doneAt ? (
-            <form
-              onSubmit={methodsUpdate.handleSubmit(onSubmitUpdate)}
-              name={`edit-todo-${todo.id}`}
-              key={todo.id}
-              className={clsx('grid gap-2 md:grid-cols-12 py-3 px-4 items-center', {
-                'bg-success text-success-content': !!todo.doneAt
-              })}
-            >
-              <div className="md:col-span-2">
-                {formatRelative(new Date(todo.createdAt), Date.now(), {
-                  locale: fr,
+          {data?.map(todo =>
+            editMode === todo.id && !todo.doneAt ? (
+              <form
+                onSubmit={methodsUpdate.handleSubmit(onSubmitUpdate)}
+                name={`edit-todo-${todo.id}`}
+                key={todo.id}
+                className={clsx('grid gap-2 md:grid-cols-12 py-3 px-4 items-center', {
+                  'bg-success text-success-content': !!todo.doneAt,
                 })}
-              </div>
-              <div className="md:col-span-2">{todo.createdBy}</div>
-              <div className="md:col-span-6">
-                <Controller name="description" rules={{ required: true, minLength: 3 }} control={methodsUpdate.control} render={({ field, fieldState }) => (
-                  <Input
-                    type="text"
-                    placeholder={t('dashboard.todos.form.fields.description.placeholder')}
-                    name={field.name}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    value={field.value}
-                    error={fieldState.invalid}
+              >
+                <div className="md:col-span-2">
+                  {formatRelative(new Date(todo.createdAt), Date.now(), {
+                    locale: fr,
+                  })}
+                </div>
+                <div className="md:col-span-2">{todo.createdBy}</div>
+                <div className="md:col-span-6">
+                  <Controller
+                    name="description"
+                    rules={{ required: true, minLength: 3 }}
+                    control={methodsUpdate.control}
+                    render={({ field, fieldState }) => (
+                      <Input
+                        type="text"
+                        placeholder={t('dashboard.todos.form.fields.description.placeholder')}
+                        name={field.name}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        error={fieldState.invalid}
+                      />
+                    )}
                   />
-                )} />
-              </div>
-              <div className="md:col-span-2 justify-end items-center flex gap-2">
-                <Button variant="success" type="submit"
-                  disabled={!methodsUpdate.formState.isValid || methodsUpdate.formState.isSubmitting}
-                >
-                  <CheckIcon className='w-5' />
-                </Button>
-                <Button onClick={handleCancelEdit} type="button" variant="error"
-                  disabled={methodsUpdate.formState.isSubmitting}
-                >
-                  <XMarkIcon className='w-5' />
-                </Button>
-              </div>
-            </form>
-          ) : (
-            <div
-              key={todo.id}
-              className={clsx('grid gap-2 min-h-16 md:grid-cols-12 py-3 px-4 items-center', {
-                'bg-success text-success-content': !!todo.doneAt
-              })}
-            >
-              <div className="md:col-span-2">
-                {formatRelative(new Date(todo.createdAt), Date.now(), {
-                  locale: fr,
-                })}
-              </div>
-              <div className="md:col-span-2">{todo.createdBy}</div>
-              <div className="md:col-span-4 break-all">
-                {todo.description}
-              </div>
-              {!todo.doneAt ? (
-                <div className='md:col-span-4 justify-end items-center flex gap-2'>
+                </div>
+                <div className="md:col-span-2 justify-end items-center flex gap-2">
                   <Button
-                    onClick={handleEdit(todo.id, todo.description)}
-                    variant="info"
-                    outline
+                    variant="success"
+                    type="submit"
+                    disabled={
+                      !methodsUpdate.formState.isValid || methodsUpdate.formState.isSubmitting
+                    }
                   >
-                    <PencilIcon className='w-5' />
+                    <CheckIcon className="w-5" />
                   </Button>
-                  <Button outline onClick={handleDone(todo.id)} variant="success">
-                    <CheckIcon className='w-5' />
+                  <Button
+                    onClick={handleCancelEdit}
+                    type="button"
+                    variant="error"
+                    disabled={methodsUpdate.formState.isSubmitting}
+                  >
+                    <XMarkIcon className="w-5" />
                   </Button>
                 </div>
-              ) : (
-                <>
-                  <div className='md:col-span-2'>
-                    {formatRelative(new Date(todo.doneAt), Date.now(), {
-                      locale: fr,
-                    })}
+              </form>
+            ) : (
+              <div
+                key={todo.id}
+                className={clsx('grid gap-2 min-h-16 md:grid-cols-12 py-3 px-4 items-center', {
+                  'bg-success text-success-content': !!todo.doneAt,
+                })}
+              >
+                <div className="md:col-span-2">
+                  {formatRelative(new Date(todo.createdAt), Date.now(), {
+                    locale: fr,
+                  })}
+                </div>
+                <div className="md:col-span-2">{todo.createdBy}</div>
+                <div className="md:col-span-4 break-all">{todo.description}</div>
+                {!todo.doneAt ? (
+                  <div className="md:col-span-4 justify-end items-center flex gap-2">
+                    <Button onClick={handleEdit(todo.id, todo.description)} variant="info" outline>
+                      <PencilIcon className="w-5" />
+                    </Button>
+                    <Button outline onClick={handleDone(todo.id)} variant="success">
+                      <CheckIcon className="w-5" />
+                    </Button>
                   </div>
-                  <div className='md:col-span-2'>
-                    {todo.doneBy}
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
+                ) : (
+                  <>
+                    <div className="md:col-span-2">
+                      {formatRelative(new Date(todo.doneAt), Date.now(), {
+                        locale: fr,
+                      })}
+                    </div>
+                    <div className="md:col-span-2">{todo.doneBy}</div>
+                  </>
+                )}
+              </div>
+            ),
+          )}
         </div>
-      ) : null
-      }
-    </div >
+      ) : null}
+    </div>
   )
 }
 

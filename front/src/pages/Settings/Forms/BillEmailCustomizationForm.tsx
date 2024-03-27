@@ -18,11 +18,9 @@ const BillEmailCustomizationForm = ({
   billEmailCustomization,
   onSubmit,
 }: BillEmailCustomizationFormProps) => {
-  const {t}  = useI18n()
-  const [
-    newBillEmailCustomization,
-    setNewBillEmailCustomization,
-  ] = useState<BillEmailCustomization>(billEmailCustomization || defaultValues)
+  const { t } = useI18n()
+  const [newBillEmailCustomization, setNewBillEmailCustomization] =
+    useState<BillEmailCustomization>(billEmailCustomization || defaultValues)
 
   useEffect(() => {
     setNewBillEmailCustomization(billEmailCustomization || defaultValues)
@@ -62,7 +60,7 @@ const BillEmailCustomizationForm = ({
           <Input
             id="object"
             name="object"
-            label={t("settings.forms.billemailcustomizationform.object.label")}
+            label={t('settings.forms.billemailcustomizationform.object.label')}
             value={newBillEmailCustomization.object}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewBillEmailCustomization({
@@ -78,7 +76,7 @@ const BillEmailCustomizationForm = ({
           <TextArea
             id="body"
             name="body"
-            label={t("settings.forms.billemailcustomizationform.body.label")}
+            label={t('settings.forms.billemailcustomizationform.body.label')}
             rows={5}
             value={newBillEmailCustomization.body}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

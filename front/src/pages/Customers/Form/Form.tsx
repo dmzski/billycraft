@@ -24,7 +24,7 @@ type CustomerFormProps = {
 }
 
 const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
-  const {t}=useI18n()
+  const { t } = useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -74,15 +74,15 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
   return (
     <div className="flex flex-col w-full gap-5">
       <h1 className="text-xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
-      <form className='flex flex-col gap-3' onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="name"
           control={control}
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.name.label")}
-              placeholder={t("customers.form.form.name.placeholder")}
+              label={t('customers.form.form.name.label')}
+              placeholder={t('customers.form.form.name.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -100,8 +100,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <TextArea
               rows={4}
-              label={t("customers.form.form.address.label")}
-              placeholder={t("customers.form.form.address.placeholder")}
+              label={t('customers.form.form.address.label')}
+              placeholder={t('customers.form.form.address.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -118,8 +118,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.email.label")}
-              placeholder={t("customers.form.form.email.placeholder")}
+              label={t('customers.form.form.email.label')}
+              placeholder={t('customers.form.form.email.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -136,8 +136,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.phoneNumber.label")}
-              placeholder={t("customers.form.form.phoneNumber.placeholder")}
+              label={t('customers.form.form.phoneNumber.label')}
+              placeholder={t('customers.form.form.phoneNumber.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -154,8 +154,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.city.label")}
-              placeholder={t("customers.form.form.city.placeholder")}
+              label={t('customers.form.form.city.label')}
+              placeholder={t('customers.form.form.city.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -172,8 +172,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.postalCode.label")}
-              placeholder={t("customers.form.form.postalcode.placeholder")}
+              label={t('customers.form.form.postalCode.label')}
+              placeholder={t('customers.form.form.postalcode.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -190,8 +190,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.contact.label")}
-              placeholder={t("customers.form.form.contact.placeholder")}
+              label={t('customers.form.form.contact.label')}
+              placeholder={t('customers.form.form.contact.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -202,19 +202,15 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
             />
           )}
         />
-        <div className={clsx('grid gap-3 mt-5', customer?.id ? "md:grid-cols-2" : "")}>
+        <div className={clsx('grid gap-3 mt-5', customer?.id ? 'md:grid-cols-2' : '')}>
           {customer?.id ? (
             <Button type="button" variant="error" onClick={tryDelete}>
-              <TrashIcon className='w-5' />
+              <TrashIcon className="w-5" />
               &nbsp; {t('delete')}
             </Button>
           ) : null}
-          <Button
-            variant="primary"
-            disabled={!isValid || isSubmitting}
-            type="submit"
-          >
-            {t("save")}
+          <Button variant="primary" disabled={!isValid || isSubmitting} type="submit">
+            {t('save')}
           </Button>
         </div>
       </form>

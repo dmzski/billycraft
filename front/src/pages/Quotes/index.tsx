@@ -31,11 +31,11 @@ const QuotePage = () => {
   }
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <h2 className="text-3xl">Devis</h2>
-        <Button className='gap-1' size="md" variant="primary" onClick={goToNewQuote}>
-          <PlusIcon className='w-5' />
+        <Button className="gap-1" size="md" variant="primary" onClick={goToNewQuote}>
+          <PlusIcon className="w-5" />
           {t('quotes.list.add')}
         </Button>
       </div>

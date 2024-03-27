@@ -13,8 +13,8 @@ type MyCompagnyFormProps = {
   onSubmitSuccess?: (res: Company) => void | Promise<void>
 }
 const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
-  const {t}=useI18n()
-  const {reload} = useDataLoaderContext()
+  const { t } = useI18n()
+  const { reload } = useDataLoaderContext()
   const toast = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadLogoState = useLoadingState()
@@ -80,15 +80,15 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-      <div className="text-2xl border-b">{t("compagny informations")}</div>
+      <div className="text-2xl border-b">{t('compagny informations')}</div>
       <div className="md:pl-2 flex flex-col gap-8">
         <Controller
           name="name"
           control={control}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("settings.forms.mycompagnyform.name.label")}
-              placeholder={t("settings.forms.mycompagnyform.name.placeholder")}
+              label={t('settings.forms.mycompagnyform.name.label')}
+              placeholder={t('settings.forms.mycompagnyform.name.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -105,9 +105,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             <TextArea
               id="address"
               rows={3}
-
-              label={t("settings.forms.mycompagnyform.address.label")}
-              placeholder={t("settings.forms.mycompagnyform.address.placeholder")}
+              label={t('settings.forms.mycompagnyform.address.label')}
+              placeholder={t('settings.forms.mycompagnyform.address.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -123,8 +122,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
-              label={t("settings.forms.mycompagnyform.postalCode.label")}
-              placeholder={t("settings.forms.mycompagnyform.postalCode.placeholder")}
+              label={t('settings.forms.mycompagnyform.postalCode.label')}
+              placeholder={t('settings.forms.mycompagnyform.postalCode.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -141,8 +140,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
-              label={t("settings.forms.mycompagnyform.city.label")}
-              placeholder={t("settings.forms.mycompagnyform.city.placeholder")}
+              label={t('settings.forms.mycompagnyform.city.label')}
+              placeholder={t('settings.forms.mycompagnyform.city.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -159,8 +158,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"
-              label={t("settings.forms.mycompagnyform.phoneNumber.label")}
-              placeholder={t("settings.forms.mycompagnyform.phoneNumber.placeholder")}
+              label={t('settings.forms.mycompagnyform.phoneNumber.label')}
+              placeholder={t('settings.forms.mycompagnyform.phoneNumber.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -177,8 +176,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
-              label={t("settings.forms.mycompagnyform.email.label")}
-              placeholder={t("settings.forms.mycompagnyform.email.placeholder")}
+              label={t('settings.forms.mycompagnyform.email.label')}
+              placeholder={t('settings.forms.mycompagnyform.email.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -195,8 +194,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="siret"
-              label={t("settings.forms.mycompagnyform.siret.label")}
-              placeholder={t("settings.forms.mycompagnyform.siret.placeholder")}
+              label={t('settings.forms.mycompagnyform.siret.label')}
+              placeholder={t('settings.forms.mycompagnyform.siret.placeholder')}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -212,9 +211,9 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Input
-                label={t("settings.forms.mycompagnyform.logo.label")}
+                label={t('settings.forms.mycompagnyform.logo.label')}
                 className="col-span-12 md:col-span-9"
-                placeholder={t("settings.forms.mycompagnyform.logo.placeholder")}
+                placeholder={t('settings.forms.mycompagnyform.logo.placeholder')}
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
@@ -253,7 +252,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.articlesTax.label")}
+                label={t('settings.forms.mycompagnyform.articlesTax.label')}
                 type="number"
                 step={0.01}
                 max={100}
@@ -273,7 +272,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.servicesTax.label")}
+                label={t('settings.forms.mycompagnyform.servicesTax.label')}
                 type="number"
                 step={0.01}
                 max={100}
@@ -293,7 +292,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.othersTax.label")}
+                label={t('settings.forms.mycompagnyform.othersTax.label')}
                 step={0.01}
                 max={100}
                 min={0}

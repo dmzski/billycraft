@@ -26,7 +26,7 @@ const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
 )
 const ReportTable = ({ report }: ReportTableProps) => {
   const formatCurrency = useFormatCurrency()
-  const {t} = useI18n()
+  const { t } = useI18n()
 
   const allTaxes = useMemo(
     () => report.serviceTaxes + report.articleTaxes + report.otherTaxes,
@@ -35,35 +35,51 @@ const ReportTable = ({ report }: ReportTableProps) => {
   return (
     <div className="flex flex-col gap-2 md:gap-0 border rounded">
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.articleSells')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.articleSells')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.articleSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.serviceSells')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.serviceSells')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.serviceSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.otherSells')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.otherSells')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.otherSales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.salesRevenue')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.salesRevenue')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.sales)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.toDeclare')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.toDeclare')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(allTaxes)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.etIncome')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.etIncome')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.sales - allTaxes)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft>{t('accounting.reports.components.table.headers.outcomes')}</ReportTableLeft>
+        <ReportTableLeft>
+          {t('accounting.reports.components.table.headers.outcomes')}
+        </ReportTableLeft>
         <ReportTableRight>{formatCurrency(report.totalOutgoings)}</ReportTableRight>
       </ReportTableRow>
       <ReportTableRow>
-        <ReportTableLeft noBorder>{t('accounting.reports.components.table.headers.etRemaining')}</ReportTableLeft>
+        <ReportTableLeft noBorder>
+          {t('accounting.reports.components.table.headers.etRemaining')}
+        </ReportTableLeft>
         <ReportTableRight noBorder>
           {formatCurrency(report.sales - allTaxes - report.totalOutgoings)}
         </ReportTableRight>

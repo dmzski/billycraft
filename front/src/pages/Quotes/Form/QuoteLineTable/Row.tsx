@@ -30,12 +30,12 @@ const QuoteLineTableLine = ({
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id,
     data: {
-      lineIndex: index
-    }
-  });
+      lineIndex: index,
+    },
+  })
   const style = {
     transform: CSS.Translate.toString(transform),
-    transition
+    transition,
   }
 
   const price = useWatch({
@@ -69,14 +69,13 @@ const QuoteLineTableLine = ({
   return (
     <div
       className="bg-base-100 grid md:grid-cols-12 mb-2 p-2 gap-2"
-      ref={setNodeRef} style={style}  {...attributes}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
     >
       <div className="flex md:col-span-2">
-        <div
-          className="items-center flex p-2"
-          {...listeners}
-        >
-          <ArrowsUpDownIcon className='w-5' />
+        <div className="items-center flex p-2" {...listeners}>
+          <ArrowsUpDownIcon className="w-5" />
         </div>
         <Controller
           name={`lines.${index}.type`}
@@ -84,7 +83,7 @@ const QuoteLineTableLine = ({
           rules={{ required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Select
-              className='min-w-0'
+              className="min-w-0"
               disabled={disabled}
               error={invalid}
               value={field.value}
@@ -184,8 +183,8 @@ const QuoteLineTableLine = ({
       <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
-          <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
-            <TrashIcon className='w-5' />
+          <Button variant="ghost" className="text-error" square size="sm" onClick={deleteLine}>
+            <TrashIcon className="w-5" />
           </Button>
         ) : null}
       </div>

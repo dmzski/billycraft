@@ -12,12 +12,8 @@ type SupplierModalFormProps = {
   onSubmitSuccess?: (data: Supplier) => void | Promise<void>
   disclosure: JSX.Element
 }
-const SupplierModalForm = ({
-  disclosure,
-  supplier,
-  onSubmitSuccess,
-}: SupplierModalFormProps) => {
-  const {t}=useI18n()
+const SupplierModalForm = ({ disclosure, supplier, onSubmitSuccess }: SupplierModalFormProps) => {
+  const { t } = useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -75,96 +71,98 @@ const SupplierModalForm = ({
 
   return (
     <Modal disclosure={disclosure}>
-    {({close}) => (
-    <div className="w-full pb-2">
-      <div className="flex border-b px-2 pb-2 mb-4 pr-6">
-        <h3 className="flex-grow text-xl">
-        {supplier.id ? t("suppliers.modals.SupplierModalForm.title.edit") : t("suppliers.modals.SupplierModalForm.title.create")}
-        </h3>
-        <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
-          <TrashIcon className='w-5' />
-          &nbsp; {t('delete')}
-        </Button>
-      </div>
-      <form className="px-4" onSubmit={handleSubmit(onSubmit(close))}>
-        <Controller
-          control={control}
-          name="name"
-          rules={{ required: true, minLength: 2 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              required
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              ref={field.ref}
-              className="mb-4"
-              label= {t('suppliers.modals.SupplierModalForm.field.name.label')}
-              value={field.value}
-              error={invalid}
-              minLength={2}
+      {({ close }) => (
+        <div className="w-full pb-2">
+          <div className="flex border-b px-2 pb-2 mb-4 pr-6">
+            <h3 className="flex-grow text-xl">
+              {supplier.id
+                ? t('suppliers.modals.SupplierModalForm.title.edit')
+                : t('suppliers.modals.SupplierModalForm.title.create')}
+            </h3>
+            <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
+              <TrashIcon className="w-5" />
+              &nbsp; {t('delete')}
+            </Button>
+          </div>
+          <form className="px-4" onSubmit={handleSubmit(onSubmit(close))}>
+            <Controller
+              control={control}
+              name="name"
+              rules={{ required: true, minLength: 2 }}
+              render={({ field, fieldState: { invalid } }) => (
+                <Input
+                  required
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  ref={field.ref}
+                  className="mb-4"
+                  label={t('suppliers.modals.SupplierModalForm.field.name.label')}
+                  value={field.value}
+                  error={invalid}
+                  minLength={2}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="vat"
-          rules={{ required: true, min: 0, max: 100 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              required
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              ref={field.ref}
-              className="mb-4"
-              label={t('suppliers.modals.SupplierModalForm.field.vat.label')}
-              value={field.value}
-              error={invalid}
-              type="number"
-              min={0}
-              max={100}
+            <Controller
+              control={control}
+              name="vat"
+              rules={{ required: true, min: 0, max: 100 }}
+              render={({ field, fieldState: { invalid } }) => (
+                <Input
+                  required
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  ref={field.ref}
+                  className="mb-4"
+                  label={t('suppliers.modals.SupplierModalForm.field.vat.label')}
+                  value={field.value}
+                  error={invalid}
+                  type="number"
+                  min={0}
+                  max={100}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="color"
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <div className="flex items-center">
-              <Input
-                required
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-                ref={field.ref}
-                className="mb-4 flex-grow"
-                label={t('suppliers.modals.SupplierModalForm.field.color.label')}
-                value={field.value}
-                error={invalid}
-              />
-              <input
-                type="color"
-                className=" ml-2"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            </div>
-          )}
-        />
-        <Button
-          disabled={!isValid || isSubmitting}
-          variant="primary"
-          className="w-full"
-          type="submit"
-        >
-          {t('save')}
-        </Button>
-      </form>
-    </div>
-    )}
+            <Controller
+              control={control}
+              name="color"
+              rules={{ required: true }}
+              render={({ field, fieldState: { invalid } }) => (
+                <div className="flex items-center">
+                  <Input
+                    required
+                    name={field.name}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                    ref={field.ref}
+                    className="mb-4 flex-grow"
+                    label={t('suppliers.modals.SupplierModalForm.field.color.label')}
+                    value={field.value}
+                    error={invalid}
+                  />
+                  <input
+                    type="color"
+                    className=" ml-2"
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                  />
+                </div>
+              )}
+            />
+            <Button
+              disabled={!isValid || isSubmitting}
+              variant="primary"
+              className="w-full"
+              type="submit"
+            >
+              {t('save')}
+            </Button>
+          </form>
+        </div>
+      )}
     </Modal>
   )
 }

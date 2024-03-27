@@ -17,9 +17,12 @@ const FormPage = () => {
     enabled: id !== 'new',
   })
 
-  const onSubmitSuccess = useCallback((res: OutgoingResponse) => {
-    push(injectIdInPath(routes.DETAILS.path, res.id))
-  }, [push])
+  const onSubmitSuccess = useCallback(
+    (res: OutgoingResponse) => {
+      push(injectIdInPath(routes.DETAILS.path, res.id))
+    },
+    [push],
+  )
 
   return (
     <div>
@@ -30,7 +33,11 @@ const FormPage = () => {
       </Link>
       <div className="border-b py-2 my-4">
         <h1 className="text-2xl">
-          {t(id !== 'new' ? "accounting.outgoings.pages.form.edit.title" : "accounting.outgoings.pages.form.create.title")}
+          {t(
+            id !== 'new'
+              ? 'accounting.outgoings.pages.form.edit.title'
+              : 'accounting.outgoings.pages.form.create.title',
+          )}
         </h1>
       </div>
       {isLoading ? (

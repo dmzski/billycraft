@@ -1,17 +1,17 @@
-import { Button, Checkbox, Input, useToast } from "@coco-ui/core"
-import { SUPPORT_EMAIL } from "@/constants/global"
-import { useI18n } from "@/i18n"
-import { ApiError } from "@/models/ApiError"
-import { useAuth } from "@/providers/AuthProvider"
-import { useMemo } from "react"
-import { Controller, useForm } from "react-hook-form"
-import { Link, useHistory } from "react-router-dom"
-import { ROUTES } from "@/routes"
-import { sendErrorToSentry } from "@/utils/errors"
+import { Button, Checkbox, Input, useToast } from '@coco-ui/core'
+import { SUPPORT_EMAIL } from '@/constants/global'
+import { useI18n } from '@/i18n'
+import { ApiError } from '@/models/ApiError'
+import { useAuth } from '@/providers/AuthProvider'
+import { useMemo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Link, useHistory } from 'react-router-dom'
+import { ROUTES } from '@/routes'
+import { sendErrorToSentry } from '@/utils/errors'
 
 type RegisterFormValues = {
-  email: string,
-  password: string,
+  email: string
+  password: string
   name: string
   tos: boolean
 }
@@ -22,21 +22,28 @@ export const Register = () => {
   const toast = useToast()
   const { push } = useHistory()
 
-  const initialValues = useMemo(() => ({
-    name: "",
-    email: "",
-    password: "",
-    tos: false
-  } as RegisterFormValues), [])
+  const initialValues = useMemo(
+    () =>
+      ({
+        name: '',
+        email: '',
+        password: '',
+        tos: false,
+      } as RegisterFormValues),
+    [],
+  )
 
-  const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid, isSubmitting },
+  } = useForm({
     values: initialValues,
-    mode: "onChange",
-    shouldUseNativeValidation: true
+    mode: 'onChange',
+    shouldUseNativeValidation: true,
   })
   const onSubmit = async (params: RegisterFormValues) => {
     try {
-
       await register(params)
       toast.success(t('register.success'))
       push(ROUTES.LOGIN.path)
@@ -50,7 +57,6 @@ export const Register = () => {
         toast.error(t('genericFormError'))
       }
     }
-
   }
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4">
@@ -66,7 +72,16 @@ export const Register = () => {
                 required: true,
               }}
               render={({ field }) => (
-                <Input required onChange={field.onChange} onBlur={field.onBlur} autoComplete="email" type="email" label={t('register.fields.email.label')} name="email" placeholder="email@exemple.com" />
+                <Input
+                  required
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  autoComplete="email"
+                  type="email"
+                  label={t('register.fields.email.label')}
+                  name="email"
+                  placeholder="email@exemple.com"
+                />
               )}
             />
             <Controller
@@ -76,7 +91,16 @@ export const Register = () => {
                 required: true,
               }}
               render={({ field }) => (
-                <Input required onChange={field.onChange} onBlur={field.onBlur} autoComplete="password" type="password" label={t('register.fields.password.label')} name="password" placeholder="*******" />
+                <Input
+                  required
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  autoComplete="password"
+                  type="password"
+                  label={t('register.fields.password.label')}
+                  name="password"
+                  placeholder="*******"
+                />
               )}
             />
             <Controller
@@ -86,7 +110,16 @@ export const Register = () => {
                 required: true,
               }}
               render={({ field }) => (
-                <Input required onChange={field.onChange} onBlur={field.onBlur} autoComplete="fullName" type="text" label={t('register.fields.name.label')} name="name" placeholder="John Doe" />
+                <Input
+                  required
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  autoComplete="fullName"
+                  type="text"
+                  label={t('register.fields.name.label')}
+                  name="name"
+                  placeholder="John Doe"
+                />
               )}
             />
           </div>
@@ -95,22 +128,38 @@ export const Register = () => {
               control={control}
               name="tos"
               rules={{
-                required: true
+                required: true,
               }}
               render={({ field }) => (
                 <div className="flex gap-2">
-                  <Checkbox name={field.name} onChange={field.onChange} checked={field.value} labelPosition="right" />
-                  <a href="/tos.txt" target="_blank" className="link">{t('register.fields.tos.label')}</a>
+                  <Checkbox
+                    name={field.name}
+                    onChange={field.onChange}
+                    checked={field.value}
+                    labelPosition="right"
+                  />
+                  <a href="/tos.txt" target="_blank" className="link">
+                    {t('register.fields.tos.label')}
+                  </a>
                 </div>
               )}
             />
-            <Button variant="primary" type="submit" disabled={!isValid || isSubmitting}>{t('register.submit')}</Button>
+            <Button variant="primary" type="submit" disabled={!isValid || isSubmitting}>
+              {t('register.submit')}
+            </Button>
             <div className="flex justify-center">
-              <Link to={ROUTES.LOGIN.path} className="link link-info">{t('login.title')}</Link>
+              <Link to={ROUTES.LOGIN.path} className="link link-info">
+                {t('login.title')}
+              </Link>
             </div>
           </div>
         </form>
-        <small className="text-xs">{t('supportPrefix')}<a className="link" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></small>
+        <small className="text-xs">
+          {t('supportPrefix')}
+          <a className="link" href={`mailto:${SUPPORT_EMAIL}`}>
+            {SUPPORT_EMAIL}
+          </a>
+        </small>
       </div>
     </div>
   )

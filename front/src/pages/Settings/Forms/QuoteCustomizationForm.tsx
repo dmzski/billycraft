@@ -8,10 +8,8 @@ import { useI18n } from '@/i18n'
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
 }
-const QuoteCustomizationForm = ({
-  quoteCustomization,
-}: QuoteCustomizationFormProps) => {
-  const {t}=useI18n()
+const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormProps) => {
+  const { t } = useI18n()
   const [newQuoteCustomization, setNewQuoteCustomization] = useState<QuoteCustomization>(
     {} as QuoteCustomization,
   )
@@ -56,8 +54,8 @@ const QuoteCustomizationForm = ({
                 mainColor: e.target.value,
               })
             }}
-            label={t("settings.forms.quotecustomizationform.mainColor.label")}
-            placeholder={t("settings.forms.quotecustomizationform.mainColor.placeholder")}
+            label={t('settings.forms.quotecustomizationform.mainColor.label')}
+            placeholder={t('settings.forms.quotecustomizationform.mainColor.placeholder')}
             className="w-full"
           />
         </div>
@@ -100,8 +98,8 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="afterTable"
           rows={5}
-          label={t("settings.forms.mycompagnyform.afterTable.label")}
-          placeholder={t("settings.forms.mycompagnyform.afterTable.placeholder")}
+          label={t('settings.forms.mycompagnyform.afterTable.label')}
+          placeholder={t('settings.forms.mycompagnyform.afterTable.placeholder')}
           value={newQuoteCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -114,9 +112,9 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="footer"
           rows={5}
-          label={t("settings.forms.mycompagnyform.footer.label")}
+          label={t('settings.forms.mycompagnyform.footer.label')}
           className="w-full"
-          placeholder={t("settings.forms.mycompagnyform.footer.placeholder")}
+          placeholder={t('settings.forms.mycompagnyform.footer.placeholder')}
           value={newQuoteCustomization.footer}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setNewQuoteCustomization({
@@ -125,13 +123,7 @@ const QuoteCustomizationForm = ({
             })
           }
         />
-        <Button
-          type="submit"
-          variant="success"
-          block
-          size="md"
-          onClick={onSubmit}
-        >
+        <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
           {t('save customs PDF')}
         </Button>
       </div>

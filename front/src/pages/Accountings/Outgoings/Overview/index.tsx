@@ -28,11 +28,11 @@ const Overview = () => {
     () =>
       data
         ? formatCurrency(
-          data.lines.reduce(
-            (acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 + vat / 100),
-            0,
-          ),
-        )
+            data.lines.reduce(
+              (acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 + vat / 100),
+              0,
+            ),
+          )
         : null,
     [data, formatCurrency],
   )
@@ -40,7 +40,10 @@ const Overview = () => {
   return (
     <div>
       <div className="mb-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">
-        <h2 className="text-xl md:col-span-9">{t('accounting.outgoings.pages.overview.currentMonth')}{currentMonth}</h2>
+        <h2 className="text-xl md:col-span-9">
+          {t('accounting.outgoings.pages.overview.currentMonth')}
+          {currentMonth}
+        </h2>
         <div className="flex flex-col md:flex-row md:justify-end border rounded md:col-span-3">
           <div className="text-primary-700 bg-primary-50 p-2 w-full md:w-auto">
             {t('accounting.outgoings.pages.overview.totalThisMonth')}

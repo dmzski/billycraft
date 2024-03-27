@@ -40,7 +40,7 @@ const QuoteLineTable = ({
   })
 
   const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = useCallback(
-    (event) => {
+    event => {
       if (
         !event.over.id ||
         !event.active.id ||
@@ -50,7 +50,6 @@ const QuoteLineTable = ({
         return
       }
 
-
       move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
     },
     [move],
@@ -58,7 +57,7 @@ const QuoteLineTable = ({
 
   const addLine = useCallback(
     (newLine = defaultLine) => {
-      append({ ...newLine, quoteId: "", line: fields.length, id: '' })
+      append({ ...newLine, quoteId: '', line: fields.length, id: '' })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -79,7 +78,10 @@ const QuoteLineTable = ({
 
   const addExistingProductSelected = () => {
     if (productIdSelected && productsQuery.data) {
-      addLine({ ...defaultLine, ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}) })
+      addLine({
+        ...defaultLine,
+        ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}),
+      })
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
@@ -97,7 +99,7 @@ const QuoteLineTable = ({
             className="md:col-span-3"
             name="existing-product"
             id="existing-product"
-            autoComplete='off'
+            autoComplete="off"
             options={productOptions}
             isSearchable
             placeholder={t('quotes.form.lines.existingProduct.label')}
@@ -134,8 +136,8 @@ const QuoteLineTable = ({
           </SortableContext>
         </DndContext>
         {!disabled ? (
-          <Button className='gap-1' type="button" block onClick={() => addLine()}>
-            <PlusIcon className='w-5' />
+          <Button className="gap-1" type="button" block onClick={() => addLine()}>
+            <PlusIcon className="w-5" />
             {t('quotes.form.lines.add')}
           </Button>
         ) : null}

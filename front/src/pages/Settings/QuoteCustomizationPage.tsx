@@ -5,7 +5,10 @@ import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
 import { useDataLoader } from '@scaleway/use-dataloader'
 
 const QuoteCustomizationPage = () => {
-  const quoteCustomizationQuery = useDataLoader('quote-customization', QuoteCustomizationApi.findMine)
+  const quoteCustomizationQuery = useDataLoader(
+    'quote-customization',
+    QuoteCustomizationApi.findMine,
+  )
 
   return (
     <div className="w-full flex justify-center flex-col items-center">

@@ -17,8 +17,6 @@ import SupplierSwitch from './Suppliers/SupplierSwitch'
 import { Login } from './Auth/Login'
 import { Register } from './Auth/Register'
 
-
-
 const PrivateSwitch = () => {
   const { organization, user } = useUser()
   const { isAuthenticated, isInitializing } = useAuth()
@@ -26,7 +24,6 @@ const PrivateSwitch = () => {
   if (isInitializing) {
     return null
   }
-
 
   if (!isAuthenticated) {
     return (
@@ -38,10 +35,10 @@ const PrivateSwitch = () => {
     )
   }
 
-  if (!user || user.companyId && !organization) {
+  if (!user || (user.companyId && !organization)) {
     return (
       <div className="flex justify-center items-center h-screen max-w-screen">
-        <div className='w-1/2'>
+        <div className="w-1/2">
           <PageLoader />
         </div>
       </div>
@@ -52,11 +49,8 @@ const PrivateSwitch = () => {
     return (
       <Switch>
         <Route path={ROUTES.ONBOARDING.path} component={Onboarding} />
-        <Route render={() =>
-          <Redirect to={ROUTES.ONBOARDING.path} />
-        } />
+        <Route render={() => <Redirect to={ROUTES.ONBOARDING.path} />} />
       </Switch>
-
     )
   }
   return (
@@ -68,16 +62,10 @@ const PrivateSwitch = () => {
         <Route path={ROUTES.CUSTOMERS.path} component={CustomerSwitch} />
         <Route path={ROUTES.SUPPLIERS.path} component={SupplierSwitch} />
         <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
-        <Route
-          path={ROUTES.PRODUCTS.path}
-          exact={ROUTES.PRODUCTS.exact}
-          component={ProductsPage}
-        />
+        <Route path={ROUTES.PRODUCTS.path} exact={ROUTES.PRODUCTS.exact} component={ProductsPage} />
         <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
         <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
-        <Route render={() =>
-          <Redirect to={ROUTES.DASHBOARD.path} />
-        } />
+        <Route render={() => <Redirect to={ROUTES.DASHBOARD.path} />} />
       </Switch>
     </Layout>
   )

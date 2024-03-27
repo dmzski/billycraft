@@ -15,9 +15,9 @@ type ProductTableLineProps = {
 }
 
 type ProductFormValues = {
-  type: LineTypeEnum,
-  name: string,
-  description: string,
+  type: LineTypeEnum
+  name: string
+  description: string
   price: number
 }
 
@@ -105,7 +105,12 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
   }, [product, reset])
 
   return (
-    <div className={clsx('grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center', mode === MODES.DELETE ? "bg-error bg-opacity-50" : null)}>
+    <div
+      className={clsx(
+        'grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center',
+        mode === MODES.DELETE ? 'bg-error bg-opacity-50' : null,
+      )}
+    >
       <div className="md:col-span-2">
         <Controller
           name="type"
@@ -116,7 +121,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
               value={field.value}
               name={field.name}
               /* Otherwise it will be to large */
-              className='w-full'
+              className="w-full"
               onChange={type => {
                 field.onChange(type)
               }}
@@ -163,7 +168,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
               onBlur={field.onBlur}
               disabled={mode !== MODES.EDIT}
               error={fieldState.invalid}
-              className='w-full'
+              className="w-full"
             />
           )}
         />
@@ -190,16 +195,23 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
             />
           )}
         />
-        <span className={clsx("right-0 inset-y-2 absolute flex items-center", mode !== MODES.EDIT ? 'bg-base-200' : "bg-base-100")}>€</span>
+        <span
+          className={clsx(
+            'right-0 inset-y-2 absolute flex items-center',
+            mode !== MODES.EDIT ? 'bg-base-200' : 'bg-base-100',
+          )}
+        >
+          €
+        </span>
       </div>
       <div className="md:col-span-1 flex justify-end">
         {mode === MODES.DELETE && !isNew ? (
           <div className="flex relative gap-2">
             <Button type="button" variant="success" square onClick={onDelete}>
-              <CheckIcon className='w-5' />
+              <CheckIcon className="w-5" />
             </Button>
             <Button type="button" variant="error" square onClick={toggleDeleteMode}>
-              <XMarkIcon className='w-5' />
+              <XMarkIcon className="w-5" />
             </Button>
           </div>
         ) : null}
@@ -207,12 +219,12 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
           <div className="flex gap-2">
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
-                <CheckIcon className='w-5' />
+                <CheckIcon className="w-5" />
               </Button>
             </form>
             {product?.id ? (
               <Button type="button" square variant="error" onClick={toggleEditMode}>
-                <XMarkIcon className='w-5' />
+                <XMarkIcon className="w-5" />
               </Button>
             ) : null}
           </div>
@@ -220,21 +232,15 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
         {mode === MODES.READ && !isNew ? (
           <div className="flex gap-2">
             <Button outline type="button" onClick={toggleEditMode} variant="primary" square>
-              <PencilIcon className='w-5' />
+              <PencilIcon className="w-5" />
             </Button>
-            <Button
-              type="button"
-              onClick={toggleDeleteMode}
-              square
-              variant="error"
-              outline
-            >
-              <TrashIcon className='w-5' />
+            <Button type="button" onClick={toggleDeleteMode} square variant="error" outline>
+              <TrashIcon className="w-5" />
             </Button>
           </div>
         ) : null}
       </div>
-    </div >
+    </div>
   )
 }
 

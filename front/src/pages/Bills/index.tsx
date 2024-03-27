@@ -16,7 +16,9 @@ type BillFilters = Record<string, string>
 const BillPage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const { data, isLoading } = useDataLoader('bills', () => BillApi.findAllNotArchivedAndNotRefused())
+  const { data, isLoading } = useDataLoader('bills', () =>
+    BillApi.findAllNotArchivedAndNotRefused(),
+  )
   const history = useHistory()
   const { t } = useI18n()
 
@@ -30,11 +32,11 @@ const BillPage = () => {
   }
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <h1 className="text-3xl">{t('bills.list.title')}</h1>
-        <Button size="md" className='gap-1' variant="primary" onClick={goToNewBill}>
-          <PlusIcon className='w-5' />
+        <Button size="md" className="gap-1" variant="primary" onClick={goToNewBill}>
+          <PlusIcon className="w-5" />
           <span>{t('bills.list.add')}</span>
         </Button>
       </div>
@@ -42,7 +44,7 @@ const BillPage = () => {
       <BillTable data={billSorted} />
       {isLoading ? (
         <div className="mt-2 flex justify-center">
-          <Loader variant='primary' />
+          <Loader variant="primary" />
         </div>
       ) : null}
     </div>

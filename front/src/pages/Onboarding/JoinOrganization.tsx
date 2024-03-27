@@ -1,7 +1,7 @@
-import { Button, Input, useToast } from "@coco-ui/core"
-import { SUPPORT_EMAIL } from "@/constants/global"
-import { useI18n } from "@/i18n"
-import { Controller, useForm } from "react-hook-form"
+import { Button, Input, useToast } from '@coco-ui/core'
+import { SUPPORT_EMAIL } from '@/constants/global'
+import { useI18n } from '@/i18n'
+import { Controller, useForm } from 'react-hook-form'
 
 type JoinOrganizationFormValues = {
   code: string
@@ -10,8 +10,12 @@ type JoinOrganizationFormValues = {
 export const JoinOrganization = () => {
   const { t } = useI18n()
   const toast = useToast()
-  const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm<JoinOrganizationFormValues>({
-    mode: "onChange"
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid, isSubmitting },
+  } = useForm<JoinOrganizationFormValues>({
+    mode: 'onChange',
   })
 
   const onSubmit = async () => {
@@ -22,7 +26,9 @@ export const JoinOrganization = () => {
     <>
       <p className="text-center">
         {t('underDevelopment')}&nbsp;
-        <a className="link link-info" href={`mailto:${SUPPORT_EMAIL}`}>{t('contactSupport')}</a>
+        <a className="link link-info" href={`mailto:${SUPPORT_EMAIL}`}>
+          {t('contactSupport')}
+        </a>
       </p>
       <form className="blur-sm flex flex-col gap-4 items-center" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-3xl font-bold text-center">{t('onboarding.join.title')}</h2>
@@ -46,7 +52,9 @@ export const JoinOrganization = () => {
             />
           )}
         />
-        <Button variant="primary" type="submit" disabled={!isValid || !isSubmitting}>{t('onboarding.join.submit')}</Button>
+        <Button variant="primary" type="submit" disabled={!isValid || !isSubmitting}>
+          {t('onboarding.join.submit')}
+        </Button>
       </form>
     </>
   )

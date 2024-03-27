@@ -1,6 +1,6 @@
-import { CompanyApi } from "@/api/CompanyApi"
-import Company from "@/models/Company"
-import { useDataLoader } from "@scaleway/use-dataloader"
+import { CompanyApi } from '@/api/CompanyApi'
+import Company from '@/models/Company'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type DataLoaderOptions = Parameters<typeof useDataLoader<Company>>[2]
 

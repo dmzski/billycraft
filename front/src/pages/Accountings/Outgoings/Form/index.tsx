@@ -40,7 +40,13 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
       const res = outgoing?.id
         ? await OutgoingApi.update(outgoing.id, data)
         : await OutgoingApi.create(data)
-      toast.success(t(outgoing?.id ? 'accounting.outgoings.forms.add.submit.edit.success' : 'accounting.outgoings.forms.add.submit.new.success'))
+      toast.success(
+        t(
+          outgoing?.id
+            ? 'accounting.outgoings.forms.add.submit.edit.success'
+            : 'accounting.outgoings.forms.add.submit.new.success',
+        ),
+      )
       onSubmitSuccess?.(res)
     } catch {
       toast.error(t('genericFormError'))

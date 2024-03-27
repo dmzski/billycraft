@@ -6,7 +6,8 @@ export const BILL_CUSTOMIZATION_URL = `${API_URL}/bill-customization`
 
 export const BillCustomizationApi = {
   findMine: (): Promise<BillCustomization> => HttpClient.GET(`${BILL_CUSTOMIZATION_URL}/mine`),
-  updateMine: (customization: BillCustomization): Promise<BillCustomization> => customization.id ?
-    HttpClient.PATCH(`${BILL_CUSTOMIZATION_URL}/${customization.id}`, customization):
-    HttpClient.POST(`${BILL_CUSTOMIZATION_URL}`, customization),
+  updateMine: (customization: BillCustomization): Promise<BillCustomization> =>
+    customization.id
+      ? HttpClient.PATCH(`${BILL_CUSTOMIZATION_URL}/${customization.id}`, customization)
+      : HttpClient.POST(`${BILL_CUSTOMIZATION_URL}`, customization),
 }

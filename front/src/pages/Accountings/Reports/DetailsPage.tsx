@@ -20,15 +20,21 @@ const DetailTable = ({ report }: DetailTableProps) => {
   return (
     <div className="flex flex-col gap-2 md:gap-0 border rounded">
       <dl className="grid md:grid-cols-12">
-        <dt className="p-2 md:col-span-2 bg-base-300 border-b">{t('accounting.reports.details.details.table.headers.name')}</dt>
+        <dt className="p-2 md:col-span-2 bg-base-300 border-b">
+          {t('accounting.reports.details.details.table.headers.name')}
+        </dt>
         <dd className="md:col-span-10 border-b p-2">{report.name}</dd>
       </dl>
       <dl className="grid md:grid-cols-12">
-        <dt className="p-2 md:col-span-2 bg-base-300 border-b">{t('accounting.reports.details.details.table.headers.startDate')}</dt>
+        <dt className="p-2 md:col-span-2 bg-base-300 border-b">
+          {t('accounting.reports.details.details.table.headers.startDate')}
+        </dt>
         <dd className="md:col-span-10 p-2 border-b">{toISO9075(report.startDate)}</dd>
       </dl>
       <dl className="grid md:grid-cols-12">
-        <dt className="p-2 md:col-span-2 bg-base-300">{t('accounting.reports.details.details.table.headers.endDate')}</dt>
+        <dt className="p-2 md:col-span-2 bg-base-300">
+          {t('accounting.reports.details.details.table.headers.endDate')}
+        </dt>
         <dd className="md:col-span-10 p-2">{toISO9075(report.endDate)}</dd>
       </dl>
     </div>
@@ -57,29 +63,33 @@ const DetailsPage = () => {
   }
 
   return (
-    <div className='flex flex-col gap-10'>
+    <div className="flex flex-col gap-10">
       <div className="flex md:justify-between flex-col gap-5 md:flex-row">
         <Link to={REPORT_ROUTES.routes.LIST.path}>
           <Button type="button" className="gap-2" variant="ghost">
-            <ArrowLeftIcon className='w-5' />
+            <ArrowLeftIcon className="w-5" />
             {t('accounting.reports.details.backTo')}
           </Button>
         </Link>
-        <DeleteModal id={id} disclosure={
-          <Button className='gap-2' variant="error" outline>
-            <TrashIcon className='w-5' />
-            {t('accounting.reports.details.delete')}
-          </Button>
-        } onSubmitSuccess={onSubmitSuccess} />
+        <DeleteModal
+          id={id}
+          disclosure={
+            <Button className="gap-2" variant="error" outline>
+              <TrashIcon className="w-5" />
+              {t('accounting.reports.details.delete')}
+            </Button>
+          }
+          onSubmitSuccess={onSubmitSuccess}
+        />
       </div>
-      <div className='flex flex-col gap-5'>
+      <div className="flex flex-col gap-5">
         <h1 className="text-2xl border-b text-primary">{report.name}</h1>
         <div className="flex flex-col gap-8">
-          <section className='flex flex-col gap-2'>
+          <section className="flex flex-col gap-2">
             <h2 className="text-xl">{t('accounting.reports.details.overview')}</h2>
             <DetailTable report={report} />
           </section>
-          <section className='flex flex-col gap-2'>
+          <section className="flex flex-col gap-2">
             <h2 className="text-xl">{t('accounting.reports.details.details')}</h2>
             <ReportTable report={report} />
           </section>

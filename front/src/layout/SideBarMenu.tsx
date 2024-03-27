@@ -25,15 +25,11 @@ const Menu = ({ route }: MenuProps) => {
   return (
     <li>
       <details>
-        <summary>
-          {route.title}
-        </summary>
+        <summary>{route.title}</summary>
         <ul>
           {Object.values(route.routes ?? {}).map(subRoute => (
             <li key={`submenu-${subRoute.path}-${subRoute.title}`}>
-              <Link to={subRoute.path}>
-                {subRoute.title}
-              </Link>
+              <Link to={subRoute.path}>{subRoute.title}</Link>
             </li>
           ))}
         </ul>
@@ -44,7 +40,7 @@ const Menu = ({ route }: MenuProps) => {
 
 const SideBarMenu = () => {
   const { logout } = useAuth()
-  const {t} = useI18n()
+  const { t } = useI18n()
 
   return (
     <div className="flex flex-col h-full gap-8">
@@ -64,10 +60,10 @@ const SideBarMenu = () => {
             ),
           )}
       </ul>
-      <ul className='menu'>
+      <ul className="menu">
         <li>
           <Button className="flex gap-2" variant="error" type="button" outline onClick={logout}>
-            <ArrowRightStartOnRectangleIcon className='w-5' />
+            <ArrowRightStartOnRectangleIcon className="w-5" />
             {t('logout')}
           </Button>
         </li>

@@ -1,29 +1,29 @@
-import { Button, Input, useToast } from "@coco-ui/core"
-import { CompanyApi } from "@/api/CompanyApi"
-import { useI18n } from "@/i18n"
-import Company from "@/models/Company"
-import { Controller, useForm } from "react-hook-form"
-import { sendErrorToSentry } from "@/utils/errors"
-import { InformationCircleIcon } from "@heroicons/react/24/solid"
-import { useUser } from "@/providers/UserProvider"
+import { Button, Input, useToast } from '@coco-ui/core'
+import { CompanyApi } from '@/api/CompanyApi'
+import { useI18n } from '@/i18n'
+import Company from '@/models/Company'
+import { Controller, useForm } from 'react-hook-form'
+import { sendErrorToSentry } from '@/utils/errors'
+import { InformationCircleIcon } from '@heroicons/react/24/solid'
+import { useUser } from '@/providers/UserProvider'
 
 type CreateOrganizationFormValues = {
-  articlesTax: number,
-  servicesTax: number,
-  othersTax: number,
-  name: string,
-  siret: string,
-  address: string,
-  postalCode: string,
-  phoneNumber: string,
-  city: string,
+  articlesTax: number
+  servicesTax: number
+  othersTax: number
+  name: string
+  siret: string
+  address: string
+  postalCode: string
+  phoneNumber: string
+  city: string
   email: string
 }
 
 export const CreateOrganization = () => {
   const toast = useToast()
   const { t } = useI18n()
-  const {reload} = useUser()
+  const { reload } = useUser()
 
   const {
     control,
@@ -35,13 +35,13 @@ export const CreateOrganization = () => {
       articlesTax: 0,
       servicesTax: 0,
       othersTax: 0,
-      phoneNumber: "",
-      postalCode: "",
-      name: "",
-      city: "",
-      siret: "",
-      address: "",
-      email: ""
+      phoneNumber: '',
+      postalCode: '',
+      name: '',
+      city: '',
+      siret: '',
+      address: '',
+      email: '',
     },
   })
 
@@ -55,7 +55,7 @@ export const CreateOrganization = () => {
       } as Company
       await CompanyApi.create(data)
       await reload()
-      toast.success(t("onboarding.create.success"))
+      toast.success(t('onboarding.create.success'))
     } catch (err) {
       sendErrorToSentry(err)
       toast.error(t('genericFormError'))
@@ -66,9 +66,8 @@ export const CreateOrganization = () => {
     <form className="px-10 flex flex-col md:w-1/2 gap-4" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-3xl font-bold text-center">{t('onboarding.create.title')}</h2>
       <div className="border rounded px-6 py-4 flex flex-col gap-4">
-
         <div className="text-lg font-bold">{t('onboarding.create.sections.information.title')}</div>
-        <div className='grid grid-cols-2 gap-x-4'>
+        <div className="grid grid-cols-2 gap-x-4">
           <Controller
             name="name"
             control={control}
@@ -115,7 +114,7 @@ export const CreateOrganization = () => {
                 id="address"
                 label={t('onboarding.create.sections.information.fields.address.label')}
                 placeholder="Adresse"
-                className='col-span-2'
+                className="col-span-2"
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
@@ -210,7 +209,6 @@ export const CreateOrganization = () => {
         </div>
       </div>
 
-
       <div className="flex flex-col gap-4 border rounded py-4 px-6">
         <div className="text-lg font-bold">{t('onboarding.create.sections.vat.title')}</div>
         <div className="md:pl-2 grid md:grid-cols-3 gap-4">
@@ -281,7 +279,7 @@ export const CreateOrganization = () => {
         <p>{t('onboarding.create.uploadLogoNotice')}</p>
       </div>
 
-      <Button type="submit" block variant='primary' disabled={isSubmitting || !isValid}>
+      <Button type="submit" block variant="primary" disabled={isSubmitting || !isValid}>
         {t('onboarding.create.submit')}
       </Button>
     </form>

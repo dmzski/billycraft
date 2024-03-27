@@ -7,8 +7,7 @@ import { useOutgoingByIdQuery } from '@/queries/useOutgoingByIdQuery'
 
 const Details = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: outgoing, isLoading } = useOutgoingByIdQuery(
-    id, {
+  const { data: outgoing, isLoading } = useOutgoingByIdQuery(id, {
     enabled: !!id,
   })
 
@@ -18,7 +17,7 @@ const Details = () => {
         <div className="md:col-span-11">
           <Link to={OUTGOING_ROUTES.routes.LIST.path}>
             <Button type="button" variant="ghost" size="xs">
-              <ArrowLeftIcon className='w-5' />
+              <ArrowLeftIcon className="w-5" />
               &nbsp; Retourner à la liste des livrets
             </Button>
           </Link>
@@ -27,7 +26,7 @@ const Details = () => {
           <div>
             <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
               <Button variant="info">
-                <PencilIcon className='w-5' />
+                <PencilIcon className="w-5" />
                 &nbsp; Modifier
               </Button>
             </Link>

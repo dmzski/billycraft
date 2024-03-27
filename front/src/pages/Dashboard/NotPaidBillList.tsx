@@ -11,7 +11,7 @@ type NotPaidBillListProps = {
 }
 const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
   const customers = useCustomers()
-  const {t} = useI18n()
+  const { t } = useI18n()
   return (
     <div className="border rounded flex flex-col">
       <div className="px-2 py-4 grid md:grid-cols-12 bg-base-300 rounded-t gap-2">

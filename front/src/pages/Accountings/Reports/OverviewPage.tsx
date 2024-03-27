@@ -6,13 +6,9 @@ import { useReportByMonthQuery } from '@/queries/useReportByMonthQuery'
 
 const OverviewPage = () => {
   const { t } = useI18n()
-  const { data: monthData } = useReportByMonthQuery(
-    Date.now()
-  )
+  const { data: monthData } = useReportByMonthQuery(Date.now())
 
-  const { data: yearData } = useReportByYearQuery(
-    Date.now(),
-  )
+  const { data: yearData } = useReportByYearQuery(Date.now())
 
   const currentMonth = useMemo(
     () =>
@@ -25,7 +21,10 @@ const OverviewPage = () => {
   return (
     <div>
       <div className="mb-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">
-        <h2 className="text-xl col-span-full">{t('accounting.overview.currentMonth')}{currentMonth}</h2>
+        <h2 className="text-xl col-span-full">
+          {t('accounting.overview.currentMonth')}
+          {currentMonth}
+        </h2>
       </div>
       {monthData ? <ReportTable report={monthData} /> : null}
       <div className="my-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">

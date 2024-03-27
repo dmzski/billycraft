@@ -1,5 +1,5 @@
-import { HomeIcon } from "@heroicons/react/24/solid"
-import { ComponentProps, ComponentType } from "react"
+import { HomeIcon } from '@heroicons/react/24/solid'
+import { ComponentProps, ComponentType } from 'react'
 
 export type Route = {
   exact?: boolean
@@ -13,10 +13,10 @@ export const injectIdInPath = (route: string, id: number | string) => route.repl
 
 export const ROUTES = {
   LOGIN: {
-    path: "/login",
+    path: '/login',
   },
   REGISTER: {
-    path: "/register",
+    path: '/register',
   },
   BILLS: {
     exact: true,

@@ -25,7 +25,7 @@ type BillLineTableProps = {
 }
 
 const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const productsQuery = useDataLoader('products', ProductApi.findAll)
   const [productIdSelected, setProductIdSelected] = useState<number>()
   const onProductSelectedChange = useCallback((option: string) => {
@@ -39,7 +39,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
   })
 
   const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = useCallback(
-    (event) => {
+    event => {
       if (
         !event.over.id ||
         !event.active.id ||
@@ -49,7 +49,6 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
         return
       }
 
-
       move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
     },
     [move],
@@ -57,7 +56,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
 
   const addLine = useCallback(
     (newLine = defaultLine) => {
-      append({ ...defaultLine, ...newLine, line: fields.length, billId: "", id: '' })
+      append({ ...defaultLine, ...newLine, line: fields.length, billId: '', id: '' })
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
         top: document.getElementById('root')?.scrollHeight,
@@ -78,7 +77,10 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
 
   const addExistingProductSelected = () => {
     if (productIdSelected && productsQuery.data) {
-      addLine({ ...defaultLine, ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}) })
+      addLine({
+        ...defaultLine,
+        ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}),
+      })
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
@@ -91,7 +93,7 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
     <div className="flex flex-col border p-2 gap-2">
       <div className="grid md:grid-cols-4 items-end gap-4">
         <Select
-          autoComplete='off'
+          autoComplete="off"
           className="md:col-span-3"
           name="existing-product"
           id="existing-product"
@@ -130,11 +132,15 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
       </DndContext>
       {!disabled ? (
         <div className="flex flex-col gap-2">
-          <Button className='gap-2' type="button" block onClick={() => addLine()} disabled={disabled}>
-            <PlusIcon className='w-5' />
-            <span>
-              {t('bills.form.lines.add')}
-            </span>
+          <Button
+            className="gap-2"
+            type="button"
+            block
+            onClick={() => addLine()}
+            disabled={disabled}
+          >
+            <PlusIcon className="w-5" />
+            <span>{t('bills.form.lines.add')}</span>
           </Button>
         </div>
       ) : null}

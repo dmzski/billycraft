@@ -32,7 +32,6 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
     updateStatus()
   }
 
-
   const nextStatuses: BillStatusEnum[] = useMemo(() => {
     switch (bill.status) {
       case BillStatusEnum.SENT:
@@ -40,15 +39,12 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
           BillStatusEnum.REFUSED,
           BillStatusEnum.PAYMENT_PAID,
           BillStatusEnum.TO_DECLARE,
-          BillStatusEnum.ARCHIVED
+          BillStatusEnum.ARCHIVED,
         ]
       case BillStatusEnum.REFUSED:
         return [BillStatusEnum.DRAFT, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.PAYMENT_PAID:
-        return [
-          BillStatusEnum.TO_DECLARE,
-          BillStatusEnum.ARCHIVED
-        ]
+        return [BillStatusEnum.TO_DECLARE, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.DRAFT:
         return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.TO_DECLARE:
@@ -65,9 +61,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
       </div>
       <div className="md:col-span-3 truncate">{bill.title}</div>
       <div className="md:col-span-2 truncate">{customer?.name ?? '-'}</div>
-      <div className="md:col-span-2">
-        {formatISO9075(parseJSON(bill.createdAt))}
-      </div>
+      <div className="md:col-span-2">{formatISO9075(parseJSON(bill.createdAt))}</div>
       <div className="md:col-span-2">
         {bill.updatedAt ? formatISO9075(parseJSON(bill.updatedAt)) : '-'}
       </div>
@@ -76,10 +70,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
           <Button>{t(`bills.status.${bill.status}`)}</Button>
           <Dropdown.Content>
             {nextStatuses.map(s => (
-              <Dropdown.Button
-                key={s}
-                onClick={updateBillStatus(s)}
-              >
+              <Dropdown.Button key={s} onClick={updateBillStatus(s)}>
                 {t(`bills.status.${s}`)}
               </Dropdown.Button>
             ))}

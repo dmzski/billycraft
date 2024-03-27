@@ -18,7 +18,7 @@ const BillFormPage = () => {
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: bill, reload } = useDataLoader(["bill", id], () => BillApi.findById(id), {
+  const { data: bill, reload } = useDataLoader(['bill', id], () => BillApi.findById(id), {
     enabled: id !== 'new',
   })
 
@@ -58,14 +58,16 @@ const BillFormPage = () => {
   return (
     <div className="w-full flex flex-col gap-4">
       <div>
-        <Button className='gap-1' variant="ghost" onClick={history.goBack}>
-          <ChevronLeftIcon className='w-5' />
+        <Button className="gap-1" variant="ghost" onClick={history.goBack}>
+          <ChevronLeftIcon className="w-5" />
           <span>{t('bills.form.backTo')}</span>
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center flex-grow gap-2">
-          <h1 className="text-3xl">{!newBill.id ? t('bills.form.title.new') : t('bills.form.title.edit')}</h1>
+          <h1 className="text-3xl">
+            {!newBill.id ? t('bills.form.title.new') : t('bills.form.title.edit')}
+          </h1>
           {newBill.status ? (
             <Badge variant="info" size="sm">
               {t(`bills.status.${newBill.status}`)}
@@ -77,9 +79,9 @@ const BillFormPage = () => {
             disabled={pdfState.isLoading}
             onClick={downloadPdf}
             variant="primary"
-            className='gap-1'
+            className="gap-1"
           >
-            <DocumentArrowDownIcon className='w-5' />
+            <DocumentArrowDownIcon className="w-5" />
             <span>{t('bills.form.downloadPdfButton')}</span>
           </Button>
         ) : null}

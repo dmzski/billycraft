@@ -6,7 +6,7 @@ import { Control, Controller, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
 import { BillFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
-import {CSS} from '@dnd-kit/utilities';
+import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { useI18n } from '@/i18n'
 
@@ -24,7 +24,7 @@ const BillLineTableLine = ({
   control,
   id,
 }: BillLineTableLineProps) => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const tva = useWatch({ control, name: 'tva' })
   const formatPrice = useFormatCurrency()
   const typeRef = useRef<HTMLInputElement | null>()
@@ -35,12 +35,12 @@ const BillLineTableLine = ({
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id,
     data: {
-      lineIndex: index
-    }
-  });
+      lineIndex: index,
+    },
+  })
   const style = {
     transform: CSS.Translate.toString(transform),
-    transition
+    transition,
   }
 
   const price = useWatch({
@@ -74,14 +74,13 @@ const BillLineTableLine = ({
   return (
     <div
       className="bg-base-100 grid md:grid-cols-12 px-4 py-2 gap-2"
-      ref={setNodeRef} style={style}  {...attributes}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
     >
       <div className="flex md:col-span-2">
-        <div
-          className="items-center flex p-2"
-          {...listeners}
-        >
-          <ArrowsUpDownIcon className='w-5' />
+        <div className="items-center flex p-2" {...listeners}>
+          <ArrowsUpDownIcon className="w-5" />
         </div>
         <Controller
           name={`lines.${index}.type`}
@@ -97,7 +96,7 @@ const BillLineTableLine = ({
                 field.ref(node)
                 typeRef.current = node
               }}
-              className='min-w-0'
+              className="min-w-0"
               options={Object.values(LINE_TYPE).map(type => ({
                 value: type.enum,
                 label: type.name,
@@ -204,8 +203,8 @@ const BillLineTableLine = ({
       <div className="pr-2 flex items-center justify-between">
         <div className="flex-grow">{formatPrice(totalTTC)}</div>
         {!disabled ? (
-          <Button variant="ghost" className='text-error' square size="sm" onClick={deleteLine}>
-            <TrashIcon className='w-5' />
+          <Button variant="ghost" className="text-error" square size="sm" onClick={deleteLine}>
+            <TrashIcon className="w-5" />
           </Button>
         ) : null}
       </div>

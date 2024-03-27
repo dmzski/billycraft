@@ -10,10 +10,8 @@ type BillCustomizationFormProps = {
 }
 
 const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps) => {
-  const {t}=useI18n()
-  const [newBillCustomization, setNewBillCustomization] = useState(
-    {} as BillCustomization,
-  )
+  const { t } = useI18n()
+  const [newBillCustomization, setNewBillCustomization] = useState({} as BillCustomization)
   const toast = useToast()
 
   const handleToggle = (property: keyof BillCustomization) => () => {
@@ -55,20 +53,20 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
                 mainColor: e.target.value,
               })
             }}
-            label={t("settings.forms.billcustomizationform.mainColor.label")}
-            placeholder={t("settings.forms.billcustomizationform.mainColor.placeholder")}
+            label={t('settings.forms.billcustomizationform.mainColor.label')}
+            placeholder={t('settings.forms.billcustomizationform.mainColor.placeholder')}
             className="w-full"
           />
         </div>
         <div className="flex">
           <div className="flex flex-grow flex-col gap-2 items-start">
-            <h3>{t("customer information")}</h3>
+            <h3>{t('customer information')}</h3>
             <Switch
               checked={newBillCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
               onChange={handleToggle('displayCustomerEmail')}
             >
-              {t("display customer email")}
+              {t('display customer email')}
             </Switch>
             <Switch
               checked={newBillCustomization.displayCustomerPhoneNumber}
@@ -98,9 +96,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
         </div>
         <TextArea
           id="afterTable"
-          label={t("settings.forms.billcustomizationform.afterTable.label")}
+          label={t('settings.forms.billcustomizationform.afterTable.label')}
           rows={5}
-          placeholder={t("settings.forms.billcustomizationform.afterTable.label")}
+          placeholder={t('settings.forms.billcustomizationform.afterTable.label')}
           value={newBillCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -111,26 +109,20 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <TextArea
-          label={t("settings.forms.billcustomizationform.footer.label")}
+          label={t('settings.forms.billcustomizationform.footer.label')}
           id="footer"
           rows={5}
           className="w-full"
-          placeholder={t("settings.forms.billcustomizationform.footer.placeholder")}
+          placeholder={t('settings.forms.billcustomizationform.footer.placeholder')}
           value={newBillCustomization.footer}
-          onChange={(e) =>
+          onChange={e =>
             setNewBillCustomization({
               ...newBillCustomization,
               footer: e.target.value,
             })
           }
         />
-        <Button
-          type="submit"
-          size="md"
-          block
-          variant="success"
-          onClick={onSubmit}
-        >
+        <Button type="submit" size="md" block variant="success" onClick={onSubmit}>
           {t('save customs PDF')}
         </Button>
       </div>

@@ -33,7 +33,9 @@ const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 
   return (
     <dl style={{ backgroundColor: supplier?.color }} className="grid md:grid-cols-12 p-2 border-t">
-      <dt className="md:col-span-6">{supplier?.name ?? t('accounting.outgoings.details.lines.defaultSupplier')}</dt>
+      <dt className="md:col-span-6">
+        {supplier?.name ?? t('accounting.outgoings.details.lines.defaultSupplier')}
+      </dt>
       <dd className="md:col-span-6">{formatCurrency(value ?? 0)}</dd>
     </dl>
   )
@@ -59,13 +61,13 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
     () =>
       outgoing?.lines
         ? outgoing.lines.reduce(
-          (acc, line) => ({
-            ...acc,
-            [line.supplierId ?? -1]:
-              (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
-          }),
-          {} as Record<number, number>,
-        )
+            (acc, line) => ({
+              ...acc,
+              [line.supplierId ?? -1]:
+                (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
+            }),
+            {} as Record<number, number>,
+          )
         : ({} as Record<number, number>),
     [outgoing],
   )
@@ -79,7 +81,9 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
             <DetailsTableRight>{outgoing.name}</DetailsTableRight>
           </DetailsTableRow>
           <DetailsTableRow>
-            <DetailsTableLeft>{t('accounting.outgoings.details.headers.startDate')}</DetailsTableLeft>
+            <DetailsTableLeft>
+              {t('accounting.outgoings.details.headers.startDate')}
+            </DetailsTableLeft>
             <DetailsTableRight>{outgoing.startDate}</DetailsTableRight>
           </DetailsTableRow>
           <DetailsTableRow>
@@ -87,7 +91,9 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
             <DetailsTableRight>{outgoing.endDate}</DetailsTableRight>
           </DetailsTableRow>
           <DetailsTableRow>
-            <DetailsTableLeft>{t('accounting.outgoings.details.headers.createdBy')}</DetailsTableLeft>
+            <DetailsTableLeft>
+              {t('accounting.outgoings.details.headers.createdBy')}
+            </DetailsTableLeft>
             <DetailsTableRight>{outgoing.createdBy}</DetailsTableRight>
           </DetailsTableRow>
           <DetailsTableRow>

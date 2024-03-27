@@ -63,7 +63,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
           QuoteStatusEnum.DEPOSIT_PAID,
           QuoteStatusEnum.ACCEPTED,
           QuoteStatusEnum.REFUSED,
-          QuoteStatusEnum.ARCHIVED
+          QuoteStatusEnum.ARCHIVED,
         ].sort()
     }
   }, [quote])
@@ -91,14 +91,10 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
           <Button>{t(`quotes.status.${quote.status}`)}</Button>
           <Dropdown.Content>
             {nextStatuses.map(s => (
-              <Dropdown.Button
-                key={s}
-                onClick={updateQuoteStatus(s)}
-              >
+              <Dropdown.Button key={s} onClick={updateQuoteStatus(s)}>
                 {t(`quotes.status.${s}`)}
               </Dropdown.Button>
-            )
-            )}
+            ))}
           </Dropdown.Content>
         </Dropdown>
       </div>

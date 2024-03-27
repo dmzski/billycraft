@@ -8,20 +8,21 @@ import { useI18n } from '@/i18n'
 const { routes, path } = ROUTES.ACCOUNTINGS.routes.REPORTS
 
 const Heading = () => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   return (
-  <div className="flex flex-col gap-4 mb-4">
-    <h1 className="text-3xl">Rapports d&apos;activité</h1>
-    <div className="tabs tabs-boxed flex">
-      <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
-        {t('accounting.heaging.overview')}
-      </NavLink>
-      <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
-        {t('accounting.heaging.list')}
-      </NavLink>
+    <div className="flex flex-col gap-4 mb-4">
+      <h1 className="text-3xl">Rapports d&apos;activité</h1>
+      <div className="tabs tabs-boxed flex">
+        <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
+          {t('accounting.heaging.overview')}
+        </NavLink>
+        <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
+          {t('accounting.heaging.list')}
+        </NavLink>
+      </div>
     </div>
-  </div>
-)}
+  )
+}
 
 const ReportsSwitch = () => (
   <Switch>

@@ -29,7 +29,10 @@ const UserProvider = ({ children }: UserProviderProps) => {
     await Promise.all([reloadUser(), reloadOrganization()])
   }, [reloadOrganization, reloadUser])
 
-  const value = useMemo(() => ({ user, organization, reload: fullReload }), [user, organization, fullReload])
+  const value = useMemo(
+    () => ({ user, organization, reload: fullReload }),
+    [user, organization, fullReload],
+  )
 
   useEffect(() => {
     if (user) {

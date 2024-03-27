@@ -14,7 +14,10 @@ type ReportDeleteFormProps = Omit<DeleteModalProps, 'disclosure'>
 
 const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
   const { t } = useI18n()
-  const { handleSubmit, formState: { isSubmitting } } = useForm()
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm()
   const toast = useToast()
 
   const onSubmit = async () => {
@@ -28,13 +31,13 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
   }
 
   return (
-    <form className='flex flex-col gap-10' onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="text-2xl font-bold border-b pb-2">{t('accounting.reports.modals.delete.title')}</h2>
-      <div className='flex flex-col gap-5'>
+    <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="text-2xl font-bold border-b pb-2">
+        {t('accounting.reports.modals.delete.title')}
+      </h2>
+      <div className="flex flex-col gap-5">
         <p>{t('accounting.reports.modals.delete.description')}</p>
-        <Alert variant="error">
-          {t('accounting.reports.modals.delete.warning')}
-        </Alert>
+        <Alert variant="error">{t('accounting.reports.modals.delete.warning')}</Alert>
       </div>
       <Button type="submit" disabled={isSubmitting} variant="error" className="w-full mt-4">
         {t('accounting.reports.modals.delete.submit')}
@@ -44,14 +47,16 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
 }
 
 const DeleteModal = ({ id, onSubmitSuccess, disclosure }: DeleteModalProps) => {
-
   return (
     <Modal disclosure={disclosure}>
       {({ close }) => (
-        <ReportDeleteForm id={id} onSubmitSuccess={async () => {
-          await onSubmitSuccess?.()
-          close()
-        }} />
+        <ReportDeleteForm
+          id={id}
+          onSubmitSuccess={async () => {
+            await onSubmitSuccess?.()
+            close()
+          }}
+        />
       )}
     </Modal>
   )

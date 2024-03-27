@@ -16,29 +16,36 @@ const QuoteFilterContainer = ({
 }: QuoteFilterContainerProps) => {
   const { t } = useI18n()
 
-  const handleChange = (field: keyof typeof filters): ChangeEventHandler<HTMLInputElement> => (e) => {
-    setFilters({ ...filters, [field]: e.target.value })
-  }
+  const handleChange =
+    (field: keyof typeof filters): ChangeEventHandler<HTMLInputElement> =>
+    e => {
+      setFilters({ ...filters, [field]: e.target.value })
+    }
 
-  const statusOptions = useMemo(() => ([
-    { value: 'none', label: t('select') },
-    ...([
-    QuoteStatusEnum.DRAFT,
-    QuoteStatusEnum.SENT,
-    QuoteStatusEnum.ACCEPTED,
-    QuoteStatusEnum.DEPOSIT_ASK,
-    QuoteStatusEnum.DEPOSIT_PAID,
-    QuoteStatusEnum.REFUSED,
-    ].sort().map((status) => ({
-      value: status,
-      label: t(`quotes.status.${status}`),
-    }))),
-  ]), [t])
+  const statusOptions = useMemo(
+    () => [
+      { value: 'none', label: t('select') },
+      ...[
+        QuoteStatusEnum.DRAFT,
+        QuoteStatusEnum.SENT,
+        QuoteStatusEnum.ACCEPTED,
+        QuoteStatusEnum.DEPOSIT_ASK,
+        QuoteStatusEnum.DEPOSIT_PAID,
+        QuoteStatusEnum.REFUSED,
+      ]
+        .sort()
+        .map(status => ({
+          value: status,
+          label: t(`quotes.status.${status}`),
+        })),
+    ],
+    [t],
+  )
 
   return (
     <div className="grid gap-4 md:grid-cols-12">
       <Input
-        className='md:col-span-2'
+        className="md:col-span-2"
         label={t('quotes.list.filters.fields.reference.label')}
         value={filters.id}
         onChange={handleChange('id')}
@@ -62,7 +69,7 @@ const QuoteFilterContainer = ({
         onChange={handleChange('createdAt')}
       />
       <Select
-        className='md:col-span-2'
+        className="md:col-span-2"
         label={t('quotes.list.filters.fields.status.label')}
         value={filters.status}
         onChange={value => {

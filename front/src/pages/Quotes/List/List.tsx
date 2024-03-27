@@ -7,7 +7,7 @@ type QuoteListProps = {
   data: Quote[]
 }
 const QuoteList = ({ data }: QuoteListProps) => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const customers = useCustomers()
 
   return (

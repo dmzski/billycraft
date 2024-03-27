@@ -11,7 +11,7 @@ type CreateReportModalProps = {
   disclosure?: ComponentProps<typeof Modal>['disclosure']
 }
 
-type CreateReportFormProps = Omit<CreateReportModalProps, "disclosure">
+type CreateReportFormProps = Omit<CreateReportModalProps, 'disclosure'>
 
 const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
   const { t } = useI18n()
@@ -42,7 +42,7 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
   return (
     <form className="grid grid-cols-1 gap-10" onSubmit={handleSubmit(onSubmit)}>
       <h3 className="text-2xl border-b pb-2">{t('accounting.reports.modals.create.title')}</h3>
-      <div className='flex flex-col gap-2'>
+      <div className="flex flex-col gap-2">
         <Controller
           control={control}
           name="name"
@@ -97,16 +97,15 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
     </form>
   )
 }
-const CreateReportModal = ({
-  onSubmitSuccess,
-  disclosure,
-}: CreateReportModalProps) => (
+const CreateReportModal = ({ onSubmitSuccess, disclosure }: CreateReportModalProps) => (
   <Modal disclosure={disclosure}>
     {({ close }) => (
-      <CreateReportForm onSubmitSuccess={async () => {
-        await onSubmitSuccess()
-        close()
-      }} />
+      <CreateReportForm
+        onSubmitSuccess={async () => {
+          await onSubmitSuccess()
+          close()
+        }}
+      />
     )}
   </Modal>
 )

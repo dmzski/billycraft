@@ -9,16 +9,16 @@ export const Onboarding = () => {
 
   return (
     <div className="flex flex-col gap-6 min-h-screen">
-      <div className='p-5 py-10 flex flex-col gap-4 items-center bg-primary shadow-xl text-primary-content'>
-        <h1 className='text-6xl font-bold'>{t('onboarding.home.title')}</h1>
+      <div className="p-5 py-10 flex flex-col gap-4 items-center bg-primary shadow-xl text-primary-content">
+        <h1 className="text-6xl font-bold">{t('onboarding.home.title')}</h1>
         <p>{t('onboarding.home.description')}</p>
       </div>
-      <div className='rounded p-5 bg-white flex flex-col gap-6 px-5 md:px-10 pb-5 items-center'>
-        <div className='grid grid-cols-2 gap-4'>
-          <Link className='btn btn-primary' to={ROUTES.ONBOARDING_CREATE.path}>
+      <div className="rounded p-5 bg-white flex flex-col gap-6 px-5 md:px-10 pb-5 items-center">
+        <div className="grid grid-cols-2 gap-4">
+          <Link className="btn btn-primary" to={ROUTES.ONBOARDING_CREATE.path}>
             {t('onboarding.home.button.create')}
           </Link>
-          <Link className='btn btn-default' to={ROUTES.ONBOARDING_JOIN.path}>
+          <Link className="btn btn-default" to={ROUTES.ONBOARDING_JOIN.path}>
             {t('onboarding.home.button.join')}
           </Link>
         </div>
@@ -28,7 +28,6 @@ export const Onboarding = () => {
           <Route component={CreateOrganization} />
         </Switch>
       </div>
-
     </div>
   )
 }

@@ -45,12 +45,18 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
     [formatCurrency, totalHT, vat],
   )
 
-  const supplierOptions = useMemo(() => suppliers ? suppliers.map(({ id, name }) => ({ value: id, label: name })) : [], [suppliers])
+  const supplierOptions = useMemo(
+    () => (suppliers ? suppliers.map(({ id, name }) => ({ value: id, label: name })) : []),
+    [suppliers],
+  )
 
-  const lineColor = useMemo(() =>
-    supplierId && suppliers ?
-      suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR : DEFAULT_LINE_COLOR
-    , [supplierId, suppliers])
+  const lineColor = useMemo(
+    () =>
+      supplierId && suppliers
+        ? suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR
+        : DEFAULT_LINE_COLOR,
+    [supplierId, suppliers],
+  )
 
   return (
     <div
@@ -179,7 +185,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
       <div className="col-span-2 flex justify-between">
         <Input className="w-full mr-2" readOnly value={totalTTC} />
         <Button variant="error" onClick={onDelete} type="button">
-          <TrashIcon className='w-5' />
+          <TrashIcon className="w-5" />
         </Button>
       </div>
     </div>

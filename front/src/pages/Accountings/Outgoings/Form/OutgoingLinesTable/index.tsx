@@ -9,7 +9,7 @@ type OutgoingTableProps = {
   control: Control<OutgoingRequest>
 }
 const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const { fields, append, remove } = useFieldArray({
     name: 'lines',
     control,
@@ -28,12 +28,14 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
     <div className="border rounded">
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-base-300 border-b p-4">
         <div className="col-span-2">{t('supplier')} *</div>
-        <div className="col-span-2">{t('accounting.outgoings.details.lines.headers.billReference')} *</div>
-        <div className="col-span-2">{t('accounting.outgoings.details.lines.headers.linkedBill')}</div>
-        <div className="col-span-2">{t('etTotal')} *</div>
         <div className="col-span-2">
-          {t('vat')} (%)
+          {t('accounting.outgoings.details.lines.headers.billReference')} *
         </div>
+        <div className="col-span-2">
+          {t('accounting.outgoings.details.lines.headers.linkedBill')}
+        </div>
+        <div className="col-span-2">{t('etTotal')} *</div>
+        <div className="col-span-2">{t('vat')} (%)</div>
         <div className="col-span-2">{t('itTotal')}</div>
       </div>
       {isLoading ? (

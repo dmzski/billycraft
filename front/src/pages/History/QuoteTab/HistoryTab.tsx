@@ -12,7 +12,9 @@ const HistoryTab = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const { data, isLoading } = useDataLoader(['quotes', 'archived'], () => QuoteApi.findAllArchived())
+  const { data, isLoading } = useDataLoader(['quotes', 'archived'], () =>
+    QuoteApi.findAllArchived(),
+  )
   const quoteSorted = useMemo(
     () => filterQuotes(data ?? [], filters, customers),
     [customers, filters, data],

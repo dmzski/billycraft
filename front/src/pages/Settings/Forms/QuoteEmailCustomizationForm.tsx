@@ -17,11 +17,10 @@ const QuoteEmailCustomizationForm = ({
   quoteEmailCustomization,
   onSubmit,
 }: QuoteEmailCustomizationFormProps) => {
-  const {t}=useI18n()
-  const [
-    newQuoteEmailCustomization,
-    setNewQuoteEmailCustomization,
-  ] = useState(quoteEmailCustomization ?? defaultValues)
+  const { t } = useI18n()
+  const [newQuoteEmailCustomization, setNewQuoteEmailCustomization] = useState(
+    quoteEmailCustomization ?? defaultValues,
+  )
 
   useEffect(() => {
     setNewQuoteEmailCustomization(quoteEmailCustomization ?? defaultValues)
@@ -60,7 +59,7 @@ const QuoteEmailCustomizationForm = ({
         <div>
           <Input
             id="email-subject"
-            label={t("settings.forms.quoteemailcustomizationform.email-subject.label")}
+            label={t('settings.forms.quoteemailcustomizationform.email-subject.label')}
             value={newQuoteEmailCustomization.object}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewQuoteEmailCustomization({
@@ -75,7 +74,7 @@ const QuoteEmailCustomizationForm = ({
         <div className="mt-2">
           <TextArea
             id="email-body"
-            label={t("settings.forms.quoteemailcustomizationform.email-body.label")}
+            label={t('settings.forms.quoteemailcustomizationform.email-body.label')}
             rows={5}
             value={newQuoteEmailCustomization.body}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

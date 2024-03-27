@@ -19,9 +19,13 @@ const QuoteCreationPage = () => {
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: quote, reload: reloadQuote } = useDataLoader(`quote-${id}`, () => QuoteApi.findById(id), {
-    enabled: id !== 'new',
-  })
+  const { data: quote, reload: reloadQuote } = useDataLoader(
+    `quote-${id}`,
+    () => QuoteApi.findById(id),
+    {
+      enabled: id !== 'new',
+    },
+  )
 
   const onSubmitSuccess = async (data: Quote) => {
     if (data.id !== id) {
@@ -74,12 +78,14 @@ const QuoteCreationPage = () => {
     <div className="w-full px-4 flex flex-col gap-4">
       <div>
         <Button variant="ghost" className="gap-1" size="sm" onClick={history.goBack}>
-          <ChevronLeftIcon className='w-5' /> &nbsp; Retourner à la liste des devis
+          <ChevronLeftIcon className="w-5" /> &nbsp; Retourner à la liste des devis
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center gap-4 flex-grow">
-          <h1 className="text-3xl">{!newQuote.id ? t('quotes.form.title.new') : t('quotes.form.title.edit')}</h1>
+          <h1 className="text-3xl">
+            {!newQuote.id ? t('quotes.form.title.new') : t('quotes.form.title.edit')}
+          </h1>
           {newQuote.status ? (
             <Badge variant="ghost">{t(`quotes.status.${newQuote.status}`)}</Badge>
           ) : null}
@@ -90,10 +96,7 @@ const QuoteCreationPage = () => {
             size="md"
             onClick={createBill}
             title="Créer la facture"
-            disabled={
-              !isQuoteMinimumAccepted(newQuote) ||
-              !newQuote.id
-            }
+            disabled={!isQuoteMinimumAccepted(newQuote) || !newQuote.id}
           >
             {t('quotes.form.createBill')}
           </Button>
@@ -102,9 +105,9 @@ const QuoteCreationPage = () => {
             onClick={downloadPdf}
             variant="primary"
             size="md"
-            className='gap-1'
+            className="gap-1"
           >
-            <DocumentArrowDownIcon className='w-5' />
+            <DocumentArrowDownIcon className="w-5" />
             {t('quotes.form.downloadPdfButton')}
           </Button>
         </div>

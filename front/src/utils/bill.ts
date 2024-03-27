@@ -3,7 +3,6 @@ import Bill, { BillLine } from '../models/Bill'
 import formatISO9075 from 'date-fns/formatISO9075'
 import parseJSON from 'date-fns/parseJSON'
 
-
 export function filterBills(
   array: Bill[],
   filters: Record<string, string>,

@@ -8,7 +8,7 @@ import { useAllOutgoingsQuery } from '@/queries/useAllOutgoingsQuery'
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const ListPage = () => {
-  const {t} = useI18n()
+  const { t } = useI18n()
   const { data, isLoading } = useAllOutgoingsQuery()
 
   return (

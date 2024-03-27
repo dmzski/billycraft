@@ -12,9 +12,12 @@ type BillFilters = Record<string, string>
 const RefusedTab = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const {data, isLoading} = useDataLoader(['bills', 'refused'], BillApi.findAllRefused)
+  const { data, isLoading } = useDataLoader(['bills', 'refused'], BillApi.findAllRefused)
 
-  const billSorted = useMemo(() => filterBills(data ?? [], filters, customers), [customers, data, filters])
+  const billSorted = useMemo(
+    () => filterBills(data ?? [], filters, customers),
+    [customers, data, filters],
+  )
 
   return (
     <>

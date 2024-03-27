@@ -1,6 +1,6 @@
-import { UserApi } from "@/api/UserApi"
-import User from "@/models/User"
-import { useDataLoader } from "@scaleway/use-dataloader"
+import { UserApi } from '@/api/UserApi'
+import User from '@/models/User'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type DataLoaderOptions = Parameters<typeof useDataLoader<User>>[2]
 export const useMyInformationQuery = (options: DataLoaderOptions) => {
