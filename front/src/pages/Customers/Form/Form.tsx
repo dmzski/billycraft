@@ -81,8 +81,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.name")}
-              placeholder="Nom du client"
+              label={t("customers.form.form.name.label")}
+              placeholder={t("customers.form.form.name.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -100,8 +100,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <TextArea
               rows={4}
-              label={t("customers.form.form.address")}
-              placeholder="Adresse du client"
+              label={t("customers.form.form.address.label")}
+              placeholder={t("customers.form.form.address.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -118,8 +118,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.email")}
-              placeholder="Adresse email"
+              label={t("customers.form.form.email.label")}
+              placeholder={t("customers.form.form.email.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -136,8 +136,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.phoneNumber")}
-              placeholder="Téléphone"
+              label={t("customers.form.form.phoneNumber.label")}
+              placeholder={t("customers.form.form.phoneNumber.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -154,8 +154,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.city")}
-              placeholder="Ville"
+              label={t("customers.form.form.city.label")}
+              placeholder={t("customers.form.form.city.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -172,8 +172,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 10, required: true }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.postalCode")}
-              placeholder="Code Postal"
+              label={t("customers.form.form.postalCode.label")}
+              placeholder={t("customers.form.form.postalcode.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -190,8 +190,8 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           rules={{ maxLength: 100 }}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("customers.form.form.contact")}
-              placeholder="Nom complet"
+              label={t("customers.form.form.contact.label")}
+              placeholder={t("customers.form.form.contact.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -206,7 +206,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
           {customer?.id ? (
             <Button type="button" variant="error" onClick={tryDelete}>
               <TrashIcon className='w-5' />
-              &nbsp; Supprimer
+              &nbsp; {t('delete')}
             </Button>
           ) : null}
           <Button
@@ -214,7 +214,7 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
             disabled={!isValid || isSubmitting}
             type="submit"
           >
-            Enregistrer
+            {t("save")}
           </Button>
         </div>
       </form>

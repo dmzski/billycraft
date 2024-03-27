@@ -36,7 +36,7 @@ const QuoteEmailCustomizationForm = ({
 
   return (
     <form onSubmit={e => onSubmit(e, newQuoteEmailCustomization)} className="w-full">
-      <h2 className="text-2xl">Personnalisation de l&lsquo;email</h2>
+      <h2 className="text-2xl">{t('email customs')}</h2>
       <div className="ml-4">
         <div className="my-4 flex">
           <Switch
@@ -46,22 +46,21 @@ const QuoteEmailCustomizationForm = ({
             onChange={handleToggle('sendAutomatically')}
           >
             <div className="ml-2">
-              Envoyer l&lsquo;email automatiquement lorsque le devis passe au status
-              &ldquo;Envoyé&ldquo;
+              {t('send email automatically when the quote goes to status sent')}
             </div>
           </Switch>
         </div>
         <div className="bg-info-200 rounded text-info-700 p-3 mb-3">
-          <p className="underline">Astuces :</p>
+          <p className="underline">{t('Tips')} :</p>
           <ul className="list-inside list-disc">
-            <li>Pour insérer le numéro du devis entrez : #QUOTE_ID#</li>
-            <li>Pour insérer le titre du devis entrez : #QUOTE_TITLE#</li>
+            <li>{t('To insert the quote number enter : #QUOTE_ID#')}</li>
+            <li>{t('To insert the quote title enter : #QUOTE_TITLE#')}</li>
           </ul>
         </div>
         <div>
           <Input
             id="email-subject"
-            label={t("settings.forms.quoteemailcustomizationform.email-subject")}
+            label={t("settings.forms.quoteemailcustomizationform.email-subject.label")}
             value={newQuoteEmailCustomization.object}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewQuoteEmailCustomization({
@@ -76,7 +75,7 @@ const QuoteEmailCustomizationForm = ({
         <div className="mt-2">
           <TextArea
             id="email-body"
-            label={t("settings.forms.quoteemailcustomizationform.email-body")}
+            label={t("settings.forms.quoteemailcustomizationform.email-body.label")}
             rows={5}
             value={newQuoteEmailCustomization.body}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -90,7 +89,7 @@ const QuoteEmailCustomizationForm = ({
           />
         </div>
         <Button type="submit" size="md" className="mt-4">
-          Enregistrer la personnalisation de l&lsquo;email
+          {t('Save email customizations')}
         </Button>
       </div>
     </form>

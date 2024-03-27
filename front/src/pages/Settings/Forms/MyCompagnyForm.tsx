@@ -80,15 +80,15 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-      <div className="text-2xl border-b">Informations de mon entreprise</div>
+      <div className="text-2xl border-b">{t("compagny informations")}</div>
       <div className="md:pl-2 flex flex-col gap-8">
         <Controller
           name="name"
           control={control}
           render={({ field, fieldState: { invalid } }) => (
             <Input
-              label={t("settings.forms.mycompagnyform.name")}
-              placeholder="Nom"
+              label={t("settings.forms.mycompagnyform.name.label")}
+              placeholder={t("settings.forms.mycompagnyform.name.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -106,8 +106,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
               id="address"
               rows={3}
 
-              label={t("settings.forms.mycompagnyform.address")}
-              placeholder="Adresse"
+              label={t("settings.forms.mycompagnyform.address.label")}
+              placeholder={t("settings.forms.mycompagnyform.address.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -123,8 +123,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="postal-code"
-              label={t("settings.forms.mycompagnyform.postalCode")}
-              placeholder="Code Postal"
+              label={t("settings.forms.mycompagnyform.postalCode.label")}
+              placeholder={t("settings.forms.mycompagnyform.postalCode.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -141,8 +141,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="city"
-              label={t("settings.forms.mycompagnyform.city")}
-              placeholder="Ville"
+              label={t("settings.forms.mycompagnyform.city.label")}
+              placeholder={t("settings.forms.mycompagnyform.city.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -159,8 +159,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="phone-number"
-              label={t("settings.forms.mycompagnyform.phoneNumber")}
-              placeholder="Téléphone"
+              label={t("settings.forms.mycompagnyform.phoneNumber.label")}
+              placeholder={t("settings.forms.mycompagnyform.phoneNumber.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -177,8 +177,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="email"
-              label={t("settings.forms.mycompagnyform.email")}
-              placeholder="Email"
+              label={t("settings.forms.mycompagnyform.email.label")}
+              placeholder={t("settings.forms.mycompagnyform.email.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -195,8 +195,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
           render={({ field, fieldState: { invalid } }) => (
             <Input
               id="siret"
-              label={t("settings.forms.mycompagnyform.siret")}
-              placeholder="SIRET"
+              label={t("settings.forms.mycompagnyform.siret.label")}
+              placeholder={t("settings.forms.mycompagnyform.siret.placeholder")}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -212,9 +212,9 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             control={control}
             render={({ field, fieldState: { invalid } }) => (
               <Input
-                label={t("settings.forms.mycompagnyform.logo")}
+                label={t("settings.forms.mycompagnyform.logo.label")}
                 className="col-span-12 md:col-span-9"
-                placeholder="URL du logo"
+                placeholder={t("settings.forms.mycompagnyform.logo.placeholder")}
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
@@ -232,7 +232,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             onClick={selectFileToUpload}
             disabled={uploadLogoState.isLoading}
           >
-            Télécharger une image
+            {t('Upload an picture')}
           </Button>
           <input
             ref={fileInputRef}
@@ -245,7 +245,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
       </div>
 
       <div className="flex flex-col gap-4 w-full mt-8">
-        <div className="border-b text-lg">Taux d&apos;imposition</div>
+        <div className="border-b text-lg">{t('Tax rate')}</div>
         <div className="md:pl-2 grid md:grid-cols-3 gap-8">
           <Controller
             name="articlesTax"
@@ -253,7 +253,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.articlesTax")}
+                label={t("settings.forms.mycompagnyform.articlesTax.label")}
                 type="number"
                 step={0.01}
                 max={100}
@@ -273,7 +273,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.servicesTax")}
+                label={t("settings.forms.mycompagnyform.servicesTax.label")}
                 type="number"
                 step={0.01}
                 max={100}
@@ -293,7 +293,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             render={({ field, fieldState: { invalid } }) => (
               <Input
                 className="w-full"
-                label={t("settings.forms.mycompagnyform.othersTax")}
+                label={t("settings.forms.mycompagnyform.othersTax.label")}
                 step={0.01}
                 max={100}
                 min={0}
@@ -310,7 +310,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
         </div>
       </div>
       <div>
-        <h2 className="text-lg mb-4 border-b">Automatisme</h2>
+        <h2 className="text-lg mb-4 border-b">{t('Automation')}</h2>
         <div className="md:pl-2 flex flex-col items-start gap-8">
           <Controller
             name="autoMonthReport"
@@ -318,7 +318,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             control={control}
             render={({ field }) => (
               <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
-                Générer automatiquement les rapports mensuels
+                {t('Automatically generate monthly reports')}
               </Switch>
             )}
           />
@@ -328,14 +328,14 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
             control={control}
             render={({ field }) => (
               <Switch checked={field.value} onChange={field.onChange} labelPosition="right">
-                Générer automatiquement les rapports annuels
+                {t('Automatically generate annual reports')}
               </Switch>
             )}
           />
         </div>
       </div>
       <Button type="submit" variant="success" className="mt-4" disabled={!isValid || isSubmitting}>
-        Enregister
+        {t('save')}
       </Button>
     </form>
   )

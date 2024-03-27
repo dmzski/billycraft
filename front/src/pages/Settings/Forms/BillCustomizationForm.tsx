@@ -37,7 +37,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">Personnalisation du PDF</h2>
+      <h2 className="text-2xl">{t('customs PDF')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex w-full items-center gap-4">
           <div
@@ -55,52 +55,52 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
                 mainColor: e.target.value,
               })
             }}
-            label={t("settings.forms.billcustomizationform.mainColor")}
-            placeholder="Couleur en hexadecimale : #000000"
+            label={t("settings.forms.billcustomizationform.mainColor.label")}
+            placeholder={t("settings.forms.billcustomizationform.mainColor.placeholder")}
             className="w-full"
           />
         </div>
         <div className="flex">
           <div className="flex flex-grow flex-col gap-2 items-start">
-            <h3>Informations du client</h3>
+            <h3>{t("customer information")}</h3>
             <Switch
               checked={newBillCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
               onChange={handleToggle('displayCustomerEmail')}
             >
-              Afficher l&lsquo;email du client
+              {t("display customer email")}
             </Switch>
             <Switch
               checked={newBillCustomization.displayCustomerPhoneNumber}
               id="displayCustomerPhoneNumber"
               onChange={handleToggle('displayCustomerPhoneNumber')}
             >
-              Afficher le téléphone du client
+              {t('display customer phonenumber')}
             </Switch>
           </div>
           <div className="flex flex-grow flex-col gap-2 items-start">
-            <h3>Informations de l&lsquo;entreprise</h3>
+            <h3>{t('compagny informations')}</h3>
             <Switch
               checked={newBillCustomization.displayCompanyEmail}
               id="displayCompanyEmail"
               onChange={handleToggle('displayCompanyEmail')}
             >
-              Afficher l&lsquo;email de mon entreprise
+              {t('display compagny email')}
             </Switch>
             <Switch
               checked={newBillCustomization.displayCompanyPhoneNumber}
               id="displayCompanyPhoneNumber"
               onChange={handleToggle('displayCompanyPhoneNumber')}
             >
-              Afficher le téléphone de mon entreprise
+              {t('display compagny phonenumber')}
             </Switch>
           </div>
         </div>
         <TextArea
           id="afterTable"
-          label={t("settings.forms.billcustomizationform.afterTable")}
+          label={t("settings.forms.billcustomizationform.afterTable.label")}
           rows={5}
-          placeholder="En dessous du tableau"
+          placeholder={t("settings.forms.billcustomizationform.afterTable.label")}
           value={newBillCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -111,11 +111,11 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <TextArea
-          label={t("settings.forms.billcustomizationform.footer")}
+          label={t("settings.forms.billcustomizationform.footer.label")}
           id="footer"
           rows={5}
           className="w-full"
-          placeholder="Pied de page"
+          placeholder={t("settings.forms.billcustomizationform.footer.placeholder")}
           value={newBillCustomization.footer}
           onChange={(e) =>
             setNewBillCustomization({
@@ -131,7 +131,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           variant="success"
           onClick={onSubmit}
         >
-          Enregister la personnalisation du PDF
+          {t('save customs PDF')}
         </Button>
       </div>
     </form>

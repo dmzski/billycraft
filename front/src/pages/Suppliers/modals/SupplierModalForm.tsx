@@ -83,7 +83,7 @@ const SupplierModalForm = ({
         </h3>
         <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
           <TrashIcon className='w-5' />
-          &nbsp; Supprimer
+          &nbsp; {t('delete')}
         </Button>
       </div>
       <form className="px-4" onSubmit={handleSubmit(onSubmit(close))}>
@@ -99,7 +99,7 @@ const SupplierModalForm = ({
               onChange={field.onChange}
               ref={field.ref}
               className="mb-4"
-              label= {t('suppliers.modals.SupplierModalForm.field.name')}
+              label= {t('suppliers.modals.SupplierModalForm.field.name.label')}
               value={field.value}
               error={invalid}
               minLength={2}
@@ -118,7 +118,7 @@ const SupplierModalForm = ({
               onChange={field.onChange}
               ref={field.ref}
               className="mb-4"
-              label={t('suppliers.modals.SupplierModalForm.field.vat')}
+              label={t('suppliers.modals.SupplierModalForm.field.vat.label')}
               value={field.value}
               error={invalid}
               type="number"
@@ -140,7 +140,7 @@ const SupplierModalForm = ({
                 onChange={field.onChange}
                 ref={field.ref}
                 className="mb-4 flex-grow"
-                label={t('suppliers.modals.SupplierModalForm.field.color')}
+                label={t('suppliers.modals.SupplierModalForm.field.color.label')}
                 value={field.value}
                 error={invalid}
               />
@@ -160,7 +160,7 @@ const SupplierModalForm = ({
           className="w-full"
           type="submit"
         >
-          Enregistrer
+          {t('save')}
         </Button>
       </form>
     </div>

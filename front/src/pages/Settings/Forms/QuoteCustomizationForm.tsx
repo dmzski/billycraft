@@ -38,7 +38,7 @@ const QuoteCustomizationForm = ({
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">Personnalisation du PDF</h2>
+      <h2 className="text-2xl">{t('customs PDF')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex gap-4 w-full content-center items-center">
           <div
@@ -56,52 +56,52 @@ const QuoteCustomizationForm = ({
                 mainColor: e.target.value,
               })
             }}
-            label={t("settings.forms.quotecustomizationform.mainColor")}
-            placeholder="Couleur en hexadecimale : #000000"
+            label={t("settings.forms.quotecustomizationform.mainColor.label")}
+            placeholder={t("settings.forms.quotecustomizationform.mainColor.placeholder")}
             className="w-full"
           />
         </div>
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 items-start">
-            <h3>Informations du client</h3>
+            <h3>{t('customer information')}</h3>
             <Switch
               checked={newQuoteCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
               onChange={handleToggle('displayCustomerEmail')}
             >
-              Afficher l&lsquo;email du client
+              {t('display customer email')}
             </Switch>
             <Switch
               checked={newQuoteCustomization.displayCustomerPhoneNumber}
               id="displayCustomerPhoneNumber"
               onChange={handleToggle('displayCustomerPhoneNumber')}
             >
-              Afficher le téléphone du client
+              {t('display customer phonenumber')}
             </Switch>
           </div>
           <div className="flex flex-col flex-grow gap-2 items-start">
-            <h3>Informations de l&lsquo;entreprise</h3>
+            <h3>{t('compagny informations')}</h3>
             <Switch
               checked={newQuoteCustomization.displayCompanyEmail}
               id="displayCompanyEmail"
               onChange={handleToggle('displayCompanyEmail')}
             >
-              Afficher l&lsquo;email de mon entreprise
+              {t('display compagny email')}
             </Switch>
             <Switch
               checked={newQuoteCustomization.displayCompanyPhoneNumber}
               id="displayCompanyPhoneNumber"
               onChange={handleToggle('displayCompanyPhoneNumber')}
             >
-              Afficher le téléphone de mon entreprise
+              {t('display compagny phonenumber')}
             </Switch>
           </div>
         </div>
         <TextArea
           id="afterTable"
           rows={5}
-          label={t("settings.forms.mycompagnyform.afterTable")}
-          placeholder="En dessous du tableau"
+          label={t("settings.forms.mycompagnyform.afterTable.label")}
+          placeholder={t("settings.forms.mycompagnyform.afterTable.placeholder")}
           value={newQuoteCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -114,9 +114,9 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="footer"
           rows={5}
-          label={t("settings.forms.mycompagnyform.footer")}
+          label={t("settings.forms.mycompagnyform.footer.label")}
           className="w-full"
-          placeholder="Pied de page"
+          placeholder={t("settings.forms.mycompagnyform.footer.placeholder")}
           value={newQuoteCustomization.footer}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setNewQuoteCustomization({
@@ -132,7 +132,7 @@ const QuoteCustomizationForm = ({
           size="md"
           onClick={onSubmit}
         >
-          Enregister la personnalisation du PDF
+          {t('save customs PDF')}
         </Button>
       </div>
     </form>
