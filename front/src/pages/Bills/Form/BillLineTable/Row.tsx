@@ -1,8 +1,8 @@
 import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { useMemo, useRef } from 'react'
-import { Control, Controller, useWatch } from 'react-hook-form'
+import { useMemo } from 'react'
+import { Control, useController, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '../../../../constants/line'
 import { BillFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
@@ -25,13 +25,11 @@ const BillLineTableLine = ({
   id,
 }: BillLineTableLineProps) => {
   const { t } = useI18n()
-  const tva = useWatch({ control, name: 'tva' })
+  const [tva, price = 0, quantity = 0] = useWatch({
+    control,
+    name: ['tva', `lines.${index}.price`, `lines.${index}.quantity`],
+  })
   const formatPrice = useFormatCurrency()
-  const typeRef = useRef<HTMLInputElement | null>()
-  const nameRef = useRef<HTMLInputElement | null>()
-  const descriptionRef = useRef<HTMLTextAreaElement | null>()
-  const quantityRef = useRef<HTMLInputElement | null>()
-  const priceRef = useRef<HTMLInputElement | null>()
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id,
     data: {
@@ -43,22 +41,11 @@ const BillLineTableLine = ({
     transition,
   }
 
-  const price = useWatch({
-    control,
-    name: `lines.${index}.price`,
-    defaultValue: 0,
-  })
-  const quantity = useWatch({
-    control,
-    name: `lines.${index}.quantity`,
-    defaultValue: 0,
-  })
-
   const priceTTC = useMemo(() => {
     if (Number.isNaN(price) || !price) {
       return 0
     }
-    const computedTva = Number(tva) || 0
+    const computedTva = Number(tva) ?? 0
 
     return Math.round(price * (1 + computedTva / 100) * 100) / 100
   }, [price, tva])
@@ -71,6 +58,38 @@ const BillLineTableLine = ({
     return quantity * priceTTC
   }, [priceTTC, quantity])
 
+  const typeOptions = Object.values(LINE_TYPE).map(type => ({
+    value: type.enum,
+    label: type.name,
+  }))
+
+  const { field: typeField, fieldState: typeFieldState } = useController({
+    control,
+    name: `lines.${index}.type`,
+    rules: { required: true },
+  })
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    control,
+    name: `lines.${index}.name`,
+    rules: { required: true },
+    defaultValue: '',
+  })
+  const { field: descriptionField } = useController({
+    control,
+    name: `lines.${index}.description`,
+    defaultValue: '',
+  })
+  const { field: quantityField } = useController({
+    control,
+    name: `lines.${index}.quantity`,
+    defaultValue: 0,
+  })
+  const { field: priceField } = useController({
+    control,
+    name: `lines.${index}.price`,
+    defaultValue: 0,
+  })
+
   return (
     <div
       className="bg-base-100 grid md:grid-cols-12 px-4 py-2 gap-2"
@@ -82,122 +101,70 @@ const BillLineTableLine = ({
         <div className="items-center flex p-2" {...listeners}>
           <ArrowsUpDownIcon className="w-5" />
         </div>
-        <Controller
-          name={`lines.${index}.type`}
-          control={control}
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Select
-              disabled={disabled}
-              error={invalid}
-              value={field.value}
-              onChange={type => field.onChange(type as LineTypeEnum)}
-              ref={node => {
-                field.ref(node)
-                typeRef.current = node
-              }}
-              className="min-w-0"
-              options={Object.values(LINE_TYPE).map(type => ({
-                value: type.enum,
-                label: type.name,
-              }))}
-              name={field.name}
-              id={`${field.name}-select`}
-            />
-          )}
+        <Select
+          disabled={disabled}
+          error={typeFieldState.invalid}
+          value={typeField.value}
+          onChange={type => typeField.onChange(type as LineTypeEnum)}
+          ref={typeField.ref}
+          className="min-w-0"
+          options={typeOptions}
+          name={typeField.name}
+          id={`${typeField.name}-select`}
+          required
         />
       </div>
-      <Controller
-        name={`lines.${index}.name`}
-        rules={{ required: true }}
-        defaultValue=""
-        control={control}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            required
-            placeholder={t('bills.form.lines.fields.name.placeholder')}
-            className="md:col-span-3"
-            disabled={disabled}
-            value={field.value}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            name={field.name}
-            error={invalid}
-            ref={node => {
-              field.ref(node)
-              nameRef.current = node
-            }}
-          />
-        )}
+      <Input
+        required
+        placeholder={t('bills.form.lines.fields.name.placeholder')}
+        className="md:col-span-3"
+        disabled={disabled}
+        value={nameField.value}
+        onChange={nameField.onChange}
+        onBlur={nameField.onBlur}
+        name={nameField.name}
+        error={nameFieldState.invalid}
+        ref={nameField.ref}
       />
-      <Controller
-        name={`lines.${index}.description`}
-        control={control}
-        render={({ field }) => (
-          <TextArea
-            placeholder={t('bills.form.lines.fields.description.placeholder')}
-            rows={1}
-            className="md:col-span-3"
-            disabled={disabled}
-            value={field.value ?? ''}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            name={field.name}
-            ref={node => {
-              field.ref(node)
-              descriptionRef.current = node
-            }}
-          />
-        )}
+      <TextArea
+        placeholder={t('bills.form.lines.fields.description.placeholder')}
+        rows={1}
+        className="md:col-span-3"
+        disabled={disabled}
+        value={descriptionField.value}
+        onChange={descriptionField.onChange}
+        onBlur={descriptionField.onBlur}
+        name={descriptionField.name}
+        ref={descriptionField.ref}
       />
-      <Controller
-        defaultValue={0}
-        name={`lines.${index}.quantity`}
-        control={control}
-        render={({ field }) => (
-          <Input
-            disabled={disabled}
-            className="md:col-span-1"
-            placeholder={t('bills.form.lines.fields.quantity.placeholder')}
-            type="number"
-            step={0.01}
-            name={field.name}
-            value={field.value ?? ''}
-            onChange={field.onChange}
-            onBlur={event => {
-              field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-              field.onBlur()
-            }}
-            ref={node => {
-              field.ref(node)
-              quantityRef.current = node
-            }}
-          />
-        )}
+      <Input
+        disabled={disabled}
+        className="md:col-span-1"
+        placeholder={t('bills.form.lines.fields.quantity.placeholder')}
+        type="number"
+        step={0.01}
+        name={quantityField.name}
+        value={quantityField.value}
+        onChange={quantityField.onChange}
+        onBlur={event => {
+          quantityField.onChange(Number((event.target as HTMLInputElement).value) ?? 0)
+          quantityField.onBlur()
+        }}
+        ref={quantityField.ref}
       />
-      <Controller
-        defaultValue={0}
-        name={`lines.${index}.price`}
-        control={control}
-        render={({ field }) => (
-          <Input
-            disabled={disabled}
-            className="md:col-span-1"
-            placeholder={t('bills.form.lines.fields.etPrice.placeholder')}
-            type="number"
-            step={0.01}
-            value={field.value ?? ''}
-            onChange={field.onChange}
-            onBlur={event => {
-              field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-              field.onBlur()
-            }}
-            ref={node => {
-              field.ref(node)
-              priceRef.current = node
-            }}
-          />
-        )}
+      <Input
+        disabled={disabled}
+        className="md:col-span-1"
+        placeholder={t('bills.form.lines.fields.etPrice.placeholder')}
+        type="number"
+        step={0.01}
+        value={priceField.value}
+        onChange={priceField.onChange}
+        onBlur={event => {
+          priceField.onChange(Number((event.target as HTMLInputElement).value) ?? 0)
+          priceField.onBlur()
+        }}
+        ref={priceField.ref}
       />
       <div className="flex items-center">{formatPrice(priceTTC)}</div>
       <div className="pr-2 flex items-center justify-between">

@@ -1,24 +1,21 @@
 import { useMemo, useState } from 'react'
 import { Button, Loader } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
-import { BillApi } from '@/api/BillApi'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import BillFilterContainer from './Filters'
 import { filterBills } from '../../utils/bill'
 import BillTable from './List'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { useAllBillsNotArchivedAndNotRefused } from '@/queries/useAllBillsNotArchivedAndNotRefused'
 
 type BillFilters = Record<string, string>
 
 const BillPage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const { data, isLoading } = useDataLoader('bills', () =>
-    BillApi.findAllNotArchivedAndNotRefused(),
-  )
+  const { data, isLoading } = useAllBillsNotArchivedAndNotRefused()
   const history = useHistory()
   const { t } = useI18n()
 

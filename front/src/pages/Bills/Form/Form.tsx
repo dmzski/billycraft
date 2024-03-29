@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react'
 import { Button, Input, Select, useToast } from '@coco-ui/core'
-import { Controller, useForm } from 'react-hook-form'
+import { useController, useForm } from 'react-hook-form'
 import { BillApi } from '@/api/BillApi'
 import { Prompt } from 'react-router-dom'
 import useCustomers from '@/hooks/useCustomers'
@@ -103,69 +103,64 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
     }
   }, [reset, bill])
 
+  const { field: titleField, fieldState: titleFieldState } = useController({
+    control,
+    name: 'title',
+    rules: { required: true, minLength: 3 },
+  })
+  const { field: customerIdField, fieldState: customerIdFieldState } = useController({
+    control,
+    name: 'customerId',
+    rules: { required: true },
+  })
+  const { field: tvaField, fieldState: tvaFieldState } = useController({
+    control,
+    name: 'tva',
+    rules: { required: true, min: 0, max: 100 },
+  })
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Prompt when={isDirty} message={t('bills.form.exitWarning')} />
-      <Controller
-        name="title"
-        control={control}
-        rules={{ required: true, minLength: 3 }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            label={t('bills.form.fields.title.label')}
-            disabled={disabled}
-            error={invalid}
-            placeholder={t('bills.form.fields.title.placeholder')}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            name={field.name}
-            value={field.value}
-            ref={field.ref}
-            required
-          />
-        )}
+      <Input
+        label={t('bills.form.fields.title.label')}
+        disabled={disabled}
+        error={titleFieldState.invalid}
+        placeholder={t('bills.form.fields.title.placeholder')}
+        onChange={titleField.onChange}
+        onBlur={titleField.onBlur}
+        name={titleField.name}
+        value={titleField.value}
+        ref={titleField.ref}
+        required
       />
-      <Controller
-        name="customerId"
-        control={control}
-        rules={{ required: true }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Select
-            tabIndex={0}
-            error={invalid}
-            label={t('bills.form.fields.customerId.label')}
-            autoComplete="off"
-            id="customer-select"
-            name={field.name}
-            disabled={disabled}
-            onChange={field.onChange}
-            options={customerOptions}
-            placeholder={t('bills.form.fields.customerId.placeholder')}
-            value={field.value}
-            isSearchable
-            ref={field.ref}
-            required
-          />
-        )}
+      <Select
+        tabIndex={0}
+        error={customerIdFieldState.invalid}
+        label={t('bills.form.fields.customerId.label')}
+        autoComplete="off"
+        id="customer-select"
+        name={customerIdField.name}
+        disabled={disabled}
+        onChange={customerIdField.onChange}
+        options={customerOptions}
+        placeholder={t('bills.form.fields.customerId.placeholder')}
+        value={customerIdField.value}
+        isSearchable
+        ref={customerIdField.ref}
+        required
       />
-      <Controller
-        name="tva"
-        control={control}
-        rules={{ min: 0, max: 100 }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            label={t('bills.form.fields.vat.label')}
-            disabled={disabled}
-            placeholder={t('bills.form.fields.vat.placeholder')}
-            type="number"
-            value={field.value}
-            name={field.name}
-            onChange={e => field.onChange(Number(e.target.value))}
-            onBlur={field.onBlur}
-            error={invalid}
-            ref={field.ref}
-          />
-        )}
+      <Input
+        label={t('bills.form.fields.vat.label')}
+        disabled={disabled}
+        placeholder={t('bills.form.fields.vat.placeholder')}
+        type="number"
+        value={tvaField.value}
+        name={tvaField.name}
+        onChange={e => tvaField.onChange(Number(e.target.value))}
+        onBlur={tvaField.onBlur}
+        error={tvaFieldState.invalid}
+        ref={tvaField.ref}
       />
       <BillLineTable control={control} disabled={disabled} />
       <div className="flex flex-row-reverse gap-4">

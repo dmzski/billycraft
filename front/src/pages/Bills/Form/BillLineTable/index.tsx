@@ -1,15 +1,14 @@
 import { Button, Select } from '@coco-ui/core'
-import { ProductApi } from '@/api/ProductApi'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useCallback, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import BillLineTableLine from './Row'
 import { BillFormValues } from '../Form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { DndContext } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
 import { useI18n } from '@/i18n'
+import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 
 const defaultLine = {
   description: '',
@@ -26,7 +25,7 @@ type BillLineTableProps = {
 
 const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
   const { t } = useI18n()
-  const productsQuery = useDataLoader('products', ProductApi.findAll)
+  const { data: products } = useAllProductsQuery()
   const [productIdSelected, setProductIdSelected] = useState<number>()
   const onProductSelectedChange = useCallback((option: string) => {
     setProductIdSelected(Number(option))
@@ -65,21 +64,20 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
     [append, fields],
   )
 
-  const productOptions = useMemo(() => {
-    if (productsQuery.data) {
-      return productsQuery.data.map(product => ({
+  const productOptions = useMemo(
+    () =>
+      products.map(product => ({
         value: product.id,
         label: product.name,
-      }))
-    }
-    return []
-  }, [productsQuery.data])
+      })) ?? [],
+    [products],
+  )
 
   const addExistingProductSelected = () => {
-    if (productIdSelected && productsQuery.data) {
+    if (productIdSelected && products) {
       addLine({
         ...defaultLine,
-        ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}),
+        ...(products.find(product => product.id === productIdSelected) ?? {}),
       })
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({

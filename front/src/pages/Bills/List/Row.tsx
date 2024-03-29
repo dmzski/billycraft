@@ -6,15 +6,15 @@ import Customer from '@/models/Customer'
 import { useMemo, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
-import { useDataLoaderContext } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useAllBillsNotArchivedAndNotRefused } from '@/queries/useAllBillsNotArchivedAndNotRefused'
 
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
 }
 const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
-  const { reload } = useDataLoaderContext()
+  const { reload } = useAllBillsNotArchivedAndNotRefused({ enabled: false })
   const toast = useToast()
   const { t } = useI18n()
 
@@ -24,7 +24,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
       try {
         if (bill.id) await BillApi.updateStatus({ id: bill.id, status })
         toast.success(t('bills.list.statusUpdated'))
-        reload('bills')
+        reload()
       } catch {
         toast.error(t('genericFormError'))
       }
