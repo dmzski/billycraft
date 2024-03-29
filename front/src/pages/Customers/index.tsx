@@ -1,6 +1,6 @@
 import { Button, Loader } from '@coco-ui/core'
 import CustomerTable from './List'
-import CustomerModal from './Modals/CustomerModal'
+import CustomerModal from './modals/CustomerModal'
 import Customer from '../../models/Customer'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useAllCustomersNotDeleted } from '@/queries/useAllCustomersNotDeleted'
@@ -13,7 +13,7 @@ const CustomerPage = () => {
   return (
     <>
       <div className="flex flex-wrap justify-between">
-        <h1 className="text-3xl">Clients</h1>
+        <h1 className="text-3xl">{t('customers.list.title')}</h1>
         <CustomerModal
           onSubmitSuccess={reload}
           customer={{} as Customer}

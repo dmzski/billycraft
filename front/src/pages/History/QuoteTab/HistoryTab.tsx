@@ -1,20 +1,17 @@
-import { QuoteApi } from '@/api/QuoteApi'
 import Loader from '@/components/Loader'
 import useCustomers from '@/hooks/useCustomers'
 import QuoteFilterContainer from '@/pages/Quotes/Filters'
 import QuoteList from '@/pages/Quotes/List/List'
 import { useMemo, useState } from 'react'
 import { filterQuotes } from '@/utils/quote'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useAllQuotesArchivedQuery } from '@/queries/useAllQuotesArchivedQuery'
 
 type QuoteFilters = Record<string, string>
 const HistoryTab = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const { data, isLoading } = useDataLoader(['quotes', 'archived'], () =>
-    QuoteApi.findAllArchived(),
-  )
+  const { data, isLoading } = useAllQuotesArchivedQuery()
   const quoteSorted = useMemo(
     () => filterQuotes(data ?? [], filters, customers),
     [customers, filters, data],
@@ -27,7 +24,7 @@ const HistoryTab = () => {
         setFilters={setFilters}
       />
       <QuoteList data={quoteSorted} />
-      {isLoading ? (
+      {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />
         </div>

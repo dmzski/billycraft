@@ -269,6 +269,7 @@ export default {
 
   // Customers > List
   'customers.list.add': 'Ajouter un client',
+  'customers.list.title': 'Clients',
   'customers.list.headers.name': 'Nom',
   'customers.list.headers.contact': 'Contact',
   'customers.list.headers.phoneNumber': 'Téléphone',
@@ -451,4 +452,11 @@ export default {
   'dashboard.todos.headers.doneAt': 'Fait le',
   'dashboard.todos.headers.doneBy': 'Fait par',
   'dashboard.todos.empty': 'Aucune tâche à faire',
+
+  'history.tabs.bill.title': 'Historique des factures',
+  'history.tabs.bill.links.archived': 'Factures archivées',
+  'history.tabs.bill.links.refused': 'Factures refusées',
+  'history.tabs.quote.title': 'Historique des devis',
+  'history.tabs.quote.links.archived': 'Devis archivés',
+  'history.tabs.quote.links.refused': 'Devis refusés',
 } as const
