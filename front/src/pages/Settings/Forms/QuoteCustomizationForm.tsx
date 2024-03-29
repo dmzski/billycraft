@@ -54,8 +54,8 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
                 mainColor: e.target.value,
               })
             }}
-            label={t('settings.forms.quotecustomizationform.mainColor.label')}
-            placeholder={t('settings.forms.quotecustomizationform.mainColor.placeholder')}
+            label={t('settings.forms.quoteCustomization.mainColor.label')}
+            placeholder={t('settings.forms.quoteCustomization.mainColor.placeholder')}
             className="w-full"
           />
         </div>
@@ -98,8 +98,8 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
         <TextArea
           id="afterTable"
           rows={5}
-          label={t('settings.forms.mycompagnyform.afterTable.label')}
-          placeholder={t('settings.forms.mycompagnyform.afterTable.placeholder')}
+          label={t('settings.forms.quoteCustomization.afterTable.label')}
+          placeholder={t('settings.forms.quoteCustomization.afterTable.placeholder')}
           value={newQuoteCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -112,9 +112,9 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
         <TextArea
           id="footer"
           rows={5}
-          label={t('settings.forms.mycompagnyform.footer.label')}
+          label={t('settings.forms.quoteCustomization.footer.label')}
           className="w-full"
-          placeholder={t('settings.forms.mycompagnyform.footer.placeholder')}
+          placeholder={t('settings.forms.quoteCustomization.footer.placeholder')}
           value={newQuoteCustomization.footer}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setNewQuoteCustomization({

@@ -1,6 +1,6 @@
-import { BillApi } from "@/api/BillApi"
-import Bill from "@/models/Bill"
-import { useDataLoader } from "@scaleway/use-dataloader"
+import { BillApi } from '@/api/BillApi'
+import Bill from '@/models/Bill'
+import { useDataLoader } from '@scaleway/use-dataloader'
 
 type DataLoaderConfig = Parameters<typeof useDataLoader<Bill[]>>[2]
 

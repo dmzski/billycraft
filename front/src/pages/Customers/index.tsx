@@ -1,34 +1,37 @@
 import { Button, Loader } from '@coco-ui/core'
-import { CustomerApi } from '@/api/CustomerApi'
 import CustomerTable from './List'
 import CustomerModal from './Modals/CustomerModal'
 import Customer from '../../models/Customer'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import { useAllCustomersNotDeleted } from '@/queries/useAllCustomersNotDeleted'
+import { useI18n } from '@/i18n'
 
 const CustomerPage = () => {
-  const customersQuery = useDataLoader(['customers', 'not-deleted'], CustomerApi.findAllNotDeleted)
+  const { t } = useI18n()
+  const { data, isLoading, reload } = useAllCustomersNotDeleted()
 
   return (
     <>
       <div className="flex flex-wrap justify-between">
         <h1 className="text-3xl">Clients</h1>
         <CustomerModal
+          onSubmitSuccess={reload}
           customer={{} as Customer}
           disclosure={
-            <Button variant="primary" size="md">
+            <Button variant="primary" className="gap-1" size="md">
               <PlusIcon className="w-5" />
-              &nbsp; Nouveau client
+              <span>{t('customers.list.add')}</span>
             </Button>
           }
         />
       </div>
       <div>
-        <CustomerTable data={customersQuery.data ?? []} />
-        {customersQuery.isLoading && (
+        {isLoading && !data ? (
           <div className="mt-2 flex justify-center">
             <Loader />
           </div>
+        ) : (
+          <CustomerTable data={data ?? []} />
         )}
       </div>
     </>

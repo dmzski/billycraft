@@ -53,8 +53,8 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
                 mainColor: e.target.value,
               })
             }}
-            label={t('settings.forms.billcustomizationform.mainColor.label')}
-            placeholder={t('settings.forms.billcustomizationform.mainColor.placeholder')}
+            label={t('settings.forms.billCustomization.mainColor.label')}
+            placeholder={t('settings.forms.billCustomization.mainColor.placeholder')}
             className="w-full"
           />
         </div>
@@ -96,9 +96,9 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
         </div>
         <TextArea
           id="afterTable"
-          label={t('settings.forms.billcustomizationform.afterTable.label')}
+          label={t('settings.forms.billCustomization.afterTable.label')}
           rows={5}
-          placeholder={t('settings.forms.billcustomizationform.afterTable.label')}
+          placeholder={t('settings.forms.billCustomization.afterTable.label')}
           value={newBillCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -109,11 +109,11 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <TextArea
-          label={t('settings.forms.billcustomizationform.footer.label')}
+          label={t('settings.forms.billCustomization.footer.label')}
           id="footer"
           rows={5}
           className="w-full"
-          placeholder={t('settings.forms.billcustomizationform.footer.placeholder')}
+          placeholder={t('settings.forms.billCustomization.footer.placeholder')}
           value={newBillCustomization.footer}
           onChange={e =>
             setNewBillCustomization({
