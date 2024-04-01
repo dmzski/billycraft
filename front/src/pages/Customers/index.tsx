@@ -1,7 +1,7 @@
 import { Button, Loader } from '@coco-ui/core'
 import CustomerTable from './List'
 import CustomerModal from './modals/CustomerModal'
-import Customer from '../../models/Customer'
+import Customer from '@/models/Customer'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useAllCustomersNotDeleted } from '@/queries/useAllCustomersNotDeleted'
 import { useI18n } from '@/i18n'

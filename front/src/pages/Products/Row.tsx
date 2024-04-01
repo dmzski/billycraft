@@ -1,14 +1,14 @@
 import { Button, Input, Select, TextArea, useToast } from '@coco-ui/core'
 import { LINE_TYPE } from '@/constants/line'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { Controller, useForm } from 'react-hook-form'
-import { STRINGS } from '@/constants/strings'
+import { useController, useForm } from 'react-hook-form'
 import clsx from 'clsx'
-import Product from '../../models/Product'
-import { ProductApi } from '../../api/ProductApi'
-import { useDataLoaderContext } from '@scaleway/use-dataloader'
+import Product from '@/models/Product'
+import { ProductApi } from '@/api/ProductApi'
 import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 
 type ProductTableLineProps = {
   product?: Product
@@ -27,29 +27,35 @@ const MODES = {
   DELETE: 'DELETE',
 }
 
+const defaultProduct = {
+  type: LineTypeEnum.ARTICLE,
+  name: '',
+  description: '',
+  price: 0,
+}
+
 const ProductTableLine = ({ product }: ProductTableLineProps) => {
   const isNew = !product
+  const { t } = useI18n()
+  const { reload } = useAllProductsQuery({ enabled: false })
   const [mode, setMode] = useState(isNew ? MODES.EDIT : MODES.READ)
   const initialValues = useMemo(
     () => ({
-      type: LineTypeEnum.ARTICLE,
-      name: '',
-      description: '',
-      price: 0,
+      ...defaultProduct
     }),
     [],
   )
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid, isSubmitting },
+    formState: { isValid, isSubmitting, disabled },
     reset,
   } = useForm<ProductFormValues>({
     values: initialValues,
-    mode: 'all',
+    mode: 'onChange',
     shouldUnregister: true,
+    disabled: mode !== MODES.EDIT && !isNew
   })
-  const { reload } = useDataLoaderContext()
   const toast = useToast()
 
   const toggleEditMode = (e: MouseEvent) => {
@@ -66,19 +72,14 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
         type: data.type,
         name: data.name,
       })
-      toast.success(STRINGS.SAVE_SUCCESS)
+      toast.success(t('products.list.row.form.submit.success'))
       if (isNew) {
-        reset({
-          type: LineTypeEnum.ARTICLE,
-          name: '',
-          description: '',
-          price: 0,
-        })
+        reset({ ...defaultProduct })
       } else setMode(MODES.READ)
 
-      reload('products')
+      await reload()
     } catch {
-      toast.error(STRINGS.SAVE_ERROR)
+      toast.error(t('products.list.row.form.submit.error'))
     }
   }
 
@@ -89,14 +90,17 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
   const onDelete = async () => {
     try {
       await ProductApi.delete(product?.id ?? 0)
-      reload('products')
-      toast.success(STRINGS.DELETE_SUCCESS)
+      await reload()
+      toast.success(t('products.list.row.delete.submit.success'))
     } catch {
-      toast.error(STRINGS.DELETE_ERROR)
+      toast.error(t('products.list.row.delete.submit.error'))
     }
   }
 
-  const formID = `form-product-${product?.id ?? 'new'}`
+  const typeOptions = useMemo(() => Object.values(LINE_TYPE).map(type => ({
+    value: type.enum,
+    label: type.name,
+  })), [])
 
   useEffect(() => {
     if (product?.id) {
@@ -104,108 +108,78 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
     }
   }, [product, reset])
 
+  const { field: typeField, fieldState: typeFieldState } = useController({ control, name: "type", rules: { required: true } })
+  const { field: nameField, fieldState: nameFieldState } = useController({ control, name: "name", rules: { required: true, minLength: 1 } })
+  const { field: descriptionField, fieldState: descriptionFieldState } = useController({ control, name: "description" })
+  const { field: priceField, fieldState: priceFieldState } = useController({ control, name: "price" })
+
   return (
-    <div
+    <form
+      onSubmit={!disabled ? handleSubmit(onSubmit) : undefined}
       className={clsx(
         'grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center',
         mode === MODES.DELETE ? 'bg-error bg-opacity-50' : null,
       )}
     >
       <div className="md:col-span-2">
-        <Controller
-          name="type"
-          control={control}
-          render={({ field, fieldState: { invalid } }) => (
-            <Select
-              error={invalid}
-              value={field.value}
-              name={field.name}
-              /* Otherwise it will be to large */
-              className="w-full"
-              onChange={type => {
-                field.onChange(type)
-              }}
-              options={Object.values(LINE_TYPE).map(type => ({
-                value: type.enum,
-                label: type.name,
-              }))}
-              disabled={mode !== MODES.EDIT}
-            />
-          )}
+        <Select
+          error={typeFieldState.invalid}
+          value={typeField.value}
+          name={typeField.name}
+          className="w-full"
+          onChange={typeField.onChange}
+          options={typeOptions}
+          disabled={disabled}
         />
       </div>
       <div className="md:col-span-3">
-        <Controller
-          name="name"
-          control={control}
-          rules={{
-            required: true,
-            minLength: 1,
-          }}
-          render={({ field, fieldState }) => (
-            <Input
-              name={`${formID}-${field.name}`}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              disabled={mode !== MODES.EDIT}
-              ref={field.ref}
-              error={fieldState.invalid}
-            />
-          )}
+        <Input
+          name={nameField.name}
+          value={nameField.value}
+          onChange={nameField.onChange}
+          onBlur={nameField.onBlur}
+          disabled={disabled}
+          ref={nameField.ref}
+          error={nameFieldState.invalid}
         />
       </div>
       <div className="md:col-span-4 flex">
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextArea
-              rows={1}
-              name={field.name}
-              value={field.value ?? ''}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              disabled={mode !== MODES.EDIT}
-              error={fieldState.invalid}
-              className="w-full"
-            />
-          )}
+        <TextArea
+          rows={1}
+          name={descriptionField.name}
+          value={descriptionField.value ?? ''}
+          onChange={descriptionField.onChange}
+          onBlur={descriptionField.onBlur}
+          disabled={disabled}
+          error={descriptionFieldState.invalid}
+          className="w-full"
         />
       </div>
       <div className="md:col-span-2 flex relative">
-        <Controller
-          name="price"
-          rules={{ min: 0 }}
-          defaultValue={0}
-          control={control}
-          render={({ field }) => (
-            <Input
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={event => {
-                field.onChange(Number((event.target as HTMLInputElement).value) || 0)
-                field.onBlur()
-              }}
-              disabled={mode !== MODES.EDIT}
-              type="number"
-              step={0.1}
-              error={!!errors.price}
-            />
-          )}
+        <Input
+          name={priceField.name}
+          value={priceField.value}
+          onChange={priceField.onChange}
+          onBlur={event => {
+            priceField.onChange(Number((event.target as HTMLInputElement).value) || 0)
+            priceField.onBlur()
+          }}
+          disabled={disabled}
+          type="number"
+          step={0.1}
+          error={priceFieldState.invalid}
         />
         <span
           className={clsx(
             'right-0 inset-y-2 absolute flex items-center',
-            mode !== MODES.EDIT ? 'bg-base-200' : 'bg-base-100',
+            disabled ? 'bg-base-200' : 'bg-base-100',
           )}
         >
           €
         </span>
       </div>
       <div className="md:col-span-1 flex justify-end">
-        {mode === MODES.DELETE && !isNew ? (
+        {(mode === MODES.DELETE && !isNew) && disabled ? (
           <div className="flex relative gap-2">
             <Button type="button" variant="success" square onClick={onDelete}>
               <CheckIcon className="w-5" />
@@ -215,13 +189,11 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
             </Button>
           </div>
         ) : null}
-        {mode === MODES.EDIT || isNew ? (
+        {!disabled ? (
           <div className="flex gap-2">
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
-                <CheckIcon className="w-5" />
-              </Button>
-            </form>
+            <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
+              <CheckIcon className="w-5" />
+            </Button>
             {product?.id ? (
               <Button type="button" square variant="error" onClick={toggleEditMode}>
                 <XMarkIcon className="w-5" />
@@ -229,7 +201,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
             ) : null}
           </div>
         ) : null}
-        {mode === MODES.READ && !isNew ? (
+        {(mode === MODES.READ && !isNew) && disabled ? (
           <div className="flex gap-2">
             <Button outline type="button" onClick={toggleEditMode} variant="primary" square>
               <PencilIcon className="w-5" />
@@ -240,7 +212,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
           </div>
         ) : null}
       </div>
-    </div>
+    </form>
   )
 }
 

@@ -459,4 +459,22 @@ export default {
   'history.tabs.quote.title': 'Historique des devis',
   'history.tabs.quote.links.archived': 'Devis archivés',
   'history.tabs.quote.links.refused': 'Devis refusés',
+
+  'history.tabs.todo.list.title': "Historique des tâches",
+  'history.tabs.todo.list.headers.createdAt': "Crée le",
+  'history.tabs.todo.list.headers.createdBy': "Crée par",
+  'history.tabs.todo.list.headers.description': "Description",
+  'history.tabs.todo.list.headers.doneAt': "Fait le",
+  'history.tabs.todo.list.headers.doneBy': "Fait par",
+
+  'products.list.title': 'Articles',
+  'products.list.description': 'Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les ajouter plus rapidement lors de la création de vos factures et devis.',
+  'products.list.headers.type': 'Type',
+  'products.list.headers.name': 'Nom',
+  'products.list.headers.description': 'Description',
+  'products.list.headers.etPrice': 'Prix HT',
+  'products.list.row.form.submit.success': 'Article enregistré',
+  'products.list.row.form.submit.error': "Une erreur est survenue lors de l'enregistrement de l'article",
+  'products.list.row.delete.submit.success': 'Article supprimé',
+  'products.list.row.delete.submit.error': "Une erreur est survenue lors de la suppression de l'article",
 } as const
