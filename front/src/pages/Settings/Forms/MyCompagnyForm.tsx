@@ -1,12 +1,11 @@
-import { ChangeEvent, useCallback, useEffect, useRef } from 'react'
+import { ChangeEvent, useEffect, useRef } from 'react'
 import useLoadingState from '@/hooks/useLoadingState'
 import { CompanyApi } from '@/api/CompanyApi'
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import Company from '@/models/Company'
-import { STRINGS } from '@/constants/strings'
 import { Controller, useForm } from 'react-hook-form'
-import { useDataLoaderContext } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useUser } from '@/providers/UserProvider'
 
 type MyCompagnyFormProps = {
   company: Company
@@ -14,7 +13,7 @@ type MyCompagnyFormProps = {
 }
 const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
   const { t } = useI18n()
-  const { reload } = useDataLoaderContext()
+  const { reload } = useUser()
   const toast = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadLogoState = useLoadingState()
@@ -29,32 +28,28 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
     defaultValues: company,
   })
 
-  const onSubmit = useCallback(
-    async (values: Company) => {
-      try {
-        const data = {
-          ...values,
-          articlesTax: Number(values.articlesTax) || 0,
-          servicesTax: Number(values.servicesTax) || 0,
-          othersTax: Number(values.othersTax) || 0,
-        }
-        const res = company?.id ? await CompanyApi.updateMine(data) : await CompanyApi.create(data)
-        reload('my-information')
-        reload('my-company')
-        toast.success(STRINGS.SAVE_SUCCESS)
-        onSubmitSuccess?.(res)
-      } catch {
-        toast.error(STRINGS.SAVE_ERROR)
+  const onSubmit = async (values: Company) => {
+    try {
+      const data = {
+        ...values,
+        articlesTax: Number(values.articlesTax) || 0,
+        servicesTax: Number(values.servicesTax) || 0,
+        othersTax: Number(values.othersTax) || 0,
       }
-    },
-    [company?.id, reload, toast, onSubmitSuccess],
-  )
+      const res = company?.id ? await CompanyApi.updateMine(data) : await CompanyApi.create(data)
+      await reload()
+      toast.success(t('settings.forms.myCompagnyForm.submit.success'))
+      onSubmitSuccess?.(res)
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
 
-  const selectFileToUpload = useCallback(() => {
+  const selectFileToUpload = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click()
     }
-  }, [])
+  }
 
   const uploadLogo = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()

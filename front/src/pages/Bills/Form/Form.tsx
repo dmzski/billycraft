@@ -6,12 +6,6 @@ import { Prompt } from 'react-router-dom'
 import useCustomers from '@/hooks/useCustomers'
 import Bill, { BillStatusEnum, BillLine } from '@/models/Bill'
 import BillLineTable from './BillLineTable'
-import {
-  ArchiveBoxArrowDownIcon,
-  EnvelopeIcon,
-  HandThumbDownIcon,
-  HandThumbUpIcon,
-} from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 
 export type BillFormValues = {
@@ -168,7 +162,6 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
           <Button
             size="md"
             type="submit"
-            variant="success"
             disabled={isValidating || isSubmitting || disabled}
           >
             {t('bills.form.submit')}
@@ -177,14 +170,11 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
         {bill.id && bill.status === BillStatusEnum.DRAFT ? (
           <Button
             size="md"
-            variant="info"
             type="button"
             onClick={updateBillStatus(BillStatusEnum.SENT)}
             disabled={disabled}
-            className="gap-1"
           >
-            <EnvelopeIcon className="w-5" />
-            <span>{t('bills.form.actions.sent')}</span>
+            {t('bills.form.actions.sent')}
           </Button>
         ) : null}
         {bill.status === BillStatusEnum.SENT ? (
@@ -192,22 +182,17 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             <Button
               size="md"
               type="button"
-              variant="success"
-              onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
-              className="gap-1"
+              outline
+              onClick={updateBillStatus(BillStatusEnum.REFUSED)}
             >
-              <HandThumbUpIcon className="w-5" />
-              <span>{t('bills.form.actions.paid')}</span>
+              {t('bills.form.actions.refused')}
             </Button>
             <Button
               size="md"
               type="button"
-              variant="error"
-              onClick={updateBillStatus(BillStatusEnum.REFUSED)}
-              className="gap-1"
+              onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
             >
-              <HandThumbDownIcon className="w-5" />
-              <span>{t('bills.form.actions.refused')}</span>
+              <span>{t('bills.form.actions.paid')}</span>
             </Button>
           </>
         ) : null}
@@ -215,11 +200,9 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
           <Button
             size="md"
             type="button"
-            className="gap-1"
             onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}
           >
-            <ArchiveBoxArrowDownIcon className="w-5" />
-            <span>{t('bills.form.actions.archive')}</span>
+            {t('bills.form.actions.archive')}
           </Button>
         ) : null}
       </div>

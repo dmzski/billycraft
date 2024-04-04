@@ -1,18 +1,23 @@
-import { BillCustomizationApi } from '@/api/BillCustomizationApi'
 import BillCustomization from '@/models/BillCustomization'
 import BillCustomizationForm from './Forms/BillCustomizationForm'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useMyBillCustomizationQuery } from '@/queries/useMyBillCustomizationQuery'
+import { Loader } from '@coco-ui/core'
 
 const BillCustomizationPage = () => {
-  const billCustomizationQuery = useDataLoader('bill-customization', BillCustomizationApi.findMine)
+  const { data: billCustomization, isLoading } = useMyBillCustomizationQuery()
 
+  if (isLoading && !billCustomization) {
+    return (
+      <div className='flex items-center justify-center'>
+        <Loader />
+      </div>
+    )
+  }
   return (
     <div className="w-full">
-      <div>
-        <BillCustomizationForm
-          billCustomization={billCustomizationQuery.data ?? ({} as BillCustomization)}
-        />
-      </div>
+      <BillCustomizationForm
+        billCustomization={billCustomization ?? ({} as BillCustomization)}
+      />
     </div>
   )
 }

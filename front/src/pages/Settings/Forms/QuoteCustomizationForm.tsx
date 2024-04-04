@@ -1,6 +1,5 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import { QuoteCustomizationApi } from '@/api/QuoteCustomizationApi'
-import { STRINGS } from '@/constants/strings'
 import QuoteCustomization from '@/models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useI18n } from '@/i18n'
@@ -25,7 +24,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     await QuoteCustomizationApi.updateMine(newQuoteCustomization)
-    toast.success(STRINGS.SAVE_SUCCESS)
+    toast.success(t('settings.forms.quoteCustomization.submit.success'))
   }
 
   useEffect(() => {

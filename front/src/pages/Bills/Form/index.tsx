@@ -1,15 +1,14 @@
 import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { BillApi } from '@/api/BillApi'
 import { PdfApi } from '@/api/PdfApi'
 import useLoadingState from '@/hooks/useLoadingState'
 import Bill from '@/models/Bill'
 import { ROUTES } from '@/routes'
 import BillForm from './Form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { useBillByIdQuery } from '@/queries/useBillByIdQuery'
 
 const BillFormPage = () => {
   const { t } = useI18n()
@@ -18,7 +17,7 @@ const BillFormPage = () => {
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: bill, reload } = useDataLoader(['bill', id], () => BillApi.findById(id), {
+  const { data: bill, reload } = useBillByIdQuery(id, {
     enabled: id !== 'new',
   })
 

@@ -387,6 +387,7 @@ export default {
   'settings.forms.billCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.billCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.billCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.billCustomization.submit.success': 'Personnalisation de la facture enregistrée',
 
   // Settings > Forms > MyCompagnyForm
   'settings.forms.myCompagnyForm.name.label': 'Nom',
@@ -416,8 +417,10 @@ export default {
   'settings.forms.quoteCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.quoteCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.quoteCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.quoteCustomization.submit.success': 'Personnalisation du devis enregistrée',
 
   // Settings > Forms > MyCompagnyForm
+  'settings.forms.myCompagnyForm.submit.success': 'Entreprise enregistrée',
   'settings.forms.myCompagnyForm.name': 'Nom',
   'settings.forms.myCompagnyForm.address': 'Adresse',
   'settings.forms.myCompagnyForm.postalCode': 'Code Postal',

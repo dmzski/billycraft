@@ -6,8 +6,8 @@ import Quote, { QuoteStatusEnum } from '@/models/Quote'
 import { Link } from 'react-router-dom'
 import { MouseEvent, useMemo } from 'react'
 import { ROUTES } from '@/routes'
-import { useDataLoaderContext } from '@scaleway/use-dataloader'
 import { useI18n } from '@/i18n'
+import { useAllQuotesNotArchivedAndNotRefused } from '@/queries/useAllQuotesNotArchivedAndNotRefused'
 
 type QuoteTableLineProps = {
   quote: Quote
@@ -15,7 +15,7 @@ type QuoteTableLineProps = {
 }
 const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
   const { t } = useI18n()
-  const { reload } = useDataLoaderContext()
+  const { reload } = useAllQuotesNotArchivedAndNotRefused({enabled: false})
   const toast = useToast()
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
@@ -24,7 +24,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
       try {
         if (quote.id) await QuoteApi.updateStatus({ id: quote.id, status })
         toast.success(t('quotes.list.statusUpdated'))
-        reload('quotes')
+        reload()
       } catch {
         toast.error(t('genericFormError'))
       }

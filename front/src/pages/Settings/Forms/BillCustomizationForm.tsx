@@ -1,6 +1,5 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
 import { BillCustomizationApi } from '@/api/BillCustomizationApi'
-import { STRINGS } from '@/constants/strings'
 import BillCustomization from '@/models/BillCustomization'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useI18n } from '@/i18n'
@@ -24,7 +23,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await BillCustomizationApi.updateMine(newBillCustomization)
-    toast.success(STRINGS.SAVE_SUCCESS)
+    toast.success(t('settings.forms.billCustomization.submit.success'))
   }
 
   useEffect(() => {

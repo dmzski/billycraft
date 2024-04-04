@@ -1,12 +1,11 @@
 import { Button, Loader } from '@coco-ui/core'
-import { SupplierApi } from '@/api/SupplierApi'
 import Supplier from '@/models/Supplier'
 import SupplierList from './List'
 import SupplierModalForm from './modals/SupplierModalForm'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 
 const Suppliers = () => {
-  const { data, isLoading, reload } = useDataLoader(['suppliers'], SupplierApi.findAll)
+  const { data, isLoading, reload } = useAllSuppliersQuery()
 
   const reloadData = async () => {
     await reload()
@@ -22,15 +21,14 @@ const Suppliers = () => {
           supplier={{} as Supplier}
         />
       </div>
-      {isLoading ? (
+      {isLoading && !data ? (
         <div className="flex justify-center">
           <Loader />
         </div>
       ) : null}
-      {!isLoading && data && data.length > 0 ? (
+      {!isLoading && data ? (
         <SupplierList reloadData={reloadData} data={data} />
       ) : null}
-      {!isLoading && (!data || data.length === 0) ? <div>Aucun fournisseur</div> : null}
     </>
   )
 }

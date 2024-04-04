@@ -2,14 +2,13 @@ import { useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Loader } from '@coco-ui/core'
 import { ROUTES } from '@/routes'
-import { QuoteApi } from '@/api/QuoteApi'
 import useCustomers from '@/hooks/useCustomers'
 import QuoteFilterContainer from './Filters'
-import { filterQuotes } from '../../utils/quote'
+import { filterQuotes } from '@/utils/quote'
 import QuoteList from './List/List'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { useAllQuotesNotArchivedAndNotRefused } from '@/queries/useAllQuotesNotArchivedAndNotRefused'
 
 type QuoteFilters = Record<string, string>
 
@@ -18,7 +17,7 @@ const QuotePage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const { isLoading, data } = useDataLoader('quotes', QuoteApi.findAllNotArchivedAndNotRefused)
+  const { isLoading, data } = useAllQuotesNotArchivedAndNotRefused()
   const history = useHistory()
 
   const quoteSorted = useMemo(
@@ -41,7 +40,7 @@ const QuotePage = () => {
       </div>
       <QuoteFilterContainer filters={filters} setFilters={setFilters} />
       <QuoteList data={quoteSorted} />
-      {isLoading ? (
+      {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />
         </div>

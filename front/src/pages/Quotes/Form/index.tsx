@@ -8,9 +8,9 @@ import useLoadingState from '@/hooks/useLoadingState'
 import Quote from '@/models/Quote'
 import { ROUTES } from '@/routes'
 import QuoteForm from './Form'
-import { useDataLoader } from '@scaleway/use-dataloader'
 import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
 
 const QuoteCreationPage = () => {
   const { t } = useI18n()
@@ -19,9 +19,8 @@ const QuoteCreationPage = () => {
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: quote, reload: reloadQuote } = useDataLoader(
-    `quote-${id}`,
-    () => QuoteApi.findById(id),
+  const { data: quote, reload: reloadQuote } = useQuoteByIdQuery(
+    id,
     {
       enabled: id !== 'new',
     },

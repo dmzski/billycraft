@@ -1,9 +1,8 @@
-import { CompanyApi } from '@/api/CompanyApi'
 import MyCompagnyForm from './Forms/MyCompagnyForm'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { useMyOrganizationQuery } from '@/queries/useMyOrganizationQuery'
 
 const MyCompanyPage = () => {
-  const { data: company, reload } = useDataLoader('my-company', CompanyApi.getMine)
+  const { data: company, reload } = useMyOrganizationQuery()
 
   return (
     <div>
