@@ -15,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
+
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/robfig/cron/v3"
 	"gorm.io/driver/postgres"
@@ -28,21 +29,35 @@ var retryCount = 0
 
 func main() {
 	var err error
+
+	// Load Config
 	config, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalln("Cannot load config:", err)
 	}
+
+	// Init DB and run migrations
 	initDb(config)
+
+	// Launch cron and register jobs
 	c := cron.New(cron.WithChain(
 		cron.Recover(cron.DefaultLogger),
 	))
 	if config.Profile != "dev" {
-		c.AddFunc("@monthly", cocoCron.LaunchMonthReportJob)
-		c.AddFunc("@yearly", cocoCron.LaunchYearReportJob)
+		_, err = c.AddFunc("@monthly", cocoCron.LaunchMonthReportJob)
+		if err != nil {
+			log.Println("Monthly cron job cant start")
+		}
+		_, err = c.AddFunc("@yearly", cocoCron.LaunchYearReportJob)
+		if err != nil {
+			log.Println("Yearly cron job cant start")
+		}
+
 	}
 	c.Start()
 	defer c.Stop()
 
+	// Create app
 	app := fiber.New(fiber.Config{
 		// Override default error handler
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
@@ -68,6 +83,8 @@ func main() {
 			return nil
 		},
 	})
+
+	// Configure app
 	if config.Profile != "dev" {
 		app.Use(recover.New())
 	} else {
@@ -75,10 +92,14 @@ func main() {
 			EnableStackTrace: true,
 		}))
 	}
+
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
 		Format: "${pid} ${locals:requestid} ${status} ${method} ${path}\n",
 	}))
+
+
+  // Add api routes
 	api.InitApiRoutes(app)
 
 	log.Fatal(app.Listen(config.ServerAddress))
@@ -106,14 +127,14 @@ func initDb(config config.Config) {
 			time.AfterFunc(3*time.Second, func() {
 				initDb(config)
 			})
-      return
+			return
 		}
 	}
 	log.Println("Connection Opened to Database")
 	err = database.MakeMigrations()
 	if err != nil && err != migrate.ErrNoChange {
 		log.Fatalln(err)
-    os.Exit(3)
+		os.Exit(3)
 	}
 	log.Println("Migrations successfully applied")
 }
