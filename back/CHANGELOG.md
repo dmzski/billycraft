@@ -1,5 +1,17 @@
 # back
 
+## 1.7.0
+
+### Minor Changes
+
+- 9422908: fix: dont throw if not app.env is present
+
+### Patch Changes
+
+- 9422908: fix: some unecessary code
+- 194666b: chore: add ratelimit on traefik
+- 9422908: feat: rmeove unused env vars and cors because traefik handle it
+
 ## 1.6.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.28.1
+
+### Patch Changes
+
+- 9422908: chore: add prepare script to improve bootstrapping
+
 ## 1.28.0
 
 ### Minor Changes

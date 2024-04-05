@@ -1,5 +1,17 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.22.0
+
+### Minor Changes
+
+- 9422908: feat: improve AuthProvider to handle localStorage usage instead of cookie only
+
+### Patch Changes
+
+- 9422908: chore: refactor queries into a single directory
+- Updated dependencies [9422908]
+  - @coco-ui/core@1.28.1
+
 ## 2.21.0
 
 ### Minor Changes
