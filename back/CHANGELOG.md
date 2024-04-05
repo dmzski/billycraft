@@ -1,5 +1,11 @@
 # back
 
+## 1.10.0
+
+### Minor Changes
+
+- ce98e33: fix: pdf on the server doesnt go through network (security issue)
+
 ## 1.9.0
 
 ### Minor Changes
