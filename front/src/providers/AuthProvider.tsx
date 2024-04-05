@@ -88,13 +88,14 @@ export const AuthProvider = ({
           const { token } = await res.json()
           addInterceptFetch(token)
           localStorage.setItem(LOCAL_STORAGE_KEY, token)
-          setIsAuthenticated(true)
-          await onLoginSuccess?.()
-        } else {
-          const { message } = await res.json()
-          throw new ApiError(res.status, message)
         }
+        setIsAuthenticated(true)
+        await onLoginSuccess?.()
+      } else {
+        const { message } = await res.json()
+        throw new ApiError(res.status, message)
       }
+
     },
     [onLoginSuccess, useAuthorizationHeader],
   )
@@ -193,14 +194,14 @@ export const AuthProvider = ({
 
   const value = useMemo(
     () =>
-      ({
-        isInitializing: isAuthenticated === undefined,
-        isAuthenticated: !!isAuthenticated,
-        refreshSession,
-        register,
-        logout,
-        login,
-      } as AuthContextType),
+    ({
+      isInitializing: isAuthenticated === undefined,
+      isAuthenticated: !!isAuthenticated,
+      refreshSession,
+      register,
+      logout,
+      login,
+    } as AuthContextType),
     [isAuthenticated, refreshSession, register, logout, login],
   )
 
