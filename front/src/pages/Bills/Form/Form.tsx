@@ -115,7 +115,7 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Prompt when={isDirty} message={t('bills.form.exitWarning')} />
+      <Prompt when={isDirty && !isSubmitting} message={t('bills.form.exitWarning')} />
       <Input
         label={t('bills.form.fields.title.label')}
         disabled={disabled}

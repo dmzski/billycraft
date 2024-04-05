@@ -3,8 +3,9 @@ import { useAuth } from '@/providers/AuthProvider'
 import { Link } from 'react-router-dom'
 import { Route, ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
+import { ArrowRightStartOnRectangleIcon, LifebuoyIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
+import { SUPPORT_EMAIL } from '@/constants/global'
 
 const menuRoutes = [
   ROUTES.DASHBOARD,
@@ -60,7 +61,10 @@ const SideBarMenu = () => {
             ),
           )}
       </ul>
-      <ul className="menu">
+      <ul className="menu gap-2">
+        <li>
+          <a className="link link-primary flex items-center justify-center" href={`mailto:${SUPPORT_EMAIL}`}><LifebuoyIcon className='w-5' /> {t('contactSupport')}</a>
+        </li>
         <li>
           <Button className="flex gap-2" variant="error" type="button" outline onClick={logout}>
             <ArrowRightStartOnRectangleIcon className="w-5" />

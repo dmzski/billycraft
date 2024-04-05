@@ -7,6 +7,7 @@ import { useAllBillsNotPaidQuery } from '@/queries/useAllBillsNotPaidQuery'
 import { useAllTodosFinishedAfter } from '@/queries/useAllTodosFinishedAfter'
 import { useI18n } from '@/i18n'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useMemo } from 'react'
 
 const DATE_OFFSET_TODOS = 24 * 60 * 60 * 1000 * 7 // 5 days
 
@@ -14,7 +15,8 @@ const Dashboard = () => {
   const { t } = useI18n()
   const formatCurrency = useFormatCurrency()
   const { data: notPaid, isLoading } = useAllBillsNotPaidQuery()
-  const { data: todos, reload } = useAllTodosFinishedAfter(new Date(Date.now() - DATE_OFFSET_TODOS))
+  const dateOffset = useMemo(() => new Date(Date.now() - DATE_OFFSET_TODOS), [])
+  const { data: todos, reload } = useAllTodosFinishedAfter(dateOffset)
 
   const totalNotPaid =
     notPaid && Array.isArray(notPaid)

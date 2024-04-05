@@ -111,7 +111,7 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Prompt when={isDirty} message={t('quotes.form.exitWarning')} />
+      <Prompt when={isDirty && !isSubmitting} message={t('quotes.form.exitWarning')} />
       <Input
         label={t('quotes.form.fields.title.label')}
         disabled={disabled}

@@ -6,9 +6,9 @@ import { useReportByMonthQuery } from '@/queries/useReportByMonthQuery'
 
 const OverviewPage = () => {
   const { t } = useI18n()
-  const { data: monthData } = useReportByMonthQuery(Date.now())
-
-  const { data: yearData } = useReportByYearQuery(Date.now())
+  const currentDate = useMemo(() => Date.now(), [])
+  const { data: monthData } = useReportByMonthQuery(currentDate)
+  const { data: yearData } = useReportByYearQuery(currentDate)
 
   const currentMonth = useMemo(
     () =>
