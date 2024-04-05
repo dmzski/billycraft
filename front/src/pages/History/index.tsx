@@ -1,5 +1,5 @@
 import HistorySwitch from './HistorySwitch'
 
-const History = (): JSX.Element => <HistorySwitch />
+const History = () => <HistorySwitch />
 
 export default History

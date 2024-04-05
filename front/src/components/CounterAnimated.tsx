@@ -6,7 +6,7 @@ const CounterAnimated = ({
 }: {
   value: number
   format?: (value: number) => string
-}): JSX.Element => {
+}) => {
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {

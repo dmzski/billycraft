@@ -1,14 +1,14 @@
-import { Icon } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
+import { Route } from '@/routes'
+import clsx from 'clsx'
 import { Link, useRouteMatch } from 'react-router-dom'
 
 type MenuItemProps = {
   text?: string
-  icon?: IconName
   path: string
   exact?: boolean
+  icon?: Route['icon']
 }
-const MenuItem = ({ text, icon, path, exact }: MenuItemProps): JSX.Element => {
+const MenuItem = ({ text, path, exact, icon: IconComponent }: MenuItemProps) => {
   const match = useRouteMatch({
     path,
     exact,
@@ -16,9 +16,12 @@ const MenuItem = ({ text, icon, path, exact }: MenuItemProps): JSX.Element => {
 
   return (
     <li>
-      <Link to={path} className={match ? 'active' : ''}>
-        {icon ? <Icon name={icon} /> : null}
-        <span className="ml-4">{text}</span>
+      <Link
+        to={path}
+        className={clsx(match ? 'active' : '', IconComponent ? 'flex items-center gap-3' : '')}
+      >
+        {IconComponent ? <IconComponent className="w-4" /> : null}
+        {text}
       </Link>
     </li>
   )

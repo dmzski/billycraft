@@ -1,21 +1,21 @@
-import { TodoApi } from 'api/TodoApi'
-import Loader from 'components/Loader'
-import { useQuery } from 'react-query'
+import Loader from '@/components/Loader'
 import TodoList from './List'
+import { useAllTodosFinishedQuery } from '@/queries/useAllTodosFinishedQuery'
+import { useI18n } from '@/i18n'
 
-const TodoTab = (): JSX.Element => {
-  const { data, isLoading } = useQuery('todos-done', TodoApi.findAllFinished)
+const TodoTab = () => {
+  const { t } = useI18n()
+  const { data, isLoading } = useAllTodosFinishedQuery()
 
   return (
     <>
-      <h1 className="text-2xl mb-4">Historique des tâches</h1>
-      {isLoading ? (
+      <h1 className="text-2xl mb-4">{t('history.tabs.todo.list.title')}</h1>
+      <TodoList data={data ?? []} />
+      {isLoading && !data ? (
         <div className="flex justify-center">
           <Loader />
         </div>
-      ) : (
-        <TodoList data={data ?? []} />
-      )}
+      ) : null}
     </>
   )
 }

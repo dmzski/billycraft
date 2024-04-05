@@ -1,4 +1,4 @@
-import Appointment, { AppointmentRequest } from 'models/Appointment'
+import Appointment, { AppointmentRequest } from '@/models/Appointment'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

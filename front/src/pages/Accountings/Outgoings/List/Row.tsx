@@ -1,8 +1,9 @@
 import { formatISO9075, parseJSON } from 'date-fns'
-import { OutgoingResponse } from 'models/Outgoing'
+import { OutgoingResponse } from '@/models/Outgoing'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
@@ -10,16 +11,18 @@ type RowProps = {
   outgoing: OutgoingResponse
 }
 
-const Row = ({ outgoing }: RowProps): JSX.Element => {
+const Row = ({ outgoing }: RowProps) => {
+  const formatCurrency = useFormatCurrency()
+
   const total = useMemo(
     () =>
-      new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(
+      formatCurrency(
         outgoing.lines.reduce(
           (acc, { totalHT = 0, vat = 0 }) => acc + totalHT * (1 + vat / 100),
           0,
         ),
       ),
-    [outgoing.lines],
+    [outgoing.lines, formatCurrency],
   )
   return (
     <div className="grid sm:grid-cols-12 gap-4 p-4 border-b">

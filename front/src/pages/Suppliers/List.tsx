@@ -1,13 +1,14 @@
-import { Button, Icon } from '@coco-ui/core'
+import { Button } from '@coco-ui/core'
 import clsx from 'clsx'
-import Supplier from 'models/Supplier'
+import Supplier from '@/models/Supplier'
 import SupplierModalForm from './modals/SupplierModalForm'
+import { PencilIcon } from '@heroicons/react/24/solid'
 
 type ListProps = {
   data: Supplier[]
   reloadData: () => Promise<void>
 }
-const List = ({ data, reloadData }: ListProps): JSX.Element => (
+const List = ({ data, reloadData }: ListProps) => (
   <div>
     <div className="px-2 py-4 grid md:grid-cols-12 bg-base-200 rounded-t">
       <div>Couleur</div>
@@ -31,7 +32,7 @@ const List = ({ data, reloadData }: ListProps): JSX.Element => (
           <SupplierModalForm
             disclosure={
               <Button size="sm" variant="info">
-                <Icon name="pencil" />
+                <PencilIcon className="w-5" />
                 &nbsp; Modifier
               </Button>
             }

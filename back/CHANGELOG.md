@@ -1,5 +1,12 @@
 # back
 
+## 1.6.0
+
+### Minor Changes
+
+- 1c2e945: fix: modify company
+- 4247b35: feat: use a custom auth server
+
 ## 1.5.0
 
 ### Minor Changes

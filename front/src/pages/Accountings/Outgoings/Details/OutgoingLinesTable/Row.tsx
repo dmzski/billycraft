@@ -1,27 +1,20 @@
-import { BillApi } from 'api/BillApi'
-import { SupplierApi } from 'api/SupplierApi'
-import { useFormatCurrency } from 'hooks/useFormatCurrency'
-import { OutgoingLineResponse } from 'models/Outgoing'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useI18n } from '@/i18n'
+import { OutgoingLineResponse } from '@/models/Outgoing'
+import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
 type RowProps = {
   line: OutgoingLineResponse
 }
-const Row = ({
-  line: { totalHT, vat, billId, supplierBillReference, supplierId },
-}: RowProps): JSX.Element => {
+const Row = ({ line: { totalHT, vat, billId, supplierBillReference, supplierId } }: RowProps) => {
   const formatCurrency = useFormatCurrency()
-  const { data: bills } = useQuery(['bills'], BillApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
-  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
+  const { data: bills } = useAllBillsQuery()
+  const { data: suppliers } = useAllSuppliersQuery()
+  const { t } = useI18n()
 
   const totalTTC = useMemo(
     () =>
@@ -35,13 +28,13 @@ const Row = ({
     if (bills) return bills.find(({ id }) => id === billId)
 
     return undefined
-  }, [bills])
+  }, [billId, bills])
 
   const supplier = useMemo(() => {
     if (suppliers) return suppliers?.find(({ id }) => id === supplierId)
 
     return undefined
-  }, [suppliers])
+  }, [supplierId, suppliers])
 
   const lineColor = useMemo(() => {
     if (supplierId && suppliers) {
@@ -56,11 +49,13 @@ const Row = ({
       style={{ backgroundColor: lineColor }}
       className="py-2 px-4 grid grid-cols-1 md:grid-cols-12 items-center gap-4 border-b"
     >
-      <div className="md:col-span-2">{supplier?.name ?? 'Divers'}</div>
+      <div className="md:col-span-2">
+        {supplier?.name ?? t('accounting.outgoings.details.lines.defaultSupplier')}
+      </div>
       <div className="md:col-span-2">{supplierBillReference}</div>
       <div className="md:col-span-2">{bill?.id}</div>
       <div className="md:col-span-2">{formatCurrency(totalHT)}</div>
-      <div className="md:col-span-2">{vat}&nbsp;%</div>
+      <div className="md:col-span-2">{vat}%</div>
       <div className="md:col-span-2 flex justify-between">{totalTTC}</div>
     </div>
   )

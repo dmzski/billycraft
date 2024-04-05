@@ -1,13 +1,12 @@
-import { Button, Icon, Input, Select, useToast } from '@coco-ui/core'
+import { Button, Input, Select, useToast } from '@coco-ui/core'
 import { useMemo, useEffect } from 'react'
-import { useMutation } from 'react-query'
-import { Controller, useForm } from 'react-hook-form'
-import { QuoteApi } from 'api/QuoteApi'
+import { useController, useForm } from 'react-hook-form'
+import { QuoteApi } from '@/api/QuoteApi'
 import { Prompt } from 'react-router-dom'
-import useCustomers from 'hooks/useCustomers'
-import { STRINGS } from 'constants/strings'
-import Quote, { QuoteLine, QuoteStatusEnum } from '../../../models/Quote'
+import useCustomers from '@/hooks/useCustomers'
+import Quote, { QuoteLine, QuoteStatusEnum } from '@/models/Quote'
 import QuoteLineTable from './QuoteLineTable'
+import { useI18n } from '@/i18n'
 
 export type QuoteFormValues = Omit<Quote, 'lines'> & {
   lines: Array<QuoteLine & { id: string }>
@@ -18,7 +17,8 @@ type QuoteFormProps = {
   quote: Quote
   onSubmitSuccess: (res: Quote) => Promise<void> | void
 }
-const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
+const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps) => {
+  const { t } = useI18n()
   const toast = useToast()
   const customers = useCustomers()
   const {
@@ -28,21 +28,17 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     reset,
   } = useForm<QuoteFormValues>({
     shouldFocusError: true,
-    mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    mode: 'onChange',
     defaultValues: defaultQuote,
   })
 
-  const [updateQuoteStatusMutation, { isLoading: isUpdatingStatus }] = useMutation(
-    QuoteApi.updateStatus,
-  )
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
-      const res = await updateQuoteStatusMutation({ id: quote.id, status })
-      toast.success(STRINGS.SAVE_SUCCESS)
+      const res = await QuoteApi.updateStatus({ id: quote.id, status })
+      toast.success(t('quotes.form.submit.edit.success'))
       onSubmitSuccess(res as Quote)
     } catch {
-      toast.error(STRINGS.SAVE_ERROR)
+      toast.error(t('genericFormError'))
     }
   }
 
@@ -63,16 +59,13 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
       const res = await QuoteApi.createOrUpdate(tmp)
       reset(res)
       onSubmitSuccess(res)
-      toast.success(STRINGS.SAVE_SUCCESS)
+      toast.success(t('quotes.form.submit.success'))
     } catch {
-      toast.error(STRINGS.SAVE_ERROR)
+      toast.error(t('genericFormError'))
     }
   }
 
-  const disabled = useMemo(
-    () => !!((quote.id && quote.status !== QuoteStatusEnum.DRAFT) || isUpdatingStatus),
-    [quote, isUpdatingStatus],
-  )
+  const disabled = useMemo(() => !!(quote.id && quote.status !== QuoteStatusEnum.DRAFT), [quote])
 
   const customerOptions = useMemo(() => {
     const array = []
@@ -100,117 +93,119 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
     }
   }, [reset, quote])
 
+  const { field: titleField, fieldState: titleFieldState } = useController({
+    control,
+    name: 'title',
+    rules: { required: true, minLength: 3 },
+  })
+  const { field: customerIdField, fieldState: customerIdFieldState } = useController({
+    control,
+    name: 'customerId',
+    rules: { required: true },
+  })
+  const { field: tvaField, fieldState: tvaFieldState } = useController({
+    control,
+    name: 'tva',
+    rules: { required: true, min: 0, max: 100 },
+  })
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Prompt
-        when={isDirty}
-        message="Attention ! Certaines modifications ne sont pas enregistrées"
+      <Prompt when={isDirty && !isSubmitting} message={t('quotes.form.exitWarning')} />
+      <Input
+        label={t('quotes.form.fields.title.label')}
+        disabled={disabled}
+        error={titleFieldState.invalid}
+        placeholder={t('quotes.form.fields.title.placeholder')}
+        onChange={titleField.onChange}
+        onBlur={titleField.onBlur}
+        name={titleField.name}
+        value={titleField.value}
+        ref={titleField.ref}
+        required
       />
-      <Controller
-        name="title"
-        control={control}
-        rules={{ required: true, minLength: 3 }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            label="Titre"
-            disabled={disabled}
-            error={invalid}
-            placeholder="Titre du devis"
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            name={field.name}
-            value={field.value}
-            ref={field.ref}
-            required
-          />
-        )}
+      <Select
+        error={customerIdFieldState.invalid}
+        label={t('quotes.form.fields.customerId.label')}
+        id="customer-select"
+        name={customerIdField.name}
+        disabled={disabled || !customers}
+        onChange={customerIdField.onChange}
+        options={customerOptions}
+        placeholder={t('quotes.form.fields.customerId.placeholder')}
+        value={customerIdField.value}
+        isSearchable
+        ref={customerIdField.ref}
+        required
+        autoComplete="off"
       />
-      <Controller
-        name="customerId"
-        control={control}
-        rules={{ required: true }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Select
-            tabIndex={0}
-            error={invalid}
-            label="Sélectionner un client *"
-            id="customer-select"
-            name={field.name}
-            disabled={disabled || !customers}
-            onChange={field.onChange}
-            options={customerOptions}
-            placeholder="Nom du client"
-            value={field.value}
-            isSearchable
-            ref={field.ref}
-            required
-          />
-        )}
-      />
-      <Controller
-        name="tva"
-        control={control}
-        rules={{ min: 0, max: 100 }}
-        render={({ field, fieldState: { invalid } }) => (
-          <Input
-            label="TVA (%)"
-            disabled={disabled}
-            placeholder="TVA en %"
-            type="number"
-            value={field.value}
-            name={field.name}
-            onChange={e => field.onChange(Number(e.target.value))}
-            onBlur={field.onBlur}
-            error={invalid}
-            ref={field.ref}
-          />
-        )}
+      <Input
+        label={t('quotes.form.fields.vat.label')}
+        disabled={disabled}
+        placeholder={t('quotes.form.fields.vat.placeholder')}
+        type="number"
+        value={tvaField.value}
+        name={tvaField.name}
+        onChange={e => tvaField.onChange(Number(e.target.value))}
+        onBlur={tvaField.onBlur}
+        error={tvaFieldState.invalid}
+        ref={tvaField.ref}
+        min={0}
+        max={100}
       />
       <QuoteLineTable control={control} disabled={disabled} />
 
       <div className="flex justify-end gap-4">
         {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
           <Button
-            variant="info"
             size="md"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
             disabled={disabled}
           >
-            Envoyer le devis
+            {t('quotes.form.actions.sent')}
           </Button>
         ) : null}
         {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
           <Button
-            variant="success"
             size="md"
             type="submit"
             disabled={isValidating || isSubmitting || disabled}
           >
-            Enregistrer
+            {t('quotes.form.submit')}
           </Button>
         ) : null}
         {quote.status === QuoteStatusEnum.SENT ? (
           <>
             <Button
               size="md"
-              variant="success"
+              outline
               type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
-              disabled={isUpdatingStatus}
+              onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
             >
-              <Icon name="thumb-up" />
-              &nbsp; Devis accepté
+              {t('quotes.form.actions.refused')}
             </Button>
             <Button
               size="md"
-              variant="error"
               type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
-              disabled={isUpdatingStatus}
+              onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
             >
-              <Icon name="thumb-down" />
-              &nbsp; Devis refusé
+              {t('quotes.form.actions.accepted')}
+            </Button>
+          </>
+        ) : null}
+        {quote.status === QuoteStatusEnum.REFUSED ? (
+          <>
+            <Button
+              size="md"
+              outline
+              type="button"
+              onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
+            >
+              {t('quotes.form.actions.backToDraft')}
+            </Button>
+            <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
+              {t('quotes.form.actions.archive')}
             </Button>
           </>
         ) : null}
@@ -218,43 +213,29 @@ const QuoteForm = ({ quote, onSubmitSuccess }: QuoteFormProps): JSX.Element => {
           <>
             <Button
               size="md"
-              variant="secondary"
+              outline
               type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
-              disabled={isUpdatingStatus}
+              onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
             >
-              <Icon name="document" /> &nbsp; Remettre en brouillon
+              {t('quotes.form.actions.archive')}
             </Button>
             <Button
               size="md"
               type="button"
               onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
-              disabled={isUpdatingStatus}
             >
-              <Icon name="currency-euro" /> &nbsp; Demander un accompte
+              {t('quotes.form.actions.depositAsk')}
             </Button>
           </>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
-          <Button
-            size="md"
-            type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}
-            disabled={isUpdatingStatus}
-          >
-            <Icon name="check" />
-            &nbsp; Accompte payé
+          <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
+            {t('quotes.form.actions.depositPaid')}
           </Button>
         ) : null}
         {quote.status === QuoteStatusEnum.DEPOSIT_PAID ? (
-          <Button
-            size="md"
-            type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
-            disabled={isUpdatingStatus}
-          >
-            <Icon name="archive" />
-            &nbsp; Archiver le devis
+          <Button size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
+            {t('quotes.form.actions.archive')}
           </Button>
         ) : null}
       </div>

@@ -53,9 +53,9 @@ func (dao QuoteCustomizationDao) Update(id string, tenant int, changes dtos.Quot
 	return
 }
 
-func (dao QuoteCustomizationDao) Create(creator models.User, newQuoteCustomization dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) Create(companyId int, newQuoteCustomization dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
 	quoteCustomization = quoteCustomization.FromDTO(newQuoteCustomization)
-	quoteCustomization.CompanyID = *creator.CompanyID
+	quoteCustomization.CompanyID = companyId
 
 	if err := database.DBConn.Omit("Company").Create(&quoteCustomization).Error; err != nil {
 		log.Println("Error : ", err.Error())

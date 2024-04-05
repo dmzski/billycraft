@@ -1,5 +1,5 @@
 import { Route, Switch } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import OutgoingsSwitch from './Outgoings/OutgoingsSwitch'
 import ReportsSwitch from './Reports/ReportsSwitch'
 

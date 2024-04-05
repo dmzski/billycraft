@@ -1,5 +1,5 @@
 import { formatRFC3339 } from 'date-fns'
-import { OutgoingRequest, OutgoingResponse } from 'models/Outgoing'
+import { OutgoingRequest, OutgoingResponse } from '@/models/Outgoing'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

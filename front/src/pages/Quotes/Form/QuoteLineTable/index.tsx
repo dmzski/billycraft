@@ -1,15 +1,14 @@
-import { Button, Icon, Select } from '@coco-ui/core'
-import { ValueType } from '@coco-ui/core/dist/components/Select'
-import { ProductApi } from 'api/ProductApi'
-import { LineTypeEnum } from 'models/LineTypeEnum'
-import { useCallback } from 'react'
-import * as React from 'react'
-import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
+import { Button, Select } from '@coco-ui/core'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { ComponentProps, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
-import { useQuery } from 'react-query'
-import { nanoid } from 'nanoid'
 import QuoteLineTableLine from './Row'
 import { QuoteFormValues } from '../Form'
+import { PlusIcon } from '@heroicons/react/24/solid'
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext } from '@dnd-kit/sortable'
+import { useI18n } from '@/i18n'
+import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 
 const defaultLine = {
   description: '',
@@ -25,44 +24,41 @@ const QuoteLineTable = ({
 }: {
   disabled?: boolean
   control: Control<QuoteFormValues>
-}): JSX.Element => {
-  const productsQuery = useQuery('products', ProductApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
-  const [productIdSelected, setProductIdSelected] = React.useState<number>()
-  const onProductSelectedChange = React.useCallback((option: ValueType) => {
+}) => {
+  const { t } = useI18n()
+  const productsQuery = useAllProductsQuery()
+  const [productIdSelected, setProductIdSelected] = useState<number>()
+
+  const onProductSelectedChange = (option: string) => {
     setProductIdSelected(Number(option))
-  }, [])
+  }
 
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
-    keyName: 'id',
   })
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      if (!result.destination) {
-        return
-      }
+  const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = event => {
+    if (
+      !event.over.id ||
+      !event.active.id ||
+      !event.active.data.current.lineIndex === undefined ||
+      !event.over.data.current.lineIndex === undefined
+    ) {
+      return
+    }
 
-      move(result.source.index, result.destination.index)
-    },
-    [move],
-  )
+    move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
+  }
 
-  const addLine = React.useCallback(
-    (newLine = defaultLine) => {
-      append({ ...newLine, id: nanoid() })
-      document.getElementById('root')?.scrollTo({
-        behavior: 'smooth',
-        top: document.getElementById('root')?.scrollHeight,
-      })
-    },
-    [append, fields],
-  )
-
-  const productOptions = React.useMemo(() => {
+  const addLine = (newLine = defaultLine) => {
+    append({ ...newLine, quoteId: '', line: fields.length, id: '' })
+    document.getElementById('root')?.scrollTo({
+      behavior: 'smooth',
+      top: document.getElementById('root')?.scrollHeight,
+    })
+  }
+  const productOptions = useMemo(() => {
     if (productsQuery.data) {
       return productsQuery.data.map(product => ({
         value: product.id,
@@ -74,7 +70,10 @@ const QuoteLineTable = ({
 
   const addExistingProductSelected = () => {
     if (productIdSelected && productsQuery.data) {
-      addLine(productsQuery.data.find(product => product.id === productIdSelected))
+      addLine({
+        ...defaultLine,
+        ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}),
+      })
       setProductIdSelected(undefined)
       document.getElementById('root')?.scrollTo({
         behavior: 'smooth',
@@ -83,85 +82,56 @@ const QuoteLineTable = ({
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.ctrlKey && e.key === 'Enter' && !disabled) {
-      e.stopPropagation()
-      addLine()
-    }
-  }
-
   return (
     <div className="flex flex-col gap-4 border p-4 rounded">
+      {!disabled ? (
+        <div className="grid md:grid-cols-4 items-end gap-4">
+          <Select
+            tabIndex={0}
+            className="md:col-span-3"
+            name="existing-product"
+            id="existing-product"
+            autoComplete="off"
+            options={productOptions}
+            isSearchable
+            placeholder={t('quotes.form.lines.existingProduct.label')}
+            value={productIdSelected}
+            onChange={onProductSelectedChange}
+          />
+          <Button block onClick={addExistingProductSelected} type="button" variant="primary">
+            {t('quotes.form.lines.existingProduct.add')}
+          </Button>
+        </div>
+      ) : null}
       <div>
         <div className="rounded bg-base-300 grid md:grid-cols-12 gap-2 p-4 mb-1">
-          <div className="pl-4 md:col-span-2">Type</div>
-          <div className="md:col-span-3">Nom&nbsp;*</div>
-          <div className="md:col-span-3">Description</div>
-          <div className="md:col-span-1">Quantité</div>
-          <div className="md:col-span-1">Prix HT</div>
-          <div className="md:col-span-1">Prix TTC</div>
-          <div className="md:col-span-1">Sous total</div>
+          <div className="pl-4 md:col-span-2">{t('quotes.form.lines.headers.type')}</div>
+          <div className="md:col-span-3">{t('quotes.form.lines.headers.name')}</div>
+          <div className="md:col-span-3">{t('quotes.form.lines.headers.description')}</div>
+          <div className="md:col-span-1">{t('quotes.form.lines.headers.quantity')}</div>
+          <div className="md:col-span-1">{t('quotes.form.lines.headers.etPrice')}</div>
+          <div className="md:col-span-1">{t('quotes.form.lines.headers.itPrice')}</div>
+          <div className="md:col-span-1">{t('quotes.form.lines.headers.subTotal')}</div>
         </div>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="lines">
-            {droppableProvided => (
-              <div
-                className="flex flex-col"
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...droppableProvided.droppableProps}
-                ref={droppableProvided.innerRef}
-                onKeyDown={handleKeyDown}
-                role="row"
-                tabIndex={0}
-              >
-                {fields?.map((line, index) => (
-                  <Draggable
-                    key={`draggable-${line.id}`}
-                    draggableId={line.id}
-                    index={index}
-                    isDragDisabled={disabled}
-                  >
-                    {provided => (
-                      <QuoteLineTableLine
-                        provided={provided}
-                        key={`${line.id}`}
-                        disabled={disabled}
-                        index={index}
-                        control={control}
-                        deleteLine={() => remove(index)}
-                      />
-                    )}
-                  </Draggable>
-                ))}
-                {droppableProvided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        {!disabled ? (
-          <div className="flex flex-col gap-2">
-            <Button type="button" variant="ghost" block onClick={addLine} disabled={disabled}>
-              <Icon name="plus" />
-              &nbsp; Ajouter une ligne
-            </Button>
-            <div className="grid md:grid-cols-4 items-end gap-4">
-              <Select
-                tabIndex={0}
-                className="md:col-span-3"
-                name="existing-product"
-                id="existing-product"
-                options={productOptions}
-                isLoading={productsQuery.isLoading}
-                isSearchable
-                placeholder="Sélectionner un produit existant"
-                value={productIdSelected}
-                onChange={onProductSelectedChange}
+        <DndContext onDragEnd={onDragEnd}>
+          <SortableContext items={fields}>
+            {fields?.map((line, index) => (
+              <QuoteLineTableLine
+                key={line.id}
+                disabled={disabled}
+                id={line.id}
+                index={index}
+                control={control}
+                deleteLine={() => remove(index)}
               />
-              <Button block onClick={addExistingProductSelected} type="button" variant="primary">
-                Ajouter
-              </Button>
-            </div>
-          </div>
+            ))}
+          </SortableContext>
+        </DndContext>
+        {!disabled ? (
+          <Button className="gap-1" type="button" block onClick={() => addLine()}>
+            <PlusIcon className="w-5" />
+            {t('quotes.form.lines.add')}
+          </Button>
         ) : null}
       </div>
     </div>

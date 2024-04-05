@@ -1,25 +1,65 @@
-import { Button, Modal } from '@coco-ui/core'
-import React from 'react'
+import { ReportApi } from '@/api/ReportApi'
+import { useI18n } from '@/i18n'
+import { Alert, Button, Modal, useToast } from '@coco-ui/core'
+import { ComponentProps } from 'react'
+import { useForm } from 'react-hook-form'
 
 type DeleteModalProps = {
-  isOpen?: boolean
-  onClose: () => void
-  onSubmit?: () => void | Promise<void>
+  onSubmitSuccess?: () => void | Promise<void>
+  disclosure?: ComponentProps<typeof Modal>['disclosure']
+  id: string
 }
 
-const DeleteModal = ({ onClose, isOpen, onSubmit }: DeleteModalProps) => (
-  <Modal onClose={onClose} open={isOpen} size="sm">
-    <div className="w-full">
-      <h2 className="text-error-600 text-xl font-bold border-b mb-4 pb-2">Supprimer un rapport</h2>
-      <p className="mb-2">Êtes-vous sûr de vouloir supprimer ce rapport ?</p>
-      <p className="font-bold">
-        Cette action est irréversible est vos données seront définitivement supprimées.
-      </p>
-      <Button onClick={onSubmit} variant="error" className="w-full mt-4">
-        Supprimer
+type ReportDeleteFormProps = Omit<DeleteModalProps, 'disclosure'>
+
+const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
+  const { t } = useI18n()
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm()
+  const toast = useToast()
+
+  const onSubmit = async () => {
+    try {
+      await ReportApi.delete(id)
+      toast.success(t('accounting.reports.modals.delete.submit.success'))
+      await onSubmitSuccess?.()
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
+
+  return (
+    <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="text-2xl font-bold border-b pb-2">
+        {t('accounting.reports.modals.delete.title')}
+      </h2>
+      <div className="flex flex-col gap-5">
+        <p>{t('accounting.reports.modals.delete.description')}</p>
+        <Alert variant="error">{t('accounting.reports.modals.delete.warning')}</Alert>
+      </div>
+      <Button type="submit" disabled={isSubmitting} variant="error" className="w-full mt-4">
+        {t('accounting.reports.modals.delete.submit')}
       </Button>
-    </div>
-  </Modal>
-)
+    </form>
+  )
+}
+
+const DeleteModal = ({ id, onSubmitSuccess, disclosure }: DeleteModalProps) => {
+  return (
+    <Modal disclosure={disclosure}>
+      {({ close }) => (
+        <ReportDeleteForm
+          id={id}
+          onSubmitSuccess={async () => {
+            await onSubmitSuccess?.()
+            close()
+          }}
+        />
+      )}
+    </Modal>
+  )
+}
 
 export default DeleteModal

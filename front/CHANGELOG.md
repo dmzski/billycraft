@@ -1,5 +1,20 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.21.0
+
+### Minor Changes
+
+- 1c2e945: feat: useI18n everywhere
+- 1c2e945: feat: reimport coco-ui in workspace
+- 4247b35: feat: use a custom auth server
+- 3e2eb01: feat: add tos validation
+
+### Patch Changes
+
+- Updated dependencies [1c2e945]
+- Updated dependencies [3e2eb01]
+  - @coco-ui/core@1.28.0
+
 ## 2.20.1
 
 ### Patch Changes

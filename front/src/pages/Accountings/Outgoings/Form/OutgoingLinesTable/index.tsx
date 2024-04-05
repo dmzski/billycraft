@@ -1,39 +1,42 @@
 import { Button, Loader } from '@coco-ui/core'
-import { OutgoingRequest } from 'models/Outgoing'
-import { useCallback } from 'react'
+import { OutgoingRequest } from '@/models/Outgoing'
 import { Control, useFieldArray } from 'react-hook-form'
 import Row from './Row'
+import { useI18n } from '@/i18n'
 
 type OutgoingTableProps = {
   isLoading?: boolean
   control: Control<OutgoingRequest>
 }
-const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Element => {
+const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
+  const { t } = useI18n()
   const { fields, append, remove } = useFieldArray({
     name: 'lines',
     control,
     keyName: 'line',
   })
 
-  const addLine = useCallback(() => {
+  const addLine = () => {
     append({
       vat: 0,
       totalHT: 0,
       line: fields.length + 1,
     })
-  }, [fields, append])
+  }
 
   return (
     <div className="border rounded">
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-base-300 border-b p-4">
-        <div className="col-span-2">Fournisseur *</div>
-        <div className="col-span-2">Référence facture *</div>
-        <div className="col-span-2">Facture liée</div>
-        <div className="col-span-2">Total HT *</div>
+        <div className="col-span-2">{t('supplier')} *</div>
         <div className="col-span-2">
-          TVA <span className="text-xs">(%)</span>
+          {t('accounting.outgoings.details.lines.headers.billReference')} *
         </div>
-        <div className="col-span-2">Total TTC</div>
+        <div className="col-span-2">
+          {t('accounting.outgoings.details.lines.headers.linkedBill')}
+        </div>
+        <div className="col-span-2">{t('etTotal')} *</div>
+        <div className="col-span-2">{t('vat')} (%)</div>
+        <div className="col-span-2">{t('itTotal')}</div>
       </div>
       {isLoading ? (
         <div className="px-4 flex justify-center">
@@ -47,7 +50,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps): JSX.Ele
           ))}
           <div className="mt-4 px-4">
             <Button type="button" className="w-full" variant="ghost" onClick={addLine}>
-              Ajouter une ligne
+              {t('accounting.outgoings.forms.add.lines.add')}
             </Button>
           </div>
         </div>

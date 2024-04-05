@@ -1,28 +1,25 @@
 import { Loader } from '@coco-ui/core'
-import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
-import QuoteCustomization from 'models/QuoteCustomization'
-import { useQuery } from 'react-query'
+import QuoteCustomization from '@/models/QuoteCustomization'
 import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
+import { useMyQuoteCustomizationQuery } from '@/queries/useMyQuoteCustomizationQuery'
 
-const QuoteCustomizationPage = (): JSX.Element => {
-  const quoteCustomizationQuery = useQuery('quote-customization', QuoteCustomizationApi.findMine, {
-    refetchOnWindowFocus: false,
-  })
+const QuoteCustomizationPage = () => {
+  const {data: quoteCustomization, isLoading} = useMyQuoteCustomizationQuery()
 
   return (
     <div className="w-full flex justify-center flex-col items-center">
-      {!quoteCustomizationQuery.isLoading ? (
+      {!isLoading ? (
         <div className="w-full">
           <QuoteCustomizationForm
-            quoteCustomization={quoteCustomizationQuery.data ?? ({} as QuoteCustomization)}
+            quoteCustomization={quoteCustomization ?? ({} as QuoteCustomization)}
           />
         </div>
       ) : null}
-      {quoteCustomizationQuery.isLoading && (
+      {isLoading && !quoteCustomization ? (
         <div className="mt-4 flex justify-center">
           <Loader />
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

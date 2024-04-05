@@ -1,38 +1,26 @@
-import { useUser } from 'providers/UserProvider'
+import { useUser } from '@/providers/UserProvider'
 import SideBarMenu from './SideBarMenu'
+import { BuildingOfficeIcon } from '@heroicons/react/24/solid'
 
-const SideBar = (): JSX.Element => {
-  const user = useUser()
+const SideBar = () => {
+  const { organization } = useUser()
 
   return (
     <aside className="bg-base-200 bg-opacity-20 border-r w-72 overflow-y-auto fixed h-screen">
       <div className="w-full h-full flex flex-col gap-4">
         <div className="flex flex-col gap-4">
-          {user.company?.name ? (
-            <p className="text-lg bg-primary w-full text-center py-4 text-primary-content">
-              {user.company.name}
-            </p>
-          ) : null}
-          {user.user ? (
-            <p className="px-2 text-sm text-center">
-              Connecté en tant que&nbsp;
-              <span className="text-primary">{user.user.firstName}</span>
-            </p>
-          ) : null}
-          {user.company?.logo ? (
-            <div className="flex justify-center">
-              <img src={user.company?.logo} className="h-24 w-24 object-contain" alt="Logo" />
+          <div className="bg-primary shadow-box flex gap-3 items-center text-lg p-3 text-primary-content">
+            <div className="rounded-full p-3 mask mask-hexagon-2 bg-primary bg-opacity-50">
+              <BuildingOfficeIcon className="w-6" />
             </div>
-          ) : (
-            <div className="h-24" />
-          )}
+            <p>{organization?.name}</p>
+          </div>
         </div>
-
         <div className="flex flex-col flex-grow gap-2">
           <div className="flex-grow">
             <SideBarMenu />
           </div>
-          <div className="text-xs text-center">{process.env.VERSION}</div>
+          <div className="text-xs text-center">{APP_VERSION}</div>
         </div>
       </div>
     </aside>

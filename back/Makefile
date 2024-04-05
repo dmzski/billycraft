@@ -1,21 +1,17 @@
+REGISTRY=rg.fr-par.scw.cloud/coco-erp
+BACK_DOCKERFILES=../dockers/back
 
-dev:
-	docker compose up -d && docker compose logs -f back
+build-dev:
+	docker build -f ${BACK_DOCKERFILES}/Dockerfile.dev -t coco-erp/api:local ../
 
-up:
-	docker compose up -d
-
-down:
-	docker compose down
-
-build-preprod:
-	docker build -f Dockerfile.prod -t maliszewskid/compta-back:local .
+build-prod:
+	docker build -f ${BACK_DOCKERFILES}/Dockerfile -t coco-erp/api:latest ../
 
 upload-migrations:
-	scp migrations/* debian@coco-erp.fr:./app/migrations/
+	scp migrations/* debian@coco-erp.fr:./api/migrations/
 
 logs:
-	docker-compose logs -f --tail=200 back
+	cd ../ && docker-compose logs -f --tail=200 api
 
-some-coffee:
-	docker build -f Dockerfile.prod -t maliszewskid/compta-back:v2 . && docker push maliszewskid/compta-back:v2
+deploy-docker:
+	docker build -f ${BACK_DOCKERFILES}/Dockerfile -t ${REGISTRY}/api:latest ../ && docker push ${REGISTRY}/api:latest

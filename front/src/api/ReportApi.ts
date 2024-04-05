@@ -1,5 +1,5 @@
 import { formatRFC3339 } from 'date-fns'
-import { ReportRequest, ReportResponse } from 'models/Report'
+import { ReportRequest, ReportResponse } from '@/models/Report'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

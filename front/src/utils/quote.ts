@@ -1,27 +1,6 @@
-import { compareAsc, formatISO9075, parseJSON } from 'date-fns'
-import Customer from 'models/Customer'
-import { QUOTE_STATUS } from '../constants/quote'
-import Quote, { QuoteLine } from '../models/Quote'
-
-export function sortQuotes(array: Quote[]): Quote[] {
-  return array.sort((quoteA, quoteB) => {
-    const updateAtCompare = compareAsc(new Date(quoteA.updatedAt), new Date(quoteB.updatedAt))
-    if (updateAtCompare === 0) {
-      const statusA = Object.values(QUOTE_STATUS).find(s => s.enum === quoteA.status) || {
-        weight: 0,
-      }
-      const statusB = Object.values(QUOTE_STATUS).find(s => s.enum === quoteB.status) || {
-        weight: 0,
-      }
-      if (statusA.weight > statusB.weight) {
-        return 1
-      }
-
-      return statusA.weight < statusB.weight ? -1 : 0
-    }
-    return updateAtCompare
-  })
-}
+import { formatISO9075, parseJSON } from 'date-fns'
+import Customer from '@/models/Customer'
+import Quote, { QuoteLine, QuoteStatusEnum } from '../models/Quote'
 
 export function filterQuotes(
   array: Quote[],
@@ -60,13 +39,6 @@ export function filterQuotes(
     ) {
       takeIt = false
     }
-    if (
-      filters.sentAt &&
-      ((quote.sentAt && !formatISO9075(parseJSON(quote.sentAt)).includes(filters.sentAt)) ||
-        !quote.sentAt)
-    ) {
-      takeIt = false
-    }
     return takeIt
   })
 }
@@ -98,8 +70,8 @@ export function getQuoteTotal(quote: Quote): number {
 
 export const isQuoteMinimumAccepted = ({ status }: Quote): boolean =>
   [
-    QUOTE_STATUS.ARCHIVED.enum,
-    QUOTE_STATUS.ACCEPTED.enum,
-    QUOTE_STATUS.DEPOSIT_ASK.enum,
-    QUOTE_STATUS.DEPOSIT_PAID.enum,
+    QuoteStatusEnum.ARCHIVED,
+    QuoteStatusEnum.ACCEPTED,
+    QuoteStatusEnum.DEPOSIT_ASK,
+    QuoteStatusEnum.DEPOSIT_PAID,
   ].includes(status)

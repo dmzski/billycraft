@@ -1,83 +1,55 @@
-import { Button, Dropdown, Icon, useToast } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
-import { BillApi } from 'api/BillApi'
-import clsx from 'clsx'
-import { STRINGS } from 'constants/strings'
+import { Button, Dropdown, useToast } from '@coco-ui/core'
+import { BillApi } from '@/api/BillApi'
 import { formatISO9075, parseJSON } from 'date-fns'
-import Bill, { BillStatusEnum } from 'models/Bill'
-import Customer from 'models/Customer'
-import { useMemo, useCallback, MouseEvent } from 'react'
-import { useMutation, useQueryCache } from 'react-query'
+import Bill, { BillStatusEnum } from '@/models/Bill'
+import Customer from '@/models/Customer'
+import { useMemo, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { ROUTES } from 'routes'
-import { BILL_STATUS } from '../../../constants/bill'
+import { ROUTES } from '@/routes'
+import { useI18n } from '@/i18n'
+import { useAllBillsNotArchivedAndNotRefused } from '@/queries/useAllBillsNotArchivedAndNotRefused'
 
 type BillTableLineProps = {
   bill: Bill
   customer?: Customer
 }
-const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
-  const queryCache = useQueryCache()
+const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
+  const { reload } = useAllBillsNotArchivedAndNotRefused({ enabled: false })
   const toast = useToast()
-
-  const [updateBillStatusMutation, updateBillStatusMutationState] = useMutation(
-    BillApi.updateStatus,
-    {
-      throwOnError: true,
-    },
-  )
+  const { t } = useI18n()
 
   const updateBillStatus = (status: BillStatusEnum) => (e: MouseEvent) => {
     e.stopPropagation()
-    if (updateBillStatusMutationState.isLoading) {
-      return
-    }
     const updateStatus = async () => {
       try {
-        if (bill.id) await updateBillStatusMutation({ id: bill.id, status })
-        toast.success(STRINGS.SAVE_SUCCESS)
-        queryCache.invalidateQueries('bills')
+        if (bill.id) await BillApi.updateStatus({ id: bill.id, status })
+        toast.success(t('bills.list.statusUpdated'))
+        reload()
       } catch {
-        toast.error(STRINGS.SAVE_ERROR)
+        toast.error(t('genericFormError'))
       }
     }
     updateStatus()
   }
 
-  const getStatus = useMemo(() => {
-    const status = Object.values(BILL_STATUS).find(s => s.enum === bill.status)
-
-    return (
-      <div className="flex items-center">
-        <Icon name={(status?.icon as IconName) || 'question-mark-circle'} />
-        <span className="ml-1">{status?.text}</span>
-      </div>
-    )
-  }, [bill])
-
-  const getNextStatuses = useCallback(() => {
-    const array = []
+  const nextStatuses: BillStatusEnum[] = useMemo(() => {
     switch (bill.status) {
       case BillStatusEnum.SENT:
-        array.push(
-          BILL_STATUS.REFUSED,
-          BILL_STATUS.PAYMENT_PAID,
-          BILL_STATUS.TO_DECLARE,
-          BILL_STATUS.ARCHIVED,
-        )
-        break
+        return [
+          BillStatusEnum.REFUSED,
+          BillStatusEnum.PAYMENT_PAID,
+          BillStatusEnum.TO_DECLARE,
+          BillStatusEnum.ARCHIVED,
+        ]
       case BillStatusEnum.REFUSED:
-        array.push(BILL_STATUS.DRAFT, BILL_STATUS.ARCHIVED)
-        break
+        return [BillStatusEnum.DRAFT, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.PAYMENT_PAID:
-        array.push(BILL_STATUS.TO_DECLARE)
-        array.push(BILL_STATUS.ARCHIVED)
-        break
+        return [BillStatusEnum.TO_DECLARE, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.DRAFT:
-      default:
-        array.push(...Object.values(BILL_STATUS))
+        return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
+      case BillStatusEnum.TO_DECLARE:
+        return [BillStatusEnum.ARCHIVED]
     }
-    return array
   }, [bill])
 
   return (
@@ -88,27 +60,19 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps): JSX.Element => {
         </Link>
       </div>
       <div className="md:col-span-3 truncate">{bill.title}</div>
-      <div className="md:col-span-2 truncate">{customer?.name ?? 'N.C'}</div>
+      <div className="md:col-span-2 truncate">{customer?.name ?? '-'}</div>
+      <div className="md:col-span-2">{formatISO9075(parseJSON(bill.createdAt))}</div>
       <div className="md:col-span-2">
-        {bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : ''}
+        {bill.updatedAt ? formatISO9075(parseJSON(bill.updatedAt)) : '-'}
       </div>
       <div className="md:col-span-2">
-        {bill.sentAt ? formatISO9075(parseJSON(bill.sentAt)) : '-'}
-      </div>
-      <div className="md:col-span-2">
-        <Dropdown variant="outline">
-          <Button>{getStatus}</Button>
+        <Dropdown>
+          <Button>{t(`bills.status.${bill.status}`)}</Button>
           <Dropdown.Content>
-            {getNextStatuses().map(s => (
-              <Dropdown.ButtonItem
-                key={s.enum}
-                onClick={updateBillStatus(s.enum as BillStatusEnum)}
-              >
-                <div className="flex items-center">
-                  <Icon className="mr-2" name={s.icon as IconName} />
-                  <span>{s.text}</span>
-                </div>
-              </Dropdown.ButtonItem>
+            {nextStatuses.map(s => (
+              <Dropdown.Button key={s} onClick={updateBillStatus(s)}>
+                {t(`bills.status.${s}`)}
+              </Dropdown.Button>
             ))}
           </Dropdown.Content>
         </Dropdown>

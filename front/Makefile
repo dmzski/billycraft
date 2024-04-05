@@ -1,8 +1,16 @@
-build-image:
-	./scripts/build-image.sh
+REGISTRY=rg.fr-par.scw.cloud/coco-erp
+FRONT_DOCKERFILES=../dockers/front
 
-push-image:
-	./scripts/push-image.sh
+deploy-docker:
+	docker build -t coco-front:latest -f ${FRONT_DOCKERFILES}/Dockerfile ../ && \
+		docker tag coco-front:latest ${REGISTRY}/app:latest && \
+		docker push ${REGISTRY}/app:latest
 
-some-coffee:
-	./scripts/build-push-install.sh
+stg-deploy-docker:
+	docker build -t coco-front:stg-latest -f ${FRONT_DOCKERFILES}/Dockerfile.stg ../ && \
+		docker tag coco-front:stg-latest ${REGISTRY}/app:stg-latest && \
+		docker push ${REGISTRY}/app:stg-latest
+	
+
+build-prod:
+	docker build -f ${FRONT_DOCKERFILES}/Dockerfile -t coco-erp/front:latest .

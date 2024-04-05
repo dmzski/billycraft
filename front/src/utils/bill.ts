@@ -1,22 +1,7 @@
-import { compareAsc, formatISO9075, parseJSON } from 'date-fns'
-import Customer from 'models/Customer'
-import { BILL_STATUS } from '../constants/bill'
+import Customer from '@/models/Customer'
 import Bill, { BillLine } from '../models/Bill'
-
-export function sortBills(array: Bill[]): Bill[] {
-  return array.sort((billA, billB) => {
-    const updateAtCompare = compareAsc(new Date(billA.updatedAt), new Date(billB.updatedAt))
-    if (updateAtCompare === 0) {
-      const statusA = Object.values(BILL_STATUS).find(s => s.enum === billA.status) || { weight: 0 }
-      const statusB = Object.values(BILL_STATUS).find(s => s.enum === billB.status) || { weight: 0 }
-
-      if (statusA.weight > statusB.weight) return 1
-
-      return statusA.weight < statusB.weight ? -1 : 0
-    }
-    return updateAtCompare
-  })
-}
+import formatISO9075 from 'date-fns/formatISO9075'
+import parseJSON from 'date-fns/parseJSON'
 
 export function filterBills(
   array: Bill[],
@@ -51,13 +36,6 @@ export function filterBills(
       filters.createdAt &&
       bill.createdAt &&
       !formatISO9075(parseJSON(bill.createdAt)).includes(filters.createdAt)
-    ) {
-      takeIt = false
-    }
-    if (
-      filters.sentAt &&
-      ((bill.sentAt && !formatISO9075(parseJSON(bill.sentAt)).includes(filters.sentAt)) ||
-        !bill.sentAt)
     ) {
       takeIt = false
     }

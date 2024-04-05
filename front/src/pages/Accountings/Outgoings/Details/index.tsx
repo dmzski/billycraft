@@ -1,19 +1,15 @@
-import { Button, Icon, Loader } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
-import { useQuery } from 'react-query'
+import { Button, Loader } from '@coco-ui/core'
 import { Link, useParams } from 'react-router-dom'
 import { OUTGOING_ROUTES } from '../constants'
 import OutgoingDetail from './OutgoingDetail'
+import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { useOutgoingByIdQuery } from '@/queries/useOutgoingByIdQuery'
 
-const Details = (): JSX.Element => {
+const Details = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: outgoing, isLoading } = useQuery(
-    `outgoing-${id}`,
-    () => OutgoingApi.findOneById(id),
-    {
-      enabled: !!id,
-    },
-  )
+  const { data: outgoing, isLoading } = useOutgoingByIdQuery(id, {
+    enabled: !!id,
+  })
 
   return (
     <>
@@ -21,7 +17,7 @@ const Details = (): JSX.Element => {
         <div className="md:col-span-11">
           <Link to={OUTGOING_ROUTES.routes.LIST.path}>
             <Button type="button" variant="ghost" size="xs">
-              <Icon name="arrow-left" size={12} />
+              <ArrowLeftIcon className="w-5" />
               &nbsp; Retourner à la liste des livrets
             </Button>
           </Link>
@@ -30,7 +26,7 @@ const Details = (): JSX.Element => {
           <div>
             <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
               <Button variant="info">
-                <Icon name="pencil" size={16} />
+                <PencilIcon className="w-5" />
                 &nbsp; Modifier
               </Button>
             </Link>

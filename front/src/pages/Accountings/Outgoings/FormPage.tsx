@@ -1,37 +1,43 @@
 import { Button, Loader } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
 import { useCallback } from 'react'
-import { useQuery, useQueryCache } from 'react-query'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { injectIdInPath, ROUTES } from 'routes'
-import { OutgoingResponse } from 'models/Outgoing'
+import { injectIdInPath, ROUTES } from '@/routes'
+import { OutgoingResponse } from '@/models/Outgoing'
 import OutgoingForm from './Form'
+import { useI18n } from '@/i18n'
+import { useOutgoingByIdQuery } from '@/queries/useOutgoingByIdQuery'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const FormPage = () => {
   const { id } = useParams<{ id: string }>()
+  const { t } = useI18n()
   const { push } = useHistory()
-  const queryCache = useQueryCache()
-  const { data, isLoading } = useQuery(['outgoings', id], () => OutgoingApi.findOneById(id), {
-    refetchOnWindowFocus: false,
+  const { data, isLoading } = useOutgoingByIdQuery(id, {
     enabled: id !== 'new',
   })
 
-  const onSubmitSuccess = useCallback((res: OutgoingResponse) => {
-    queryCache.invalidateQueries('outgoings')
-    push(injectIdInPath(routes.DETAILS.path, res.id))
-  }, [])
+  const onSubmitSuccess = useCallback(
+    (res: OutgoingResponse) => {
+      push(injectIdInPath(routes.DETAILS.path, res.id))
+    },
+    [push],
+  )
+
   return (
     <div>
       <Link to={routes.LIST.path}>
         <Button type="button" size="xs" variant="ghost">
-          Retourner à la liste des livrets d&apos;achats
+          {t('accounting.outgoings.pages.form.goBack')}
         </Button>
       </Link>
       <div className="border-b py-2 my-4">
         <h1 className="text-2xl">
-          {id !== 'new' ? "Modification d'un livret d'achat" : "Création d'un livret d'achat"}
+          {t(
+            id !== 'new'
+              ? 'accounting.outgoings.pages.form.edit.title'
+              : 'accounting.outgoings.pages.form.create.title',
+          )}
         </h1>
       </div>
       {isLoading ? (

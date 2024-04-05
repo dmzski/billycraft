@@ -38,12 +38,6 @@ func (dao CompanyDao) Create(creator string, dto dtos.CompanyRequest) (company m
 		tx.Rollback()
 		panic(err)
 	}
-	tx.Model(&models.User{}).Where("email = ?", company.CreatedBy).Update("company_id", company.ID)
-	if tx.Error != nil {
-		err := tx.Error
-		tx.Rollback()
-		panic(err)
-	}
 	tx.Commit()
 	return
 }

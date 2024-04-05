@@ -1,4 +1,3 @@
-import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import BillCustomizationPage from './BillCustomizationPage'
 import { SETTINGS_ROUTES } from './constants'

@@ -1,30 +1,20 @@
 import { Button } from '@coco-ui/core'
-import { ReportApi } from 'api/ReportApi'
-import { useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
 import List from './components/List'
 import CreateReportModal from './modals/CreateReportModal'
+import { useI18n } from '@/i18n'
+import { useAllReportsQuery } from '@/queries/useAllReportsQuery'
 
 const ListPage = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const { data, refetch } = useQuery(['reports', 'all'], ReportApi.findAll, {
-    refetchOnWindowFocus: false,
-  })
-  const handleCreate = useCallback(() => {
-    setOpenModal(true)
-  }, [])
+  const { t } = useI18n()
+  const { data, reload } = useAllReportsQuery()
 
   return (
-    <div>
-      <div className="flex flex-col items-center md:flex-row pb-2 mb-4 border-b">
-        <h2 className="text-2xl flex-grow">Rapports</h2>
-        <Button onClick={handleCreate}>Créer un rapport</Button>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center pb-2 border-b">
+        <h2 className="text-2xl flex-grow">{t('accounting.reports.list.title')}</h2>
         <CreateReportModal
-          isOpen={openModal}
-          onClose={() => setOpenModal(false)}
-          onSubmitSuccess={() => {
-            refetch()
-          }}
+          disclosure={<Button variant="primary">{t('accounting.reports.list.create')}</Button>}
+          onSubmitSuccess={reload}
         />
       </div>
       {data ? (

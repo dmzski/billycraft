@@ -1,48 +1,36 @@
-import { Badge, Button, Icon, useToast } from '@coco-ui/core'
-import { useState, useCallback, useEffect } from 'react'
-import { useMutation, useQuery, useQueryCache } from 'react-query'
+import { Badge, Button, useToast } from '@coco-ui/core'
+import { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { QuoteApi } from 'api/QuoteApi'
-import { isQuoteMinimumAccepted } from 'utils/quote'
-import { QUOTE_STATUS } from 'constants/quote'
-import { STRINGS } from 'constants/strings'
-import { PdfApi } from '../../../api/PdfApi'
-import useLoadingState from '../../../hooks/useLoadingState'
-import Quote from '../../../models/Quote'
-import { ROUTES } from '../../../routes'
+import { QuoteApi } from '@/api/QuoteApi'
+import { isQuoteMinimumAccepted } from '@/utils/quote'
+import { PdfApi } from '@/api/PdfApi'
+import useLoadingState from '@/hooks/useLoadingState'
+import Quote from '@/models/Quote'
+import { ROUTES } from '@/routes'
 import QuoteForm from './Form'
+import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
 
-const QuoteCreationPage = (): JSX.Element => {
+const QuoteCreationPage = () => {
+  const { t } = useI18n()
   const [newQuote, setNewQuote] = useState<Quote>({} as Quote)
-  const queryCache = useQueryCache()
   const toast = useToast()
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: quote, refetch } = useQuery(`quote-${id}`, () => QuoteApi.findById(id), {
-    enabled: id !== 'new',
-    refetchOnWindowFocus: false,
-  })
-
-  const [createBillFromQuote, createBillFromQuoteState] = useMutation(QuoteApi.createBill, {
-    onSuccess: data => {
-      toast.success(STRINGS.BILL_CREATED)
-      queryCache.invalidateQueries('bills')
-      if (data.id) {
-        history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
-      } else {
-        history.push(ROUTES.BILLS.path)
-      }
+  const { data: quote, reload: reloadQuote } = useQuoteByIdQuery(
+    id,
+    {
+      enabled: id !== 'new',
     },
-    throwOnError: true,
-  })
+  )
 
   const onSubmitSuccess = async (data: Quote) => {
     if (data.id !== id) {
       history.push(ROUTES.QUOTE_FORM.path.replace(':id', data.id))
     } else {
-      queryCache.invalidateQueries('quotes')
-      refetch()
+      reloadQuote()
     }
   }
 
@@ -60,37 +48,45 @@ const QuoteCreationPage = (): JSX.Element => {
         pdfState.update('idle')
       }
     } catch {
-      toast.error('Erreur lors de la génération du PDF')
+      toast.error(t('quotes.form.pdfError'))
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)
     }
   }
 
-  const createBill = useCallback(() => {
+  const createBill = async () => {
     try {
-      createBillFromQuote({ id: newQuote.id })
+      const data = await QuoteApi.createBill({ id: newQuote.id })
+      toast.success(t('quotes.form.createBill'))
+      if (data.id) {
+        history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
+      } else {
+        history.push(ROUTES.BILLS.path)
+      }
     } catch {
-      toast.error('Erreur lors de la création de la facture')
+      toast.error(t('quotes.form.createBillError'))
     }
-  }, [newQuote, createBillFromQuote])
+  }
 
   useEffect(() => {
     setNewQuote(quote && id !== 'new' ? quote : ({} as Quote))
-  }, [quote])
+  }, [id, quote])
 
   return (
     <div className="w-full px-4 flex flex-col gap-4">
       <div>
-        <Button variant="ghost" className="mb-4" size="sm" onClick={history.goBack}>
-          <Icon name="chevron-left" /> &nbsp; Retourner à la liste des devis
+        <Button variant="ghost" className="gap-1" size="sm" onClick={history.goBack}>
+          <ChevronLeftIcon className="w-5" /> &nbsp; Retourner à la liste des devis
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
-        <div className="flex items-center gap-4 flex-grow mb-4 md:mb-0">
-          <h1 className="text-3xl">{!newQuote.id ? 'Nouveau devis' : 'Modifier un devis'}</h1>
+        <div className="flex items-center gap-4 flex-grow">
+          <h1 className="text-3xl">
+            {!newQuote.id ? t('quotes.form.title.new') : t('quotes.form.title.edit')}
+          </h1>
           {newQuote.status ? (
-            <Badge variant="ghost">{QUOTE_STATUS[newQuote.status]?.text}</Badge>
+            <Badge variant="ghost">{t(`quotes.status.${newQuote.status}`)}</Badge>
           ) : null}
         </div>
         <div className="flex gap-2">
@@ -99,23 +95,19 @@ const QuoteCreationPage = (): JSX.Element => {
             size="md"
             onClick={createBill}
             title="Créer la facture"
-            disabled={
-              createBillFromQuoteState.isLoading ||
-              !isQuoteMinimumAccepted(newQuote) ||
-              !newQuote.id
-            }
+            disabled={!isQuoteMinimumAccepted(newQuote) || !newQuote.id}
           >
-            <Icon name="document-add" />
-            &nbsp; Créer la facture
+            {t('quotes.form.createBill')}
           </Button>
           <Button
             disabled={pdfState.isLoading || !newQuote.id}
-            title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
             size="md"
+            className="gap-1"
           >
-            <Icon name="document-download" /> &nbsp; Télécharger le PDF
+            <DocumentArrowDownIcon className="w-5" />
+            {t('quotes.form.downloadPdfButton')}
           </Button>
         </div>
       </div>

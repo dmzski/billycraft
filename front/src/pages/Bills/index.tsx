@@ -1,25 +1,27 @@
-import { useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
-import { Button, Icon, Loader } from '@coco-ui/core'
-import useCustomers from 'hooks/useCustomers'
-import { BillApi } from 'api/BillApi'
+import { useMemo, useState } from 'react'
+import { Button, Loader } from '@coco-ui/core'
+import useCustomers from '@/hooks/useCustomers'
 import { useHistory } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import BillFilterContainer from './Filters'
-import { filterBills } from '../../utils/bill'
+import { filterBills } from '@/utils/bill'
 import BillTable from './List'
+import { PlusIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { useAllBillsNotArchivedAndNotRefused } from '@/queries/useAllBillsNotArchivedAndNotRefused'
 
 type BillFilters = Record<string, string>
 
-const BillPage = (): JSX.Element => {
+const BillPage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
-  const billsQuery = useQuery('bills', BillApi.findAllNotArchivedAndNotRefused)
+  const { data, isLoading } = useAllBillsNotArchivedAndNotRefused()
   const history = useHistory()
+  const { t } = useI18n()
 
-  const billSorted = useCallback(
-    () => filterBills(billsQuery.data ?? [], filters, customers),
-    [billsQuery.data, filters],
+  const billSorted = useMemo(
+    () => filterBills(data ?? [], filters, customers),
+    [customers, data, filters],
   )
 
   const goToNewBill = () => {
@@ -27,22 +29,22 @@ const BillPage = (): JSX.Element => {
   }
 
   return (
-    <>
-      <div className="flex justify-between mb-4">
-        <h1 className="text-3xl">Factures</h1>
-        <Button size="md" variant="primary" onClick={goToNewBill}>
-          <Icon name="plus" />
-          &nbsp; Nouvelle facture
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between">
+        <h1 className="text-3xl">{t('bills.list.title')}</h1>
+        <Button size="md" className="gap-1" variant="primary" onClick={goToNewBill}>
+          <PlusIcon className="w-5" />
+          <span>{t('bills.list.add')}</span>
         </Button>
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
-      <BillTable data={billSorted()} />
-      {billsQuery.isLoading ? (
+      <BillTable data={billSorted} />
+      {isLoading ? (
         <div className="mt-2 flex justify-center">
-          <Loader />
+          <Loader variant="primary" />
         </div>
       ) : null}
-    </>
+    </div>
   )
 }
 

@@ -1,18 +1,19 @@
 import { Button, Input, useToast } from '@coco-ui/core'
-import { OutgoingApi } from 'api/OutgoingApi'
-import { STRINGS } from 'constants/strings'
+import { OutgoingApi } from '@/api/OutgoingApi'
 import { endOfMonth, format, formatRFC3339 } from 'date-fns'
-import { OutgoingRequest, OutgoingResponse } from 'models/Outgoing'
-import { useCallback, useEffect } from 'react'
+import { OutgoingRequest, OutgoingResponse } from '@/models/Outgoing'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import OutgoingLinesTable from './OutgoingLinesTable'
+import { useI18n } from '@/i18n'
 
 type FormProps = {
   outgoing?: OutgoingResponse
   onSubmitSuccess?: (res: OutgoingResponse) => void | Promise<void>
   disabledFields?: string[]
 }
-const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Element => {
+const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
+  const { t } = useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -20,34 +21,37 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
     formState: { isSubmitting, isValid },
     reset,
   } = useForm<OutgoingRequest>({
-    mode: 'onBlur',
+    mode: 'onChange',
   })
 
-  const onSubmit = useCallback(
-    async ({ name, lines, startDate }: OutgoingRequest) => {
-      const data = {
-        lines: lines.map((line, index) => ({
-          ...line,
-          line: index + 1,
-          totalHT: Number(line.totalHT) || 0,
-          vat: Number(line.vat) || 0,
-        })),
-        name,
-        startDate: formatRFC3339(Date.parse(startDate)),
-        endDate: formatRFC3339(endOfMonth(Date.parse(startDate))),
-      } as OutgoingRequest
-      try {
-        const res = outgoing?.id
-          ? await OutgoingApi.update(outgoing.id, data)
-          : await OutgoingApi.create(data)
-        toast.success(outgoing?.id ? STRINGS.OUTGOING_UPDATED : STRINGS.OUTGOING_CREATED)
-        onSubmitSuccess?.(res)
-      } catch {
-        toast.error(STRINGS.SAVE_ERROR)
-      }
-    },
-    [outgoing, reset, toast],
-  )
+  const onSubmit = async ({ name, lines, startDate }: OutgoingRequest) => {
+    const data = {
+      lines: lines.map((line, index) => ({
+        ...line,
+        line: index + 1,
+        totalHT: Number(line.totalHT) || 0,
+        vat: Number(line.vat) || 0,
+      })),
+      name,
+      startDate: formatRFC3339(Date.parse(startDate)),
+      endDate: formatRFC3339(endOfMonth(Date.parse(startDate))),
+    } as OutgoingRequest
+    try {
+      const res = outgoing?.id
+        ? await OutgoingApi.update(outgoing.id, data)
+        : await OutgoingApi.create(data)
+      toast.success(
+        t(
+          outgoing?.id
+            ? 'accounting.outgoings.forms.add.submit.edit.success'
+            : 'accounting.outgoings.forms.add.submit.new.success',
+        ),
+      )
+      onSubmitSuccess?.(res)
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
 
   useEffect(() => {
     if (reset && outgoing) {
@@ -75,7 +79,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
             ref={field.ref}
             error={invalid}
             required
-            label="Nom du livret"
+            label={t('accounting.outgoings.forms.add.fields.name')}
           />
         )}
       />
@@ -89,23 +93,23 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
             const date = Date.parse(value)
             try {
               await OutgoingApi.findFirstWithDateIn(date)
-              return "Un livret d'achat pour cette période existe déjà"
+              return t('accounting.outgoings.forms.add.error.alreadyExist')
             } catch {
               return undefined
             }
           },
         }}
         control={control}
-        render={({ field, fieldState: { invalid, error } }) => (
+        render={({ field, fieldState: { error } }) => (
           <div className="flex flex-col mb-4">
             <Input
               value={field.value}
               onChange={field.onChange}
               onBlur={field.onBlur}
               ref={field.ref}
-              error={invalid}
+              error={!!error}
               required
-              label="Période du livret"
+              label={t('accounting.outgoings.forms.add.fields.period')}
               type="month"
               disabled={disabledFields?.includes(field.name)}
             />
@@ -115,7 +119,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps): JSX.Ele
       />
       <OutgoingLinesTable control={control} />
       <Button className="mt-4" disabled={isSubmitting || !isValid} type="submit" variant="primary">
-        Enregistrer les modifications
+        {t('save')}
       </Button>
     </form>
   )

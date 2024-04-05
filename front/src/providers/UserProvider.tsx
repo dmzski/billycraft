@@ -1,38 +1,40 @@
-import { useKeycloak } from '@react-keycloak/web'
-import { CompanyApi } from 'api/CompanyApi'
-import { UserApi } from 'api/UserApi'
-import Company from 'models/Company'
-import User from 'models/User'
-import { useMemo } from 'react'
-import * as React from 'react'
-import { useQuery } from 'react-query'
+import Company from '@/models/Company'
+import User from '@/models/User'
+import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import * as Sentry from '@sentry/react'
+import { useAuth } from './AuthProvider'
+import { useMyInformationQuery } from '@/queries/useMyInformationQuery'
+import { useMyOrganizationQuery } from '@/queries/useMyOrganizationQuery'
 
 type UserContextType = {
   user?: User
-  company?: Company
+  organization?: Company
+  reload: () => Promise<void>
 }
-const UserContext = React.createContext<UserContextType>({} as UserContextType)
+const UserContext = createContext<UserContextType>({ reload: () => Promise.resolve() })
 
 type UserProviderProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
-const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
-  const { keycloak } = useKeycloak()
-  const { data: user } = useQuery('my-information', UserApi.getMyInformation, {
-    enabled: keycloak.authenticated,
-    refetchOnWindowFocus: false,
-    refetchInterval: 10000,
+const UserProvider = ({ children }: UserProviderProps) => {
+  const { isAuthenticated } = useAuth()
+  const { data: user, reload: reloadUser } = useMyInformationQuery({
+    enabled: isAuthenticated,
   })
-  const { data: company } = useQuery('my-company', CompanyApi.getMine, {
-    enabled: user?.companyId && keycloak.authenticated,
-    refetchOnWindowFocus: false,
-    refetchInterval: 10000,
+  const { data: organization, reload: reloadOrganization } = useMyOrganizationQuery({
+    enabled: !!user?.companyId && isAuthenticated,
   })
 
-  const value = useMemo(() => ({ user, company }), [user, company])
+  const fullReload = useCallback(async () => {
+    await Promise.all([reloadUser(), reloadOrganization()])
+  }, [reloadOrganization, reloadUser])
 
-  React.useEffect(() => {
+  const value = useMemo(
+    () => ({ user, organization, reload: fullReload }),
+    [user, organization, fullReload],
+  )
+
+  useEffect(() => {
     if (user) {
       Sentry.setUser({ email: user.email })
       Sentry.setExtra('companyId', user.companyId)
@@ -42,6 +44,6 @@ const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
-const useUser = (): UserContextType => React.useContext(UserContext)
+const useUser = (): UserContextType => useContext(UserContext)
 
 export { UserProvider, useUser }

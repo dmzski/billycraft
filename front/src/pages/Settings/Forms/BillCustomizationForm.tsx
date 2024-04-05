@@ -1,28 +1,17 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
-import { BillCustomizationApi } from 'api/BillCustomizationApi'
-import { STRINGS } from 'constants/strings'
-import BillCustomization from 'models/BillCustomization'
-import { ChangeEvent } from 'react'
-import * as React from 'react'
-import { useMutation } from 'react-query'
+import { BillCustomizationApi } from '@/api/BillCustomizationApi'
+import BillCustomization from '@/models/BillCustomization'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n'
 
 type BillCustomizationFormProps = {
   billCustomization: BillCustomization
 }
 
-const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps): JSX.Element => {
-  const [newBillCustomization, setNewBillCustomization] = React.useState<BillCustomization>(
-    {} as BillCustomization,
-  )
+const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps) => {
+  const { t } = useI18n()
+  const [newBillCustomization, setNewBillCustomization] = useState({} as BillCustomization)
   const toast = useToast()
-  const [updateBillCustomizationMutation, updateBillCustomizationMutationState] = useMutation(
-    BillCustomizationApi.updateMine,
-    {
-      onSuccess: () => {
-        toast.success(STRINGS.SAVE_SUCCESS)
-      },
-    },
-  )
 
   const handleToggle = (property: keyof BillCustomization) => () => {
     setNewBillCustomization(current => ({
@@ -31,14 +20,13 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
     }))
   }
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!updateBillCustomizationMutationState.isLoading) {
-      updateBillCustomizationMutation(newBillCustomization)
-    }
+    await BillCustomizationApi.updateMine(newBillCustomization)
+    toast.success(t('settings.forms.billCustomization.submit.success'))
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (billCustomization) {
       setNewBillCustomization(billCustomization)
     }
@@ -46,7 +34,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">Personnalisation du PDF</h2>
+      <h2 className="text-2xl">{t('customs PDF')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex w-full items-center gap-4">
           <div
@@ -64,52 +52,52 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
                 mainColor: e.target.value,
               })
             }}
-            label="Couleur principale"
-            placeholder="Couleur en hexadecimale : #000000"
+            label={t('settings.forms.billCustomization.mainColor.label')}
+            placeholder={t('settings.forms.billCustomization.mainColor.placeholder')}
             className="w-full"
           />
         </div>
         <div className="flex">
           <div className="flex flex-grow flex-col gap-2 items-start">
-            <h3>Informations du client</h3>
+            <h3>{t('customer information')}</h3>
             <Switch
               checked={newBillCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
               onChange={handleToggle('displayCustomerEmail')}
             >
-              Afficher l&lsquo;email du client
+              {t('display customer email')}
             </Switch>
             <Switch
               checked={newBillCustomization.displayCustomerPhoneNumber}
               id="displayCustomerPhoneNumber"
               onChange={handleToggle('displayCustomerPhoneNumber')}
             >
-              Afficher le téléphone du client
+              {t('display customer phonenumber')}
             </Switch>
           </div>
           <div className="flex flex-grow flex-col gap-2 items-start">
-            <h3>Informations de l&lsquo;entreprise</h3>
+            <h3>{t('compagny informations')}</h3>
             <Switch
               checked={newBillCustomization.displayCompanyEmail}
               id="displayCompanyEmail"
               onChange={handleToggle('displayCompanyEmail')}
             >
-              Afficher l&lsquo;email de mon entreprise
+              {t('display compagny email')}
             </Switch>
             <Switch
               checked={newBillCustomization.displayCompanyPhoneNumber}
               id="displayCompanyPhoneNumber"
               onChange={handleToggle('displayCompanyPhoneNumber')}
             >
-              Afficher le téléphone de mon entreprise
+              {t('display compagny phonenumber')}
             </Switch>
           </div>
         </div>
         <TextArea
           id="afterTable"
-          label="Après le tableau"
+          label={t('settings.forms.billCustomization.afterTable.label')}
           rows={5}
-          placeholder="En dessous du tableau"
+          placeholder={t('settings.forms.billCustomization.afterTable.label')}
           value={newBillCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -120,28 +108,21 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <TextArea
-          label="Pied de page"
+          label={t('settings.forms.billCustomization.footer.label')}
           id="footer"
           rows={5}
           className="w-full"
-          placeholder="Pied de page"
+          placeholder={t('settings.forms.billCustomization.footer.placeholder')}
           value={newBillCustomization.footer}
-          onChange={(e: React.ChangeEvent) =>
+          onChange={e =>
             setNewBillCustomization({
               ...newBillCustomization,
-              footer: (e.target as HTMLTextAreaElement).value,
+              footer: e.target.value,
             })
           }
         />
-        <Button
-          type="submit"
-          size="md"
-          block
-          variant="success"
-          disabled={updateBillCustomizationMutationState.isLoading}
-          onClick={onSubmit}
-        >
-          Enregister la personnalisation du PDF
+        <Button type="submit" size="md" block variant="success" onClick={onSubmit}>
+          {t('save customs PDF')}
         </Button>
       </div>
     </form>

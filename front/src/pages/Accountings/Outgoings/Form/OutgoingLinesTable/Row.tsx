@@ -1,10 +1,11 @@
-import { Button, Icon, Input, Select } from '@coco-ui/core'
-import { SupplierApi } from 'api/SupplierApi'
-import { OutgoingRequest } from 'models/Outgoing'
+import { Button, Input, Select } from '@coco-ui/core'
+import { OutgoingRequest } from '@/models/Outgoing'
 import { useMemo, useState } from 'react'
 import { Control, Controller, useController, useWatch } from 'react-hook-form'
-import { useQuery } from 'react-query'
 import SelectBillModal from './modals/SelectBillModal'
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 
 const DEFAULT_LINE_COLOR = 'initial'
 
@@ -14,7 +15,8 @@ type RowProps = {
   onDelete: () => void
   disabled?: boolean
 }
-const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
+const Row = ({ control, index, onDelete, disabled }: RowProps) => {
+  const formatCurrency = useFormatCurrency()
   const [billModalOpen, setBillModalOpen] = useState(false)
 
   const vatController = useController({
@@ -28,51 +30,33 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
     },
   })
 
-  const { data: suppliers } = useQuery(['suppliers'], SupplierApi.findAll, {
-    refetchOnWindowFocus: false,
-    staleTime: 6000,
-  })
-  const totalHT = useWatch({
-    name: `lines.${index}.totalHT`,
-    control,
-    defaultValue: 0,
-  })
+  const { data: suppliers } = useAllSuppliersQuery()
 
-  const supplierId = useWatch({
-    name: `lines.${index}.supplierId`,
+  const [totalHT, supplierId, vat] = useWatch({
+    name: [`lines.${index}.totalHT`, `lines.${index}.supplierId`, `lines.${index}.vat`],
     control,
-  })
-
-  const vat = useWatch({
-    name: `lines.${index}.vat`,
-    control,
-    defaultValue: 0,
   })
 
   const totalTTC = useMemo(
     () =>
       !Number.isNaN(totalHT) && !Number.isNaN(vat)
-        ? new Intl.NumberFormat(undefined, {
-            currency: 'EUR',
-            style: 'currency',
-          }).format(Number(totalHT * (1 + vat / 100)) || 0)
+        ? formatCurrency(Number(totalHT * (1 + vat / 100)) || 0)
         : '',
-    [totalHT, vat],
+    [formatCurrency, totalHT, vat],
   )
 
-  const supplierOptions = useMemo(() => {
-    if (suppliers) return suppliers.map(({ id, name }) => ({ value: id, label: name }))
+  const supplierOptions = useMemo(
+    () => (suppliers ? suppliers.map(({ id, name }) => ({ value: id, label: name })) : []),
+    [suppliers],
+  )
 
-    return []
-  }, [suppliers])
-
-  const lineColor = useMemo(() => {
-    if (supplierId && suppliers) {
-      return suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR
-    }
-
-    return DEFAULT_LINE_COLOR
-  }, [supplierId, suppliers])
+  const lineColor = useMemo(
+    () =>
+      supplierId && suppliers
+        ? suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR
+        : DEFAULT_LINE_COLOR,
+    [supplierId, suppliers],
+  )
 
   return (
     <div
@@ -139,8 +123,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
                 disabled={disabled}
               />
               {field.value ? (
-                <Icon
-                  name="x"
+                <XMarkIcon
                   className="absolute right-2 top-2 cursor-pointer"
                   role="button"
                   onClick={() => field.onChange('')}
@@ -202,7 +185,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps): JSX.Element => {
       <div className="col-span-2 flex justify-between">
         <Input className="w-full mr-2" readOnly value={totalTTC} />
         <Button variant="error" onClick={onDelete} type="button">
-          <Icon name="trash" />
+          <TrashIcon className="w-5" />
         </Button>
       </div>
     </div>

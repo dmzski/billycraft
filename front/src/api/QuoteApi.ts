@@ -1,6 +1,6 @@
-import { API_URL } from 'constants/global'
-import Bill from 'models/Bill'
-import Quote, { QuoteStatusEnum } from 'models/Quote'
+import { API_URL } from '@/constants/global'
+import Bill from '@/models/Bill'
+import Quote, { QuoteStatusEnum } from '@/models/Quote'
 import { HttpClient } from './HttpClient'
 
 export const QUOTE_URL = `${API_URL}/quotes`

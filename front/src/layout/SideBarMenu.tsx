@@ -1,11 +1,11 @@
-import { Button, Icon } from '@coco-ui/core'
-import { IconName } from '@coco-ui/core/dist/components/Icon'
-import { useKeycloak } from '@react-keycloak/web'
-import clsx from 'clsx'
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { Route, ROUTES } from 'routes'
+import { Button } from '@coco-ui/core'
+import { useAuth } from '@/providers/AuthProvider'
+import { Link } from 'react-router-dom'
+import { Route, ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
+import { ArrowRightStartOnRectangleIcon, LifebuoyIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { SUPPORT_EMAIL } from '@/constants/global'
 
 const menuRoutes = [
   ROUTES.DASHBOARD,
@@ -22,66 +22,56 @@ const menuRoutes = [
 type MenuProps = {
   route: Route
 }
-const Menu = ({ route }: MenuProps): JSX.Element => {
-  const [open, setOpen] = useState(false)
-
-  const handleOpen = () => {
-    setOpen(current => !current)
-  }
+const Menu = ({ route }: MenuProps) => {
   return (
-    <li className={clsx('collapse collapse-arrow flex', open ? 'collapse-open' : 'collapse-close')}>
-      <button
-        onClick={handleOpen}
-        type="button"
-        className="appearance-none collapse-title flex items-center gap-6 min-h-0"
-      >
-        {route.icon ? <Icon name={route.icon} /> : null}
-        {route.title}
-      </button>
-      <div className="collapse-content bg-base-200 flex p-0">
-        <ul className="menu flex-grow">
+    <li>
+      <details>
+        <summary>{route.title}</summary>
+        <ul>
           {Object.values(route.routes ?? {}).map(subRoute => (
-            <li>
-              <NavLink activeClassName="active" key={subRoute.path} to={subRoute.path}>
-                {subRoute.title}
-              </NavLink>
+            <li key={`submenu-${subRoute.path}-${subRoute.title}`}>
+              <Link to={subRoute.path}>{subRoute.title}</Link>
             </li>
           ))}
         </ul>
-      </div>
+      </details>
     </li>
   )
 }
 
-const SideBarMenu = (): JSX.Element => {
-  const { keycloak } = useKeycloak()
-
-  const logout = () => {
-    keycloak.logout()
-  }
+const SideBarMenu = () => {
+  const { logout } = useAuth()
+  const { t } = useI18n()
 
   return (
     <div className="flex flex-col h-full gap-8">
-      <ul className="menu flex-grow">
+      <ul className="menu flex-grow gap-2">
         {menuRoutes
           .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
           .map(route =>
             !route.routes ? (
               <MenuItem
-                key={route.path}
+                key={route.path + route.title}
                 text={route.title}
-                icon={route.icon as IconName}
                 path={route.path}
+                icon={route.icon}
               />
             ) : (
-              <Menu route={route} />
+              <Menu key={route.path} route={route} />
             ),
           )}
       </ul>
-      <Button className="rounded-none" block variant="error" type="button" outline onClick={logout}>
-        <Icon name="logout" type="outline" />
-        &nbsp; Déconnexion
-      </Button>
+      <ul className="menu gap-2">
+        <li>
+          <a className="link link-primary flex items-center justify-center" href={`mailto:${SUPPORT_EMAIL}`}><LifebuoyIcon className='w-5' /> {t('contactSupport')}</a>
+        </li>
+        <li>
+          <Button className="flex gap-2" variant="error" type="button" outline onClick={logout}>
+            <ArrowRightStartOnRectangleIcon className="w-5" />
+            {t('logout')}
+          </Button>
+        </li>
+      </ul>
     </div>
   )
 }

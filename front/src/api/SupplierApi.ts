@@ -1,4 +1,4 @@
-import Supplier, { SupplierRequest } from 'models/Supplier'
+import Supplier, { SupplierRequest } from '@/models/Supplier'
 import { API_URL } from '../constants/global'
 import { HttpClient } from './HttpClient'
 

@@ -1,28 +1,28 @@
-import { useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Icon, Loader } from '@coco-ui/core'
-import { ROUTES } from 'routes'
-import { QuoteApi } from 'api/QuoteApi'
-import useCustomers from 'hooks/useCustomers'
+import { Button, Loader } from '@coco-ui/core'
+import { ROUTES } from '@/routes'
+import useCustomers from '@/hooks/useCustomers'
 import QuoteFilterContainer from './Filters'
-import { filterQuotes } from '../../utils/quote'
-import QuoteList from './List'
+import { filterQuotes } from '@/utils/quote'
+import QuoteList from './List/List'
+import { PlusIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { useAllQuotesNotArchivedAndNotRefused } from '@/queries/useAllQuotesNotArchivedAndNotRefused'
 
 type QuoteFilters = Record<string, string>
 
-const QuotePage = (): JSX.Element => {
+const QuotePage = () => {
+  const { t } = useI18n()
   const customers = useCustomers()
   const [filters, setFilters] = useState<QuoteFilters>({})
 
-  const quotesQuery = useQuery('quotes', QuoteApi.findAllNotArchivedAndNotRefused, {
-    refetchOnWindowFocus: false,
-  })
+  const { isLoading, data } = useAllQuotesNotArchivedAndNotRefused()
   const history = useHistory()
 
-  const quoteSorted = useCallback(
-    () => filterQuotes(quotesQuery.data ?? [], filters, customers),
-    [filters, quotesQuery.data],
+  const quoteSorted = useMemo(
+    () => filterQuotes(data ?? [], filters, customers),
+    [customers, filters, data],
   )
 
   const goToNewQuote = () => {
@@ -30,22 +30,22 @@ const QuotePage = (): JSX.Element => {
   }
 
   return (
-    <>
-      <div className="flex justify-between mb-4">
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between">
         <h2 className="text-3xl">Devis</h2>
-        <Button size="md" variant="primary" onClick={goToNewQuote}>
-          <Icon name="plus" />
-          &nbsp; Nouveau devis
+        <Button className="gap-1" size="md" variant="primary" onClick={goToNewQuote}>
+          <PlusIcon className="w-5" />
+          {t('quotes.list.add')}
         </Button>
       </div>
       <QuoteFilterContainer filters={filters} setFilters={setFilters} />
-      <QuoteList data={quoteSorted()} />
-      {quotesQuery.isLoading ? (
+      <QuoteList data={quoteSorted} />
+      {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />
         </div>
       ) : null}
-    </>
+    </div>
   )
 }
 

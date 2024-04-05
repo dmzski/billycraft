@@ -1,23 +1,23 @@
-import { Badge, Button, Icon, useToast } from '@coco-ui/core'
+import { Badge, Button, useToast } from '@coco-ui/core'
 import { useState, useEffect } from 'react'
-import { useQuery, useQueryCache } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
-import { BillApi } from 'api/BillApi'
-import { BILL_STATUS } from 'constants/bill'
-import { PdfApi } from '../../../api/PdfApi'
-import useLoadingState from '../../../hooks/useLoadingState'
-import Bill from '../../../models/Bill'
-import { ROUTES } from '../../../routes'
+import { PdfApi } from '@/api/PdfApi'
+import useLoadingState from '@/hooks/useLoadingState'
+import Bill from '@/models/Bill'
+import { ROUTES } from '@/routes'
 import BillForm from './Form'
+import { ChevronLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
+import { useBillByIdQuery } from '@/queries/useBillByIdQuery'
 
-const BillFormPage = (): JSX.Element => {
+const BillFormPage = () => {
+  const { t } = useI18n()
   const [newBill, setNewBill] = useState<Bill>({} as Bill)
-  const queryCache = useQueryCache()
   const toast = useToast()
   const pdfState = useLoadingState()
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: bill, refetch } = useQuery(`bill-${id}`, () => BillApi.findById(id), {
+  const { data: bill, reload } = useBillByIdQuery(id, {
     enabled: id !== 'new',
   })
 
@@ -25,8 +25,7 @@ const BillFormPage = (): JSX.Element => {
     if (data.id !== id) {
       history.push(ROUTES.BILL_FORM.path.replace(':id', data.id))
     } else {
-      queryCache.invalidateQueries('bills')
-      refetch()
+      reload()
     }
   }
 
@@ -44,7 +43,7 @@ const BillFormPage = (): JSX.Element => {
         pdfState.update('idle')
       }
     } catch {
-      toast.error('Erreur lors de la génération du PDF')
+      toast.error(t('bills.form.pdfError'))
       setTimeout(() => {
         pdfState.update('idle')
       }, 1000)
@@ -53,34 +52,36 @@ const BillFormPage = (): JSX.Element => {
 
   useEffect(() => {
     setNewBill(bill && id !== 'new' ? bill : ({} as Bill))
-  }, [bill])
+  }, [bill, id])
 
   return (
     <div className="w-full flex flex-col gap-4">
       <div>
-        <Button variant="ghost" onClick={history.goBack}>
-          <Icon name="chevron-left" />
-          &nbsp; Retourner à la liste des factures
+        <Button className="gap-1" variant="ghost" onClick={history.goBack}>
+          <ChevronLeftIcon className="w-5" />
+          <span>{t('bills.form.backTo')}</span>
         </Button>
       </div>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center flex-grow gap-2">
-          <h1 className="text-3xl">{!newBill.id ? 'Nouvelle facture' : 'Modifier une facture'}</h1>
+          <h1 className="text-3xl">
+            {!newBill.id ? t('bills.form.title.new') : t('bills.form.title.edit')}
+          </h1>
           {newBill.status ? (
             <Badge variant="info" size="sm">
-              {BILL_STATUS[newBill.status]?.text}
+              {t(`bills.status.${newBill.status}`)}
             </Badge>
           ) : null}
         </div>
-        {newBill && newBill.id ? (
+        {newBill?.id !== undefined ? (
           <Button
             disabled={pdfState.isLoading}
-            title="Télécharger le PDF"
             onClick={downloadPdf}
             variant="primary"
+            className="gap-1"
           >
-            <Icon name="document-download" />
-            &nbsp; Télécharger le PDF
+            <DocumentArrowDownIcon className="w-5" />
+            <span>{t('bills.form.downloadPdfButton')}</span>
           </Button>
         ) : null}
       </div>

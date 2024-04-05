@@ -21,7 +21,6 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var res = make([]models.Quote, 0)
 	status := c.Query("status")
 	not_status := c.Query("not_status")
 	if status != "" {
@@ -29,18 +28,17 @@ func findAll(c *fiber.Ctx) error {
 		if err := json.Unmarshal([]byte(status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
 		}
-		res = DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr)
-	} else if not_status != "" {
+		return makeArrayResponse(c, DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr))
+	} 
+  if not_status != "" {
 		var arr []string
 		if err := json.Unmarshal([]byte(not_status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
 		}
-		res = DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr)
-	} else {
-		res = DAO.FindAllByTenant(*user.CompanyID)
+		return makeArrayResponse(c, DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr))
 	}
 
-	return makeArrayResponse(c, res)
+	return makeArrayResponse(c, DAO.FindAllByTenant(*user.CompanyID))
 }
 
 func findById(c *fiber.Ctx) error {

@@ -1,5 +1,5 @@
-import { API_URL } from 'constants/global'
-import QuoteEmailCustomization from 'models/QuoteEmailCustomization'
+import { API_URL } from '@/constants/global'
+import QuoteEmailCustomization from '@/models/QuoteEmailCustomization'
 import { HttpClient } from './HttpClient'
 
 export const QUOTE_EMAIL_CUSTOMIZATION_URL = `${API_URL}/quote-email-customization`

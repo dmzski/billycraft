@@ -1,25 +1,30 @@
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
-import { ROUTES } from 'routes'
+import { ROUTES } from '@/routes'
 import FormPage from './FormPage'
 import Details from './Details'
 import ListPage from './ListPage'
 import Overview from './Overview'
+import { useI18n } from '@/i18n'
 
 const { routes, path } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
-const Heading = (): JSX.Element => (
-  <>
-    <h1 className="text-3xl mb-4">Livrets d&apos;achats</h1>
-    <div className="tabs tabs-boxed">
-      <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
-        Vue d&apos;ensemble
-      </NavLink>
-      <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
-        Tous les livrets d&apos;achats
-      </NavLink>
-    </div>
-  </>
-)
+const Heading = () => {
+  const { t } = useI18n()
+
+  return (
+    <>
+      <h1 className="text-3xl mb-4">{t('accounting.outgoings.title')}</h1>
+      <div className="tabs tabs-boxed">
+        <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
+          {t('accounting.outgoings.links.overview')}
+        </NavLink>
+        <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
+          {t('accounting.outgoings.links.list')}
+        </NavLink>
+      </div>
+    </>
+  )
+}
 const OutgoingsSwitch = () => (
   <Switch>
     <Route path={routes.OVERVIEW.path}>

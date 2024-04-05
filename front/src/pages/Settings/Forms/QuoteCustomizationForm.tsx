@@ -1,28 +1,18 @@
 import { Button, Input, Switch, TextArea, useToast } from '@coco-ui/core'
-import { QuoteCustomizationApi } from 'api/QuoteCustomizationApi'
-import { STRINGS } from 'constants/strings'
-import QuoteCustomization from 'models/QuoteCustomization'
+import { QuoteCustomizationApi } from '@/api/QuoteCustomizationApi'
+import QuoteCustomization from '@/models/QuoteCustomization'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import { useMutation } from 'react-query'
+import { useI18n } from '@/i18n'
 
 type QuoteCustomizationFormProps = {
   quoteCustomization: QuoteCustomization
 }
-const QuoteCustomizationForm = ({
-  quoteCustomization,
-}: QuoteCustomizationFormProps): JSX.Element => {
+const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormProps) => {
+  const { t } = useI18n()
   const [newQuoteCustomization, setNewQuoteCustomization] = useState<QuoteCustomization>(
     {} as QuoteCustomization,
   )
   const toast = useToast()
-  const [updateQuoteCustomizationMutation, updateQuoteCustomizationMutationState] = useMutation(
-    QuoteCustomizationApi.updateMine,
-    {
-      onSuccess: () => {
-        toast.success(STRINGS.SAVE_SUCCESS)
-      },
-    },
-  )
 
   const handleToggle = (property: keyof QuoteCustomization) => () => {
     setNewQuoteCustomization(current => ({
@@ -31,11 +21,10 @@ const QuoteCustomizationForm = ({
     }))
   }
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!updateQuoteCustomizationMutationState.isLoading) {
-      updateQuoteCustomizationMutation(newQuoteCustomization)
-    }
+    await QuoteCustomizationApi.updateMine(newQuoteCustomization)
+    toast.success(t('settings.forms.quoteCustomization.submit.success'))
   }
 
   useEffect(() => {
@@ -46,7 +35,7 @@ const QuoteCustomizationForm = ({
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">Personnalisation du PDF</h2>
+      <h2 className="text-2xl">{t('customs PDF')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex gap-4 w-full content-center items-center">
           <div
@@ -64,52 +53,52 @@ const QuoteCustomizationForm = ({
                 mainColor: e.target.value,
               })
             }}
-            label="Couleur principale"
-            placeholder="Couleur en hexadecimale : #000000"
+            label={t('settings.forms.quoteCustomization.mainColor.label')}
+            placeholder={t('settings.forms.quoteCustomization.mainColor.placeholder')}
             className="w-full"
           />
         </div>
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 items-start">
-            <h3>Informations du client</h3>
+            <h3>{t('customer information')}</h3>
             <Switch
               checked={newQuoteCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
               onChange={handleToggle('displayCustomerEmail')}
             >
-              Afficher l&lsquo;email du client
+              {t('display customer email')}
             </Switch>
             <Switch
               checked={newQuoteCustomization.displayCustomerPhoneNumber}
               id="displayCustomerPhoneNumber"
               onChange={handleToggle('displayCustomerPhoneNumber')}
             >
-              Afficher le téléphone du client
+              {t('display customer phonenumber')}
             </Switch>
           </div>
           <div className="flex flex-col flex-grow gap-2 items-start">
-            <h3>Informations de l&lsquo;entreprise</h3>
+            <h3>{t('compagny informations')}</h3>
             <Switch
               checked={newQuoteCustomization.displayCompanyEmail}
               id="displayCompanyEmail"
               onChange={handleToggle('displayCompanyEmail')}
             >
-              Afficher l&lsquo;email de mon entreprise
+              {t('display compagny email')}
             </Switch>
             <Switch
               checked={newQuoteCustomization.displayCompanyPhoneNumber}
               id="displayCompanyPhoneNumber"
               onChange={handleToggle('displayCompanyPhoneNumber')}
             >
-              Afficher le téléphone de mon entreprise
+              {t('display compagny phonenumber')}
             </Switch>
           </div>
         </div>
         <TextArea
           id="afterTable"
           rows={5}
-          label="Après le tableau"
-          placeholder="En dessous du tableau"
+          label={t('settings.forms.quoteCustomization.afterTable.label')}
+          placeholder={t('settings.forms.quoteCustomization.afterTable.placeholder')}
           value={newQuoteCustomization.afterTable}
           className="w-full"
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -122,9 +111,9 @@ const QuoteCustomizationForm = ({
         <TextArea
           id="footer"
           rows={5}
-          label="Pied de page"
+          label={t('settings.forms.quoteCustomization.footer.label')}
           className="w-full"
-          placeholder="Pied de page"
+          placeholder={t('settings.forms.quoteCustomization.footer.placeholder')}
           value={newQuoteCustomization.footer}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setNewQuoteCustomization({
@@ -133,15 +122,8 @@ const QuoteCustomizationForm = ({
             })
           }
         />
-        <Button
-          type="submit"
-          variant="success"
-          block
-          size="md"
-          onClick={onSubmit}
-          disabled={updateQuoteCustomizationMutationState.isLoading}
-        >
-          Enregister la personnalisation du PDF
+        <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
+          {t('save customs PDF')}
         </Button>
       </div>
     </form>

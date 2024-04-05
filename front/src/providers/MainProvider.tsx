@@ -1,42 +1,20 @@
 import { ToastProvider } from '@coco-ui/core'
-import { ReactKeycloakProvider } from '@react-keycloak/web'
-import * as React from 'react'
-import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-import { fetchRegister } from '../utils/fetch-interceptor'
-import keycloak from '../utils/keycloak'
+import { AuthProvider } from './AuthProvider'
 import { UserProvider } from './UserProvider'
-
-const queryCache = new QueryCache()
-
-const keycloakProviderInitConfig = {
-  onLoad: 'login-required',
-  promiseType: 'native',
-  checkLoginIframe: false,
-}
+import { DataLoaderProvider } from '@scaleway/use-dataloader'
+import { ReactNode } from 'react'
 
 type MainProviderProps = {
-  children: React.ReactNode
+  children: ReactNode
 }
-const MainProvider = ({ children }: MainProviderProps): JSX.Element => {
-  const onKeycloakTokens = (tokens: { idToken?: string }) => {
-    if (tokens.idToken) {
-      fetchRegister(tokens.idToken)
-    }
-  }
-
-  return (
-    <ReactQueryCacheProvider queryCache={queryCache}>
-      <ReactKeycloakProvider
-        onTokens={onKeycloakTokens}
-        initOptions={keycloakProviderInitConfig}
-        authClient={keycloak}
-      >
-        <ToastProvider>
-          <UserProvider>{children}</UserProvider>
-        </ToastProvider>
-      </ReactKeycloakProvider>
-    </ReactQueryCacheProvider>
-  )
-}
+const MainProvider = ({ children }: MainProviderProps) => (
+  <DataLoaderProvider>
+    <AuthProvider useAuthorizationHeader={window.location.hostname.includes('localhost')}>
+      <ToastProvider>
+        <UserProvider>{children}</UserProvider>
+      </ToastProvider>
+    </AuthProvider>
+  </DataLoaderProvider>
+)
 
 export default MainProvider

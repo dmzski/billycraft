@@ -1,20 +1,21 @@
-import { Button, Icon, Input, Modal, useToast } from '@coco-ui/core'
-import { SupplierApi } from 'api/SupplierApi'
-import { STRINGS } from 'constants/strings'
-import Supplier, { SupplierRequest } from 'models/Supplier'
-import { useCallback, useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Button, Input, Modal, useToast } from '@coco-ui/core'
+import { SupplierApi } from '@/api/SupplierApi'
+import Supplier, { SupplierRequest } from '@/models/Supplier'
+import { useEffect } from 'react'
+import { useController, useForm } from 'react-hook-form'
+import { TrashIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 type SupplierModalFormProps = {
   supplier: Supplier
-  onSubmitSuccess?: (data: Supplier) => void | Promise<void>
+  onSubmitSuccess?: () => void | Promise<void>
   disclosure: JSX.Element
 }
-const SupplierModalForm = ({
-  disclosure,
-  supplier,
-  onSubmitSuccess,
-}: SupplierModalFormProps): JSX.Element => {
+
+type SupplierFormProps = Omit<SupplierModalFormProps, 'disclosure'>
+
+const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
+  const { t } = useI18n()
   const toast = useToast()
   const {
     handleSubmit,
@@ -22,148 +23,141 @@ const SupplierModalForm = ({
     reset,
     formState: { isValid, isSubmitting },
   } = useForm<SupplierRequest>({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       name: '',
       color: '',
       vat: 0,
     },
-    shouldUnregister: true,
   })
 
-  const onSubmit = useCallback(
-    (close: () => void) => async (values: SupplierRequest) => {
-      const data = {
-        ...values,
-        vat: Number(values.vat) || 0,
-      }
-      try {
-        const res = supplier.id
-          ? await SupplierApi.update(supplier.id, data)
-          : await SupplierApi.create(data)
-        toast.success(STRINGS.SAVE_SUCCESS)
-        onSubmitSuccess?.(res)
-        close()
-      } catch {
-        toast.error(STRINGS.SAVE_ERROR)
-      }
-    },
-    [toast, onSubmitSuccess, supplier],
-  )
+  const onSubmit = async (values: SupplierRequest) => {
+    const data = {
+      ...values,
+      vat: Number(values.vat) || 0,
+    }
+    try {
+      await (supplier.id ? SupplierApi.update(supplier.id, data) : SupplierApi.create(data))
+      toast.success(t('suppliers.modals.form.submit.success'))
+      await onSubmitSuccess?.()
+    } catch {
+      toast.error(t('genericFormError'))
+    }
+  }
 
-  const handleDelete = useCallback(() => {
-    const deleteFn = async () => {
-      if (supplier.id) {
-        try {
-          await SupplierApi.delete(supplier.id)
-          toast.success(STRINGS.DELETE_SUCCESS)
-          onSubmitSuccess?.(supplier)
-        } catch {
-          toast.error(STRINGS.DELETE_ERROR)
-        }
+  const handleDelete = async () => {
+    if (supplier.id) {
+      try {
+        await SupplierApi.delete(supplier.id)
+        toast.success(t('suppliers.modals.form.delete.success'))
+        onSubmitSuccess?.()
+      } catch {
+        toast.error(t('genericFormError'))
       }
     }
-    deleteFn()
-  }, [supplier, onSubmitSuccess, toast])
+  }
 
   useEffect(() => {
     if (reset && supplier) reset(supplier)
   }, [supplier, reset])
 
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    control,
+    name: 'name',
+    rules: { required: true, minLength: 2 },
+  })
+  const { field: vatField, fieldState: vatFieldState } = useController({
+    control,
+    name: 'vat',
+    rules: { required: true, min: 0, max: 100 },
+  })
+  const { field: colorField, fieldState: colorFieldState } = useController({
+    control,
+    name: 'color',
+    rules: { required: true },
+  })
+
   return (
-    <Modal disclosure={disclosure}>
-    {({close}) => (
-    <div className="w-full pb-2">
-      <div className="flex border-b px-2 pb-2 mb-4 pr-6">
+    <div className="w-full pb-2 flex flex-col gap-4">
+      <div className="flex border-b px-2 pb-2 pr-6">
         <h3 className="flex-grow text-xl">
-          {supplier.id ? 'Modifier un fournisseur' : 'Ajouter un fournisseur'}
+          {supplier.id
+            ? t('suppliers.modals.form.title.edit')
+            : t('suppliers.modals.form.title.create')}
         </h3>
-        <Button variant="error" disabled={!supplier.id} onClick={handleDelete}>
-          <Icon name="trash" />
-          &nbsp; Supprimer
+        <Button variant="error" className="gap-1" disabled={!supplier.id} onClick={handleDelete}>
+          <TrashIcon className="w-5" />
+          <span>{t('delete')}</span>
         </Button>
       </div>
-      <form className="px-4" onSubmit={handleSubmit(onSubmit(close))}>
-        <Controller
-          control={control}
-          name="name"
-          rules={{ required: true, minLength: 2 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              required
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              ref={field.ref}
-              className="mb-4"
-              label="Nom du fournisseur"
-              value={field.value}
-              error={invalid}
-              minLength={2}
-            />
-          )}
+      <form className="px-4 flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          required
+          name={nameField.name}
+          onBlur={nameField.onBlur}
+          onChange={nameField.onChange}
+          ref={nameField.ref}
+          label={t('suppliers.modals.form.field.name.label')}
+          value={nameField.value}
+          error={nameFieldState.invalid}
+          minLength={2}
         />
-        <Controller
-          control={control}
-          name="vat"
-          rules={{ required: true, min: 0, max: 100 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              required
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              ref={field.ref}
-              className="mb-4"
-              label="TVA appliquée par le fournisseur (%)"
-              value={field.value}
-              error={invalid}
-              type="number"
-              min={0}
-              max={100}
-            />
-          )}
+        <Input
+          required
+          name={vatField.name}
+          onBlur={vatField.onBlur}
+          onChange={vatField.onChange}
+          ref={vatField.ref}
+          label={t('suppliers.modals.form.field.vat.label')}
+          value={vatField.value}
+          error={vatFieldState.invalid}
+          type="number"
+          min={0}
+          max={100}
         />
-        <Controller
-          control={control}
-          name="color"
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <div className="flex items-center">
-              <Input
-                required
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-                ref={field.ref}
-                className="mb-4 flex-grow"
-                label="Couleur hexadécimale associée"
-                value={field.value}
-                error={invalid}
-              />
-              <input
-                type="color"
-                className=" ml-2"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            </div>
-          )}
-        />
+        <div className="flex items-center gap-2">
+          <Input
+            required
+            name={colorField.name}
+            onBlur={colorField.onBlur}
+            onChange={colorField.onChange}
+            ref={colorField.ref}
+            className="flex-grow"
+            label={t('suppliers.modals.form.field.color.label')}
+            value={colorField.value}
+            error={colorFieldState.invalid}
+          />
+          <input
+            type="color"
+            value={colorField.value}
+            onChange={colorField.onChange}
+            onBlur={colorField.onBlur}
+          />
+        </div>
         <Button
           disabled={!isValid || isSubmitting}
           variant="primary"
           className="w-full"
           type="submit"
         >
-          Enregistrer
+          {t('save')}
         </Button>
       </form>
     </div>
-    )}
-    </Modal>
   )
 }
+const SupplierModalForm = ({ disclosure, supplier, onSubmitSuccess }: SupplierModalFormProps) => (
+  <Modal disclosure={disclosure}>
+    {({ close }) => (
+      <SupplierForm
+        supplier={supplier}
+        onSubmitSuccess={async () => {
+          await onSubmitSuccess?.()
+          close()
+        }}
+      />
+    )}
+  </Modal>
+)
 
 export default SupplierModalForm

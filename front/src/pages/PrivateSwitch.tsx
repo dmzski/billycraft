@@ -1,12 +1,11 @@
-import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom'
-import Loader from 'components/Loader'
-import { ROUTES } from 'routes'
-import { useEffect } from 'react'
-import { useKeycloak } from '@react-keycloak/web'
-import { useUser } from 'providers/UserProvider'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { ROUTES } from '@/routes'
+import { useUser } from '@/providers/UserProvider'
+import { useAuth } from '@/providers/AuthProvider'
+import { PageLoader } from '@/components/PageLoader'
 import Dashboard from './Dashboard'
 import Layout from '../layout/Layout'
-import Onboarding from './Onboarding'
+import Onboarding from './Onboarding/Onboarding'
 import ProductsPage from './Products'
 import Settings from './Settings'
 import History from './History'
@@ -15,80 +14,60 @@ import QuoteSwitch from './Quotes/QuoteSwitch'
 import BillSwitch from './Bills/BillSwitch'
 import CustomerSwitch from './Customers/CustomerSwitch'
 import SupplierSwitch from './Suppliers/SupplierSwitch'
+import { Login } from './Auth/Login'
+import { Register } from './Auth/Register'
 
-const PrivateSwitch = (): JSX.Element => {
-  const user = useUser()
-  const location = useLocation()
-  const history = useHistory()
-  const { keycloak } = useKeycloak()
+const PrivateSwitch = () => {
+  const { organization, user } = useUser()
+  const { isAuthenticated, isInitializing } = useAuth()
 
-  useEffect(() => {
-    if (user.user && keycloak.authenticated) {
-      if (!user.user.companyId && history.location.pathname !== ROUTES.ONBOARDING_COMPANY.path) {
-        history.push(ROUTES.ONBOARDING_COMPANY.path)
-      }
-      if (user.user.companyId && history.location.pathname === ROUTES.ONBOARDING_COMPANY.path) {
-        history.push(ROUTES.DASHBOARD.path)
-      }
-    }
-  }, [user, history, keycloak.authenticated])
+  if (isInitializing) {
+    return null
+  }
 
-  return keycloak.authenticated ? (
-    <>
-      {!user.user ? (
-        <div className="flex justify-center items-center h-screen">
-          <Loader />
-          <span className="ml-3">Chargement de vos données...</span>
+  if (!isAuthenticated) {
+    return (
+      <Switch>
+        <Route path={ROUTES.LOGIN.path} component={Login} />
+        <Route path={ROUTES.REGISTER.path} component={Register} />
+        <Route render={() => <Redirect to={ROUTES.LOGIN.path} />} />
+      </Switch>
+    )
+  }
+
+  if (!user || (user.companyId && !organization)) {
+    return (
+      <div className="flex justify-center items-center h-screen max-w-screen">
+        <div className="w-1/2">
+          <PageLoader />
         </div>
-      ) : null}
-      {user.user && user.user.companyId === null ? (
-        <Switch location={location}>
-          <Route path={ROUTES.ONBOARDING_COMPANY.path}>
-            <Onboarding />
-          </Route>
-          <Route>
-            <Redirect to={ROUTES.ONBOARDING_COMPANY.path} />
-          </Route>
-        </Switch>
-      ) : null}
-      {user.user && user.user.companyId !== null ? (
-        <Layout>
-          <Switch location={location}>
-            <Route path={ROUTES.ACCOUNTINGS.path}>
-              <AccountingSwitch />
-            </Route>
-            <Route path={ROUTES.QUOTES.path}>
-              <QuoteSwitch />
-            </Route>
-            <Route path={ROUTES.BILLS.path}>
-              <BillSwitch />
-            </Route>
-            <Route path={ROUTES.CUSTOMERS.path}>
-              <CustomerSwitch />
-            </Route>
-            <Route path={ROUTES.SUPPLIERS.path}>
-              <SupplierSwitch />
-            </Route>
-            <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
-            <Route
-              path={ROUTES.PRODUCTS.path}
-              exact={ROUTES.PRODUCTS.exact}
-              component={ProductsPage}
-            />
-            <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
-            <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
-            <Route>
-              <Redirect to={ROUTES.DASHBOARD.path} />
-            </Route>
-          </Switch>
-        </Layout>
-      ) : null}
-    </>
-  ) : (
-    <div className="flex justify-center items-center h-full">
-      <Loader />
-      <span className="ml-1">Initialisation</span>
-    </div>
+      </div>
+    )
+  }
+
+  if (user && user.companyId === null) {
+    return (
+      <Switch>
+        <Route path={ROUTES.ONBOARDING.path} component={Onboarding} />
+        <Route render={() => <Redirect to={ROUTES.ONBOARDING.path} />} />
+      </Switch>
+    )
+  }
+  return (
+    <Layout>
+      <Switch>
+        <Route path={ROUTES.ACCOUNTINGS.path} component={AccountingSwitch} />
+        <Route path={ROUTES.QUOTES.path} component={QuoteSwitch} />
+        <Route path={ROUTES.BILLS.path} component={BillSwitch} />
+        <Route path={ROUTES.CUSTOMERS.path} component={CustomerSwitch} />
+        <Route path={ROUTES.SUPPLIERS.path} component={SupplierSwitch} />
+        <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
+        <Route path={ROUTES.PRODUCTS.path} exact={ROUTES.PRODUCTS.exact} component={ProductsPage} />
+        <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
+        <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
+        <Route render={() => <Redirect to={ROUTES.DASHBOARD.path} />} />
+      </Switch>
+    </Layout>
   )
 }
 
