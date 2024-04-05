@@ -2,7 +2,7 @@ version: "3"
 
 services:
   front:
-    image: coco-erp/app:latest
+    image: ${REGISTRY_URL}/app:latest
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host(`${FRONT_DOMAIN}`)"
@@ -19,8 +19,8 @@ services:
       - ./init-db.sh:/docker-entrypoint-initdb.d/init.sh
 
   migrate-auth-db:
-    image: coco-erp/auth-migrator:latest
-    env:
+    image: ${REGISTRY_URL}/auth-migrator:latest
+    environment:
       DATABASE_URL: ${DATABASE_URL}
     depends_on:
       db:
@@ -29,7 +29,7 @@ services:
   auth:
     env_file:
       - ./.env
-    image: coco-erp/auth:latest
+    image: ${REGISTRY_URL}/auth:latest
     volumes:
       - ./auth:/app
     labels:
@@ -48,10 +48,10 @@ services:
       - "traefik.http.routers.auth.middlewares=auth@docker,auth-ratelimit@docker"
     depends_on:
       migrate-auth-db:
-        conition: service_completed_successfully
+        condition: service_completed_successfully
 
   api:
-    image: coco-erp/api:latest
+    image: ${REGISTRY_URL}/api:latest
     volumes:
       - ./upload:/upload
       - ./.env:/app/app.env
