@@ -45,7 +45,7 @@ func (dao TodoDao) Update(id string, tenant int, changes dtos.TodoRequest) (todo
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(models.Todo{
+	tx.Model(&todo).Updates(models.Todo{
 		Description: changes.Description,
 	})
 	if tx.Error != nil {

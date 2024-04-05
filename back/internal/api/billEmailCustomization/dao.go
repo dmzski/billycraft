@@ -37,7 +37,7 @@ func (dao BillEmailCustomizationDao) Update(id string, tenant int, changes dtos.
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(changes)
+	tx.Model(&billEmailCustomization).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

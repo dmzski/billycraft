@@ -30,7 +30,7 @@ func (dao Repository) Update(id string, tenant int, changes dtos.Product) (produ
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(changes)
+	tx.Model(&product).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

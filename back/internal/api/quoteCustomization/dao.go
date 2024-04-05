@@ -44,7 +44,7 @@ func (dao QuoteCustomizationDao) Update(id string, tenant int, changes dtos.Quot
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(changes)
+	tx.Model(&quoteCustomization).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

@@ -30,7 +30,7 @@ func (dao SettingDao) Update(id string, tenant int, changes dtos.Setting) (setti
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(changes)
+	tx.Model(&setting).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

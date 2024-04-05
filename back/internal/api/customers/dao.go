@@ -38,7 +38,7 @@ func (dao CustomerDao) Update(id int, tenant int, changes dtos.Customer) (custom
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Updates(changes)
+	tx.Model(&customer).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
