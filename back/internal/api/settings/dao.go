@@ -26,11 +26,11 @@ func (dao SettingDao) FindOneByIdAndTenant(id string, tenant int) (setting model
 
 func (dao SettingDao) Update(id string, tenant int, changes dtos.Setting) (setting models.Setting) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id= ?", tenant, id).First(&setting)
+	tx.Where("company_id = ? AND id= ?", tenant, id).First(&setting)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(changes)
+	tx.Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

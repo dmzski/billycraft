@@ -12,6 +12,12 @@ type SupplierModalFormProps = {
   disclosure: JSX.Element
 }
 
+const defaultSupplier = {
+  name: '',
+  color: '#000000',
+  vat: 0,
+} as Supplier
+
 type SupplierFormProps = Omit<SupplierModalFormProps, 'disclosure'>
 
 const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
@@ -24,11 +30,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
     formState: { isValid, isSubmitting },
   } = useForm<SupplierRequest>({
     mode: 'onChange',
-    defaultValues: {
-      name: '',
-      color: '',
-      vat: 0,
-    },
+    defaultValues: supplier ?? defaultSupplier,
   })
 
   const onSubmit = async (values: SupplierRequest) => {
@@ -115,7 +117,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
           min={0}
           max={100}
         />
-        <div className="flex items-center gap-2">
+        <div className="flex items-end gap-2">
           <Input
             required
             name={colorField.name}
@@ -128,6 +130,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
             error={colorFieldState.invalid}
           />
           <input
+            className='h-12'
             type="color"
             value={colorField.value}
             onChange={colorField.onChange}

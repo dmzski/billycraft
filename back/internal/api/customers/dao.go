@@ -34,11 +34,11 @@ func (dao CustomerDao) FindOneByIdAndTenant(id int, tenant int) (customer models
 
 func (dao CustomerDao) Update(id int, tenant int, changes dtos.Customer) (customer models.Customer) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id= ?", tenant, id).First(&customer)
+	tx.Where("company_id = ? AND id= ?", tenant, id).First(&customer)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(changes)
+	tx.Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

@@ -26,11 +26,11 @@ func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (product model
 
 func (dao Repository) Update(id string, tenant int, changes dtos.Product) (product models.Product) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
+	tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(changes)
+	tx.Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

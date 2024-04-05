@@ -1,6 +1,5 @@
 import { Button, Input, TextArea, useToast } from '@coco-ui/core'
 import { CustomerApi } from '@/api/CustomerApi'
-import { useEffect } from 'react'
 import { useController, useForm } from 'react-hook-form'
 import Customer from '@/models/Customer'
 import { TrashIcon } from '@heroicons/react/24/solid'
@@ -15,7 +14,7 @@ const defaultCustomer = {
   contact: '',
   email: '',
   postalCode: '',
-} as Partial<Customer>
+} as Customer
 
 type CustomerFormProps = {
   customer?: Customer
@@ -29,10 +28,9 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting },
-    reset,
   } = useForm<Partial<Customer>>({
-    mode: 'all',
-    defaultValues: defaultCustomer,
+    mode: 'onChange',
+    values: customer ?? defaultCustomer
   })
 
   const onSubmit = async (data: Partial<Customer>) => {
@@ -57,12 +55,6 @@ const CustomerForm = ({ customer, onSubmitSuccess }: CustomerFormProps) => {
       }
     }
   }
-
-  useEffect(() => {
-    if (customer) {
-      reset(customer)
-    }
-  }, [reset, customer])
 
   const { field: nameField, fieldState: nameFieldState } = useController({
     control,

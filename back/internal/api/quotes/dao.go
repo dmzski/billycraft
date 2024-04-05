@@ -70,7 +70,6 @@ func (dao QuoteDao) Update(id string, tenant int, changes dtos.Quote) (quote mod
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
 	if tx.Error != nil {
-		tx.Rollback()
 		panic(tx.Error)
 	}
 	if enums.QuoteStatus(changes.Status).IsGreaterThanOrEqualSent() {

@@ -41,11 +41,11 @@ func (dao TodoDao) FindOneByIdAndTenant(id string, tenant int) (todo models.Todo
 
 func (dao TodoDao) Update(id string, tenant int, changes dtos.TodoRequest) (todo models.Todo) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id = ?", tenant, id).First(&todo)
+	tx.Where("company_id = ? AND id = ?", tenant, id).First(&todo)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx = tx.Updates(models.Todo{
+	tx.Updates(models.Todo{
 		Description: changes.Description,
 	})
 	if tx.Error != nil {
@@ -77,12 +77,12 @@ func (dao TodoDao) Delete(id string, creator string) {
 
 func (dao TodoDao) Done(id string, user models.User) (todo models.Todo) {
 	tx := database.DBConn.Begin()
-	tx = tx.Where("company_id = ? AND id = ?", user.CompanyID, id).First(&todo)
+	tx.Where("company_id = ? AND id = ?", user.CompanyID, id).First(&todo)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
 	now := time.Now()
-	tx = tx.Updates(models.Todo{
+	tx.Updates(models.Todo{
 		DoneAt: &now,
 		DoneBy: &user.Email,
 	})
