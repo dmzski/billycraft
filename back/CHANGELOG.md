@@ -1,5 +1,11 @@
 # back
 
+## 1.9.0
+
+### Minor Changes
+
+- 9baae23: fix: database queries
+
 ## 1.8.0
 
 ### Minor Changes
