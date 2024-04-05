@@ -59,11 +59,21 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	// Put the logo
 	if company.Logo != nil {
-		httpimg.Register(pdf, *company.Logo, "png")
-		opt := gofpdf.ImageOptions{
-			ImageType: "png",
+    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%d/logo.png", company.ID))
+		if err == nil {
+			opt := gofpdf.ImageOptions{
+				ImageType: "png",
+			}
+			_ = pdf.RegisterImageOptionsReader(*company.Logo, opt, imgdata)
+			imgdata.Close()
+			pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
+		} else {
+			httpimg.Register(pdf, *company.Logo, "png")
+			opt := gofpdf.ImageOptions{
+				ImageType: "png",
+			}
+			pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 		}
-		pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 	}
 	pdf.SetX(-100 - marginL)
 
@@ -232,11 +242,11 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		}
 	}
 
-  // End the table witht he bottom line
+	// End the table witht he bottom line
 	pdf.Line(marginL, pdf.GetY(), pageSize.Wd-marginL, pdf.GetY())
 	pdf.SetFillColor(int(mainColor.R), int(mainColor.G), int(mainColor.B))
-  // Go to next line
-  pdf.Ln(-1)
+	// Go to next line
+	pdf.Ln(-1)
 
 	// Insert TVA and total HT, TTC
 	var totalTTC = getQuoteTotal(quote)
@@ -245,13 +255,13 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	if hasVat {
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), TOTALHT_TITLE, "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%s (%.2f)%%", VAT_TITLE, tva)), "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%s (%.2f)%%", VAT_TITLE, tva)), "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTVA)), "1", 0, "C", false, 0, "")
-    pdf.Ln(-1)
+		pdf.Ln(-1)
 	}
 
 	// Insert the quote total
@@ -262,7 +272,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		pdf.CellFormat(cols[3], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalHT)), "1", 0, "C", false, 0, "")
 	} else {
 		pdf.SetX(marginL + cols[0] + cols[1])
-		pdf.CellFormat(cols[2] + cols[3], float64(totalAndTvaCellHeight), TOTALTTC_TITLE, "1", 0, "C", true, 0, "")
+		pdf.CellFormat(cols[2]+cols[3], float64(totalAndTvaCellHeight), TOTALTTC_TITLE, "1", 0, "C", true, 0, "")
 		pdf.CellFormat(cols[4], float64(totalAndTvaCellHeight), tr(fmt.Sprintf("%.2f€", totalTTC)), "1", 0, "C", false, 0, "")
 
 	}

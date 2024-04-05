@@ -59,11 +59,21 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	// Put the logo
 	if company.Logo != nil {
-		httpimg.Register(pdf, *company.Logo, "png")
-		opt := gofpdf.ImageOptions{
-			ImageType: "png",
+    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%d/logo.png", company.ID))
+		if err == nil {
+			opt := gofpdf.ImageOptions{
+				ImageType: "png",
+			}
+			_ = pdf.RegisterImageOptionsReader(*company.Logo, opt, imgdata)
+			imgdata.Close()
+			pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
+		} else {
+			httpimg.Register(pdf, *company.Logo, "png")
+			opt := gofpdf.ImageOptions{
+				ImageType: "png",
+			}
+			pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 		}
-		pdf.ImageOptions(*company.Logo, marginL, marginL, 30, 30, false, opt, 0, "")
 	}
 	pdf.SetX(-100 - marginL)
 
