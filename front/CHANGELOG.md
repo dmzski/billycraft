@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.24.0
+
+### Minor Changes
+
+- aa8fec4: fix: populate modal with data
+
 ## 2.23.0
 
 ### Minor Changes

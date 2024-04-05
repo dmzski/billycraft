@@ -1,5 +1,11 @@
 # back
 
+## 1.8.0
+
+### Minor Changes
+
+- aa8fec4: fix: database transaction usage
+
 ## 1.7.0
 
 ### Minor Changes
