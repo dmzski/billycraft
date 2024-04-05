@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.23.0
+
+### Minor Changes
+
+- 5505d60: fix: login success throw always if use cookies
+
 ## 2.22.0
 
 ### Minor Changes
