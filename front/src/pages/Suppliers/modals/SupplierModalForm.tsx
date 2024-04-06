@@ -1,13 +1,12 @@
 import { Button, Input, Modal, useToast } from '@coco-ui/core'
 import { SupplierApi } from '@/api/SupplierApi'
 import Supplier, { SupplierRequest } from '@/models/Supplier'
-import { useEffect } from 'react'
 import { useController, useForm } from 'react-hook-form'
 import { TrashIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 
 type SupplierModalFormProps = {
-  supplier: Supplier
+  supplier?: Supplier
   onSubmitSuccess?: () => void | Promise<void>
   disclosure: JSX.Element
 }
@@ -26,7 +25,6 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
   const {
     handleSubmit,
     control,
-    reset,
     formState: { isValid, isSubmitting },
   } = useForm<SupplierRequest>({
     mode: 'onChange',
@@ -39,7 +37,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
       vat: Number(values.vat) || 0,
     }
     try {
-      await (supplier.id ? SupplierApi.update(supplier.id, data) : SupplierApi.create(data))
+      await (supplier?.id ? SupplierApi.update(supplier.id, data) : SupplierApi.create(data))
       toast.success(t('suppliers.modals.form.submit.success'))
       await onSubmitSuccess?.()
     } catch {
@@ -48,7 +46,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
   }
 
   const handleDelete = async () => {
-    if (supplier.id) {
+    if (supplier?.id) {
       try {
         await SupplierApi.delete(supplier.id)
         toast.success(t('suppliers.modals.form.delete.success'))
@@ -58,10 +56,6 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
       }
     }
   }
-
-  useEffect(() => {
-    if (reset && supplier) reset(supplier)
-  }, [supplier, reset])
 
   const { field: nameField, fieldState: nameFieldState } = useController({
     control,
@@ -81,16 +75,18 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
 
   return (
     <div className="w-full pb-2 flex flex-col gap-4">
-      <div className="flex border-b px-2 pb-2 pr-6">
-        <h3 className="flex-grow text-xl">
-          {supplier.id
+      <div className="flex items-center gap-4">
+        <h3 className="text-xl">
+          {supplier?.id
             ? t('suppliers.modals.form.title.edit')
             : t('suppliers.modals.form.title.create')}
         </h3>
-        <Button variant="error" className="gap-1" disabled={!supplier.id} onClick={handleDelete}>
-          <TrashIcon className="w-5" />
-          <span>{t('delete')}</span>
-        </Button>
+        {supplier?.id ? (
+          <Button variant="error" size="sm" className="gap-1" onClick={handleDelete}>
+            <TrashIcon className="w-5" />
+            <span>{t('delete')}</span>
+          </Button>
+        ) : null}
       </div>
       <form className="px-4 flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <Input

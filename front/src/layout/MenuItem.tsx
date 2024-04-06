@@ -18,7 +18,11 @@ const MenuItem = ({ text, path, exact, icon: IconComponent }: MenuItemProps) => 
     <li>
       <Link
         to={path}
-        className={clsx(match ? 'active' : '', IconComponent ? 'flex items-center gap-3' : '')}
+        className={clsx(
+        "focus:text-primary focus:bg-primary-content",
+        match ? 'bg-primary-content text-primary' : '',
+        IconComponent ? 'flex items-center gap-3' : ''
+        )}
       >
         {IconComponent ? <IconComponent className="w-4" /> : null}
         {text}

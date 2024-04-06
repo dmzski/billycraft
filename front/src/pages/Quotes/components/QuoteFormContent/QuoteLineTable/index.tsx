@@ -3,12 +3,12 @@ import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import QuoteLineTableLine from './Row'
-import { QuoteFormValues } from '../Form'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { DndContext } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
 import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
+import { QuoteFormValues } from '../types'
 
 const defaultLine = {
   description: '',

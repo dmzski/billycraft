@@ -1,12 +1,10 @@
 import Customer from '@/models/Customer'
 import { useI18n } from '@/i18n'
-import CustomerModal from './modals/CustomerModal'
-import { Button } from '@coco-ui/core'
-import { useAllCustomersNotDeleted } from '@/queries/useAllCustomersNotDeleted'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '@/routes'
 
 const CustomerTable = ({ data = [] }: { data: Customer[] }) => {
   const { t } = useI18n()
-  const { reload } = useAllCustomersNotDeleted({ enabled: false })
 
   return (
     <div className="mt-2 flex flex-col">
@@ -20,15 +18,9 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }) => {
         {data.map(customer => (
           <div className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
             <div className="md:col-span-3">
-              <CustomerModal
-                onSubmitSuccess={reload}
-                disclosure={
-                  <Button variant="ghost" className="link-primary">
-                    {customer.name}
-                  </Button>
-                }
-                customer={customer}
-              />
+              <Link to={ROUTES.CUSTOMER_EDIT.path.replace(':id', customer.id.toString())} className="link-primary">
+                {customer.name}
+              </Link>
             </div>
             <div className="md:col-span-3">{customer.contact ?? '-'}</div>
             <div className="md:col-span-3">{customer.phoneNumber ?? '-'}</div>

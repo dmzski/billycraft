@@ -1,5 +1,4 @@
 import { Button, Loader } from '@coco-ui/core'
-import Supplier from '@/models/Supplier'
 import SupplierList from './List'
 import SupplierModalForm from './modals/SupplierModalForm'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
@@ -18,7 +17,6 @@ const Suppliers = () => {
         <SupplierModalForm
           disclosure={<Button variant="primary">Créer un fournisseur</Button>}
           onSubmitSuccess={reloadData}
-          supplier={{} as Supplier}
         />
       </div>
       {isLoading && !data ? (

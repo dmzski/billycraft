@@ -32,7 +32,11 @@ export const ROUTES = {
     path: '/customers',
     title: 'Clients',
   },
-  CUSTOMER_FORM: {
+  CUSTOMER_ADD: {
+    path: '/customers/create',
+    title: 'Ajouter un client',
+  },
+  CUSTOMER_EDIT: {
     path: '/customers/edit/:id',
     title: 'Edition de client',
   },
@@ -108,8 +112,12 @@ export const ROUTES = {
     path: '/quotes',
     title: 'Devis',
   },
-  QUOTE_FORM: {
+  QUOTE_EDIT: {
     path: '/quotes/edit/:id',
+    title: 'Edition de devis',
+  },
+  QUOTE_ADD: {
+    path: '/quotes/create',
     title: 'Edition de devis',
   },
   SETTINGS: {

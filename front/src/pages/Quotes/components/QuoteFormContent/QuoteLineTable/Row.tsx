@@ -4,11 +4,11 @@ import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useMemo } from 'react'
 import { Control, useController, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '@/constants/line'
-import { QuoteFormValues } from '../Form'
 import { ArrowsUpDownIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useI18n } from '@/i18n'
+import { QuoteFormValues } from '../types'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void

@@ -73,7 +73,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
       <div className="md:col-span-1 text-sm">
         <Link
           className="link-primary"
-          to={ROUTES.QUOTE_FORM.path.replace(':id', quote.id ?? 'new')}
+          to={ROUTES.QUOTE_EDIT.path.replace(':id', quote.id ?? 'new')}
         >
           {quote.id}
         </Link>
@@ -86,9 +86,9 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
       <div className="md:col-span-2">
         {quote.updatedAt ? formatISO9075(parseJSON(quote.updatedAt)) : '-'}
       </div>
-      <div className="md:col-span-2">
+      <div className="md:col-span-2 grid">
         <Dropdown>
-          <Button>{t(`quotes.status.${quote.status}`)}</Button>
+          <Button block>{t(`quotes.status.${quote.status}`)}</Button>
           <Dropdown.Content>
             {nextStatuses.map(s => (
               <Dropdown.Button key={s} onClick={updateQuoteStatus(s)}>

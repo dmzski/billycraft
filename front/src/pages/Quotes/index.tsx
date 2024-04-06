@@ -26,7 +26,7 @@ const QuotePage = () => {
   )
 
   const goToNewQuote = () => {
-    history.push(ROUTES.QUOTE_FORM.path.replace(':id', 'new'))
+    history.push(ROUTES.QUOTE_ADD.path)
   }
 
   return (

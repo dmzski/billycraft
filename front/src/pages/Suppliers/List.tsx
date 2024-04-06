@@ -28,12 +28,11 @@ const List = ({ data, reloadData }: ListProps) => (
         </div>
         <div className="md:col-span-9">{supplier.name}</div>
         <div>{supplier.vat}&nbsp;%</div>
-        <div className="flex">
+        <div className="flex justify-end">
           <SupplierModalForm
             disclosure={
-              <Button size="sm" variant="info">
-                <PencilIcon className="w-5" />
-                &nbsp; Modifier
+              <Button variant="primary" size="sm" outline>
+                <PencilIcon className="w-4" />
               </Button>
             }
             onSubmitSuccess={reloadData}

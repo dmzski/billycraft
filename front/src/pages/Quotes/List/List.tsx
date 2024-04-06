@@ -13,12 +13,12 @@ const QuoteList = ({ data }: QuoteListProps) => {
   return (
     <div className="flex flex-col">
       <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
-        <div className="col-span-1">{t('quotes.list.headers.reference')}</div>
-        <div className="col-span-3">{t('quotes.list.headers.title')}</div>
-        <div className="col-span-2">{t('quotes.list.headers.customer')}</div>
-        <div className="col-span-2">{t('quotes.list.headers.createdAt')}</div>
-        <div className="col-span-2">{t('quotes.list.headers.updatedAt')}</div>
-        <div className="col-span-2">{t('quotes.list.headers.status')}</div>
+        <div className="md:col-span-1">{t('quotes.list.headers.reference')}</div>
+        <div className="md:col-span-3">{t('quotes.list.headers.title')}</div>
+        <div className="md:col-span-2">{t('quotes.list.headers.customer')}</div>
+        <div className="md:col-span-2">{t('quotes.list.headers.createdAt')}</div>
+        <div className="md:col-span-2">{t('quotes.list.headers.updatedAt')}</div>
+        <div className="md:col-span-2">{t('quotes.list.headers.status')}</div>
       </div>
       <div className="flex flex-col">
         {data.map(quote => (
