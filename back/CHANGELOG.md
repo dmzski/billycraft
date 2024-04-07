@@ -1,5 +1,11 @@
 # back
 
+## 1.11.0
+
+### Minor Changes
+
+- d6b7c2b: fix: todos done update
+
 ## 1.10.0
 
 ### Minor Changes
