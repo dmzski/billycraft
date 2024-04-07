@@ -1,5 +1,17 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.25.0
+
+### Minor Changes
+
+- fb3cdb4: feat: add customer page and split quote form pages
+- f974b13: feat(accounting): clean and better style
+
+### Patch Changes
+
+- f974b13: feat: change side menu order
+- f974b13: chore(settings): use unique strings to translate in pdf customizations
+
 ## 2.24.0
 
 ### Minor Changes
