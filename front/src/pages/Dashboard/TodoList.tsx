@@ -34,31 +34,25 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
     },
   })
 
-  const handleDone = (id: number) => () => {
-    const fn = async () => {
-      try {
-        await TodoApi.done(id)
-        await onSubmitSuccess?.()
-        toast.success(t('dashboard.todos.form.submit.edit.success'))
-      } catch {
-        toast.error(t('genericFormError'))
-      }
+  const handleDone = (id: number) => async () => {
+    try {
+      await TodoApi.done(id)
+      await onSubmitSuccess?.()
+      toast.success(t('dashboard.todos.form.submit.edit.success'))
+    } catch {
+      toast.error(t('genericFormError'))
     }
-    fn()
   }
 
-  const onSubmit = (values: TodoFormValues) => {
-    const fn = async () => {
-      try {
-        await TodoApi.create(values)
-        await onSubmitSuccess?.()
-        methodsCreate.reset({ description: '' })
-        toast.success(t('dashboard.todos.form.submit.success'))
-      } catch {
-        toast.error(t('genericFormError'))
-      }
+  const onSubmit = async (values: TodoFormValues) => {
+    try {
+      await TodoApi.create(values)
+      await onSubmitSuccess?.()
+      methodsCreate.reset({ description: '' })
+      toast.success(t('dashboard.todos.form.submit.success'))
+    } catch {
+      toast.error(t('genericFormError'))
     }
-    fn()
   }
 
   const handleEdit = (id: number, description: string) => () => {
