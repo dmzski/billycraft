@@ -9,11 +9,12 @@ const SideBar = () => {
     <aside className="bg-base-200 bg-opacity-20 border-r w-72 overflow-y-auto fixed h-screen">
       <div className="w-full h-full flex flex-col gap-4">
         <div className="flex flex-col gap-4">
-          <div className="bg-primary shadow-box flex gap-3 items-center text-lg p-3 text-primary-content">
-            <div className="rounded-full p-3 mask mask-hexagon-2 bg-primary bg-opacity-50">
-              <BuildingOfficeIcon className="w-6" />
+          <div className="bg-primary shadow-box flex gap-5 pl-5 items-center text-lg py-5 text-primary-content">
+            <BuildingOfficeIcon className="w-10" />
+            <div className='flex flex-col overflow-hidden'>
+              <small className='text-xs'>Entreprise</small>
+              <p title={organization?.name} className='truncate'>{organization?.name}</p>
             </div>
-            <p>{organization?.name}</p>
           </div>
         </div>
         <div className="flex flex-col flex-grow gap-2">
