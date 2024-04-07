@@ -6,7 +6,7 @@ const SideBar = () => {
   const { organization } = useUser()
 
   return (
-    <aside className="bg-base-200 bg-opacity-20 border-r w-72 overflow-y-auto fixed h-screen">
+    <aside className="bg-base-200 bg-opacity-20 border-r w-full md:w-80 overflow-y-auto fixed h-screen">
       <div className="w-full h-full flex flex-col gap-4">
         <div className="flex flex-col gap-4">
           <div className="bg-primary shadow-box flex gap-5 pl-5 items-center text-lg py-5 text-primary-content">

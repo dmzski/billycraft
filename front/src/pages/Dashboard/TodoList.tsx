@@ -127,7 +127,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
                 name={`edit-todo-${todo.id}`}
                 key={todo.id}
                 className={clsx('grid gap-2 md:grid-cols-12 py-3 px-4 items-center', {
-                  'bg-success text-success-content': !!todo.doneAt,
+                  'bg-success bg-opacity-50 text-success-content': !!todo.doneAt,
                 })}
               >
                 <div className="md:col-span-2">
@@ -178,7 +178,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
               <div
                 key={todo.id}
                 className={clsx('grid gap-2 min-h-16 md:grid-cols-12 py-3 px-4 items-center', {
-                  'bg-success text-success-content': !!todo.doneAt,
+                  'bg-success bg-opacity-50 text-success-content': !!todo.doneAt,
                 })}
               >
                 <div className="md:col-span-2">
