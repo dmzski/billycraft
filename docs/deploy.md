@@ -16,7 +16,8 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 SCW_SECRET_KEY=XXXXXXX ./login.sh
 cd $SSH_FOLDER
-nano .env #Change values acccording to your environnement
+nano .env #Change values acccording to your environment
+nano init-db.sh # CHanges values according to your environment
 docker compose up -d
 ```
 - Everything should run fine but you can run : `docker compose ps` to see list of services Up/Down
