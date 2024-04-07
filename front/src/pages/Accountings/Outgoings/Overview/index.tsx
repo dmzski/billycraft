@@ -33,22 +33,22 @@ const Overview = () => {
               0,
             ),
           )
-        : null,
+        : formatCurrency(0),
     [data, formatCurrency],
   )
 
   return (
-    <div>
-      <div className="mb-4 p-2 border-b grid md:grid-cols-12 gap-4 items-center">
-        <h2 className="text-xl md:col-span-9">
+    <div className='flex flex-col gap-10'>
+      <div className="p-2 flex gap-4 items-center">
+        <h2 className="text-2xl flex-grow">
           {t('accounting.outgoings.pages.overview.currentMonth')}
           {currentMonth}
         </h2>
-        <div className="flex flex-col md:flex-row md:justify-end border rounded md:col-span-3">
-          <div className="text-primary-700 bg-primary-50 p-2 w-full md:w-auto">
+        <div className="flex items-center border border-primary rounded bg-primary-content text-primary p-4">
+          <p>
             {t('accounting.outgoings.pages.overview.totalThisMonth')}
-          </div>
-          <div className="flex-grow p-2 text-lg text-right">{total}</div>
+          </p>
+          <p className="flex-grow">{total}</p>
         </div>
       </div>
       <OutgoingForm

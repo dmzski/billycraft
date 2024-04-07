@@ -4,22 +4,30 @@ import DetailsPage from './DetailsPage'
 import ListPage from './ListPage'
 import OverviewPage from './OverviewPage'
 import { useI18n } from '@/i18n'
+import { ReactNode } from 'react'
 
 const { routes, path } = ROUTES.ACCOUNTINGS.routes.REPORTS
 
-const Heading = () => {
+type ReportLayoutProps = {
+  children: ReactNode
+}
+
+const ReportLayout = ({ children }: ReportLayoutProps) => {
   const { t } = useI18n()
   return (
-    <div className="flex flex-col gap-4 mb-4">
-      <h1 className="text-3xl">Rapports d&apos;activité</h1>
-      <div className="tabs tabs-boxed flex">
-        <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
-          {t('accounting.heaging.overview')}
-        </NavLink>
-        <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
-          {t('accounting.heaging.list')}
-        </NavLink>
+    <div className="flex flex-col gap-10 mb-4">
+      <div className='flex flex-col gap-5'>
+        <h1 className="text-3xl">{t('accounting.reports.title')}</h1>
+        <div className="tabs tabs-bordered">
+          <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
+            {t('accounting.reports.heading.overview')}
+          </NavLink>
+          <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
+            {t('accounting.reports.heading.list')}
+          </NavLink>
+        </div>
       </div>
+      {children}
     </div>
   )
 }
@@ -27,12 +35,14 @@ const Heading = () => {
 const ReportsSwitch = () => (
   <Switch>
     <Route path={routes.OVERVIEW.path}>
-      <Heading />
-      <OverviewPage />
+      <ReportLayout>
+        <OverviewPage />
+      </ReportLayout>
     </Route>
     <Route path={routes.LIST.path} exact={routes.LIST.exact}>
-      <Heading />
-      <ListPage />
+      <ReportLayout>
+        <ListPage />
+      </ReportLayout>
     </Route>
     <Route path={routes.DETAILS.path}>
       <DetailsPage />

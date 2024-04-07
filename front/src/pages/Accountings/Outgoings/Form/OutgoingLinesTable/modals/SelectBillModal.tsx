@@ -1,36 +1,34 @@
 import { Button, Input, Modal, Select } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
-import { useCallback, useEffect, useMemo } from 'react'
+import { ComponentProps, useMemo } from 'react'
 import { useController, useForm } from 'react-hook-form'
 import { useI18n } from '@/i18n'
 import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
 
 type SelectBillModalProps = {
-  isOpen?: boolean
-  onSubmit?: (billId: string) => void | Promise<void>
-  onClose: () => void
+  onSubmit: (billId: string) => void | Promise<void>
+  disclosure: ComponentProps<typeof Modal>['disclosure']
 }
 
-type SelectBillModalForm = {
+type SelectBillFormProps = Omit<SelectBillModalProps, "disclosure"> & { close: () => void }
+
+type SelectBillModalFormValues = {
   customerId?: number
   title?: string
   billId?: string
 }
-const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) => {
+const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
   const { t } = useI18n()
-  const { data: bills } = useAllBillsQuery({
-    enabled: isOpen,
-  })
+  const { data: bills } = useAllBillsQuery()
   const customers = useCustomers()
 
   const {
     handleSubmit,
     control,
     setValue,
-    reset,
     formState: { isSubmitting, isValid },
-  } = useForm<SelectBillModalForm>({
-    mode: 'all',
+  } = useForm<SelectBillModalFormValues>({
+    mode: 'onChange',
   })
   const customerController = useController({
     name: 'customerId',
@@ -85,62 +83,59 @@ const SelectBillModal = ({ onSubmit, isOpen, onClose }: SelectBillModalProps) =>
     [titleController.field.value, customerController.field.value, bills],
   )
 
-  const beforeSubmit = useCallback(
-    ({ billId }) => {
-      onClose()
-      onSubmit?.(billId)
-      return false
-    },
-    [onClose, onSubmit],
-  )
-
-  useEffect(() => {
-    reset()
-  }, [isOpen, reset])
+  const onFormSubmit = ({ billId }) => {
+    onSubmit?.(billId)
+    close()
+  }
 
   return (
-    <Modal onClose={onClose} open={isOpen}>
-      <div className="w-full">
-        <h2 className="text-xl border-b mb-4 pb-2">
-          {t('accounting.outgoings.modals.selectBill.title')}
-        </h2>
-        <div className="ml-2 mb-2 flex flex-col gap-4">
-          <Select
-            options={customerOptions}
-            value={customerController.field.value}
-            name={customerController.field.name}
-            onChange={customerController.field.onChange}
-            ref={customerController.field.ref}
-            label={t('customer')}
-            isSearchable
-          />
-          <Input
-            value={titleController.field.value}
-            name={titleController.field.name}
-            onChange={titleController.field.onChange}
-            ref={titleController.field.ref}
-            label={t('title')}
-          />
-          <Select
-            options={billOptions}
-            value={billIdController.field.value}
-            name={billIdController.field.name}
-            onChange={billIdController.field.onChange}
-            ref={billIdController.field.ref}
-            label={t('bill')}
-            isSearchable
-          />
-          <Button
-            type="button"
-            onClick={handleSubmit(beforeSubmit)}
-            disabled={!isValid || isSubmitting}
-          >
-            {t('select')}
-          </Button>
-        </div>
-      </div>
-    </Modal>
+    <div className="flex flex-col gap-5">
+      <h2 className="text-xl">
+        {t('accounting.outgoings.modals.selectBill.title')}
+      </h2>
+      <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col gap-4">
+        <Select
+          options={customerOptions}
+          value={customerController.field.value}
+          name={customerController.field.name}
+          onChange={customerController.field.onChange}
+          ref={customerController.field.ref}
+          label={t('customer')}
+          isSearchable
+        />
+        <Input
+          value={titleController.field.value}
+          name={titleController.field.name}
+          onChange={titleController.field.onChange}
+          ref={titleController.field.ref}
+          label={t('title')}
+        />
+        <Select
+          options={billOptions}
+          value={billIdController.field.value}
+          name={billIdController.field.name}
+          onChange={billIdController.field.onChange}
+          ref={billIdController.field.ref}
+          label={t('bill')}
+          isSearchable
+        />
+        <Button
+          type="submit"
+          disabled={!isValid || isSubmitting}
+        >
+          {t('select')}
+        </Button>
+      </form>
+    </div>
   )
 }
+
+const SelectBillModal = ({ onSubmit, disclosure }: SelectBillModalProps) => (
+  <Modal disclosure={disclosure}>
+    {({ close }) => (
+      <SelectBillForm close={close} onSubmit={onSubmit} />
+    )}
+  </Modal>
+)
 
 export default SelectBillModal

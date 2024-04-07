@@ -22,7 +22,6 @@ export default {
   save: 'Enregistrer',
   update: 'Mettre à jour',
   logout: 'Déconnexion',
-  'customs PDF': 'Personnalisation du PDF',
   'customer information': 'Informations du client',
   'display customer email': "Afficher l'email du client",
   'display customer phonenumber': 'Afficher le téléphone du client',
@@ -48,7 +47,6 @@ export default {
   Automation: 'Automatisme',
   'Automatically generate monthly reports': 'Générer automatiquement les rapports mensuels',
   'Automatically generate annual reports': 'Générer automatiquement les rapports annuels',
-  'save customs PDF': 'Enregistrer la personnalisation du PDF',
   Tips: 'Astuces',
 
   // Login
@@ -118,6 +116,9 @@ export default {
   'accounting.outgoings.list.headers.startDate': 'Date de début',
   'accounting.outgoings.list.headers.endDate': 'Date de fin',
   'accounting.outgoings.list.headers.itTotal': 'Total TTC',
+  'accounting.outgoings.list.empty': "Aucun livret d'achat",
+  'accounting.outgoings.details.backTo': 'Retourner à la liste des livrets',
+  'accounting.outgoings.details.title': "Détail d'un livret d'achat",
   'accounting.outgoings.details.headers.name': 'Nom du livret',
   'accounting.outgoings.details.headers.startDate': 'Date de début',
   'accounting.outgoings.details.headers.endDate': 'Date de fin',
@@ -195,9 +196,10 @@ export default {
   'accounting.reports.list.title': 'Rapports',
   'accounting.reports.list.create': 'Créer un rapport',
 
-  // Acounting > Switch
-  'accounting.heaging.overview': "Vue d'ensemble",
-  'accounting.heaging.list': "Tous les rapports d'activité",
+  // Acounting > Reports > Switch
+  'accounting.reports.title': "Rapports d'activité",
+  'accounting.reports.heading.overview': "Vue d'ensemble",
+  'accounting.reports.heading.list': "Tous les rapports d'activité",
 
   // Accounting > Overview
   'accounting.overview.currentMonth': 'Mois en cours : ',
@@ -382,12 +384,14 @@ export default {
   'suppliers.modals.form.field.color.label': 'Couleur hexadécimale associée',
 
   // Settings > Forms > BillCustomizationForm
+  'settings.forms.billCustomization.title': 'Personnalisation de la facture',
   'settings.forms.billCustomization.mainColor.label': 'Couleur principale',
   'settings.forms.billCustomization.afterTable.label': 'Après le tableau',
   'settings.forms.billCustomization.footer.label': 'Pied de page',
   'settings.forms.billCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.billCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.billCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.billCustomization.submit': 'Enregistrer la personnalisation',
   'settings.forms.billCustomization.submit.success': 'Personnalisation de la facture enregistrée',
 
   // Settings > Forms > MyCompagnyForm
@@ -412,12 +416,14 @@ export default {
   'settings.forms.myCompagnyForm.logo.placeholder': 'URL du logo',
 
   // Settings > Forms > QuoteCustomizationForm
+  'settings.forms.quoteCustomization.title': 'Personnalisation du devis',
   'settings.forms.quoteCustomization.mainColor.label': 'Couleur principale',
   'settings.forms.quoteCustomization.afterTable.label': 'Après le tableau',
   'settings.forms.quoteCustomization.footer.label': 'Pied de page',
   'settings.forms.quoteCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.quoteCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.quoteCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.quoteCustomization.submit': 'Enregistrer la personnalisation',
   'settings.forms.quoteCustomization.submit.success': 'Personnalisation du devis enregistrée',
 
   // Settings > Forms > MyCompagnyForm

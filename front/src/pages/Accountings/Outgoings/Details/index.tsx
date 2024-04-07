@@ -1,53 +1,54 @@
-import { Button, Loader } from '@coco-ui/core'
-import { Link, useParams } from 'react-router-dom'
+import { Loader } from '@coco-ui/core'
+import { Link, Redirect, useParams } from 'react-router-dom'
 import { OUTGOING_ROUTES } from '../constants'
 import OutgoingDetail from './OutgoingDetail'
-import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import { useOutgoingByIdQuery } from '@/queries/useOutgoingByIdQuery'
+import { useI18n } from '@/i18n'
+import { ROUTES } from '@/routes'
 
 const Details = () => {
+  const { t } = useI18n()
   const { id } = useParams<{ id: string }>()
   const { data: outgoing, isLoading } = useOutgoingByIdQuery(id, {
     enabled: !!id,
   })
 
+  if (!outgoing && !isLoading) {
+    return <Redirect to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path} />
+  }
+
   return (
-    <>
-      <div className="flex md:justify-between flex-col md:flex-row md:items-center gap-4 mb-4">
-        <div className="md:col-span-11">
-          <Link to={OUTGOING_ROUTES.routes.LIST.path}>
-            <Button type="button" variant="ghost" size="xs">
-              <ArrowLeftIcon className="w-5" />
-              &nbsp; Retourner à la liste des livrets
-            </Button>
+    <div className='flex flex-col gap-10'>
+      <div className="flex justify-between items-center gap-4">
+        <div>
+          <Link className='link link-primary inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.LIST.path}>
+            <ChevronLeftIcon className="w-5" />
+            {t('accounting.outgoings.details.backTo')}
           </Link>
         </div>
         {outgoing ? (
           <div>
-            <Link to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
-              <Button variant="info">
-                <PencilIcon className="w-5" />
-                &nbsp; Modifier
-              </Button>
+            <Link className='btn btn-info inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
+              {t('update')}
             </Link>
           </div>
         ) : null}
       </div>
       {isLoading ? (
-        <div className="flex items-center justify-center h-full gap-2">
-          <Loader />
-          Chargement du livret
+        <div className="grid items-center justify-center flex-grow">
+          <Loader size='lg' />
         </div>
       ) : null}
       {outgoing ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <h1 className="border-b text-2xl text-primary-700 mb-4">
-            Détail d&apos;un livret d&apos;achat
+            {t('accounting.outgoings.details.title')}
           </h1>
           <OutgoingDetail outgoing={outgoing} />
         </div>
       ) : null}
-    </>
+    </div>
   )
 }
 

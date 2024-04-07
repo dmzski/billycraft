@@ -35,7 +35,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">{t('customs PDF')}</h2>
+      <h2 className="text-2xl">{t('settings.forms.quoteCustomization.title')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex gap-4 w-full content-center items-center">
           <div
@@ -123,7 +123,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
           }
         />
         <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
-          {t('save customs PDF')}
+          {t('settings.forms.quoteCustomization.submit')}
         </Button>
       </div>
     </form>

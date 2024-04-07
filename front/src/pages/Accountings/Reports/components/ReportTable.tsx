@@ -18,7 +18,7 @@ const ReportTableRow = ({ children }: { children: ReactNode }) => (
 )
 
 const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
-  <dt className={clsx('md:col-span-6 bg-base-300 p-2', noBorder ? '' : 'border-b')}>{children}</dt>
+  <dt className={clsx('md:col-span-6 bg-primary-content text-primary p-2', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
 const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps) => (

@@ -12,10 +12,10 @@ const menuRoutes = [
   ROUTES.BILLS,
   ROUTES.CUSTOMERS,
   ROUTES.PRODUCTS,
-  ROUTES.HISTORY,
-  ROUTES.SETTINGS,
   ROUTES.SUPPLIERS,
   ROUTES.ACCOUNTINGS,
+  ROUTES.HISTORY,
+  ROUTES.SETTINGS,
 ] as Route[]
 
 type MenuProps = {
@@ -42,7 +42,6 @@ const SideBarMenu = () => {
     <div className="flex flex-col h-full gap-8">
       <ul className="menu flex-grow gap-1">
         {menuRoutes
-          .sort((routeA, routeB) => routeA.title.localeCompare(routeB.title))
           .map(route =>
             !route.routes ? (
               <MenuItem

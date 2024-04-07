@@ -34,7 +34,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
 
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8">
-      <h2 className="text-2xl">{t('customs PDF')}</h2>
+      <h2 className="text-2xl">{t('settings.forms.billCustomization.title')}</h2>
       <div className="ml-4 flex flex-col gap-8">
         <div className="flex w-full items-center gap-4">
           <div
@@ -122,7 +122,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
           }
         />
         <Button type="submit" size="md" block variant="success" onClick={onSubmit}>
-          {t('save customs PDF')}
+          {t('settings.forms.billCustomization.submit')}
         </Button>
       </div>
     </form>

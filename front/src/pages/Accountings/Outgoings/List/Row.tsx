@@ -25,22 +25,22 @@ const Row = ({ outgoing }: RowProps) => {
     [outgoing.lines, formatCurrency],
   )
   return (
-    <div className="grid sm:grid-cols-12 gap-4 p-4 border-b">
-      <div className="col-span-3 truncate">
+    <div className="grid md:grid-cols-12 gap-4 p-4">
+      <div className="md:col-span-3 truncate">
         <Link
           to={routes.DETAILS.path.replace(':id', outgoing.id)}
-          className="text-primary-700 underline font-semibold"
+          className="link link-primary"
         >
           {outgoing.name}
         </Link>
       </div>
-      <div className="col-span-3">
+      <div className="md:col-span-3">
         {formatISO9075(parseJSON(outgoing.startDate), { representation: 'date' })}
       </div>
-      <div className="col-span-3">
+      <div className="md:col-span-3">
         {formatISO9075(parseJSON(outgoing.endDate), { representation: 'date' })}
       </div>
-      <div className="col-span-3">{total}</div>
+      <div className="md:col-span-3">{total}</div>
     </div>
   )
 }

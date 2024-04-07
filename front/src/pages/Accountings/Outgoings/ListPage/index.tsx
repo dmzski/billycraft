@@ -1,4 +1,4 @@
-import { Button, Loader } from '@coco-ui/core'
+import { Loader } from '@coco-ui/core'
 import { ROUTES } from '@/routes'
 import { Link } from 'react-router-dom'
 import OutgoingList from '../List'
@@ -15,13 +15,13 @@ const ListPage = () => {
     <div>
       <div className="flex justify-between border-b my-4 pb-2 items-center">
         <h2 className="text-xl">{t('accounting.outgoings.pages.list.title')}</h2>
-        <Link to={routes.FORM.path.replace(':id', 'new')}>
-          <Button variant="primary">{t('accounting.outgoings.pages.list.add')}</Button>
+        <Link className='btn btn-primary' to={routes.FORM.path.replace(':id', 'new')}>
+          {t('accounting.outgoings.pages.list.add')}
         </Link>
       </div>
       {isLoading && !data ? (
         <div className="flex justify-center">
-          <Loader />
+          <Loader size="lg" />
         </div>
       ) : null}
       {data ? <OutgoingList data={data} /> : null}

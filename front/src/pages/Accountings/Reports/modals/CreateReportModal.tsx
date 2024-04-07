@@ -3,7 +3,7 @@ import { ReportApi } from '@/api/ReportApi'
 import { endOfMonth, formatRFC3339 } from 'date-fns'
 import { ReportRequest } from '@/models/Report'
 import { ComponentProps } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useController, useForm } from 'react-hook-form'
 import { useI18n } from '@/i18n'
 
 type CreateReportModalProps = {
@@ -39,56 +39,39 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
     }
   }
 
+  const { field: nameField, fieldState: nameFieldState } = useController({ control, name: "name", rules: { required: true, minLength: 3 } })
+  const { field: startDateField, fieldState: startDateFieldState } = useController({ control, name: "startDate", rules: { required: true } })
+  const { field: endDateField, fieldState: endDateFieldState } = useController({ control, name: "endDate", rules: { required: true } })
+
   return (
-    <form className="grid grid-cols-1 gap-10" onSubmit={handleSubmit(onSubmit)}>
-      <h3 className="text-2xl border-b pb-2">{t('accounting.reports.modals.create.title')}</h3>
+    <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="text-3xl">{t('accounting.reports.modals.create.title')}</h2>
       <div className="flex flex-col gap-2">
-        <Controller
-          control={control}
-          name="name"
-          rules={{ required: true, minLength: 3 }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              label={t('accounting.reports.modals.create.fields.name')}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              ref={field.ref}
-              error={invalid}
-            />
-          )}
+        <Input
+          label={t('accounting.reports.modals.create.fields.name')}
+          value={nameField.value}
+          onChange={nameField.onChange}
+          onBlur={nameField.onBlur}
+          ref={nameField.ref}
+          error={nameFieldState.invalid}
         />
-        <Controller
-          control={control}
-          name="startDate"
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              label={t('accounting.reports.modals.create.fields.startDate')}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              ref={field.ref}
-              error={invalid}
-              type="month"
-            />
-          )}
+        <Input
+          label={t('accounting.reports.modals.create.fields.startDate')}
+          value={startDateField.value}
+          onChange={startDateField.onChange}
+          onBlur={startDateField.onBlur}
+          ref={startDateField.ref}
+          error={startDateFieldState.invalid}
+          type="month"
         />
-        <Controller
-          control={control}
-          name="endDate"
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              label={t('accounting.reports.modals.create.fields.endDate')}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              ref={field.ref}
-              error={invalid}
-              type="month"
-            />
-          )}
+        <Input
+          label={t('accounting.reports.modals.create.fields.endDate')}
+          value={endDateField.value}
+          onChange={endDateField.onChange}
+          onBlur={endDateField.onBlur}
+          ref={endDateField.ref}
+          error={endDateFieldState.invalid}
+          type="month"
         />
       </div>
       <Button type="submit" disabled={!isValid || isSubmitting}>

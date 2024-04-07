@@ -9,7 +9,7 @@ const List = ({ data }: ListProps) => {
   const { t } = useI18n()
 
   return (
-    <div>
+    <div className='flex flex-col gap-4'>
       <div className="grid sm:grid-cols-12 gap-4 bg-base-200 p-4 rounded-t">
         <div className="col-span-3">{t('accounting.outgoings.list.headers.name')}</div>
         <div className="col-span-3">{t('accounting.outgoings.list.headers.startDate')}</div>
@@ -23,7 +23,7 @@ const List = ({ data }: ListProps) => {
           ))}
         </div>
       ) : (
-        <div>Aucun livret enregistré</div>
+        <div className='text-center'>{t('accounting.outgoings.list.empty')}</div>
       )}
     </div>
   )
