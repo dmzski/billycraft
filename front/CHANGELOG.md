@@ -1,5 +1,14 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.27.0
+
+### Minor Changes
+
+- 08e1cf0: feat(core): improve tsconfig and add error boundary
+- 08e1cf0: feat(quote,bills): drop useless status
+- 090c89d: chore(dashboard): change bg opacity when todo is done
+- 08e1cf0: feat(quote): try a new form
+
 ## 2.26.0
 
 ### Minor Changes
