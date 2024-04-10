@@ -7,16 +7,18 @@ import useLoadingState from '@/hooks/useLoadingState'
 import { QuoteStatusEnum } from '@/models/Quote'
 import { ROUTES } from '@/routes'
 import { QuoteFormContent } from '@/pages/Quotes/components/QuoteFormContent'
-import { BanknotesIcon, CheckIcon, ChevronLeftIcon, DocumentArrowDownIcon, EnvelopeIcon, InboxArrowDownIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { CheckIcon, ChevronLeftIcon, DocumentArrowDownIcon, EnvelopeIcon, InboxArrowDownIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
 import { QuoteFormValues } from '../components/QuoteFormContent'
 import { FormProvider, useForm } from 'react-hook-form'
+import { QuoteUpdateRequest } from '@/models/dtos/QuoteUpdateRequest'
 
 const defaultQuote = {
   lines: [],
   tva: 0,
   title: "",
+  customerId: 0
 } as QuoteFormValues
 
 export const Edit = () => {
@@ -71,16 +73,18 @@ export const Edit = () => {
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
     try {
-      await QuoteApi.updateStatus({ id: quote.id, status })
-      toast.success(t('quotes.form.submit.edit.success'))
-      await reloadQuote()
+      if (quote) {
+        await QuoteApi.updateStatus({ id: quote.id, status })
+        toast.success(t('quotes.form.submit.edit.success'))
+        await reloadQuote()
+      }
     } catch {
       toast.error(t('genericFormError'))
     }
   }
 
   const onSubmit = async (data: QuoteFormValues) => {
-    const tmp = {
+    const tmp: QuoteUpdateRequest = {
       id: quote?.id ?? "",
       ...data,
       lines: data.lines.map((line, index: number) => ({
@@ -89,8 +93,8 @@ export const Edit = () => {
         type: line.type,
         description: line.description,
         line: index + 1,
-        price: line.price ? Number(`${line.price}`) : null,
-        quantity: line.quantity ? Number(`${line.quantity}`) : null,
+        price: line.price ? Number(`${line.price}`) : undefined,
+        quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
       })),
     }
     try {
@@ -115,6 +119,10 @@ export const Edit = () => {
 
   if (!quote && isLoading) {
     return <Loader />
+  }
+
+  if (!quote) {
+    return t("genericDataLoadError")
   }
 
   return (
@@ -160,108 +168,102 @@ export const Edit = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <QuoteFormContent quote={quote} />
+          <div className="grid md:grid-cols-2 gap-4">
+            {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
+              <Button
+                size="md"
+                type="button"
+                onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
+                disabled={disabled}
+                variant='primary'
+                outline
+                className='gap-4'
+              >
+                <EnvelopeIcon className='w-5' />
+                {t('quotes.form.actions.sent')}
+              </Button>
+            ) : null}
+            {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
+              <Button
+                size="md"
+                type="submit"
+                disabled={!isValid || isSubmitting || disabled}
+                variant="primary"
+              >
+                {t('quotes.form.submit')}
+              </Button>
+            ) : null}
+            {quote.status === QuoteStatusEnum.SENT ? (
+              <>
+                <Button
+                  size="md"
+                  type="button"
+                  onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
+                  variant='error'
+                  className='gap-4'
+                >
+                  <XMarkIcon className='w-5' />
+                  {t('quotes.form.actions.refused')}
+                </Button>
+                <Button
+                  size="md"
+                  type="button"
+                  onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
+                  variant='success'
+                  className='gap-4'
+                >
+                  <CheckIcon className='w-5' />
+                  {t('quotes.form.actions.accepted')}
+                </Button>
+              </>
+            ) : null}
+            {quote.status === QuoteStatusEnum.REFUSED ? (
+              <>
+                <Button
+                  size="md"
+                  type="button"
+                  variant='primary'
+                  onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
+                >
+                  {t('quotes.form.actions.backToDraft')}
+                </Button>
+                <Button outline variant='error' className='gap-4' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
+                  <InboxArrowDownIcon className='w-5' />
+                  {t('quotes.form.actions.archive')}
+                </Button>
+              </>
+            ) : null}
+            {quote.status === QuoteStatusEnum.ACCEPTED ? (
+              <>
+                <Button
+                  size="md"
+                  outline
+                  type="button"
+                  variant='error'
+                  onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+                >
+                  <InboxArrowDownIcon className='w-5' />
+                  {t('quotes.form.actions.archive')}
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  type="button"
+                  onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
+                >
+                  {t('quotes.form.actions.depositAsk')}
+                </Button>
+              </>
+            ) : null}
+            {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
+              <Button variant='primary' className='gap-4 md:col-start-2' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
+                <InboxArrowDownIcon className='w-5' />
+                {t('quotes.form.actions.archive')}
+              </Button>
+            ) : null}
+          </div>
         </form>
       </FormProvider>
-      <div className="grid md:grid-cols-2 gap-4">
-        {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
-          <Button
-            size="md"
-            type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
-            disabled={disabled}
-            variant='primary'
-            outline
-            className='gap-4'
-          >
-            <EnvelopeIcon className='w-5' />
-            {t('quotes.form.actions.sent')}
-          </Button>
-        ) : null}
-        {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
-          <Button
-            size="md"
-            type="submit"
-            disabled={!isValid || isSubmitting || disabled}
-            variant="primary"
-          >
-            {t('quotes.form.submit')}
-          </Button>
-        ) : null}
-        {quote.status === QuoteStatusEnum.SENT ? (
-          <>
-            <Button
-              size="md"
-              type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
-              variant='error'
-              className='gap-4'
-            >
-              <XMarkIcon className='w-5' />
-              {t('quotes.form.actions.refused')}
-            </Button>
-            <Button
-              size="md"
-              type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
-              variant='success'
-              className='gap-4'
-            >
-              <CheckIcon className='w-5' />
-              {t('quotes.form.actions.accepted')}
-            </Button>
-          </>
-        ) : null}
-        {quote.status === QuoteStatusEnum.REFUSED ? (
-          <>
-            <Button
-              size="md"
-              type="button"
-              variant='primary'
-              onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
-            >
-              {t('quotes.form.actions.backToDraft')}
-            </Button>
-            <Button outline variant='error' className='gap-4' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
-              <InboxArrowDownIcon className='w-5' />
-              {t('quotes.form.actions.archive')}
-            </Button>
-          </>
-        ) : null}
-        {quote.status === QuoteStatusEnum.ACCEPTED ? (
-          <>
-            <Button
-              size="md"
-              outline
-              type="button"
-              variant='error'
-              onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
-            >
-              <InboxArrowDownIcon className='w-5' />
-              {t('quotes.form.actions.archive')}
-            </Button>
-            <Button
-              variant="primary"
-              size="md"
-              type="button"
-              onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
-            >
-              {t('quotes.form.actions.depositAsk')}
-            </Button>
-          </>
-        ) : null}
-        {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
-          <Button variant='success' className='gap-4 md:col-start-2' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_PAID)}>
-            <BanknotesIcon className='w-5' />
-            {t('quotes.form.actions.depositPaid')}
-          </Button>
-        ) : null}
-        {quote.status === QuoteStatusEnum.DEPOSIT_PAID ? (
-          <Button variant='primary' className='gap-4 md:col-start-2' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
-            <InboxArrowDownIcon className='w-5' />
-            {t('quotes.form.actions.archive')}
-          </Button>
-        ) : null}
-      </div>
     </div>
   )
 }

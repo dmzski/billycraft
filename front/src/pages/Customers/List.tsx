@@ -16,7 +16,7 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }) => {
       </div>
       <div>
         {data.map(customer => (
-          <div className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
+          <div key={customer.id} className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
             <div className="md:col-span-3">
               <Link to={ROUTES.CUSTOMER_EDIT.path.replace(':id', customer.id.toString())} className="link-primary">
                 {customer.name}

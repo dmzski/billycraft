@@ -39,7 +39,6 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
           QuoteStatusEnum.ACCEPTED,
           QuoteStatusEnum.REFUSED,
           QuoteStatusEnum.DEPOSIT_ASK,
-          QuoteStatusEnum.DEPOSIT_PAID,
           QuoteStatusEnum.ARCHIVED,
         ].sort()
       case QuoteStatusEnum.REFUSED:
@@ -47,20 +46,15 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
       case QuoteStatusEnum.ACCEPTED:
         return [
           QuoteStatusEnum.DEPOSIT_ASK,
-          QuoteStatusEnum.DEPOSIT_PAID,
           QuoteStatusEnum.ARCHIVED,
         ].sort()
       case QuoteStatusEnum.DEPOSIT_ASK:
-        return [QuoteStatusEnum.DEPOSIT_PAID, QuoteStatusEnum.ARCHIVED].sort()
-      case QuoteStatusEnum.DEPOSIT_PAID:
         return [QuoteStatusEnum.ARCHIVED].sort()
-      case QuoteStatusEnum.DRAFT:
       default:
         return [
           QuoteStatusEnum.DRAFT,
           QuoteStatusEnum.SENT,
           QuoteStatusEnum.DEPOSIT_ASK,
-          QuoteStatusEnum.DEPOSIT_PAID,
           QuoteStatusEnum.ACCEPTED,
           QuoteStatusEnum.REFUSED,
           QuoteStatusEnum.ARCHIVED,

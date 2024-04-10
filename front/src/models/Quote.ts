@@ -6,17 +6,16 @@ export enum QuoteStatusEnum {
   ACCEPTED = 'ACCEPTED',
   REFUSED = 'REFUSED',
   DEPOSIT_ASK = 'DEPOSIT_ASK',
-  DEPOSIT_PAID = 'DEPOSIT_PAID',
   ARCHIVED = 'ARCHIVED',
 }
 
 export type QuoteLine = {
   quoteId: string
   line: number
-  quantity?: number | null
-  price?: number | null
+  quantity?: number
+  price?: number
   name: string
-  description?: string | null
+  description?: string
   type: LineTypeEnum
 }
 

@@ -112,6 +112,11 @@ export const ROUTES = {
     path: '/quotes',
     title: 'Devis',
   },
+  QUOTE_OVERVIEW: {
+    exact: true,
+    path: '/quotes/overview/:id',
+    title: "Détail d'un devis",
+  },
   QUOTE_EDIT: {
     path: '/quotes/edit/:id',
     title: 'Edition de devis',

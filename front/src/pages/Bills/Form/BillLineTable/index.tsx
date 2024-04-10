@@ -1,6 +1,6 @@
 import { Button, Select } from '@coco-ui/core'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { ComponentProps, useCallback, useMemo, useState } from 'react'
+import { ComponentProps, useMemo, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import BillLineTableLine from './Row'
 import { BillFormValues } from '../Form'
@@ -27,9 +27,9 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
   const { t } = useI18n()
   const { data: products } = useAllProductsQuery()
   const [productIdSelected, setProductIdSelected] = useState<number>()
-  const onProductSelectedChange = useCallback((option: string) => {
+  const onProductSelectedChange = (option: string) => {
     setProductIdSelected(Number(option))
-  }, [])
+  }
 
   const { fields, append, remove, move } = useFieldArray({
     control,
@@ -37,36 +37,30 @@ const BillLineTable = ({ control, disabled }: BillLineTableProps) => {
     keyName: 'id',
   })
 
-  const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = useCallback(
-    event => {
-      if (
-        !event.over.id ||
-        !event.active.id ||
-        !event.active.data.current.lineIndex === undefined ||
-        !event.over.data.current.lineIndex === undefined
-      ) {
-        return
-      }
-
+  const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = event => {
+    if (
+      event.over?.id &&
+      event.active.id &&
+      event.active.data.current?.lineIndex !== undefined &&
+      event.over.data.current?.lineIndex !== undefined
+    ) {
       move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
-    },
-    [move],
-  )
+    }
 
-  const addLine = useCallback(
-    (newLine = defaultLine) => {
-      append({ ...defaultLine, ...newLine, line: fields.length, billId: '', id: '' })
-      document.getElementById('root')?.scrollTo({
-        behavior: 'smooth',
-        top: document.getElementById('root')?.scrollHeight,
-      })
-    },
-    [append, fields],
-  )
+    return
+  }
+
+  const addLine = (newLine = defaultLine) => {
+    append({ ...defaultLine, ...newLine, line: fields.length, billId: '', id: '' })
+    document.getElementById('root')?.scrollTo({
+      behavior: 'smooth',
+      top: document.getElementById('root')?.scrollHeight,
+    })
+  }
 
   const productOptions = useMemo(
     () =>
-      products.map(product => ({
+      products?.map(product => ({
         value: product.id,
         label: product.name,
       })) ?? [],

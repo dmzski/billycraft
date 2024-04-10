@@ -7,12 +7,13 @@ import useCustomers from '@/hooks/useCustomers'
 import Bill, { BillStatusEnum, BillLine } from '@/models/Bill'
 import BillLineTable from './BillLineTable'
 import { useI18n } from '@/i18n'
+import { BillCreateRequest } from '@/models/dtos/BillCreateRequest'
 
 export type BillFormValues = {
   lines: Array<BillLine & { id: string }>
 } & Omit<Bill, 'lines'>
 
-const defaultBill = {} as Partial<BillFormValues>
+const defaultBill = {} as BillFormValues
 
 type BillFormProps = {
   bill: Bill
@@ -47,22 +48,29 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
   }
 
   const onSubmit = async (data: BillFormValues) => {
-    const tmp: Bill = {
+    const tmp: BillCreateRequest = {
       ...data,
-      lines: data.lines.map((line: BillLine, index: number) => ({
+      lines: data.lines.map((line, index) => ({
         billId: line.billId,
         description: line.description,
         name: line.name,
         type: line.type,
         line: index + 1,
-        price: line.price ? Number(`${line.price}`) : null,
-        quantity: line.quantity ? Number(`${line.quantity}`) : null,
+        price: line.price ? Number(`${line.price}`) : undefined,
+        quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
       })),
     }
     try {
-      const res = await BillApi.createOrUpdate(tmp)
-      reset(res)
-      onSubmitSuccess(res)
+      if (bill.id) {
+        const res = await BillApi.update({ ...tmp, id: bill.id })
+        reset(res)
+        onSubmitSuccess(res)
+
+      } else {
+        const res = await BillApi.create(tmp)
+        reset(res)
+        onSubmitSuccess(res)
+      }
       toast.success(t('bills.form.submit.success'))
     } catch {
       toast.error(t('genericFormError'))
@@ -72,23 +80,22 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
   const disabled = useMemo(() => !!(bill.id && bill.status !== BillStatusEnum.DRAFT), [bill])
 
   const customerOptions = useMemo(() => {
-    const array = []
     if (customers) {
-      array.push(
-        ...customers
-          .filter(({ deleted }) => !deleted)
-          .map(customer => ({
-            value: customer.id,
-            label: customer.name,
-          })),
-      )
-    }
-    if (bill.customerId && !array.find(({ value }) => value === bill.customerId)) {
-      const customer = customers.find(({ id }) => id === bill.customerId)
-      if (customer) array.push({ value: customer.id, label: customer.name })
+      const filteredCustomers = customers
+        .filter(({ deleted }) => !deleted)
+        .map(customer => ({
+          value: customer.id,
+          label: customer.name,
+        }))
+      if (bill.customerId && !filteredCustomers.find(({ value }) => value === bill.customerId)) {
+        const customer = customers.find(({ id }) => id === bill.customerId)
+        if (customer) filteredCustomers.push({ value: customer.id, label: customer.name })
+      }
+
+      return filteredCustomers
     }
 
-    return array
+    return []
   }, [customers, bill])
 
   useEffect(() => {
@@ -190,13 +197,13 @@ const BillForm = ({ bill, onSubmitSuccess }: BillFormProps) => {
             <Button
               size="md"
               type="button"
-              onClick={updateBillStatus(BillStatusEnum.PAYMENT_PAID)}
+              onClick={updateBillStatus(BillStatusEnum.TO_DECLARE)}
             >
-              <span>{t('bills.form.actions.paid')}</span>
+              <span>{t('bills.form.actions.toDeclare')}</span>
             </Button>
           </>
         ) : null}
-        {bill.status === BillStatusEnum.PAYMENT_PAID ? (
+        {bill.status === BillStatusEnum.TO_DECLARE ? (
           <Button
             size="md"
             type="button"

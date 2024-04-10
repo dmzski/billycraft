@@ -37,18 +37,15 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
       case BillStatusEnum.SENT:
         return [
           BillStatusEnum.REFUSED,
-          BillStatusEnum.PAYMENT_PAID,
           BillStatusEnum.TO_DECLARE,
           BillStatusEnum.ARCHIVED,
         ]
       case BillStatusEnum.REFUSED:
         return [BillStatusEnum.DRAFT, BillStatusEnum.ARCHIVED]
-      case BillStatusEnum.PAYMENT_PAID:
-        return [BillStatusEnum.TO_DECLARE, BillStatusEnum.ARCHIVED]
-      case BillStatusEnum.DRAFT:
-        return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.TO_DECLARE:
         return [BillStatusEnum.ARCHIVED]
+      default:
+        return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
     }
   }, [bill])
 

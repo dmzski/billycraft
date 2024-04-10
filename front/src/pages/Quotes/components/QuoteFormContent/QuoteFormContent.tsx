@@ -1,5 +1,5 @@
 import { Input, Select } from '@coco-ui/core'
-import { useMemo } from 'react'
+import { ComponentProps, useMemo } from 'react'
 import { useController, useFormContext } from 'react-hook-form'
 import { Prompt } from 'react-router-dom'
 import useCustomers from '@/hooks/useCustomers'
@@ -19,8 +19,8 @@ export const QuoteFormContent = ({ quote }: QuoteFormProps) => {
   const customers = useCustomers()
   const { control, formState: { isDirty, isSubmitting, disabled } } = useFormContext<QuoteFormValues>()
 
-  const customerOptions = useMemo(() => {
-    const array = []
+  const customerOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
+    const array: ComponentProps<typeof Select>['options'] = []
     if (customers) {
       array.push(
         ...customers

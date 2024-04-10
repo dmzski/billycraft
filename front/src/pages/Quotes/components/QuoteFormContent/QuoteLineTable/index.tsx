@@ -1,6 +1,6 @@
 import { Button, Select } from '@coco-ui/core'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
-import { ComponentProps, useMemo, useState } from 'react'
+import { ComponentProps, useMemo, useRef, useState } from 'react'
 import { Control, useFieldArray } from 'react-hook-form'
 import QuoteLineTableLine from './Row'
 import { PlusIcon } from '@heroicons/react/24/solid'
@@ -15,7 +15,7 @@ const defaultLine = {
   name: '',
   price: 0,
   quantity: 0,
-  type: LineTypeEnum.ARTICLE,
+  type: LineTypeEnum.TEXT,
 }
 
 const QuoteLineTable = ({
@@ -26,7 +26,8 @@ const QuoteLineTable = ({
   control: Control<QuoteFormValues>
 }) => {
   const { t } = useI18n()
-  const productsQuery = useAllProductsQuery()
+  const selectExistingProductRef = useRef<HTMLInputElement>(null)
+  const { data: allProducts } = useAllProductsQuery()
   const [productIdSelected, setProductIdSelected] = useState<number>()
 
   const onProductSelectedChange = (option: string) => {
@@ -40,44 +41,39 @@ const QuoteLineTable = ({
 
   const onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'] = event => {
     if (
-      !event.over.id ||
-      !event.active.id ||
-      !event.active.data.current.lineIndex === undefined ||
-      !event.over.data.current.lineIndex === undefined
+      event.over?.id &&
+      event.active.id &&
+      event.active.data.current?.lineIndex !== undefined &&
+      event.over.data.current?.lineIndex !== undefined
     ) {
-      return
+      move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
     }
 
-    move(event.active.data.current.lineIndex, event.over.data.current.lineIndex)
+    return
   }
 
   const addLine = (newLine = defaultLine) => {
     append({ ...newLine, quoteId: '', line: fields.length, id: '' })
-    document.getElementById('root')?.scrollTo({
-      behavior: 'smooth',
-      top: document.getElementById('root')?.scrollHeight,
-    })
   }
   const productOptions = useMemo(() => {
-    if (productsQuery.data) {
-      return productsQuery.data.map(product => ({
+    if (allProducts) {
+      return allProducts.map(product => ({
         value: product.id,
         label: product.name,
       }))
     }
     return []
-  }, [productsQuery.data])
+  }, [allProducts])
 
   const addExistingProductSelected = () => {
-    if (productIdSelected && productsQuery.data) {
+    if (productIdSelected && allProducts) {
       addLine({
         ...defaultLine,
-        ...(productsQuery.data.find(product => product.id === productIdSelected) ?? {}),
+        ...(allProducts.find(product => product.id === productIdSelected) ?? {}),
       })
       setProductIdSelected(undefined)
-      document.getElementById('root')?.scrollTo({
-        behavior: 'smooth',
-        top: document.getElementById('root')?.scrollHeight,
+      setTimeout(() => {
+        selectExistingProductRef.current?.focus()
       })
     }
   }
@@ -87,7 +83,7 @@ const QuoteLineTable = ({
       {!disabled ? (
         <div className="grid md:grid-cols-4 items-end gap-4">
           <Select
-            tabIndex={0}
+            ref={selectExistingProductRef}
             className="md:col-span-3"
             name="existing-product"
             id="existing-product"
@@ -103,16 +99,7 @@ const QuoteLineTable = ({
           </Button>
         </div>
       ) : null}
-      <div>
-        <div className="rounded bg-base-300 grid md:grid-cols-12 gap-2 p-4 mb-1">
-          <div className="pl-4 md:col-span-2">{t('quotes.form.lines.headers.type')}</div>
-          <div className="md:col-span-3">{t('quotes.form.lines.headers.name')}</div>
-          <div className="md:col-span-3">{t('quotes.form.lines.headers.description')}</div>
-          <div className="md:col-span-1">{t('quotes.form.lines.headers.quantity')}</div>
-          <div className="md:col-span-1">{t('quotes.form.lines.headers.etPrice')}</div>
-          <div className="md:col-span-1">{t('quotes.form.lines.headers.itPrice')}</div>
-          <div className="md:col-span-1">{t('quotes.form.lines.headers.subTotal')}</div>
-        </div>
+      <div className='flex flex-col'>
         <DndContext onDragEnd={onDragEnd}>
           <SortableContext items={fields}>
             {fields?.map((line, index) => (

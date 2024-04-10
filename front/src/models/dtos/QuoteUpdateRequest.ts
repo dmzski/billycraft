@@ -3,10 +3,10 @@ import { QuoteStatusEnum } from "../Quote"
 
 export type QuoteUpdateRequestLine = {
   line: number
-  quantity?: number | null
-  price?: number | null
+  quantity?: number
+  price?: number
   name: string
-  description?: string | null
+  description?: string
   type: LineTypeEnum
 }
 

@@ -72,6 +72,5 @@ export const isQuoteMinimumAccepted = ({ status }: Quote): boolean =>
   [
     QuoteStatusEnum.ARCHIVED,
     QuoteStatusEnum.ACCEPTED,
-    QuoteStatusEnum.DEPOSIT_ASK,
-    QuoteStatusEnum.DEPOSIT_PAID,
+    QuoteStatusEnum.DEPOSIT_ASK
   ].includes(status)

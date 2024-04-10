@@ -16,7 +16,8 @@ const UserContext = createContext<UserContextType>({ reload: () => Promise.resol
 type UserProviderProps = {
   children: ReactNode
 }
-const UserProvider = ({ children }: UserProviderProps) => {
+
+export const UserProvider = ({ children }: UserProviderProps) => {
   const { isAuthenticated } = useAuth()
   const { data: user, reload: reloadUser } = useMyInformationQuery({
     enabled: isAuthenticated,
@@ -44,6 +45,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
-const useUser = (): UserContextType => useContext(UserContext)
-
-export { UserProvider, useUser }
+// eslint-disable-next-line react-refresh/only-export-components
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext)
+  if (!context) {
+    throw new Error('useUser must be used inside UserProvider')
+  }
+  return context
+}

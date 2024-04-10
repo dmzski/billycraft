@@ -17,8 +17,8 @@ export const OutgoingApi = {
         date: formatRFC3339(date),
       })}`,
     ),
-  create: (request: OutgoingRequest): Promise<OutgoingResponse> =>
-    HttpClient.POST(`${OUTGOING_URL}`, request),
-  update: (id: string, request: OutgoingRequest): Promise<OutgoingResponse> =>
-    HttpClient.PATCH(`${OUTGOING_URL}/${id}`, request),
+  create: (request: OutgoingRequest) =>
+    HttpClient.POST<OutgoingResponse>(`${OUTGOING_URL}`, request),
+  update: (id: string, request: OutgoingRequest) =>
+    HttpClient.PATCH<OutgoingResponse>(`${OUTGOING_URL}/${id}`, request),
 }

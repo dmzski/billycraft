@@ -6,6 +6,7 @@ export default {
   dataloaderError:
     'Une erreur est survenue lors de la récupération de vos données, veuillez réessayer ou contactez le support',
   genericFormError: 'Une erreur est survenue, veuillez réessayer ou contactez le support',
+  genericDataLoadError: 'Une erreur est survenue, veuillez recharger la page ou contactez le support',
   supportPrefix: 'Support : ',
   etTotal: 'Total HT',
   itTotal: 'Total TTC',
@@ -250,7 +251,7 @@ export default {
   'bills.form.submit.success': 'Facture enregistrée',
   'bills.form.submit.edit.success': 'État de la facture mis à jour',
   'bills.form.actions.sent': 'Facture envoyée',
-  'bills.form.actions.paid': 'Facture payée',
+  'bills.form.actions.toDeclare': 'A déclarer',
   'bills.form.actions.refused': 'Facture refusée',
   'bills.form.actions.archive': 'Archiver la facture',
   // Bills > Form > LineTable

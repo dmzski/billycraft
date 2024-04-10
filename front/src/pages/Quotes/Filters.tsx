@@ -30,7 +30,6 @@ const QuoteFilterContainer = ({
         QuoteStatusEnum.SENT,
         QuoteStatusEnum.ACCEPTED,
         QuoteStatusEnum.DEPOSIT_ASK,
-        QuoteStatusEnum.DEPOSIT_PAID,
         QuoteStatusEnum.REFUSED,
       ]
         .sort()

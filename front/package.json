@@ -9,7 +9,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@heroicons/react": "^2.1.1",
     "@react-hook/media-query": "^1.1.1",
-    "@scaleway/use-dataloader": "^5.0.0",
+    "@scaleway/use-dataloader": "5.0.0",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
     "clsx": "^1.2.1",

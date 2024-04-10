@@ -100,87 +100,111 @@ const QuoteLineTableLine = ({
 
   return (
     <div
-      className="bg-base-100 grid md:grid-cols-12 mb-2 p-2 gap-2"
+      className="flex items-center gap-2 border-b pb-4"
       ref={setNodeRef}
       style={style}
       {...attributes}
     >
-      <div className="flex md:col-span-2">
-        <div className="items-center flex p-2" {...listeners}>
-          <ArrowsUpDownIcon className="w-5" />
+      <Button variant="ghost" className='h-full' {...listeners}>
+        <ArrowsUpDownIcon className="w-5" />
+      </Button>
+      <div className='flex flex-col flex-grow gap-4'>
+        <div className='flex items-end gap-4'>
+          <Select
+            label="Type"
+            className='flex-grow'
+            disabled={disabled}
+            required
+            error={typeFieldState.invalid}
+            value={typeField.value}
+            onChange={type => {
+              typeField.onChange(type as LineTypeEnum)
+              if (type === LineTypeEnum.TEXT) {
+                priceField.onChange(0)
+                quantityField.onChange(0)
+              }
+            }}
+            ref={typeField.ref}
+            options={typeOptions}
+            name={typeField.name}
+            id={`${typeField.name}-select`}
+          />
+          {!disabled ? (
+            <Button variant="error" outline onClick={deleteLine}>
+              <TrashIcon className="w-5" />
+            </Button>
+          ) : null}
         </div>
-        <Select
-          className="min-w-0"
-          disabled={disabled}
-          error={typeFieldState.invalid}
-          value={typeField.value}
-          onChange={type => typeField.onChange(type as LineTypeEnum)}
-          ref={typeField.ref}
-          options={typeOptions}
-          name={typeField.name}
-          id={`${typeField.name}-select`}
-        />
-      </div>
-      <Input
-        required
-        placeholder={t('quotes.form.lines.fields.name.placeholder')}
-        className="md:col-span-3"
-        disabled={disabled}
-        value={nameField.value}
-        onChange={nameField.onChange}
-        onBlur={nameField.onBlur}
-        name={nameField.name}
-        error={nameFieldState.invalid}
-        ref={nameField.ref}
-      />
-      <TextArea
-        placeholder={t('quotes.form.lines.fields.description.placeholder')}
-        className="md:col-span-3"
-        rows={1}
-        disabled={disabled}
-        value={descriptionField.value}
-        onChange={descriptionField.onChange}
-        onBlur={descriptionField.onBlur}
-        name={descriptionField.name}
-        ref={descriptionField.ref}
-      />
-      <Input
-        disabled={disabled}
-        className="md:col-span-1"
-        placeholder={t('quotes.form.lines.fields.quantity.placeholder')}
-        type="number"
-        step={0.01}
-        name={quantityField.name}
-        value={quantityField.value}
-        onChange={quantityField.onChange}
-        onBlur={event => {
-          quantityField.onChange(Number((event.target as HTMLInputElement).value) || 0)
-          quantityField.onBlur()
-        }}
-        ref={quantityField.ref}
-      />
-      <Input
-        className="md:col-span-1"
-        disabled={disabled}
-        placeholder={t('quotes.form.lines.fields.etPrice.placeholder')}
-        type="number"
-        step={0.01}
-        value={priceField.value}
-        onChange={priceField.onChange}
-        onBlur={event => {
-          priceField.onChange(Number((event.target as HTMLInputElement).value) || 0)
-          priceField.onBlur()
-        }}
-        ref={priceField.ref}
-      />
-      <div className="flex items-center">{formatPrice(priceTTC)}</div>
-      <div className="pr-2 flex items-center justify-between">
-        <div className="flex-grow">{formatPrice(totalTTC)}</div>
-        {!disabled ? (
-          <Button variant="ghost" className="text-error" square size="sm" onClick={deleteLine}>
-            <TrashIcon className="w-5" />
-          </Button>
-        ) : null}
+        <div className='grid md:grid-cols-12 gap-4'>
+          <div className='md:col-span-6 flex flex-col gap-2'>
+            <Input
+              label="Nom"
+              required
+              placeholder={t('quotes.form.lines.fields.name.placeholder')}
+              className="md:col-span-6"
+              disabled={disabled}
+              value={nameField.value}
+              onChange={nameField.onChange}
+              onBlur={nameField.onBlur}
+              name={nameField.name}
+              error={nameFieldState.invalid}
+              ref={nameField.ref}
+            />
+            <TextArea
+              placeholder={t('quotes.form.lines.fields.description.placeholder')}
+              className="md:col-span-6"
+              rows={1}
+              disabled={disabled}
+              value={descriptionField.value}
+              onChange={descriptionField.onChange}
+              onBlur={descriptionField.onBlur}
+              name={descriptionField.name}
+              ref={descriptionField.ref}
+            />
+          </div>
+          <Input
+            label="Quantité"
+            disabled={disabled || typeField.value === LineTypeEnum.TEXT}
+            className="md:col-span-1"
+            placeholder={t('quotes.form.lines.fields.quantity.placeholder')}
+            type="number"
+            step={0.01}
+            name={quantityField.name}
+            value={quantityField.value}
+            onChange={quantityField.onChange}
+            onBlur={event => {
+              quantityField.onChange(Number((event.target as HTMLInputElement).value) || 0)
+              quantityField.onBlur()
+            }}
+            ref={quantityField.ref}
+          />
+          <Input
+            label="Prix HT"
+            className="md:col-span-2"
+            disabled={disabled || typeField.value === LineTypeEnum.TEXT}
+            placeholder={t('quotes.form.lines.fields.etPrice.placeholder')}
+            type="number"
+            step={0.01}
+            value={priceField.value}
+            onChange={priceField.onChange}
+            onBlur={event => {
+              priceField.onChange(Number((event.target as HTMLInputElement).value) || 0)
+              priceField.onBlur()
+            }}
+            ref={priceField.ref}
+          />
+          <Input
+            label="Prix TTC"
+            readOnly
+            value={formatPrice(priceTTC)}
+          />
+          <Input
+            className='md:col-span-2'
+            label="Sous total TTC"
+            readOnly
+            value={formatPrice(totalTTC)}
+          />
+        </div>
       </div>
     </div>
   )

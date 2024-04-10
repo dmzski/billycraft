@@ -16,8 +16,32 @@ import CustomerSwitch from './Customers/CustomerSwitch'
 import SupplierSwitch from './Suppliers/SupplierSwitch'
 import { Login } from './Auth/Login'
 import { Register } from './Auth/Register'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
-const PrivateSwitch = () => {
+type PathComponentTuple = [string, () => JSX.Element]
+
+const UNAUTHENTIFIED_ROUTES: PathComponentTuple[] = [
+  [ROUTES.LOGIN.path, Login],
+  [ROUTES.REGISTER.path, Register],
+]
+
+const ONBOARDING_ROUTES: PathComponentTuple[] = [
+  [ROUTES.ONBOARDING.path, Onboarding]
+]
+
+const APP_ROUTES: PathComponentTuple[] = [
+  [ROUTES.ACCOUNTINGS.path, AccountingSwitch],
+  [ROUTES.QUOTES.path, QuoteSwitch],
+  [ROUTES.BILLS.path, BillSwitch],
+  [ROUTES.CUSTOMERS.path, CustomerSwitch],
+  [ROUTES.SUPPLIERS.path, SupplierSwitch],
+  [ROUTES.DASHBOARD.path, Dashboard],
+  [ROUTES.PRODUCTS.path, ProductsPage],
+  [ROUTES.SETTINGS.path, Settings],
+  [ROUTES.HISTORY.path, History],
+]
+
+export const MainSwitch = () => {
   const { organization, user } = useUser()
   const { isAuthenticated, isInitializing } = useAuth()
 
@@ -28,8 +52,12 @@ const PrivateSwitch = () => {
   if (!isAuthenticated) {
     return (
       <Switch>
-        <Route path={ROUTES.LOGIN.path} component={Login} />
-        <Route path={ROUTES.REGISTER.path} component={Register} />
+        {UNAUTHENTIFIED_ROUTES.map(([path, RouteComponent]) => (
+          <Route key={path} path={path} render={() => (
+            <ErrorBoundary>
+              <RouteComponent />
+            </ErrorBoundary>
+          )} />))}
         <Route render={() => <Redirect to={ROUTES.LOGIN.path} />} />
       </Switch>
     )
@@ -48,27 +76,27 @@ const PrivateSwitch = () => {
   if (user && user.companyId === null) {
     return (
       <Switch>
-        <Route path={ROUTES.ONBOARDING.path} component={Onboarding} />
+        {ONBOARDING_ROUTES.map(([path, RouteComponent]) => (
+          <Route key={path} path={path} render={() => (
+            <ErrorBoundary >
+              <RouteComponent />
+            </ErrorBoundary>
+          )} />))}
         <Route render={() => <Redirect to={ROUTES.ONBOARDING.path} />} />
       </Switch>
     )
   }
   return (
     <Layout>
-      <Switch>
-        <Route path={ROUTES.ACCOUNTINGS.path} component={AccountingSwitch} />
-        <Route path={ROUTES.QUOTES.path} component={QuoteSwitch} />
-        <Route path={ROUTES.BILLS.path} component={BillSwitch} />
-        <Route path={ROUTES.CUSTOMERS.path} component={CustomerSwitch} />
-        <Route path={ROUTES.SUPPLIERS.path} component={SupplierSwitch} />
-        <Route path={ROUTES.DASHBOARD.path} component={Dashboard} />
-        <Route path={ROUTES.PRODUCTS.path} exact={ROUTES.PRODUCTS.exact} component={ProductsPage} />
-        <Route path={ROUTES.SETTINGS.path} exact={ROUTES.SETTINGS.exact} component={Settings} />
-        <Route path={ROUTES.HISTORY.path} exact={ROUTES.HISTORY.exact} component={History} />
-        <Route render={() => <Redirect to={ROUTES.DASHBOARD.path} />} />
-      </Switch>
+      <ErrorBoundary>
+        <Switch>
+          {APP_ROUTES.map(([path, RouteComponent]) => (
+            <Route key={path} path={path} render={() => (
+              <RouteComponent />
+            )} />))}
+          <Route render={() => <Redirect to={ROUTES.DASHBOARD.path} />} />
+        </Switch>
+      </ErrorBoundary>
     </Layout>
   )
 }
-
-export default PrivateSwitch

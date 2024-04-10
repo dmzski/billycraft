@@ -83,9 +83,11 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
     [titleController.field.value, customerController.field.value, bills],
   )
 
-  const onFormSubmit = ({ billId }) => {
-    onSubmit?.(billId)
-    close()
+  const onFormSubmit = ({ billId }: SelectBillModalFormValues) => {
+    if (billId) {
+      onSubmit?.(billId)
+      close()
+    }
   }
 
   return (

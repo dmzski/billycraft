@@ -6,11 +6,13 @@ import { QuoteFormContent, type QuoteFormValues } from '@/pages/Quotes/component
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 import { FormProvider, useForm } from 'react-hook-form'
+import { QuoteCreateRequest } from '@/models/dtos/QuoteCreateRequest'
 
 const defaultQuote = {
   lines: [],
   tva: 0,
   title: "",
+  customerId: 0
 } as QuoteFormValues
 
 export const Create = () => {
@@ -25,7 +27,7 @@ export const Create = () => {
   })
 
   const onSubmit = async (data: QuoteFormValues) => {
-    const tmp = {
+    const tmp: QuoteCreateRequest = {
       ...data,
       lines: data.lines.map((line, index: number) => ({
         name: line.name,
@@ -33,8 +35,8 @@ export const Create = () => {
         type: line.type,
         description: line.description,
         line: index + 1,
-        price: line.price ? Number(`${line.price}`) : null,
-        quantity: line.quantity ? Number(`${line.quantity}`) : null,
+        price: line.price ? Number(`${line.price}`) : undefined,
+        quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
       })),
     }
     try {
@@ -61,16 +63,16 @@ export const Create = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <QuoteFormContent />
+          <Button
+            size="md"
+            type="submit"
+            disabled={!methods.formState.isValid || methods.formState.isSubmitting}
+            variant="primary"
+          >
+            {t('quotes.form.submit')}
+          </Button>
         </form>
       </FormProvider>
-      <Button
-        size="md"
-        type="submit"
-        disabled={!methods.formState.isValid || methods.formState.isSubmitting}
-        variant="primary"
-      >
-        {t('quotes.form.submit')}
-      </Button>
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { useController, useForm } from 'react-hook-form'
 import clsx from 'clsx'
 import Product from '@/models/Product'
 import { ProductApi } from '@/api/ProductApi'
-import { MouseEvent, useEffect, useMemo, useState } from 'react'
+import { MouseEvent, useMemo, useState } from 'react'
 import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
@@ -39,19 +39,14 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
   const { t } = useI18n()
   const { reload } = useAllProductsQuery({ enabled: false })
   const [mode, setMode] = useState(isNew ? MODES.EDIT : MODES.READ)
-  const initialValues = useMemo(
-    () => ({
-      ...defaultProduct
-    }),
-    [],
-  )
+
   const {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting, disabled },
     reset,
   } = useForm<ProductFormValues>({
-    values: initialValues,
+    values: product ?? defaultProduct,
     mode: 'onChange',
     shouldUnregister: true,
     disabled: mode !== MODES.EDIT && !isNew
@@ -102,12 +97,6 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
     label: type.name,
   })), [])
 
-  useEffect(() => {
-    if (product?.id) {
-      reset(product)
-    }
-  }, [product, reset])
-
   const { field: typeField, fieldState: typeFieldState } = useController({ control, name: "type", rules: { required: true } })
   const { field: nameField, fieldState: nameFieldState } = useController({ control, name: "name", rules: { required: true, minLength: 1 } })
   const { field: descriptionField, fieldState: descriptionFieldState } = useController({ control, name: "description" })
@@ -157,6 +146,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
       </div>
       <div className="md:col-span-2 flex relative">
         <Input
+          className='min-w-0'
           name={priceField.name}
           value={priceField.value}
           onChange={priceField.onChange}
@@ -169,16 +159,8 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
           step={0.1}
           error={priceFieldState.invalid}
         />
-        <span
-          className={clsx(
-            'right-0 inset-y-2 absolute flex items-center',
-            disabled ? 'bg-base-200' : 'bg-base-100',
-          )}
-        >
-          €
-        </span>
       </div>
-      <div className="md:col-span-1 flex justify-end">
+      <div className="flex justify-end">
         {(mode === MODES.DELETE && !isNew) && disabled ? (
           <div className="flex relative gap-2">
             <Button type="button" variant="success" square onClick={onDelete}>
@@ -190,7 +172,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
           </div>
         ) : null}
         {!disabled ? (
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-end">
             <Button type="submit" square variant="success" disabled={!isValid || isSubmitting}>
               <CheckIcon className="w-5" />
             </Button>
@@ -202,7 +184,7 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
           </div>
         ) : null}
         {(mode === MODES.READ && !isNew) && disabled ? (
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-end">
             <Button outline type="button" onClick={toggleEditMode} variant="primary" square>
               <PencilIcon className="w-5" />
             </Button>

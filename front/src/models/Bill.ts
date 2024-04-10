@@ -5,7 +5,6 @@ export enum BillStatusEnum {
   SENT = 'SENT',
   ACCEPTED = 'ACCEPTED',
   REFUSED = 'REFUSED',
-  PAYMENT_PAID = 'PAYMENT_PAID',
   TO_DECLARE = 'TO_DECLARE',
   ARCHIVED = 'ARCHIVED',
 }
@@ -13,10 +12,10 @@ export enum BillStatusEnum {
 export type BillLine = {
   billId: string
   line: number
-  quantity?: number | null
-  price?: number | null
+  quantity?: number
+  price?: number
   name: string
-  description?: string | null
+  description?: string
   type: LineTypeEnum
 }
 
@@ -31,7 +30,7 @@ type Bill = {
   createdBy: string
   companyId: number
   customerId: number
-  fileName: null
+  fileName?: string
   lines: BillLine[]
   quoteId: string
 }

@@ -13,18 +13,24 @@ type CreateReportModalProps = {
 
 type CreateReportFormProps = Omit<CreateReportModalProps, 'disclosure'>
 
+type CreateReportFormValues = {
+  startDate: string,
+  endDate: string,
+  name: string
+}
+
 const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
   const { t } = useI18n()
   const {
     control,
     handleSubmit,
     formState: { isValid, isSubmitting },
-  } = useForm({
+  } = useForm<CreateReportFormValues>({
     mode: 'onChange',
   })
   const toast = useToast()
 
-  const onSubmit = async ({ startDate, endDate, name }) => {
+  const onSubmit = async ({ startDate, endDate, name }: CreateReportFormValues) => {
     try {
       const data = {
         name,
@@ -85,7 +91,7 @@ const CreateReportModal = ({ onSubmitSuccess, disclosure }: CreateReportModalPro
     {({ close }) => (
       <CreateReportForm
         onSubmitSuccess={async () => {
-          await onSubmitSuccess()
+          await onSubmitSuccess?.()
           close()
         }}
       />

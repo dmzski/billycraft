@@ -11,6 +11,7 @@ const ProductsPage = () => {
   const sortedData = data?.sort((a: Product, b: Product) =>
     a.name.localeCompare(b.name),
   ) ?? []
+
   return (
     <>
       <h2 className="text-3xl">{t('products.list.title')}</h2>

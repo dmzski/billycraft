@@ -1,11 +1,11 @@
 import { BrowserRouter } from 'react-router-dom'
 import MainProvider from './providers/MainProvider'
-import PrivateSwitch from './pages/PrivateSwitch'
+import { MainSwitch } from './pages/MainSwitch'
 
 const App = () => (
   <BrowserRouter>
     <MainProvider>
-      <PrivateSwitch />
+      <MainSwitch />
     </MainProvider>
   </BrowserRouter>
 )

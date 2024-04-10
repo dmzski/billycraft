@@ -27,7 +27,6 @@ const BillFilterContainer = ({
       ...[
         BillStatusEnum.DRAFT,
         BillStatusEnum.SENT,
-        BillStatusEnum.PAYMENT_PAID,
         BillStatusEnum.TO_DECLARE,
         BillStatusEnum.REFUSED,
       ]

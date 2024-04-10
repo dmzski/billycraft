@@ -20,7 +20,7 @@ const ReportCardVariants = {
 } as const
 
 type ReportCardProps = {
-  icon: ComponentType<{ className: string }>
+  icon: ComponentType<{ className?: string }>
   title: string
   children?: ReactNode
   variant?: keyof typeof ReportCardVariants
