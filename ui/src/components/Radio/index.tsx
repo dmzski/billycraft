@@ -21,10 +21,7 @@ const classes = {
   error: 'radio-error',
 } as const
 
-export type RadioProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'type'
-> & {
+export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   children?: ReactNode
   className?: string
   error?: boolean
@@ -46,25 +43,16 @@ const Radio = ({
     const variantClasses = variant ? classes.variants[variant] : ''
     const sizeClasses = size ? classes.sizes[size] : ''
 
-    return clsx(
-      classes.base,
-      error && classes.error,
-      !error && variantClasses,
-      sizeClasses
-    )
+    return clsx(classes.base, error && classes.error, !error && variantClasses, sizeClasses)
   }, [variant, size])
 
   if (children)
     return (
       <div className={clsx('form-control', className)}>
         <label className="label cursor-pointer gap-2">
-          {labelPosition === 'left' ? (
-            <span className="label-text">{children}</span>
-          ) : null}
+          {labelPosition === 'left' ? <span className="label-text">{children}</span> : null}
           <input {...props} type="radio" className={computedClasses} />
-          {labelPosition !== 'left' ? (
-            <span className="label-text">{children}</span>
-          ) : null}
+          {labelPosition !== 'left' ? <span className="label-text">{children}</span> : null}
         </label>
       </div>
     )

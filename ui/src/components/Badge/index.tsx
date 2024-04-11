@@ -23,32 +23,19 @@ const classes = {
 } as const
 
 export type BadgeProps = {
-  size?: keyof typeof classes['sizes']
+  size?: keyof (typeof classes)['sizes']
   className?: string
   children?: ReactNode
-  variant?: keyof typeof classes['variants']
+  variant?: keyof (typeof classes)['variants']
   outline?: boolean
 }
 
-const Badge = ({
-  children,
-  className,
-  size = 'md',
-  outline,
-  variant,
-  ...props
-}: BadgeProps) => {
+const Badge = ({ children, className, size = 'md', outline, variant, ...props }: BadgeProps) => {
   const badgeClassName = useMemo(() => {
     const sizeClass = size ? classes.sizes[size] : ''
     const variantClass = variant ? classes.variants[variant] : ''
 
-    return clsx(
-      variantClass,
-      classes.base,
-      sizeClass,
-      outline && classes.outline,
-      className
-    )
+    return clsx(variantClass, classes.base, sizeClass, outline && classes.outline, className)
   }, [size, variant, className])
 
   return (

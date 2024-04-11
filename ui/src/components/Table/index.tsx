@@ -10,17 +10,20 @@ export type TableProps = {
   className?: string
   pinRows?: boolean
   pinCols?: boolean
-  size?: "xs" | "sm" | "md" | "lg"
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   zebra?: boolean
-
 }
 const Table = ({ children, className, pinRows, zebra, size, pinCols, ...props }: TableProps) => {
-  const finalClassNames = clsx('table', {
-    'table-pin-rows': pinRows,
-    'table-pin-cols': pinCols,
-    'table-zebra': zebra,
-  }, size ? `table-${size}` : "",
-    className)
+  const finalClassNames = clsx(
+    'table',
+    {
+      'table-pin-rows': pinRows,
+      'table-pin-cols': pinCols,
+      'table-zebra': zebra,
+    },
+    size ? `table-${size}` : '',
+    className,
+  )
   return (
     <table className={finalClassNames} {...props}>
       {children}
@@ -38,7 +41,7 @@ type TableCellProps = HTMLAttributes<HTMLTableCellElement> & {
 }
 const TableCell = (
   { children, ...props }: TableCellProps,
-  ref: ForwardedRef<HTMLTableCellElement>
+  ref: ForwardedRef<HTMLTableCellElement>,
 ) => (
   <td ref={ref} {...props}>
     {children}

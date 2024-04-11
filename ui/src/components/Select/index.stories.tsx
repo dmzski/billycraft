@@ -7,7 +7,7 @@ export default {
   title: 'Components/Select',
   component: Select,
   args: {
-    variant: 'inside',
+    className: 'flex-grow',
   },
 }
 
@@ -24,19 +24,14 @@ const fakeOptions = [
 
 type Story = StoryObj<typeof Select>
 
-const render: Story['render'] = (props) => {
+const render: Story['render'] = props => {
   const ref = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState<ValueType>()
 
   return (
-    <div className="flex gap-2 items-center">
-      <Select
-        {...props}
-        value={value}
-        onChange={(result) => setValue(result)}
-        ref={ref}
-      />
-      <div>Value is : {value}</div>
+    <div className="min-h-44 flex gap-2 flex-row justify-start">
+      <Select {...props} value={value} onChange={result => setValue(result)} ref={ref} />
+      <div className="w-32 flex pt-3">Value is : {value}</div>
     </div>
   )
 }
@@ -44,30 +39,24 @@ const render: Story['render'] = (props) => {
 export const Basic: Story = {
   render,
   args: {
-    options: fakeOptions
+    options: fakeOptions,
   },
-  decorators: [
-    (Component) => (
-      <div style={{ minHeight: '10rem' }} className="w-full items-start flex">
-        <Component />
-      </div>
-    ),
-  ]
+  decorators: [Component => <Component />],
 }
 
 export const Searchable: Story = {
   render,
   args: {
     isSearchable: true,
-    options: fakeOptions
+    options: fakeOptions,
   },
   decorators: [
-    (Story) => (
+    Story => (
       <>
         <Story />
       </>
     ),
-  ]
+  ],
 }
 
 export const Labeled: Story = {
@@ -75,7 +64,7 @@ export const Labeled: Story = {
   args: {
     label: 'My awesome label',
     options: fakeOptions,
-  }
+  },
 }
 
 export const Multi: Story = {
@@ -84,11 +73,29 @@ export const Multi: Story = {
     label: 'Multi select',
     options: fakeOptions,
     isMulti: true,
-  }
+  },
+}
+
+export const CustomRender: Story = {
+  render,
+  args: {
+    label: 'Select option 1, 2, or 5',
+    options: [
+      { label: 'Option 1', value: 1, render: 'Custom 1' },
+      { label: 'Option 2', value: 2, render: 'Custom 2' },
+      { label: 'Option 3', value: 3 },
+      { label: 'Option 4', value: 4 },
+      {
+        label: 'Option 5 is a very very very very very very very very long string',
+        value: 5,
+        render: 'Option 5',
+      },
+    ],
+  },
 }
 
 export const Controlled: Story = {
-  render: (props) => {
+  render: props => {
     const [value, setValue] = useState<number | undefined>(1)
 
     const handleReset = () => {
@@ -103,14 +110,14 @@ export const Controlled: Story = {
           {...props}
           value={value}
           isSearchable
-          onChange={(result) => setValue(result as number)}
+          onChange={result => setValue(result as number)}
         />
         <p>Value is {JSON.stringify(value)}</p>
       </div>
     )
   },
   args: {
-    "aria-label": 'My awesome label',
+    'aria-label': 'My awesome label',
     options: fakeOptions,
-  }
+  },
 }

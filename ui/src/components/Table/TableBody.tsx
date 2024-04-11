@@ -1,4 +1,4 @@
-import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from "react"
+import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from 'react'
 
 export type TableBodyProps = HTMLAttributes<HTMLTableSectionElement> & {
   children: ReactNode
@@ -6,7 +6,7 @@ export type TableBodyProps = HTMLAttributes<HTMLTableSectionElement> & {
 
 const TableBody = (
   { children, ...props }: TableBodyProps,
-  ref: ForwardedRef<HTMLTableSectionElement>
+  ref: ForwardedRef<HTMLTableSectionElement>,
 ) => (
   <tbody ref={ref} {...props}>
     {children}

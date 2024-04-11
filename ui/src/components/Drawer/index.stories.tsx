@@ -11,10 +11,7 @@ export default {
 type Story = StoryObj<typeof Drawer>
 
 export const Basic: Story = {
-  render: ({
-    open,
-    ...props
-  }: DrawerProps) => {
+  render: ({ open, ...props }: DrawerProps) => {
     const [isOpen, setIsOpen] = useState(open)
 
     return (
@@ -25,13 +22,13 @@ export const Basic: Story = {
         <Drawer {...props} open={isOpen} onClose={() => setIsOpen(false)} />
       </>
     )
-  }
-  , args: {
+  },
+  args: {
     children: 'Basic',
     open: false,
     hasBackdrop: true,
     withoutPortal: true,
-  }
+  },
 }
 
 export const Position: Story = {
@@ -84,5 +81,5 @@ export const Position: Story = {
         </Drawer>
       </>
     )
-  }
+  },
 }

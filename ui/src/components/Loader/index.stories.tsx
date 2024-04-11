@@ -8,11 +8,11 @@ export default {
 
 type Story = StoryObj<typeof Loader>
 
-const render: Story['render'] = (args) => <Loader {...args} />
+const render: Story['render'] = args => <Loader {...args} />
 
 export const Basic: Story = {
   render,
   args: {
     size: 'md',
-  }
+  },
 }

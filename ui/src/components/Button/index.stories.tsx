@@ -3,10 +3,9 @@ import Button, { ButtonProps } from '.'
 
 export default {
   title: 'Components/Button',
-  component: Button
+  component: Button,
 }
 type Story = StoryObj<typeof Button>
-
 
 const BUTTON_SIZES = {
   lg: 'btn-lg',
@@ -33,12 +32,12 @@ export const Basic: Story = {
   args: {
     children: 'Basic',
     size: 'md',
-  }
+  },
 }
 
 export const Variants = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
       <Button key={variant} variant={variant as ButtonProps['variant']}>
         {variant}
       </Button>
@@ -48,7 +47,7 @@ export const Variants = () => (
 
 export const Outlined = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
       <Button key={variant} outline variant={variant as ButtonProps['variant']}>
         {variant}
       </Button>
@@ -58,7 +57,7 @@ export const Outlined = () => (
 
 export const Rounded = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
       <Button key={variant} rounded variant={variant as ButtonProps['variant']}>
         {variant.slice(0, 3)}
       </Button>
@@ -68,7 +67,7 @@ export const Rounded = () => (
 
 export const Square = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
       <Button key={variant} square variant={variant as ButtonProps['variant']}>
         X
       </Button>
@@ -78,13 +77,8 @@ export const Square = () => (
 
 export const Block = () => (
   <>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
-      <Button
-        key={variant}
-        className="mt-2"
-        block
-        variant={variant as ButtonProps['variant']}
-      >
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
+      <Button key={variant} className="mt-2" block variant={variant as ButtonProps['variant']}>
         {variant}
       </Button>
     ))}
@@ -93,7 +87,7 @@ export const Block = () => (
 
 export const Sizes = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_SIZES).map((size) => (
+    {Object.keys(BUTTON_SIZES).map(size => (
       <Button key={size} size={size as ButtonProps['size']}>
         {size}
       </Button>
@@ -103,12 +97,8 @@ export const Sizes = () => (
 
 export const Disabled = () => (
   <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map((variant) => (
-      <Button
-        key={variant}
-        variant={variant as ButtonProps['variant']}
-        disabled
-      >
+    {Object.keys(BUTTON_VARIANTS).map(variant => (
+      <Button key={variant} variant={variant as ButtonProps['variant']} disabled>
         {variant}
       </Button>
     ))}

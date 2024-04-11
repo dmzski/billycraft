@@ -1,8 +1,22 @@
 import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 import Badge from '../Badge'
-import { AriaAttributes, ChangeEventHandler, FocusEventHandler, KeyboardEventHandler, ReactNode, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import {
+  AriaAttributes,
+  ChangeEventHandler,
+  FocusEventHandler,
+  KeyboardEventHandler,
+  ReactNode,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
-type RenderSelectedProps = { array: string[]; onDelete: (index: number) => () => void }
+type RenderSelectedProps = {
+  array: string[]
+  onDelete: (index: number) => () => void
+}
 export type TextArrayInputProps = AriaAttributes & {
   onInputChange?: ChangeEventHandler<HTMLInputElement>
   onChange?: (strings: string[]) => void
@@ -22,7 +36,7 @@ export type TextArrayInputProps = AriaAttributes & {
 const defaultRender = ({ array, onDelete }: RenderSelectedProps) =>
   array?.map((string, index) => (
     <Badge key={index} outline variant="primary">
-      <p className='flex gap-1 items-center'>
+      <p className="flex gap-1 items-center">
         <span>{string}</span>
         <XMarkIcon onClick={onDelete(index)} className="w-4 cursor-pointer" />
       </p>
@@ -45,12 +59,12 @@ const TextArrayInput = ({
   const [inputValue, setInputValue] = useState('')
   const [array, setArray] = useState(value ?? [])
 
-  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = event => {
     onInputChange?.(event)
     if (!event.defaultPrevented) setInputValue(event.target.value)
   }
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = event => {
     onKeyDown?.(event)
     if (event.key === 'Enter' && !event.defaultPrevented && inputValue.length) {
       const tmp = [...array]
@@ -59,11 +73,7 @@ const TextArrayInput = ({
       setArray(tmp)
       setInputValue('')
     }
-    if (
-      event.key === 'Backspace' &&
-      !event.defaultPrevented &&
-      inputValue.length === 0
-    ) {
+    if (event.key === 'Backspace' && !event.defaultPrevented && inputValue.length === 0) {
       const tmp = [...array]
       tmp.pop()
       onChange?.(tmp)
@@ -84,12 +94,11 @@ const TextArrayInput = ({
 
   return (
     <div
-      className={`flex w-full border focus-within:border-primary gap-2 p-2 rounded outline-none focus-within:ring-2 ring-primary text-black ${disabled ? 'opacity-50 pointer-event-none' : ''
-        }`}
+      className={`flex w-full border focus-within:border-primary gap-2 p-2 rounded outline-none focus-within:ring-2 ring-primary text-black ${
+        disabled ? 'opacity-50 pointer-event-none' : ''
+      }`}
     >
-      <div className="flex gap-1">
-        {renderSelected({ array, onDelete: handleDelete })}
-      </div>
+      <div className="flex gap-1">{renderSelected({ array, onDelete: handleDelete })}</div>
       <input
         {...props}
         type="text"

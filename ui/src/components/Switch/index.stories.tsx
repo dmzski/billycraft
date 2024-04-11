@@ -8,16 +8,12 @@ export default {
 }
 
 type Story = StoryObj<typeof Switch>
-const render: Story['render'] = ({
-  checked,
-  onChange,
-  ...props
-}) => {
+const render: Story['render'] = ({ checked, onChange, ...props }) => {
   const [isChecked, setIsChecked] = useState(checked)
   return (
     <Switch
       checked={isChecked}
-      onChange={(event) => {
+      onChange={event => {
         setIsChecked(!isChecked)
         onChange?.(event)
       }}
@@ -33,7 +29,7 @@ export const Basic: Story = {
     id: 'test',
     value: 'on',
     className: 'w-fit',
-  }
+  },
 }
 
 export const Position: Story = {
@@ -44,5 +40,5 @@ export const Position: Story = {
     value: 'on',
     labelPosition: 'left',
     className: 'w-fit',
-  }
+  },
 }

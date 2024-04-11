@@ -19,7 +19,7 @@ export type CheckboxProps = {
   labelPosition?: 'left' | 'right'
   checked: boolean
   error?: boolean
-  size?: keyof typeof classes['inputSizes']
+  size?: keyof (typeof classes)['inputSizes']
   'aria-label'?: string
   'aria-labelledby'?: string
   value?: string
@@ -47,7 +47,7 @@ const Checkbox = forwardRef(
       className,
       size,
     }: CheckboxProps,
-    ref: ForwardedRef<HTMLInputElement>
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     return !label ? (
       <input
@@ -56,7 +56,7 @@ const Checkbox = forwardRef(
           !error && classes.input,
           error && classes.inputError,
           size && classes.inputSizes[size],
-          className
+          className,
         )}
         ref={ref}
         type="checkbox"
@@ -70,16 +70,14 @@ const Checkbox = forwardRef(
     ) : (
       <div className={clsx('form-control', className)}>
         <label className={classes.label}>
-          {labelPosition === 'left' ? (
-            <span className={classes.text}>{label}</span>
-          ) : null}
+          {labelPosition === 'left' ? <span className={classes.text}>{label}</span> : null}
           <input
             disabled={disabled}
             id={id}
             className={clsx(
               !error && classes.input,
               error && classes.inputError,
-              size && classes.inputSizes[size]
+              size && classes.inputSizes[size],
             )}
             ref={ref}
             type="checkbox"
@@ -90,13 +88,11 @@ const Checkbox = forwardRef(
             aria-label={ariaLabel}
             onChange={onChange}
           />
-          {labelPosition === 'right' ? (
-            <span className={classes.text}>{label}</span>
-          ) : null}
+          {labelPosition === 'right' ? <span className={classes.text}>{label}</span> : null}
         </label>
       </div>
     )
-  }
+  },
 )
 Checkbox.displayName = 'Checkbox'
 

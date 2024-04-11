@@ -7,7 +7,7 @@ export default {
 }
 
 const fakeDataGenerator = (length: number) => {
-  return Array.from({ length }, (_, i) => i).map((index) => ({
+  return Array.from({ length }, (_, i) => i).map(index => ({
     id: index + 1,
     name: 'Developer ' + (index + 1),
     skill: Math.random() > 0.5 ? 'None' : 'Eat pizza',
@@ -19,11 +19,9 @@ const fakeData = fakeDataGenerator(10)
 export const Basic = () => {
   return (
     <Table>
-      <Table.Head
-        columns={[{ name: 'Id' }, { name: 'Name' }, { name: 'Skill' }]}
-      />
+      <Table.Head columns={[{ name: 'Id' }, { name: 'Name' }, { name: 'Skill' }]} />
       <Table.Body>
-        {fakeData.map((row) => (
+        {fakeData.map(row => (
           <Table.Row key={row.id}>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
@@ -46,7 +44,7 @@ export const Composition = () => {
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {fakeData.map((row) => (
+        {fakeData.map(row => (
           <Table.Row key={row.id}>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
@@ -59,7 +57,7 @@ export const Composition = () => {
 }
 
 export const Sortable = () => {
-  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
+  const { data, sort, onSort } = useTableState<(typeof fakeData)[number]>({
     data: fakeData,
     initialSort: { field: 'id', order: 'asc' },
   })
@@ -79,7 +77,7 @@ export const Sortable = () => {
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {data.map((row) => (
+        {data.map(row => (
           <Table.Row key={row.id}>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
@@ -92,7 +90,7 @@ export const Sortable = () => {
 }
 
 export const Zebra = () => {
-  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
+  const { data, sort, onSort } = useTableState<(typeof fakeData)[number]>({
     data: fakeData,
     initialSort: { field: 'id', order: 'asc' },
   })
@@ -112,7 +110,7 @@ export const Zebra = () => {
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {data.map((row) => (
+        {data.map(row => (
           <Table.Row key={row.id}>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
@@ -125,7 +123,7 @@ export const Zebra = () => {
 }
 
 export const Hoverable = () => {
-  const { data, sort, onSort } = useTableState<typeof fakeData[number]>({
+  const { data, sort, onSort } = useTableState<(typeof fakeData)[number]>({
     data: fakeData,
     initialSort: { field: 'id', order: 'asc' },
   })
@@ -145,7 +143,7 @@ export const Hoverable = () => {
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {data.map((row) => (
+        {data.map(row => (
           <Table.Row key={row.id} hoverable>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
@@ -166,32 +164,19 @@ export const Example = () => {
     <Table>
       <Table.Head>
         <Table.Row>
-          <Table.HeadCell
-            className="w-20"
-            onSort={onSort}
-            sort={sort}
-            sortable="id"
-          >
+          <Table.HeadCell className="w-20" onSort={onSort} sort={sort} sortable="id">
             Id
           </Table.HeadCell>
-          <Table.HeadCell
-            onSort={onSort}
-            sort={sort}
-            sortable="name"
-          >
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="name">
             Name
           </Table.HeadCell>
-          <Table.HeadCell
-            onSort={onSort}
-            sort={sort}
-            sortable="skill"
-          >
+          <Table.HeadCell onSort={onSort} sort={sort} sortable="skill">
             Skill
           </Table.HeadCell>
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {data.map((row) => (
+        {data.map(row => (
           <Table.Row hoverable key={row.id}>
             <Table.Cell>{row.id}</Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>

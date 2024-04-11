@@ -7,12 +7,11 @@ export type TopBarProps = InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const TopBar = ({ children, className, ...props }: TopBarProps) => {
-  const finalClassName = clsx(
-    "navbar",
-    className
-  )
+  const finalClassName = clsx('navbar', className)
   return (
-    <div className={finalClassName} {...props}>{children}</div>
+    <div className={finalClassName} {...props}>
+      {children}
+    </div>
   )
 }
 

@@ -1,22 +1,19 @@
 import clsx from 'clsx'
 import { ButtonHTMLAttributes, LinkHTMLAttributes, ReactNode } from 'react'
 
-const dropdownContentClasses =
-  'dropdown-content menu p-2 shadow bg-base-100 rounded-box z-10'
+const dropdownContentClasses = 'dropdown-content menu p-2 shadow bg-base-100 rounded-box z-10'
 
 export type DropdownProps = {
   children: ReactNode
 }
-type DropdownContentProps =  {
+type DropdownContentProps = {
   children: ReactNode
   className?: string
 }
 type DropdownLinkItemProps = LinkHTMLAttributes<HTMLAnchorElement>
 type DropdownButtonItemProps = ButtonHTMLAttributes<HTMLButtonElement>
 
-const Dropdown = ({ children }: DropdownProps) => (
-  <div className="dropdown">{children}</div>
-)
+const Dropdown = ({ children }: DropdownProps) => <div className="dropdown">{children}</div>
 
 const DropdownContent = ({ children, className }: DropdownContentProps) => {
   return (

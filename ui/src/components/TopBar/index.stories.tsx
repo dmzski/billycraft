@@ -8,10 +8,9 @@ export default {
 type Story = StoryObj<typeof TopBar>
 
 export const Basic: Story = {
-  render: (args) => <TopBar {...args} />,
+  render: args => <TopBar {...args} />,
   args: {
-    children: "Test navbar",
-    className: 'border rounded-box shadow-xl'
-  }
-
+    children: 'Test navbar',
+    className: 'border rounded-box shadow-xl',
+  },
 }

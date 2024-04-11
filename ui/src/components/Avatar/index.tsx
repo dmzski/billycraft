@@ -22,13 +22,7 @@ export type AvatarProps = HTMLAttributes<HTMLImageElement | HTMLDivElement> & {
   alt: string
 }
 
-const Avatar = ({
-  size = 24,
-  src,
-  alt,
-  className,
-  ...props
-}: AvatarProps) => {
+const Avatar = ({ size = 24, src, alt, className, ...props }: AvatarProps) => {
   return src ? (
     <img
       src={src}

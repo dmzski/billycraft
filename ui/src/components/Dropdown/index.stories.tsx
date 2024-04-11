@@ -10,7 +10,7 @@ export default {
 type Story = StoryObj<typeof Dropdown>
 
 export const Basic: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <Dropdown {...args}>
         <Button>Click me</Button>
@@ -19,17 +19,15 @@ export const Basic: Story = {
           <Dropdown.Button>Action</Dropdown.Button>
           <Dropdown.Button>Action</Dropdown.Button>
           <Dropdown.Button>Action</Dropdown.Button>
-          <Dropdown.Button>
-            Action that has a super long content
-          </Dropdown.Button>
+          <Dropdown.Button>Action that has a super long content</Dropdown.Button>
         </Dropdown.Content>
       </Dropdown>
     )
-  }
+  },
 }
 
 export const Customized: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <Dropdown {...args}>
         <Button>Click me</Button>
@@ -38,11 +36,9 @@ export const Customized: Story = {
           <Dropdown.Button>Action</Dropdown.Button>
           <Dropdown.Button>Action</Dropdown.Button>
           <Dropdown.Button>Action</Dropdown.Button>
-          <Dropdown.Button>
-            Action that has a super long content
-          </Dropdown.Button>
+          <Dropdown.Button>Action that has a super long content</Dropdown.Button>
         </Dropdown.Content>
       </Dropdown>
     )
-  }
+  },
 }

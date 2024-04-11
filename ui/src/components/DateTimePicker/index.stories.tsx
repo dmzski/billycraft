@@ -9,24 +9,16 @@ export default {
 
 type Story = StoryObj<typeof DateTimePicker>
 
-const render = ({
-  ...args
-}: DateTimePickerProps) => {
+const render = ({ ...args }: DateTimePickerProps) => {
   const [value, setValue] = useState<Date | undefined>()
-  return (
-    <DateTimePicker
-      {...args}
-      value={value}
-      onChange={(newValue) => setValue(newValue)}
-    />
-  )
+  return <DateTimePicker {...args} value={value} onChange={newValue => setValue(newValue)} />
 }
 
 export const Basic: Story = {
   args: {
     label: 'Basic',
   },
-  render
+  render,
 }
 
 export const Labeled: Story = {
@@ -34,7 +26,7 @@ export const Labeled: Story = {
   args: {
     label: 'Labeled',
     variant: 'outside',
-  }
+  },
 }
 
 export const Disabled: Story = {
@@ -42,7 +34,7 @@ export const Disabled: Story = {
   args: {
     label: 'Disabled',
     disabled: true,
-  }
+  },
 }
 
 export const Error: Story = {
@@ -50,5 +42,5 @@ export const Error: Story = {
   args: {
     label: 'Error',
     error: true,
-  }
+  },
 }

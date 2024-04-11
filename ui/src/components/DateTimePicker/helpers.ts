@@ -6,12 +6,12 @@ export const daysOfWeek = (localeName?: string): Array<string> => {
   let format = new Intl.DateTimeFormat(undefined, { weekday: 'narrow' }).format
   try {
     format = new Intl.DateTimeFormat(localeName, { weekday: 'narrow' }).format
-    return Array.from({ length: 7 }, (_, index) => index).map((day) =>
-      format(new Date(Date.UTC(2021, 5, day)))
+    return Array.from({ length: 7 }, (_, index) => index).map(day =>
+      format(new Date(Date.UTC(2021, 5, day))),
     )
   } catch {
-    return Array.from({ length: 7 }, (_, index) => index).map((day) =>
-      format(new Date(Date.UTC(2021, 5, day)))
+    return Array.from({ length: 7 }, (_, index) => index).map(day =>
+      format(new Date(Date.UTC(2021, 5, day))),
     )
   }
 }
@@ -41,14 +41,12 @@ export const weekOfDate = (date: Date): number => {
  * @param date Base date in month and year
  * @returns Object of weekday index with an array of Dates (undefined if a Date is not present in the weekday in the month)
  */
-export const datesOfMonthAndYear = (
-  date: Date
-): Array<Array<Date | undefined>> => {
+export const datesOfMonthAndYear = (date: Date): Array<Array<Date | undefined>> => {
   const maxWeekNumber = 6
   const numberOfDay = 7
 
   const daysInWeekDay = Array.from({ length: maxWeekNumber }, () =>
-    Array.from({ length: numberOfDay }, () => undefined)
+    Array.from({ length: numberOfDay }, () => undefined),
   ) as Array<Array<Date | undefined>>
 
   const baseDate = new Date(date.getFullYear(), date.getMonth(), 1)

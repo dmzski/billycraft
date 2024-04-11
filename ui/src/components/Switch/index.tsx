@@ -20,10 +20,7 @@ const classes = {
   },
 } as const
 
-export type SwitchProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'type'
-> & {
+export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   variant?: keyof typeof classes.variants
   size?: keyof typeof classes.sizes
   children?: ReactNode
@@ -49,13 +46,9 @@ const Switch = ({
     return (
       <div className={clsx('form-control', className)}>
         <label className="label cursor-pointer gap-2">
-          {labelPosition === 'left' ? (
-            <span className="label-text">{children}</span>
-          ) : null}
+          {labelPosition === 'left' ? <span className="label-text">{children}</span> : null}
           <input {...props} type="checkbox" className={computedClasses} />
-          {labelPosition !== 'left' ? (
-            <span className="label-text">{children}</span>
-          ) : null}
+          {labelPosition !== 'left' ? <span className="label-text">{children}</span> : null}
         </label>
       </div>
     )

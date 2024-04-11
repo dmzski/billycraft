@@ -9,8 +9,8 @@ export default {
 type Story = StoryObj<typeof TextArrayInput>
 
 export const Basic: Story = {
-  render: (args) => <TextArrayInput {...args} />,
+  render: args => <TextArrayInput {...args} />,
   args: {
     value: ['This', 'is', 'awesome'],
-  }
+  },
 }

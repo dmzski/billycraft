@@ -20,11 +20,7 @@ export default {
 type Story = StoryObj<ToastProps>
 
 export const Basic: Story = {
-  render: ({
-    children,
-    duration,
-    variant,
-  }: ToastProps) => {
+  render: ({ children, duration, variant }: ToastProps) => {
     const toast = useToast()
 
     const showToast = () => {
@@ -43,18 +39,16 @@ export const Basic: Story = {
     duration: 3000,
     children: 'Test message',
     variant: undefined,
-  }
+  },
 }
-
 
 export const Variants = {
   render: () => {
     const toast = useToast()
 
-    const showToast =
-      (variant?: ComponentProps<typeof Toast>['variant']) => () => {
-        toast.show(variant ?? 'default', { variant })
-      }
+    const showToast = (variant?: ComponentProps<typeof Toast>['variant']) => () => {
+      toast.show(variant ?? 'default', { variant })
+    }
 
     return (
       <div className="flex flex-col gap-1">
@@ -75,5 +69,5 @@ export const Variants = {
         </Button>
       </div>
     )
-  }
+  },
 }

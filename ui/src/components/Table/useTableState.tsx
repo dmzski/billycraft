@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 export type useTableStateProps<T extends object> = {
   data: T[]
@@ -11,14 +11,15 @@ export type useTableStateResult<T extends object> = {
   onSort: (field: keyof T, order: 'asc' | 'desc') => void
 }
 
-
-const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') => {
+const sortData = <T extends object>(data: T[], field: keyof T, order = 'asc') => {
   const sortedData = [...data].sort((currentRow, nextRow) => {
-    if (typeof currentRow[field] === 'number' && typeof nextRow[field] === "number") {
+    if (typeof currentRow[field] === 'number' && typeof nextRow[field] === 'number') {
       return (currentRow[field] as number) - (nextRow[field] as number)
     }
-    if (typeof currentRow[field] === "string" && typeof nextRow[field] === "string") {
-      return `${currentRow[field] as string ?? ""}`.localeCompare(nextRow[field] as string ?? "")
+    if (typeof currentRow[field] === 'string' && typeof nextRow[field] === 'string') {
+      return `${(currentRow[field] as string) ?? ''}`.localeCompare(
+        (nextRow[field] as string) ?? '',
+      )
     }
 
     return 0
@@ -27,7 +28,7 @@ const sortData = <T extends object,>(data: T[], field: keyof T, order = 'asc') =
   return order === 'asc' ? sortedData : sortedData.reverse()
 }
 
-const useTableState = <T extends object,>({
+const useTableState = <T extends object>({
   data,
   initialSort,
 }: useTableStateProps<T>): useTableStateResult<T> => {
@@ -49,9 +50,7 @@ const useTableState = <T extends object,>({
   useEffect(() => {
     setState({
       ...state,
-      data: state.sort?.field
-        ? sortData(data, state.sort.field, state.sort?.order)
-        : data,
+      data: state.sort?.field ? sortData(data, state.sort.field, state.sort?.order) : data,
     })
   }, [data])
 

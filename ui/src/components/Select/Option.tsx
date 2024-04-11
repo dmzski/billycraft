@@ -1,5 +1,6 @@
 import { MouseEvent, useEffect, useMemo, useRef } from 'react'
 import { SelectOptionType, ValueType } from '.'
+import clsx from 'clsx'
 
 export type RenderSelectOptionProps = {
   option: SelectOptionType
@@ -14,17 +15,9 @@ type OptionProps = {
   onOptionClick: (option: SelectOptionType, event: MouseEvent) => void
 }
 
-const Option = ({
-  isMulti,
-  value,
-  option,
-  focused,
-  onOptionClick,
-}: OptionProps) => {
+const Option = ({ isMulti, value, option, focused, onOptionClick }: OptionProps) => {
   const isSelected = useMemo(() => {
-    return isMulti && Array.isArray(value)
-      ? value.includes(option.value)
-      : option.value === value
+    return isMulti && Array.isArray(value) ? value.includes(option.value) : option.value === value
   }, [value, option, isMulti])
 
   const isFocused = useMemo(() => focused === option.value, [option, focused])
@@ -33,9 +26,9 @@ const Option = ({
   useEffect(() => {
     if (isFocused && optionRef.current) {
       optionRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "nearest",
-        block: "nearest"
+        behavior: 'smooth',
+        inline: 'nearest',
+        block: 'nearest',
       })
     }
   }, [isFocused])
@@ -45,8 +38,11 @@ const Option = ({
       <button
         role="option"
         tabIndex={-1}
-        className={isFocused || isSelected ? 'active' : ''}
-        onClick={(event) => onOptionClick(option, event)}
+        className={clsx({
+          active: isFocused,
+          'border-l-4 rounded-l-none bg-primary bg-opacity-10 border-primary': isSelected,
+        })}
+        onClick={event => onOptionClick(option, event)}
       >
         {option.label}
       </button>

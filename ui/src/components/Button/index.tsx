@@ -1,9 +1,4 @@
-import {
-  ButtonHTMLAttributes,
-  ForwardedRef,
-  forwardRef,
-  useMemo,
-} from 'react'
+import { ButtonHTMLAttributes, ForwardedRef, forwardRef, useMemo } from 'react'
 import clsx from 'clsx'
 
 const baseClasses = 'btn'
@@ -45,49 +40,51 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   block?: boolean
 }
 
-const Button = forwardRef((
-  {
-    variant = 'default',
-    size = 'md',
-    outline = false,
-    rounded = false,
-    square = false,
-    loading = false,
-    block = false,
-    children,
-    className,
-    type = 'button',
-    disabled = false,
-    ...props
-  }: ButtonProps,
-  ref: ForwardedRef<HTMLButtonElement>
-) => {
-  const computeClassName = useMemo(
-    () =>
-      clsx([
-        baseClasses,
-        BUTTON_VARIANTS[variant],
-        BUTTON_SIZES[size],
-        { [outlineClasses]: outline },
-        { [squareClasses]: square },
-        { [roundedClasses]: rounded },
-        { [loadingClasses]: loading },
-        { [blockClasses]: block },
-        className,
-      ]),
-    [variant, size, outline, rounded, square, loading, className]
-  )
-  return (
-    <button
-      className={computeClassName}
-      type={type ?? 'button'}
-      disabled={disabled}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-})
+const Button = forwardRef(
+  (
+    {
+      variant = 'default',
+      size = 'md',
+      outline = false,
+      rounded = false,
+      square = false,
+      loading = false,
+      block = false,
+      children,
+      className,
+      type = 'button',
+      disabled = false,
+      ...props
+    }: ButtonProps,
+    ref: ForwardedRef<HTMLButtonElement>,
+  ) => {
+    const computeClassName = useMemo(
+      () =>
+        clsx([
+          baseClasses,
+          BUTTON_VARIANTS[variant],
+          BUTTON_SIZES[size],
+          { [outlineClasses]: outline },
+          { [squareClasses]: square },
+          { [roundedClasses]: rounded },
+          { [loadingClasses]: loading },
+          { [blockClasses]: block },
+          className,
+        ]),
+      [variant, size, outline, rounded, square, loading, className],
+    )
+    return (
+      <button
+        className={computeClassName}
+        type={type ?? 'button'}
+        disabled={disabled}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </button>
+    )
+  },
+)
 
 export default Button

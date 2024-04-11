@@ -18,7 +18,7 @@ const classes = {
 
 type Variant = keyof typeof classes.variants
 
-export type LinkProps<T extends ComponentType | ElementType> ={
+export type LinkProps<T extends ComponentType | ElementType> = {
   as?: T
   className: string
   children: ReactNode
@@ -27,7 +27,7 @@ export type LinkProps<T extends ComponentType | ElementType> ={
   linkType?: 'hover' | 'normal'
 } & ComponentProps<T>
 
-const Link = <T extends ComponentType | ElementType = "a">({
+const Link = <T extends ComponentType | ElementType = 'a'>({
   className,
   children,
   variant = 'primary',
@@ -35,16 +35,11 @@ const Link = <T extends ComponentType | ElementType = "a">({
   as,
   ...props
 }: LinkProps<T>) => {
-  const Component = as ?? "a"
+  const Component = as ?? 'a'
   const computedClasses = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant as Variant] : ''
 
-    return clsx(
-      classes.base,
-      variantClasses,
-      linkType === 'hover' && classes.hover,
-      className
-    )
+    return clsx(classes.base, variantClasses, linkType === 'hover' && classes.hover, className)
   }, [linkType, variant, className])
 
   return (

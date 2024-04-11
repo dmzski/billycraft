@@ -26,24 +26,9 @@ export type DatePickerProps = {
 }
 
 const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-  (
-    {
-      name,
-      value,
-      onChange,
-      onBlur,
-      label,
-      className,
-      disabled,
-      error,
-      required,
-    },
-    ref
-  ) => {
+  ({ name, value, onChange, onBlur, label, className, disabled, error, required }, ref) => {
     if (value && !(value instanceof Date && !Number.isNaN(value))) {
-      throw new Error(
-        'DatePicker : value should be a Date instance or undefined'
-      )
+      throw new Error('DatePicker : value should be a Date instance or undefined')
     }
     const [inputValue, setInputValue] = useState(value?.toLocaleDateString())
     const [open, setOpen] = useState(false)
@@ -56,9 +41,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     useEffect(() => {
       if (value) {
         if (!(value instanceof Date && !Number.isNaN(value))) {
-          throw new Error(
-            'DatePicker : value should be a Date instance or undefined'
-          )
+          throw new Error('DatePicker : value should be a Date instance or undefined')
         }
         setInputValue(value.toLocaleDateString())
       }
@@ -73,17 +56,16 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         onChange?.(newDate)
         setOpen(false)
       },
-      [onChange]
+      [onChange],
     )
 
     const containerClassNames = useMemo(
       () =>
         clsx({
-          ['absolute top-full shadow rounded overflow-hidden z-100 bg-background']:
-            true,
+          ['absolute top-full shadow rounded overflow-hidden z-100 bg-background']: true,
           ['sr-only']: !open,
         }),
-      [open]
+      [open],
     )
 
     const iconClassNames = useMemo(
@@ -94,7 +76,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           'text-error': error,
           'bottom-3': label,
         }),
-      [error, label, open]
+      [error, label, open],
     )
 
     return (
@@ -113,9 +95,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         />
         {!disabled ? (
           <>
-            <CalendarIcon
-              className={iconClassNames}
-            />
+            <CalendarIcon className={iconClassNames} />
             <div className={containerClassNames}>
               <MonthCalendar selected={value} onDateClick={handleDateClick} />
             </div>
@@ -123,7 +103,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         ) : null}
       </div>
     )
-  }
+  },
 )
 
 DatePicker.displayName = 'DatePicker'

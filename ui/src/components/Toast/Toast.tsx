@@ -14,10 +14,7 @@ const classes: {
   progressBar: {
     base: string
     default: string
-    variants: Record<
-      NonNullable<ComponentProps<typeof Alert>['variant']>,
-      string
-    >
+    variants: Record<NonNullable<ComponentProps<typeof Alert>['variant']>, string>
   }
 } = {
   progressBar: {
@@ -40,13 +37,7 @@ export type ToastProps = {
   id: number
 }
 
-const Toast = ({
-  onClose,
-  duration,
-  children,
-  variant,
-  id,
-}: ToastProps) => {
+const Toast = ({ onClose, duration, children, variant, id }: ToastProps) => {
   const [mounted, setMounted] = useState(false)
   const onCloseRef = useRef(onClose)
   const handleClose = (_event?: SyntheticEvent, reason?: string) => {
@@ -77,14 +68,9 @@ const Toast = ({
   }, [onClose])
 
   const computedProgressBarClassName = useMemo(() => {
-    const variantClasses = variant
-      ? classes.progressBar.variants[variant]
-      : undefined
+    const variantClasses = variant ? classes.progressBar.variants[variant] : undefined
 
-    return clsx(
-      classes.progressBar.base,
-      variantClasses ?? classes.progressBar.default
-    )
+    return clsx(classes.progressBar.base, variantClasses ?? classes.progressBar.default)
   }, [variant])
 
   return (

@@ -27,28 +27,15 @@ export type LoaderProps = {
   className?: string
 }
 
-const Loader = ({
-  size = 'md',
-  variant = 'primary',
-  className = '',
-}: LoaderProps) => {
+const Loader = ({ size = 'md', variant = 'primary', className = '' }: LoaderProps) => {
   const computedClasses = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant] : ''
     const sizeClasses = size ? classes.sizes[size] : ''
 
-    return clsx(
-      classes.base,
-      variantClasses,
-      sizeClasses,
-      className
-    )
+    return clsx(classes.base, variantClasses, sizeClasses, className)
   }, [variant, size, className])
 
-  return (
-    <div
-      className={computedClasses}
-    />
-  )
+  return <div className={computedClasses} />
 }
 
 export default Loader

@@ -7,15 +7,8 @@ type HourButtonProps = {
   onHourClick?: (hour: number) => void
 }
 
-const HourButton = ({
-  selected,
-  hour,
-  onHourClick,
-}: HourButtonProps) => {
-  const isSelected = useMemo(
-    () => selected?.getHours() === hour,
-    [selected, hour]
-  )
+const HourButton = ({ selected, hour, onHourClick }: HourButtonProps) => {
+  const isSelected = useMemo(() => selected?.getHours() === hour, [selected, hour])
 
   return (
     <button
@@ -37,15 +30,8 @@ type MinuteButtonProps = {
   onMinuteClick?: (minute: number) => void
 }
 
-const MinuteButton = ({
-  selected,
-  minute,
-  onMinuteClick,
-}: MinuteButtonProps) => {
-  const isSelected = useMemo(
-    () => selected?.getMinutes() === minute,
-    [selected, minute]
-  )
+const MinuteButton = ({ selected, minute, onMinuteClick }: MinuteButtonProps) => {
+  const isSelected = useMemo(() => selected?.getMinutes() === minute, [selected, minute])
 
   return (
     <button
@@ -65,30 +51,27 @@ type TimeCalendarProps = {
   selected?: Date
   onTimeClick: (hours: number, minutes: number) => void
 }
-const TimeCalendar = ({
-  selected,
-  onTimeClick,
-}: TimeCalendarProps) => {
+const TimeCalendar = ({ selected, onTimeClick }: TimeCalendarProps) => {
   const options = useMemo(
     () => ({
       hours: Array.from({ length: 24 }, (_, index) => index),
       minutes: [0, 30],
     }),
-    []
+    [],
   )
 
   const handleHourClick = useCallback(
     (hour: number) => {
       onTimeClick(hour, selected?.getMinutes() ?? 0)
     },
-    [onTimeClick, selected]
+    [onTimeClick, selected],
   )
 
   const handleMinuteClick = useCallback(
     (minute: number) => {
       onTimeClick(selected?.getHours() ?? 0, minute)
     },
-    [onTimeClick, selected]
+    [onTimeClick, selected],
   )
 
   return (
@@ -98,7 +81,7 @@ const TimeCalendar = ({
         <div className="flex flex-col items-center h-60">
           <div className="text-gray-500 mb-2">Heures</div>
           <div className="text-sm flex flex-col items-center overflow-y-auto w-20 max-h-56">
-            {options.hours.map((hour) => (
+            {options.hours.map(hour => (
               <HourButton
                 hour={hour}
                 selected={selected}
@@ -111,7 +94,7 @@ const TimeCalendar = ({
         <div className="flex flex-col items-center border-l">
           <div className="text-gray-500 mb-2">Minutes</div>
           <div className="text-sm flex flex-col items-center overflow-y-scroll w-20 max-h-60">
-            {options.minutes.map((minute) => (
+            {options.minutes.map(minute => (
               <MinuteButton
                 minute={minute}
                 selected={selected}

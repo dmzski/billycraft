@@ -22,8 +22,7 @@ const positions = {
 }
 
 const classes = {
-  drawerContainer: (hasPortal?: boolean) =>
-    hasPortal ? `` : `z-10 select-none`,
+  drawerContainer: (hasPortal?: boolean) => (hasPortal ? `` : `z-10 select-none`),
   backdrop: `fixed left-0 top-0 bg-opacity-20 bg-black w-full h-full`,
   containerWithBackdrop: `bg-base-100 fixed p-2 shadow`,
   containerWithoutBackgrop: (hasPortal?: boolean) =>
@@ -69,7 +68,7 @@ const Drawer = ({
   open = false,
   hasBackdrop = false,
   hasCloseButton = true,
-  position = "right",
+  position = 'right',
   onClose,
   withoutPortal = false,
 }: DrawerProps) => {
@@ -80,7 +79,7 @@ const Drawer = ({
       () => {
         setIsVisible(open)
       },
-      open ? 0 : 500
+      open ? 0 : 500,
     )
     return () => clearTimeout(handler)
   }, [open])
@@ -92,21 +91,18 @@ const Drawer = ({
     >
       <div className={isVisible ? classes.backdrop : `sr-only`}></div>
       <div
-        onDoubleClick={(e) => e.stopPropagation()}
+        onDoubleClick={e => e.stopPropagation()}
         className={clsx(
           classes.containerWithBackdrop,
           positions[position]?.container,
-          animations.slide(open, position)
+          animations.slide(open, position),
         )}
       >
         {isVisible ? (
           <>
             {hasCloseButton ? (
               <XMarkIcon
-                className={clsx(
-                  positions[position]?.closeButton,
-                  classes.closeButton
-                )}
+                className={clsx(positions[position]?.closeButton, classes.closeButton)}
                 onClick={onClose}
                 role="button"
               />
@@ -121,17 +117,14 @@ const Drawer = ({
       className={clsx(
         positions[position]?.container,
         animations.slide(open, position),
-        classes.containerWithoutBackgrop(withoutPortal)
+        classes.containerWithoutBackgrop(withoutPortal),
       )}
     >
       {isVisible ? (
         <>
           {hasCloseButton ? (
             <XMarkIcon
-              className={clsx(
-                positions[position]?.closeButton,
-                classes.closeButton
-              )}
+              className={clsx(positions[position]?.closeButton, classes.closeButton)}
               onClick={onClose}
               role="button"
             />
@@ -142,9 +135,7 @@ const Drawer = ({
     </div>
   )
 
-  return withoutPortal
-    ? modalRendered
-    : createPortal(modalRendered, document.body)
+  return withoutPortal ? modalRendered : createPortal(modalRendered, document.body)
 }
 
 export default Drawer

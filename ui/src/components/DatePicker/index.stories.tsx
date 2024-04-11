@@ -11,27 +11,21 @@ type Story = StoryObj<typeof DatePicker>
 
 const render = ({ ...args }: DatePickerProps) => {
   const [value, setValue] = useState<Date | undefined>()
-  return (
-    <DatePicker
-      {...args}
-      value={value}
-      onChange={(newValue) => setValue(newValue)}
-    />
-  )
+  return <DatePicker {...args} value={value} onChange={newValue => setValue(newValue)} />
 }
 
 export const Basic: Story = {
   render,
   args: {
     label: 'Basic',
-  }
+  },
 }
 
 export const Labeled: Story = {
   render,
   args: {
     label: 'Labeled',
-  }
+  },
 }
 
 export const Disabled: Story = {
@@ -39,7 +33,7 @@ export const Disabled: Story = {
   args: {
     label: 'Disabled',
     disabled: true,
-  }
+  },
 }
 
 export const Error: Story = {
@@ -47,5 +41,5 @@ export const Error: Story = {
   args: {
     label: 'Error',
     error: true,
-  }
+  },
 }

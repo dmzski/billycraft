@@ -8,17 +8,17 @@ export default {
 
 type Story = StoryObj<typeof TextArea>
 
-const render: Story['render'] = (args) => <TextArea {...args} />
+const render: Story['render'] = args => <TextArea {...args} />
 
 export const Basic: Story = {
-  render
+  render,
 }
 
 export const WithLabel: Story = {
   render,
   args: {
     label: 'My awesome label',
-  }
+  },
 }
 
 export const Error: Story = {
@@ -27,5 +27,5 @@ export const Error: Story = {
     value: 'test',
     label: 'My awesome label',
     error: 'Test error',
-  }
+  },
 }

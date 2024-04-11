@@ -12,20 +12,14 @@ type Story = StoryObj<typeof TimePicker>
 const render: Story['render'] = ({ ...args }: TimePickerProps) => {
   const [value, setValue] = useState('')
 
-  return (
-    <TimePicker
-      {...args}
-      value={value}
-      onChange={(newValue) => setValue(newValue)}
-    />
-  )
+  return <TimePicker {...args} value={value} onChange={newValue => setValue(newValue)} />
 }
 
 export const Basic: Story = {
   render,
   args: {
     id: 'test',
-  }
+  },
 }
 
 export const Disabled: Story = {
@@ -33,7 +27,7 @@ export const Disabled: Story = {
   args: {
     id: 'test',
     disabled: true,
-  }
+  },
 }
 
 export const Error: Story = {
@@ -41,5 +35,5 @@ export const Error: Story = {
   args: {
     id: 'test',
     error: true,
-  }
+  },
 }

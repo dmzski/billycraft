@@ -46,7 +46,7 @@ export const ToastProvider = ({
   const [toasts, setToasts] = useState<ToastInfo[]>([])
 
   const show = useCallback(
-    (render: ReactNode, info: ToastOptions = { variant: "info" }) => {
+    (render: ReactNode, info: ToastOptions = { variant: 'info' }) => {
       const newToast = {} as ToastInfo
       newToast.id = counterRef.current
       counterRef.current += 1
@@ -55,37 +55,37 @@ export const ToastProvider = ({
       newToast.closed = false
       newToast.variant = info.variant
       newToast.duration = info.duration ?? duration
-      setToasts((current) => [...current, newToast])
+      setToasts(current => [...current, newToast])
     },
-    [duration]
+    [duration],
   )
 
   const success = useCallback(
     (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'success' })
     },
-    [show]
+    [show],
   )
 
   const error = useCallback(
     (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'error' })
     },
-    [show]
+    [show],
   )
 
   const warning = useCallback(
     (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'warning' })
     },
-    [show]
+    [show],
   )
 
   const info = useCallback(
     (render: ReactNode, info?: ToastOptions) => {
       show(render, { ...info, variant: 'info' })
     },
-    [show]
+    [show],
   )
 
   const onCloseToast = useCallback(
@@ -98,7 +98,7 @@ export const ToastProvider = ({
         setToasts(tmp)
       }
     },
-    [toasts]
+    [toasts],
   )
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export const ToastProvider = ({
 
   const value = useMemo(
     () => ({ show, error, success, info, warning }),
-    [show, success, info, error, warning]
+    [show, success, info, error, warning],
   )
 
   return (
@@ -119,7 +119,7 @@ export const ToastProvider = ({
         {toasts
           .filter(({ closed }) => !closed)
           .slice(0, maxConcurrent)
-          .map((toast) => (
+          .map(toast => (
             <Toast
               id={toast.id}
               key={toast.id}

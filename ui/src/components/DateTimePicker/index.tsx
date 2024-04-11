@@ -44,12 +44,10 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
       error,
       required,
     },
-    ref
+    ref,
   ) => {
     if (value && !(value instanceof Date && !Number.isNaN(value))) {
-      throw new Error(
-        'DateTimePicker : value should be a Date instance or undefined'
-      )
+      throw new Error('DateTimePicker : value should be a Date instance or undefined')
     }
     const [inputValue, setInputValue] = useState(value)
     const [open, setOpen] = useState(false)
@@ -63,9 +61,7 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
     useEffect(() => {
       if (value) {
         if (!(value instanceof Date && !Number.isNaN(value))) {
-          throw new Error(
-            'DateTimePicker : value should be a Date instance or undefined'
-          )
+          throw new Error('DateTimePicker : value should be a Date instance or undefined')
         }
         setInputValue(value)
       }
@@ -79,20 +75,17 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
       if (!disabled) setOpen(true)
     }, [disabled])
 
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Escape') {
-          setOpen(false)
-        }
-      },
-      []
-    )
+    const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+      }
+    }, [])
 
     const handleDateClick = useCallback(
       (newDate: Date) => {
         onChange?.(newDate)
       },
-      [onChange]
+      [onChange],
     )
 
     const handleTimeClick = useCallback(
@@ -106,17 +99,16 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
           onChange?.(new Date(0, 0, 0, hours, minutes))
         }
       },
-      [onChange, value]
+      [onChange, value],
     )
 
     const containerClassNames = useMemo(
       () =>
         clsx({
-          ['absolute top-full shadow-xl rounded overflow-hidden z-100 bg-background']:
-            true,
+          ['absolute top-full shadow-xl rounded overflow-hidden z-100 bg-background']: true,
           ['sr-only']: !open,
         }),
-      [open]
+      [open],
     )
 
     const iconClassNames = useMemo(
@@ -126,15 +118,11 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
           'text-primary': !error && open,
           'text-error': error,
         }),
-      [error, variant, label, open]
+      [error, variant, label, open],
     )
 
     return (
-      <div
-        onKeyDown={handleKeyDown}
-        ref={containerRef}
-        className="relative"
-      >
+      <div onKeyDown={handleKeyDown} ref={containerRef} className="relative">
         <Input
           className={className}
           label={label}
@@ -159,21 +147,15 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
             <CalendarIcon className={iconClassNames} />
             <div className={containerClassNames}>
               <div className="flex">
-                <MonthCalendar
-                  selected={inputValue}
-                  onDateClick={handleDateClick}
-                />
-                <TimeCalendar
-                  selected={inputValue}
-                  onTimeClick={handleTimeClick}
-                />
+                <MonthCalendar selected={inputValue} onDateClick={handleDateClick} />
+                <TimeCalendar selected={inputValue} onTimeClick={handleTimeClick} />
               </div>
             </div>
           </>
         ) : null}
       </div>
     )
-  }
+  },
 )
 
 DateTimePicker.displayName = 'DateTimePicker'

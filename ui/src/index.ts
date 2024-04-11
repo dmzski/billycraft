@@ -20,10 +20,7 @@ export { default as Input } from './components/Input'
 export { default as TextArea } from './components/TextArea'
 export { default as Alert } from './components/Alert'
 
-export {
-  useToast,
-  ToastProvider,
-} from './components/Toast/ToastProvider'
+export { useToast, ToastProvider } from './components/Toast/ToastProvider'
 export { default as Tooltip } from './components/Tooltip'
 export { default as TopBar } from './components/TopBar'
 

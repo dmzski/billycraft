@@ -38,19 +38,15 @@ const Tooltip = ({
   variant,
 }: TooltipProps) => {
   const computedClassNames = useMemo(() => {
-    const variantClasses = variant
-      ? classes.variants[variant] ?? undefined
-      : undefined
-    const positionClasses = position
-      ? classes.positions[position] ?? undefined
-      : undefined
+    const variantClasses = variant ? classes.variants[variant] ?? undefined : undefined
+    const positionClasses = position ? classes.positions[position] ?? undefined : undefined
 
     return clsx(
       classes.base,
       forceOpen ? classes.open : undefined,
       variantClasses,
       positionClasses,
-      className
+      className,
     )
   }, [forceOpen, variant, position, className])
 

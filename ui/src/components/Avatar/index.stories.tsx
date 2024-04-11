@@ -14,12 +14,12 @@ export const Basic: Story = {
     src: example,
     alt: 'Example with image',
     size: 30,
-  }
+  },
 }
 
 export const WithoutImage: Story = {
   args: {
     alt: 'Dorian Maliszewski',
     size: 30,
-  }
+  },
 }

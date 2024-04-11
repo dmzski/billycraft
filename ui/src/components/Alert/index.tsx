@@ -18,12 +18,7 @@ export type AlertProps = {
   onClick?: MouseEventHandler<HTMLDivElement>
 }
 
-const Alert = ({
-  variant,
-  className,
-  children,
-  onClick,
-}: AlertProps) => {
+const Alert = ({ variant, className, children, onClick }: AlertProps) => {
   const computedClassName = useMemo(() => {
     const variantClasses = variant ? classes.variants[variant] : undefined
 

@@ -7,9 +7,9 @@ export default {
 }
 
 export const Basic: StoryObj<typeof Tooltip> = {
-  render: (args) => <Tooltip {...args} />,
+  render: args => <Tooltip {...args} />,
   args: {
     children: 'Tooltip',
     text: 'Test',
-  }
+  },
 }

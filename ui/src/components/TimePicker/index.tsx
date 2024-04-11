@@ -1,5 +1,5 @@
 import Select, { SelectOptionType } from '../Select'
-import{ forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo } from 'react'
 
 export type TimePickerProps = {
   value?: string
@@ -17,19 +17,8 @@ export type TimePickerProps = {
 
 const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
   (
-    {
-      value,
-      className,
-      disabled,
-      error,
-      id,
-      step = 30,
-      onChange,
-      label,
-      locales,
-      required,
-    },
-    ref
+    { value, className, disabled, error, id, step = 30, onChange, label, locales, required },
+    ref,
   ) => {
     const options = useMemo(() => {
       const array: SelectOptionType[] = []
@@ -65,7 +54,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       <Select
         options={options}
         value={value}
-        onChange={(value) => {
+        onChange={value => {
           onChange?.(value as string)
         }}
         disabled={disabled}
@@ -77,7 +66,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         required={required}
       />
     )
-  }
+  },
 )
 
 TimePicker.displayName = 'TimePicker'

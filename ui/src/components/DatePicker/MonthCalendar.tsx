@@ -10,20 +10,15 @@ type MonthCalendarButtonProps = {
   onDateClick?: (newDate: Date) => void
   selected?: Date
 }
-const MonthCalendarButton = ({
-  date,
-  selected,
-  onDateClick,
-}: MonthCalendarButtonProps) => {
-  const isSelected =
-    selected && date ? datesAreOnSameDay(selected, date) : false
+const MonthCalendarButton = ({ date, selected, onDateClick }: MonthCalendarButtonProps) => {
+  const isSelected = selected && date ? datesAreOnSameDay(selected, date) : false
 
   const buttonClassNames = clsx(
     'user-select-none appearance-none text-sm mb-2 h-6 w-6 rounded-full',
     {
       ['hover:bg-primary hover:text-primary-content']: !isSelected,
       ['bg-primary text-primary-content']: isSelected,
-    }
+    },
   )
 
   if (date)
@@ -46,21 +41,18 @@ type MonthCalendarProps = {
   onDateClick?: (newDate: Date) => void
 }
 
-const MonthCalendar = ({
-  selected,
-  onDateClick,
-}: MonthCalendarProps) => {
+const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
   const [dateView, setDateView] = useState(selected ?? new Date())
 
   const goPrevious = useCallback(() => {
-    setDateView((current) => {
+    setDateView(current => {
       current.setMonth(current.getMonth() - 1)
       return new Date(current)
     })
   }, [])
 
   const goNext = useCallback(() => {
-    setDateView((current) => {
+    setDateView(current => {
       current.setMonth(current.getMonth() + 1)
       return new Date(current)
     })
@@ -79,13 +71,8 @@ const MonthCalendar = ({
     <div className="w-60">
       <div className="flex flex-col">
         <div className="gap-2 bg-primary text-primary-content flex items-center justify-between">
-          <Button
-            aria-label="Previous"
-            type="button"
-            variant="ghost"
-            onClick={goPrevious}
-          >
-            <ArrowLeftIcon className='fill-current h-5' />
+          <Button aria-label="Previous" type="button" variant="ghost" onClick={goPrevious}>
+            <ArrowLeftIcon className="fill-current h-5" />
           </Button>
           <div className="text-center">
             {dateView
@@ -95,13 +82,8 @@ const MonthCalendar = ({
               })
               .toLocaleUpperCase()}
           </div>
-          <Button
-            aria-label="Next"
-            type="button"
-            variant="ghost"
-            onClick={goNext}
-          >
-            <ArrowRightIcon className='fill-current h-5' />
+          <Button aria-label="Next" type="button" variant="ghost" onClick={goNext}>
+            <ArrowRightIcon className="fill-current h-5" />
           </Button>
         </div>
       </div>

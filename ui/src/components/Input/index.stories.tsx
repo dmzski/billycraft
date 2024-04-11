@@ -8,17 +8,26 @@ export default {
 
 type Story = StoryObj<typeof Input>
 
-const render: Story['render'] = (args) => <Input {...args} />
+const render: Story['render'] = args => <Input {...args} />
 
 export const Basic: Story = {
-  render
+  render,
 }
 
 export const WithLabel: Story = {
   render,
   args: {
     label: 'My awesome label',
-  }
+  },
+}
+
+export const PrefixAndSuffix: Story = {
+  render,
+  args: {
+    label: 'My awesome label',
+    suffix: 'Suffix',
+    prefix: 'Prefix',
+  },
 }
 
 export const Error: Story = {
@@ -27,5 +36,5 @@ export const Error: Story = {
     value: 'test',
     label: 'My awesome label',
     error: 'Test error',
-  }
+  },
 }

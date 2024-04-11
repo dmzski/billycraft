@@ -11,10 +11,7 @@ export default {
 type Story = StoryObj<typeof Modal>
 
 export const Basic: Story = {
-  render: ({
-    withoutPortal,
-    hideOnClickOutside,
-  }) => (
+  render: ({ withoutPortal, hideOnClickOutside }) => (
     <Modal
       disclosure={<Button>Open modal</Button>}
       withoutPortal={withoutPortal}
@@ -25,15 +22,12 @@ export const Basic: Story = {
   ),
   args: {
     withoutPortal: false,
-    hideOnClickOutside: true
-  }
+    hideOnClickOutside: true,
+  },
 }
 
 export const Controlled: Story = {
-  render: ({
-    withoutPortal,
-    hideOnClickOutside,
-  }) => {
+  render: ({ withoutPortal, hideOnClickOutside }) => {
     const [open, setOpen] = useState(false)
 
     return (
@@ -58,6 +52,6 @@ export const Controlled: Story = {
   },
   args: {
     withoutPortal: false,
-    hideOnClickOutside: true
-  }
+    hideOnClickOutside: true,
+  },
 }

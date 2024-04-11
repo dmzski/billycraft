@@ -40,35 +40,31 @@ export type TextAreaProps = {
   rows?: number
 }
 
-
-
-const TextArea = forwardRef<
-  HTMLTextAreaElement,
-  TextAreaProps
->(
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, label, error, id, ...props }, ref) => {
-
     return (
-    <div className={clsx(classes.container, className)}>
-      {label ? (<label htmlFor={id} className={classes.label}>
-        <span className={classes.labelText}>{label}</span>
-      </label>) : null}
-      <textarea
-        className={clsx(
-          classes.input,
-          !error && 'focus:border-primary focus:outline-primary',
-          error && classes.inputError
-        )}
-        {...props}
-        ref={ref}
-        id={id}
-      />
-      {error && typeof error === 'string' ? (
-        <span className="label-text-alt text-error mt-1">{error}</span>
-      ) : null}
-    </div>
+      <div className={clsx(classes.container, className)}>
+        {label ? (
+          <label htmlFor={id} className={classes.label}>
+            <span className={classes.labelText}>{label}</span>
+          </label>
+        ) : null}
+        <textarea
+          className={clsx(
+            classes.input,
+            !error && 'focus:border-primary focus:outline-primary',
+            error && classes.inputError,
+          )}
+          {...props}
+          ref={ref}
+          id={id}
+        />
+        {error && typeof error === 'string' ? (
+          <span className="label-text-alt text-error mt-1">{error}</span>
+        ) : null}
+      </div>
     )
-  }
+  },
 )
 
 TextArea.displayName = 'TextArea'

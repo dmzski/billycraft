@@ -1,11 +1,4 @@
-import {
-  cloneElement,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { cloneElement, ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Button from '../Button'
 import MarkXIcon from '@heroicons/react/24/solid/XMarkIcon'
@@ -41,10 +34,7 @@ const Modal = ({
 
       return () => {
         if (ref.current) {
-          ref.current.removeEventListener(
-            'click',
-            handleClick
-          )
+          ref.current.removeEventListener('click', handleClick)
         }
       }
     }
@@ -56,8 +46,8 @@ const Modal = ({
 
   const Component = disclosure
     ? cloneElement(disclosure, {
-      ref,
-    })
+        ref,
+      })
     : undefined
 
   const close = () => {
@@ -72,41 +62,31 @@ const Modal = ({
     () => (
       <div
         onClick={hideOnClickOutside ? close : undefined}
-        className={
-          open ? 'modal visible opacity-100 pointer-events-auto' : 'sr-only'
-        }
+        className={open ? 'modal visible opacity-100 pointer-events-auto' : 'sr-only'}
       >
         {open ? (
           <dialog
             open={open}
-            onClick={(event) => {
+            onClick={event => {
               event.stopPropagation()
             }}
             className="modal-box relative"
           >
-            <Button
-              onClick={close}
-              size="sm"
-              outline
-              rounded
-              className="absolute right-2 top-2"
-            >
-              <MarkXIcon className='h-5' />
+            <Button onClick={close} size="sm" outline rounded className="absolute right-2 top-2">
+              <MarkXIcon className="h-5" />
             </Button>
             {typeof children === 'function' ? children({ close }) : children}
           </dialog>
         ) : null}
       </div>
     ),
-    [open, children, close]
+    [open, children, close],
   )
 
   return (
     <>
       {Component}
-      {withoutPortal
-        ? modalContentRendered
-        : createPortal(modalContentRendered, document.body)}
+      {withoutPortal ? modalContentRendered : createPortal(modalContentRendered, document.body)}
     </>
   )
 }

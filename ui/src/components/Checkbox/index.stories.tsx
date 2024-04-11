@@ -10,10 +10,7 @@ export default {
 type Story = StoryObj<typeof Checkbox>
 
 export const Basic: Story = {
-  render: ({
-    checked,
-    ...props
-  }: CheckboxProps) => {
+  render: ({ checked, ...props }: CheckboxProps) => {
     const [isChecked, setChecked] = useState(checked)
 
     const onChange = () => {
@@ -23,7 +20,6 @@ export const Basic: Story = {
     return <Checkbox {...props} checked={isChecked} onChange={onChange} />
   },
   args: {
-    checked: true
-  }
+    checked: true,
+  },
 }
-
