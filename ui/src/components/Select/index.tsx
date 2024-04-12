@@ -20,7 +20,14 @@ import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
 const errorClasses = 'select-error'
 const disabledClasses = 'select-disabled'
 const inputClasses =
-  'select select-bordered focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary focus-within:select-primary inline-flex items-center min-w-0'
+  'select inline-flex items-center min-w-0'
+
+type Variants = "no-border" | "ghost" | "default"
+const variants: Record<Variants, string> = {
+  "no-border": "",
+  ghost: "select-ghost focus-within:select-primary",
+  default: "select-bordered focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary focus-within:select-primary"
+}
 
 export type OptionValue = string | number
 export type SelectOptionType = {
@@ -52,6 +59,7 @@ export type SelectProps = Pick<
   isSearchable?: boolean
   isMulti?: boolean
   error?: boolean | string
+  variant?: Variants
 }
 
 const KEYS = {
@@ -89,6 +97,7 @@ const Select = (
     error,
     required,
     autoFocus,
+    variant = "default"
   }: SelectProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
@@ -154,15 +163,16 @@ const Select = (
   const handleKeyDown: KeyboardEventHandler = useCallback(
     event => {
       if (!isOpen) {
-        event.preventDefault()
-        if (event.key === KEYS.ArrowDown) handleOpen()
+        if (event.key === KEYS.ArrowDown) {
+          handleOpen()
+          event.preventDefault()
+        }
       } else if (
         [KEYS.ArrowDown, KEYS.ArrowUp, KEYS.Enter, KEYS.Tab, KEYS.Escape].includes(event.key)
       ) {
         switch (event.key) {
           case KEYS.Tab:
           case KEYS.Escape:
-            event.preventDefault()
             setOpen(false)
             break
           case KEYS.ArrowUp:
@@ -213,7 +223,7 @@ const Select = (
     }
   }, [])
 
-  const inputClassName = clsx(inputClasses, 'relative', {
+  const inputClassName = clsx(inputClasses, 'relative', variants[variant] ?? variants.default, {
     [errorClasses]: error,
     [disabledClasses]: disabled,
   })

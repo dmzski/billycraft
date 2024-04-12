@@ -73,19 +73,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div
           className={clsx(
             classes.input,
+            {
+              "pl-0": !!prefix && typeof prefix !== "string",
+              'pr-0': !!suffix && typeof suffix !== "string"
+            },
             'flex items-center gap-2',
-            !error ? 'focus:border-primary focus:outline-primary' : 'input-error',
+            !error ? 'focus-within:border-primary focus-within:outline-primary' : 'input-error',
           )}
         >
-          {prefix ? <div className="border-r pr-4 h-full flex items-center">{prefix}</div> : null}
-          <input className="grow" {...props} ref={ref} required={required} id={id} />
+          {prefix ? <div className={clsx("border-r h-full flex items-center", typeof prefix === "string" ? "pr-4" : "")}>{prefix}</div> : null}
+          <input className="grow min-w-0" {...props} ref={ref} required={required} id={id} />
           {required && !label ? <span className="text-error">*</span> : null}
-          {suffix ? <div className="border-l pl-4 h-full flex items-center">{suffix}</div> : null}
+          {suffix ? <div className={clsx("border-l h-full flex items-center", typeof suffix === "string" ? "pl-4" : "")} > {suffix}</div> : null}
         </div>
-        {error && typeof error === 'string' ? (
-          <span className="label-text-alt text-error mt-1">{error}</span>
-        ) : null}
-      </div>
+        {
+          error && typeof error === 'string' ? (
+            <span className="label-text-alt text-error mt-1">{error}</span>
+          ) : null
+        }
+      </div >
     )
   },
 )

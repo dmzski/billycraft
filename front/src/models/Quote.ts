@@ -17,6 +17,7 @@ export type QuoteLine = {
   name: string
   description?: string
   type: LineTypeEnum
+  productId?: number
 }
 
 type Quote = {

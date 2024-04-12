@@ -9,13 +9,17 @@ import { SortableContext } from '@dnd-kit/sortable'
 import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { QuoteFormValues } from '../types'
+import { LINE_TYPE } from '@/constants/line'
 
-const defaultLine = {
-  description: '',
+const defaultLine: QuoteFormValues['lines'][number] = {
+  description: undefined,
   name: '',
   price: 0,
   quantity: 0,
   type: LineTypeEnum.TEXT,
+  line: 0,
+  quoteId: "",
+  id: "",
 }
 
 const QuoteLineTable = ({
@@ -57,24 +61,43 @@ const QuoteLineTable = ({
   }
   const productOptions = useMemo(() => {
     if (allProducts) {
-      return allProducts.map(product => ({
-        value: product.id,
-        label: product.name,
-      }))
+      return allProducts.map(product => {
+        const IconComponent = LINE_TYPE[product.type]?.icon
+        return {
+          value: product.id,
+          label: (
+            <span className='inline-flex gap-2 items-center'>
+              {IconComponent ? <IconComponent className='w-5' /> : null}
+              {product.name}
+            </span>
+          ),
+        }
+      }
+      )
     }
     return []
   }, [allProducts])
 
   const addExistingProductSelected = () => {
     if (productIdSelected && allProducts) {
-      addLine({
-        ...defaultLine,
-        ...(allProducts.find(product => product.id === productIdSelected) ?? {}),
-      })
-      setProductIdSelected(undefined)
-      setTimeout(() => {
-        selectExistingProductRef.current?.focus()
-      })
+      const productFound = allProducts.find(product => product.id === productIdSelected)
+      if (productFound) {
+        const newLine: QuoteFormValues['lines'][number] = {
+          name: productFound.name,
+          type: productFound.type,
+          price: productFound.price,
+          quantity: 0,
+          quoteId: "",
+          line: 0,
+          description: productFound.description,
+          productId: productFound.id
+        }
+        addLine(newLine)
+        setProductIdSelected(undefined)
+        setTimeout(() => {
+          selectExistingProductRef.current?.focus()
+        })
+      }
     }
   }
 
@@ -99,7 +122,7 @@ const QuoteLineTable = ({
           </Button>
         </div>
       ) : null}
-      <div className='flex flex-col'>
+      <div className='flex flex-col divide-y'>
         <DndContext onDragEnd={onDragEnd}>
           <SortableContext items={fields}>
             {fields?.map((line, index) => (
@@ -115,7 +138,7 @@ const QuoteLineTable = ({
           </SortableContext>
         </DndContext>
         {!disabled ? (
-          <Button className="gap-1" type="button" block onClick={() => addLine()}>
+          <Button className="gap-1 mt-2" type="button" block onClick={() => addLine()}>
             <PlusIcon className="w-5" />
             {t('quotes.form.lines.add')}
           </Button>

@@ -22,7 +22,7 @@ const OptionList = ({
   isMulti,
   isOpen,
 }: OptionListProps) => (
-  <ul className={clsx(listContainerClasses, isOpen ? '' : 'sr-only')} role="listbox">
+  <ul className={clsx(listContainerClasses, isOpen ? 'min-w-max' : 'sr-only')} role="listbox">
     {options.map((option: SelectOptionType) => (
       <Option
         focused={focused}
