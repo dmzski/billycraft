@@ -7,7 +7,7 @@ import Overview from './Overview'
 import { useI18n } from '@/i18n'
 import { ReactNode } from 'react'
 
-const { routes, path } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
+const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 type OutgoingLayoutProps = {
   children: ReactNode
@@ -35,21 +35,21 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
 }
 const OutgoingsSwitch = () => (
   <Switch>
-    <Route path={routes.OVERVIEW.path} render={() => (
+    <Route path={routes.OVERVIEW.path()} render={() => (
       <OutgoingLayout>
         <Overview />
 
       </OutgoingLayout>
     )} />
-    <Route path={routes.LIST.path} exact={routes.LIST.exact} render={() => (
+    <Route path={routes.LIST.path()} exact={routes.LIST.exact} render={() => (
       <OutgoingLayout>
         <ListPage />
       </OutgoingLayout>
     )} />
-    <Route path={routes.FORM.path} component={FormPage} />
-    <Route path={routes.DETAILS.path} component={Details} />
-    <Route path={path}>
-      <Redirect to={routes.OVERVIEW.path} />
+    <Route path={routes.FORM.path()} component={FormPage} />
+    <Route path={routes.DETAILS.path()} component={Details} />
+    <Route>
+      <Redirect to={routes.OVERVIEW.path()} />
     </Route>
   </Switch>
 )

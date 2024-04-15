@@ -47,7 +47,7 @@ const DetailsPage = () => {
   const { t } = useI18n()
 
   const onSubmitSuccess = async () => {
-    push(REPORT_ROUTES.routes.LIST.path)
+    push(REPORT_ROUTES.routes.LIST.path())
   }
 
   if (isLoading && !report) {

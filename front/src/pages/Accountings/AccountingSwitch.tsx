@@ -1,12 +1,13 @@
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import OutgoingsSwitch from './Outgoings/OutgoingsSwitch'
 import ReportsSwitch from './Reports/ReportsSwitch'
 
 const AccountingSwitch = () => (
   <Switch>
-    <Route path={ROUTES.ACCOUNTINGS.routes?.REPORTS.path} component={ReportsSwitch} />
-    <Route path={ROUTES.ACCOUNTINGS.routes?.OUTGOINGS.path} component={OutgoingsSwitch} />
+    <Route path={ROUTES.ACCOUNTINGS.routes.REPORTS.path()} component={ReportsSwitch} />
+    <Route path={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.path()} component={OutgoingsSwitch} />
+    <Route render={() => <Redirect to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.path()} />} />
   </Switch>
 )
 

@@ -1,211 +1,247 @@
-import { HomeIcon } from '@heroicons/react/24/solid'
-import { ComponentProps, ComponentType } from 'react'
-
-export type Route = {
-  exact?: boolean
-  path: string
-  title: string
-  routes?: Record<string, Route>
-  icon?: ComponentType<ComponentProps<typeof HomeIcon>>
+export type QuoteRouteProps = {
+  id: string
 }
 
-export const injectIdInPath = (route: string, id: number | string) => route.replace(':id', `${id}`)
+export type BillRouteProps = {
+  id: string
+}
+
+export type CustomerRouteProps = {
+  id: string
+}
+
+export type SupplierRouteProps = {
+  id: string
+}
+
+export type OutgoingRouteProps = {
+  id: string
+}
+
+export type ReportRouteProps = {
+  id: string
+}
+
+const DEFAULT_QUOTE_ROUTE_PARAMS: QuoteRouteProps = { id: ":id" }
+const DEFAULT_BILL_ROUTE_PARAMS: BillRouteProps = { id: ":id" }
+const DEFAULT_CUSTOMER_ROUTE_PARAMS: CustomerRouteProps = { id: ":id" }
+const DEFAULT_SUPPLIER_ROUTE_PARAMS: SupplierRouteProps = { id: ":id" }
+const DEFAULT_OUTGOING_ROUTE_PARAMS: OutgoingRouteProps = { id: ":id" }
+const DEFAULT_REPORT_ROUTE_PARAMS: ReportRouteProps = { id: ":id" }
+
+
 
 export const ROUTES = {
   LOGIN: {
-    path: '/login',
+    id: "login",
+    path: () => '/login',
   },
   REGISTER: {
-    path: '/register',
+    id: "register",
+    path: () => '/register',
   },
   BILLS: {
+    id: "bills",
     exact: true,
-    path: '/bills',
-    title: 'Factures',
+    path: () => '/bills',
   },
   BILL_FORM: {
-    path: '/bills/edit/:id',
-    title: 'Edition de facture',
+    id: "bills.form",
+    path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/edit/${params.id}`,
+  },
+  BILL_ADD: {
+    id: "bills.form",
+    path: () => `/bills/create`,
+  },
+  BILL_EDIT: {
+    id: "bills.form",
+    path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/edit/${params.id}`,
+  },
+  BILL_OVERVIEW: {
+    id: "bills.form",
+    path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/overview/${params.id}`,
   },
   CUSTOMERS: {
+    id: "customers",
     exact: true,
-    path: '/customers',
-    title: 'Clients',
+    path: () => '/customers',
   },
   CUSTOMER_ADD: {
-    path: '/customers/create',
-    title: 'Ajouter un client',
+    id: "customers.add",
+    path: () => '/customers/create',
   },
   CUSTOMER_EDIT: {
-    path: '/customers/edit/:id',
-    title: 'Edition de client',
+    id: "customers.edit",
+    path: (params = DEFAULT_CUSTOMER_ROUTE_PARAMS) => `/customers/edit/${params.id}`,
   },
   DASHBOARD: {
-    path: '/dashboard',
-    title: 'Accueil',
+    id: "dashboard",
+    path: () => '/dashboard',
   },
   HISTORY: {
     exact: false,
-    path: '/history',
-    title: 'Historique',
+    id: "history",
+    path: () => '/history',
     routes: {
       QUOTES: {
+        id: "history.quotes",
         exact: true,
-        path: '/history/quotes',
-        title: 'Devis',
+        path: () => `${ROUTES.HISTORY.path()}/quotes`,
         routes: {
           ARCHIVED: {
+            id: "history.quotes.archived",
             exact: true,
-            path: '/history/quotes/archived',
-            title: 'Devis > Archivés',
+            path: () => `${ROUTES.HISTORY.routes.QUOTES.path()}/archived`,
           },
           REFUSED: {
+            id: "history.quotes.refused",
             exact: true,
-            path: '/history/quotes/refused',
-            title: 'Devis > Refusés',
+            path: () => `${ROUTES.HISTORY.routes.QUOTES.path()}/refused`,
           },
         },
       },
       BILLS: {
+        id: "history.bills",
         exact: true,
-        path: '/history/bills',
-        title: 'Factures',
+        path: () => '/history/bills',
         routes: {
           ARCHIVED: {
+            id: "history.bills.archived",
             exact: true,
-            path: '/history/bills/archived',
-            title: 'Factures > Archivées',
+            path: () => '/history/bills/archived',
           },
           REFUSED: {
+            id: "history.bills.refused",
             exact: true,
-            path: '/history/bills/refused',
-            title: 'Factures > Refusées',
+            path: () => '/history/bills/refused',
           },
         },
       },
       TODOS: {
+        id: "history.todos",
         exact: true,
-        path: '/history/todos',
-        title: 'Tâches',
+        path: () => '/history/todos',
       },
     },
   },
   ONBOARDING: {
-    path: '/onboarding',
-    title: 'Bienvenue sur Coco ERP',
+    id: "onboarding",
+    path: () => '/onboarding',
   },
   ONBOARDING_CREATE: {
-    path: '/onboarding/create-organization',
-    title: 'Créer mon entreprise',
+    id: "onboarding.create",
+    path: () => '/onboarding/create-organization',
   },
   ONBOARDING_JOIN: {
-    path: '/onboarding/join-organization',
-    title: 'Rejoindre une entreprise',
+    id: "onboarding.join",
+    path: () => '/onboarding/join-organization',
   },
   PRODUCTS: {
+    id: "products",
     exact: true,
-    path: '/products',
-    title: 'Articles',
+    path: () => '/products',
   },
   QUOTES: {
+    id: "quotes",
     exact: true,
-    path: '/quotes',
-    title: 'Devis',
+    path: () => '/quotes',
   },
   QUOTE_OVERVIEW: {
+    id: "quotes.overview",
     exact: true,
-    path: '/quotes/overview/:id',
-    title: "Détail d'un devis",
+    path: (params = DEFAULT_QUOTE_ROUTE_PARAMS) => `/quotes/overview/${params.id}`,
   },
   QUOTE_EDIT: {
-    path: '/quotes/edit/:id',
-    title: 'Edition de devis',
+    id: "quotes.edit",
+    path: (params = DEFAULT_QUOTE_ROUTE_PARAMS) => `/quotes/edit/${params.id}`,
   },
   QUOTE_ADD: {
-    path: '/quotes/create',
-    title: 'Edition de devis',
+    id: "quotes.add",
+    path: () => '/quotes/create',
   },
   SETTINGS: {
+    id: 'settings',
     exact: false,
-    path: '/settings',
-    title: 'Paramètres',
+    path: () => '/settings',
     routes: {
       MY_COMPANY: {
+        id: 'settings.myOrganization',
         exact: true,
-        path: '/settings/my-company',
-        title: 'Mon entreprise',
+        path: () => '/settings/my-company',
       },
       QUOTE_CUSTOMIZATION: {
+        id: 'settings.quoteCustomization',
         exact: true,
-        path: '/settings/quote-customization',
-        title: 'Personnalisation des devis',
+        path: () => '/settings/quote-customization',
       },
       BILL_CUSTOMIZATION: {
+        id: 'settings.billCustomization',
         exact: true,
-        path: '/settings/bill-customization',
-        title: 'Personnalisation des factures',
+        path: () => '/settings/bill-customization',
       },
     },
   },
   SUPPLIERS: {
+    id: 'suppliers',
     exact: true,
-    path: '/suppliers',
-    title: 'Fournisseurs',
+    path: () => '/suppliers',
   },
   SUPPLIERS_FORM: {
-    path: '/suppliers/:id',
-    title: 'Fournisseurs',
+    id: 'suppliers.form',
+    path: (params = DEFAULT_SUPPLIER_ROUTE_PARAMS) => `/suppliers/${params.id}`,
   },
   ACCOUNTINGS: {
-    path: '/accounting',
-    title: 'Comptabilité',
+    id: 'accounting',
+    path: () => '/accounting',
     routes: {
       OUTGOINGS: {
+        id: "accounting.outgoings",
         exact: true,
-        path: '/accounting/outgoings',
-        title: "Livrets d'achats",
+        path: () => '/accounting/outgoings',
         routes: {
           OVERVIEW: {
+            id: "accounting.outgoings.overview",
             exact: true,
-            path: '/accounting/outgoings/overview',
-            title: "Livrets d'achats > Vue d'ensemble",
+            path: () => '/accounting/outgoings/overview',
           },
           LIST: {
+            id: "accounting.outgoings.list",
             exact: true,
-            path: '/accounting/outgoings/list',
-            title: "Livrets d'achats > Tous les livrets d'achats",
+            path: () => '/accounting/outgoings/list',
           },
           FORM: {
-            path: '/accounting/outgoings/edit/:id',
-            title: "Edition d'un livret d'achat",
+            id: "accounting.outgoings.form",
+            path: (params = DEFAULT_OUTGOING_ROUTE_PARAMS) => `/accounting/outgoings/edit/${params.id}`,
           },
           DETAILS: {
-            path: '/accounting/outgoings/details/:id',
-            title: "Détail d'un livret d'achat",
+            id: "accounting.outgoings.details",
+            path: (params = DEFAULT_OUTGOING_ROUTE_PARAMS) => `/accounting/outgoings/details/${params.id}`,
           },
         },
       },
       REPORTS: {
         exact: true,
-        path: '/accounting/reports',
-        title: 'Rapports',
+        id: "accounting.reports",
+        path: () => '/accounting/reports',
         routes: {
           OVERVIEW: {
+            id: "accounting.reports.overview",
             exact: true,
-            path: '/accounting/reports/overview',
-            title: "Rapports > Vue d'ensemble",
+            path: () => '/accounting/reports/overview',
           },
           DETAILS: {
-            path: '/accounting/reports/details/:id',
-            title: 'Rapports > Détails',
+            id: "accounting.reports.details",
+            path: (params = DEFAULT_REPORT_ROUTE_PARAMS) => `/accounting/reports/details/${params.id}`,
           },
           LIST: {
             exact: true,
-            path: '/accounting/reports/list',
-            title: 'Rapports > Tous mes rapports',
+            id: "accounting.reports.list",
+            path: () => '/accounting/reports/list',
           },
         },
       },
     },
   },
 } as const
+
+export type RouteId = typeof ROUTES[keyof typeof ROUTES]['id']

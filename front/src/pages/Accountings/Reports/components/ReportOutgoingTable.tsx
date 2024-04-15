@@ -5,7 +5,6 @@ import { ReportOutgoingResponse, ReportResponse } from '@/models/Report'
 import { OUTGOING_ROUTES } from '@/pages/Accountings/Outgoings/constants'
 import { ReactNode, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { injectIdInPath } from '@/routes'
 import { useI18n } from '@/i18n'
 
 type ReportOutgoingTableProps = {
@@ -51,7 +50,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
                 {t('accounting.reports.components.outgoing.headers.name')}
               </DetailsTableLeft>
               <DetailsTableRight>
-                <Link to={injectIdInPath(OUTGOING_ROUTES.routes.DETAILS.path, outgoing.outgoingId)}>
+                <Link to={OUTGOING_ROUTES.routes.DETAILS.path({id: outgoing.outgoingId})}>
                   {outgoing.name}
                 </Link>
               </DetailsTableRight>

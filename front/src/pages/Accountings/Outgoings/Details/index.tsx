@@ -15,7 +15,7 @@ const Details = () => {
   })
 
   if (!outgoing && !isLoading) {
-    return <Redirect to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path} />
+    return <Redirect to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path()} />
   }
 
   return (
@@ -29,7 +29,7 @@ const Details = () => {
         </div>
         {outgoing ? (
           <div>
-            <Link className='btn btn-info inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.FORM.path.replace(':id', outgoing.id)}>
+            <Link className='btn btn-info inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.FORM.path({id: outgoing.id})}>
               {t('update')}
             </Link>
           </div>

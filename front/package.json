@@ -70,6 +70,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "html-webpack-plugin": "^5.5.0",
+    "international-types": "^0.8.1",
     "postcss": "^8.4.32",
     "postcss-cli": "^8.3.1",
     "prettier": "^2.8.4",

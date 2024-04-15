@@ -1,7 +1,6 @@
 import { useFormatDate } from '@/hooks/useFormatDate'
 import { ReportResponse } from '@/models/Report'
 import { Link } from 'react-router-dom'
-import { injectIdInPath } from '@/routes'
 import { REPORT_ROUTES } from '../constants'
 import { useI18n } from '@/i18n'
 
@@ -15,7 +14,7 @@ const ReportRow = ({ report }: ReportRowProps) => {
       <div className="md:col-span-3">
         <Link
           className="link-primary"
-          to={injectIdInPath(REPORT_ROUTES.routes.DETAILS.path, report.id)}
+          to={REPORT_ROUTES.routes.DETAILS.path({id: report.id})}
         >
           {report.name}
         </Link>

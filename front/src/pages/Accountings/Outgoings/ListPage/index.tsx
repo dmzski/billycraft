@@ -15,7 +15,7 @@ const ListPage = () => {
     <div>
       <div className="flex justify-between border-b my-4 pb-2 items-center">
         <h2 className="text-xl">{t('accounting.outgoings.pages.list.title')}</h2>
-        <Link className='btn btn-primary' to={routes.FORM.path.replace(':id', 'new')}>
+        <Link className='btn btn-primary' to={routes.FORM.path({id: "new"})}>
           {t('accounting.outgoings.pages.list.add')}
         </Link>
       </div>

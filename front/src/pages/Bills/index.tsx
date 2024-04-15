@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Button, Loader } from '@coco-ui/core'
+import { Loader } from '@coco-ui/core'
 import useCustomers from '@/hooks/useCustomers'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import BillFilterContainer from './Filters'
 import { filterBills } from '@/utils/bill'
@@ -16,7 +16,6 @@ const BillPage = () => {
   const customers = useCustomers()
   const [filters, setFilters] = useState<BillFilters>({})
   const { data, isLoading } = useAllBillsNotArchivedAndNotRefused()
-  const history = useHistory()
   const { t } = useI18n()
 
   const billSorted = useMemo(
@@ -24,18 +23,14 @@ const BillPage = () => {
     [customers, data, filters],
   )
 
-  const goToNewBill = () => {
-    history.push(ROUTES.BILL_FORM.path.replace(':id', 'new'))
-  }
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <h1 className="text-3xl">{t('bills.list.title')}</h1>
-        <Button size="md" className="gap-1" variant="primary" onClick={goToNewBill}>
+        <Link className="gap-1 btn btn-primary" to={ROUTES.BILL_ADD.path()}>
           <PlusIcon className="w-5" />
           <span>{t('bills.list.add')}</span>
-        </Button>
+        </Link>
       </div>
       <BillFilterContainer filters={filters} setFilters={setFilters} />
       <BillTable data={billSorted} />

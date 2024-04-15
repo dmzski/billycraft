@@ -27,7 +27,7 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
           })}
         >
           <div>
-            <Link to={ROUTES.BILL_FORM.path.replace(':id', id)} className="link-primary">
+            <Link to={ROUTES.BILL_FORM.path({ id })} className="link-hover link-primary">
               {id}
             </Link>
           </div>

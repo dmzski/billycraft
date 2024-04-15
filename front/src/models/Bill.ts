@@ -17,6 +17,7 @@ export type BillLine = {
   name: string
   description?: string
   type: LineTypeEnum
+  productId?: number
 }
 
 type Bill = {

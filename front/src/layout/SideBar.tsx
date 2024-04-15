@@ -1,9 +1,11 @@
 import { useUser } from '@/providers/UserProvider'
 import SideBarMenu from './SideBarMenu'
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid'
+import { useI18n } from '@/i18n'
 
 const SideBar = () => {
   const { organization } = useUser()
+  const { t } = useI18n()
 
   return (
     <aside className="bg-base-200 bg-opacity-20 border-r w-full md:w-80 overflow-y-auto fixed h-screen">
@@ -12,7 +14,7 @@ const SideBar = () => {
           <div className="bg-primary shadow-box flex gap-5 pl-5 items-center text-lg py-5 text-primary-content">
             <BuildingOfficeIcon className="w-10" />
             <div className='flex flex-col overflow-hidden'>
-              <small className='text-xs'>Entreprise</small>
+              <small className='text-xs'>{t('organization')}</small>
               <p title={organization?.name} className='truncate'>{organization?.name}</p>
             </div>
           </div>

@@ -4,8 +4,8 @@ import Supplier from '.'
 
 const SupplierSwitch = () => (
   <Switch>
-    <Route path={ROUTES.SUPPLIERS.path} exact={ROUTES.SUPPLIERS.exact} component={Supplier} />
-    <Route path={ROUTES.SUPPLIERS_FORM.path} component={Supplier} />
+    <Route path={ROUTES.SUPPLIERS.path()} exact={ROUTES.SUPPLIERS.exact} component={Supplier} />
+    <Route path={ROUTES.SUPPLIERS_FORM.path()} component={Supplier} />
   </Switch>
 )
 

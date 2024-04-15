@@ -2,6 +2,8 @@ import Customer from '@/models/Customer'
 import Bill, { BillLine } from '../models/Bill'
 import formatISO9075 from 'date-fns/formatISO9075'
 import parseJSON from 'date-fns/parseJSON'
+import { calculatePriceET, calculatePriceTTC } from './price'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
 
 export function filterBills(
   array: Bill[],
@@ -43,14 +45,6 @@ export function filterBills(
   })
 }
 
-export function calculatePriceTTC(price?: number | string | null, tva = 0): number {
-  if (!price || Number.isNaN(price)) {
-    return 0
-  }
-  const finalPrice = Number(`${price}`)
-  return finalPrice + finalPrice * (tva / 100)
-}
-
 export function getBillTotal(bill: Bill): number {
   const array = bill.lines
     .filter((billLine: BillLine) => billLine.price && billLine.quantity)
@@ -61,6 +55,55 @@ export function getBillTotal(bill: Bill): number {
   if (array && array.length > 0) {
     return array.reduce(
       (previousValue: number, currentValue: number) => previousValue + currentValue,
+    )
+  }
+  return 0
+}
+
+export function getBillTotalEt(bill: Bill): number {
+  const array = bill.lines
+    .filter((billLine: BillLine) => billLine.price && billLine.quantity)
+    .map(
+      (billine: BillLine) => calculatePriceET(billine.price) * (billine.quantity ?? 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue: number, currentValue: number) => previousValue + currentValue,
+    )
+  }
+  return 0
+}
+
+export function getBillTotalETForLineType(quote: Bill, type: LineTypeEnum): number {
+  const array = quote.lines
+    .filter((quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .map(
+      (quoteLine: BillLine) =>
+        calculatePriceET(quoteLine.price) *
+        (quoteLine.quantity ? quoteLine.quantity : 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue, 0
+    )
+  }
+  return 0
+}
+
+export function getBillTotalForLineType(quote: Bill, type: LineTypeEnum): number {
+  const array = quote.lines
+    .filter((quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .map(
+      (quoteLine: BillLine) =>
+        calculatePriceTTC(quoteLine.price, quote.tva) *
+        (quoteLine.quantity ? quoteLine.quantity : 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue, 0
     )
   }
   return 0

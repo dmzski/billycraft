@@ -28,9 +28,9 @@ const BillSwitch = () => {
         </NavLink>
       </div>
       <Switch>
-        <Route path={BILL_ROUTES.ARCHIVED.path} component={HistoryTab} />
-        <Route path={BILL_ROUTES.REFUSED.path} component={RefusedTab} />
-        <Route render={() => <Redirect to={BILL_ROUTES.ARCHIVED.path} />} />
+        <Route path={BILL_ROUTES.ARCHIVED.path()} component={HistoryTab} />
+        <Route path={BILL_ROUTES.REFUSED.path()} component={RefusedTab} />
+        <Route render={() => <Redirect to={BILL_ROUTES.ARCHIVED.path()} />} />
       </Switch>
     </div>
   )

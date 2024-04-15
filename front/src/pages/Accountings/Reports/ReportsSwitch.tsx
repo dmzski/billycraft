@@ -6,7 +6,7 @@ import OverviewPage from './OverviewPage'
 import { useI18n } from '@/i18n'
 import { ReactNode } from 'react'
 
-const { routes, path } = ROUTES.ACCOUNTINGS.routes.REPORTS
+const { routes } = ROUTES.ACCOUNTINGS.routes.REPORTS
 
 type ReportLayoutProps = {
   children: ReactNode
@@ -34,21 +34,21 @@ const ReportLayout = ({ children }: ReportLayoutProps) => {
 
 const ReportsSwitch = () => (
   <Switch>
-    <Route path={routes.OVERVIEW.path}>
+    <Route path={routes.OVERVIEW.path()}>
       <ReportLayout>
         <OverviewPage />
       </ReportLayout>
     </Route>
-    <Route path={routes.LIST.path} exact={routes.LIST.exact}>
+    <Route path={routes.LIST.path()} exact={routes.LIST.exact}>
       <ReportLayout>
         <ListPage />
       </ReportLayout>
     </Route>
-    <Route path={routes.DETAILS.path}>
+    <Route path={routes.DETAILS.path()}>
       <DetailsPage />
     </Route>
-    <Route path={path}>
-      <Redirect to={routes.OVERVIEW.path} />
+    <Route>
+      <Redirect to={routes.OVERVIEW.path()} />
     </Route>
   </Switch>
 )

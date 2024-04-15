@@ -1,6 +1,8 @@
 import { formatISO9075, parseJSON } from 'date-fns'
 import Customer from '@/models/Customer'
 import Quote, { QuoteLine, QuoteStatusEnum } from '../models/Quote'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { calculatePriceET, calculatePriceTTC } from './price'
 
 export function filterQuotes(
   array: Quote[],
@@ -43,14 +45,6 @@ export function filterQuotes(
   })
 }
 
-export function calculatePriceTTC(price?: number | string | null, tva = 0): number {
-  if (!price) {
-    return 0
-  }
-  const finalPrice = Number(`${price}`)
-  return finalPrice + finalPrice * (tva / 100)
-}
-
 export function getQuoteTotal(quote: Quote): number {
   const array = quote.lines
     .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
@@ -63,6 +57,57 @@ export function getQuoteTotal(quote: Quote): number {
   if (array && array.length > 0) {
     return array.reduce(
       (previousValue: number, currentValue: number) => previousValue + currentValue,
+    )
+  }
+  return 0
+}
+
+export function getQuoteTotalET(quote: Quote): number {
+  const array = quote.lines
+    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
+    .map(
+      (quoteLine: QuoteLine) =>
+        calculatePriceET(quoteLine.price) *
+        (quoteLine.quantity ? quoteLine.quantity : 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue, 0
+    )
+  }
+  return 0
+}
+
+export function getQuoteTotalETForLineType(quote: Quote, type: LineTypeEnum): number {
+  const array = quote.lines
+    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .map(
+      (quoteLine: QuoteLine) =>
+        calculatePriceET(quoteLine.price) *
+        (quoteLine.quantity ? quoteLine.quantity : 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue, 0
+    )
+  }
+  return 0
+}
+
+export function getQuoteTotalForLineType(quote: Quote, type: LineTypeEnum): number {
+  const array = quote.lines
+    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .map(
+      (quoteLine: QuoteLine) =>
+        calculatePriceTTC(quoteLine.price, quote.tva) *
+        (quoteLine.quantity ? quoteLine.quantity : 0),
+    )
+
+  if (array && array.length > 0) {
+    return array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue, 0
     )
   }
   return 0

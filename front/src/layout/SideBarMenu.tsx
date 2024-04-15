@@ -1,6 +1,6 @@
 import { Button } from '@coco-ui/core'
 import { useAuth } from '@/providers/AuthProvider'
-import { Route, ROUTES } from '@/routes'
+import { ROUTES } from '@/routes'
 import MenuItem from './MenuItem'
 import { ArrowRightStartOnRectangleIcon, LifebuoyIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
@@ -16,19 +16,20 @@ const menuRoutes = [
   ROUTES.ACCOUNTINGS,
   ROUTES.HISTORY,
   ROUTES.SETTINGS,
-] as Route[]
+] as const
 
 type MenuProps = {
-  route: Route
+  route: typeof menuRoutes[number]
 }
 const Menu = ({ route }: MenuProps) => {
+  const { t } = useI18n()
   return (
     <li>
-      <span className='menu-title'>{route.title}</span>
+      <span className='menu-title'>{t(`heads.${route.id}`)}</span>
       <ul>
-        {Object.values(route.routes ?? {}).map(subRoute => (
-          <MenuItem path={subRoute.path} key={`submenu-${subRoute.path}-${subRoute.title}`} text={subRoute.title} />
-        ))}
+        {'routes' in route ? Object.values(route.routes ?? {}).map(subRoute => (
+          <MenuItem path={subRoute.path()} id={subRoute.id} key={`submenu-${subRoute.path}`} />
+        )) : null}
       </ul>
     </li>
   )
@@ -43,15 +44,14 @@ const SideBarMenu = () => {
       <ul className="menu flex-grow gap-1">
         {menuRoutes
           .map(route =>
-            !route.routes ? (
-              <MenuItem
-                key={route.path + route.title}
-                text={route.title}
-                path={route.path}
-                icon={route.icon}
-              />
+            'routes' in route ? (
+              <Menu key={route.path()} route={route} />
             ) : (
-              <Menu key={route.path} route={route} />
+              <MenuItem
+                key={route.path()}
+                id={route.id}
+                path={route.path()}
+              />
             ),
           )}
       </ul>

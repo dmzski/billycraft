@@ -36,7 +36,7 @@ const CustomerForm = () => {
   const onSubmit = async (data: Partial<Customer>) => {
     try {
       await CustomerApi.createOrUpdate(data as Customer)
-      push(ROUTES.CUSTOMERS.path)
+      push(ROUTES.CUSTOMERS.path())
       toast.success(t('customers.form.submit.success'))
     } catch {
       toast.error(t('genericFormError'))
@@ -49,7 +49,7 @@ const CustomerForm = () => {
       try {
         await CustomerApi.delete(customer.id)
         toast.success(t('customers.form.delete.submit.success'))
-        push(ROUTES.CUSTOMERS.path)
+        push(ROUTES.CUSTOMERS.path())
       } catch {
         toast.error(t('genericFormError'))
       }

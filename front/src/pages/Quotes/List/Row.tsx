@@ -15,7 +15,7 @@ type QuoteTableLineProps = {
 }
 const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
   const { t } = useI18n()
-  const { reload } = useAllQuotesNotArchivedAndNotRefused({enabled: false})
+  const { reload } = useAllQuotesNotArchivedAndNotRefused({ enabled: false })
   const toast = useToast()
 
   const updateQuoteStatus = (status: QuoteStatusEnum) => (e: MouseEvent<HTMLButtonElement>) => {
@@ -67,7 +67,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
       <div className="md:col-span-1 text-sm">
         <Link
           className="link-primary"
-          to={ROUTES.QUOTE_EDIT.path.replace(':id', quote.id ?? 'new')}
+          to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}
         >
           {quote.id}
         </Link>

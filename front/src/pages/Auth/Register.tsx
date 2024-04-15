@@ -46,7 +46,7 @@ export const Register = () => {
     try {
       await register(params)
       toast.success(t('register.success'))
-      push(ROUTES.LOGIN.path)
+      push(ROUTES.LOGIN.path())
     } catch (err) {
       if (!(err instanceof ApiError) || err.code === 500) {
         sendErrorToSentry(err)

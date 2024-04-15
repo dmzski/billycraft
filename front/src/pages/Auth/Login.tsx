@@ -31,7 +31,7 @@ export const Login = () => {
     try {
       await login({ email, password })
       toast.success(t('login.success'))
-      push(ROUTES.DASHBOARD.path)
+      push(ROUTES.DASHBOARD.path())
     } catch (err) {
       if (!(err instanceof ApiError) || err.code === 500) {
         sendErrorToSentry(err)

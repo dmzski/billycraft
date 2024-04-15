@@ -28,7 +28,7 @@ const Row = ({ outgoing }: RowProps) => {
     <div className="grid md:grid-cols-12 gap-4 p-4">
       <div className="md:col-span-3 truncate">
         <Link
-          to={routes.DETAILS.path.replace(':id', outgoing.id)}
+          to={routes.DETAILS.path({id: outgoing.id})}
           className="link link-primary"
         >
           {outgoing.name}

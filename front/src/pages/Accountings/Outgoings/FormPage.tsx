@@ -1,7 +1,7 @@
 import { Button, Loader } from '@coco-ui/core'
 import { useCallback } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { injectIdInPath, ROUTES } from '@/routes'
+import { ROUTES } from '@/routes'
 import { OutgoingResponse } from '@/models/Outgoing'
 import OutgoingForm from './Form'
 import { useI18n } from '@/i18n'
@@ -19,7 +19,7 @@ const FormPage = () => {
 
   const onSubmitSuccess = useCallback(
     (res: OutgoingResponse) => {
-      push(injectIdInPath(routes.DETAILS.path, res.id))
+      push(routes.DETAILS.path({ id: res.id }))
     },
     [push],
   )

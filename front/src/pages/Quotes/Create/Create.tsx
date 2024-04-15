@@ -18,7 +18,7 @@ const defaultQuote = {
 export const Create = () => {
   const { t } = useI18n()
   const toast = useToast()
-  const history = useHistory()
+  const { push } = useHistory()
 
   const methods = useForm<QuoteFormValues>({
     shouldFocusError: true,
@@ -42,7 +42,7 @@ export const Create = () => {
     try {
       const { id } = await QuoteApi.create(tmp)
       toast.success(t('quotes.form.submit.success'))
-      history.push(ROUTES.QUOTE_EDIT.path.replace(':id', id))
+      push(ROUTES.QUOTE_OVERVIEW.path({ id }))
     } catch {
       toast.error(t('genericFormError'))
     }

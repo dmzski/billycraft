@@ -28,9 +28,9 @@ const QuoteSwitch = () => {
         </NavLink>
       </div>
       <Switch>
-        <Route path={QUOTE_ROUTES.ARCHIVED.path} component={HistoryTab} />
-        <Route path={QUOTE_ROUTES.REFUSED.path} component={RefusedTab} />
-        <Route render={() => <Redirect to={QUOTE_ROUTES.ARCHIVED.path} />} />
+        <Route path={QUOTE_ROUTES.ARCHIVED.path()} component={HistoryTab} />
+        <Route path={QUOTE_ROUTES.REFUSED.path()} component={RefusedTab} />
+        <Route render={() => <Redirect to={QUOTE_ROUTES.ARCHIVED.path()} />} />
       </Switch>
     </div>
   )

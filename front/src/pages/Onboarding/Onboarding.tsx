@@ -23,8 +23,8 @@ export const Onboarding = () => {
           </Link>
         </div>
         <Switch>
-          <Route path={ROUTES.ONBOARDING_CREATE.path} component={CreateOrganization} />
-          <Route path={ROUTES.ONBOARDING_JOIN.path} component={JoinOrganization} />
+          <Route path={ROUTES.ONBOARDING_CREATE.path()} component={CreateOrganization} />
+          <Route path={ROUTES.ONBOARDING_JOIN.path()} component={JoinOrganization} />
           <Route component={CreateOrganization} />
         </Switch>
       </div>
