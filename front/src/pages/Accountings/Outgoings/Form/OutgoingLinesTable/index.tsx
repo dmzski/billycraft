@@ -29,20 +29,16 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-base-300 border-b p-4">
         <div className="md:col-span-2">{t('supplier')} *</div>
         <div className="md:col-span-2">
-          {t('accounting.outgoings.details.lines.headers.billReference')} *
+          {t('accounting.outgoings.details.lines.headers.billReference')}
         </div>
         <div className="md:col-span-2">
           {t('accounting.outgoings.details.lines.headers.linkedBill')}
         </div>
-        <div className="md:col-span-2">{t('etTotal')} *</div>
-        <div className="md:col-span-2">{t('vat')} (%)</div>
+        <div className="md:col-span-2">{t('etTotal')}</div>
+        <div className="md:col-span-1">{t('vat')}</div>
         <div className="md:col-span-2">{t('itTotal')}</div>
+        <div/>
       </div>
-      {isLoading ? (
-        <div className="px-4 flex justify-center">
-          <Loader />
-        </div>
-      ) : null}
       {!isLoading ? (
         <div className="pb-4 flex flex-col">
           {fields.map((line, index) => (
@@ -54,7 +50,11 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
             </Button>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="px-4 flex justify-center">
+          <Loader />
+        </div>
+      )}
     </div>
   )
 }

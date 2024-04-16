@@ -40,10 +40,11 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
           BillStatusEnum.TO_DECLARE,
           BillStatusEnum.ARCHIVED,
         ]
-      case BillStatusEnum.REFUSED:
-        return [BillStatusEnum.DRAFT, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.TO_DECLARE:
         return [BillStatusEnum.ARCHIVED]
+      case BillStatusEnum.ARCHIVED: 
+      case BillStatusEnum.REFUSED: 
+        return []
       default:
         return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
     }

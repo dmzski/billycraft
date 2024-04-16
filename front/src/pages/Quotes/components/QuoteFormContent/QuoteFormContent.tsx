@@ -83,7 +83,6 @@ export const QuoteFormContent = ({ quote }: QuoteFormProps) => {
         isSearchable
         ref={customerIdField.ref}
         required
-        autoComplete="off"
       />
       <Input
         label={t('quotes.form.fields.vat.label')}

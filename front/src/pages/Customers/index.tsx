@@ -14,7 +14,7 @@ const CustomerPage = () => {
     <>
       <div className="flex flex-wrap justify-between">
         <h1 className="text-3xl">{t('customers.list.title')}</h1>
-        <Link to={ROUTES.CUSTOMER_ADD.path} className="gap-1 btn btn-primary">
+        <Link to={ROUTES.CUSTOMER_ADD.path()} className="gap-1 btn btn-primary">
           <PlusIcon className="w-5" />
           <span>{t('customers.list.add')}</span>
         </Link>

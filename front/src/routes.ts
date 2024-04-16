@@ -22,6 +22,7 @@ export type ReportRouteProps = {
   id: string
 }
 
+
 const DEFAULT_QUOTE_ROUTE_PARAMS: QuoteRouteProps = { id: ":id" }
 const DEFAULT_BILL_ROUTE_PARAMS: BillRouteProps = { id: ":id" }
 const DEFAULT_CUSTOMER_ROUTE_PARAMS: CustomerRouteProps = { id: ":id" }
@@ -73,6 +74,10 @@ export const ROUTES = {
   CUSTOMER_EDIT: {
     id: "customers.edit",
     path: (params = DEFAULT_CUSTOMER_ROUTE_PARAMS) => `/customers/edit/${params.id}`,
+  },
+  CUSTOMER_OVERVIEW: {
+    id: "customers.overview",
+    path: (params = DEFAULT_CUSTOMER_ROUTE_PARAMS) => `/customers/overview/${params.id}`,
   },
   DASHBOARD: {
     id: "dashboard",

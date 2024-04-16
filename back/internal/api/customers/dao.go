@@ -12,21 +12,21 @@ type CustomerDao struct {
 }
 
 func (dao CustomerDao) FindAllByTenant(tenant int) (customers []models.Customer) {
-	if err := database.DBConn.Unscoped().Find(&customers, "company_id = ?", tenant).Error; err != nil {
+	if err := database.DBConn.Order("name ASC").Where("deleted_at is NULL").Find(&customers, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao CustomerDao) FindAllByTenantAndNameContains(tenant int, q string) (customers []models.Customer) {
-	if err := database.DBConn.Where("company_id = ? AND TRANSLATE(LOWER(name), ' ', '') LIKE ?", tenant, "%"+strings.ReplaceAll(strings.ToLower(q)+"%", " ", "")).Find(&customers).Error; err != nil {
+	if err := database.DBConn.Order("name ASC").Where("company_id = ? AND TRANSLATE(LOWER(name), ' ', '') LIKE ?", tenant, "%"+strings.ReplaceAll(strings.ToLower(q)+"%", " ", "")).Find(&customers).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
 func (dao CustomerDao) FindOneByIdAndTenant(id int, tenant int) (customer models.Customer) {
-	if err := database.DBConn.First(&customer, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
+	if err := database.DBConn.Unscoped().First(&customer, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return

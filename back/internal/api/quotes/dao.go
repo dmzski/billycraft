@@ -138,12 +138,18 @@ func (dao QuoteDao) CreateBill(creator models.User, id string) (bill models.Bill
 	bill.CompanyID = *creator.CompanyID
 	bill.CreatedBy = creator.Email
 	bill.Status = "DRAFT"
-  quote.Status = "ARCHIVED"
 
-	if err := database.DBConn.Omit("Company", "Custom").Create(&bill).Error; err != nil {
-		log.Println("Error : ", err.Error())
+	if err := tx.Omit("Company", "Custom").Create(&bill).Error; err != nil {
+    tx.Rollback()
 		panic(err)
 	}
+	if err := tx.Model(&quote).Update("status", "ARCHIVED").Error; err != nil {
+    tx.Rollback()
+		panic(err)
+	}
+
+  tx.Commit()
+
 	return
 }
 

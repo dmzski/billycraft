@@ -50,6 +50,8 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
         ].sort()
       case QuoteStatusEnum.DEPOSIT_ASK:
         return [QuoteStatusEnum.ARCHIVED].sort()
+      case QuoteStatusEnum.ARCHIVED:
+        return []
       default:
         return [
           QuoteStatusEnum.DRAFT,

@@ -83,7 +83,6 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
         isSearchable
         ref={customerIdField.ref}
         required
-        autoComplete="off"
       />
       <Input
         label={t('bills.form.fields.vat.label')}

@@ -1,12 +1,12 @@
-import { Button, Input, Loader, TextArea, useToast } from '@coco-ui/core'
+import { Alert, Button, Input, Loader, TextArea, useToast } from '@coco-ui/core'
 import { CustomerApi } from '@/api/CustomerApi'
 import { useController, useForm } from 'react-hook-form'
-import Customer from '@/models/Customer'
-import { ChevronLeftIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { ROUTES } from '@/routes'
+import { CustomerUpdateRequest } from '@/models/dtos/CustomerUpdateRequest'
 
 const defaultCustomer = {
   address: '',
@@ -16,9 +16,9 @@ const defaultCustomer = {
   contact: '',
   email: '',
   postalCode: '',
-} as Customer
+} as CustomerUpdateRequest
 
-const CustomerForm = () => {
+export const Edit = () => {
   const { id } = useParams<{ id?: string }>()
   const { data: customer, isLoading } = useCustomerQuery(Number(id) ?? 0, { enabled: !!id })
   const { t } = useI18n()
@@ -28,31 +28,20 @@ const CustomerForm = () => {
     handleSubmit,
     control,
     formState: { isValid, isSubmitting },
-  } = useForm<Partial<Customer>>({
+  } = useForm<CustomerUpdateRequest>({
     mode: 'onChange',
     values: customer ?? defaultCustomer
   })
 
-  const onSubmit = async (data: Partial<Customer>) => {
+  const onSubmit = async (data: CustomerUpdateRequest) => {
     try {
-      await CustomerApi.createOrUpdate(data as Customer)
-      push(ROUTES.CUSTOMERS.path())
-      toast.success(t('customers.form.submit.success'))
+      if (customer?.id) {
+        await CustomerApi.update(data)
+        push(ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() }))
+        toast.success(t('customers.form.submit.success'))
+      }
     } catch {
       toast.error(t('genericFormError'))
-    }
-  }
-
-  const tryDelete = async () => {
-    const deleteCustomer = window.confirm('Êtes-vous sur de vouloir supprimer ce client')
-    if (deleteCustomer && customer?.id) {
-      try {
-        await CustomerApi.delete(customer.id)
-        toast.success(t('customers.form.delete.submit.success'))
-        push(ROUTES.CUSTOMERS.path())
-      } catch {
-        toast.error(t('genericFormError'))
-      }
     }
   }
 
@@ -92,24 +81,24 @@ const CustomerForm = () => {
     rules: { maxLength: 100 },
   })
 
-  if (id && !customer && isLoading) {
+  if (!customer && isLoading) {
     return <Loader />
+  }
+
+  if (!customer) {
+    return (
+      <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    )
   }
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <Link to={ROUTES.CUSTOMERS.path} className='link-primary link flex gap-2 items-center'>
-      <ChevronLeftIcon className='w-5' />
-      {t('customers.form.backToList')}
+      <Link to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer?.id.toString() })} className='link-primary link-hover flex gap-2 items-center'>
+        <ChevronLeftIcon className='w-5' />
+        {t('customers.form.backToList')}
       </Link>
       <div className='flex flex-col md:flex-row justify-between items-center gap-2'>
-        <h1 className="text-3xl">{!customer?.id ? 'Nouveau client' : `Modifier un client`}</h1>
-        {customer?.id ? (
-          <Button outline className="gap-1 items-center" variant="error" onClick={tryDelete}>
-            <TrashIcon className="w-5" />
-            <span>{t('delete')}</span>
-          </Button>
-        ) : null}
+        <h1 className="text-3xl">{"Modifier un client"}</h1>
       </div>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col gap-3'>
@@ -205,5 +194,3 @@ const CustomerForm = () => {
     </div>
   )
 }
-
-export default CustomerForm

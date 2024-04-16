@@ -109,7 +109,7 @@ export const Overview = () => {
             <dt className="font-bold">{pageT('sections.information.customer')}</dt>
             <dd>
               {customer ? (
-                <Link className="link-hover link-primary" to={ROUTES.CUSTOMER_EDIT.path({ id: customer.id.toString() })}>
+                <Link className="link-hover link-primary" to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}>
                   {customer.name ?? "-"}
                 </Link>
               ) : "-"}

@@ -5,9 +5,7 @@ import { Control, useController, useWatch } from 'react-hook-form'
 import SelectBillModal from './modals/SelectBillModal'
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
-import { useFormatCurrency } from '@/hooks/useFormatCurrency'
-
-const DEFAULT_LINE_COLOR = 'initial'
+import { calculatePriceTTC } from '@/utils/price'
 
 type RowProps = {
   control: Control<OutgoingRequest>
@@ -16,7 +14,6 @@ type RowProps = {
   disabled?: boolean
 }
 const Row = ({ control, index, onDelete, disabled }: RowProps) => {
-  const formatCurrency = useFormatCurrency()
 
   const vatController = useController({
     name: `lines.${index}.vat`,
@@ -31,40 +28,40 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
 
   const { data: suppliers } = useAllSuppliersQuery()
 
-  const [totalHT, supplierId, vat] = useWatch({
-    name: [`lines.${index}.totalHT`, `lines.${index}.supplierId`, `lines.${index}.vat`],
+  const [totalHT, vat] = useWatch({
+    name: [`lines.${index}.totalHT`, `lines.${index}.vat`],
     control,
   })
 
   const totalTTC = useMemo(
     () =>
       !Number.isNaN(totalHT) && !Number.isNaN(vat)
-        ? formatCurrency(Number(totalHT * (1 + vat / 100)) || 0)
-        : '',
-    [formatCurrency, totalHT, vat],
+        ? calculatePriceTTC(totalHT, vat)
+        : 0,
+    [totalHT, vat],
   )
 
   const supplierOptions = useMemo(
-    () => (suppliers ? suppliers.map(({ id, name }) => ({ value: id, label: name })) : []),
+    () => (suppliers ? suppliers.map(({ id, name, color }) => ({
+      value: id,
+      label: name,
+      render: color ? (
+        <span className='inline-flex gap-2 items-center'>
+          <span className='size-4 rounded-full' style={{ backgroundColor: color }} />
+          <span>{name}</span>
+        </span>
+      ) : undefined
+    })) : []),
     [suppliers],
-  )
-
-  const lineColor = useMemo(
-    () =>
-      supplierId && suppliers
-        ? suppliers.find(({ id }) => id === supplierId)?.color ?? DEFAULT_LINE_COLOR
-        : DEFAULT_LINE_COLOR,
-    [supplierId, suppliers],
   )
 
   const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({ control, name: `lines.${index}.supplierId`, rules: { required: true } })
   const { field: supplierBillReferenceField, fieldState: supplierBillReferenceFieldState } = useController({ control, name: `lines.${index}.supplierBillReference` })
   const { field: billIdField, fieldState: billIdFieldState } = useController({ control, name: `lines.${index}.billId` })
-  const { field: etTotalField, fieldState: etTotalFieldState } = useController({ control, name: `lines.${index}.totalHT` })
+  const { field: etTotalField, fieldState: etTotalFieldState } = useController({ control, name: `lines.${index}.totalHT`, rules: { required: true } })
 
   return (
     <div
-      style={{ backgroundColor: lineColor }}
       className="px-4 py-2 grid md:grid-cols-12 items-center gap-4"
     >
       <div className="md:col-span-2">
@@ -82,6 +79,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
           ref={supplierIdField.ref}
           error={supplierIdFieldState.invalid}
           disabled={disabled}
+          isSearchable
         />
       </div>
       <div className="md:col-span-2">
@@ -105,16 +103,18 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
               ref={billIdField.ref}
               error={billIdFieldState.invalid}
               disabled={disabled}
+              suffix={
+                billIdField.value ? (
+                  <XMarkIcon
+                    className="absolute right-2 top-2 cursor-pointer"
+                    role="button"
+                    onClick={() => billIdField.onChange('')}
+                  />
+                ) : null
+              }
             />
           }
         />
-        {billIdField.value ? (
-          <XMarkIcon
-            className="absolute right-2 top-2 cursor-pointer"
-            role="button"
-            onClick={() => billIdField.onChange('')}
-          />
-        ) : null}
       </div>
       <div className="md:col-span-2">
         <Input
@@ -131,9 +131,10 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
           ref={etTotalField.ref}
           error={etTotalFieldState.invalid}
           disabled={disabled}
+          suffix="€"
         />
       </div>
-      <div className="md:col-span-2">
+      <div className="md:col-span-1">
         <Input
           type="number"
           step={1}
@@ -149,11 +150,23 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
           ref={vatController.field.ref}
           error={vatController.fieldState.invalid}
           disabled={disabled}
+          required
+          suffix={
+            <span className='px-2'>%</span>
+          }
         />
       </div>
-      <div className="md:col-span-2 gap-2 flex items-center">
-        <p className="flex-grow">{totalTTC}</p>
-        <Button variant="error" onClick={onDelete} type="button">
+      <div className="md:col-span-2">
+        <Input
+          className='w-full'
+          type="number"
+          value={totalTTC}
+          readOnly
+          suffix="€"
+        />
+      </div>
+      <div className='flex justify-end'>
+        <Button variant="error" outline onClick={onDelete} type="button">
           <TrashIcon className="w-5" />
         </Button>
       </div>
