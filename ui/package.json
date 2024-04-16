@@ -21,7 +21,6 @@
     "name": "Dorian Maliszewski",
     "url": "https://dorianmaliszewski.fr"
   },
-  "homepage": "https://dorianmaliszewski.github.io/coco-ui",
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "clsx": "^2.1.0",
@@ -29,7 +28,6 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.4.2"
   },
-  "packageManager": "^pnpm@8.14.0",
   "devDependencies": {
     "@storybook/addon-a11y": "^7.6.17",
     "@storybook/addon-actions": "^7.6.17",
@@ -78,10 +76,6 @@
     "prepare": "pnpm run build",
     "format": "prettier --write \"./src/**/*.{ts,tsx}\""
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -93,9 +87,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DorianMaliszewski/cocoerp.git"
   }
 }
