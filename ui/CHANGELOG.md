@@ -1,5 +1,14 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.29.0
+
+### Minor Changes
+
+- ee3e82a: feat(select): improve styles
+- 7097660: fix: improve suffix and prefix styles and select width
+- ee3e82a: feat(input): allow prefix and suffix
+- 9c51f2d: fix(select): better searchable select
+
 ## 1.28.1
 
 ### Patch Changes

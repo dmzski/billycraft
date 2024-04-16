@@ -1,5 +1,23 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.28.0
+
+### Minor Changes
+
+- 9c51f2d: fix: condition create bill from quote and select
+- f35e32b: feat: new bills and quotes form and add overview
+- e987ff5: feat: better status management
+- f73c129: feat: quote improve form ui
+- e987ff5: feat: customer overview
+
+### Patch Changes
+
+- Updated dependencies [ee3e82a]
+- Updated dependencies [7097660]
+- Updated dependencies [ee3e82a]
+- Updated dependencies [9c51f2d]
+  - @coco-ui/core@1.29.0
+
 ## 2.27.0
 
 ### Minor Changes
