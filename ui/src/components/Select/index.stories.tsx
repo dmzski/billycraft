@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
 import Select, { ValueType } from '.'
 import Button from 'components/Button'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 export default {
   title: 'Components/Select',
@@ -25,12 +25,11 @@ const fakeOptions = [
 type Story = StoryObj<typeof Select>
 
 const render: Story['render'] = props => {
-  const ref = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState<ValueType>()
 
   return (
     <div className="min-h-44 flex gap-2 flex-row justify-start">
-      <Select {...props} value={value} onChange={result => setValue(result)} ref={ref} />
+      <Select {...props} value={value} onChange={result => setValue(result)} />
       <div className="w-32 flex pt-3">Value is : {value}</div>
     </div>
   )

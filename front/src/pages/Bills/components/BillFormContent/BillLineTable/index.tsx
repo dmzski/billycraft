@@ -59,12 +59,13 @@ const BillLineTable = ({
   const addLine = (newLine = defaultLine) => {
     append({ ...newLine, billId: '', line: fields.length, id: '' })
   }
-  const productOptions = useMemo(() => {
+  const productOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
     if (allProducts) {
       return allProducts.map(product => {
         const IconComponent = LINE_TYPE[product.type]?.icon
         return {
           value: product.id,
+          searchText: product.name,
           label: (
             <span className='inline-flex gap-2 items-center'>
               {IconComponent ? <IconComponent className='w-5' /> : null}
@@ -96,7 +97,7 @@ const BillLineTable = ({
         setProductIdSelected(undefined)
         setTimeout(() => {
           selectExistingProductRef.current?.focus()
-        })
+        }, 200)
       }
     }
   }
@@ -110,7 +111,6 @@ const BillLineTable = ({
             className="md:col-span-3"
             name="existing-product"
             id="existing-product"
-            autoComplete="off"
             options={productOptions}
             isSearchable
             placeholder={t('bills.form.lines.existingProduct.label')}

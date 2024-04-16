@@ -1,13 +1,11 @@
 import {
   ForwardedRef,
   forwardRef,
-  MouseEvent,
   useMemo,
   useState,
   useCallback,
   InputHTMLAttributes,
   KeyboardEventHandler,
-  ChangeEventHandler,
   useRef,
   useImperativeHandle,
   useId,
@@ -34,6 +32,7 @@ export type SelectOptionType = {
   value: OptionValue
   label: ReactNode
   render?: ReactNode
+  searchText?: string
 }
 
 export type ValueType = OptionValue | Array<OptionValue> | undefined
@@ -47,9 +46,7 @@ export type SelectProps = Pick<
   | 'className'
   | 'id'
   | 'aria-label'
-  | 'tabIndex'
   | 'name'
-  | 'autoComplete'
 > & {
   options: SelectOptionType[]
   label?: string
@@ -70,18 +67,11 @@ const KEYS = {
   Enter: 'Enter',
 }
 
-const filterOptions = ({ options, search }: { options: SelectOptionType[]; search: string }) =>
-  options.filter(option =>
-    typeof option.label === 'string'
-      ? option.label.toLowerCase().includes(search.toLowerCase())
-      : true,
-  )
 
 const Select = (
   {
     'aria-label': ariaLabel,
     readOnly,
-    autoComplete,
     className,
     id: idProp,
     name,
@@ -92,7 +82,6 @@ const Select = (
     value = isMulti ? [] : undefined,
     disabled,
     label,
-    tabIndex,
     isSearchable,
     error,
     required,
@@ -104,22 +93,14 @@ const Select = (
   const generatedId = useId()
   const id = idProp ?? generatedId
   const [isOpen, setOpen] = useState(false)
-  const [search, setSearch] = useState<string>('')
-  const [focused, setFocused] = useState<OptionValue>(options[0]?.value)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
 
   useClickOutsideHandler(containerRef, () => {
-    setSearch('')
     setOpen(false)
   })
-
-  const filteredOptions = useMemo(
-    () => (search.length === 0 ? options : filterOptions({ options, search })),
-    [isSearchable, options, search, filterOptions],
-  )
 
   const handleOpen = useCallback(() => {
     if (!disabled) {
@@ -144,7 +125,6 @@ const Select = (
       } else {
         onChange?.([...value, option.value])
       }
-      setSearch('')
     },
     [onChange, value],
   )
@@ -153,7 +133,6 @@ const Select = (
   const handleClickForSingle = useCallback(
     (option: SelectOptionType) => {
       onChange?.(option.value)
-      setSearch('')
       inputRef.current?.focus()
       setOpen(false)
     },
@@ -164,64 +143,19 @@ const Select = (
     event => {
       if (!isOpen) {
         if (event.key === KEYS.ArrowDown) {
-          handleOpen()
           event.preventDefault()
+          handleOpen()
         }
-      } else if (
-        [KEYS.ArrowDown, KEYS.ArrowUp, KEYS.Enter, KEYS.Tab, KEYS.Escape].includes(event.key)
-      ) {
-        switch (event.key) {
-          case KEYS.Tab:
-          case KEYS.Escape:
-            setOpen(false)
-            break
-          case KEYS.ArrowUp:
-            {
-              event.preventDefault()
-              const index = filteredOptions.findIndex(option => option.value === focused)
-              setFocused(current => filteredOptions[index - 1]?.value ?? current)
-            }
-            break
-          case KEYS.ArrowDown:
-            event.preventDefault()
-            if (!isOpen) {
-              handleOpen()
-              setFocused(filteredOptions[0].value)
-            } else {
-              const index = filteredOptions.findIndex(option => option.value === focused)
-              setFocused((current: string | number) => filteredOptions[index + 1]?.value ?? current)
-            }
-            break
-          case KEYS.Enter: {
-            if (isOpen) {
-              event.preventDefault()
-              const optionSelected = filteredOptions.find(option => option.value === focused)
-              if (optionSelected) {
-                isMulti ? handleClickForMulti(optionSelected) : handleClickForSingle(optionSelected)
-              }
-              break
-            }
-          }
+      } else {
+        if (
+          KEYS.Escape === event.key
+        ) {
+          setOpen(false)
         }
       }
     },
-    [isOpen, filteredOptions, handleClickForMulti, handleClickForMulti, focused, handleOpen],
+    [isOpen, handleOpen, setOpen],
   )
-
-  const handleInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    event => {
-      setSearch(event.currentTarget.value ?? '')
-      handleOpen()
-    },
-    [handleOpen],
-  )
-
-  const handleInputKeyUp: KeyboardEventHandler = useCallback(event => {
-    if ([KEYS.Enter].includes(event.key)) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-  }, [])
 
   const inputClassName = clsx(inputClasses, 'relative', variants[variant] ?? variants.default, {
     [errorClasses]: error,
@@ -229,6 +163,9 @@ const Select = (
   })
 
   const valueRender = useMemo(() => {
+    if (!value) {
+      return placeholder
+    }
     if (Array.isArray(value)) {
       return value
         .map(aValue => {
@@ -251,75 +188,53 @@ const Select = (
     return optionFound?.render ?? optionFound?.label
   }, [options, value])
 
-  const inputValue = useMemo(() => {
-    if (isOpen && search.length > 0) {
-      return search
-    }
-
-    return ''
-  }, [value, search, isOpen])
-
   return (
     <div
-      className={clsx('dropdown', className)}
       aria-expanded={isOpen}
       aria-disabled={disabled}
       ref={containerRef}
+      onKeyDown={handleKeyDown}
+      onClick={handleOpen}
+      aria-invalid={required && !value}
+      className={clsx("form-control", className)}
     >
-      <div
-        className="form-control"
-        aria-invalid={required && !value}
-        onKeyDown={handleKeyDown}
-        onClick={() => {
-          inputRef.current?.focus()
-        }}
-      >
-        {label ? (
-          <label htmlFor={id} className="label py-1">
-            <span className="label-text">{label}</span>
-          </label>
-        ) : null}
-        <div className={inputClassName}>
-          <span className="flex-grow inline-flex gap-2">
-            {isOpen && search.length > 0 ? '' : valueRender}
-          </span>
-          <input
-            className={clsx('bg-transparent outline-none absolute inset-y-0 inset-x-4', {
-              'cursor-pointer': !isSearchable,
-            })}
-            autoFocus={autoFocus}
-            onClick={handleOpen}
-            name={name}
-            role="combobox"
-            disabled={disabled}
-            onKeyUp={handleInputKeyUp}
-            onChange={handleInputChange}
-            readOnly={readOnly || !isSearchable}
-            aria-label={ariaLabel}
-            placeholder={!value ? placeholder ?? 'Select...' : undefined}
-            type="text"
-            id={id}
-            tabIndex={tabIndex}
-            ref={inputRef}
-            value={inputValue}
-            aria-haspopup="listbox"
-            autoComplete={autoComplete}
-          />
-        </div>
-      </div>
-      {filteredOptions?.length > 0 ? (
-        <OptionList
-          isMulti={isMulti}
-          options={filteredOptions}
-          value={value}
-          focused={focused}
-          isOpen={isOpen}
-          onOptionClick={(option: SelectOptionType, event: MouseEvent) => {
-            event.preventDefault()
-            isMulti ? handleClickForMulti(option) : handleClickForSingle(option)
-          }}
-        />
+      {label ? (
+        <label htmlFor={id} className="label py-1">
+          <span className="label-text">{label}</span>
+        </label>
       ) : null}
+      <div
+        className={clsx(inputClassName, "relative flex-nowrap")}
+      >
+        <span className="flex-grow inline-flex gap-2 truncate">
+          {valueRender}
+        </span>
+        <input
+          aria-haspopup="listbox"
+          autoFocus={autoFocus}
+          id={id}
+          className={clsx('sr-only')}
+          tabIndex={-1}
+          name={name}
+          disabled={disabled || readOnly}
+          aria-label={ariaLabel}
+          ref={inputRef}
+          onFocus={handleOpen}
+          onClick={handleOpen}
+          defaultValue={value?.toString() ?? ""}
+        />
+        {options?.length > 0 && isOpen ? (
+          <OptionList
+            isMulti={isMulti}
+            options={options}
+            value={value}
+            isSearchable={isSearchable}
+            onOptionClick={(option: SelectOptionType) => {
+              isMulti ? handleClickForMulti(option) : handleClickForSingle(option)
+            }}
+          />
+        ) : null}
+      </div>
     </div>
   )
 }

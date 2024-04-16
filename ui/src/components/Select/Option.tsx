@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useMemo, useRef } from 'react'
+import { KeyboardEventHandler, MouseEventHandler, useEffect, useMemo, useRef } from 'react'
 import { SelectOptionType, ValueType } from '.'
 import clsx from 'clsx'
 
@@ -11,38 +11,47 @@ type OptionProps = {
   isMulti?: boolean
   value?: ValueType
   option: SelectOptionType
-  focused: number | string
-  onOptionClick: (option: SelectOptionType, event: MouseEvent) => void
+  onOptionClick: (option: SelectOptionType) => void
+  autoFocus?: boolean
 }
 
-const Option = ({ isMulti, value, option, focused, onOptionClick }: OptionProps) => {
+const Option = ({ autoFocus, isMulti, value, option, onOptionClick }: OptionProps) => {
   const isSelected = useMemo(() => {
     return isMulti && Array.isArray(value) ? value.includes(option.value) : option.value === value
   }, [value, option, isMulti])
 
-  const isFocused = useMemo(() => focused === option.value, [option, focused])
-  const optionRef = useRef<HTMLLIElement>(null)
+  const optionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    if (isFocused && optionRef.current) {
-      optionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'nearest',
-        block: 'nearest',
-      })
+    setTimeout(() => {
+      if (autoFocus && optionRef.current) {
+        optionRef.current.focus()
+      }
+    })
+  }, [autoFocus])
+
+  const handleSelectOptionClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault()
+    onOptionClick(option)
+  }
+  const handleSelectOptionEnter: KeyboardEventHandler<HTMLButtonElement> = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      onOptionClick(option)
     }
-  }, [isFocused])
+  }
 
   return (
-    <li ref={optionRef}>
+    <li role="option">
       <button
-        role="option"
-        tabIndex={-1}
+        autoFocus={autoFocus}
+        ref={optionRef}
         className={clsx({
-          active: isFocused,
-          'border-l-4 rounded-l-none bg-primary bg-opacity-10 border-primary': isSelected,
+          'focus:bg-primary-content focus:text-primary': !isSelected,
+          'border-l-4 rounded-l-none bg-primary-content text-primary border-primary focus:bg-primary focus:text-primary-content focus:border-primary-content': isSelected,
         })}
-        onClick={event => onOptionClick(option, event)}
+        onClick={handleSelectOptionClick}
+        onKeyUp={handleSelectOptionEnter}
       >
         {option.label}
       </button>

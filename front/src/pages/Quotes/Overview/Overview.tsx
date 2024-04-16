@@ -152,7 +152,7 @@ export const Overview = () => {
             outline
             size="md"
             onClick={createBill}
-            disabled={isQuoteMinimumAccepted(quote)}
+            disabled={!isQuoteMinimumAccepted(quote)}
             className='gap-4'
           >
             <PlusIcon className='w-5' />
