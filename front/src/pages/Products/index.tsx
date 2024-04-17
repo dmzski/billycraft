@@ -1,18 +1,21 @@
 import Loader from '../../components/Loader'
 import ProductTable from './List'
-import Product from '@/models/Product'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { useI18n } from '@/i18n'
 import { AddProductModal } from './modals/AddProductModal'
 import { Button } from '@coco-ui/core'
+import { Filters } from './Filters'
+import { useMemo, useState } from 'react'
+import { ProductFilters, filterProducts } from '@/utils/products'
 
 const ProductsPage = () => {
   const { t } = useI18n()
+  const [filters, setFilters] = useState<ProductFilters>({ type: '', name: '' })
   const { data, isLoading, reload } = useAllProductsQuery()
 
-  const sortedData = data?.sort((a: Product, b: Product) =>
+  const enhancedData = useMemo(() => filterProducts(data?.sort((a, b) =>
     a.name.localeCompare(b.name),
-  ) ?? []
+  ) ?? [], filters), [data, filters])
 
   return (
     <div className='flex flex-col gap-10'>
@@ -37,10 +40,13 @@ const ProductsPage = () => {
           </div>
         ) : null}
         {data ? (
-          <ProductTable
-            products={sortedData}
-            reloadProducts={reload}
-          />
+          <div className="flex flex-col gap-5">
+            <Filters filters={filters} onChangeFilters={setFilters} />
+            <ProductTable
+              products={enhancedData}
+              reloadProducts={reload}
+            />
+          </div>
         ) : null}
       </div>
     </div>

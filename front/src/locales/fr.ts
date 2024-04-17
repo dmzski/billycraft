@@ -595,6 +595,8 @@ export default {
   'products.list.title': 'Articles',
   'products.list.add': 'Ajouter un article',
   'products.list.description': 'Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les ajouter plus rapidement lors de la création de vos factures et devis.',
+  'products.list.filters.fields.type.label': 'Type',
+  'products.list.filters.fields.name.label': 'Désignation',
   'products.list.headers.type': 'Type',
   'products.list.headers.name': 'Désignation',
   'products.list.headers.etPrice': 'Prix HT',
