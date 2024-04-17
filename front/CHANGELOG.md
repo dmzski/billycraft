@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.29.0
+
+### Minor Changes
+
+- f86a80e: feat: allow users to edit ttc prices
+
 ## 2.28.0
 
 ### Minor Changes
