@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.30.0
+
+### Minor Changes
+
+- 1b9d0bd: fix: typecheck
+
 ## 2.29.0
 
 ### Minor Changes
