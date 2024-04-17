@@ -31,7 +31,7 @@ func getOrGenerateQuote(c *fiber.Ctx) error {
 			return generateQuote(c)
 		}
 
-		file, err := os.Open(fmt.Sprintf("%s/%d/quotes/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.ID))
+		file, err := os.Open(fmt.Sprintf("%s/%s/quotes/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.Name))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
 			return generateQuote(c)
@@ -50,7 +50,7 @@ func getOrGenerateBill(c *fiber.Ctx) error {
 			return generateBill(c)
 		}
 
-		file, err := os.Open(fmt.Sprintf("%s/%d/bills/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
+		file, err := os.Open(fmt.Sprintf("%s/%s/bills/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.Name))
 		if err != nil {
 			log.Println("Error when opening the file, err " + err.Error())
 			return generateBill(c)

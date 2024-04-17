@@ -43,8 +43,8 @@ var (
 	TOTALTTC_TITLE        = "Total TTC"
 	TOTALHT_TITLE         = "Total HT"
 	VAT_TITLE             = "TVA"
-	QUOTES_FOLDER         = "%s/%d/quotes"
-	BILLS_FOLDER          = "%s/%d/bills"
+	QUOTES_FOLDER         = "%s/%s/quotes"
+	BILLS_FOLDER          = "%s/%s/bills"
 )
 
 func parseHexColor(s string) (c color.RGBA, err error) {

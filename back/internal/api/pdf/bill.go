@@ -59,7 +59,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	// Put the logo
 	if company.Logo != nil {
-    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%d/logo.png", company.ID))
+    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", company.ID))
 		if err == nil {
 			opt := gofpdf.ImageOptions{
 				ImageType: "png",
@@ -127,7 +127,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	pdf.SetFont(fontFamily, "B", fontSize)
 	pdf.SetY(y + cellMargin)
-	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(REFERENCE_TITLE+" : "+bill.ID), "", "R", false)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(REFERENCE_TITLE+" : "+bill.Name), "", "R", false)
 	pdf.SetY(pdf.GetY() + lineHt)
 	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(OBJECT_TITLE+" : "+bill.Title), "", "L", false)
 	pdf.SetY(pdf.GetY() + lineHt)
@@ -302,13 +302,13 @@ func generateBillPDF(bill models.Bill) *os.File {
 	}
 
 	// Save the pdf
-	err = pdf.OutputFileAndClose(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
+	err = pdf.OutputFileAndClose(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.Name))
 	if err != nil {
 		log.Panicln(err.Error())
 	}
 
 	// Get it and return it
-	file, err := os.Open(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.ID))
+	file, err := os.Open(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, bill.CompanyID, bill.Name))
 	if err != nil {
 		log.Panicln(err.Error())
 	}

@@ -59,7 +59,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	// Put the logo
 	if company.Logo != nil {
-    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%d/logo.png", company.ID))
+    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", company.ID))
 		if err == nil {
 			opt := gofpdf.ImageOptions{
 				ImageType: "png",
@@ -127,7 +127,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 
 	pdf.SetFont(fontFamily, "B", fontSize)
 	pdf.SetY(y + cellMargin)
-	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(REFERENCE_TITLE+" : "+quote.ID), "", "R", false)
+	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(REFERENCE_TITLE+" : "+quote.Name), "", "R", false)
 	pdf.SetY(pdf.GetY() + lineHt)
 	pdf.MultiCell(pageSize.Wd-marginL*2, lineHt, tr(OBJECT_TITLE+" : "+quote.Title), "", "L", false)
 	pdf.SetY(pdf.GetY() + lineHt)
@@ -303,13 +303,13 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	}
 
 	// Save the pdf
-	err = pdf.OutputFileAndClose(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.ID))
+	err = pdf.OutputFileAndClose(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.Name))
 	if err != nil {
 		log.Panicln(err.Error())
 	}
 
 	// Get it and return it
-	file, err := os.Open(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.ID))
+	file, err := os.Open(fmt.Sprintf(FOLDER+"/%s.pdf", config.Get().UploadDir, quote.CompanyID, quote.Name))
 	if err != nil {
 		log.Panicln(err.Error())
 	}
