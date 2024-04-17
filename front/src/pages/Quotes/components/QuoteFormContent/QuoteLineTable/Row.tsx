@@ -9,6 +9,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useI18n } from '@/i18n'
 import { QuoteFormValues } from '../types'
 import clsx from 'clsx'
+import { calculatePriceETFromIT, calculatePriceTTC } from '@/utils/price'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
@@ -25,7 +26,6 @@ const QuoteLineTableLine = ({
   control,
 }: QuoteLineTableLineProps) => {
   const { t } = useI18n()
-  const tva = useWatch({ control, name: 'tva' })
   const { listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
     data: {
@@ -38,27 +38,18 @@ const QuoteLineTableLine = ({
     zIndex: isDragging ? 10 : undefined
   }
 
-  const [price = 0, quantity = 0] = useWatch({
+  const [tva, quantity = 0, itPrice = 0] = useWatch({
     control,
-    name: [`lines.${index}.price`, `lines.${index}.quantity`, `lines.${index}.productId`],
+    name: ["tva", `lines.${index}.quantity`, `lines.${index}.itPrice`],
   })
-
-  const priceTTC = useMemo(() => {
-    if (Number.isNaN(price) || !price) {
-      return 0
-    }
-    const computedTva = Number(tva) || 0
-
-    return Number((price * (1 + computedTva / 100)).toFixed(2))
-  }, [price, tva])
 
   const totalTTC = useMemo(() => {
     if (Number.isNaN(quantity) || !quantity) {
       return 0
     }
 
-    return quantity * priceTTC
-  }, [priceTTC, quantity])
+    return quantity * itPrice
+  }, [itPrice, quantity])
 
   const typeOptions: ComponentProps<typeof Select>['options'] = Object.values(LINE_TYPE).map(({ name, icon: IconComponent, enum: value }) => ({
     value,
@@ -87,15 +78,18 @@ const QuoteLineTableLine = ({
     name: `lines.${index}.description`,
     defaultValue: undefined,
   })
-  const { field: quantityField } = useController({
+  const { field: quantityField, fieldState: quantityFieldState } = useController({
     control,
-    name: `lines.${index}.quantity`,
-    defaultValue: 0,
+    name: `lines.${index}.quantity`
   })
-  const { field: priceField } = useController({
+  const { field: priceField, fieldState: priceFieldState } = useController({
     control,
-    name: `lines.${index}.price`,
-    defaultValue: 0,
+    name: `lines.${index}.price`
+  })
+  const { field: itPriceField, fieldState: itPriceFieldState } = useController({
+    control,
+    name: `lines.${index}.itPrice`,
+    defaultValue: calculatePriceTTC(priceField.value, tva)
   })
 
   return (
@@ -140,13 +134,13 @@ const QuoteLineTableLine = ({
                     typeField.onChange(type as LineTypeEnum)
                     if (type === LineTypeEnum.TEXT) {
                       priceField.onChange(0)
+                      itPriceField.onChange(0)
                       quantityField.onChange(0)
                     }
                   }}
                   ref={typeField.ref}
                   options={typeOptions}
                   name={typeField.name}
-                  id={`${typeField.name}-select`}
                 />
               }
             />
@@ -190,6 +184,7 @@ const QuoteLineTableLine = ({
                   quantityField.onBlur()
                 }}
                 ref={quantityField.ref}
+                error={quantityFieldState.invalid}
               />
               <Input
                 label={t('quotes.form.lines.fields.etPrice.label')}
@@ -201,16 +196,30 @@ const QuoteLineTableLine = ({
                 value={priceField.value}
                 onChange={priceField.onChange}
                 onBlur={event => {
-                  priceField.onChange(Number((event.target as HTMLInputElement).value) || 0)
+                  const newPrice = Number(event.target.value) || 0
+                  priceField.onChange(newPrice)
+                  itPriceField.onChange(calculatePriceTTC(newPrice, tva))
                   priceField.onBlur()
                 }}
                 ref={priceField.ref}
                 suffix={<span className="px-1">€</span>}
+                error={priceFieldState.invalid}
               />
               <Input
                 label={t('quotes.form.lines.fields.totalItPrice.label')}
-                readOnly
-                value={priceTTC}
+                value={itPriceField.value}
+                ref={itPriceField.ref}
+                name={itPriceField.name}
+                onBlur={event => {
+                  const newPrice = Number(event.target.value) || 0
+                  const newEtPrice = calculatePriceETFromIT(newPrice, tva)
+                  itPriceField.onChange(newPrice)
+                  priceField.onChange(newEtPrice)
+                  itPriceField.onBlur()
+                }}
+                onChange={itPriceField.onChange}
+                error={itPriceFieldState.invalid}
+                disabled={itPriceField.disabled}
                 suffix={<span className="px-1">€</span>}
               />
               <Input

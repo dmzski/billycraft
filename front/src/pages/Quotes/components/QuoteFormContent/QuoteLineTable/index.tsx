@@ -1,7 +1,7 @@
 import { Button, Select } from '@coco-ui/core'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo, useRef, useState } from 'react'
-import { Control, useFieldArray } from 'react-hook-form'
+import { Control, useFieldArray, useWatch } from 'react-hook-form'
 import QuoteLineTableLine from './Row'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { DndContext } from '@dnd-kit/core'
@@ -10,11 +10,13 @@ import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { QuoteFormValues } from '../types'
 import { LINE_TYPE } from '@/constants/line'
+import { calculatePriceTTC } from '@/utils/price'
 
 const defaultLine: QuoteFormValues['lines'][number] = {
   description: undefined,
   name: '',
   price: 0,
+  itPrice: 0,
   quantity: 0,
   type: LineTypeEnum.TEXT,
   line: 0,
@@ -38,6 +40,7 @@ const QuoteLineTable = ({
     setProductIdSelected(Number(option))
   }
 
+  const tva = useWatch({control, name: "tva"})
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
@@ -88,6 +91,7 @@ const QuoteLineTable = ({
           name: productFound.name,
           type: productFound.type,
           price: productFound.price,
+          itPrice: calculatePriceTTC(productFound.price, tva),
           quantity: 0,
           quoteId: "",
           line: 0,

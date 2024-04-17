@@ -1,7 +1,7 @@
 import { Button, Select } from '@coco-ui/core'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo, useRef, useState } from 'react'
-import { Control, useFieldArray } from 'react-hook-form'
+import { Control, useFieldArray, useWatch } from 'react-hook-form'
 import BillLineTableLine from './Row'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { DndContext } from '@dnd-kit/core'
@@ -10,6 +10,7 @@ import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { BillFormValues } from '../types'
 import { LINE_TYPE } from '@/constants/line'
+import { calculatePriceTTC } from '@/utils/price'
 
 const defaultLine: BillFormValues['lines'][number] = {
   description: undefined,
@@ -20,6 +21,7 @@ const defaultLine: BillFormValues['lines'][number] = {
   line: 0,
   billId: "",
   id: "",
+  itPrice: 0,
 }
 
 const BillLineTable = ({
@@ -38,6 +40,7 @@ const BillLineTable = ({
     setProductIdSelected(Number(option))
   }
 
+  const tva = useWatch({control, name: "tva"})
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
@@ -87,6 +90,7 @@ const BillLineTable = ({
           name: productFound.name,
           type: productFound.type,
           price: productFound.price,
+          itPrice: calculatePriceTTC(productFound.price, tva),
           quantity: 0,
           billId: "",
           line: 0,
