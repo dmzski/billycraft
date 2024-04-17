@@ -2,26 +2,19 @@ package models
 
 import (
 	"back/internal/lib/dtos"
-
-	"gorm.io/gorm"
 )
 
 type QuoteEmailCustomization struct {
-	ID                int `gorm:"primaryKey;autoIncrement"`
+	ID                string `gorm:"primaryKey"`
 	Body              string
 	Object            string
 	SendAutomatically bool
-	CompanyID         int `gorm:"<-:create"`
+	CompanyID         string `gorm:"<-:create"`
 	Company           Company
 }
 
 func (QuoteEmailCustomization) TableName() string {
 	return "com_quote_email_customization"
-}
-
-func (q *QuoteEmailCustomization) BeforeCreate(tx *gorm.DB) (err error) {
-	q.ID = 0
-	return
 }
 
 func (q QuoteEmailCustomization) ToDTO() dtos.QuoteEmailCustomization {

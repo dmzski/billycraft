@@ -20,13 +20,52 @@ type Report struct {
 	ServiceTaxes    float64
 	OtherTaxes      float64
 	Outgoings       float64
-	CompanyID       int
+	CompanyID       string
 	CreatedBy       string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 	ReportBills     []ReportBill
 	ReportOutgoings []ReportOutgoing
 }
+
+type ReportOutgoingLine struct {
+	ReportOutgoingID      string `gorm:"primaryKey"`
+	Line                  int    `gorm:"primaryKey"`
+	SupplierID            *string
+	BillID                *string
+	SupplierBillReference *string
+	TotalHT               float64
+	VAT                   float32
+}
+
+type ReportOutgoing struct {
+	ID         string `gorm:"primaryKey"`
+	OutgoingID string
+	ReportID   string
+	Name       string
+	StartDate  time.Time
+	EndDate    time.Time
+	CreatedBy  string
+	Lines      []ReportOutgoingLine
+}
+
+type ReportBill struct {
+	ID           string `gorm:"primaryKey"`
+	Title        string
+	BillID       string
+	PaidAt       time.Time
+	SentAt       time.Time
+	ArticleSales float64
+	ServiceSales float64
+	OtherSales   float64
+	ArticleTaxes float64
+	ServiceTaxes float64
+	OtherTaxes   float64
+	Outgoings    float64
+	CreatedBy    string
+	ReportID     string
+}
+
 
 func (Report) TableName() string {
 	return "com_report"
@@ -65,16 +104,6 @@ func (r Report) ToDTO() dtos.ReportResponse {
 	return dto
 }
 
-type ReportOutgoing struct {
-	ID         string `gorm:"primaryKey"`
-	OutgoingID string
-	ReportID   string
-	Name       string
-	StartDate  time.Time
-	EndDate    time.Time
-	CreatedBy  string
-	Lines      []ReportOutgoingLine
-}
 
 func (ReportOutgoing) TableName() string {
 	return "com_report_outgoing"
@@ -100,15 +129,6 @@ func (r ReportOutgoing) ToDTO() dtos.ReportOutgoingResponse {
 	return dto
 }
 
-type ReportOutgoingLine struct {
-	ReportOutgoingID      string `gorm:"primaryKey"`
-	Line                  int    `gorm:"primaryKey"`
-	SupplierID            *int64
-	BillID                *string
-	SupplierBillReference *string
-	TotalHT               float64
-	VAT                   float32
-}
 
 func (ReportOutgoingLine) TableName() string {
 	return "com_report_outgoing_lines"
@@ -127,22 +147,6 @@ func (r ReportOutgoingLine) ToDTO() dtos.ReportOutgoingLineResponse {
 	return dto
 }
 
-type ReportBill struct {
-	ID           string `gorm:"primaryKey"`
-	Title        string
-	BillID       string
-	PaidAt       time.Time
-	SentAt       time.Time
-	ArticleSales float64
-	ServiceSales float64
-	OtherSales   float64
-	ArticleTaxes float64
-	ServiceTaxes float64
-	OtherTaxes   float64
-	Outgoings    float64
-	CreatedBy    string
-	ReportID     string
-}
 
 func (ReportBill) TableName() string {
 	return "com_report_bill"

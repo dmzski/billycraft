@@ -11,35 +11,35 @@ import (
 type TodoDao struct {
 }
 
-func (dao TodoDao) FindAllByTenant(tenant int) (todos []models.Todo) {
+func (dao TodoDao) FindAllByTenant(tenant string) (todos []models.Todo) {
 	if err := database.DBConn.Find(&todos, "company_id = ? ORDER BY created_at desc", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao TodoDao) FindAllByTenantAndIsDone(tenant int) (todos []models.Todo) {
+func (dao TodoDao) FindAllByTenantAndIsDone(tenant string) (todos []models.Todo) {
 	if err := database.DBConn.Find(&todos, "company_id = ? AND done_at IS NOT NULL ORDER BY created_at desc", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao TodoDao) FindAllByTenantAndDoneAfter(tenant int, doneAfter time.Time) (todos []models.Todo) {
+func (dao TodoDao) FindAllByTenantAndDoneAfter(tenant string, doneAfter time.Time) (todos []models.Todo) {
 	if err := database.DBConn.Find(&todos, "company_id = ? AND (done_at IS NULL OR done_at > ?) ORDER BY created_at desc", tenant, doneAfter).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao TodoDao) FindOneByIdAndTenant(id string, tenant int) (todo models.Todo) {
+func (dao TodoDao) FindOneByIdAndTenant(id string, tenant string) (todo models.Todo) {
 	if err := database.DBConn.Find(&todo, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao TodoDao) Update(id string, tenant int, changes dtos.TodoRequest) (todo models.Todo) {
+func (dao TodoDao) Update(id string, tenant string, changes dtos.TodoRequest) (todo models.Todo) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&todo)
 	if tx.Error != nil {

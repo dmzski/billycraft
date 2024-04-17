@@ -12,6 +12,7 @@ import (
 
 type Bill struct {
 	ID         string `gorm:"primaryKey"`
+	Name       string `gorm:"<-:create"`
 	Title      string
 	Tva        *float32
 	CreatedAt  time.Time
@@ -19,9 +20,9 @@ type Bill struct {
 	PaidAt     *time.Time
 	SentAt     *time.Time
 	Status     string
-	CreatedBy  string
-	CompanyID  int
-	CustomerID *int
+	CreatedBy  string `gorm:"<-:create"`
+	CompanyID  string `gorm:"<-:create"`
+	CustomerID *string
 	FileName   *string
 	Company    Company
 	Customer   *Customer
@@ -48,7 +49,7 @@ func (b *Bill) BeforeCreate(tx *gorm.DB) (err error) {
 		return
 	}
 
-	b.ID = fmt.Sprintf("%d_%s_F%d", b.CompanyID, time.Now().Format("020106"), lastId+1)
+	b.Name = fmt.Sprintf("%s_F%d", time.Now().Format("020106"), lastId+1)
 	return
 }
 
@@ -77,6 +78,7 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 
 	return Bill{
 		ID:         b.ID,
+		Name:       b.Name,
 		Title:      b.Title,
 		Tva:        b.Tva,
 		CreatedAt:  b.CreatedAt,
@@ -122,6 +124,7 @@ func (bill Bill) ToDTO() dtos.Bill {
 	}
 	return dtos.Bill{
 		ID:         bill.ID,
+		Name:       bill.Name,
 		Title:      bill.Title,
 		Tva:        bill.Tva,
 		CreatedAt:  bill.CreatedAt,

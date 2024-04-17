@@ -3,8 +3,8 @@ package models
 import "back/internal/lib/dtos"
 
 type BillLine struct {
-	BillID      string `gorm:"primaryKey;autoIncrement:false"`
-	Line        int    `gorm:"primaryKey;autoIncrement:false"`
+	BillID      string `gorm:"primaryKey"`
+	Line        int    `gorm:"primaryKey"`
 	Quantity    float64
 	Price       float64
 	Name        string

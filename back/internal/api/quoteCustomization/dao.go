@@ -10,35 +10,35 @@ import (
 type QuoteCustomizationDao struct {
 }
 
-func (dao QuoteCustomizationDao) FindAllByTenant(tenant int) (quoteCustomizations []models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) FindAllByTenant(tenant string) (quoteCustomizations []models.QuoteCustomization) {
 	if err := database.DBConn.Find(&quoteCustomizations, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteCustomizationDao) FindFirstByTenant(tenant int) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) FindFirstByTenant(tenant string) (quoteCustomization models.QuoteCustomization) {
 	if err := database.DBConn.Where("company_id = ?", tenant).First(&quoteCustomization).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteCustomizationDao) FindFirstOrInitByTenant(tenant int) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) FindFirstOrInitByTenant(tenant string) (quoteCustomization models.QuoteCustomization) {
 	if err := database.DBConn.Where("company_id = ?", tenant).FirstOrInit(&quoteCustomization).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) FindOneByIdAndTenant(id string, tenant string) (quoteCustomization models.QuoteCustomization) {
 	if err := database.DBConn.Find(&quoteCustomization, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteCustomizationDao) Update(id string, tenant int, changes dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) Update(id string, tenant string, changes dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quoteCustomization)
 	if tx.Error != nil {
@@ -53,7 +53,7 @@ func (dao QuoteCustomizationDao) Update(id string, tenant int, changes dtos.Quot
 	return
 }
 
-func (dao QuoteCustomizationDao) Create(companyId int, newQuoteCustomization dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) Create(companyId string, newQuoteCustomization dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
 	quoteCustomization = quoteCustomization.FromDTO(newQuoteCustomization)
 	quoteCustomization.CompanyID = companyId
 

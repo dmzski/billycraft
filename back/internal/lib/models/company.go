@@ -3,12 +3,10 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Company struct {
-	ID              int `gorm:"primaryKey;autoIncrement;<-:create"`
+	ID              string `gorm:"primaryKey"`
 	Name            string
 	City            string
 	Address         string
@@ -29,11 +27,6 @@ type Company struct {
 
 func (Company) TableName() string {
 	return "com_company"
-}
-
-func (c *Company) BeforeCreate(tx *gorm.DB) (err error) {
-	c.ID = 0
-	return
 }
 
 func (c Company) ToDTO() dtos.CompanyResponse {

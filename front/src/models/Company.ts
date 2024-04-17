@@ -1,5 +1,5 @@
 interface Company {
-  id: number
+  id: string
   name: string
   city: string
   address: string

@@ -15,6 +15,6 @@ export type QuoteUpdateRequest = {
   lines: QuoteUpdateRequestLine[]
   tva: number
   title: string
-  customerId: number
+  customerId: string
   status?: QuoteStatusEnum
 }

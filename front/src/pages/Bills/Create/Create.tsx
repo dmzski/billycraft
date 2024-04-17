@@ -12,7 +12,7 @@ const defaultBill = {
   lines: [],
   tva: 0,
   title: "",
-  customerId: 0
+  customerId: ""
 } as BillFormValues
 
 export const Create = () => {

@@ -3,29 +3,22 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Todo struct {
-	ID          int64 `gorm:"primaryKey;autoIncrement;<-:create"`
+	ID          string `gorm:"primaryKey"`
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
 	DoneAt      *time.Time
-	CompanyID   int     `gorm:"<-:create"`
+	CompanyID   string     `gorm:"<-:create"`
 	CreatedBy   string  `gorm:"foreignKey:Email;<-:create"`
 	DoneBy      *string `gorm:"foreignKey:Email"`
 }
 
 func (t Todo) TableName() string {
 	return "com_todo"
-}
-
-func (t *Todo) BeforeCreate(tx *gorm.DB) (err error) {
-	t.ID = 0
-	return
 }
 
 func (t Todo) ToDTO() dtos.TodoResponse {

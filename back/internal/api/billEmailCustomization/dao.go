@@ -10,28 +10,28 @@ import (
 type BillEmailCustomizationDao struct {
 }
 
-func (dao BillEmailCustomizationDao) FindAllByTenant(tenant int) (billEmailCustomizations []models.BillEmailCustomization) {
+func (dao BillEmailCustomizationDao) FindAllByTenant(tenant string) (billEmailCustomizations []models.BillEmailCustomization) {
 	if err := database.DBConn.Find(&billEmailCustomizations, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao BillEmailCustomizationDao) FindFirstByTenant(tenant int) (billEmailCustomization models.BillEmailCustomization) {
+func (dao BillEmailCustomizationDao) FindFirstByTenant(tenant string) (billEmailCustomization models.BillEmailCustomization) {
 	if err := database.DBConn.Where("company_id = ?", tenant).First(&billEmailCustomization).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao BillEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (billEmailCustomization models.BillEmailCustomization) {
+func (dao BillEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant string) (billEmailCustomization models.BillEmailCustomization) {
 	if err := database.DBConn.Find(&billEmailCustomization, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao BillEmailCustomizationDao) Update(id string, tenant int, changes dtos.BillEmailCustomization) (billEmailCustomization models.BillEmailCustomization) {
+func (dao BillEmailCustomizationDao) Update(id string, tenant string, changes dtos.BillEmailCustomization) (billEmailCustomization models.BillEmailCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&billEmailCustomization)
 	if tx.Error != nil {

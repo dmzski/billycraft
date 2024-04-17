@@ -14,8 +14,8 @@ export const CustomerApi = {
     ),
   create: (data: CustomerCreateRequest) => HttpClient.POST<Customer>(`${CUSTOMER_URL}`, data),
   update: ({ id, ...data }: CustomerUpdateRequest) => HttpClient.PATCH<Customer>(`${CUSTOMER_URL}/${id}`, data),
-  findById: (id: number) => HttpClient.GET<Customer | undefined>(`${CUSTOMER_URL}/${id}`),
-  findAllByNameContains: (search: string) =>
+  findById: (id: Customer['id']) => HttpClient.GET<Customer | undefined>(`${CUSTOMER_URL}/${id}`),
+  findAllByNameContains: (search: Customer['name']) =>
     HttpClient.GET<Customer[] | undefined>(`${CUSTOMER_URL}?search=${search}`),
-  delete: (id: number) => HttpClient.DELETE(`${CUSTOMER_URL}/${id}`),
+  delete: (id: Customer['id']) => HttpClient.DELETE(`${CUSTOMER_URL}/${id}`),
 }

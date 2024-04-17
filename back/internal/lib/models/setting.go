@@ -10,7 +10,7 @@ type Setting struct {
 	Value     string
 	CreatedAt time.Time
 	UpdatedAt *time.Time `gorm:"autoUpdateTime"`
-	CompanyID int
+	CompanyID string
 	Company   Company
 }
 

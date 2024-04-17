@@ -3,7 +3,7 @@ package dtos
 import "time"
 
 type Customer struct {
-	ID          int64      `json:"id"`
+	ID          string     `json:"id"`
 	Name        string     `json:"name"`
 	Contact     string     `json:"contact"`
 	PhoneNumber string     `json:"phoneNumber"`
@@ -14,5 +14,5 @@ type Customer struct {
 	CreatedAt   time.Time  `json:"createdAt"`
 	UpdatedAt   *time.Time `json:"updatedAt"`
 	Deleted     bool       `json:"deleted"`
-	CompanyID   int        `json:"companyId"`
+	CompanyID   string     `json:"companyId"`
 }

@@ -1,9 +1,9 @@
 interface QuoteEmailCustomization {
-  id?: number
+  id?: string
   body: string
   object: string
   sendAutomatically: boolean
-  companyId: number
+  companyId: string
 }
 
 export default QuoteEmailCustomization

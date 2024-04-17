@@ -40,13 +40,12 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
           .flat()
           .reduce(
             (acc, line) => {
-              const index = line.supplierId ?? -1
-              if (acc[index]) {
+              if (line.supplierId) {
                 return {
                   ...acc,
-                  [index]: {
-                    total: (Number(acc[index]) || 0) + line.totalHT * (1 - line.vat),
-                    supplier: acc[index].supplier,
+                  [line.supplierId]: {
+                    total: (Number(acc[line.supplierId]) || 0) + line.totalHT * (1 - line.vat),
+                    supplier: acc[line.supplierId].supplier,
                   },
                 }
               }
@@ -54,24 +53,29 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
               const supplier = suppliers?.find(
                 ({ id: supplierId }) => supplierId === line.supplierId,
               )
-              return {
-                ...acc,
-                [supplier?.id ?? -1]: {
-                  total: (Number(acc[index]) || 0) + line.totalHT * (1 - line.vat),
-                  supplier,
-                },
+
+              if (supplier) {
+                return {
+                  ...acc,
+                  [supplier.id]: {
+                    total: (Number(acc[supplier.id]) || 0) + line.totalHT * (1 - line.vat),
+                    supplier,
+                  },
+                }
               }
+
+              return acc
             },
             {} as Record<
-              number,
+              string,
               {
                 total: number
-                supplier?: Supplier
+                supplier: Supplier
               }
             >,
           ),
       ).sort(({ supplier: supplierA }, { supplier: supplerB }) =>
-        (supplierA?.name ?? '').localeCompare(supplerB?.name ?? ''),
+        (supplierA.name).localeCompare(supplerB.name),
       ),
     [report.outgoings, suppliers],
   )

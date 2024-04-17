@@ -5,12 +5,12 @@ export type SupplierRequest = {
 }
 
 type Supplier = {
-  id: number
+  id: string
   name: string
   color?: string
   vat: number
   createdBy: string
-  companyId: number
+  companyId: string
 }
 
 export default Supplier

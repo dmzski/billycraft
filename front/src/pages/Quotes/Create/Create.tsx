@@ -12,7 +12,7 @@ const defaultQuote = {
   lines: [],
   tva: 0,
   title: "",
-  customerId: 0
+  customerId: ""
 } as QuoteFormValues
 
 export const Create = () => {

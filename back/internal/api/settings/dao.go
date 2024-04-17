@@ -10,21 +10,21 @@ import (
 type SettingDao struct {
 }
 
-func (dao SettingDao) FindAllByTenant(tenant int) (settings []models.Setting) {
+func (dao SettingDao) FindAllByTenant(tenant string) (settings []models.Setting) {
 	if err := database.DBConn.Preload("Lines").Find(&settings, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao SettingDao) FindOneByIdAndTenant(id string, tenant int) (setting models.Setting) {
+func (dao SettingDao) FindOneByIdAndTenant(id string, tenant string) (setting models.Setting) {
 	if err := database.DBConn.Preload("Lines").Find(&setting, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao SettingDao) Update(id string, tenant int, changes dtos.Setting) (setting models.Setting) {
+func (dao SettingDao) Update(id string, tenant string, changes dtos.Setting) (setting models.Setting) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&setting)
 	if tx.Error != nil {

@@ -17,11 +17,12 @@ export type BillLine = {
   name: string
   description?: string
   type: LineTypeEnum
-  productId?: number
+  productId?: string
 }
 
 type Bill = {
   id: string
+  name: string
   title: string
   tva: number
   createdAt: string
@@ -29,8 +30,8 @@ type Bill = {
   sentAt?: string
   status: BillStatusEnum
   createdBy: string
-  companyId: number
-  customerId: number
+  companyId: string
+  customerId: string
   fileName?: string
   lines: BillLine[]
   quoteId: string

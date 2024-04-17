@@ -16,14 +16,14 @@ type Outgoing struct {
 	StartDate time.Time
 	EndDate   time.Time
 	CreatedBy string
-	CompanyID int
+	CompanyID string
 	Lines     []OutgoingLine
 }
 
 type OutgoingLine struct {
 	OutgoingID            string `gorm:"primaryKey"`
 	Line                  int    `gorm:"primaryKey"`
-	SupplierID            *int64
+	SupplierID            *string
 	BillID                *string
 	SupplierBillReference *string
 	TotalHT               float64

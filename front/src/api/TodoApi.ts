@@ -6,7 +6,7 @@ import { HttpClient } from './HttpClient'
 export const TODO_URL = `${API_URL}/todos`
 
 export const TodoApi = {
-  delete: async (id: number): Promise<undefined> => HttpClient.DELETE(`${TODO_URL}/${id}`, {}),
+  delete: async (id: Todo['id']): Promise<undefined> => HttpClient.DELETE(`${TODO_URL}/${id}`, {}),
   findAll: (): Promise<Todo[]> => HttpClient.GET<Todo[]>(`${TODO_URL}`),
   findAllFinished: (): Promise<Todo[]> =>
     HttpClient.GET<Todo[]>(
@@ -21,7 +21,7 @@ export const TodoApi = {
       })}`,
     ),
   create: (request: TodoRequest): Promise<Todo> => HttpClient.POST(`${TODO_URL}`, request),
-  update: (id: number, request: TodoRequest): Promise<Todo> =>
+  update: (id: Todo['id'], request: TodoRequest): Promise<Todo> =>
     HttpClient.PATCH(`${TODO_URL}/${id}`, request),
-  done: (id: number): Promise<Todo> => HttpClient.POST(`${TODO_URL}/${id}/done`, {}),
+  done: (id: Todo['id']): Promise<Todo> => HttpClient.POST(`${TODO_URL}/${id}/done`, {}),
 }

@@ -1,5 +1,5 @@
 interface Customer {
-  id: number
+  id: string
   name: string
   contact: string
   phoneNumber: string
@@ -9,7 +9,7 @@ interface Customer {
   email: string
   createdAt: string
   updatedAt: string
-  companyId: number
+  companyId: string
   deleted?: boolean
 }
 

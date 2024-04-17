@@ -20,7 +20,7 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
         <div className="md:col-span-3">{t('dashboard.notPaidBills.headers.customer')}</div>
         <div className="md:col-span-6">{t('dashboard.notPaidBills.headers.title')}</div>
       </div>
-      {data.map(({ id, title, customerId, sentAt }, index) => (
+      {data.map(({ id, name, title, customerId, sentAt }, index) => (
         <div
           className={clsx('py-4 px-2 grid md:grid-cols-12', {
             'bg-base-200': index % 2 !== 0,
@@ -28,7 +28,7 @@ const NotPaidBillList = ({ data }: NotPaidBillListProps) => {
         >
           <div>
             <Link to={ROUTES.BILL_FORM.path({ id })} className="link-hover link-primary">
-              {id}
+              {name}
             </Link>
           </div>
           <div className="md:col-span-2">{sentAt ? formatISO9075(parseJSON(sentAt)) : '-'}</div>

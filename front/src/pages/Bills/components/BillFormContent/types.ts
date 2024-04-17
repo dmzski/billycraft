@@ -4,5 +4,5 @@ export type BillFormValues = {
   lines: Array<BillLine & { id?: string, itPrice: number }>
   tva: number
   title: string
-  customerId: number
+  customerId: string
 }

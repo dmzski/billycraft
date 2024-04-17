@@ -10,7 +10,7 @@ import { Link, useHistory, useParams } from "react-router-dom"
 export const Overview = () => {
   const { scopedT, t } = useI18n()
   const { id } = useParams<CustomerRouteProps>()
-  const { data: customer, isLoading } = useCustomerQuery(Number(id), {
+  const { data: customer, isLoading } = useCustomerQuery(id, {
     enabled: !!id
   })
   const { push } = useHistory()

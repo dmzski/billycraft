@@ -5,7 +5,7 @@ import { HttpClient } from './HttpClient'
 export const PRODUCT_URL = `${API_URL}/products`
 
 export const ProductApi = {
-  delete: async (id: number): Promise<undefined> => HttpClient.DELETE(`${PRODUCT_URL}/${id}`, {}),
+  delete: async (id: Product['id']) => HttpClient.DELETE(`${PRODUCT_URL}/${id}`, {}),
 
   findAll: () => HttpClient.GET<Product[]>(`${PRODUCT_URL}`),
   findAllContains: (search: string) => HttpClient.GET<Product[] | undefined>(`${PRODUCT_URL}?contains=${search}`),

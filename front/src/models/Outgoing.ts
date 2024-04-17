@@ -1,5 +1,5 @@
 export type OutgoingLineResponse = {
-  supplierId?: number
+  supplierId?: string
   supplierBillReference?: string
   billId?: string
   totalHT: number
@@ -13,12 +13,12 @@ export type OutgoingResponse = {
   startDate: string
   endDate: string
   lines: OutgoingLineResponse[]
-  companyId: number
+  companyId: string
   createdBy: string
 }
 
 export type OutgoingLineRequest = {
-  supplierId?: number
+  supplierId?: string
   supplierBillReference?: string
   billId?: string
   totalHT: number

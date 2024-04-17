@@ -7,22 +7,17 @@ import (
 )
 
 type Supplier struct {
-	ID        int64 `gorm:"primaryKey;autoIncrement;<-:create"`
+	ID        string `gorm:"primaryKey"`
 	Name      string
 	Color     *string
 	Vat       float32
-	CompanyID int    `gorm:"<-:create"`
+	CompanyID string `gorm:"<-:create"`
 	CreatedBy string `gorm:"foreignKey:Email;<-:create"`
 	DeletedAt gorm.DeletedAt
 }
 
 func (p Supplier) TableName() string {
 	return "com_supplier"
-}
-
-func (p *Supplier) BeforeCreate(tx *gorm.DB) (err error) {
-	p.ID = 0
-	return
 }
 
 func (p Supplier) ToDTO() dtos.SupplierResponse {

@@ -2,26 +2,19 @@ package models
 
 import (
 	"back/internal/lib/dtos"
-
-	"gorm.io/gorm"
 )
 
 type BillEmailCustomization struct {
-	ID                int `gorm:"primaryKey;autoIncrement"`
+	ID                string `gorm:"primaryKey"`
 	Body              string
 	Object            string
 	SendAutomatically bool
-	CompanyID         int `gorm:"<-:create"`
+	CompanyID         string `gorm:"<-:create"`
 	Company           Company
 }
 
 func (BillEmailCustomization) TableName() string {
 	return "com_bill_email_customization"
-}
-
-func (b *BillEmailCustomization) BeforeCreate(tx *gorm.DB) (err error) {
-	b.ID = 0
-	return
 }
 
 func (BillEmailCustomization) FromDTO(b dtos.BillEmailCustomization) BillEmailCustomization {

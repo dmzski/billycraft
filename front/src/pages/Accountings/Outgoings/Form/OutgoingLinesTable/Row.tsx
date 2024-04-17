@@ -6,6 +6,7 @@ import SelectBillModal from './modals/SelectBillModal'
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import { calculatePriceTTC } from '@/utils/price'
+import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
 
 type RowProps = {
   control: Control<OutgoingRequest>
@@ -27,6 +28,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
   })
 
   const { data: suppliers } = useAllSuppliersQuery()
+  const { data: bills } = useAllBillsQuery()
 
   const [totalHT, vat] = useWatch({
     name: [`lines.${index}.totalHT`, `lines.${index}.vat`],
@@ -98,7 +100,7 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
           disclosure={
             <Input
               name={billIdField.name}
-              value={billIdField.value}
+              value={bills?.find(({ id }) => id === billIdField.value)?.name ?? billIdField.value}
               readOnly
               ref={billIdField.ref}
               error={billIdFieldState.invalid}

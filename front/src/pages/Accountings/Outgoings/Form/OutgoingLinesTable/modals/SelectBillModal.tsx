@@ -13,7 +13,7 @@ type SelectBillModalProps = {
 type SelectBillFormProps = Omit<SelectBillModalProps, "disclosure"> & { close: () => void }
 
 type SelectBillModalFormValues = {
-  customerId?: number
+  customerId?: string
   title?: string
   billId?: string
 }
@@ -66,20 +66,20 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
           if (titleController.field.value && customerController.field.value)
             return (
               title.toUpperCase().includes(titleController.field.value.toUpperCase()) &&
-              Number(customerController.field.value) === customerId
+              customerController.field.value === customerId
             )
 
           if (titleController.field.value)
             return title.toUpperCase().includes(titleController.field.value.toUpperCase())
 
           if (customerController.field.value)
-            return Number(customerController.field.value) === customerId
+            return customerController.field.value === customerId
 
           if (!titleController.field.value && !customerController.field.value) return true
 
           return false
         })
-        ?.map(({ id, title }) => ({ value: id, label: `${id} - ${title}` })) ?? [],
+        ?.map(({ id, title, name }) => ({ value: id, label: `${name} - ${title}` })) ?? [],
     [titleController.field.value, customerController.field.value, bills],
   )
 

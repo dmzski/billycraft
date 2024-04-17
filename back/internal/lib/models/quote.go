@@ -11,15 +11,16 @@ import (
 
 type Quote struct {
 	ID         string `gorm:"primaryKey;<-:create"`
+	Name       string `gorm:"<-:create"`
 	Title      string
 	Tva        *float32
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
 	SentAt     *time.Time
 	Status     string
-	CreatedBy  string
-	CompanyID  int `gorm:"<-:create"`
-	CustomerID *int
+	CreatedBy  string `gorm:"<-:create"`
+	CompanyID  string `gorm:"<-:create"`
+	CustomerID *string
 	FileName   *string
 	Company    Company
 	Customer   *Customer
@@ -44,7 +45,7 @@ func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
 		err = idTx.Error
 		return
 	}
-	q.ID = fmt.Sprintf("%d_%s_D%d", q.CompanyID, time.Now().Format("020106"), lastId+1)
+	q.Name = fmt.Sprintf("%s_D%d", time.Now().Format("020106"), lastId+1)
 	return
 }
 
@@ -62,6 +63,7 @@ func (Quote) FromDTO(q dtos.Quote) Quote {
 	}
 	return Quote{
 		ID:         q.ID,
+		Name:       q.Name,
 		Title:      q.Title,
 		Tva:        q.Tva,
 		CreatedAt:  q.CreatedAt,
@@ -83,6 +85,7 @@ func (quote Quote) ToDTO() dtos.Quote {
 	}
 	return dtos.Quote{
 		ID:         quote.ID,
+		Name:       quote.Name,
 		Title:      quote.Title,
 		Tva:        quote.Tva,
 		CreatedAt:  quote.CreatedAt,

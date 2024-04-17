@@ -17,11 +17,12 @@ export type QuoteLine = {
   name: string
   description?: string
   type: LineTypeEnum
-  productId?: number
+  productId?: string
 }
 
 type Quote = {
   id: string
+  name: string
   title: string
   tva: number
   createdAt: string
@@ -29,8 +30,8 @@ type Quote = {
   sentAt?: string
   status: QuoteStatusEnum
   createdBy: string
-  companyId: number
-  customerId: number
+  companyId: string
+  customerId: string
   fileName?: string
   lines: QuoteLine[]
 }

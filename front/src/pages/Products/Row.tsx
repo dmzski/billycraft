@@ -84,9 +84,11 @@ const ProductTableLine = ({ product }: ProductTableLineProps) => {
 
   const onDelete = async () => {
     try {
-      await ProductApi.delete(product?.id ?? 0)
-      await reload()
-      toast.success(t('products.list.row.delete.submit.success'))
+      if (product?.id) {
+        await ProductApi.delete(product.id)
+        await reload()
+        toast.success(t('products.list.row.delete.submit.success'))
+      }
     } catch {
       toast.error(t('products.list.row.delete.submit.error'))
     }

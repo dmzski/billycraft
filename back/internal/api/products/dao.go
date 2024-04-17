@@ -10,21 +10,21 @@ import (
 type Repository struct {
 }
 
-func (dao Repository) FindAllByTenant(tenant int) (products []models.Product) {
+func (dao Repository) FindAllByTenant(tenant string) (products []models.Product) {
 	if err := database.DBConn.Find(&products, "company_id = ? ORDER BY name asc", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (product models.Product) {
+func (dao Repository) FindOneByIdAndTenant(id string, tenant string) (product models.Product) {
 	if err := database.DBConn.Find(&product, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) Update(id string, tenant int, changes dtos.Product) (product models.Product) {
+func (dao Repository) Update(id string, tenant string, changes dtos.Product) (product models.Product) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
@@ -50,7 +50,7 @@ func (dao Repository) Create(creator models.User, newProduct dtos.Product) (prod
 	return
 }
 
-func (dao Repository) Delete(id string, tenant int) {
+func (dao Repository) Delete(id string, tenant string) {
 	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Product{}).Error; err != nil {
 		panic(err)
 	}

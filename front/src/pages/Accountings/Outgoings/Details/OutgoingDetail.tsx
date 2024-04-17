@@ -61,14 +61,21 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
     () =>
       outgoing?.lines
         ? outgoing.lines.reduce(
-            (acc, line) => ({
-              ...acc,
-              [line.supplierId ?? -1]:
-                (Number(acc[line.supplierId ?? -1]) || 0) + line.totalHT * (1 + line.vat / 100),
-            }),
-            {} as Record<number, number>,
-          )
-        : ({} as Record<number, number>),
+          (acc, line) => {
+
+            if (line.supplierId) {
+              return {
+                ...acc,
+                [line.supplierId]:
+                  (Number(acc[line.supplierId]) || 0) + line.totalHT * (1 + line.vat / 100),
+              }
+            }
+
+            return acc
+          },
+          {} as Record<string, number>,
+        )
+        : ({} as Record<string, number>),
     [outgoing],
   )
 
@@ -113,7 +120,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
             {Object.entries(groupBySuppliers).map(([key, value]) => (
               <SupplierDetailRow
                 value={value}
-                supplier={suppliers?.find(({ id: supplierId }) => supplierId === Number(key))}
+                supplier={suppliers?.find(({ id: supplierId }) => supplierId === key)}
               />
             ))}
           </div>

@@ -3,13 +3,11 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type QuoteCustomization struct {
-	ID                         int `gorm:"primaryKey;autoIncrement"`
-	CompanyID                  int `gorm:"<-:create"`
+	ID                         string `gorm:"primaryKey"`
+	CompanyID                  string `gorm:"<-:create"`
 	AfterTable                 string
 	Footer                     string
 	MainColor                  string
@@ -24,11 +22,6 @@ type QuoteCustomization struct {
 
 func (QuoteCustomization) TableName() string {
 	return "com_quote_customization"
-}
-
-func (q *QuoteCustomization) BeforeCreate(tx *gorm.DB) (err error) {
-	q.ID = 0
-	return
 }
 
 func (q QuoteCustomization) ToDTO() dtos.QuoteCustomization {

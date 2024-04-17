@@ -23,7 +23,7 @@ func (dao CompanyDao) FindAllForYearCron() (companies []models.Company) {
 	return
 }
 
-func (dao CompanyDao) FindOneById(id int) (company models.Company) {
+func (dao CompanyDao) FindOneById(id string) (company models.Company) {
 	database.DBConn.Where("id = ?", id).First(&company)
 	return
 }
@@ -42,7 +42,7 @@ func (dao CompanyDao) Create(creator string, dto dtos.CompanyRequest) (company m
 	return
 }
 
-func (dao CompanyDao) Update(id int, dto dtos.CompanyRequest) (company models.Company) {
+func (dao CompanyDao) Update(id string, dto dtos.CompanyRequest) (company models.Company) {
 	tx := database.DBConn.Begin()
 	tx.Where("id = ?", id).First(&company)
 	if tx.Error != nil {

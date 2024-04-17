@@ -44,8 +44,8 @@ const BillFilterContainer = ({
       <Input
         className="md:col-span-2"
         label={t('bills.list.filters.fields.reference.label')}
-        value={filters.id}
-        onChange={handleChange('id')}
+        value={filters.name}
+        onChange={handleChange('name')}
       />
       <Input
         className="md:col-span-3"

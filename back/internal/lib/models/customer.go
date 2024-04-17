@@ -8,7 +8,7 @@ import (
 )
 
 type Customer struct {
-	ID          int64 `gorm:"primaryKey;autoIncrement;<-:create"`
+	ID          string `gorm:"primaryKey"`
 	Name        string
 	Contact     string
 	PhoneNumber string
@@ -19,17 +19,12 @@ type Customer struct {
 	CreatedAt   time.Time
 	UpdatedAt   *time.Time     `gorm:"autoUpdateTime"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
-	CompanyID   int            `gorm:"<-:create"`
+	CompanyID   string            `gorm:"<-:create"`
 	Company     Company
 }
 
 func (Customer) TableName() string {
 	return "com_customer"
-}
-
-func (c *Customer) BeforeCreate(tx *gorm.DB) (err error) {
-	c.ID = 0
-	return
 }
 
 func (c Customer) ToDTO() dtos.Customer {

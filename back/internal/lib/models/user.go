@@ -6,7 +6,7 @@ type User struct {
 	Email     string `gorm:"primaryKey"`
 	FirstName string
 	LastName  string
-	CompanyID *int
+	CompanyID *string
 	Company   *Company
 	Role      string
 }

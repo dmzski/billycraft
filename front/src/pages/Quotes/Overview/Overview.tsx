@@ -19,7 +19,7 @@ export const Overview = () => {
   const toast = useToast()
   const { id } = useParams<QuoteRouteProps>()
   const { data: quote, isLoading, reload } = useQuoteByIdQuery(id)
-  const { data: customer } = useCustomerQuery(quote?.customerId ?? 0, {
+  const { data: customer } = useCustomerQuery(quote?.customerId ?? "", {
     enabled: !!quote?.customerId
   })
   const { push } = useHistory()
@@ -32,7 +32,7 @@ export const Overview = () => {
       if (quote?.id) {
         const blob = await PdfApi.getQuotePdf(quote.id)
         const link = document.createElement('a')
-        link.download = quote.id
+        link.download = quote.name
         link.href = URL.createObjectURL(blob)
         document.body.appendChild(link)
         link.click()
@@ -84,7 +84,7 @@ export const Overview = () => {
         <h1 className="text-4xl font-bold flex gap-5 items-center">
           <DocumentIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
           <span>
-            {quote.id}
+            {quote.name}
           </span>
         </h1>
         {quote.status === QuoteStatusEnum.DRAFT ? (
@@ -99,7 +99,7 @@ export const Overview = () => {
         <div className="grid md:grid-cols-4 border rounded-2xl items-center divide-x *:p-4">
           <dl>
             <dt className="font-bold">{pageT('sections.information.id')}</dt>
-            <dd>{quote.id}</dd>
+            <dd>{quote.name}</dd>
           </dl>
           <dl>
             <dt className="font-bold">{pageT('sections.information.status')}</dt>

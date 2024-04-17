@@ -17,7 +17,7 @@ type TodoListProps = {
 }
 const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
   const { t } = useI18n()
-  const [editMode, setEditMode] = useState<number>()
+  const [editMode, setEditMode] = useState<string>()
   const toast = useToast()
 
   const methodsCreate = useForm<TodoFormValues>({
@@ -34,7 +34,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
     },
   })
 
-  const handleDone = (id: number) => async () => {
+  const handleDone = (id: string) => async () => {
     try {
       await TodoApi.done(id)
       await onSubmitSuccess?.()
@@ -55,7 +55,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
     }
   }
 
-  const handleEdit = (id: number, description: string) => () => {
+  const handleEdit = (id: string, description: string) => () => {
     setEditMode(id)
     methodsUpdate.reset({ description })
   }

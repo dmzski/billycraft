@@ -1,7 +1,7 @@
 export interface Todo {
-  id: number
+  id: string
   description: string
-  companyId: number
+  companyId: string
   createdBy: string
   createdAt: string
   updatedAt: string

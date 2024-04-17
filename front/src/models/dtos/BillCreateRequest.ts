@@ -14,6 +14,6 @@ export type BillCreateRequest = {
   lines: BillCreateRequestLine[]
   tva: number
   title: string
-  customerId: number
+  customerId: string
   status?: BillStatusEnum
 }

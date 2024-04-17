@@ -3,13 +3,11 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type BillCustomization struct {
-	ID                         int `gorm:"primaryKey;autoIncrement"`
-	CompanyID                  int `gorm:"<-:create"`
+	ID                         string `gorm:"primaryKey"`
+	CompanyID                  string `gorm:"<-:create"`
 	AfterTable                 string
 	Footer                     string
 	MainColor                  string
@@ -24,11 +22,6 @@ type BillCustomization struct {
 
 func (BillCustomization) TableName() string {
 	return "com_bill_customization"
-}
-
-func (b *BillCustomization) BeforeCreate(tx *gorm.DB) (err error) {
-	b.ID = 0
-	return
 }
 
 func (q BillCustomization) ToDTO() dtos.BillCustomization {

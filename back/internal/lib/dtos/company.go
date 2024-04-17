@@ -3,7 +3,7 @@ package dtos
 import "time"
 
 type CompanyResponse struct {
-	ID              int        `json:"id"`
+	ID              string     `json:"id"`
 	Name            string     `json:"name"`
 	City            string     `json:"city"`
 	Address         string     `json:"address"`

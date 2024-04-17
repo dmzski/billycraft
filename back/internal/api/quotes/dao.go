@@ -14,7 +14,7 @@ import (
 type QuoteDao struct {
 }
 
-func (dao QuoteDao) FindAllByTenant(tenant int) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenant(tenant string) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Order("created_at desc").Find(&quotes, "company_id = ?", tenant).Error; err != nil {
@@ -23,7 +23,7 @@ func (dao QuoteDao) FindAllByTenant(tenant int) (quotes []models.Quote) {
 	return
 }
 
-func (dao QuoteDao) FindAllByTenantByStatusIs(tenant int, status string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusIs(tenant string, status string) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status = ?", tenant, status).Order("created_at desc").Find(&quotes).Error; err != nil {
@@ -31,7 +31,7 @@ func (dao QuoteDao) FindAllByTenantByStatusIs(tenant int, status string) (quotes
 	}
 	return
 }
-func (dao QuoteDao) FindAllByTenantByStatusIn(tenant int, statuses []string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusIn(tenant string, statuses []string) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status IN ?", tenant, statuses).Find(&quotes).Order("created_at desc").Error; err != nil {
@@ -39,7 +39,7 @@ func (dao QuoteDao) FindAllByTenantByStatusIn(tenant int, statuses []string) (qu
 	}
 	return
 }
-func (dao QuoteDao) FindAllByTenantByStatusNotIn(tenant int, statuses []string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusNotIn(tenant string, statuses []string) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&quotes).Error; err != nil {
@@ -48,7 +48,7 @@ func (dao QuoteDao) FindAllByTenantByStatusNotIn(tenant int, statuses []string) 
 	return
 }
 
-func (dao QuoteDao) FindAllByTenantByStatusIsNot(tenant int, status string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusIsNot(tenant string, status string) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status <> ?", tenant, status).Order("created_at desc").Find(&quotes).Error; err != nil {
@@ -57,7 +57,7 @@ func (dao QuoteDao) FindAllByTenantByStatusIsNot(tenant int, status string) (quo
 	return
 }
 
-func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant int) (quote models.Quote) {
+func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant string) (quote models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Find(&quote, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
@@ -66,7 +66,7 @@ func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant int) (quote models.Qu
 	return
 }
 
-func (dao QuoteDao) Update(id string, tenant int, changes dtos.Quote) (quote models.Quote) {
+func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote models.Quote) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
 	if tx.Error != nil {

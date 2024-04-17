@@ -1,12 +1,12 @@
 import { LineTypeEnum } from './LineTypeEnum'
 
 interface Product {
-  id: number
+  id: string
   type: LineTypeEnum
   name: string
   description: string
   price: number
-  companyId: number
+  companyId: string
   createdBy: string
 }
 

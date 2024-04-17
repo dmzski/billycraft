@@ -14,7 +14,7 @@ export type Report = {
 
 export type ReportOutgoingLineResponse = {
   line: number
-  supplierId?: number
+  supplierId?: string
   billId?: string
   supplierBillReference?: string
   totalHT: number

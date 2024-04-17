@@ -15,7 +15,7 @@ export function filterQuotes(
   return arrayFiltered.filter((quote: Quote) => {
     let takeIt = true
     const customer = customers.find(c => c.id === quote.customerId)
-    if (filters.id && !quote.id.trim().includes(filters.id.toUpperCase().trim())) {
+    if (filters.name && !quote.name.trim().includes(filters.name.toUpperCase().trim())) {
       takeIt = false
     }
     if (filters.status && filters.status !== 'none' && quote.status !== filters.status) {

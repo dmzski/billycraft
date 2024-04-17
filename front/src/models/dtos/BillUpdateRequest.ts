@@ -15,6 +15,6 @@ export type BillUpdateRequest = {
   lines: BillUpdateRequestLine[]
   tva: number
   title: string
-  customerId: number
+  customerId: string
   status?: BillStatusEnum
 }

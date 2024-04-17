@@ -1,5 +1,5 @@
 export type CustomerUpdateRequest = {
-  id: number
+  id: string
   name: string
   contact: string
   phoneNumber: string

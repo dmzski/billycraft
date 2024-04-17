@@ -34,10 +34,10 @@ const BillLineTable = ({
   const { t } = useI18n()
   const selectExistingProductRef = useRef<HTMLInputElement>(null)
   const { data: allProducts } = useAllProductsQuery()
-  const [productIdSelected, setProductIdSelected] = useState<number>()
+  const [productIdSelected, setProductIdSelected] = useState<string>()
 
   const onProductSelectedChange = (option: string) => {
-    setProductIdSelected(Number(option))
+    setProductIdSelected(option)
   }
 
   const tva = useWatch({control, name: "tva"})

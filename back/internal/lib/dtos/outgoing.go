@@ -8,13 +8,13 @@ type OutgoingResponse struct {
 	StartDate time.Time              `json:"startDate"`
 	EndDate   time.Time              `json:"endDate"`
 	Lines     []OutgoingLineResponse `json:"lines"`
-	CompanyID int                    `json:"companyId"`
+	CompanyID string                 `json:"companyId"`
 	CreatedBy string                 `json:"createdBy"`
 }
 
 type OutgoingLineResponse struct {
 	Line                  int     `json:"line"`
-	SupplierID            *int64  `json:"supplierId"`
+	SupplierID            *string `json:"supplierId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
@@ -30,7 +30,7 @@ type OutgoingRequest struct {
 
 type OutgoingLineRequest struct {
 	Line                  int     `json:"line"`
-	SupplierID            *int64  `json:"supplierId"`
+	SupplierID            *string `json:"supplierId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`

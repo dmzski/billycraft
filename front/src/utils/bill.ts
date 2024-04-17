@@ -16,7 +16,7 @@ export function filterBills(
   return arrayFiltered.filter((bill: Bill) => {
     let takeIt = true
     const customer = customers.find(c => c.id === bill.customerId)
-    if (filters.id && !bill.id.trim().includes(filters.id.toUpperCase().trim())) {
+    if (filters.name && !bill.name.trim().includes(filters.name.toUpperCase().trim())) {
       takeIt = false
     }
     if (filters.status && filters.status !== 'none' && bill.status !== filters.status) {

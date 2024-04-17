@@ -10,28 +10,28 @@ import (
 type QuoteEmailCustomizationDao struct {
 }
 
-func (dao QuoteEmailCustomizationDao) FindAllByTenant(tenant int) (quoteEmailCustomizations []models.QuoteEmailCustomization) {
+func (dao QuoteEmailCustomizationDao) FindAllByTenant(tenant string) (quoteEmailCustomizations []models.QuoteEmailCustomization) {
 	if err := database.DBConn.Find(&quoteEmailCustomizations, "company_id = ?", tenant).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteEmailCustomizationDao) FindFirstByTenant(tenant int) (quoteEmailCustomization models.QuoteEmailCustomization) {
+func (dao QuoteEmailCustomizationDao) FindFirstByTenant(tenant string) (quoteEmailCustomization models.QuoteEmailCustomization) {
 	if err := database.DBConn.Where("company_id = ?", tenant).First(&quoteEmailCustomization).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant int) (quoteEmailCustomization models.QuoteEmailCustomization) {
+func (dao QuoteEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant string) (quoteEmailCustomization models.QuoteEmailCustomization) {
 	if err := database.DBConn.Find(&quoteEmailCustomization, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao QuoteEmailCustomizationDao) Update(id string, tenant int, changes dtos.QuoteEmailCustomization) (quoteEmailCustomization models.QuoteEmailCustomization) {
+func (dao QuoteEmailCustomizationDao) Update(id string, tenant string, changes dtos.QuoteEmailCustomization) (quoteEmailCustomization models.QuoteEmailCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? and id = ?", tenant, id).First(&quoteEmailCustomization)
 	if tx.Error != nil {

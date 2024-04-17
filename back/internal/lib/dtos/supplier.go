@@ -1,10 +1,10 @@
 package dtos
 
 type SupplierResponse struct {
-	ID        int64   `json:"id"`
+	ID        string  `json:"id"`
 	Name      string  `json:"name"`
 	Color     *string `json:"color"`
-	CompanyID int     `json:"companyId"`
+	CompanyID string  `json:"companyId"`
 	Vat       float32 `json:"vat"`
 	CreatedBy string  `json:"createdBy"`
 }

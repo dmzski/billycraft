@@ -4,8 +4,6 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"fmt"
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -34,11 +32,7 @@ func findById(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		if intId, err := strconv.Atoi(id); err != nil {
-			return fiber.NewError(400, fmt.Sprintln("Malformed id : ", err.Error()))
-		} else {
-			return c.JSON(DAO.FindOneByIdAndTenant(intId, *user.CompanyID).ToDTO())
-		}
+		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
 	}
 }
 func update(c *fiber.Ctx) error {
@@ -50,11 +44,7 @@ func update(c *fiber.Ctx) error {
 		if err := c.BodyParser(&newCustomer); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 		}
-		if intId, err := strconv.Atoi(id); err != nil {
-			return fiber.NewError(400, fmt.Sprintln("Malformed id : ", err.Error()))
-		} else {
-			return c.JSON(DAO.Update(intId, *user.CompanyID, newCustomer).ToDTO())
-		}
+			return c.JSON(DAO.Update(id, *user.CompanyID, newCustomer).ToDTO())
 	}
 }
 
@@ -63,12 +53,8 @@ func delete(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		if intId, err := strconv.Atoi(id); err != nil {
-			return fiber.NewError(400, fmt.Sprintln("Malformed id : ", err.Error()))
-		} else {
-			DAO.Delete(intId, *user.CompanyID)
+			DAO.Delete(id, *user.CompanyID)
 			return c.Status(204).SendString("Customer deleted")
-		}
 	}
 }
 func create(c *fiber.Ctx) error {

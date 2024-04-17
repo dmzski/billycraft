@@ -1,6 +1,6 @@
 interface QuoteCustomization {
-  id?: number
-  companyId?: number
+  id?: string
+  companyId?: string
   afterTable: string
   footer: string
   mainColor: string

@@ -71,7 +71,7 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
           className="link-primary"
           to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}
         >
-          {quote.id}
+          {quote.name}
         </Link>
       </div>
       <div className="md:col-span-3 truncate">{quote.title}</div>

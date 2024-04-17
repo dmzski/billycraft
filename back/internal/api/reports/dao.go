@@ -12,14 +12,14 @@ import (
 type Repository struct {
 }
 
-func (Repository) FindAllByTenant(tenant int) (reports []models.Report) {
+func (Repository) FindAllByTenant(tenant string) (reports []models.Report) {
 	if err := database.DBConn.Preload("ReportBills").Preload("ReportOutgoings").Preload("ReportOutgoings.Lines").Where("company_id = ?", tenant).Find(&reports).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (Repository) FindOneByTenantAndId(tenant int, id string) (report models.Report) {
+func (Repository) FindOneByTenantAndId(tenant string, id string) (report models.Report) {
 	if err := database.DBConn.Preload("ReportBills").Preload("ReportOutgoings").Preload("ReportOutgoings.Lines").Where("company_id = ? AND id = ?", tenant, id).First(&report).Error; err != nil {
 		panic(err)
 	}
@@ -51,7 +51,7 @@ func (dao Repository) Create(user models.User, dto dtos.ReportRequest) models.Re
 	return report
 }
 
-func (dao Repository) CreateCron(creator string, tenant int, startTime time.Time, endTime time.Time, name string) models.Report {
+func (dao Repository) CreateCron(creator string, tenant string, startTime time.Time, endTime time.Time, name string) models.Report {
 	report := dao.BuildBetweenTwoDates(tenant, startTime, endTime)
 	report.CompanyID = tenant
 	report.CreatedBy = creator
@@ -68,13 +68,13 @@ func (dao Repository) CreateCron(creator string, tenant int, startTime time.Time
 	return report
 }
 
-func (dao Repository) Delete(tenant int, id string) {
+func (dao Repository) Delete(tenant string, id string) {
 	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).Delete(&models.Report{}).Error; err != nil {
 		panic(err)
 	}
 }
 
-func (Repository) BuildBetweenTwoDates(tenant int, startDate time.Time, endDate time.Time) models.Report {
+func (Repository) BuildBetweenTwoDates(tenant string, startDate time.Time, endDate time.Time) models.Report {
 	bills := []models.Bill{}
 	err := database.DBConn.Preload("Lines").Where("company_id = ? AND paid_at BETWEEN ? AND ?", tenant, startDate, endDate).Find(&bills).Error
 	if err != nil {
@@ -142,13 +142,13 @@ func (Repository) BuildBetweenTwoDates(tenant int, startDate time.Time, endDate 
 	return report
 }
 
-func (dao Repository) BuildForMonth(tenant int, date time.Time) models.Report {
+func (dao Repository) BuildForMonth(tenant string, date time.Time) models.Report {
 	startDate := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.Local)
 	endDate := startDate.AddDate(0, 1, 0).Add(time.Nanosecond * -1)
 	return dao.BuildBetweenTwoDates(tenant, startDate, endDate)
 }
 
-func (dao Repository) BuildForYear(tenant int, date time.Time) models.Report {
+func (dao Repository) BuildForYear(tenant string, date time.Time) models.Report {
 	startDate := time.Date(date.Year(), 1, 1, 0, 0, 0, 0, time.Local)
 	endDate := startDate.AddDate(1, 0, 0).Add(time.Nanosecond * -1)
 	return dao.BuildBetweenTwoDates(tenant, startDate, endDate)

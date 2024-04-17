@@ -50,7 +50,7 @@ func leaveCompany(c *fiber.Ctx) error {
 func joinCompany(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	if user.Email == "test" {
-		if id, err := c.ParamsInt("id"); err != nil {
+		if id := c.Params("id", ""); id != "" {
 			return c.SendString("bad id")
 		} else {
 			DAO.JoinCompany(user.Email, id)

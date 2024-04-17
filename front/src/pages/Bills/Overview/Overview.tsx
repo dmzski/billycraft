@@ -18,7 +18,7 @@ export const Overview = () => {
   const toast = useToast()
   const { id } = useParams<BillRouteProps>()
   const { data: bill, isLoading, reload } = useBillByIdQuery(id)
-  const { data: customer } = useCustomerQuery(bill?.customerId ?? 0, {
+  const { data: customer } = useCustomerQuery(bill?.customerId ?? "", {
     enabled: !!bill?.customerId
   })
   const formatCurrency = useFormatCurrency()
@@ -30,7 +30,7 @@ export const Overview = () => {
       if (bill?.id) {
         const blob = await PdfApi.getBillPdf(bill.id)
         const link = document.createElement('a')
-        link.download = bill.id
+        link.download = bill.name
         link.href = URL.createObjectURL(blob)
         document.body.appendChild(link)
         link.click()
@@ -65,7 +65,7 @@ export const Overview = () => {
         <h1 className="text-4xl font-bold flex gap-5 items-center">
           <CreditCardIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
           <span>
-            {bill.id}
+            {bill.name}
           </span>
         </h1>
         {bill.status === BillStatusEnum.DRAFT ? (
@@ -80,7 +80,7 @@ export const Overview = () => {
         <div className="grid md:grid-cols-4 border rounded-2xl items-center divide-x *:p-4">
           <dl>
             <dt className="font-bold">{pageT('sections.information.id')}</dt>
-            <dd>{bill.id}</dd>
+            <dd>{bill.name}</dd>
           </dl>
           <dl>
             <dt className="font-bold">{pageT('sections.information.status')}</dt>

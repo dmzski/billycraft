@@ -45,7 +45,7 @@ type ReportOutgoingResponse struct {
 
 type ReportOutgoingLineResponse struct {
 	Line                  int     `json:"line"`
-	SupplierID            *int64  `json:"supplierId"`
+	SupplierID            *string `json:"supplierId"`
 	BillID                *string `json:"billId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	TotalHT               float64 `json:"totalHT"`

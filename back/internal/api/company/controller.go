@@ -42,7 +42,7 @@ func create(c *fiber.Ctx) error {
 	quoteCustomization.DAO.Create(company.ID, dtos.QuoteCustomization{})
 	billCustomization.DAO.Create(company.ID, dtos.BillCustomization{})
 
-  if (company.ID == 0) {
+  if (company.ID == "") {
 		return fiber.NewError(fiber.StatusInternalServerError, "Company creation error")
   }
 	user.CompanyID = &company.ID
@@ -75,15 +75,15 @@ func uploadLogo(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).SendString("Error when getting logo file")
 	}
-	err = os.MkdirAll(config.Get().UploadDir+fmt.Sprintf("/%d/", company.ID), os.ModePerm)
+	err = os.MkdirAll(config.Get().UploadDir+fmt.Sprintf("/%s/", company.ID), os.ModePerm)
 	if err != nil {
 		return c.Status(500).SendString("Error when creating directory : " + err.Error())
 	}
-	err = c.SaveFile(file, config.Get().UploadDir+fmt.Sprintf("/%d/logo.png", company.ID))
+	err = c.SaveFile(file, config.Get().UploadDir+fmt.Sprintf("/%s/logo.png", company.ID))
 	if err != nil {
 		return c.Status(500).SendString("Error when saving logo file : " + err.Error())
 	}
-	newPath := fmt.Sprintf("%s/api/logo/%d", c.BaseURL(), company.ID)
+	newPath := fmt.Sprintf("%s/api/logo/%s", c.BaseURL(), company.ID)
 	company = DAO.Update(company.ID, dtos.CompanyRequest{
 		Logo: &newPath,
 	})

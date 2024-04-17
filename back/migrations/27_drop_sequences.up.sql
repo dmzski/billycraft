@@ -1,0 +1,9 @@
+DROP SEQUENCE com_bill_customization_id_seq;
+DROP SEQUENCE com_bill_email_customization_id_seq;
+DROP SEQUENCE com_company_id_seq;
+DROP SEQUENCE com_customer_id_seq;
+DROP SEQUENCE com_product_id_seq;
+DROP SEQUENCE com_quote_customization_id_seq;
+DROP SEQUENCE com_quote_email_customization_id_seq;
+DROP SEQUENCE com_supplier_id_seq;
+DROP SEQUENCE com_todo_id_seq;

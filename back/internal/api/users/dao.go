@@ -23,7 +23,7 @@ func (dao UserDao) FindMe(email string) (user models.User) {
 	return
 }
 
-func (dao UserDao) FindAllByCompanyId(tenant int) (users []models.User) {
+func (dao UserDao) FindAllByCompanyId(tenant string) (users []models.User) {
 	tx := database.DBConn.Find(&users, "company_id = ?", tenant)
 	if tx.Error != nil {
 		log.Println(tx.Error.Error())
@@ -52,7 +52,7 @@ func (dao UserDao) LeaveCompany(user models.User) models.User {
 	return user
 }
 
-func (dao UserDao) JoinCompany(email string, cid int) {
+func (dao UserDao) JoinCompany(email string, cid string) {
 	if err := database.DBConn.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", cid, email).Error; err != nil {
 		panic(err)
 	}

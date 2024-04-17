@@ -54,7 +54,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
     <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
       <div className="md:col-span-1 text-sm">
         <Link className="link-primary" to={ROUTES.BILL_OVERVIEW.path({id: bill.id})}>
-          {bill.id}
+          {bill.name}
         </Link>
       </div>
       <div className="md:col-span-3 truncate">{bill.title}</div>

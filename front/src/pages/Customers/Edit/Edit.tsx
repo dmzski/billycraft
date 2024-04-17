@@ -19,8 +19,8 @@ const defaultCustomer = {
 } as CustomerUpdateRequest
 
 export const Edit = () => {
-  const { id } = useParams<{ id?: string }>()
-  const { data: customer, isLoading } = useCustomerQuery(Number(id) ?? 0, { enabled: !!id })
+  const { id } = useParams<{ id: string }>()
+  const { data: customer, isLoading } = useCustomerQuery(id, { enabled: !!id })
   const { t } = useI18n()
   const { push } = useHistory()
   const toast = useToast()

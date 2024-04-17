@@ -17,7 +17,7 @@ const defaultQuote = {
   lines: [],
   tva: 0,
   title: "",
-  customerId: 0
+  customerId: ""
 } as QuoteFormValues
 
 export const Edit = () => {
@@ -97,7 +97,7 @@ export const Edit = () => {
       <h1 className="text-4xl font-bold flex gap-5 items-center">
         <DocumentIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
         <span>
-          {quote.id}
+          {quote.name}
         </span>
       </h1>
       <FormProvider {...methods}>

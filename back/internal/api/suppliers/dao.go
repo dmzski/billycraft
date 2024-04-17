@@ -10,21 +10,21 @@ import (
 type Repository struct {
 }
 
-func (dao Repository) FindAllByTenant(tenant int) (suppliers []models.Supplier) {
+func (dao Repository) FindAllByTenant(tenant string) (suppliers []models.Supplier) {
 	if err := database.DBConn.Where("company_id = ?", tenant).Order("name asc").Find(&suppliers).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) FindOneByIdAndTenant(id string, tenant int) (supplier models.Supplier) {
+func (dao Repository) FindOneByIdAndTenant(id string, tenant string) (supplier models.Supplier) {
 	if err := database.DBConn.Where("company_id = ? AND id = ?", tenant, id).First(&supplier).Error; err != nil {
 		panic(err)
 	}
 	return
 }
 
-func (dao Repository) Update(id string, tenant int, changes dtos.SupplierRequest) (supplier models.Supplier) {
+func (dao Repository) Update(id string, tenant string, changes dtos.SupplierRequest) (supplier models.Supplier) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&supplier)
 	if tx.Error != nil {
@@ -50,7 +50,7 @@ func (dao Repository) Create(creator models.User, newSupplier dtos.SupplierReque
 	return
 }
 
-func (dao Repository) Delete(id string, tenant int) {
+func (dao Repository) Delete(id string, tenant string) {
 	if err := database.DBConn.Where("id = ? and company_id = ?", id, tenant).Delete(&models.Supplier{}).Error; err != nil {
 		panic(err)
 	}
