@@ -1,5 +1,11 @@
 # back
 
+## 1.15.0
+
+### Minor Changes
+
+- 580e25f: feat: migrate to uuid and drop appointment
+
 ## 1.14.0
 
 ### Minor Changes
