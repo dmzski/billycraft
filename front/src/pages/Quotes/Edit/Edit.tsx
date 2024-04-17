@@ -10,6 +10,8 @@ import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
 import { QuoteFormValues } from '../components/QuoteFormContent'
 import { FormProvider, useForm } from 'react-hook-form'
 import { QuoteUpdateRequest } from '@/models/dtos/QuoteUpdateRequest'
+import { useMemo } from 'react'
+import { calculatePriceTTC } from '@/utils/price'
 
 const defaultQuote = {
   lines: [],
@@ -55,10 +57,19 @@ export const Edit = () => {
     }
   }
 
+  const initialValues: QuoteFormValues = useMemo(() => quote ? {
+    ...quote,
+    lines: quote.lines.map(({ price, ...rest }) => ({
+      ...rest,
+      price,
+      itPrice: calculatePriceTTC(price, quote.tva)
+    }))
+  } : defaultQuote, [quote])
+
   const methods = useForm<QuoteFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
-    values: quote ?? defaultQuote,
+    values: initialValues,
     disabled: !!(quote && quote.status !== QuoteStatusEnum.DRAFT)
   })
 

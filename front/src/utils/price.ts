@@ -7,7 +7,7 @@ export function calculatePriceTTC(price?: number | string | null, tva = 0): numb
   if (!price) {
     return 0
   }
-  const typedPrice = parseFloat(price)
+  const typedPrice = parseFloat(`${price}`)
   const computedVat = tva / 100
   return roundTwoDecimals(typedPrice * (1 + computedVat))
 }
@@ -23,7 +23,7 @@ export function calculatePriceETFromIT(price?: number | string | null, tva = 0):
   if (!price) {
     return 0
   }
-  const typedPrice = parseFloat(price)
+  const typedPrice = parseFloat(`${price}`)
   const computedVat = tva / 100
 
   return roundTwoDecimals(typedPrice / (1 + computedVat))

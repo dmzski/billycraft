@@ -10,6 +10,8 @@ import { useBillByIdQuery } from '@/queries/useBillByIdQuery'
 import { BillFormValues } from '../components/BillFormContent'
 import { FormProvider, useForm } from 'react-hook-form'
 import { BillUpdateRequest } from '@/models/dtos/BillUpdateRequest'
+import { calculatePriceTTC } from '@/utils/price'
+import { useMemo } from 'react'
 
 const defaultBill = {
   lines: [],
@@ -55,10 +57,19 @@ export const Edit = () => {
     }
   }
 
+  const initialValues: BillFormValues = useMemo(() => bill ? {
+    ...bill,
+    lines: bill.lines.map(({ price, ...rest }) => ({
+      ...rest,
+      price,
+      itPrice: calculatePriceTTC(price, bill.tva)
+    }))
+  } : defaultBill, [bill])
+
   const methods = useForm<BillFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
-    values: bill ?? defaultBill,
+    values: initialValues,
     disabled: !!(bill && bill.status !== BillStatusEnum.DRAFT)
   })
 
