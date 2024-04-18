@@ -17,14 +17,14 @@ import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
 
 const errorClasses = 'select-error'
 const disabledClasses = 'select-disabled'
-const inputClasses =
-  'select inline-flex items-center min-w-0'
+const inputClasses = 'select inline-flex items-center min-w-0'
 
-type Variants = "no-border" | "ghost" | "default"
+type Variants = 'no-border' | 'ghost' | 'default'
 const variants: Record<Variants, string> = {
-  "no-border": "",
-  ghost: "select-ghost focus-within:select-primary",
-  default: "select-bordered focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary focus-within:select-primary"
+  'no-border': '',
+  ghost: 'select-ghost focus-within:select-primary',
+  default:
+    'select-bordered focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary focus-within:select-primary',
 }
 
 export type OptionValue = string | number
@@ -67,7 +67,6 @@ const KEYS = {
   Enter: 'Enter',
 }
 
-
 const Select = (
   {
     'aria-label': ariaLabel,
@@ -86,7 +85,7 @@ const Select = (
     error,
     required,
     autoFocus,
-    variant = "default"
+    variant = 'default',
   }: SelectProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
@@ -147,9 +146,7 @@ const Select = (
           handleOpen()
         }
       } else {
-        if (
-          KEYS.Escape === event.key
-        ) {
+        if (KEYS.Escape === event.key) {
           setOpen(false)
         }
       }
@@ -196,19 +193,15 @@ const Select = (
       onKeyDown={handleKeyDown}
       onClick={handleOpen}
       aria-invalid={required && !value}
-      className={clsx("form-control", className)}
+      className={clsx('form-control', className)}
     >
       {label ? (
         <label htmlFor={id} className="label py-1">
           <span className="label-text">{label}</span>
         </label>
       ) : null}
-      <div
-        className={clsx(inputClassName, "relative flex-nowrap")}
-      >
-        <span className="flex-grow inline-flex gap-2 truncate">
-          {valueRender}
-        </span>
+      <div className={clsx(inputClassName, 'relative flex-nowrap')}>
+        <span className="flex-grow inline-flex gap-2 truncate">{valueRender}</span>
         <input
           aria-haspopup="listbox"
           autoFocus={autoFocus}
@@ -221,7 +214,7 @@ const Select = (
           ref={inputRef}
           onFocus={handleOpen}
           onClick={handleOpen}
-          defaultValue={value?.toString() ?? ""}
+          defaultValue={value?.toString() ?? ''}
         />
         {options?.length > 0 && isOpen ? (
           <OptionList

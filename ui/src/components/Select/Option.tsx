@@ -30,12 +30,12 @@ const Option = ({ autoFocus, isMulti, value, option, onOptionClick }: OptionProp
     })
   }, [autoFocus])
 
-  const handleSelectOptionClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleSelectOptionClick: MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault()
     onOptionClick(option)
   }
-  const handleSelectOptionEnter: KeyboardEventHandler<HTMLButtonElement> = (event) => {
-    if (event.key === "Enter") {
+  const handleSelectOptionEnter: KeyboardEventHandler<HTMLButtonElement> = event => {
+    if (event.key === 'Enter') {
       event.preventDefault()
       onOptionClick(option)
     }
@@ -48,7 +48,8 @@ const Option = ({ autoFocus, isMulti, value, option, onOptionClick }: OptionProp
         ref={optionRef}
         className={clsx({
           'focus:bg-primary-content focus:text-primary': !isSelected,
-          'border-l-4 rounded-l-none bg-primary-content text-primary border-primary focus:bg-primary focus:text-primary-content focus:border-primary-content': isSelected,
+          'border-l-4 rounded-l-none bg-primary-content text-primary border-primary focus:bg-primary focus:text-primary-content focus:border-primary-content':
+            isSelected,
         })}
         onClick={handleSelectOptionClick}
         onKeyUp={handleSelectOptionEnter}

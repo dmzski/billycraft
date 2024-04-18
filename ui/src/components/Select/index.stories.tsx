@@ -39,7 +39,7 @@ export const Basic: Story = {
   render,
   args: {
     options: fakeOptions,
-    variant: "default"
+    variant: 'default',
   },
   decorators: [Component => <Component />],
 }
