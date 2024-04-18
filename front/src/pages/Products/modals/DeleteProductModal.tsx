@@ -1,10 +1,10 @@
-import { useI18n } from "@/i18n"
-import { Alert, Button, Input, Modal, useToast } from "@coco-ui/core"
-import { ComponentProps } from "react"
-import { useController, useForm } from "react-hook-form"
-import { sendErrorToSentry } from "@/utils/errors"
-import { ProductApi } from "@/api/ProductApi"
-import Product from "@/models/Product"
+import { useI18n } from '@/i18n'
+import { Alert, Button, Input, Modal, useToast } from '@coco-ui/core'
+import { ComponentProps } from 'react'
+import { useController, useForm } from 'react-hook-form'
+import { sendErrorToSentry } from '@/utils/errors'
+import { ProductApi } from '@/api/ProductApi'
+import Product from '@/models/Product'
 
 type DeleteProductModalProps = {
   onSubmitSuccess: () => Promise<void>
@@ -12,9 +12,7 @@ type DeleteProductModalProps = {
   product: Product
 }
 
-type DeleteProductFormProps = Omit<DeleteProductModalProps,
-  'disclosure'
-> & { close: () => void }
+type DeleteProductFormProps = Omit<DeleteProductModalProps, 'disclosure'> & { close: () => void }
 
 type ConfirmValues = {
   confirm: string
@@ -27,10 +25,10 @@ const DeleteProductForm = ({ product, onSubmitSuccess, close }: DeleteProductFor
   const confirmationString = t('forms.confirmation.delete.pattern')
 
   const methods = useForm<ConfirmValues>({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      confirm: ''
-    }
+      confirm: '',
+    },
   })
 
   const onSubmit = async () => {
@@ -45,8 +43,11 @@ const DeleteProductForm = ({ product, onSubmitSuccess, close }: DeleteProductFor
     }
   }
 
-  const {field: nameField, fieldState: nameFieldState} = useController({ control: methods.control, name: 'confirm', rules: { required: true, pattern: new RegExp(confirmationString, "i") } })
-
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    control: methods.control,
+    name: 'confirm',
+    rules: { required: true, pattern: new RegExp(confirmationString, 'i') },
+  })
 
   return (
     <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -63,14 +64,22 @@ const DeleteProductForm = ({ product, onSubmitSuccess, close }: DeleteProductFor
         autoComplete="off"
         error={nameFieldState.invalid}
       />
-      <Button variant="error" type="submit" disabled={!methods.formState.isValid || methods.formState.isSubmitting}>
+      <Button
+        variant="error"
+        type="submit"
+        disabled={!methods.formState.isValid || methods.formState.isSubmitting}
+      >
         {pageT('submit')}
       </Button>
     </form>
   )
 }
 
-export const DeleteProductModal = ({ product, onSubmitSuccess, disclosure }: DeleteProductModalProps) => (
+export const DeleteProductModal = ({
+  product,
+  onSubmitSuccess,
+  disclosure,
+}: DeleteProductModalProps) => (
   <Modal disclosure={disclosure}>
     {({ close }) => (
       <DeleteProductForm product={product} onSubmitSuccess={onSubmitSuccess} close={close} />

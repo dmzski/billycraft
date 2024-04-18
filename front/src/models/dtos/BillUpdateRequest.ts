@@ -1,5 +1,5 @@
-import { LineTypeEnum } from "../LineTypeEnum"
-import { BillStatusEnum } from "../Bill"
+import { LineTypeEnum } from '../LineTypeEnum'
+import { BillStatusEnum } from '../Bill'
 
 export type BillUpdateRequestLine = {
   line: number

@@ -35,15 +35,11 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
   const nextStatuses: BillStatusEnum[] = useMemo(() => {
     switch (bill.status) {
       case BillStatusEnum.SENT:
-        return [
-          BillStatusEnum.REFUSED,
-          BillStatusEnum.TO_DECLARE,
-          BillStatusEnum.ARCHIVED,
-        ]
+        return [BillStatusEnum.REFUSED, BillStatusEnum.TO_DECLARE, BillStatusEnum.ARCHIVED]
       case BillStatusEnum.TO_DECLARE:
         return [BillStatusEnum.ARCHIVED]
-      case BillStatusEnum.ARCHIVED: 
-      case BillStatusEnum.REFUSED: 
+      case BillStatusEnum.ARCHIVED:
+      case BillStatusEnum.REFUSED:
         return []
       default:
         return [BillStatusEnum.SENT, BillStatusEnum.ARCHIVED]
@@ -53,7 +49,7 @@ const BillTableLine = ({ bill, customer }: BillTableLineProps) => {
   return (
     <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
       <div className="md:col-span-1 text-sm">
-        <Link className="link-primary" to={ROUTES.BILL_OVERVIEW.path({id: bill.id})}>
+        <Link className="link-primary" to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}>
           {bill.name}
         </Link>
       </div>

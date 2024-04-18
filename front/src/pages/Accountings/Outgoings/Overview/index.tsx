@@ -38,16 +38,14 @@ const Overview = () => {
   )
 
   return (
-    <div className='flex flex-col gap-10'>
+    <div className="flex flex-col gap-10">
       <div className="p-2 flex gap-4 items-center">
         <h2 className="text-2xl flex-grow">
           {t('accounting.outgoings.pages.overview.currentMonth')}
           {currentMonth}
         </h2>
         <div className="flex items-center border border-primary rounded bg-primary-content text-primary p-4">
-          <p>
-            {t('accounting.outgoings.pages.overview.totalThisMonth')}
-          </p>
+          <p>{t('accounting.outgoings.pages.overview.totalThisMonth')}</p>
           <p className="flex-grow">{total}</p>
         </div>
       </div>

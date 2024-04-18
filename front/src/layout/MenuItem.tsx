@@ -20,7 +20,7 @@ const MenuItem = ({ path, exact, id }: MenuItemProps) => {
       <Link
         to={path}
         className={clsx(
-          "focus:text-primary focus:bg-primary-content",
+          'focus:text-primary focus:bg-primary-content',
           match ? 'bg-primary-content text-primary' : '',
         )}
       >

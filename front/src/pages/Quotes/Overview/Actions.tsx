@@ -1,12 +1,12 @@
-import { QuoteApi } from "@/api/QuoteApi"
-import { useI18n } from "@/i18n"
-import Quote, { QuoteStatusEnum } from "@/models/Quote"
-import { Button, useToast } from "@coco-ui/core"
-import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
+import { QuoteApi } from '@/api/QuoteApi'
+import { useI18n } from '@/i18n'
+import Quote, { QuoteStatusEnum } from '@/models/Quote'
+import { Button, useToast } from '@coco-ui/core'
+import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 
 type ActionsProps = {
-  quote: Quote,
+  quote: Quote
   reloadQuote: () => Promise<void>
 }
 
@@ -30,7 +30,6 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
     }
   }
 
-
   return (
     <section className="grid md:grid-cols-2 gap-4 justify-end">
       {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
@@ -39,11 +38,11 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
           type="button"
           onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
           disabled={isSubmitting}
-          variant='primary'
+          variant="primary"
           outline
-          className='gap-4 md:col-start-2'
+          className="gap-4 md:col-start-2"
         >
-          <EnvelopeIcon className='w-5' />
+          <EnvelopeIcon className="w-5" />
           {t('quotes.form.actions.sent')}
         </Button>
       ) : null}
@@ -53,11 +52,11 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
             size="md"
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
-            variant='error'
-            className='gap-4'
+            variant="error"
+            className="gap-4"
             disabled={isSubmitting}
           >
-            <XMarkIcon className='w-5' />
+            <XMarkIcon className="w-5" />
             {t('quotes.form.actions.refused')}
           </Button>
           <Button
@@ -65,10 +64,10 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
             disabled={isSubmitting}
             type="button"
             onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
-            variant='success'
-            className='gap-4'
+            variant="success"
+            className="gap-4"
           >
-            <CheckIcon className='w-5' />
+            <CheckIcon className="w-5" />
             {t('quotes.form.actions.accepted')}
           </Button>
         </>
@@ -79,16 +78,21 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
             size="md"
             disabled={isSubmitting}
             type="button"
-            variant='primary'
+            variant="primary"
             onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
           >
             {t('quotes.form.actions.backToDraft')}
           </Button>
           <Button
-
             disabled={isSubmitting}
-            outline variant='error' className='gap-4' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
-            <InboxArrowDownIcon className='w-5' />
+            outline
+            variant="error"
+            className="gap-4"
+            size="md"
+            type="button"
+            onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+          >
+            <InboxArrowDownIcon className="w-5" />
             {t('quotes.form.actions.archive')}
           </Button>
         </>
@@ -100,10 +104,10 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
             disabled={isSubmitting}
             outline
             type="button"
-            variant='error'
+            variant="error"
             onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
           >
-            <InboxArrowDownIcon className='w-5' />
+            <InboxArrowDownIcon className="w-5" />
             {t('quotes.form.actions.archive')}
           </Button>
           <Button
@@ -120,8 +124,13 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
       {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
         <Button
           disabled={isSubmitting}
-          variant='primary' className='gap-4 md:col-start-2' size="md" type="button" onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}>
-          <InboxArrowDownIcon className='w-5' />
+          variant="primary"
+          className="gap-4 md:col-start-2"
+          size="md"
+          type="button"
+          onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+        >
+          <InboxArrowDownIcon className="w-5" />
           {t('quotes.form.actions.archive')}
         </Button>
       ) : null}

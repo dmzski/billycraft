@@ -9,8 +9,6 @@ import { useI18n } from '@/i18n'
 import { QuoteFormValues } from './types'
 import { calculatePriceTTC } from '@/utils/price'
 
-
-
 type QuoteFormProps = {
   quote?: Quote
 }
@@ -18,7 +16,12 @@ type QuoteFormProps = {
 export const QuoteFormContent = ({ quote }: QuoteFormProps) => {
   const { t } = useI18n()
   const customers = useCustomers()
-  const { control, formState: { isDirty, isSubmitting, disabled }, getValues, setValue } = useFormContext<QuoteFormValues>()
+  const {
+    control,
+    formState: { isDirty, isSubmitting, disabled },
+    getValues,
+    setValue,
+  } = useFormContext<QuoteFormValues>()
 
   const customerOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
     const array: ComponentProps<typeof Select>['options'] = []
@@ -54,15 +57,20 @@ export const QuoteFormContent = ({ quote }: QuoteFormProps) => {
     control,
     name: 'tva',
     rules: {
-      required: true, min: 0, max: 100,
-      onBlur: (event) => {
+      required: true,
+      min: 0,
+      max: 100,
+      onBlur: event => {
         const values = getValues()
-        setValue("lines", values.lines.map(({ price, ...restLine }) => ({
-          ...restLine,
-          price,
-          itPrice: calculatePriceTTC(price, Number(event.target.value))
-        })))
-      }
+        setValue(
+          'lines',
+          values.lines.map(({ price, ...restLine }) => ({
+            ...restLine,
+            price,
+            itPrice: calculatePriceTTC(price, Number(event.target.value)),
+          })),
+        )
+      },
     },
   })
 

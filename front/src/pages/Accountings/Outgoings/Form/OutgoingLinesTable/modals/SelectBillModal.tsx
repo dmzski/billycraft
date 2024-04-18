@@ -10,7 +10,7 @@ type SelectBillModalProps = {
   disclosure: ComponentProps<typeof Modal>['disclosure']
 }
 
-type SelectBillFormProps = Omit<SelectBillModalProps, "disclosure"> & { close: () => void }
+type SelectBillFormProps = Omit<SelectBillModalProps, 'disclosure'> & { close: () => void }
 
 type SelectBillModalFormValues = {
   customerId?: string
@@ -72,8 +72,7 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
           if (titleController.field.value)
             return title.toUpperCase().includes(titleController.field.value.toUpperCase())
 
-          if (customerController.field.value)
-            return customerController.field.value === customerId
+          if (customerController.field.value) return customerController.field.value === customerId
 
           if (!titleController.field.value && !customerController.field.value) return true
 
@@ -92,9 +91,7 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="text-xl">
-        {t('accounting.outgoings.modals.selectBill.title')}
-      </h2>
+      <h2 className="text-xl">{t('accounting.outgoings.modals.selectBill.title')}</h2>
       <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col gap-4">
         <Select
           options={customerOptions}
@@ -121,10 +118,7 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
           label={t('bill')}
           isSearchable
         />
-        <Button
-          type="submit"
-          disabled={!isValid || isSubmitting}
-        >
+        <Button type="submit" disabled={!isValid || isSubmitting}>
           {t('select')}
         </Button>
       </form>
@@ -134,9 +128,7 @@ const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
 
 const SelectBillModal = ({ onSubmit, disclosure }: SelectBillModalProps) => (
   <Modal disclosure={disclosure}>
-    {({ close }) => (
-      <SelectBillForm close={close} onSubmit={onSubmit} />
-    )}
+    {({ close }) => <SelectBillForm close={close} onSubmit={onSubmit} />}
   </Modal>
 )
 

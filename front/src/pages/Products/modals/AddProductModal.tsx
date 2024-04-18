@@ -1,27 +1,25 @@
-import { useI18n } from "@/i18n"
-import { Button, Modal, useToast } from "@coco-ui/core"
-import { ComponentProps } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { ProductFormContent, ProductFormValues } from "../components/ProductFormContent"
-import { LineTypeEnum } from "@/models/LineTypeEnum"
-import { sendErrorToSentry } from "@/utils/errors"
-import { ProductApi } from "@/api/ProductApi"
+import { useI18n } from '@/i18n'
+import { Button, Modal, useToast } from '@coco-ui/core'
+import { ComponentProps } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { ProductFormContent, ProductFormValues } from '../components/ProductFormContent'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { sendErrorToSentry } from '@/utils/errors'
+import { ProductApi } from '@/api/ProductApi'
 
 type AddProductModalProps = {
   onSubmitSuccess: () => Promise<void>
   disclosure: ComponentProps<typeof Modal>['disclosure']
 }
 
-type AddProductFormProps = Pick<AddProductModalProps,
-  'onSubmitSuccess'
-> & { close: () => void }
+type AddProductFormProps = Pick<AddProductModalProps, 'onSubmitSuccess'> & { close: () => void }
 
 const initialValues: ProductFormValues = {
   type: LineTypeEnum.ARTICLE,
-  name: "",
+  name: '',
   price: 0,
-  description: "",
-  supplierId: null
+  description: '',
+  supplierId: null,
 }
 
 const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
@@ -30,8 +28,8 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
   const pageT = scopedT('products.modals.add')
 
   const methods = useForm<ProductFormValues>({
-    mode: "onChange",
-    values: initialValues
+    mode: 'onChange',
+    values: initialValues,
   })
 
   const onSubmit = async (values: ProductFormValues) => {
@@ -46,13 +44,16 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
     }
   }
 
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <h2 className="text-2xl">{pageT('title')}</h2>
         <ProductFormContent />
-        <Button variant="primary" type="submit" disabled={!methods.formState.isValid || methods.formState.isSubmitting}>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={!methods.formState.isValid || methods.formState.isSubmitting}
+        >
           {pageT('submit')}
         </Button>
       </form>
@@ -62,8 +63,6 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
 
 export const AddProductModal = ({ onSubmitSuccess, disclosure }: AddProductModalProps) => (
   <Modal disclosure={disclosure}>
-    {({ close }) => (
-      <AddProductForm onSubmitSuccess={onSubmitSuccess} close={close} />
-    )}
+    {({ close }) => <AddProductForm onSubmitSuccess={onSubmitSuccess} close={close} />}
   </Modal>
 )

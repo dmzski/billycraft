@@ -9,7 +9,9 @@ export const PRODUCT_URL = `${API_URL}/products`
 export const ProductApi = {
   delete: async (id: Product['id']) => HttpClient.DELETE(`${PRODUCT_URL}/${id}`, {}),
   findAll: () => HttpClient.GET<Product[]>(`${PRODUCT_URL}`),
-  findAllContains: (search: string) => HttpClient.GET<Product[] | undefined>(`${PRODUCT_URL}?contains=${search}`),
+  findAllContains: (search: string) =>
+    HttpClient.GET<Product[] | undefined>(`${PRODUCT_URL}?contains=${search}`),
   create: (data: ProductCreateRequest) => HttpClient.POST<Product>(`${PRODUCT_URL}`, data),
-  update: ({ id, ...data }: ProductUpdateRequest) => HttpClient.PATCH<Product>(`${PRODUCT_URL}/${id}`, data)
+  update: ({ id, ...data }: ProductUpdateRequest) =>
+    HttpClient.PATCH<Product>(`${PRODUCT_URL}/${id}`, data),
 }

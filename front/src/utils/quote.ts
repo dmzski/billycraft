@@ -67,38 +67,36 @@ export function getQuoteTotalET(quote: Quote): number {
     .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity)
     .map(
       (quoteLine: QuoteLine) =>
-        calculatePriceET(quoteLine.price) *
-        (quoteLine.quantity ? quoteLine.quantity : 0),
+        calculatePriceET(quoteLine.price) * (quoteLine.quantity ? quoteLine.quantity : 0),
     )
 
   if (array && array.length > 0) {
-    return array.reduce(
-      (previousValue, currentValue) => previousValue + currentValue, 0
-    )
+    return array.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
   return 0
 }
 
 export function getQuoteTotalETForLineType(quote: Quote, type: LineTypeEnum): number {
   const array = quote.lines
-    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .filter(
+      (quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type,
+    )
     .map(
       (quoteLine: QuoteLine) =>
-        calculatePriceET(quoteLine.price) *
-        (quoteLine.quantity ? quoteLine.quantity : 0),
+        calculatePriceET(quoteLine.price) * (quoteLine.quantity ? quoteLine.quantity : 0),
     )
 
   if (array && array.length > 0) {
-    return array.reduce(
-      (previousValue, currentValue) => previousValue + currentValue, 0
-    )
+    return array.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
   return 0
 }
 
 export function getQuoteTotalForLineType(quote: Quote, type: LineTypeEnum): number {
   const array = quote.lines
-    .filter((quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .filter(
+      (quoteLine: QuoteLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type,
+    )
     .map(
       (quoteLine: QuoteLine) =>
         calculatePriceTTC(quoteLine.price, quote.tva) *
@@ -106,16 +104,10 @@ export function getQuoteTotalForLineType(quote: Quote, type: LineTypeEnum): numb
     )
 
   if (array && array.length > 0) {
-    return array.reduce(
-      (previousValue, currentValue) => previousValue + currentValue, 0
-    )
+    return array.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
   return 0
 }
 
 export const isQuoteMinimumAccepted = ({ status }: Quote): boolean =>
-  [
-    QuoteStatusEnum.ARCHIVED,
-    QuoteStatusEnum.ACCEPTED,
-    QuoteStatusEnum.DEPOSIT_ASK
-  ].includes(status)
+  [QuoteStatusEnum.ARCHIVED, QuoteStatusEnum.ACCEPTED, QuoteStatusEnum.DEPOSIT_ASK].includes(status)

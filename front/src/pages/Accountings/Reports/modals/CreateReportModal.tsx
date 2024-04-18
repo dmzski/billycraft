@@ -14,8 +14,8 @@ type CreateReportModalProps = {
 type CreateReportFormProps = Omit<CreateReportModalProps, 'disclosure'>
 
 type CreateReportFormValues = {
-  startDate: string,
-  endDate: string,
+  startDate: string
+  endDate: string
   name: string
 }
 
@@ -45,9 +45,21 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
     }
   }
 
-  const { field: nameField, fieldState: nameFieldState } = useController({ control, name: "name", rules: { required: true, minLength: 3 } })
-  const { field: startDateField, fieldState: startDateFieldState } = useController({ control, name: "startDate", rules: { required: true } })
-  const { field: endDateField, fieldState: endDateFieldState } = useController({ control, name: "endDate", rules: { required: true } })
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    control,
+    name: 'name',
+    rules: { required: true, minLength: 3 },
+  })
+  const { field: startDateField, fieldState: startDateFieldState } = useController({
+    control,
+    name: 'startDate',
+    rules: { required: true },
+  })
+  const { field: endDateField, fieldState: endDateFieldState } = useController({
+    control,
+    name: 'endDate',
+    rules: { required: true },
+  })
 
   return (
     <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>

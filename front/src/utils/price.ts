@@ -1,4 +1,3 @@
-
 export function roundTwoDecimals(aPrice: number): number {
   return Math.round(aPrice * 100) / 100
 }

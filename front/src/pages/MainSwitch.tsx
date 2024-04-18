@@ -25,9 +25,7 @@ const UNAUTHENTIFIED_ROUTES: PathComponentTuple[] = [
   [ROUTES.REGISTER.path(), Register],
 ]
 
-const ONBOARDING_ROUTES: PathComponentTuple[] = [
-  [ROUTES.ONBOARDING.path(), Onboarding]
-]
+const ONBOARDING_ROUTES: PathComponentTuple[] = [[ROUTES.ONBOARDING.path(), Onboarding]]
 
 const APP_ROUTES: PathComponentTuple[] = [
   [ROUTES.ACCOUNTINGS.path(), AccountingSwitch],
@@ -53,11 +51,16 @@ export const MainSwitch = () => {
     return (
       <Switch>
         {UNAUTHENTIFIED_ROUTES.map(([path, RouteComponent]) => (
-          <Route key={path} path={path} render={() => (
-            <ErrorBoundary>
-              <RouteComponent />
-            </ErrorBoundary>
-          )} />))}
+          <Route
+            key={path}
+            path={path}
+            render={() => (
+              <ErrorBoundary>
+                <RouteComponent />
+              </ErrorBoundary>
+            )}
+          />
+        ))}
         <Route render={() => <Redirect to={ROUTES.LOGIN.path()} />} />
       </Switch>
     )
@@ -77,11 +80,16 @@ export const MainSwitch = () => {
     return (
       <Switch>
         {ONBOARDING_ROUTES.map(([path, RouteComponent]) => (
-          <Route key={path} path={path} render={() => (
-            <ErrorBoundary >
-              <RouteComponent />
-            </ErrorBoundary>
-          )} />))}
+          <Route
+            key={path}
+            path={path}
+            render={() => (
+              <ErrorBoundary>
+                <RouteComponent />
+              </ErrorBoundary>
+            )}
+          />
+        ))}
         <Route render={() => <Redirect to={ROUTES.ONBOARDING.path()} />} />
       </Switch>
     )
@@ -91,9 +99,8 @@ export const MainSwitch = () => {
       <ErrorBoundary>
         <Switch>
           {APP_ROUTES.map(([path, RouteComponent]) => (
-            <Route key={path} path={path} render={() => (
-              <RouteComponent />
-            )} />))}
+            <Route key={path} path={path} render={() => <RouteComponent />} />
+          ))}
           <Route render={() => <Redirect to={ROUTES.DASHBOARD.path()} />} />
         </Switch>
       </ErrorBoundary>

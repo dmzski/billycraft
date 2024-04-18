@@ -15,11 +15,8 @@ const List = ({ data, reloadData }: ListProps) => (
       <div>TVA</div>
       <div />
     </div>
-    {data.map((supplier) => (
-      <div
-        key={supplier.id}
-        className="grid md:grid-cols-12 p-2 items-center"
-      >
+    {data.map(supplier => (
+      <div key={supplier.id} className="grid md:grid-cols-12 p-2 items-center">
         <div>
           <div className="ml-4 w-6 h-6 rounded-full" style={{ backgroundColor: supplier.color }} />
         </div>

@@ -1,12 +1,12 @@
-import { BillApi } from "@/api/BillApi"
-import { useI18n } from "@/i18n"
-import Bill, { BillStatusEnum } from "@/models/Bill"
-import { Button, useToast } from "@coco-ui/core"
-import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
+import { BillApi } from '@/api/BillApi'
+import { useI18n } from '@/i18n'
+import Bill, { BillStatusEnum } from '@/models/Bill'
+import { Button, useToast } from '@coco-ui/core'
+import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 
 type ActionsProps = {
-  bill: Bill,
+  bill: Bill
   reloadBill: () => Promise<void>
 }
 
@@ -30,7 +30,6 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
     }
   }
 
-
   return (
     <section className="grid md:grid-cols-2 gap-4 justify-end">
       {bill.status === BillStatusEnum.DRAFT ? (
@@ -39,11 +38,11 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
           type="button"
           onClick={updateBillStatus(BillStatusEnum.SENT)}
           disabled={isSubmitting}
-          variant='primary'
+          variant="primary"
           outline
-          className='gap-4 md:col-start-2'
+          className="gap-4 md:col-start-2"
         >
-          <EnvelopeIcon className='w-5' />
+          <EnvelopeIcon className="w-5" />
           {t('bills.form.actions.sent')}
         </Button>
       ) : null}
@@ -53,11 +52,11 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
             size="md"
             type="button"
             onClick={updateBillStatus(BillStatusEnum.REFUSED)}
-            variant='error'
-            className='gap-4'
+            variant="error"
+            className="gap-4"
             disabled={isSubmitting}
           >
-            <XMarkIcon className='w-5' />
+            <XMarkIcon className="w-5" />
             {t('bills.form.actions.refused')}
           </Button>
           <Button
@@ -65,10 +64,10 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
             disabled={isSubmitting}
             type="button"
             onClick={updateBillStatus(BillStatusEnum.TO_DECLARE)}
-            variant='success'
-            className='gap-4'
+            variant="success"
+            className="gap-4"
           >
-            <CheckIcon className='w-5' />
+            <CheckIcon className="w-5" />
             {t('bills.form.actions.toDeclare')}
           </Button>
         </>
@@ -76,8 +75,13 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
       {bill.status === BillStatusEnum.TO_DECLARE ? (
         <Button
           disabled={isSubmitting}
-          variant='primary' className='gap-4 md:col-start-2' size="md" type="button" onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}>
-          <InboxArrowDownIcon className='w-5' />
+          variant="primary"
+          className="gap-4 md:col-start-2"
+          size="md"
+          type="button"
+          onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}
+        >
+          <InboxArrowDownIcon className="w-5" />
           {t('bills.form.actions.archive')}
         </Button>
       ) : null}

@@ -16,8 +16,8 @@ import { useMemo } from 'react'
 const defaultBill = {
   lines: [],
   tva: 0,
-  title: "",
-  customerId: ""
+  title: '',
+  customerId: '',
 } as BillFormValues
 
 export const Edit = () => {
@@ -25,16 +25,13 @@ export const Edit = () => {
   const toast = useToast()
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: bill, isLoading } = useBillByIdQuery(
-    id,
-    {
-      enabled: !!id,
-    },
-  )
+  const { data: bill, isLoading } = useBillByIdQuery(id, {
+    enabled: !!id,
+  })
 
   const onSubmit = async (data: BillFormValues) => {
     const tmp: BillUpdateRequest = {
-      id: bill?.id ?? "",
+      id: bill?.id ?? '',
       ...data,
       lines: data.lines.map((line, index: number) => ({
         name: line.name,
@@ -57,20 +54,26 @@ export const Edit = () => {
     }
   }
 
-  const initialValues: BillFormValues = useMemo(() => bill ? {
-    ...bill,
-    lines: bill.lines.map(({ price, ...rest }) => ({
-      ...rest,
-      price,
-      itPrice: calculatePriceTTC(price, bill.tva)
-    }))
-  } : defaultBill, [bill])
+  const initialValues: BillFormValues = useMemo(
+    () =>
+      bill
+        ? {
+            ...bill,
+            lines: bill.lines.map(({ price, ...rest }) => ({
+              ...rest,
+              price,
+              itPrice: calculatePriceTTC(price, bill.tva),
+            })),
+          }
+        : defaultBill,
+    [bill],
+  )
 
   const methods = useForm<BillFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
     values: initialValues,
-    disabled: !!(bill && bill.status !== BillStatusEnum.DRAFT)
+    disabled: !!(bill && bill.status !== BillStatusEnum.DRAFT),
   })
 
   const { isValid, isSubmitting, disabled } = methods.formState
@@ -80,25 +83,24 @@ export const Edit = () => {
   }
 
   if (!bill) {
-    return t("genericDataLoadError")
+    return t('genericDataLoadError')
   }
 
   if (bill.status !== BillStatusEnum.DRAFT) {
-    return (
-      <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />
-    )
+    return <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />
   }
 
   return (
     <div className="flex flex-col gap-10">
-      <Link className="gap-1 link-hover link-primary flex items-center" to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}>
+      <Link
+        className="gap-1 link-hover link-primary flex items-center"
+        to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
+      >
         <ChevronLeftIcon className="w-5" /> {t('bills.form.edit.backTo')}
       </Link>
       <h1 className="text-4xl font-bold flex gap-5 items-center">
         <CreditCardIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
-        <span>
-          {bill.name}
-        </span>
+        <span>{bill.name}</span>
       </h1>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">

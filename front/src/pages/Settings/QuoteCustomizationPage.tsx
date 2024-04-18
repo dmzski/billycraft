@@ -4,7 +4,7 @@ import QuoteCustomizationForm from './Forms/QuoteCustomizationForm'
 import { useMyQuoteCustomizationQuery } from '@/queries/useMyQuoteCustomizationQuery'
 
 const QuoteCustomizationPage = () => {
-  const {data: quoteCustomization, isLoading} = useMyQuoteCustomizationQuery()
+  const { data: quoteCustomization, isLoading } = useMyQuoteCustomizationQuery()
 
   return (
     <div className="w-full flex justify-center flex-col items-center">

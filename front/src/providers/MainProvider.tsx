@@ -9,9 +9,11 @@ type MainProviderProps = {
   children: ReactNode
 }
 const MainProvider = ({ children }: MainProviderProps) => (
-  <DataLoaderProvider onError={(err) => {
-    sendErrorToSentry(err)
-  }}>
+  <DataLoaderProvider
+    onError={err => {
+      sendErrorToSentry(err)
+    }}
+  >
     <AuthProvider useAuthorizationHeader={window.location.hostname.includes('localhost')}>
       <ToastProvider>
         <UserProvider>{children}</UserProvider>

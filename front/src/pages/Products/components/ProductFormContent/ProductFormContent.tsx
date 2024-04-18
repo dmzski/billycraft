@@ -1,10 +1,10 @@
-import { useController, useFormContext } from "react-hook-form"
-import { ProductFormValues } from "./types"
-import { Input, Select, TextArea } from "@coco-ui/core"
-import { ComponentProps, useMemo } from "react"
-import { LINE_TYPE } from "@/constants/line"
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
-import { useI18n } from "@/i18n"
+import { useController, useFormContext } from 'react-hook-form'
+import { ProductFormValues } from './types'
+import { Input, Select, TextArea } from '@coco-ui/core'
+import { ComponentProps, useMemo } from 'react'
+import { LINE_TYPE } from '@/constants/line'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
+import { useI18n } from '@/i18n'
 
 export const ProductFormContent = () => {
   const { scopedT } = useI18n()
@@ -12,21 +12,47 @@ export const ProductFormContent = () => {
   const { control } = useFormContext<ProductFormValues>()
   const { data: suppliers } = useAllSuppliersQuery()
 
-  const { field: nameField, fieldState: nameFieldState } = useController({ control, name: 'name', rules: { required: true, minLength: 3 } })
-  const { field: typeField, fieldState: typeFieldState } = useController({ control, name: 'type', rules: { required: true } })
-  const { field: descriptionField, fieldState: descriptionFieldState } = useController({ control, name: 'description' })
-  const { field: priceField, fieldState: priceFieldState } = useController({ control, name: 'price', rules: { required: true } })
-  const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({ control, name: 'supplierId' })
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    control,
+    name: 'name',
+    rules: { required: true, minLength: 3 },
+  })
+  const { field: typeField, fieldState: typeFieldState } = useController({
+    control,
+    name: 'type',
+    rules: { required: true },
+  })
+  const { field: descriptionField, fieldState: descriptionFieldState } = useController({
+    control,
+    name: 'description',
+  })
+  const { field: priceField, fieldState: priceFieldState } = useController({
+    control,
+    name: 'price',
+    rules: { required: true },
+  })
+  const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({
+    control,
+    name: 'supplierId',
+  })
 
-  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(() => Object.values(LINE_TYPE).map(type => ({
-    value: type.enum,
-    label: type.name,
-  })), [])
+  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(
+    () =>
+      Object.values(LINE_TYPE).map(type => ({
+        value: type.enum,
+        label: type.name,
+      })),
+    [],
+  )
 
-  const supplierOptions: ComponentProps<typeof Select>['options'] = useMemo(() => suppliers?.map(({ id, name }) => ({
-    value: id,
-    label: name
-  })) ?? [], [suppliers])
+  const supplierOptions: ComponentProps<typeof Select>['options'] = useMemo(
+    () =>
+      suppliers?.map(({ id, name }) => ({
+        value: id,
+        label: name,
+      })) ?? [],
+    [suppliers],
+  )
 
   return (
     <div className="flex flex-col gap-3">
@@ -37,7 +63,7 @@ export const ProductFormContent = () => {
         ref={supplierIdField.ref}
         label={pageT('fields.supplierId.label')}
         error={supplierIdFieldState.invalid}
-        value={supplierIdField.value ?? ""}
+        value={supplierIdField.value ?? ''}
         isSearchable
       />
       <Select
@@ -83,7 +109,6 @@ export const ProductFormContent = () => {
         autoComplete="off"
         value={priceField.value}
       />
-
     </div>
   )
 }

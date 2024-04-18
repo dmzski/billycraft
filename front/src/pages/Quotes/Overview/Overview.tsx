@@ -1,26 +1,38 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency"
-import { useI18n } from "@/i18n"
-import { LineTypeEnum } from "@/models/LineTypeEnum"
-import { useCustomerQuery } from "@/queries/useCustomerQuery"
-import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery"
-import { QuoteRouteProps, ROUTES } from "@/routes"
-import { getQuoteTotal, getQuoteTotalET, getQuoteTotalETForLineType, getQuoteTotalForLineType, isQuoteMinimumAccepted } from "@/utils/quote"
-import { Alert, Button, Loader, useToast } from "@coco-ui/core"
-import { ChevronLeftIcon, DocumentArrowDownIcon, DocumentIcon, PencilIcon, PlusIcon } from "@heroicons/react/24/solid"
-import { Link, useHistory, useParams } from "react-router-dom"
-import { Actions } from "./Actions"
-import { PdfApi } from "@/api/PdfApi"
-import { QuoteApi } from "@/api/QuoteApi"
-import { calculatePriceTTC } from "@/utils/price"
-import { QuoteStatusEnum } from "@/models/Quote"
+import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { useI18n } from '@/i18n'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { useCustomerQuery } from '@/queries/useCustomerQuery'
+import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
+import { QuoteRouteProps, ROUTES } from '@/routes'
+import {
+  getQuoteTotal,
+  getQuoteTotalET,
+  getQuoteTotalETForLineType,
+  getQuoteTotalForLineType,
+  isQuoteMinimumAccepted,
+} from '@/utils/quote'
+import { Alert, Button, Loader, useToast } from '@coco-ui/core'
+import {
+  ChevronLeftIcon,
+  DocumentArrowDownIcon,
+  DocumentIcon,
+  PencilIcon,
+  PlusIcon,
+} from '@heroicons/react/24/solid'
+import { Link, useHistory, useParams } from 'react-router-dom'
+import { Actions } from './Actions'
+import { PdfApi } from '@/api/PdfApi'
+import { QuoteApi } from '@/api/QuoteApi'
+import { calculatePriceTTC } from '@/utils/price'
+import { QuoteStatusEnum } from '@/models/Quote'
 
 export const Overview = () => {
   const { t, scopedT } = useI18n()
   const toast = useToast()
   const { id } = useParams<QuoteRouteProps>()
   const { data: quote, isLoading, reload } = useQuoteByIdQuery(id)
-  const { data: customer } = useCustomerQuery(quote?.customerId ?? "", {
-    enabled: !!quote?.customerId
+  const { data: customer } = useCustomerQuery(quote?.customerId ?? '', {
+    enabled: !!quote?.customerId,
   })
   const { push } = useHistory()
   const formatCurrency = useFormatCurrency()
@@ -59,7 +71,6 @@ export const Overview = () => {
     }
   }
 
-
   if (!quote && isLoading) {
     return (
       <div className="flex items-center jusitfy-center">
@@ -69,9 +80,7 @@ export const Overview = () => {
   }
 
   if (!quote) {
-    return (
-      <Alert variant="error">{t('genericDataLoadError')}</Alert>
-    )
+    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
   }
 
   return (
@@ -83,9 +92,7 @@ export const Overview = () => {
       <div className="flex flex-col md:flex-row gap-5 md:justify-between md:items-center">
         <h1 className="text-4xl font-bold flex gap-5 items-center">
           <DocumentIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
-          <span>
-            {quote.name}
-          </span>
+          <span>{quote.name}</span>
         </h1>
         {quote.status === QuoteStatusEnum.DRAFT ? (
           <Link to={ROUTES.QUOTE_EDIT.path({ id: quote.id })} className="btn btn-primary gap-2">
@@ -109,10 +116,15 @@ export const Overview = () => {
             <dt className="font-bold">{pageT('sections.information.customer')}</dt>
             <dd>
               {customer ? (
-                <Link className="link-hover link-primary" to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}>
-                  {customer.name ?? "-"}
+                <Link
+                  className="link-hover link-primary"
+                  to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
+                >
+                  {customer.name ?? '-'}
                 </Link>
-              ) : "-"}
+              ) : (
+                '-'
+              )}
             </dd>
           </dl>
           <dl>
@@ -124,22 +136,39 @@ export const Overview = () => {
           <dl className="stat">
             <dt className="stat-title">{pageT('sections.information.total')}</dt>
             <dd className="stat-value">{formatCurrency(getQuoteTotal(quote))}</dd>
-            <dd className="stat-desc">{formatCurrency(getQuoteTotalET(quote))}&nbsp;{t(('shortExcludedTax'))}</dd>
+            <dd className="stat-desc">
+              {formatCurrency(getQuoteTotalET(quote))}&nbsp;{t('shortExcludedTax')}
+            </dd>
           </dl>
           <dl className="stat">
             <dt className="stat-title">{pageT('sections.information.totalProducts')}</dt>
-            <dd className="stat-value">{formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.ARTICLE))}</dd>
-            <dd className="stat-desc">{formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.ARTICLE))}&nbsp;{t(('shortExcludedTax'))}</dd>
+            <dd className="stat-value">
+              {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.ARTICLE))}
+            </dd>
+            <dd className="stat-desc">
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.ARTICLE))}&nbsp;
+              {t('shortExcludedTax')}
+            </dd>
           </dl>
           <dl className="stat">
             <dt className="stat-title">{pageT('sections.information.totalServices')}</dt>
-            <dd className="stat-value">{formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.SERVICE))}</dd>
-            <dd className="stat-desc">{formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.SERVICE))}&nbsp;{t(('shortExcludedTax'))}</dd>
+            <dd className="stat-value">
+              {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.SERVICE))}
+            </dd>
+            <dd className="stat-desc">
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.SERVICE))}&nbsp;
+              {t('shortExcludedTax')}
+            </dd>
           </dl>
           <dl className="stat">
             <dt className="stat-title">{pageT('sections.information.totalOthers')}</dt>
-            <dd className="stat-value">{formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.OTHER_SERVICE))}</dd>
-            <dd className="stat-desc">{formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.OTHER_SERVICE))}&nbsp;{t(('shortExcludedTax'))}</dd>
+            <dd className="stat-value">
+              {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.OTHER_SERVICE))}
+            </dd>
+            <dd className="stat-desc">
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.OTHER_SERVICE))}&nbsp;
+              {t('shortExcludedTax')}
+            </dd>
           </dl>
         </div>
       </section>
@@ -153,17 +182,12 @@ export const Overview = () => {
             size="md"
             onClick={createBill}
             disabled={!isQuoteMinimumAccepted(quote)}
-            className='gap-4'
+            className="gap-4"
           >
-            <PlusIcon className='w-5' />
+            <PlusIcon className="w-5" />
             {t('quotes.form.createBill')}
           </Button>
-          <Button
-            onClick={downloadPdf}
-            variant="default"
-            size="md"
-            className="gap-1"
-          >
+          <Button onClick={downloadPdf} variant="default" size="md" className="gap-1">
             <DocumentArrowDownIcon className="w-5" />
             {t('quotes.form.downloadPdfButton')}
           </Button>
@@ -171,9 +195,7 @@ export const Overview = () => {
         <div className="flex flex-col gap-5">
           <dl>
             <dt className="font-bold">{pageT('sections.content.name')}</dt>
-            <dd>
-              {quote.title}
-            </dd>
+            <dd>{quote.title}</dd>
           </dl>
           <div className="flex flex-col border">
             <div className="bg-primary-content text-primary grid md:grid-cols-12 gap-2 p-4">
@@ -194,19 +216,31 @@ export const Overview = () => {
                     <div>{quantity}</div>
                     <div>{formatCurrency(price ?? 0)}</div>
                     <div>{formatCurrency(calculatePriceTTC(price, quote.tva))}</div>
-                    <div>{formatCurrency(calculatePriceTTC(price, quote.tva) * (quantity ?? 0))}</div>
+                    <div>
+                      {formatCurrency(calculatePriceTTC(price, quote.tva) * (quantity ?? 0))}
+                    </div>
                   </>
                 ) : null}
               </div>
             ))}
           </div>
           <div className="grid md:grid-cols-12 grid *:p-2">
-            <p className="md:col-start-10 border-b bg-primary-content text-primary">{t('etTotal')}</p>
-            <p className="md:col-span-2 flex items-center border">{formatCurrency(getQuoteTotalET(quote))}</p>
+            <p className="md:col-start-10 border-b bg-primary-content text-primary">
+              {t('etTotal')}
+            </p>
+            <p className="md:col-span-2 flex items-center border">
+              {formatCurrency(getQuoteTotalET(quote))}
+            </p>
             <p className="md:col-start-10 border-b bg-primary-content text-primary">{t('vat')}</p>
-            <p className="md:col-span-2 flex items-center border border-b-0 border-t-0">{formatCurrency(getQuoteTotal(quote) - getQuoteTotalET(quote))}</p>
-            <p className="md:col-start-10 border-b bg-primary-content text-primary">{t('itTotal')}</p>
-            <p className="md:col-span-2 flex items-center border">{formatCurrency(getQuoteTotal(quote))}</p>
+            <p className="md:col-span-2 flex items-center border border-b-0 border-t-0">
+              {formatCurrency(getQuoteTotal(quote) - getQuoteTotalET(quote))}
+            </p>
+            <p className="md:col-start-10 border-b bg-primary-content text-primary">
+              {t('itTotal')}
+            </p>
+            <p className="md:col-span-2 flex items-center border">
+              {formatCurrency(getQuoteTotal(quote))}
+            </p>
           </div>
         </div>
       </section>

@@ -5,7 +5,8 @@ import { HttpClient } from './HttpClient'
 export const SUPPLIER_URL = `${API_URL}/suppliers`
 
 export const SupplierApi = {
-  delete: async (id: Supplier['id']): Promise<undefined> => HttpClient.DELETE(`${SUPPLIER_URL}/${id}`, {}),
+  delete: async (id: Supplier['id']): Promise<undefined> =>
+    HttpClient.DELETE(`${SUPPLIER_URL}/${id}`, {}),
 
   findAll: (): Promise<Supplier[]> => HttpClient.GET<Supplier[]>(`${SUPPLIER_URL}`),
   create: (request: SupplierRequest): Promise<Supplier> =>

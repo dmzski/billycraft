@@ -43,7 +43,14 @@ export const QuoteApi = {
 
     return HttpClient.POST<Quote>(`${QUOTE_URL}`, data)
   },
-  update: async ({id, customerId, lines, status, title, tva }: QuoteUpdateRequest): Promise<Quote> => {
+  update: async ({
+    id,
+    customerId,
+    lines,
+    status,
+    title,
+    tva,
+  }: QuoteUpdateRequest): Promise<Quote> => {
     const data = {
       id,
       customerId,

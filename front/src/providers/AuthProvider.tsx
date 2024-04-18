@@ -95,7 +95,6 @@ export const AuthProvider = ({
         const { message } = await res.json()
         throw new ApiError(res.status, message)
       }
-
     },
     [onLoginSuccess, useAuthorizationHeader],
   )
@@ -194,14 +193,14 @@ export const AuthProvider = ({
 
   const value = useMemo(
     () =>
-    ({
-      isInitializing: isAuthenticated === undefined,
-      isAuthenticated: !!isAuthenticated,
-      refreshSession,
-      register,
-      logout,
-      login,
-    } as AuthContextType),
+      ({
+        isInitializing: isAuthenticated === undefined,
+        isAuthenticated: !!isAuthenticated,
+        refreshSession,
+        register,
+        logout,
+        login,
+      } as AuthContextType),
     [isAuthenticated, refreshSession, register, logout, login],
   )
 

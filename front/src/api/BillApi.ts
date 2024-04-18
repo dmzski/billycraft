@@ -8,23 +8,14 @@ export const BILL_URL = `${API_URL}/bills`
 
 export const BillApi = {
   findAll: async () => HttpClient.GET<Bill[]>(`${BILL_URL}`),
-  findAllNotArchived: async () =>
-    HttpClient.GET<Bill[]>(`${BILL_URL}?not_status=["ARCHIVED"]`),
+  findAllNotArchived: async () => HttpClient.GET<Bill[]>(`${BILL_URL}?not_status=["ARCHIVED"]`),
   findAllNotArchivedAndNotRefused: async () =>
     HttpClient.GET<Bill[]>(`${BILL_URL}?not_status=["ARCHIVED", "REFUSED"]`),
   findAllArchived: async () =>
     HttpClient.GET<Bill[] | undefined>(`${BILL_URL}?status=["ARCHIVED"]`),
-  findAllRefused: async () =>
-    HttpClient.GET<Bill[]>(`${BILL_URL}?status=["REFUSED"]`),
-  findAllNotPaid: async () =>
-    HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_paid`),
-  create: async ({
-    customerId,
-    lines,
-    status,
-    title,
-    tva,
-  }: BillCreateRequest) => {
+  findAllRefused: async () => HttpClient.GET<Bill[]>(`${BILL_URL}?status=["REFUSED"]`),
+  findAllNotPaid: async () => HttpClient.GET<Bill[]>(`${BILL_URL}?filter=not_paid`),
+  create: async ({ customerId, lines, status, title, tva }: BillCreateRequest) => {
     const data = {
       customerId,
       lines: (lines || []).map(({ name, description, line, price, quantity, type }) => ({
@@ -42,14 +33,7 @@ export const BillApi = {
 
     return HttpClient.POST<Bill>(`${BILL_URL}`, data)
   },
-  update: async ({
-    id,
-    customerId,
-    lines,
-    status,
-    title,
-    tva,
-  }: BillUpdateRequest) => {
+  update: async ({ id, customerId, lines, status, title, tva }: BillUpdateRequest) => {
     const data = {
       customerId,
       lines: (lines ?? []).map(({ name, description, line, price, quantity, type }) => ({

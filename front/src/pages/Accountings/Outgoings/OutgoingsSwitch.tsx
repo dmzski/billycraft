@@ -17,8 +17,8 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
   const { t } = useI18n()
 
   return (
-    <div className='flex flex-col gap-10'>
-      <div className='flex flex-col gap-5'>
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-5">
         <h1 className="text-3xl mb-4">{t('accounting.outgoings.title')}</h1>
         <div className="tabs tabs-bordered">
           <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
@@ -35,17 +35,23 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
 }
 const OutgoingsSwitch = () => (
   <Switch>
-    <Route path={routes.OVERVIEW.path()} render={() => (
-      <OutgoingLayout>
-        <Overview />
-
-      </OutgoingLayout>
-    )} />
-    <Route path={routes.LIST.path()} exact={routes.LIST.exact} render={() => (
-      <OutgoingLayout>
-        <ListPage />
-      </OutgoingLayout>
-    )} />
+    <Route
+      path={routes.OVERVIEW.path()}
+      render={() => (
+        <OutgoingLayout>
+          <Overview />
+        </OutgoingLayout>
+      )}
+    />
+    <Route
+      path={routes.LIST.path()}
+      exact={routes.LIST.exact}
+      render={() => (
+        <OutgoingLayout>
+          <ListPage />
+        </OutgoingLayout>
+      )}
+    />
     <Route path={routes.FORM.path()} component={FormPage} />
     <Route path={routes.DETAILS.path()} component={Details} />
     <Route>

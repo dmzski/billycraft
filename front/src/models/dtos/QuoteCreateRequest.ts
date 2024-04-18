@@ -1,5 +1,5 @@
-import { LineTypeEnum } from "../LineTypeEnum"
-import { QuoteStatusEnum } from "../Quote"
+import { LineTypeEnum } from '../LineTypeEnum'
+import { QuoteStatusEnum } from '../Quote'
 
 export type QuoteCreateRequestLine = {
   line: number

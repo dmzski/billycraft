@@ -16,7 +16,7 @@ const ReportLayout = ({ children }: ReportLayoutProps) => {
   const { t } = useI18n()
   return (
     <div className="flex flex-col gap-10 mb-4">
-      <div className='flex flex-col gap-5'>
+      <div className="flex flex-col gap-5">
         <h1 className="text-3xl">{t('accounting.reports.title')}</h1>
         <div className="tabs tabs-bordered">
           <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">

@@ -11,8 +11,8 @@ import { BillCreateRequest } from '@/models/dtos/BillCreateRequest'
 const defaultBill = {
   lines: [],
   tva: 0,
-  title: "",
-  customerId: ""
+  title: '',
+  customerId: '',
 } as BillFormValues
 
 export const Create = () => {
@@ -23,7 +23,7 @@ export const Create = () => {
   const methods = useForm<BillFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
-    values: defaultBill
+    values: defaultBill,
   })
 
   const onSubmit = async (data: BillFormValues) => {
@@ -55,9 +55,7 @@ export const Create = () => {
       </Link>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center gap-4 flex-grow">
-          <h1 className="text-3xl">
-            {t('bills.form.title.new')}
-          </h1>
+          <h1 className="text-3xl">{t('bills.form.title.new')}</h1>
         </div>
       </div>
       <FormProvider {...methods}>

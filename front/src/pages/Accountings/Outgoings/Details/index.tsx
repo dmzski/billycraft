@@ -19,17 +19,23 @@ const Details = () => {
   }
 
   return (
-    <div className='flex flex-col gap-10'>
+    <div className="flex flex-col gap-10">
       <div className="flex justify-between items-center gap-4">
         <div>
-          <Link className='link link-primary inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.LIST.path}>
+          <Link
+            className="link link-primary inline-flex gap-1 items-center"
+            to={OUTGOING_ROUTES.routes.LIST.path}
+          >
             <ChevronLeftIcon className="w-5" />
             {t('accounting.outgoings.details.backTo')}
           </Link>
         </div>
         {outgoing ? (
           <div>
-            <Link className='btn btn-info inline-flex gap-1 items-center' to={OUTGOING_ROUTES.routes.FORM.path({id: outgoing.id})}>
+            <Link
+              className="btn btn-info inline-flex gap-1 items-center"
+              to={OUTGOING_ROUTES.routes.FORM.path({ id: outgoing.id })}
+            >
               {t('update')}
             </Link>
           </div>
@@ -37,7 +43,7 @@ const Details = () => {
       </div>
       {isLoading ? (
         <div className="grid items-center justify-center flex-grow">
-          <Loader size='lg' />
+          <Loader size="lg" />
         </div>
       ) : null}
       {outgoing ? (

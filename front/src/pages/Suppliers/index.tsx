@@ -24,9 +24,7 @@ const Suppliers = () => {
           <Loader />
         </div>
       ) : null}
-      {!isLoading && data ? (
-        <SupplierList reloadData={reloadData} data={data} />
-      ) : null}
+      {!isLoading && data ? <SupplierList reloadData={reloadData} data={data} /> : null}
     </>
   )
 }

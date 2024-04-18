@@ -1,8 +1,8 @@
-import { LINE_TYPE } from "@/constants/line"
-import { useI18n } from "@/i18n"
-import { ProductFilters } from "@/utils/products"
-import { Input, Select } from "@coco-ui/core"
-import { ChangeEvent, ComponentProps, useMemo } from "react"
+import { LINE_TYPE } from '@/constants/line'
+import { useI18n } from '@/i18n'
+import { ProductFilters } from '@/utils/products'
+import { Input, Select } from '@coco-ui/core'
+import { ChangeEvent, ComponentProps, useMemo } from 'react'
 
 type FiltersProps = {
   filters: ProductFilters
@@ -16,23 +16,27 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
   const handleInputChange = (field: keyof ProductFilters, event: ChangeEvent<HTMLInputElement>) => {
     onChangeFilters({
       ...filters,
-      [field]: event.target.value ?? ""
+      [field]: event.target.value ?? '',
     })
   }
 
   const handleSelectChange = (field: keyof ProductFilters, newValue: string) => {
     onChangeFilters({
       ...filters,
-      [field]: newValue ?? ""
+      [field]: newValue ?? '',
     })
   }
 
-  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(() => [
-    { value: '', label: t('select') },
-    ...Object.values(LINE_TYPE).map(type => ({
-      value: type.enum,
-      label: type.name,
-    }))], [t])
+  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(
+    () => [
+      { value: '', label: t('select') },
+      ...Object.values(LINE_TYPE).map(type => ({
+        value: type.enum,
+        label: type.name,
+      })),
+    ],
+    [t],
+  )
 
   return (
     <div className="grid md:grid-cols-12 gap-5">
@@ -43,7 +47,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
         value={filters.type}
         name="filters.type"
         onChange={e => {
-          if (typeof e === "string") {
+          if (typeof e === 'string') {
             handleSelectChange('type', e)
           }
         }}

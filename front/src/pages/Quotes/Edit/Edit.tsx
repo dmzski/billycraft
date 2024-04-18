@@ -16,8 +16,8 @@ import { calculatePriceTTC } from '@/utils/price'
 const defaultQuote = {
   lines: [],
   tva: 0,
-  title: "",
-  customerId: ""
+  title: '',
+  customerId: '',
 } as QuoteFormValues
 
 export const Edit = () => {
@@ -25,16 +25,13 @@ export const Edit = () => {
   const toast = useToast()
   const { push } = useHistory()
   const { id } = useParams<{ id: string }>()
-  const { data: quote, isLoading } = useQuoteByIdQuery(
-    id,
-    {
-      enabled: !!id,
-    },
-  )
+  const { data: quote, isLoading } = useQuoteByIdQuery(id, {
+    enabled: !!id,
+  })
 
   const onSubmit = async (data: QuoteFormValues) => {
     const tmp: QuoteUpdateRequest = {
-      id: quote?.id ?? "",
+      id: quote?.id ?? '',
       ...data,
       lines: data.lines.map((line, index: number) => ({
         name: line.name,
@@ -57,20 +54,26 @@ export const Edit = () => {
     }
   }
 
-  const initialValues: QuoteFormValues = useMemo(() => quote ? {
-    ...quote,
-    lines: quote.lines.map(({ price, ...rest }) => ({
-      ...rest,
-      price,
-      itPrice: calculatePriceTTC(price, quote.tva)
-    }))
-  } : defaultQuote, [quote])
+  const initialValues: QuoteFormValues = useMemo(
+    () =>
+      quote
+        ? {
+            ...quote,
+            lines: quote.lines.map(({ price, ...rest }) => ({
+              ...rest,
+              price,
+              itPrice: calculatePriceTTC(price, quote.tva),
+            })),
+          }
+        : defaultQuote,
+    [quote],
+  )
 
   const methods = useForm<QuoteFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
     values: initialValues,
-    disabled: !!(quote && quote.status !== QuoteStatusEnum.DRAFT)
+    disabled: !!(quote && quote.status !== QuoteStatusEnum.DRAFT),
   })
 
   const { isValid, isSubmitting, disabled } = methods.formState
@@ -80,25 +83,24 @@ export const Edit = () => {
   }
 
   if (!quote) {
-    return t("genericDataLoadError")
+    return t('genericDataLoadError')
   }
 
   if (quote.status !== QuoteStatusEnum.DRAFT) {
-    return (
-      <Redirect to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })} />
-    )
+    return <Redirect to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })} />
   }
 
   return (
     <div className="flex flex-col gap-10">
-      <Link className="gap-1 link link-primary flex items-center" to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}>
+      <Link
+        className="gap-1 link link-primary flex items-center"
+        to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}
+      >
         <ChevronLeftIcon className="w-5" /> {t('quotes.form.backTo.edit')}
       </Link>
       <h1 className="text-4xl font-bold flex gap-5 items-center">
         <DocumentIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
-        <span>
-          {quote.name}
-        </span>
+        <span>{quote.name}</span>
       </h1>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">

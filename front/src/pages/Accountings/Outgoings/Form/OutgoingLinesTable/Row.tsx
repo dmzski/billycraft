@@ -15,7 +15,6 @@ type RowProps = {
   disabled?: boolean
 }
 const Row = ({ control, index, onDelete, disabled }: RowProps) => {
-
   const vatController = useController({
     name: `lines.${index}.vat`,
     control,
@@ -36,36 +35,46 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
   })
 
   const totalTTC = useMemo(
-    () =>
-      !Number.isNaN(totalHT) && !Number.isNaN(vat)
-        ? calculatePriceTTC(totalHT, vat)
-        : 0,
+    () => (!Number.isNaN(totalHT) && !Number.isNaN(vat) ? calculatePriceTTC(totalHT, vat) : 0),
     [totalHT, vat],
   )
 
   const supplierOptions = useMemo(
-    () => (suppliers ? suppliers.map(({ id, name, color }) => ({
-      value: id,
-      label: name,
-      render: color ? (
-        <span className='inline-flex gap-2 items-center'>
-          <span className='size-4 rounded-full' style={{ backgroundColor: color }} />
-          <span>{name}</span>
-        </span>
-      ) : undefined
-    })) : []),
+    () =>
+      suppliers
+        ? suppliers.map(({ id, name, color }) => ({
+            value: id,
+            label: name,
+            render: color ? (
+              <span className="inline-flex gap-2 items-center">
+                <span className="size-4 rounded-full" style={{ backgroundColor: color }} />
+                <span>{name}</span>
+              </span>
+            ) : undefined,
+          }))
+        : [],
     [suppliers],
   )
 
-  const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({ control, name: `lines.${index}.supplierId`, rules: { required: true } })
-  const { field: supplierBillReferenceField, fieldState: supplierBillReferenceFieldState } = useController({ control, name: `lines.${index}.supplierBillReference` })
-  const { field: billIdField, fieldState: billIdFieldState } = useController({ control, name: `lines.${index}.billId` })
-  const { field: etTotalField, fieldState: etTotalFieldState } = useController({ control, name: `lines.${index}.totalHT`, rules: { required: true } })
+  const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({
+    control,
+    name: `lines.${index}.supplierId`,
+    rules: { required: true },
+  })
+  const { field: supplierBillReferenceField, fieldState: supplierBillReferenceFieldState } =
+    useController({ control, name: `lines.${index}.supplierBillReference` })
+  const { field: billIdField, fieldState: billIdFieldState } = useController({
+    control,
+    name: `lines.${index}.billId`,
+  })
+  const { field: etTotalField, fieldState: etTotalFieldState } = useController({
+    control,
+    name: `lines.${index}.totalHT`,
+    rules: { required: true },
+  })
 
   return (
-    <div
-      className="px-4 py-2 grid md:grid-cols-12 items-center gap-4"
-    >
+    <div className="px-4 py-2 grid md:grid-cols-12 items-center gap-4">
       <div className="md:col-span-2">
         <Select
           required
@@ -153,21 +162,13 @@ const Row = ({ control, index, onDelete, disabled }: RowProps) => {
           error={vatController.fieldState.invalid}
           disabled={disabled}
           required
-          suffix={
-            <span className='px-2'>%</span>
-          }
+          suffix={<span className="px-2">%</span>}
         />
       </div>
       <div className="md:col-span-2">
-        <Input
-          className='w-full'
-          type="number"
-          value={totalTTC}
-          readOnly
-          suffix="€"
-        />
+        <Input className="w-full" type="number" value={totalTTC} readOnly suffix="€" />
       </div>
-      <div className='flex justify-end'>
+      <div className="flex justify-end">
         <Button variant="error" outline onClick={onDelete} type="button">
           <TrashIcon className="w-5" />
         </Button>

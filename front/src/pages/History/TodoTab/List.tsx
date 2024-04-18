@@ -14,11 +14,21 @@ const List = ({ data }: TodoListProps) => {
     <Table className="w-full table-fixed">
       <Table.Head>
         <Table.Row>
-          <Table.HeadCell className="w-48">{t('history.tabs.todo.list.headers.createdAt')}</Table.HeadCell>
-          <Table.HeadCell className="w-56">{t('history.tabs.todo.list.headers.createdBy')}</Table.HeadCell>
-          <Table.HeadCell className="w-full">{t('history.tabs.todo.list.headers.description')}</Table.HeadCell>
-          <Table.HeadCell className="w-48">{t('history.tabs.todo.list.headers.doneAt')}</Table.HeadCell>
-          <Table.HeadCell className="w-56">{t('history.tabs.todo.list.headers.doneBy')}</Table.HeadCell>
+          <Table.HeadCell className="w-48">
+            {t('history.tabs.todo.list.headers.createdAt')}
+          </Table.HeadCell>
+          <Table.HeadCell className="w-56">
+            {t('history.tabs.todo.list.headers.createdBy')}
+          </Table.HeadCell>
+          <Table.HeadCell className="w-full">
+            {t('history.tabs.todo.list.headers.description')}
+          </Table.HeadCell>
+          <Table.HeadCell className="w-48">
+            {t('history.tabs.todo.list.headers.doneAt')}
+          </Table.HeadCell>
+          <Table.HeadCell className="w-56">
+            {t('history.tabs.todo.list.headers.doneBy')}
+          </Table.HeadCell>
         </Table.Row>
       </Table.Head>
       <Table.Body>

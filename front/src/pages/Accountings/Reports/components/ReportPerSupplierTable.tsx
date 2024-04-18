@@ -75,7 +75,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
             >,
           ),
       ).sort(({ supplier: supplierA }, { supplier: supplerB }) =>
-        (supplierA.name).localeCompare(supplerB.name),
+        supplierA.name.localeCompare(supplerB.name),
       ),
     [report.outgoings, suppliers],
   )

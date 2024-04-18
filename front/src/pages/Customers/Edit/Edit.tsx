@@ -30,7 +30,7 @@ export const Edit = () => {
     formState: { isValid, isSubmitting },
   } = useForm<CustomerUpdateRequest>({
     mode: 'onChange',
-    values: customer ?? defaultCustomer
+    values: customer ?? defaultCustomer,
   })
 
   const onSubmit = async (data: CustomerUpdateRequest) => {
@@ -86,23 +86,23 @@ export const Edit = () => {
   }
 
   if (!customer) {
-    return (
-      <Alert variant="error">{t('genericDataLoadError')}</Alert>
-    )
+    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
   }
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <Link to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer?.id.toString() })} className='link-primary link-hover flex gap-2 items-center'>
-        <ChevronLeftIcon className='w-5' />
+      <Link
+        to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer?.id.toString() })}
+        className="link-primary link-hover flex gap-2 items-center"
+      >
+        <ChevronLeftIcon className="w-5" />
         {t('customers.form.backToList')}
       </Link>
-      <div className='flex flex-col md:flex-row justify-between items-center gap-2'>
-        <h1 className="text-3xl">{"Modifier un client"}</h1>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+        <h1 className="text-3xl">{'Modifier un client'}</h1>
       </div>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
-        <div className='flex flex-col gap-3'>
-
+        <div className="flex flex-col gap-3">
           <Input
             label={t('customers.form.name.label')}
             placeholder={t('customers.form.name.placeholder')}
@@ -127,7 +127,7 @@ export const Edit = () => {
             error={addressFieldState.invalid}
             required
           />
-          <div className='grid md:grid-cols-2 gap-3'>
+          <div className="grid md:grid-cols-2 gap-3">
             <Input
               label={t('customers.form.email.label')}
               placeholder={t('customers.form.email.placeholder')}

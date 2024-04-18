@@ -37,7 +37,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
         <div className="md:col-span-2">{t('etTotal')}</div>
         <div className="md:col-span-1">{t('vat')}</div>
         <div className="md:col-span-2">{t('itTotal')}</div>
-        <div/>
+        <div />
       </div>
       {!isLoading ? (
         <div className="pb-4 flex flex-col">

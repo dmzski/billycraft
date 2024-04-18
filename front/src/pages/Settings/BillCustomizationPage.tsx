@@ -8,16 +8,14 @@ const BillCustomizationPage = () => {
 
   if (isLoading && !billCustomization) {
     return (
-      <div className='flex items-center justify-center'>
+      <div className="flex items-center justify-center">
         <Loader />
       </div>
     )
   }
   return (
     <div className="w-full">
-      <BillCustomizationForm
-        billCustomization={billCustomization ?? ({} as BillCustomization)}
-      />
+      <BillCustomizationForm billCustomization={billCustomization ?? ({} as BillCustomization)} />
     </div>
   )
 }

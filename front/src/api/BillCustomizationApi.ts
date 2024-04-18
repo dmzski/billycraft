@@ -8,6 +8,9 @@ export const BillCustomizationApi = {
   findMine: () => HttpClient.GET<BillCustomization>(`${BILL_CUSTOMIZATION_URL}/mine`),
   updateMine: (customization: BillCustomization) =>
     customization.id
-      ? HttpClient.PATCH<BillCustomization>(`${BILL_CUSTOMIZATION_URL}/${customization.id}`, customization)
+      ? HttpClient.PATCH<BillCustomization>(
+          `${BILL_CUSTOMIZATION_URL}/${customization.id}`,
+          customization,
+        )
       : HttpClient.POST<BillCustomization>(`${BILL_CUSTOMIZATION_URL}`, customization),
 }

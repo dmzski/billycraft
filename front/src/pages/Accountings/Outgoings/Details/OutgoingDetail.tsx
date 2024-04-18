@@ -60,9 +60,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
   const groupBySuppliers = useMemo(
     () =>
       outgoing?.lines
-        ? outgoing.lines.reduce(
-          (acc, line) => {
-
+        ? outgoing.lines.reduce((acc, line) => {
             if (line.supplierId) {
               return {
                 ...acc,
@@ -72,9 +70,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
             }
 
             return acc
-          },
-          {} as Record<string, number>,
-        )
+          }, {} as Record<string, number>)
         : ({} as Record<string, number>),
     [outgoing],
   )

@@ -63,9 +63,7 @@ export function getBillTotal(bill: Bill): number {
 export function getBillTotalEt(bill: Bill): number {
   const array = bill.lines
     .filter((billLine: BillLine) => billLine.price && billLine.quantity)
-    .map(
-      (billine: BillLine) => calculatePriceET(billine.price) * (billine.quantity ?? 0),
-    )
+    .map((billine: BillLine) => calculatePriceET(billine.price) * (billine.quantity ?? 0))
 
   if (array && array.length > 0) {
     return array.reduce(
@@ -77,24 +75,25 @@ export function getBillTotalEt(bill: Bill): number {
 
 export function getBillTotalETForLineType(quote: Bill, type: LineTypeEnum): number {
   const array = quote.lines
-    .filter((quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .filter(
+      (quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type,
+    )
     .map(
       (quoteLine: BillLine) =>
-        calculatePriceET(quoteLine.price) *
-        (quoteLine.quantity ? quoteLine.quantity : 0),
+        calculatePriceET(quoteLine.price) * (quoteLine.quantity ? quoteLine.quantity : 0),
     )
 
   if (array && array.length > 0) {
-    return array.reduce(
-      (previousValue, currentValue) => previousValue + currentValue, 0
-    )
+    return array.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
   return 0
 }
 
 export function getBillTotalForLineType(quote: Bill, type: LineTypeEnum): number {
   const array = quote.lines
-    .filter((quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type)
+    .filter(
+      (quoteLine: BillLine) => quoteLine.price && quoteLine.quantity && quoteLine.type === type,
+    )
     .map(
       (quoteLine: BillLine) =>
         calculatePriceTTC(quoteLine.price, quote.tva) *
@@ -102,9 +101,7 @@ export function getBillTotalForLineType(quote: Bill, type: LineTypeEnum): number
     )
 
   if (array && array.length > 0) {
-    return array.reduce(
-      (previousValue, currentValue) => previousValue + currentValue, 0
-    )
+    return array.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
   return 0
 }

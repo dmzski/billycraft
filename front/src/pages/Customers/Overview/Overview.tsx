@@ -1,17 +1,17 @@
-import { CustomerApi } from "@/api/CustomerApi"
-import { useI18n } from "@/i18n"
-import { useCustomerQuery } from "@/queries/useCustomerQuery"
-import { CustomerRouteProps, ROUTES } from "@/routes"
-import { sendErrorToSentry } from "@/utils/errors"
-import { Alert, Badge, Button, Loader, useToast } from "@coco-ui/core"
-import { ChevronLeftIcon, PencilIcon, UserIcon } from "@heroicons/react/24/solid"
-import { Link, useHistory, useParams } from "react-router-dom"
+import { CustomerApi } from '@/api/CustomerApi'
+import { useI18n } from '@/i18n'
+import { useCustomerQuery } from '@/queries/useCustomerQuery'
+import { CustomerRouteProps, ROUTES } from '@/routes'
+import { sendErrorToSentry } from '@/utils/errors'
+import { Alert, Badge, Button, Loader, useToast } from '@coco-ui/core'
+import { ChevronLeftIcon, PencilIcon, UserIcon } from '@heroicons/react/24/solid'
+import { Link, useHistory, useParams } from 'react-router-dom'
 
 export const Overview = () => {
   const { scopedT, t } = useI18n()
   const { id } = useParams<CustomerRouteProps>()
   const { data: customer, isLoading } = useCustomerQuery(id, {
-    enabled: !!id
+    enabled: !!id,
   })
   const { push } = useHistory()
   const toast = useToast()
@@ -30,7 +30,6 @@ export const Overview = () => {
       sendErrorToSentry(err)
       toast.error(t('genericFormError'))
     }
-
   }
 
   if (isLoading && !customer) {
@@ -42,9 +41,7 @@ export const Overview = () => {
   }
 
   if (!customer) {
-    return (
-      <Alert variant="error">{t('genericDataLoadError')}</Alert>
-    )
+    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
   }
 
   return (
@@ -59,11 +56,12 @@ export const Overview = () => {
         <h1 className="text-4xl flex items-center gap-4">
           <UserIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
           <span>{customer.name}</span>
-          {customer.deleted ? (
-            <Badge variant="error">{t('deleted')}</Badge>
-          ) : null}
+          {customer.deleted ? <Badge variant="error">{t('deleted')}</Badge> : null}
         </h1>
-        <Link className="btn btn-primary gap-2" to={ROUTES.CUSTOMER_EDIT.path({ id: customer.id.toString() })}>
+        <Link
+          className="btn btn-primary gap-2"
+          to={ROUTES.CUSTOMER_EDIT.path({ id: customer.id.toString() })}
+        >
           <PencilIcon className="w-4" />
           <span>{t('edit')}</span>
         </Link>
@@ -105,9 +103,13 @@ export const Overview = () => {
         <section>
           <h2 className="text-2xl">{pageT('sections.delete.title')}</h2>
           <div className="border rounded-xl grid md:grid-cols-12 gap-5 p-4">
-            <p className="md:col-span-10 text-error font-bold">{pageT('sections.delete.description')}</p>
+            <p className="md:col-span-10 text-error font-bold">
+              {pageT('sections.delete.description')}
+            </p>
             <div className="md:col-span-2 flex justify-end">
-              <Button variant="error" onClick={handleDelete}>{t('delete')}</Button>
+              <Button variant="error" onClick={handleDelete}>
+                {t('delete')}
+              </Button>
             </div>
           </div>
         </section>

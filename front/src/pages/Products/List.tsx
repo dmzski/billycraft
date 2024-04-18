@@ -2,7 +2,7 @@ import ProductTableLine from '@/pages/Products/Row'
 import Product from '@/models/Product'
 import { useI18n } from '@/i18n'
 
-type ProductTableProps = { products: Product[], reloadProducts: () => Promise<void> }
+type ProductTableProps = { products: Product[]; reloadProducts: () => Promise<void> }
 
 const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
   const { t } = useI18n()
@@ -16,7 +16,7 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
         <div className="md:col-span-1" />
       </div>
       <div>
-        {products.map((product) => (
+        {products.map(product => (
           <ProductTableLine key={product.id} product={product} reloadProducts={reloadProducts} />
         ))}
       </div>

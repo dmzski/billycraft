@@ -12,10 +12,7 @@ const ReportRow = ({ report }: ReportRowProps) => {
   return (
     <div className="grid md:grid-cols-12 p-2 border-t">
       <div className="md:col-span-3">
-        <Link
-          className="link-primary"
-          to={REPORT_ROUTES.routes.DETAILS.path({id: report.id})}
-        >
+        <Link className="link-primary" to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>
           {report.name}
         </Link>
       </div>

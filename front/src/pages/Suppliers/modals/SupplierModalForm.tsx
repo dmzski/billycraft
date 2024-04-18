@@ -126,7 +126,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
             error={colorFieldState.invalid}
           />
           <input
-            className='h-12'
+            className="h-12"
             type="color"
             value={colorField.value}
             onChange={colorField.onChange}

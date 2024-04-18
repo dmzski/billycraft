@@ -20,8 +20,8 @@ const defaultLine: QuoteFormValues['lines'][number] = {
   quantity: 0,
   type: LineTypeEnum.TEXT,
   line: 0,
-  quoteId: "",
-  id: "",
+  quoteId: '',
+  id: '',
 }
 
 const QuoteLineTable = ({
@@ -40,7 +40,7 @@ const QuoteLineTable = ({
     setProductIdSelected(option)
   }
 
-  const tva = useWatch({control, name: "tva"})
+  const tva = useWatch({ control, name: 'tva' })
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'lines',
@@ -70,14 +70,13 @@ const QuoteLineTable = ({
           value: product.id,
           searchText: product.name,
           label: (
-            <span className='inline-flex gap-2 items-center'>
-              {IconComponent ? <IconComponent className='w-5' /> : null}
+            <span className="inline-flex gap-2 items-center">
+              {IconComponent ? <IconComponent className="w-5" /> : null}
               {product.name}
             </span>
           ),
         }
-      }
-      )
+      })
     }
 
     return []
@@ -93,10 +92,10 @@ const QuoteLineTable = ({
           price: productFound.price,
           itPrice: calculatePriceTTC(productFound.price, tva),
           quantity: 0,
-          quoteId: "",
+          quoteId: '',
           line: 0,
           description: productFound.description,
-          productId: productFound.id
+          productId: productFound.id,
         }
         addLine(newLine)
         setProductIdSelected(undefined)
@@ -127,7 +126,7 @@ const QuoteLineTable = ({
           </Button>
         </div>
       ) : null}
-      <div className='flex flex-col divide-y'>
+      <div className="flex flex-col divide-y">
         <DndContext onDragEnd={onDragEnd}>
           <SortableContext items={fields}>
             {fields?.map((line, index) => (

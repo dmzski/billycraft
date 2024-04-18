@@ -13,9 +13,11 @@ const SideBar = () => {
         <div className="flex flex-col gap-4">
           <div className="bg-primary shadow-box flex gap-5 pl-5 items-center text-lg py-5 text-primary-content">
             <BuildingOfficeIcon className="w-10" />
-            <div className='flex flex-col overflow-hidden'>
-              <small className='text-xs'>{t('organization')}</small>
-              <p title={organization?.name} className='truncate'>{organization?.name}</p>
+            <div className="flex flex-col overflow-hidden">
+              <small className="text-xs">{t('organization')}</small>
+              <p title={organization?.name} className="truncate">
+                {organization?.name}
+              </p>
             </div>
           </div>
         </div>

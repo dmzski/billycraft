@@ -3,7 +3,6 @@ import { GlobalLocale } from '@/locales/types'
 import type { LocaleKeys, Scopes } from 'international-types'
 
 export const useI18n = () => {
-
   const t = <Key extends LocaleKeys<GlobalLocale, undefined>>(key: Key) => locales.fr[key]
 
   const scopedT = <Scope extends Scopes<GlobalLocale>>(scope: Scope) => {
@@ -11,7 +10,6 @@ export const useI18n = () => {
       return locales.fr[`${scope}.${key}` as keyof GlobalLocale]
     }
   }
-
 
   return { t, scopedT }
 }

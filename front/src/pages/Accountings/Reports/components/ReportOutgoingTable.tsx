@@ -50,7 +50,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
                 {t('accounting.reports.components.outgoing.headers.name')}
               </DetailsTableLeft>
               <DetailsTableRight>
-                <Link to={OUTGOING_ROUTES.routes.DETAILS.path({id: outgoing.outgoingId})}>
+                <Link to={OUTGOING_ROUTES.routes.DETAILS.path({ id: outgoing.outgoingId })}>
                   {outgoing.name}
                 </Link>
               </DetailsTableRight>

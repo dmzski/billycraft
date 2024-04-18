@@ -11,8 +11,8 @@ import { QuoteCreateRequest } from '@/models/dtos/QuoteCreateRequest'
 const defaultQuote = {
   lines: [],
   tva: 0,
-  title: "",
-  customerId: ""
+  title: '',
+  customerId: '',
 } as QuoteFormValues
 
 export const Create = () => {
@@ -23,7 +23,7 @@ export const Create = () => {
   const methods = useForm<QuoteFormValues>({
     shouldFocusError: true,
     mode: 'onChange',
-    values: defaultQuote
+    values: defaultQuote,
   })
 
   const onSubmit = async (data: QuoteFormValues) => {
@@ -55,9 +55,7 @@ export const Create = () => {
       </Link>
       <div className="flex items-center flex-wrap border-b pb-2">
         <div className="flex items-center gap-4 flex-grow">
-          <h1 className="text-3xl">
-            {t('quotes.form.title.new')}
-          </h1>
+          <h1 className="text-3xl">{t('quotes.form.title.new')}</h1>
         </div>
       </div>
       <FormProvider {...methods}>

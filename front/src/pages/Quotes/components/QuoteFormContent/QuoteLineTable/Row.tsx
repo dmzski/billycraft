@@ -35,12 +35,12 @@ const QuoteLineTableLine = ({
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
-    zIndex: isDragging ? 10 : undefined
+    zIndex: isDragging ? 10 : undefined,
   }
 
   const [tva, quantity = 0, itPrice = 0] = useWatch({
     control,
-    name: ["tva", `lines.${index}.quantity`, `lines.${index}.itPrice`],
+    name: ['tva', `lines.${index}.quantity`, `lines.${index}.itPrice`],
   })
 
   const totalTTC = useMemo(() => {
@@ -51,16 +51,18 @@ const QuoteLineTableLine = ({
     return quantity * itPrice
   }, [itPrice, quantity])
 
-  const typeOptions: ComponentProps<typeof Select>['options'] = Object.values(LINE_TYPE).map(({ name, icon: IconComponent, enum: value }) => ({
-    value,
-    label: (
-      <span className='inline-flex gap-1 items-center'>
-        <IconComponent className='w-5' />
-        {name}
-      </span>
-    ),
-    render: <IconComponent className='w-5' />
-  }))
+  const typeOptions: ComponentProps<typeof Select>['options'] = Object.values(LINE_TYPE).map(
+    ({ name, icon: IconComponent, enum: value }) => ({
+      value,
+      label: (
+        <span className="inline-flex gap-1 items-center">
+          <IconComponent className="w-5" />
+          {name}
+        </span>
+      ),
+      render: <IconComponent className="w-5" />,
+    }),
+  )
 
   const { field: typeField, fieldState: typeFieldState } = useController({
     control,
@@ -80,30 +82,31 @@ const QuoteLineTableLine = ({
   })
   const { field: quantityField, fieldState: quantityFieldState } = useController({
     control,
-    name: `lines.${index}.quantity`
+    name: `lines.${index}.quantity`,
   })
   const { field: priceField, fieldState: priceFieldState } = useController({
     control,
-    name: `lines.${index}.price`
+    name: `lines.${index}.price`,
   })
   const { field: itPriceField, fieldState: itPriceFieldState } = useController({
     control,
     name: `lines.${index}.itPrice`,
-    defaultValue: calculatePriceTTC(priceField.value, tva)
+    defaultValue: calculatePriceTTC(priceField.value, tva),
   })
 
   return (
-    <div
-      className="flex items-center gap-2 py-2 bg-base-100"
-      ref={setNodeRef}
-      style={style}
-    >
-      <Button variant="ghost" className='h-full' {...listeners}>
+    <div className="flex items-center gap-2 py-2 bg-base-100" ref={setNodeRef} style={style}>
+      <Button variant="ghost" className="h-full" {...listeners}>
         <ArrowsUpDownIcon className="w-5" />
       </Button>
-      <div className='flex flex-col flex-grow gap-4'>
-        <div className='grid md:grid-cols-[repeat(10,minmax(0,1fr))_minmax(0,auto)] gap-4'>
-          <div className={clsx('md:col-span-6 flex flex-col', descriptionField.value !== undefined ? "gap-2" : "")}>
+      <div className="flex flex-col flex-grow gap-4">
+        <div className="grid md:grid-cols-[repeat(10,minmax(0,1fr))_minmax(0,auto)] gap-4">
+          <div
+            className={clsx(
+              'md:col-span-6 flex flex-col',
+              descriptionField.value !== undefined ? 'gap-2' : '',
+            )}
+          >
             <Input
               label={t('quotes.form.lines.fields.name.label')}
               required
@@ -157,11 +160,15 @@ const QuoteLineTableLine = ({
                 ref={descriptionField.ref}
               />
             ) : (
-              <div className='flex'>
-                <button className='inline-flex gap-1 items-center link-hover link-primary text-xs' type="button" onClick={() => {
-                  descriptionField.onChange('')
-                }}>
-                  <PlusIcon className='w-4' />
+              <div className="flex">
+                <button
+                  className="inline-flex gap-1 items-center link-hover link-primary text-xs"
+                  type="button"
+                  onClick={() => {
+                    descriptionField.onChange('')
+                  }}
+                >
+                  <PlusIcon className="w-4" />
                   {t('quotes.form.lines.addDescription')}
                 </button>
               </div>
@@ -229,10 +236,11 @@ const QuoteLineTableLine = ({
                 suffix={<span className="px-1">€</span>}
               />
             </>
-
-          ) : <div className='md:col-span-4' />}
+          ) : (
+            <div className="md:col-span-4" />
+          )}
           {!disabled ? (
-            <div className='pt-7 flex justify-end'>
+            <div className="pt-7 flex justify-end">
               <Button variant="error" outline onClick={deleteLine}>
                 <TrashIcon className="w-5" />
               </Button>

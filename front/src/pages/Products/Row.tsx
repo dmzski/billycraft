@@ -10,25 +10,15 @@ type ProductTableLineProps = {
 }
 
 const ProductTableLine = ({ product, reloadProducts }: ProductTableLineProps) => (
-  <div
-    className="grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center"
-  >
-    <div className="md:col-span-2">
-      {product.type}
-    </div>
+  <div className="grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center">
+    <div className="md:col-span-2">{product.type}</div>
     <div className="md:col-span-7 flex flex-col gap-2">
-      <p className='truncate'>
-        {product.name}
-      </p>
+      <p className="truncate">{product.name}</p>
       {product.description ? (
-        <p className='pl-4 text-sm whitespace-pre-wrap'>
-          {product.description}
-        </p>
+        <p className="pl-4 text-sm whitespace-pre-wrap">{product.description}</p>
       ) : null}
     </div>
-    <div className="md:col-span-2 truncate">
-      {product.price}
-    </div>
+    <div className="md:col-span-2 truncate">{product.price}</div>
     <div className="flex justify-end">
       <div className="flex gap-2 justify-end">
         <EditProductModal
