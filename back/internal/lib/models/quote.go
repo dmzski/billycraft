@@ -10,7 +10,7 @@ import (
 )
 
 type Quote struct {
-	ID         string `gorm:"primaryKey;<-:create"`
+	ID         string `gorm:"primaryKey;<-:false"`
 	Name       string `gorm:"<-:create"`
 	Title      string
 	Tva        *float32

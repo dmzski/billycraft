@@ -7,10 +7,11 @@ import { Button } from '@coco-ui/core'
 import { Filters } from './Filters'
 import { useMemo, useState } from 'react'
 import { ProductFilters, filterProducts } from '@/utils/products'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 const ProductsPage = () => {
   const { t } = useI18n()
-  const [filters, setFilters] = useState<ProductFilters>({ type: '', name: '' })
+  const [filters, setFilters] = useState<ProductFilters>({ type: '', name: '', supplierId: '' })
   const { data, isLoading, reload } = useAllProductsQuery()
 
   const enhancedData = useMemo(
@@ -21,12 +22,15 @@ const ProductsPage = () => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-5">
-        <h1 className="text-4xl">{t('products.list.title')}</h1>
+        <h1 className="text-3xl">{t('products.list.title')}</h1>
         <div className="grid md:grid-cols-12">
           <p className="text-sm md:col-span-10">{t('products.list.description')}</p>
           <div className="md:col-span-2 flex justify-end">
             <AddProductModal
-              disclosure={<Button variant="primary">{t('products.list.add')}</Button>}
+              disclosure={<Button variant="primary" className='gap-2'>
+              <PlusIcon className="w-5" />
+              {t('products.list.add')}
+              </Button>}
               onSubmitSuccess={reload}
             />
           </div>

@@ -8,7 +8,7 @@ import (
 )
 
 type Customer struct {
-	ID          string `gorm:"primaryKey"`
+	ID          string `gorm:"primaryKey;<-:false"`
 	Name        string
 	Contact     string
 	PhoneNumber string

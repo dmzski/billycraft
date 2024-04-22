@@ -3,13 +3,10 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Outgoing struct {
-	ID        string `gorm:"primaryKey"`
+	ID        string `gorm:"primaryKey;<-:false"`
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -36,11 +33,6 @@ func (Outgoing) TableName() string {
 
 func (OutgoingLine) TableName() string {
 	return "com_outgoing_lines"
-}
-
-func (o *Outgoing) BeforeCreate(tx *gorm.DB) (err error) {
-	o.ID = uuid.New().String()
-	return
 }
 
 func (Outgoing) FromDTO(r dtos.OutgoingRequest) Outgoing {

@@ -6,6 +6,8 @@ import { ProductFormContent, ProductFormValues } from '../components/ProductForm
 import { sendErrorToSentry } from '@/utils/errors'
 import { ProductApi } from '@/api/ProductApi'
 import Product from '@/models/Product'
+import { calculatePriceTTC } from '@/utils/price'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 
 type EditProductModalProps = {
   onSubmitSuccess: () => Promise<void>
@@ -19,6 +21,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
   const { scopedT, t } = useI18n()
   const toast = useToast()
   const pageT = scopedT('products.modals.edit')
+  const {data: suppliers} = useAllSuppliersQuery()
 
   const initialValues: ProductFormValues = useMemo(
     () => ({
@@ -26,9 +29,10 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
       description: product.description,
       price: product.price,
       type: product.type,
-      supplierId: '',
+      supplierId: product.supplierId ?? null,
+      itPrice: calculatePriceTTC(product.price, product.supplierId ? suppliers?.find(({id}) => id === product.supplierId)?.vat ?? 0 : 0)
     }),
-    [product],
+    [product, suppliers],
   )
 
   const methods = useForm<ProductFormValues>({
@@ -52,7 +56,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <h2 className="text-2xl">{pageT('title')}</h2>
-        <ProductFormContent />
+        <ProductFormContent suppliers={suppliers ?? []} />
         <Button
           variant="primary"
           type="submit"

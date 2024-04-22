@@ -1,11 +1,10 @@
-import { CustomerApi } from '@/api/CustomerApi'
 import { useI18n } from '@/i18n'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { CustomerRouteProps, ROUTES } from '@/routes'
-import { sendErrorToSentry } from '@/utils/errors'
-import { Alert, Badge, Button, Loader, useToast } from '@coco-ui/core'
+import { Alert, Badge, Button, Loader } from '@coco-ui/core'
 import { ChevronLeftIcon, PencilIcon, UserIcon } from '@heroicons/react/24/solid'
 import { Link, useHistory, useParams } from 'react-router-dom'
+import { DeleteCustomerModal } from '../modals/DeleteCustomerModal'
 
 export const Overview = () => {
   const { scopedT, t } = useI18n()
@@ -14,22 +13,11 @@ export const Overview = () => {
     enabled: !!id,
   })
   const { push } = useHistory()
-  const toast = useToast()
 
   const pageT = scopedT('customers.details')
 
-  const handleDelete = async () => {
-    try {
-      const rep = confirm(t('confirmDelete'))
-      if (customer?.id && rep) {
-        await CustomerApi.delete(customer.id)
-        toast.success(pageT('delete.success'))
-        push(ROUTES.CUSTOMERS.path())
-      }
-    } catch (err) {
-      sendErrorToSentry(err)
-      toast.error(t('genericFormError'))
-    }
+  const onSubmitSuccess = async () => {
+    push(ROUTES.CUSTOMERS.path())
   }
 
   if (isLoading && !customer) {
@@ -107,9 +95,11 @@ export const Overview = () => {
               {pageT('sections.delete.description')}
             </p>
             <div className="md:col-span-2 flex justify-end">
-              <Button variant="error" onClick={handleDelete}>
-                {t('delete')}
-              </Button>
+              <DeleteCustomerModal
+                disclosure={<Button variant="error">{t('delete')}</Button>}
+                customer={customer}
+                onSubmitSuccess={onSubmitSuccess}
+              />
             </div>
           </div>
         </section>

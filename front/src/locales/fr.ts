@@ -43,7 +43,7 @@ export default {
   'heads.accounting.reports.list': 'Rapports > Liste',
 
   // Global
-  'forms.confirmation.delete.pattern': 'SUPPRIMER',
+  'forms.confirmation.delete.pattern': '^SUPPRIMER$',
   'forms.confirmation.delete.label': 'Ecrire SUPPRIMER pour confirmer',
   appName: 'Coco ERP',
   underDevelopment: 'Fonctionnalité en cours de développment',
@@ -100,6 +100,10 @@ export default {
   Tips: 'Astuces',
   shortIncludedTax: 'TTC',
   shortExcludedTax: 'HT',
+  'products.type.ARTICLE.label': 'Article',
+  'products.type.SERVICE.label': 'Service commercial',
+  'products.type.OTHER_SERVICE.label': 'Autre type de service',
+  'products.type.TEXT.label': 'Texte',
 
   // Login
   'login.title': 'Se connecter',
@@ -270,7 +274,7 @@ export default {
   'bills.list.title': 'Factures',
   'bills.list.add': 'Nouvelle Facture',
   'bills.list.headers.reference': '#',
-  'bills.list.headers.title': 'Title',
+  'bills.list.headers.title': 'Titre',
   'bills.list.headers.customer': 'Client',
   'bills.list.headers.createdAt': 'Créée le',
   'bills.list.headers.updatedAt': 'Mise à jour le',
@@ -388,6 +392,12 @@ export default {
   'customers.form.postalcode.placeholder': 'Code Postal',
   'customers.form.contact.placeholder': 'Nom complet',
 
+  // Customers > Modals
+  'customers.modals.delete.title': 'Supprimer un client',
+  'customers.modals.delete.description': 'Êtes-vous sur de vouloir supprimer ce client ?',
+  'customers.modals.delete.submit': 'Supprimer',
+  'customers.modals.delete.submit.success': 'Client supprimé',
+
   // Quotes > Status
   'quotes.status.DRAFT': 'Brouillon',
   'quotes.status.SENT': 'Envoyé',
@@ -401,7 +411,7 @@ export default {
   'quotes.list.title': 'Devis',
   'quotes.list.add': 'Nouveau devis',
   'quotes.list.headers.reference': '#',
-  'quotes.list.headers.title': 'Title',
+  'quotes.list.headers.title': 'Titre',
   'quotes.list.headers.customer': 'Client',
   'quotes.list.headers.createdAt': 'Créé le',
   'quotes.list.headers.updatedAt': 'Mis à jour le',
@@ -490,6 +500,13 @@ export default {
   'customers.modals.form.city': 'Ville',
   'customers.modals.form.postalCode': 'Code Postal',
   'customers.modals.form.contact': 'Contact',
+
+  // Supplier > List
+  'suppliers.list.title': 'Fournisseurs',
+  'suppliers.list.addButton': 'Ajouter un fournisseur',
+  'suppliers.list.headers.color': 'Couleur',
+  'suppliers.list.headers.name': 'Nom',
+  'suppliers.list.headers.vat': 'TVA',
 
   // Supplier > modals > SupplierModalForm
   'suppliers.modals.form.title.edit': 'Modifier un fournisseur',
@@ -599,10 +616,13 @@ export default {
   'products.list.description':
     'Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les ajouter plus rapidement lors de la création de vos factures et devis.',
   'products.list.filters.fields.type.label': 'Type',
+  'products.list.filters.fields.supplier.label': 'Fournisseur',
   'products.list.filters.fields.name.label': 'Désignation',
+  'products.list.headers.supplier': 'Fournisseur',
   'products.list.headers.type': 'Type',
   'products.list.headers.name': 'Désignation',
   'products.list.headers.etPrice': 'Prix HT',
+  'products.list.headers.itPrice': 'Prix TTC',
   'products.list.row.form.submit.success': 'Article enregistré',
   'products.list.row.form.submit.error':
     "Une erreur est survenue lors de l'enregistrement de l'article",
@@ -614,6 +634,7 @@ export default {
   'products.components.formContent.fields.name.label': 'Désignation',
   'products.components.formContent.fields.description.placeholder': 'Description optionnelle',
   'products.components.formContent.fields.price.label': 'Prix HT',
+  'products.components.formContent.fields.itPrice.label': 'Prix TTC',
   'products.components.formContent.fields.supplierId.label': 'Fournisseur',
   'products.modals.add.title': 'Ajouter un article',
   'products.modals.add.submit': 'Ajouter',

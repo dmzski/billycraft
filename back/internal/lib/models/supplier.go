@@ -7,7 +7,7 @@ import (
 )
 
 type Supplier struct {
-	ID        string `gorm:"primaryKey"`
+	ID        string `gorm:"primaryKey;<-:false"`
 	Name      string
 	Color     *string
 	Vat       float32

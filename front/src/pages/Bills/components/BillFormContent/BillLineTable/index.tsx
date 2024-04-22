@@ -120,7 +120,7 @@ const BillLineTable = ({
             value={productIdSelected}
             onChange={onProductSelectedChange}
           />
-          <Button block onClick={addExistingProductSelected} type="button" variant="primary">
+          <Button block disabled={!productIdSelected} onClick={addExistingProductSelected} type="button" variant="primary">
             {t('bills.form.lines.existingProduct.add')}
           </Button>
         </div>

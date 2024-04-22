@@ -6,7 +6,7 @@ import (
 )
 
 type Company struct {
-	ID              string `gorm:"primaryKey"`
+	ID              string `gorm:"primaryKey;<-:false"`
 	Name            string
 	City            string
 	Address         string

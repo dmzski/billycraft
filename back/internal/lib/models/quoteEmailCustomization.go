@@ -5,7 +5,7 @@ import (
 )
 
 type QuoteEmailCustomization struct {
-	ID                string `gorm:"primaryKey"`
+	ID                string `gorm:"primaryKey;<-:false"`
 	Body              string
 	Object            string
 	SendAutomatically bool

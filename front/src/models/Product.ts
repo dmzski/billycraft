@@ -8,6 +8,7 @@ interface Product {
   price: number
   companyId: string
   createdBy: string
+  supplierId?: string
 }
 
 export default Product

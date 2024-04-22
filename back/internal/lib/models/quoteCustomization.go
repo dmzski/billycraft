@@ -6,7 +6,7 @@ import (
 )
 
 type QuoteCustomization struct {
-	ID                         string `gorm:"primaryKey"`
+	ID                         string `gorm:"primaryKey;<-:false"`
 	CompanyID                  string `gorm:"<-:create"`
 	AfterTable                 string
 	Footer                     string

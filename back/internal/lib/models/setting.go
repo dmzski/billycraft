@@ -6,7 +6,7 @@ import (
 )
 
 type Setting struct {
-	ID        string `gorm:"primaryKey"`
+	ID        string `gorm:"primaryKey;<-:false"`
 	Value     string
 	CreatedAt time.Time
 	UpdatedAt *time.Time `gorm:"autoUpdateTime"`

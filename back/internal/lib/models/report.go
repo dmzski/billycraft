@@ -3,13 +3,10 @@ package models
 import (
 	"back/internal/lib/dtos"
 	"time"
-
-	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Report struct {
-	ID              string `gorm:"primaryKey"`
+	ID              string `gorm:"primaryKey;<-:false"`
 	Name            string
 	StartDate       time.Time
 	EndDate         time.Time
@@ -39,7 +36,7 @@ type ReportOutgoingLine struct {
 }
 
 type ReportOutgoing struct {
-	ID         string `gorm:"primaryKey"`
+  ID         string `gorm:"primaryKey;<-:false"`
 	OutgoingID string
 	ReportID   string
 	Name       string
@@ -50,7 +47,7 @@ type ReportOutgoing struct {
 }
 
 type ReportBill struct {
-	ID           string `gorm:"primaryKey"`
+  ID           string `gorm:"primaryKey;<-:false"`
 	Title        string
 	BillID       string
 	PaidAt       time.Time
@@ -69,11 +66,6 @@ type ReportBill struct {
 
 func (Report) TableName() string {
 	return "com_report"
-}
-
-func (r *Report) BeforeCreate(tx *gorm.DB) (err error) {
-	r.ID = uuid.New().String()
-	return
 }
 
 func (r Report) ToDTO() dtos.ReportResponse {
@@ -107,11 +99,6 @@ func (r Report) ToDTO() dtos.ReportResponse {
 
 func (ReportOutgoing) TableName() string {
 	return "com_report_outgoing"
-}
-
-func (r *ReportOutgoing) BeforeCreate(tx *gorm.DB) (err error) {
-	r.ID = uuid.New().String()
-	return
 }
 
 func (r ReportOutgoing) ToDTO() dtos.ReportOutgoingResponse {
@@ -150,11 +137,6 @@ func (r ReportOutgoingLine) ToDTO() dtos.ReportOutgoingLineResponse {
 
 func (ReportBill) TableName() string {
 	return "com_report_bill"
-}
-
-func (r *ReportBill) BeforeCreate(tx *gorm.DB) (err error) {
-	r.ID = uuid.New().String()
-	return
 }
 
 func (r ReportBill) ToDTO() dtos.ReportBillResponse {

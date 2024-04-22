@@ -200,7 +200,7 @@ const Select = (
           <span className="label-text">{label}</span>
         </label>
       ) : null}
-      <div className={clsx(inputClassName, 'relative flex-nowrap')}>
+      <div tabIndex={0} className={clsx(inputClassName, 'relative flex-nowrap')}>
         <span className="flex-grow inline-flex gap-2 truncate">{valueRender}</span>
         <input
           aria-haspopup="listbox"

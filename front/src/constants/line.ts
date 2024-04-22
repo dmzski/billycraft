@@ -1,3 +1,4 @@
+import { LineTypeEnum } from '@/models/LineTypeEnum'
 import {
   HandRaisedIcon,
   PencilIcon,
@@ -5,13 +6,20 @@ import {
   ShoppingBagIcon,
 } from '@heroicons/react/24/solid'
 
-export const LINE_TYPE = {
-  ARTICLE: { enum: 'ARTICLE', name: 'Matériel', icon: ShoppingBagIcon },
-  SERVICE: { enum: 'SERVICE', name: 'Service commercial ou artisanal', icon: HandRaisedIcon },
+export const LINE_TYPE: Record<
+  LineTypeEnum,
+  { enum: LineTypeEnum; name: string; icon: typeof ShoppingBagIcon }
+> = {
+  ARTICLE: { enum: LineTypeEnum.ARTICLE, name: 'Matériel', icon: ShoppingBagIcon },
+  SERVICE: {
+    enum: LineTypeEnum.SERVICE,
+    name: 'Service commercial ou artisanal',
+    icon: HandRaisedIcon,
+  },
   OTHER_SERVICE: {
-    enum: 'OTHER_SERVICE',
+    enum: LineTypeEnum.OTHER_SERVICE,
     name: 'Autre type de service',
     icon: QuestionMarkCircleIcon,
   },
-  TEXT: { enum: 'TEXT', name: 'Texte', icon: PencilIcon },
+  TEXT: { enum: LineTypeEnum.TEXT, name: 'Texte', icon: PencilIcon },
 }

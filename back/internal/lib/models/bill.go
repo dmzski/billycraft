@@ -11,7 +11,7 @@ import (
 )
 
 type Bill struct {
-	ID         string `gorm:"primaryKey"`
+	ID         string `gorm:"primaryKey;<-:false"`
 	Name       string `gorm:"<-:create"`
 	Title      string
 	Tva        *float32

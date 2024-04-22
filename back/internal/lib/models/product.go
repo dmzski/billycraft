@@ -5,13 +5,14 @@ import (
 )
 
 type Product struct {
-	ID          string `gorm:"primaryKey"`
+	ID          string `gorm:"primaryKey;<-:false"`
 	Type        string
 	Name        string
 	Description *string
 	Price       *float64
 	CompanyID   string `gorm:"<-:create"`
 	CreatedBy   string `gorm:"foreignKey:Email;<-:create"`
+  SupplierID  *string
 }
 
 func (p Product) TableName() string {
@@ -27,6 +28,7 @@ func (p Product) ToDTO() dtos.Product {
 		Price:       p.Price,
 		CompanyID:   p.CompanyID,
 		CreatedBy:   p.CreatedBy,
+    SupplierID:  p.SupplierID,
 	}
 }
 
@@ -39,5 +41,6 @@ func (Product) FromDTO(p dtos.Product) Product {
 		Price:       p.Price,
 		CompanyID:   p.CompanyID,
 		CreatedBy:   p.CreatedBy,
+    SupplierID: p.SupplierID,
 	}
 }

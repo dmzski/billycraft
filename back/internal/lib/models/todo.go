@@ -6,7 +6,7 @@ import (
 )
 
 type Todo struct {
-	ID          string `gorm:"primaryKey"`
+	ID          string `gorm:"primaryKey;<-:false"`
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

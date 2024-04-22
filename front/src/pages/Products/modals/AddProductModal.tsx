@@ -6,6 +6,7 @@ import { ProductFormContent, ProductFormValues } from '../components/ProductForm
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { sendErrorToSentry } from '@/utils/errors'
 import { ProductApi } from '@/api/ProductApi'
+import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 
 type AddProductModalProps = {
   onSubmitSuccess: () => Promise<void>
@@ -20,12 +21,14 @@ const initialValues: ProductFormValues = {
   price: 0,
   description: '',
   supplierId: null,
+  itPrice: 0
 }
 
 const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
   const { scopedT, t } = useI18n()
   const toast = useToast()
   const pageT = scopedT('products.modals.add')
+  const {data: suppliers} = useAllSuppliersQuery()
 
   const methods = useForm<ProductFormValues>({
     mode: 'onChange',
@@ -48,7 +51,7 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <h2 className="text-2xl">{pageT('title')}</h2>
-        <ProductFormContent />
+        <ProductFormContent suppliers={suppliers ?? []} />
         <Button
           variant="primary"
           type="submit"
