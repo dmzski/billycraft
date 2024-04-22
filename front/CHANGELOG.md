@@ -1,5 +1,18 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.32.0
+
+### Minor Changes
+
+- 8246d69: feat(supplier): improve ui
+- 2af94e9: feat: add product filters
+- 8246d69: feat(product): add supplier
+
+### Patch Changes
+
+- Updated dependencies [8246d69]
+  - @coco-ui/core@1.30.0
+
 ## 2.31.0
 
 ### Minor Changes

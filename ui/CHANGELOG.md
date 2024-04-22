@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.30.0
+
+### Minor Changes
+
+- 8246d69: fix: tabIndex on select
+
 ## 1.29.0
 
 ### Minor Changes
