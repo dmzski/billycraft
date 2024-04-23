@@ -1,5 +1,11 @@
 # back
 
+## 1.18.0
+
+### Minor Changes
+
+- 5995d90: feat: allow user to add productId to quote/bill lines
+
 ## 1.17.0
 
 ### Minor Changes
