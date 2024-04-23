@@ -10,11 +10,11 @@ type ProductTypeLabelProps = {
 export const ProductTypeLabel = ({ type, short }: ProductTypeLabelProps) => {
   const { scopedT } = useI18n()
   const t = scopedT(`products.type.${type}`)
-  const IconComponent = LINE_TYPE[type].icon
+  const IconComponent = LINE_TYPE[type]?.icon
 
   return (
     <span className="inline-flex gap-2 items-center">
-      <IconComponent className="w-5" title={t('label')} />
+      {IconComponent ? <IconComponent className="w-5" title={t('label')} /> : null}
       {!short ? <span>{t('label')}</span> : null}
     </span>
   )
