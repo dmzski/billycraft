@@ -10,7 +10,7 @@ type QuoteLine struct {
 	Name        string
 	Description *string
 	Type        string
-  ProductID   *string
+	ProductID   *string
 }
 
 func (QuoteLine) TableName() string {
@@ -26,7 +26,7 @@ func (line QuoteLine) ToDTO() dtos.QuoteLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
-    ProductID:   line.ProductID,
+		ProductID:   line.ProductID,
 	}
 }
 
@@ -39,6 +39,6 @@ func (QuoteLine) FromDTO(line dtos.QuoteLine) QuoteLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
-    ProductID:   line.ProductID,
+		ProductID:   line.ProductID,
 	}
 }

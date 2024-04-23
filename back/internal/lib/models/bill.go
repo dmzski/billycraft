@@ -106,7 +106,7 @@ func (b Bill) FromQuote(q Quote) Bill {
 			Name:        x.Name,
 			Description: x.Description,
 			Type:        x.Type,
-      ProductID:   x.ProductID,
+			ProductID:   x.ProductID,
 		})
 	}
 	return Bill{

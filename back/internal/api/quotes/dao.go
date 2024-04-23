@@ -120,24 +120,24 @@ func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote mode
 	quote = quote.FromDTO(newQuote)
 	quote.CompanyID = *creator.CompanyID
 	quote.CreatedBy = creator.Email
-  tx.Model(&quote).Omit(clause.Associations).Create(&quote)
-  if tx.Error != nil {
-    tx.Rollback()
-    panic(tx.Error)
-  }
-  log.Println("quoteId", quote.ID)
-  var lines []models.QuoteLine
-  for _, x := range newQuote.Lines {
-    x.QuoteID = quote.ID
-    newLine := models.QuoteLine{}.FromDTO(x)
-    lines = append(lines, newLine)
-  }
-  err := tx.Model(&quote).Association("Lines").Append(&lines)
-  if err != nil {
-    tx.Rollback()
-    panic(err)
-  }
-  tx.Commit()
+	tx.Model(&quote).Omit(clause.Associations).Create(&quote)
+	if tx.Error != nil {
+		tx.Rollback()
+		panic(tx.Error)
+	}
+	log.Println("quoteId", quote.ID)
+	var lines []models.QuoteLine
+	for _, x := range newQuote.Lines {
+		x.QuoteID = quote.ID
+		newLine := models.QuoteLine{}.FromDTO(x)
+		lines = append(lines, newLine)
+	}
+	err := tx.Model(&quote).Association("Lines").Append(&lines)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+	tx.Commit()
 	return
 }
 
@@ -155,15 +155,15 @@ func (dao QuoteDao) CreateBill(creator models.User, id string) (bill models.Bill
 	bill.Status = "DRAFT"
 
 	if err := tx.Omit("Company", "Custom").Create(&bill).Error; err != nil {
-    tx.Rollback()
+		tx.Rollback()
 		panic(err)
 	}
 	if err := tx.Model(&quote).Update("status", "ARCHIVED").Error; err != nil {
-    tx.Rollback()
+		tx.Rollback()
 		panic(err)
 	}
 
-  tx.Commit()
+	tx.Commit()
 
 	return
 }

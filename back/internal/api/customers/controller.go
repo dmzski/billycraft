@@ -44,7 +44,7 @@ func update(c *fiber.Ctx) error {
 		if err := c.BodyParser(&newCustomer); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 		}
-			return c.JSON(DAO.Update(id, *user.CompanyID, newCustomer).ToDTO())
+		return c.JSON(DAO.Update(id, *user.CompanyID, newCustomer).ToDTO())
 	}
 }
 
@@ -53,8 +53,8 @@ func delete(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-			DAO.Delete(id, *user.CompanyID)
-			return c.Status(204).SendString("Customer deleted")
+		DAO.Delete(id, *user.CompanyID)
+		return c.Status(204).SendString("Customer deleted")
 	}
 }
 func create(c *fiber.Ctx) error {

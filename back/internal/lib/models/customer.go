@@ -19,7 +19,7 @@ type Customer struct {
 	CreatedAt   time.Time
 	UpdatedAt   *time.Time     `gorm:"autoUpdateTime"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
-	CompanyID   string            `gorm:"<-:create"`
+	CompanyID   string         `gorm:"<-:create"`
 	Company     Company
 }
 

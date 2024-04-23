@@ -8,5 +8,5 @@ type Product struct {
 	Price       *float64 `json:"price"`
 	CompanyID   string   `json:"companyId"`
 	CreatedBy   string   `json:"createdBy"`
-  SupplierID  *string   `json:"supplierId"`
+	SupplierID  *string  `json:"supplierId"`
 }

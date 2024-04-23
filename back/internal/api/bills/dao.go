@@ -150,23 +150,23 @@ func (dao BillDao) Create(creator models.User, newBill dtos.Bill) (bill models.B
 	bill = bill.FromDTO(newBill)
 	bill.CompanyID = *creator.CompanyID
 	bill.CreatedBy = creator.Email
-  tx.Model(&bill).Omit(clause.Associations).Create(&bill)
-  if tx.Error != nil {
-    tx.Rollback()
-    panic(tx.Error)
-  }
-  var lines []models.BillLine
-  for _, x := range newBill.Lines {
-    x.BillID = bill.ID
-    newLine := models.BillLine{}.FromDTO(x)
-    lines = append(lines, newLine)
-  }
-  err := tx.Model(&bill).Association("Lines").Append(&lines)
-  if err != nil {
-    tx.Rollback()
-    panic(err)
-  }
-  tx.Commit()
+	tx.Model(&bill).Omit(clause.Associations).Create(&bill)
+	if tx.Error != nil {
+		tx.Rollback()
+		panic(tx.Error)
+	}
+	var lines []models.BillLine
+	for _, x := range newBill.Lines {
+		x.BillID = bill.ID
+		newLine := models.BillLine{}.FromDTO(x)
+		lines = append(lines, newLine)
+	}
+	err := tx.Model(&bill).Association("Lines").Append(&lines)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+	tx.Commit()
 	return
 }
 

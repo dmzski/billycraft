@@ -36,7 +36,7 @@ type ReportOutgoingLine struct {
 }
 
 type ReportOutgoing struct {
-  ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
+	ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	OutgoingID string
 	ReportID   string
 	Name       string
@@ -47,7 +47,7 @@ type ReportOutgoing struct {
 }
 
 type ReportBill struct {
-  ID           string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
+	ID           string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Title        string
 	BillID       string
 	PaidAt       time.Time
@@ -62,7 +62,6 @@ type ReportBill struct {
 	CreatedBy    string
 	ReportID     string
 }
-
 
 func (Report) TableName() string {
 	return "com_report"
@@ -96,7 +95,6 @@ func (r Report) ToDTO() dtos.ReportResponse {
 	return dto
 }
 
-
 func (ReportOutgoing) TableName() string {
 	return "com_report_outgoing"
 }
@@ -116,7 +114,6 @@ func (r ReportOutgoing) ToDTO() dtos.ReportOutgoingResponse {
 	return dto
 }
 
-
 func (ReportOutgoingLine) TableName() string {
 	return "com_report_outgoing_lines"
 }
@@ -133,7 +130,6 @@ func (r ReportOutgoingLine) ToDTO() dtos.ReportOutgoingLineResponse {
 
 	return dto
 }
-
 
 func (ReportBill) TableName() string {
 	return "com_report_bill"

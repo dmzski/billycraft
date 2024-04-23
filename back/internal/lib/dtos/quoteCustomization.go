@@ -3,8 +3,8 @@ package dtos
 import "time"
 
 type QuoteCustomization struct {
-	ID                         string        `json:"id"`
-	CompanyID                  string        `json:"companyId"`
+	ID                         string     `json:"id"`
+	CompanyID                  string     `json:"companyId"`
 	AfterTable                 string     `json:"afterTable"`
 	Footer                     string     `json:"footer"`
 	MainColor                  string     `json:"mainColor"`

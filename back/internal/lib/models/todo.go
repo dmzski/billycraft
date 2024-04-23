@@ -12,7 +12,7 @@ type Todo struct {
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
 	DoneAt      *time.Time
-	CompanyID   string     `gorm:"<-:create"`
+	CompanyID   string  `gorm:"<-:create"`
 	CreatedBy   string  `gorm:"foreignKey:Email;<-:create"`
 	DoneBy      *string `gorm:"foreignKey:Email"`
 }

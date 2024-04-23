@@ -12,39 +12,39 @@ import (
 
 var errInvalidFormat = errors.New("invalid format")
 var (
-	blackRGB              = color.RGBA{R: 0, G: 0, B: 0, A: 255}
-	whiteRGB              = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	grayRGB               = color.RGBA{R: 230, G: 230, B: 230, A: 255}
-	marginL               = 5.0
-	marginB               = 25.0
-	cellMargin            = 2.0
-	cellMarginLarge       = 15.0
-	lineMargin            = 1.0
-	colsWithVat           = []float64{115, 20, 20, 20, 25}
-	colsWithoutVat        = []float64{135, 20, 20, 25}
-	totalAndTvaCellHeight = 10.0
-	reportTotalCellWidth  = 40
-	fontSize              = 10.0
-	fontFamily            = "Arial"
-	QUOTE_TITLE           = "DEVIS"
-	BILL_TITLE            = "FACTURE"
-	DESIGNATION_TITLE     = "Désignation"
-	QUANTITY_TITLE        = "Quantité"
-	PRICE_TTC_TITLE       = "Prix TTC"
-	PRICE_HT_TITLE        = "Prix HT"
-	SUBTOTALTTC_TITLE     = "Sous total TTC"
-	SUBTOTALHT_TITLE      = "Sous total HT"
-	REPORTED_TOTALTTC_TITLE  = "Total reporté TTC"
+	blackRGB                = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	whiteRGB                = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	grayRGB                 = color.RGBA{R: 230, G: 230, B: 230, A: 255}
+	marginL                 = 5.0
+	marginB                 = 25.0
+	cellMargin              = 2.0
+	cellMarginLarge         = 15.0
+	lineMargin              = 1.0
+	colsWithVat             = []float64{115, 20, 20, 20, 25}
+	colsWithoutVat          = []float64{135, 20, 20, 25}
+	totalAndTvaCellHeight   = 10.0
+	reportTotalCellWidth    = 40
+	fontSize                = 10.0
+	fontFamily              = "Arial"
+	QUOTE_TITLE             = "DEVIS"
+	BILL_TITLE              = "FACTURE"
+	DESIGNATION_TITLE       = "Désignation"
+	QUANTITY_TITLE          = "Quantité"
+	PRICE_TTC_TITLE         = "Prix TTC"
+	PRICE_HT_TITLE          = "Prix HT"
+	SUBTOTALTTC_TITLE       = "Sous total TTC"
+	SUBTOTALHT_TITLE        = "Sous total HT"
+	REPORTED_TOTALTTC_TITLE = "Total reporté TTC"
 	REPORTED_TOTALHT_TITLE  = "Total reporté HT"
-	DATE_TITLE            = "Date d'émission"
-	REFERENCE_TITLE       = "Référence"
-	OBJECT_TITLE          = "Objet"
-	FREE_STR              = "OFFERT"
-	TOTALTTC_TITLE        = "Total TTC"
-	TOTALHT_TITLE         = "Total HT"
-	VAT_TITLE             = "TVA"
-	QUOTES_FOLDER         = "%s/%s/quotes"
-	BILLS_FOLDER          = "%s/%s/bills"
+	DATE_TITLE              = "Date d'émission"
+	REFERENCE_TITLE         = "Référence"
+	OBJECT_TITLE            = "Objet"
+	FREE_STR                = "OFFERT"
+	TOTALTTC_TITLE          = "Total TTC"
+	TOTALHT_TITLE           = "Total HT"
+	VAT_TITLE               = "TVA"
+	QUOTES_FOLDER           = "%s/%s/quotes"
+	BILLS_FOLDER            = "%s/%s/bills"
 )
 
 func parseHexColor(s string) (c color.RGBA, err error) {
@@ -139,11 +139,11 @@ func addTotal(pdf gofpdf.Pdf, reportTotal float64, cols []float64) {
 	pdf.SetY(height - float64(marginB) - fontSize)
 	pdf.SetFont(fontFamily, "B", fontSize)
 	pdf.SetX(marginL + cols[0] + cols[1] + cols[2] - float64(reportTotalCellWidth))
-  if len(cols) > 4 {
-    pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALTTC_TITLE), "1", 0, "C", true, 0, "")
-  } else {
-    pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALHT_TITLE), "1", 0, "C", true, 0, "")
-  }
+	if len(cols) > 4 {
+		pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALTTC_TITLE), "1", 0, "C", true, 0, "")
+	} else {
+		pdf.CellFormat(float64(reportTotalCellWidth), 10, tr(REPORTED_TOTALHT_TITLE), "1", 0, "C", true, 0, "")
+	}
 	pdf.CellFormat(cols[3], 10, tr(fmt.Sprintf("%.2f€", reportTotal)), "1", 0, "C", false, 0, "")
 	pdf.SetFont(fontFamily, "", fontSize)
 }

@@ -59,7 +59,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 	// Put the logo
 	if company.Logo != nil {
-    imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", company.ID))
+		imgdata, err := os.Open(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", company.ID))
 		if err == nil {
 			opt := gofpdf.ImageOptions{
 				ImageType: "png",
@@ -154,10 +154,10 @@ func generateBillPDF(bill models.Bill) *os.File {
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
-    descriptionLines := make([][]byte, 0)
-    if (line.Description != nil) {
-      descriptionLines = pdf.SplitLines([]byte(*line.Description), cols[0]-cellMarginLarge-marginL)
-    }
+		descriptionLines := make([][]byte, 0)
+		if line.Description != nil {
+			descriptionLines = pdf.SplitLines([]byte(*line.Description), cols[0]-cellMarginLarge-marginL)
+		}
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height of the row more the height of total and tva

@@ -29,8 +29,8 @@ func findAll(c *fiber.Ctx) error {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
 		}
 		return makeArrayResponse(c, DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr))
-	} 
-  if not_status != "" {
+	}
+	if not_status != "" {
 		var arr []string
 		if err := json.Unmarshal([]byte(not_status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")

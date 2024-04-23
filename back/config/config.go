@@ -8,11 +8,11 @@ import (
 )
 
 type Config struct {
-	Profile           string `mapstructure:"PROFILE"`
-	DBDriver          string `mapstructure:"DB_DRIVER"`
-	DBSource          string `mapstructure:"DB_SOURCE"`
-	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
-	UploadDir         string `mapstructure:"UPLOAD_DIR"`
+	Profile       string `mapstructure:"PROFILE"`
+	DBDriver      string `mapstructure:"DB_DRIVER"`
+	DBSource      string `mapstructure:"DB_SOURCE"`
+	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	UploadDir     string `mapstructure:"UPLOAD_DIR"`
 }
 
 var (
@@ -32,11 +32,11 @@ func LoadConfig() (config Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
-    log.Println("No config file found")
+		log.Println("No config file found")
 	}
 
 	err = viper.Unmarshal(&config)
-  log.Println(config.DBSource)  
+	log.Println(config.DBSource)
 	appConfig = config
 	return
 }

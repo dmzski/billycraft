@@ -98,8 +98,7 @@ func main() {
 		Format: "${pid} ${locals:requestid} ${status} ${method} ${path}\n",
 	}))
 
-
-  // Add api routes
+	// Add api routes
 	api.InitApiRoutes(app)
 
 	log.Fatal(app.Listen(config.ServerAddress))

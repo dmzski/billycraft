@@ -32,31 +32,31 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusConflict, "You already have a company")
 	}
 	newCompany := dtos.CompanyRequest{}
-  err := c.BodyParser(&newCompany)
-  if err != nil {
-    return fiber.NewError(fiber.StatusBadRequest, "Malformed company")
-  }
+	err := c.BodyParser(&newCompany)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Malformed company")
+	}
 	company := DAO.Create(user.Email, newCompany)
-  users.DAO.JoinCompany(user.Email, company.ID)
+	users.DAO.JoinCompany(user.Email, company.ID)
 
 	quoteCustomization.DAO.Create(company.ID, dtos.QuoteCustomization{})
 	billCustomization.DAO.Create(company.ID, dtos.BillCustomization{})
 
-  if (company.ID == "") {
+	if company.ID == "" {
 		return fiber.NewError(fiber.StatusInternalServerError, "Company creation error")
-  }
+	}
 	user.CompanyID = &company.ID
 	return c.JSON(company)
 }
 
 func updateMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-  company := DAO.FindOneById(*user.CompanyID)
+	company := DAO.FindOneById(*user.CompanyID)
 	newCompany := dtos.CompanyRequest{}
-  err := c.BodyParser(&newCompany)
-  if err != nil {
-    return fiber.NewError(fiber.StatusBadRequest, "Can't parse company")
-  }
+	err := c.BodyParser(&newCompany)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Can't parse company")
+	}
 	if user.Email != company.CreatedBy {
 		return fiber.NewError(fiber.StatusUnauthorized, "You cant do this")
 	}

@@ -10,7 +10,7 @@ type BillLine struct {
 	Name        string
 	Description *string
 	Type        string
-  ProductID   *string
+	ProductID   *string
 	Bill        Bill
 }
 
@@ -27,7 +27,7 @@ func (line BillLine) ToDTO() dtos.BillLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
-    ProductID:   line.ProductID,
+		ProductID:   line.ProductID,
 	}
 }
 
@@ -40,6 +40,6 @@ func (BillLine) FromDTO(line dtos.BillLine) BillLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
-    ProductID:   line.ProductID,
+		ProductID:   line.ProductID,
 	}
 }
