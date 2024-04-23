@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.34.0
+
+### Minor Changes
+
+- e75911a: fix: product type label when icon is not present
+
 ## 2.33.0
 
 ### Minor Changes
