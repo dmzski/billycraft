@@ -36,8 +36,8 @@ export const Edit = () => {
       lines: data.lines.map((line, index: number) => ({
         ...line,
         line: index + 1,
-        price: line.price ? Number(`${line.price}`) : undefined,
-        quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
+        price: line.price ? Number(`${line.price}`) : null,
+        quantity: line.quantity ? Number(`${line.quantity}`) : null,
       })),
     }
     try {
