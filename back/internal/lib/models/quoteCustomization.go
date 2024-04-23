@@ -6,7 +6,7 @@ import (
 )
 
 type QuoteCustomization struct {
-	ID                         string `gorm:"primaryKey;<-:false"`
+	ID                         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	CompanyID                  string `gorm:"<-:create"`
 	AfterTable                 string
 	Footer                     string

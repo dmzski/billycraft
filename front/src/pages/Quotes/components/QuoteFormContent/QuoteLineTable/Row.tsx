@@ -3,13 +3,19 @@ import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo } from 'react'
 import { Control, useController, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '@/constants/line'
-import { ArrowsUpDownIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/solid'
+import {
+  ArrowsUpDownIcon,
+  CloudArrowDownIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/solid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useI18n } from '@/i18n'
 import { QuoteFormValues } from '../types'
 import clsx from 'clsx'
 import { calculatePriceETFromIT, calculatePriceTTC } from '@/utils/price'
+import { AddProductModal } from '@/pages/Products/modals/AddProductModal'
 
 type QuoteLineTableLineProps = {
   deleteLine: () => void
@@ -64,34 +70,81 @@ const QuoteLineTableLine = ({
     }),
   )
 
+  const { field: productIdField } = useController({
+    control,
+    name: `lines.${index}.productId`,
+  })
   const { field: typeField, fieldState: typeFieldState } = useController({
     control,
     name: `lines.${index}.type`,
-    rules: { required: true },
+    rules: {
+      required: true,
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: nameField, fieldState: nameFieldState } = useController({
     control,
     name: `lines.${index}.name`,
-    rules: { required: true },
+    rules: {
+      required: true,
+
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
     defaultValue: '',
   })
   const { field: descriptionField } = useController({
     control,
     name: `lines.${index}.description`,
     defaultValue: undefined,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: quantityField, fieldState: quantityFieldState } = useController({
     control,
     name: `lines.${index}.quantity`,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: priceField, fieldState: priceFieldState } = useController({
     control,
     name: `lines.${index}.price`,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: itPriceField, fieldState: itPriceFieldState } = useController({
     control,
     name: `lines.${index}.itPrice`,
     defaultValue: calculatePriceTTC(priceField.value, tva),
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
 
   return (
@@ -119,12 +172,28 @@ const QuoteLineTableLine = ({
               name={nameField.name}
               error={nameFieldState.invalid}
               ref={nameField.ref}
-              /* suffix={!productId && nameField.value ? ( */
-              /*   <button type="button" className='btn btn-ghost'> */
-              /*     <CloudArrowDownIcon className='w-5' /> */
-              /*   </button> */
-              /**/
-              /* ) : undefined} */
+              suffix={
+                !productIdField.value && nameField.value ? (
+                  <AddProductModal
+                    initialValues={{
+                      type: typeField.value,
+                      name: nameField.value,
+                      price: priceField.value,
+                      itPrice: itPriceField.value,
+                      supplierId: null,
+                      description: descriptionField.value,
+                    }}
+                    disclosure={
+                      <button type="button" className="btn btn-ghost">
+                        <CloudArrowDownIcon className="w-5" />
+                      </button>
+                    }
+                    onSubmitSuccess={newId => {
+                      productIdField.onChange(newId)
+                    }}
+                  />
+                ) : undefined
+              }
               prefix={
                 <Select
                   aria-label={t('quotes.form.lines.fields.type.label')}
@@ -147,7 +216,7 @@ const QuoteLineTableLine = ({
                 />
               }
             />
-            {descriptionField.value !== undefined ? (
+            {descriptionField.value !== null ? (
               <TextArea
                 placeholder={t('quotes.form.lines.fields.description.placeholder')}
                 className="md:col-span-6"
@@ -184,7 +253,7 @@ const QuoteLineTableLine = ({
                 step={0.01}
                 required
                 name={quantityField.name}
-                value={quantityField.value}
+                value={quantityField.value ?? ''}
                 onChange={quantityField.onChange}
                 onBlur={event => {
                   quantityField.onChange(Number((event.target as HTMLInputElement).value) || 0)
@@ -200,7 +269,7 @@ const QuoteLineTableLine = ({
                 placeholder={t('quotes.form.lines.fields.etPrice.placeholder')}
                 type="number"
                 step={0.01}
-                value={priceField.value}
+                value={priceField.value ?? ''}
                 onChange={priceField.onChange}
                 onBlur={event => {
                   const newPrice = Number(event.target.value) || 0

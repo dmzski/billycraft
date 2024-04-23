@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type QuoteDao struct {
@@ -115,14 +116,28 @@ func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote 
 }
 
 func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote models.Quote) {
+	tx := database.DBConn.Begin()
 	quote = quote.FromDTO(newQuote)
 	quote.CompanyID = *creator.CompanyID
 	quote.CreatedBy = creator.Email
-	// Delete quote lines and add the new ones (Set)
-	if err := database.DBConn.Omit("Company", "Custom").Create(&quote).Error; err != nil {
-		log.Println("Error : ", err.Error())
-		panic(err)
-	}
+  tx.Model(&quote).Omit(clause.Associations).Create(&quote)
+  if tx.Error != nil {
+    tx.Rollback()
+    panic(tx.Error)
+  }
+  log.Println("quoteId", quote.ID)
+  var lines []models.QuoteLine
+  for _, x := range newQuote.Lines {
+    x.QuoteID = quote.ID
+    newLine := models.QuoteLine{}.FromDTO(x)
+    lines = append(lines, newLine)
+  }
+  err := tx.Model(&quote).Association("Lines").Append(&lines)
+  if err != nil {
+    tx.Rollback()
+    panic(err)
+  }
+  tx.Commit()
 	return
 }
 

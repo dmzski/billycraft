@@ -3,11 +3,12 @@ import { BillStatusEnum } from '../Bill'
 
 export type BillCreateRequestLine = {
   line: number
-  quantity?: number
-  price?: number
+  quantity?: number | null
+  price?: number | null
   name: string
-  description?: string
+  description?: string | null
   type: LineTypeEnum
+  productId?: string | null
 }
 
 export type BillCreateRequest = {

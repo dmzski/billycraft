@@ -4,7 +4,7 @@ export type ProductFormValues = {
   type: LineTypeEnum
   name: string
   description: string | null
-  price: number
+  price: number | null
   itPrice: number
   supplierId: string | null
 }

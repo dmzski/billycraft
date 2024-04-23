@@ -6,6 +6,7 @@ type QuoteLine struct {
 	Quantity    float64 `json:"quantity"`
 	Price       float64 `json:"price"`
 	Name        string  `json:"name"`
-	Description string  `json:"description"`
+	Description *string  `json:"description"`
 	Type        string  `json:"type"`
+  ProductID   *string  `json:"productId"`
 }

@@ -7,6 +7,7 @@ import { useI18n } from '@/i18n'
 import { ProductTypeLabel } from '@/components/labels/ProductTypeLabel'
 import { calculatePriceETFromIT, calculatePriceTTC } from '@/utils/price'
 import Supplier from '@/models/Supplier'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
 
 type ProductFormContentProps = {
   suppliers: Supplier[]
@@ -35,11 +36,13 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
     control,
     name: 'price',
     rules: { required: true },
+    shouldUnregister: true,
   })
   const { field: itPriceField, fieldState: itPriceFieldState } = useController({
     control,
     name: 'itPrice',
     rules: { required: true },
+    shouldUnregister: true,
   })
   const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({
     control,
@@ -69,7 +72,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
     : undefined
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       <Select
         options={supplierOptions}
         name={supplierIdField.name}
@@ -113,43 +116,49 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
           rows={1}
         />
       </div>
-      <Input
-        name={priceField.name}
-        onChange={priceField.onChange}
-        onBlur={event => {
-          const newPrice = Number(event.target.value) || 0
-          priceField.onChange(newPrice)
-          itPriceField.onChange(calculatePriceTTC(newPrice, selectedSupplier?.vat ?? 0))
-          priceField.onBlur()
-        }}
-        ref={priceField.ref}
-        label={pageT('fields.price.label')}
-        error={priceFieldState.invalid}
-        autoComplete="off"
-        value={priceField.value}
-        type="number"
-        suffix="€"
-        step={0.01}
-      />
-      <Input
-        name={itPriceField.name}
-        onChange={itPriceField.onChange}
-        onBlur={event => {
-          const newPrice = Number(event.target.value) || 0
-          const newEtPrice = calculatePriceETFromIT(newPrice, selectedSupplier?.vat ?? 0)
-          itPriceField.onChange(newPrice)
-          priceField.onChange(newEtPrice)
-          itPriceField.onBlur()
-        }}
-        ref={itPriceField.ref}
-        label={pageT('fields.itPrice.label')}
-        error={itPriceFieldState.invalid}
-        autoComplete="off"
-        value={itPriceField.value}
-        type="number"
-        step={0.01}
-        suffix="€"
-      />
+      {typeField.value !== LineTypeEnum.TEXT ? (
+        <div className="grid md:grid-cols-2 gap-5">
+          <Input
+            name={priceField.name}
+            onChange={priceField.onChange}
+            onBlur={event => {
+              const newPrice = Number(event.target.value) || 0
+              priceField.onChange(newPrice)
+              itPriceField.onChange(calculatePriceTTC(newPrice, selectedSupplier?.vat ?? 0))
+              priceField.onBlur()
+            }}
+            ref={priceField.ref}
+            label={pageT('fields.price.label')}
+            error={priceFieldState.invalid}
+            autoComplete="off"
+            value={priceField.value ?? ''}
+            type="number"
+            suffix="€"
+            step={0.01}
+            required
+          />
+          <Input
+            name={itPriceField.name}
+            onChange={itPriceField.onChange}
+            onBlur={event => {
+              const newPrice = Number(event.target.value) || 0
+              const newEtPrice = calculatePriceETFromIT(newPrice, selectedSupplier?.vat ?? 0)
+              itPriceField.onChange(newPrice)
+              priceField.onChange(newEtPrice)
+              itPriceField.onBlur()
+            }}
+            ref={itPriceField.ref}
+            label={pageT('fields.itPrice.label')}
+            error={itPriceFieldState.invalid}
+            autoComplete="off"
+            value={itPriceField.value ?? ''}
+            type="number"
+            step={0.01}
+            suffix="€"
+            required
+          />
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -34,10 +34,7 @@ export const Edit = () => {
       id: bill?.id ?? '',
       ...data,
       lines: data.lines.map((line, index: number) => ({
-        name: line.name,
-        billId: line.billId,
-        type: line.type,
-        description: line.description,
+        ...line,
         line: index + 1,
         price: line.price ? Number(`${line.price}`) : undefined,
         quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
@@ -70,7 +67,7 @@ export const Edit = () => {
   )
 
   const methods = useForm<BillFormValues>({
-    shouldFocusError: true,
+    shouldFocusError: false,
     mode: 'onChange',
     values: initialValues,
     disabled: !!(bill && bill.status !== BillStatusEnum.DRAFT),

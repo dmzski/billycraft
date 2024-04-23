@@ -1,36 +1,34 @@
 import { Button, Select } from '@coco-ui/core'
-import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo, useRef, useState } from 'react'
-import { Control, useFieldArray, useWatch } from 'react-hook-form'
-import BillLineTableLine from './Row'
-import { PlusIcon } from '@heroicons/react/24/solid'
-import { DndContext } from '@dnd-kit/core'
-import { SortableContext } from '@dnd-kit/sortable'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useI18n } from '@/i18n'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { BillFormValues } from '../types'
 import { LINE_TYPE } from '@/constants/line'
 import { calculatePriceTTC } from '@/utils/price'
+import { PlusIcon } from '@heroicons/react/24/solid'
+import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext } from '@dnd-kit/sortable'
+import BillLineTableLine from './Row'
 
 const defaultLine: BillFormValues['lines'][number] = {
-  description: undefined,
+  description: null,
   name: '',
   price: 0,
   quantity: 0,
   type: LineTypeEnum.TEXT,
   line: 0,
   billId: '',
-  id: '',
   itPrice: 0,
+  productId: null,
 }
 
-const BillLineTable = ({
-  disabled,
-  control,
-}: {
-  disabled?: boolean
-  control: Control<BillFormValues>
-}) => {
+const BillLineTable = () => {
+  const {
+    control,
+    formState: { disabled },
+  } = useFormContext<BillFormValues>()
   const { t } = useI18n()
   const selectExistingProductRef = useRef<HTMLInputElement>(null)
   const { data: allProducts } = useAllProductsQuery()
@@ -41,7 +39,7 @@ const BillLineTable = ({
   }
 
   const tva = useWatch({ control, name: 'tva' })
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, move, remove } = useFieldArray({
     control,
     name: 'lines',
   })
@@ -59,9 +57,6 @@ const BillLineTable = ({
     return
   }
 
-  const addLine = (newLine = defaultLine) => {
-    append({ ...newLine, billId: '', line: fields.length, id: '' })
-  }
   const productOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
     if (allProducts) {
       return allProducts.map(product => {
@@ -92,17 +87,19 @@ const BillLineTable = ({
           itPrice: calculatePriceTTC(productFound.price, tva),
           quantity: 0,
           billId: '',
-          line: 0,
+          line: fields.length,
           description: productFound.description,
           productId: productFound.id,
         }
-        addLine(newLine)
+        append(newLine, { shouldFocus: false })
         setProductIdSelected(undefined)
-        setTimeout(() => {
-          selectExistingProductRef.current?.focus()
-        }, 200)
+        selectExistingProductRef.current?.focus()
       }
     }
+  }
+
+  const addLine = () => {
+    append({ ...defaultLine, billId: '', line: fields.length }, { shouldFocus: false })
   }
 
   return (
@@ -120,7 +117,13 @@ const BillLineTable = ({
             value={productIdSelected}
             onChange={onProductSelectedChange}
           />
-          <Button block disabled={!productIdSelected} onClick={addExistingProductSelected} type="button" variant="primary">
+          <Button
+            block
+            disabled={!productIdSelected}
+            onClick={addExistingProductSelected}
+            type="button"
+            variant="primary"
+          >
             {t('bills.form.lines.existingProduct.add')}
           </Button>
         </div>
@@ -128,25 +131,23 @@ const BillLineTable = ({
       <div className="flex flex-col divide-y">
         <DndContext onDragEnd={onDragEnd}>
           <SortableContext items={fields}>
-            {fields?.map((line, index) => (
+            {fields.map((line, index) => (
               <BillLineTableLine
                 key={line.id}
-                disabled={disabled}
                 id={line.id}
                 index={index}
-                control={control}
                 deleteLine={() => remove(index)}
               />
             ))}
           </SortableContext>
         </DndContext>
-        {!disabled ? (
-          <Button className="gap-1 mt-2" type="button" block onClick={() => addLine()}>
-            <PlusIcon className="w-5" />
-            {t('bills.form.lines.add')}
-          </Button>
-        ) : null}
       </div>
+      {!disabled ? (
+        <Button className="gap-1 mt-2" type="button" block onClick={addLine}>
+          <PlusIcon className="w-5" />
+          {t('bills.form.lines.add')}
+        </Button>
+      ) : null}
     </div>
   )
 }

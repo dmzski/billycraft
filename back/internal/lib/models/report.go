@@ -6,7 +6,7 @@ import (
 )
 
 type Report struct {
-	ID              string `gorm:"primaryKey;<-:false"`
+	ID              string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Name            string
 	StartDate       time.Time
 	EndDate         time.Time
@@ -36,7 +36,7 @@ type ReportOutgoingLine struct {
 }
 
 type ReportOutgoing struct {
-  ID         string `gorm:"primaryKey;<-:false"`
+  ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	OutgoingID string
 	ReportID   string
 	Name       string
@@ -47,7 +47,7 @@ type ReportOutgoing struct {
 }
 
 type ReportBill struct {
-  ID           string `gorm:"primaryKey;<-:false"`
+  ID           string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Title        string
 	BillID       string
 	PaidAt       time.Time

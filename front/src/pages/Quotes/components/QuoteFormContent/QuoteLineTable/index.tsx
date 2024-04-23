@@ -13,7 +13,7 @@ import { LINE_TYPE } from '@/constants/line'
 import { calculatePriceTTC } from '@/utils/price'
 
 const defaultLine: QuoteFormValues['lines'][number] = {
-  description: undefined,
+  description: null,
   name: '',
   price: 0,
   itPrice: 0,
@@ -21,7 +21,7 @@ const defaultLine: QuoteFormValues['lines'][number] = {
   type: LineTypeEnum.TEXT,
   line: 0,
   quoteId: '',
-  id: '',
+  productId: null,
 }
 
 const QuoteLineTable = ({
@@ -60,7 +60,7 @@ const QuoteLineTable = ({
   }
 
   const addLine = (newLine = defaultLine) => {
-    append({ ...newLine, quoteId: '', line: fields.length, id: '' })
+    append({ ...newLine, quoteId: '', line: fields.length }, { shouldFocus: false })
   }
   const productOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
     if (allProducts) {
@@ -99,9 +99,7 @@ const QuoteLineTable = ({
         }
         addLine(newLine)
         setProductIdSelected(undefined)
-        setTimeout(() => {
-          selectExistingProductRef.current?.focus()
-        }, 200)
+        selectExistingProductRef.current?.focus()
       }
     }
   }
@@ -121,7 +119,13 @@ const QuoteLineTable = ({
             value={productIdSelected}
             onChange={onProductSelectedChange}
           />
-          <Button disabled={!productIdSelected} block onClick={addExistingProductSelected} type="button" variant="primary">
+          <Button
+            disabled={!productIdSelected}
+            block
+            onClick={addExistingProductSelected}
+            type="button"
+            variant="primary"
+          >
             {t('quotes.form.lines.existingProduct.add')}
           </Button>
         </div>

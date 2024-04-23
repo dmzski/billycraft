@@ -12,12 +12,12 @@ export enum QuoteStatusEnum {
 export type QuoteLine = {
   quoteId: string
   line: number
-  quantity?: number
-  price?: number
+  quantity: number | null
+  price: number | null
   name: string
-  description?: string
+  description: string | null
   type: LineTypeEnum
-  productId?: string
+  productId: string | null
 }
 
 type Quote = {

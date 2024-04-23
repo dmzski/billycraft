@@ -8,7 +8,7 @@ import (
 )
 
 type Customer struct {
-	ID          string `gorm:"primaryKey;<-:false"`
+	ID          string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Name        string
 	Contact     string
 	PhoneNumber string

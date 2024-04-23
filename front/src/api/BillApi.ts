@@ -18,13 +18,14 @@ export const BillApi = {
   create: async ({ customerId, lines, status, title, tva }: BillCreateRequest) => {
     const data = {
       customerId,
-      lines: (lines || []).map(({ name, description, line, price, quantity, type }) => ({
+      lines: (lines || []).map(({ name, description, line, price, quantity, type, productId }) => ({
         type,
         name,
         description,
         quantity,
         price,
         line,
+        productId,
       })),
       status,
       title,
@@ -36,13 +37,14 @@ export const BillApi = {
   update: async ({ id, customerId, lines, status, title, tva }: BillUpdateRequest) => {
     const data = {
       customerId,
-      lines: (lines ?? []).map(({ name, description, line, price, quantity, type }) => ({
+      lines: (lines ?? []).map(({ name, description, line, price, quantity, type, productId }) => ({
         type,
         name,
         description,
         quantity,
         price,
         line,
+        productId,
       })),
       status,
       title,

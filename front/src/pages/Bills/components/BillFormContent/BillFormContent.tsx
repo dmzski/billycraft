@@ -117,7 +117,7 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
         min={0}
         max={100}
       />
-      <BillLineTable control={control} disabled={disabled} />
+      <BillLineTable />
     </>
   )
 }

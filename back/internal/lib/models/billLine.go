@@ -8,8 +8,9 @@ type BillLine struct {
 	Quantity    float64
 	Price       float64
 	Name        string
-	Description string
+	Description *string
 	Type        string
+  ProductID   *string
 	Bill        Bill
 }
 
@@ -26,6 +27,7 @@ func (line BillLine) ToDTO() dtos.BillLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
+    ProductID:   line.ProductID,
 	}
 }
 
@@ -38,5 +40,6 @@ func (BillLine) FromDTO(line dtos.BillLine) BillLine {
 		Name:        line.Name,
 		Description: line.Description,
 		Type:        line.Type,
+    ProductID:   line.ProductID,
 	}
 }

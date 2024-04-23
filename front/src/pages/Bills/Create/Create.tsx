@@ -21,7 +21,7 @@ export const Create = () => {
   const { push } = useHistory()
 
   const methods = useForm<BillFormValues>({
-    shouldFocusError: true,
+    shouldFocusError: false,
     mode: 'onChange',
     values: defaultBill,
   })
@@ -30,10 +30,7 @@ export const Create = () => {
     const tmp: BillCreateRequest = {
       ...data,
       lines: data.lines.map((line, index: number) => ({
-        name: line.name,
-        billId: line.billId,
-        type: line.type,
-        description: line.description,
+        ...line,
         line: index + 1,
         price: line.price ? Number(`${line.price}`) : undefined,
         quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
@@ -59,7 +56,7 @@ export const Create = () => {
         </div>
       </div>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form noValidate onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <BillFormContent />
           <Button
             size="md"

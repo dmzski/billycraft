@@ -5,7 +5,7 @@ import (
 )
 
 type Product struct {
-	ID          string `gorm:"primaryKey;<-:false"`
+	ID          string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Type        string
 	Name        string
 	Description *string

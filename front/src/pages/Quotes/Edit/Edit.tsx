@@ -34,10 +34,7 @@ export const Edit = () => {
       id: quote?.id ?? '',
       ...data,
       lines: data.lines.map((line, index: number) => ({
-        name: line.name,
-        quoteId: line.quoteId,
-        type: line.type,
-        description: line.description,
+        ...line,
         line: index + 1,
         price: line.price ? Number(`${line.price}`) : undefined,
         quantity: line.quantity ? Number(`${line.quantity}`) : undefined,

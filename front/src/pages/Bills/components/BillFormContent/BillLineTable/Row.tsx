@@ -1,30 +1,32 @@
 import { Button, Input, Select, TextArea } from '@coco-ui/core'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo } from 'react'
-import { Control, useController, useWatch } from 'react-hook-form'
+import { useController, useFormContext, useWatch } from 'react-hook-form'
 import { LINE_TYPE } from '@/constants/line'
-import { ArrowsUpDownIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/solid'
+import {
+  ArrowsUpDownIcon,
+  CloudArrowDownIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/solid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useI18n } from '@/i18n'
 import { BillFormValues } from '../types'
 import clsx from 'clsx'
 import { calculatePriceETFromIT, calculatePriceTTC } from '@/utils/price'
+import { AddProductModal } from '@/pages/Products/modals/AddProductModal'
 
 type BillLineTableLineProps = {
   deleteLine: () => void
-  disabled?: boolean
   index: number
-  control: Control<BillFormValues>
   id: string
 }
-const BillLineTableLine = ({
-  deleteLine,
-  disabled,
-  index,
-  id,
-  control,
-}: BillLineTableLineProps) => {
+const BillLineTableLine = ({ deleteLine, index, id }: BillLineTableLineProps) => {
+  const {
+    control,
+    formState: { disabled },
+  } = useFormContext<BillFormValues>()
   const { t } = useI18n()
   const { listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
@@ -64,34 +66,80 @@ const BillLineTableLine = ({
     }),
   )
 
+  const { field: productIdField } = useController({
+    control,
+    name: `lines.${index}.productId`,
+  })
   const { field: typeField, fieldState: typeFieldState } = useController({
     control,
     name: `lines.${index}.type`,
-    rules: { required: true },
+    rules: {
+      required: true,
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: nameField, fieldState: nameFieldState } = useController({
     control,
     name: `lines.${index}.name`,
-    rules: { required: true },
+    rules: {
+      required: true,
+
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
     defaultValue: '',
   })
   const { field: descriptionField } = useController({
     control,
     name: `lines.${index}.description`,
-    defaultValue: undefined,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: quantityField, fieldState: quantityFieldState } = useController({
     control,
     name: `lines.${index}.quantity`,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: priceField, fieldState: priceFieldState } = useController({
     control,
     name: `lines.${index}.price`,
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
   const { field: itPriceField, fieldState: itPriceFieldState } = useController({
     control,
     name: `lines.${index}.itPrice`,
     defaultValue: calculatePriceTTC(priceField.value, tva),
+    rules: {
+      onChange: () => {
+        if (productIdField.value) {
+          productIdField.onChange(null)
+        }
+      },
+    },
   })
 
   return (
@@ -139,14 +187,36 @@ const BillLineTableLine = ({
                   name={typeField.name}
                 />
               }
+              suffix={
+                !productIdField.value && nameField.value ? (
+                  <AddProductModal
+                    initialValues={{
+                      type: typeField.value,
+                      name: nameField.value,
+                      price: priceField.value,
+                      itPrice: itPriceField.value,
+                      supplierId: null,
+                      description: descriptionField.value,
+                    }}
+                    disclosure={
+                      <button type="button" className="btn btn-ghost">
+                        <CloudArrowDownIcon className="w-5" />
+                      </button>
+                    }
+                    onSubmitSuccess={newId => {
+                      productIdField.onChange(newId)
+                    }}
+                  />
+                ) : undefined
+              }
             />
-            {descriptionField.value !== undefined ? (
+            {descriptionField.value !== null ? (
               <TextArea
                 placeholder={t('bills.form.lines.fields.description.placeholder')}
                 className="md:col-span-6"
                 rows={1}
                 disabled={disabled}
-                value={descriptionField.value}
+                value={descriptionField.value ?? ''}
                 onChange={descriptionField.onChange}
                 onBlur={descriptionField.onBlur}
                 name={descriptionField.name}
@@ -177,7 +247,7 @@ const BillLineTableLine = ({
                 step={0.01}
                 required
                 name={quantityField.name}
-                value={quantityField.value}
+                value={quantityField.value ?? ''}
                 onChange={quantityField.onChange}
                 onBlur={event => {
                   quantityField.onChange(Number((event.target as HTMLInputElement).value) || 0)
@@ -193,7 +263,7 @@ const BillLineTableLine = ({
                 placeholder={t('bills.form.lines.fields.etPrice.placeholder')}
                 type="number"
                 step={0.01}
-                value={priceField.value}
+                value={priceField.value ?? ''}
                 onChange={priceField.onChange}
                 onBlur={event => {
                   const newPrice = Number(event.target.value) || 0

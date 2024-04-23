@@ -1,45 +1,48 @@
 import { useI18n } from '@/i18n'
 import { Button, Modal, useToast } from '@coco-ui/core'
-import { ComponentProps } from 'react'
+import { ComponentProps, useId } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { ProductFormContent, ProductFormValues } from '../components/ProductFormContent'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { sendErrorToSentry } from '@/utils/errors'
 import { ProductApi } from '@/api/ProductApi'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
+import Product from '@/models/Product'
 
 type AddProductModalProps = {
-  onSubmitSuccess: () => Promise<void>
+  onSubmitSuccess: (newId: Product['id']) => Promise<void> | void
   disclosure: ComponentProps<typeof Modal>['disclosure']
+  initialValues?: ProductFormValues
 }
 
-type AddProductFormProps = Pick<AddProductModalProps, 'onSubmitSuccess'> & { close: () => void }
+type AddProductFormProps = Omit<AddProductModalProps, 'disclosure'> & { close: () => void }
 
-const initialValues: ProductFormValues = {
+const defaultValues: ProductFormValues = {
   type: LineTypeEnum.ARTICLE,
   name: '',
   price: 0,
   description: '',
   supplierId: null,
-  itPrice: 0
+  itPrice: 0,
 }
 
-const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
+const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFormProps) => {
   const { scopedT, t } = useI18n()
   const toast = useToast()
   const pageT = scopedT('products.modals.add')
-  const {data: suppliers} = useAllSuppliersQuery()
+  const { data: suppliers } = useAllSuppliersQuery()
+  const id = useId()
 
   const methods = useForm<ProductFormValues>({
     mode: 'onChange',
-    values: initialValues,
+    values: initialValues ?? defaultValues,
   })
 
   const onSubmit = async (values: ProductFormValues) => {
     try {
-      await ProductApi.create(values)
+      const res = await ProductApi.create(values)
       toast.success(pageT('submit.success'))
-      await onSubmitSuccess()
+      await onSubmitSuccess(res.id)
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: values })
@@ -49,13 +52,22 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+      <form
+        id={id}
+        onSubmit={event => {
+          event.preventDefault()
+          event.stopPropagation()
+          methods.handleSubmit(onSubmit)(event)
+        }}
+        className="flex flex-col gap-10"
+      >
         <h2 className="text-2xl">{pageT('title')}</h2>
         <ProductFormContent suppliers={suppliers ?? []} />
         <Button
           variant="primary"
           type="submit"
           disabled={!methods.formState.isValid || methods.formState.isSubmitting}
+          form={id}
         >
           {pageT('submit')}
         </Button>
@@ -64,8 +76,18 @@ const AddProductForm = ({ onSubmitSuccess, close }: AddProductFormProps) => {
   )
 }
 
-export const AddProductModal = ({ onSubmitSuccess, disclosure }: AddProductModalProps) => (
+export const AddProductModal = ({
+  onSubmitSuccess,
+  disclosure,
+  initialValues,
+}: AddProductModalProps) => (
   <Modal disclosure={disclosure}>
-    {({ close }) => <AddProductForm onSubmitSuccess={onSubmitSuccess} close={close} />}
+    {({ close }) => (
+      <AddProductForm
+        initialValues={initialValues}
+        onSubmitSuccess={onSubmitSuccess}
+        close={close}
+      />
+    )}
   </Modal>
 )

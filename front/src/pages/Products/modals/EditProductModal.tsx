@@ -1,6 +1,6 @@
 import { useI18n } from '@/i18n'
 import { Button, Modal, useToast } from '@coco-ui/core'
-import { ComponentProps, useMemo } from 'react'
+import { ComponentProps, useId, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { ProductFormContent, ProductFormValues } from '../components/ProductFormContent'
 import { sendErrorToSentry } from '@/utils/errors'
@@ -21,7 +21,8 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
   const { scopedT, t } = useI18n()
   const toast = useToast()
   const pageT = scopedT('products.modals.edit')
-  const {data: suppliers} = useAllSuppliersQuery()
+  const { data: suppliers } = useAllSuppliersQuery()
+  const id = useId()
 
   const initialValues: ProductFormValues = useMemo(
     () => ({
@@ -30,7 +31,10 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
       price: product.price,
       type: product.type,
       supplierId: product.supplierId ?? null,
-      itPrice: calculatePriceTTC(product.price, product.supplierId ? suppliers?.find(({id}) => id === product.supplierId)?.vat ?? 0 : 0)
+      itPrice: calculatePriceTTC(
+        product.price,
+        product.supplierId ? suppliers?.find(({ id }) => id === product.supplierId)?.vat ?? 0 : 0,
+      ),
     }),
     [product, suppliers],
   )
@@ -54,12 +58,21 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+      <form
+        id={id}
+        onSubmit={event => {
+          event.preventDefault()
+          event.stopPropagation()
+          methods.handleSubmit(onSubmit)(event)
+        }}
+        className="flex flex-col gap-3"
+      >
         <h2 className="text-2xl">{pageT('title')}</h2>
         <ProductFormContent suppliers={suppliers ?? []} />
         <Button
           variant="primary"
           type="submit"
+          form={id}
           disabled={!methods.formState.isValid || methods.formState.isSubmitting}
         >
           {pageT('submit')}

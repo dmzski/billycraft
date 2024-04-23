@@ -6,7 +6,7 @@ import (
 )
 
 type Todo struct {
-	ID          string `gorm:"primaryKey;<-:false"`
+	ID          string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

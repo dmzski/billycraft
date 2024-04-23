@@ -5,6 +5,6 @@ export type ProductUpdateRequest = {
   type: LineTypeEnum
   name: string
   description?: string | null
-  price: number
+  price?: number | null
   supplierId?: string | null
 }

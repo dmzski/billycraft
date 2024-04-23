@@ -11,7 +11,7 @@ import (
 )
 
 type Bill struct {
-	ID         string `gorm:"primaryKey;<-:false"`
+	ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Name       string `gorm:"<-:create"`
 	Title      string
 	Tva        *float32
@@ -106,6 +106,7 @@ func (b Bill) FromQuote(q Quote) Bill {
 			Name:        x.Name,
 			Description: x.Description,
 			Type:        x.Type,
+      ProductID:   x.ProductID,
 		})
 	}
 	return Bill{

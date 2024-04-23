@@ -154,7 +154,10 @@ func generateBillPDF(bill models.Bill) *os.File {
 		subtotal := fmt.Sprintf("%.2f€", linePrice)
 
 		lines := pdf.SplitLines([]byte(line.Name), cols[0]-cellMarginLarge)
-		descriptionLines := pdf.SplitLines([]byte(line.Description), cols[0]-cellMarginLarge-marginL)
+    descriptionLines := make([][]byte, 0)
+    if (line.Description != nil) {
+      descriptionLines = pdf.SplitLines([]byte(*line.Description), cols[0]-cellMarginLarge-marginL)
+    }
 		height := float64(len(lines)+len(descriptionLines))*lineHt + lineMargin*float64(len(lines)+len(descriptionLines)) + cellMargin*2
 
 		// The height of the row more the height of total and tva
@@ -184,7 +187,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 
 		// If no price, quantity and no description write the line as a title so reset all strings and change font
 		pdf.SetFont(fontFamily, "", fontSize)
-		if line.Price == 0 && line.Quantity == 0 && line.Description == "" {
+		if (line.Price == 0 && line.Quantity == 0 && (line.Description != nil || *line.Description == "")) || line.Type == "TEXT" {
 			pdf.SetFont(fontFamily, "B", fontSize)
 			pdf.SetCellMargin(lineMargin)
 			quantity = ""

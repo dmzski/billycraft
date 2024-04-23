@@ -28,13 +28,14 @@ export const QuoteApi = {
   create: async ({ customerId, lines, status, title, tva }: QuoteCreateRequest): Promise<Quote> => {
     const data = {
       customerId,
-      lines: (lines || []).map(({ name, description, line, price, quantity, type }) => ({
+      lines: (lines || []).map(({ name, description, line, price, quantity, type, productId }) => ({
         type,
         name,
         description,
         quantity,
         price,
         line,
+        productId,
       })),
       status,
       title,
@@ -54,13 +55,14 @@ export const QuoteApi = {
     const data = {
       id,
       customerId,
-      lines: (lines || []).map(({ name, description, line, price, quantity, type }) => ({
+      lines: (lines || []).map(({ name, description, line, price, quantity, type, productId }) => ({
         type,
         name,
         description,
         quantity,
         price,
         line,
+        productId,
       })),
       status,
       title,
