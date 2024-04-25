@@ -1,5 +1,11 @@
 # back
 
+## 1.21.0
+
+### Minor Changes
+
+- 84af382: fix: pdf rendering
+
 ## 1.20.0
 
 ### Minor Changes
