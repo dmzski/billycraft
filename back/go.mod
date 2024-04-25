@@ -6,10 +6,9 @@ require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/golang-migrate/migrate/v4 v4.17.0
-	github.com/google/uuid v1.6.0
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/klauspost/compress v1.17.7 // indirect
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.18.2

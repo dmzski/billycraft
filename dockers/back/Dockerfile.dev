@@ -4,6 +4,6 @@ EXPOSE 8080
 
 WORKDIR /app
 
-RUN mkdir /pdfs && chmod 777 -R /pdfs
+RUN mkdir /upload && chmod 777 -R /upload
 
-VOLUME [ "/app", "/pdfs" ]
+VOLUME [ "/app", "/upload", "/templates" ]

@@ -13,6 +13,7 @@ type Config struct {
 	DBSource      string `mapstructure:"DB_SOURCE"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	UploadDir     string `mapstructure:"UPLOAD_DIR"`
+	PdfUrl        string `mapstructure:"PDF_URL"`
 }
 
 var (
@@ -36,7 +37,6 @@ func LoadConfig() (config Config, err error) {
 	}
 
 	err = viper.Unmarshal(&config)
-	log.Println(config.DBSource)
 	appConfig = config
 	return
 }

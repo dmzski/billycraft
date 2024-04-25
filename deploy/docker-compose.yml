@@ -76,6 +76,10 @@ services:
       db:
         condition: service_started
 
+  pdf:
+    image: gotenberg/gotenberg:8
+
+
   traefik:
     image: traefik:v2.3
     command:

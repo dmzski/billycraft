@@ -1,0 +1,244 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, initial-scale=1" />
+    <title>{{.Quote.Name}}</title>
+  </head>
+  <style>
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    thead th {
+      text-align: left;
+    }
+
+    .bg-main {
+      background-color:{{.QuoteCustomization.MainColor}};
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .flex-grow {
+      flex-grow: 1;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .gap-1 {
+      gap: 0.25rem;
+    }
+    .gap-2 {
+      gap: 0.5rem;
+    }
+    .gap-3 {
+      gap: 0.75rem;
+    }
+    .gap-4 {
+      gap: 1rem;
+    }
+    .gap-5 {
+      gap: 1.25rem;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .main-table {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: 1px solid black;
+      border-collapse: collapse;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .main-table tr {
+      display: grid;
+      width: 100%;
+      {{if .HasVat}}
+      grid-template-columns: minmax(0, 3fr) 1fr 1fr 1fr 1.5fr;
+      {{else}}
+      grid-template-columns: minmax(0,4fr) 1fr 1fr 1.5fr;
+      {{end}}
+    }
+    .main-table tr > * {
+      border-right: 1px solid black;
+      padding: 0.75rem;
+    }
+    .main-table tr > *:last-child {
+      border-right: none;
+    }
+
+    .main-table .row:nth-child(even) {
+      background-color: rgb(240, 240, 240);
+    }
+
+    .total-table {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .total-table tbody {
+      width: 100%;
+      display: grid;
+      {{if .HasVat}}
+      grid-template-columns: minmax(0, 3fr) 1fr 1fr 1fr 1.5fr;
+      {{else}}
+      grid-template-columns: minmax(0,4fr) 1fr 1fr 1.5fr;
+      {{end}}
+    }
+
+    .total-table tr {
+      width: 100%;
+      grid-column-end: 6;
+      display: grid;
+      {{if .HasVat}}
+      grid-column-start: 3;
+      grid-template-columns: 1fr 1fr;
+      {{else}}
+      grid-column-start: 2;
+      grid-template-columns: 1.3fr 1fr;
+      {{end}}
+      border: 1px solid black;
+      border-top: 0;
+    }
+
+    .total-table tr:first-child {
+      border-top-right-radius: 5px;
+      border-top-left-radius: 5px;
+      overflow:hidden;
+    }
+    .total-table tr:last-child {
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      overflow:hidden;
+    }
+
+    .total-table th {
+      border-right: 1px solid black;
+      padding: 1rem;
+    }
+    .total-table td {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .total-table tr:first-child {
+      border-top: 1px solid black;
+    }
+  </style>
+  <body class="flex flex-col gap-5" style="max-width: 100%">
+    <div class="flex" style="height: 100px">
+      <div class="flex-1">
+        <img src="{{ htmlSafe $.LogoSrc}}" style="height: 50px" />
+      </div>
+      <div class="flex-1 flex flex-col gap-4" style="align-items: end">
+        <p>{{.GeneratedDate}}</p>
+        <p
+          class="bg-main"
+          style="
+            padding: 1rem 4rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            border: 2px solid black;
+          "
+        >
+          {{.Title}}
+        </p>
+      </div>
+    </div>
+    <div class="flex">
+      <div class="flex-1 flex flex-col gap-1">
+        <p>{{.Company.Name}}</p>
+        <p>{{.Company.Address}}</p>
+        <p>{{.Company.PostalCode}}, {{.Company.City}}</p>
+        <p>{{.Company.Siret}}</p>
+      </div>
+      <div class="flex-1 flex flex-col gap-1" style="align-items: end">
+        <div>&nbsp;</div>
+        <p>{{.Customer.Name}}</p>
+        <p>{{.Customer.Address}}</p>
+        <p>{{.Customer.PostalCode}}, {{.Customer.City}}</p>
+      </div>
+    </div>
+    <div class="bold flex flex-col gap-1">
+      <p class="text-right">{{.ReferenceTitle}}: {{.Quote.Name}}</p>
+      <p>{{.ObjectTitle}}: {{.Quote.Title}}</p>
+    </div>
+    <table class="main-table">
+      <thead>
+        <tr class="bg-main">
+          <th>{{.DesignationTitle}}</th>
+          <th class="text-right">{{.QuantityTitle}}</th>
+          <th class="text-right">{{.EtPriceTitle}}</th>
+          {{if .HasVat }}
+          <th class="text-right">{{.ItPriceTitle}}</th>
+          {{end}}
+          <th class="text-right">{{.SubTotalTitle}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Quote.Lines}}
+        <tr class="row">
+          <td>
+            <p>{{.Name}}</p>
+            {{if .Description}}
+            <p
+              style="
+                margin-left: 10px;
+                color: rgb(80, 80, 80);
+                white-space: pre-wrap;
+              "
+            >{{.Description}}</p>
+            {{end}}
+          </td>
+          <td class="text-right">{{.Quantity}}</td>
+          <td class="text-right">{{$.GetEtPriceStr .Price}}</td>
+          {{if $.HasVat}}
+          <td class="text-right">{{$.GetItPriceStr .Price}}</td>
+          {{end}}
+          <td class="text-right">{{$.GetItLinePriceStr .Price .Quantity}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+    <table class="total-table">
+      {{if .HasVat }}
+      <tr>
+        <th class="bg-main">{{.EtTotalTitle}}</th>
+        <td>{{.GetEtTotalStr}}</td>
+      </tr>
+      <tr>
+        <th class="bg-main">{{.VatTitle}} ({{.Quote.Tva}}%)</th>
+        <td>{{.GetVatTotalStr}}</td>
+      </tr>
+      {{end}}
+      <tr>
+        <th class="bg-main">
+          {{if .HasVat }}{{.ItTotalTitle}}{{else}}{{.EtTotalTitle}}{{end}}
+        </th>
+        <td>{{.GetItTotalStr}}</td>
+      </tr>
+    </table>
+    <p style="white-space: pre-wrap">{{.QuoteCustomization.AfterTable}}</p>
+    <footer style="white-space: pre-wrap; font-size: 0.8rem">{{.QuoteCustomization.Footer}}</footer>
+  </body>
+</html>

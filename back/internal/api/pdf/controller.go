@@ -68,7 +68,7 @@ func generateQuote(c *fiber.Ctx) error {
 
 		file := generateQuotePDF(quote)
 
-		return c.Download(file.Name())
+		return c.SendFile(file.Name())
 	}
 }
 
