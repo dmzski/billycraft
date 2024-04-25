@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.35.0
+
+### Minor Changes
+
+- 58092e8: fix: add whitespace pre-wrap on overview bill and quote
+
 ## 2.34.0
 
 ### Minor Changes

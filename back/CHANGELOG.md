@@ -1,5 +1,11 @@
 # back
 
+## 1.20.0
+
+### Minor Changes
+
+- 58092e8: fix: improve pdf rendering
+
 ## 1.19.0
 
 ### Minor Changes
