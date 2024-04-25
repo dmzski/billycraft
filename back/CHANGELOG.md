@@ -1,5 +1,11 @@
 # back
 
+## 1.19.0
+
+### Minor Changes
+
+- 7ff711c: feat(pdf): new generation with gotenberg
+
 ## 1.18.0
 
 ### Minor Changes
