@@ -121,6 +121,10 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		ItTotalTitle:       TOTALTTC_TITLE,
 	}
 
+  footerData := map[string]interface{}{
+    "Footer": customization.Footer,
+  }
+
 	tmpl, err := template.New("quote.html").Funcs(template.FuncMap{
 		"htmlSafe": func(html string) template.URL {
 			return template.URL(html)
@@ -129,8 +133,19 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	if err != nil {
 		panic(err)
 	}
+
+	tmplFooter, err := template.New("footer.html").ParseFiles("./templates/footer.html")
+
+	if err != nil {
+		panic(err)
+	}
 	b := new(strings.Builder)
+	bFooter := new(strings.Builder)
 	err = tmpl.Execute(b, vd)
+	if err != nil {
+		panic(err)
+	}
+	err = tmplFooter.Execute(bFooter, footerData)
 	if err != nil {
 		panic(err)
 	}
@@ -141,7 +156,12 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		Name:      "index.html",
 		Content:   []byte(b.String()),
 	}
-	agent.FileData(index).MultipartForm(nil)
+	footer := &fiber.FormFile{
+		Fieldname: "footer.html",
+		Name:      "footer.html",
+		Content:   []byte(bFooter.String()),
+	}
+	agent.FileData(index).FileData(footer).MultipartForm(nil)
 
 	statusCode, body, errs := agent.Bytes()
 	if len(errs) > 0 || statusCode != 200 {

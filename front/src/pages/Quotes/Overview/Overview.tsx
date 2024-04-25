@@ -209,7 +209,7 @@ export const Overview = () => {
               <div key={line} className="px-4 py-2 grid md:grid-cols-12 gap-2 even:bg-base-200">
                 <div className="md:col-span-8 flex flex-col">
                   <p className="font-bolder">{name}</p>
-                  <p className="pl-4">{description}</p>
+                  <p className="pl-4 opacity-70 whitespace-pre-wrap">{description}</p>
                 </div>
                 {type !== LineTypeEnum.TEXT ? (
                   <>

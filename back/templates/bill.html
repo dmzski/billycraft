@@ -59,27 +59,65 @@
     }
 
     .main-table {
-      display: flex;
-      flex-direction: column;
       width: 100%;
       border: 1px solid black;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       border-radius: 5px;
       overflow: hidden;
     }
 
-    .main-table tr {
-      display: grid;
-      width: 100%;
-      {{if .HasVat}}
-      grid-template-columns: minmax(0, 3fr) 1fr 1fr 1fr 1.5fr;
-      {{else}}
-      grid-template-columns: minmax(0,4fr) 1fr 1fr 1.5fr;
-      {{end}}
+    .main-table thead {
+      border: 1px solid black;
     }
-    .main-table tr > * {
+    .main-table thead tr {
+      border: 1px solid black;
+    }
+
+    {{if .HasVat}}
+    .main-table tr th {
+      padding: 0.5rem 0.25rem;
+      text-align: center;
+    }
+    .main-table tr th:nth-child(1) {
+      width: 50%;
+    }
+    .main-table tr th:nth-child(2) {
+      width: 10%;
+    }
+    .main-table tr th:nth-child(3) {
+      width: 10%;
+    }
+    .main-table tr th:nth-child(4) {
+      width: 10%;
+    }
+    .main-table tr th:nth-child(5) {
+      width: 20%;
+    }
+    {{else}}
+    .main-table tr th {
+      padding: 0.5rem 0.25rem;
+      text-align: center;
+    }
+    .main-table tr th:nth-child(1) {
+      width: 63%;
+    }
+    .main-table tr th:nth-child(2) {
+      width: 10%;
+    }
+    .main-table tr th:nth-child(3) {
+      width: 10%;
+    }
+    .main-table tr th:nth-child(4) {
+      width: 17%;
+    }
+    {{end}}
+    .main-table tr > *:not(:last-child) {
       border-right: 1px solid black;
-      padding: 0.75rem;
+    }
+
+    .main-table tr > * {
+      padding: 0.5rem;
     }
     .main-table tr > *:last-child {
       border-right: none;
@@ -144,6 +182,12 @@
     .total-table tr:first-child {
       border-top: 1px solid black;
     }
+
+    @media print {
+      .total-table, .main-table .row {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
   </style>
   <body class="flex flex-col gap-5" style="max-width: 100%">
     <div class="flex" style="height: 100px">
