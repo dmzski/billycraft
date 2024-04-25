@@ -1,5 +1,11 @@
 # back
 
+## 1.22.0
+
+### Minor Changes
+
+- fix: put footer in footer bill
+
 ## 1.21.0
 
 ### Minor Changes
