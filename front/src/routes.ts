@@ -181,6 +181,24 @@ export const ROUTES = {
         exact: true,
         path: () => '/settings/bill-customization',
       },
+      USERS: {
+        id: 'settings.users',
+        exact: false,
+        path: () => '/settings/users',
+        routes: {
+          USERS: {
+            id: 'settings.users.users',
+            exact: true,
+            path: () => '/settings/users/users',
+          },
+          INVITATIONS: {
+            id: 'settings.users.invitations',
+            exact: true,
+            path: () => '/settings/users/invitations',
+          }
+        }
+        
+      },
     },
   },
   SUPPLIERS: {

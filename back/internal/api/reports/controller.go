@@ -1,7 +1,9 @@
 package reports
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"time"
 
@@ -13,10 +15,10 @@ func InitRoutes(api fiber.Router) {
 	router.Get("/year", findForYear)
 	router.Get("/month", findForMonth)
 	router.Get("/", findAll)
-	router.Post("/", create)
+	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
 	router.Get("/:id", findById)
-	router.Delete("/:id", delete)
-	router.Patch("/:id", patch)
+	router.Delete("/:id", auth.RoleRequired(enums.RoleEnumEditor), delete)
+	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), patch)
 }
 
 func findForMonth(c *fiber.Ctx) error {

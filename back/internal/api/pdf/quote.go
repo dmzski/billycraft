@@ -80,6 +80,9 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	var TITLE = QUOTE_TITLE
 
 	date := time.Now()
+	if quote.SentAt != nil && quote.Status != "DRAFT" {
+		date = *quote.SentAt
+	}
 	company := company.DAO.FindOneById(quote.CompanyID)
 	customization := quoteCustomization.DAO.FindFirstOrInitByTenant(quote.CompanyID)
 	var customer models.Customer
@@ -121,9 +124,9 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		ItTotalTitle:       TOTALTTC_TITLE,
 	}
 
-  footerData := map[string]interface{}{
-    "Footer": customization.Footer,
-  }
+	footerData := map[string]interface{}{
+		"Footer": customization.Footer,
+	}
 
 	tmpl, err := template.New("quote.html").Funcs(template.FuncMap{
 		"htmlSafe": func(html string) template.URL {

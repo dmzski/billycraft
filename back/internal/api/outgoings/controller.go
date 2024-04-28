@@ -1,7 +1,9 @@
 package outgoings
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"fmt"
 	"time"
@@ -15,8 +17,8 @@ func InitRoutes(api fiber.Router) {
 	router.Get("/first", findFirst)
 	router.Get("/current", findCurrent)
 	router.Get("/:id", findById)
-	router.Post("/", create)
-	router.Patch("/:id", update)
+	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
+	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
 }
 
 func findAll(c *fiber.Ctx) error {

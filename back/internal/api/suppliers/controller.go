@@ -1,7 +1,9 @@
 package suppliers
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"fmt"
 
@@ -12,9 +14,9 @@ func InitRoutes(api fiber.Router) {
 	router := api.Group("/suppliers")
 	router.Get("/", findAll)
 	router.Get("/:id", findById)
-	router.Post("/", create)
-	router.Patch("/:id", update)
-	router.Delete("/:id", delete)
+	router.Post("/", auth.RoleRequired(enums.RoleEnumAdmin), create)
+	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumAdmin), update)
+	router.Delete("/:id", auth.RoleRequired(enums.RoleEnumAdmin), delete)
 }
 
 func findAll(c *fiber.Ctx) error {

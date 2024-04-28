@@ -38,6 +38,9 @@ func (dao CompanyDao) Create(creator string, dto dtos.CompanyRequest) (company m
 		tx.Rollback()
 		panic(err)
 	}
+	tx.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", company.ID, creator)
+	tx.Exec("INSERT INTO com_role (company_id, email, role) VALUES (?, ?, 'OWNER')", company.ID, creator)
+
 	tx.Commit()
 	return
 }

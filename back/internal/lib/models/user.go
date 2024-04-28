@@ -8,7 +8,7 @@ type User struct {
 	LastName  string
 	CompanyID *string
 	Company   *Company
-	Role      string
+	Roles     []*Role `gorm:"foreignKey:Email;references:Email"`
 }
 
 func (User) TableName() string {
@@ -21,7 +21,6 @@ func (u User) ToDTO() dtos.User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		CompanyID: u.CompanyID,
-		Role:      u.Role,
 	}
 }
 
@@ -31,6 +30,5 @@ func (User) FromDTO(u dtos.User) User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		CompanyID: u.CompanyID,
-		Role:      u.Role,
 	}
 }

@@ -168,10 +168,4 @@ func (dao QuoteDao) CreateBill(creator models.User, id string) (bill models.Bill
 	return
 }
 
-func (dao QuoteDao) Delete(id string, creator string) {
-	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Quote{}).Error; err != nil {
-		panic(err)
-	}
-}
-
 var DAO = &QuoteDao{}

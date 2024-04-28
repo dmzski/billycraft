@@ -4,6 +4,8 @@ import (
 	"back/config"
 	"back/internal/api/bills"
 	"back/internal/api/quotes"
+	"back/internal/lib/auth"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"fmt"
 	"log"
@@ -16,9 +18,8 @@ func InitRoutes(api fiber.Router) {
 	r := api.Group("/pdfs")
 	r.Get("/quote/:id", getOrGenerateQuote)
 	r.Get("/bill/:id", getOrGenerateBill)
-	r.Get("/quote/:id/generate", generateQuote)
-	r.Get("/bill/:id/generate", generateBill)
-	r.Get("/report/generate", generateBill)
+	r.Get("/quote/:id/generate", auth.RoleRequired(enums.RoleEnumEditor), generateQuote)
+	r.Get("/bill/:id/generate", auth.RoleRequired(enums.RoleEnumEditor), generateBill)
 }
 
 func getOrGenerateQuote(c *fiber.Ctx) error {
@@ -65,6 +66,9 @@ func generateQuote(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		quote := quotes.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		if quote.Status == "DRAFT" {
+			return getOrGenerateQuote(c)
+		}
 
 		file := generateQuotePDF(quote)
 
@@ -78,6 +82,9 @@ func generateBill(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		bill := bills.DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		if bill.Status != "DRAFT" {
+			return getOrGenerateBill(c)
+		}
 
 		file := generateBillPDF(bill)
 

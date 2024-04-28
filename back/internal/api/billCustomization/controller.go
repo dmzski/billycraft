@@ -1,7 +1,9 @@
 package billCustomization
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"fmt"
 
@@ -9,7 +11,7 @@ import (
 )
 
 func InitRoutes(api fiber.Router) {
-	router := api.Group("/bill-customization")
+	router := api.Group("/bill-customization", auth.RoleRequired(enums.RoleEnumAdmin))
 	router.Get("/", findAll)
 	router.Get("/mine", findMine)
 	router.Get("/:id", findById)

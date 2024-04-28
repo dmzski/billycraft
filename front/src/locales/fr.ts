@@ -29,6 +29,9 @@ export default {
   'heads.settings.myOrganization': 'Mon entreprise',
   'heads.settings.quoteCustomization': 'Devis',
   'heads.settings.billCustomization': 'Factures',
+  'heads.settings.users': 'Utilisateurs et Invitations',
+  'heads.settings.users.users': 'Utilisateurs',
+  'heads.settings.users.invitations': 'Invitations',
   'heads.suppliers': 'Fournisseurs',
   'heads.suppliers.form': 'Fournisseurs > Formulaire',
   'heads.accounting': 'Compatibilité',
@@ -105,6 +108,13 @@ export default {
   'products.type.OTHER_SERVICE.label': 'Autre type de service',
   'products.type.TEXT.label': 'Texte',
 
+  // Users > Role
+  'roles.OWNER': 'Propriétaire',
+  'roles.ADMIN': 'Administrateur',
+  'roles.EDITOR': 'Editeur',
+  'roles.VIEWER': 'Lecteur',
+  'roles.BILLING': 'Comptable',
+
   // Login
   'login.title': 'Se connecter',
   'login.migrationMotd':
@@ -152,9 +162,9 @@ export default {
 
   // Join
   'onboarding.join.title': 'Rejoindre une entreprise',
-  'onboarding.join.description': "Veuillez copier le code secret communiquer par l'entreprise",
+  'onboarding.join.description': "Lorsque vous serez invitez dans une entreprise vous pourrez accepté la demande depuis cet écran",
+  'onboarding.join.youAreInvited': "Vous avez été invité à rejoindre l'entreprise {companyName} en tant que {roleName}",
   'onboarding.join.submit': 'Rejoindre',
-  'onboarding.join.fields.code.label': "Code d'invitation",
   'onboarding.join.success': "Vous avez rejoint l'entreprise",
 
   // Accounting > Outgoings
@@ -646,4 +656,53 @@ export default {
   'products.modals.delete.description': 'Êtes-vous sûr de vouloir supprimer cet article ?',
   'products.modals.delete.submit': 'Supprimer',
   'products.modals.delete.submit.success': 'Article supprimé',
+
+  // Settings > Users
+  'settings.users.title': 'Utilisateurs et Invitations',
+  'settings.users.tabs.users': 'Utilisateurs',
+  'settings.users.tabs.invitations': 'Invitations',
+
+  // Settings > Users > Users
+  'settings.users.users.title': 'Utilisateurs',
+  'settings.users.users.description': "Gérer les utilisateurs ayant accès à votre entreprise",
+  'settings.users.users.list.headers.email': "Email",
+  'settings.users.users.list.headers.name': "Nom complet",
+  'settings.users.users.list.headers.role': "Role",
+  'settings.users.users.list.emptyText': "Aucun utilisateur",
+
+  // Settings > Users > Users > Modals > Remove
+  'settings.users.users.modals.remove.title': "Supprimer un utilisateur",
+  'settings.users.users.modals.remove.warning': "Attention ! En supprimant un utilisateur il n'aura plus accès aux données de l'entreprise vous devrez l'inviter à nouveau pour lui redonner accès",
+  'settings.users.users.modals.remove.submit': "Supprimer",
+  'settings.users.users.modals.remove.submit.success': "Utilisateur supprimé avec succès",
+
+  // Settings > Users > Invitations
+  'settings.users.invitations.title': 'Invitations',
+  'settings.users.invitations.description': 'Gérer les invitations pour rejoindre votre entreprise',
+  'settings.users.invitations.inviteButton': 'Inviter un utilisateur',
+  'settings.users.invitations.list.headers.email': 'Email',
+  'settings.users.invitations.list.headers.role': 'Role',
+  'settings.users.invitations.list.headers.status': 'Status',
+  'settings.users.invitations.list.headers.createdAt': 'Créée le',
+  'settings.users.invitations.list.emptyText': 'Aucune invitation en attente',
+
+  // Settings > Users > Invitations > Modals > Invite
+  'settings.users.invitations.modals.invite.title': 'Inviter un utilisateur',
+  'settings.users.invitations.modals.invite.description': "Entrez l'email de l'utilisateur ainsi que le rôle désiré",
+  'settings.users.invitations.modals.invite.fields.email.label': 'Email',
+  'settings.users.invitations.modals.invite.fields.email.placeholder': 'test@exemple.com',
+  'settings.users.invitations.modals.invite.fields.role.label': 'Role',
+  'settings.users.invitations.modals.invite.submit': 'Inviter',
+  'settings.users.invitations.modals.invite.submit.success': 'Invitation envoyée avec succès',
+
+  // Settings > Users > Invitations > Modals > DeleteInvite
+  'settings.users.invitations.modals.delete.title': 'Annuler une invitation',
+  'settings.users.invitations.modals.delete.description': "Une fois l'invitation annulé l'utilisateur ne pourra plus rejoindre votre entreprise",
+  'settings.users.invitations.modals.delete.submit': "Annuler l'invitation",
+  'settings.users.invitations.modals.delete.submit.success': 'Invitation annulée avec succès',
+
+  // Invitations > Status
+  'invitations.status.PENDING': 'En attente',
+  'invitations.status.ACCEPTED': 'Acceptée',
+  'invitations.status.REFUSED': 'Refusée',
 } as const

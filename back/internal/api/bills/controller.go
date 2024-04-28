@@ -1,7 +1,9 @@
 package bills
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"encoding/json"
 	"fmt"
@@ -13,9 +15,8 @@ func InitRoutes(api fiber.Router) {
 	router := api.Group("/bills")
 	router.Get("/", findAll)
 	router.Get("/:id", findById)
-	router.Post("/", create)
-	router.Patch("/:id", update)
-	router.Delete("/:id", delete)
+	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
+	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
 }
 
 func findAll(c *fiber.Ctx) error {
@@ -70,15 +71,6 @@ func update(c *fiber.Ctx) error {
 	}
 }
 
-func delete(c *fiber.Ctx) error {
-	user := c.Locals("user").(models.User)
-	if id := c.Params("id", ""); id == "" {
-		return fiber.NewError(400, "No id provided")
-	} else {
-		DAO.Delete(id, user.Email)
-		return c.Status(204).SendString("Bill deleted")
-	}
-}
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newBill := dtos.Bill{}

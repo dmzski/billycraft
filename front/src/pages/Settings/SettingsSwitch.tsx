@@ -3,12 +3,14 @@ import BillCustomizationPage from './BillCustomizationPage'
 import { SETTINGS_ROUTES } from './constants'
 import MyCompanyPage from './MyCompanyPage'
 import QuoteCustomizationPage from './QuoteCustomizationPage'
+import { UsersAndInvitations } from './UsersAndInvitations/UsersAndInvitations'
 
 const SettingsSwitch = () => (
   <Switch>
     <Route path={SETTINGS_ROUTES.MY_COMPANY.path()} component={MyCompanyPage} />
     <Route path={SETTINGS_ROUTES.BILL_CUSTOMIZATION.path()} component={BillCustomizationPage} />
     <Route path={SETTINGS_ROUTES.QUOTE_CUSTOMIZATION.path()} component={QuoteCustomizationPage} />
+    <Route path={SETTINGS_ROUTES.USERS.path()} component={UsersAndInvitations} />
     <Redirect to={SETTINGS_ROUTES.MY_COMPANY.path()} />
   </Switch>
 )

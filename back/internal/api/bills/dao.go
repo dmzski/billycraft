@@ -170,10 +170,4 @@ func (dao BillDao) Create(creator models.User, newBill dtos.Bill) (bill models.B
 	return
 }
 
-func (dao BillDao) Delete(id string, creator string) {
-	if err := database.DBConn.Where("id = ? and email = ?", id, creator).Delete(&models.Bill{}).Error; err != nil {
-		panic(err)
-	}
-}
-
 var DAO = &BillDao{}

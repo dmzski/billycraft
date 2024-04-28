@@ -80,6 +80,9 @@ func generateBillPDF(bill models.Bill) *os.File {
 	var FOLDER = BILLS_FOLDER
 
 	date := time.Now()
+	if bill.SentAt != nil && bill.Status != "DRAFT" {
+		date = *bill.SentAt
+	}
 	company := company.DAO.FindOneById(bill.CompanyID)
 	customization := billCustomization.DAO.FindFirstOrInitByTenant(bill.CompanyID)
 	var customer models.Customer
@@ -121,9 +124,9 @@ func generateBillPDF(bill models.Bill) *os.File {
 		ItTotalTitle:      TOTALTTC_TITLE,
 	}
 
-  footerData := map[string]interface{}{
-    "Footer": customization.Footer,
-  }
+	footerData := map[string]interface{}{
+		"Footer": customization.Footer,
+	}
 
 	tmpl, err := template.New("bill.html").Funcs(template.FuncMap{
 		"htmlSafe": func(html string) template.URL {

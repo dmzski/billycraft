@@ -2,7 +2,10 @@ package users
 
 import (
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,17 +15,24 @@ func InitRoutes(api fiber.Router) {
 	router.Get("/", findAll)
 	router.Get("/me", findMe)
 	router.Patch("/me", updateMe)
-	router.Patch("/me/leave-company", leaveCompany)
-	router.Patch("/me/join-company/:id", joinCompany)
+	router.Delete("/remove-user", removeUser)
 }
 
 func findMe(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	return c.JSON(user.ToDTO())
+	dto := new(responses.UserResponse)
+	dto.FromModel(user)
+	return c.JSON(dto)
 }
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
+	role := c.Locals("role").(enums.RoleEnum)
+
+	if user.CompanyID == nil || !enums.CheckRoleEqualsOrGreaterThan(role, enums.RoleEnumAdmin) {
+		return c.Status(fiber.StatusUnauthorized).SendString("You don't have access to this")
+	}
+
 	users := DAO.FindAllByCompanyId(*user.CompanyID)
 	return makeArrayResponse(c, users)
 }
@@ -39,31 +49,40 @@ func updateMe(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	user.FirstName = newUser.FirstName
 	user.LastName = newUser.LastName
-	return c.JSON(DAO.SaveUser(user).ToDTO())
+	DAO.SaveUser(user)
+	dto := new(responses.UserResponse)
+	dto.FromModel(user)
+
+	return c.JSON(user)
 }
 
-func leaveCompany(c *fiber.Ctx) error {
+func removeUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	return c.JSON(DAO.LeaveCompany(user).ToDTO())
-}
-
-func joinCompany(c *fiber.Ctx) error {
-	user := c.Locals("user").(models.User)
-	if user.Email == "test" {
-		if id := c.Params("id", ""); id != "" {
-			return c.SendString("bad id")
-		} else {
-			DAO.JoinCompany(user.Email, id)
-			return c.SendStatus(200)
-		}
+	role := c.Locals("role").(enums.RoleEnum)
+	request := requests.RemoveUserRequest{}
+	err := c.BodyParser(&request)
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+			Code:    fiber.ErrBadRequest.Code,
+			Message: "Can't parse request",
+		})
 	}
-	return c.SendStatus(fiber.StatusNotImplemented)
+	if user.CompanyID == nil || !enums.CheckRoleEqualsOrGreaterThan(role, enums.RoleEnumAdmin) {
+		return c.Status(fiber.StatusUnauthorized).SendString("You can't do this")
+	}
+	err = DAO.LeaveCompany(request.Email, *user.CompanyID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error occured during processing your request")
+	}
+
+	return c.Status(fiber.StatusNoContent).SendString("User removed from company")
 }
 
 func makeArrayResponse(c *fiber.Ctx, array []models.User) error {
-	res := make([]dtos.User, 0)
+	res := make([]responses.UserResponse, 0)
 	for _, x := range array {
-		newDto := x.ToDTO()
+		newDto := responses.UserResponse{}
+		newDto.FromModel(x)
 		res = append(res, newDto)
 	}
 

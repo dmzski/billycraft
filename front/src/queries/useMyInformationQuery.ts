@@ -1,5 +1,5 @@
 import { UserApi } from '@/api/UserApi'
-import User from '@/models/User'
+import { User } from '@/models/User'
 import { useDataLoader } from '@scaleway/use-dataloader'
 
 type DataLoaderOptions = Parameters<typeof useDataLoader<User>>[2]

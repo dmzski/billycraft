@@ -1,7 +1,9 @@
 package quotes
 
 import (
+	"back/internal/lib/auth"
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"encoding/json"
 	"fmt"
@@ -13,10 +15,9 @@ func InitRoutes(api fiber.Router) {
 	router := api.Group("/quotes")
 	router.Get("/", findAll)
 	router.Get("/:id", findById)
-	router.Post("/", create)
-	router.Post("/:id/bill", createBill)
-	router.Patch("/:id", update)
-	router.Delete("/:id", delete)
+	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
+	router.Post("/:id/bill", auth.RoleRequired(enums.RoleEnumEditor), createBill)
+	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
 }
 
 func findAll(c *fiber.Ctx) error {
@@ -63,15 +64,6 @@ func update(c *fiber.Ctx) error {
 	}
 }
 
-func delete(c *fiber.Ctx) error {
-	user := c.Locals("user").(models.User)
-	if id := c.Params("id", ""); id == "" {
-		return fiber.NewError(400, "No id provided")
-	} else {
-		DAO.Delete(id, user.Email)
-		return c.Status(204).SendString("Quote deleted")
-	}
-}
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newQuote := dtos.Quote{}

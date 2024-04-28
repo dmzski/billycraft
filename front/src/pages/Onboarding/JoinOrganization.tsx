@@ -1,61 +1,73 @@
-import { Button, Input, useToast } from '@coco-ui/core'
-import { SUPPORT_EMAIL } from '@/constants/global'
+import { Alert, Button, Loader, useToast } from '@coco-ui/core'
 import { useI18n } from '@/i18n'
-import { Controller, useForm } from 'react-hook-form'
-
-type JoinOrganizationFormValues = {
-  code: string
-}
+import { FormProvider, useForm } from 'react-hook-form'
+import { FormErrorAlert } from '@/components/FormErrorAlert'
+import { useAllMyInvitationsQuery } from '@/queries/useAllMyInvitationsQuery'
+import { sendErrorToSentry } from '@/utils/errors'
+import { InvitationApi } from '@/api/InvitationApi'
+import { useUser } from '@/providers/UserProvider'
 
 export const JoinOrganization = () => {
-  const { t } = useI18n()
+  const { scopedT, t } = useI18n()
+  const pageT = scopedT('onboarding.join')
+  const { data, isLoading } = useAllMyInvitationsQuery()
+  const { reload } = useUser()
+
   const toast = useToast()
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid, isSubmitting },
-  } = useForm<JoinOrganizationFormValues>({
-    mode: 'onChange',
-  })
+  const methods = useForm()
 
   const onSubmit = async () => {
-    toast.success(t('onboarding.join.success'))
+    try {
+      if (data && data.length > 0) {
+        await InvitationApi.accept({
+          companyId: data[0].companyId,
+        })
+        toast.success(pageT('success'))
+        await reload()
+      }
+    } catch (err) {
+      sendErrorToSentry(err)
+      methods.setError('root', { message: t('genericFormError') })
+    }
   }
 
-  return (
-    <>
-      <p className="text-center">
-        {t('underDevelopment')}&nbsp;
-        <a className="link link-info" href={`mailto:${SUPPORT_EMAIL}`}>
-          {t('contactSupport')}
-        </a>
-      </p>
-      <form className="blur-sm flex flex-col gap-4 items-center" onSubmit={handleSubmit(onSubmit)}>
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods
+
+  if (isLoading && !data) {
+    return (
+      <div className="flex justify-center items-center">
+        <Loader size="lg" />
+      </div>
+    )
+  }
+
+  if (!data) {
+    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+  }
+
+  return data.length === 0 ? (
+    <div className="flex flex-col gap-4 items-center">
+      <h2 className="text-3xl font-bold text-center">{t('onboarding.join.title')}</h2>
+      <p>{pageT('description')}</p>
+    </div>
+  ) : (
+    <FormProvider {...methods}>
+      <form className="flex flex-col gap-4 items-center" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-3xl font-bold text-center">{t('onboarding.join.title')}</h2>
-        <p>{t('onboarding.join.description')}</p>
-        <Controller
-          name="code"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, fieldState: { invalid } }) => (
-            <Input
-              disabled
-              label={t('onboarding.join.fields.code.label')}
-              placeholder="1AZ56BI67891"
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              ref={field.ref}
-              error={invalid}
-              required
-            />
-          )}
-        />
-        <Button variant="primary" type="submit" disabled={!isValid || !isSubmitting}>
-          {t('onboarding.join.submit')}
+        <p>
+          {pageT('youAreInvited', {
+            companyName: data[0].companyName,
+            roleName: t(`roles.${data[0].role}`),
+          })}
+        </p>
+        <FormErrorAlert />
+        <Button variant="primary" type="submit" disabled={isSubmitting}>
+          {pageT('submit')}
         </Button>
       </form>
-    </>
+    </FormProvider>
   )
 }
