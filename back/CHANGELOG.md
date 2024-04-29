@@ -1,5 +1,13 @@
 # back
 
+## 1.23.0
+
+### Minor Changes
+
+- a46e78d: feat: you can now invite, join and delete user in your organization
+- e94f549: feat: add roles on users
+- cf2e2a8: fix: column sizes, calculation and free str
+
 ## 1.22.0
 
 ### Minor Changes

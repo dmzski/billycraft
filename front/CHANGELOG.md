@@ -1,5 +1,13 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.36.0
+
+### Minor Changes
+
+- a46e78d: feat: you can now invite, join and delete user in your organization
+- 8a88a56: feat: add transition state on download pdf and create bill
+- e94f549: feat: add roles on users
+
 ## 2.35.0
 
 ### Minor Changes
