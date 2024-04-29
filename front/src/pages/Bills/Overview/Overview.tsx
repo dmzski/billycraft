@@ -22,6 +22,7 @@ import { Actions } from './Actions'
 import { PdfApi } from '@/api/PdfApi'
 import { calculatePriceTTC } from '@/utils/price'
 import { BillStatusEnum } from '@/models/Bill'
+import { useReducer } from 'react'
 
 export const Overview = () => {
   const { t, scopedT } = useI18n()
@@ -32,12 +33,14 @@ export const Overview = () => {
     enabled: !!bill?.customerId,
   })
   const formatCurrency = useFormatCurrency()
+  const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(state => !state, false)
 
   const pageT = scopedT('bills.details')
 
   const downloadPdf = async () => {
     try {
-      if (bill?.id) {
+      if (bill?.id && !isDownloadingPDF) {
+        toggleIsDownloadingPDF()
         const blob = await PdfApi.getBillPdf(bill.id)
         const link = document.createElement('a')
         link.download = bill.name
@@ -45,9 +48,11 @@ export const Overview = () => {
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
+        toggleIsDownloadingPDF()
       }
     } catch {
       toast.error(t('bills.form.pdfError'))
+      toggleIsDownloadingPDF()
     }
   }
 
@@ -155,7 +160,13 @@ export const Overview = () => {
       <hr />
       <section className="flex flex-col gap-5">
         <h2 className="text-2xl">{pageT('sections.content.title')}</h2>
-        <Button onClick={downloadPdf} variant="default" size="md" className="gap-1">
+        <Button
+          disabled={isDownloadingPDF}
+          onClick={downloadPdf}
+          variant="default"
+          size="md"
+          className="gap-1"
+        >
           <DocumentArrowDownIcon className="w-5" />
           {t('bills.form.downloadPdfButton')}
         </Button>

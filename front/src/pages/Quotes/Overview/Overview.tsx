@@ -25,6 +25,7 @@ import { PdfApi } from '@/api/PdfApi'
 import { QuoteApi } from '@/api/QuoteApi'
 import { calculatePriceTTC } from '@/utils/price'
 import { QuoteStatusEnum } from '@/models/Quote'
+import { useReducer } from 'react'
 
 export const Overview = () => {
   const { t, scopedT } = useI18n()
@@ -36,12 +37,15 @@ export const Overview = () => {
   })
   const { push } = useHistory()
   const formatCurrency = useFormatCurrency()
+  const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(state => !state, false)
+  const [isCreatingBill, toggleIsCreatingBill] = useReducer(state => !state, false)
 
   const pageT = scopedT('quotes.details')
 
   const downloadPdf = async () => {
     try {
-      if (quote?.id) {
+      if (quote?.id && !isDownloadingPDF) {
+        toggleIsDownloadingPDF()
         const blob = await PdfApi.getQuotePdf(quote.id)
         const link = document.createElement('a')
         link.download = quote.name
@@ -49,15 +53,18 @@ export const Overview = () => {
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
+        toggleIsDownloadingPDF()
       }
     } catch {
       toast.error(t('quotes.form.pdfError'))
+      toggleIsDownloadingPDF()
     }
   }
 
   const createBill = async () => {
-    if (quote) {
+    if (quote && !isCreatingBill) {
       try {
+        toggleIsCreatingBill()
         const data = await QuoteApi.createBill({ id: quote.id })
         toast.success(t('quotes.form.createBill'))
         if (data.id) {
@@ -67,6 +74,7 @@ export const Overview = () => {
         }
       } catch {
         toast.error(t('quotes.form.createBillError'))
+        toggleIsCreatingBill()
       }
     }
   }
@@ -181,13 +189,19 @@ export const Overview = () => {
             outline
             size="md"
             onClick={createBill}
-            disabled={!isQuoteMinimumAccepted(quote)}
+            disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
             className="gap-4"
           >
             <PlusIcon className="w-5" />
             {t('quotes.form.createBill')}
           </Button>
-          <Button onClick={downloadPdf} variant="default" size="md" className="gap-1">
+          <Button
+            disabled={isDownloadingPDF}
+            onClick={downloadPdf}
+            variant="default"
+            size="md"
+            className="gap-1"
+          >
             <DocumentArrowDownIcon className="w-5" />
             {t('quotes.form.downloadPdfButton')}
           </Button>
