@@ -36,6 +36,11 @@ type QuoteViewData struct {
 	ItTotalTitle       string
 	EtTotalTitle       string
 	VatTitle           string
+  FreeStr            string
+}
+
+func (v QuoteViewData) IsFree(price float64) bool {
+  return price == 0
 }
 
 func (v QuoteViewData) GetItPriceStr(price float64) string {
@@ -54,7 +59,7 @@ func (v QuoteViewData) GetEtPriceStr(price float64) string {
 func (v QuoteViewData) GetItLinePriceStr(price float64, quantity float64) string {
 	vat := v.Quote.Tva
 	if vat != nil {
-		return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, *vat)), v.Currency)
+		return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, *vat/100)), v.Currency)
 	}
 
 	return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, 0)), v.Currency)
@@ -122,6 +127,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		VatTitle:           VAT_TITLE,
 		EtTotalTitle:       TOTALHT_TITLE,
 		ItTotalTitle:       TOTALTTC_TITLE,
+    FreeStr: FREE_STR,
 	}
 
 	footerData := map[string]interface{}{

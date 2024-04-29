@@ -80,19 +80,19 @@
       text-align: center;
     }
     .main-table tr th:nth-child(1) {
-      width: 50%;
+      width: 47%;
     }
     .main-table tr th:nth-child(2) {
       width: 10%;
     }
     .main-table tr th:nth-child(3) {
-      width: 10%;
+      width: 14%;
     }
     .main-table tr th:nth-child(4) {
-      width: 12%;
+      width: 14%;
     }
     .main-table tr th:nth-child(5) {
-      width: 20%;
+      width: 15%;
     }
     {{else}}
     .main-table tr th {
@@ -100,13 +100,13 @@
       text-align: center;
     }
     .main-table tr th:nth-child(1) {
-      width: 63%;
+      width: 57%;
     }
     .main-table tr th:nth-child(2) {
       width: 10%;
     }
     .main-table tr th:nth-child(3) {
-      width: 10%;
+      width: 15%;
     }
     .main-table tr th:nth-child(4) {
       width: 17%;
@@ -121,6 +121,10 @@
 
     .main-table .row:nth-child(even) {
       background-color: rgb(240, 240, 240);
+    }
+
+    .main-table {
+      font-size: 0.9rem;
     }
 
     .total-table {
@@ -249,12 +253,30 @@
             >{{.Description}}</p>
             {{end}}
           </td>
-          <td class="text-right">{{.Quantity}}</td>
-          <td class="text-right">{{$.GetEtPriceStr .Price}}</td>
-          {{if $.HasVat}}
-          <td class="text-right">{{$.GetItPriceStr .Price}}</td>
+          {{if ne .Type "TEXT"}}
+            {{if $.IsFree .Price}}
+              <td></td>
+              <td></td>
+              {{if $.HasVat}}
+                <td></td>
+              {{end}}
+              <td class="text-right">{{$.FreeStr}}</td>
+            {{else}}
+              <td class="text-right">{{.Quantity}}</td>
+              <td class="text-right">{{$.GetEtPriceStr .Price}}</td>
+              {{if $.HasVat}}
+              <td class="text-right">{{$.GetItPriceStr .Price}}</td>
+              {{end}}
+              <td class="text-right">{{$.GetItLinePriceStr .Price .Quantity}}</td>
+            {{end}}
+          {{else}}
+            <td/>
+            <td/>
+            {{if $.HasVat}}
+              <td/>
+            {{end}}
+            <td/>
           {{end}}
-          <td class="text-right">{{$.GetItLinePriceStr .Price .Quantity}}</td>
         </tr>
         {{end}}
       </tbody>

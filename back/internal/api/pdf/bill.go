@@ -36,6 +36,10 @@ type BillViewData struct {
 	ItTotalTitle      string
 	EtTotalTitle      string
 	VatTitle          string
+  FreeStr          string
+}
+func (v BillViewData) IsFree(price float64) bool {
+  return price == 0
 }
 
 func (v BillViewData) GetItPriceStr(price float64) string {
@@ -54,7 +58,7 @@ func (v BillViewData) GetEtPriceStr(price float64) string {
 func (v BillViewData) GetItLinePriceStr(price float64, quantity float64) string {
 	vat := v.Bill.Tva
 	if vat != nil {
-		return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, *vat)), v.Currency)
+		return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, *vat/100)), v.Currency)
 	}
 
 	return fmt.Sprintf("%.2f %s", roundTwoDecimals(getLinePrice(price, quantity, 0)), v.Currency)
@@ -122,6 +126,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 		VatTitle:          VAT_TITLE,
 		EtTotalTitle:      TOTALHT_TITLE,
 		ItTotalTitle:      TOTALTTC_TITLE,
+    FreeStr: FREE_STR,
 	}
 
 	footerData := map[string]interface{}{
