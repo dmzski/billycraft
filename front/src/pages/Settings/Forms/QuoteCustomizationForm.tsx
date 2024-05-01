@@ -110,7 +110,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
         />
         <TextArea
           id="footer"
-          rows={5}
+          rows={6}
           label={t('settings.forms.quoteCustomization.footer.label')}
           className="w-full"
           placeholder={t('settings.forms.quoteCustomization.footer.placeholder')}
@@ -121,6 +121,8 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
               footer: e.target.value,
             })
           }
+          resize="none"
+          helper={t('settings.form.quoteCustomization.footer.placeholder')}
         />
         <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
           {t('settings.forms.quoteCustomization.submit')}

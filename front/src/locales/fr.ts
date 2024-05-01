@@ -162,8 +162,10 @@ export default {
 
   // Join
   'onboarding.join.title': 'Rejoindre une entreprise',
-  'onboarding.join.description': "Lorsque vous serez invitez dans une entreprise vous pourrez accepté la demande depuis cet écran",
-  'onboarding.join.youAreInvited': "Vous avez été invité à rejoindre l'entreprise {companyName} en tant que {roleName}",
+  'onboarding.join.description':
+    'Lorsque vous serez invitez dans une entreprise vous pourrez accepté la demande depuis cet écran',
+  'onboarding.join.youAreInvited':
+    "Vous avez été invité à rejoindre l'entreprise {companyName} en tant que {roleName}",
   'onboarding.join.submit': 'Rejoindre',
   'onboarding.join.success': "Vous avez rejoint l'entreprise",
 
@@ -535,6 +537,8 @@ export default {
   'settings.forms.billCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.billCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.billCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.billCustomization.footer.helper':
+    'Au dessus de 6 lignes le contenu de la page peut superposé le pied de page',
   'settings.forms.billCustomization.submit': 'Enregistrer la personnalisation',
   'settings.forms.billCustomization.submit.success': 'Personnalisation de la facture enregistrée',
 
@@ -567,6 +571,8 @@ export default {
   'settings.forms.quoteCustomization.mainColor.placeholder': 'Couleur en hexadecimale : #000000',
   'settings.forms.quoteCustomization.afterTable.placeholder': 'En dessous du tableau',
   'settings.forms.quoteCustomization.footer.placeholder': 'Pied de page',
+  'settings.forms.quoteCustomization.footer.helper':
+    'Au dessus de 6 lignes le contenu de la page peut superposé le pied de page',
   'settings.forms.quoteCustomization.submit': 'Enregistrer la personnalisation',
   'settings.forms.quoteCustomization.submit.success': 'Personnalisation du devis enregistrée',
 
@@ -629,16 +635,15 @@ export default {
   'products.list.filters.fields.supplier.label': 'Fournisseur',
   'products.list.filters.fields.name.label': 'Désignation',
   'products.list.headers.supplier': 'Fournisseur',
-  'products.list.headers.type': 'Type',
+  'products.list.headers.type': 'Type de produits',
   'products.list.headers.name': 'Désignation',
-  'products.list.headers.etPrice': 'Prix HT',
-  'products.list.headers.itPrice': 'Prix TTC',
-  'products.list.row.form.submit.success': 'Article enregistré',
-  'products.list.row.form.submit.error':
-    "Une erreur est survenue lors de l'enregistrement de l'article",
-  'products.list.row.delete.submit.success': 'Article supprimé',
-  'products.list.row.delete.submit.error':
-    "Une erreur est survenue lors de la suppression de l'article",
+  'products.list.headers.etPrice': 'Prix HT (excl. TVA)',
+  'products.list.headers.itPrice': 'Prix TTC (incl. TVA)',
+  'products.list.row.form.submit.success': 'Article enregistré avec succès',
+  'products.list.row.form.submit.error': "Erreur lors de l'enregistrement de l'article",
+
+  'products.list.row.delete.submit.success': 'Article supprimé avec succès',
+  'products.list.row.delete.submit.error': "Erreur lors de la suppression de l'article",
 
   'products.components.formContent.fields.type.label': 'Type',
   'products.components.formContent.fields.name.label': 'Désignation',
@@ -646,58 +651,69 @@ export default {
   'products.components.formContent.fields.price.label': 'Prix HT',
   'products.components.formContent.fields.itPrice.label': 'Prix TTC',
   'products.components.formContent.fields.supplierId.label': 'Fournisseur',
+
   'products.modals.add.title': 'Ajouter un article',
-  'products.modals.add.submit': 'Ajouter',
-  'products.modals.add.submit.success': 'Article ajouté',
+  'products.modals.add.submit': 'Enregistrer',
+  'products.modals.add.submit.success': 'Article ajouté avec succès',
   'products.modals.edit.title': 'Modifier un article',
-  'products.modals.edit.submit': 'Modifier',
-  'products.modals.edit.submit.success': 'Article modifié',
+  'products.modals.edit.submit': 'Enregistrer les modifications',
+  'products.modals.edit.submit.success': 'Article modifié avec succès',
+
   'products.modals.delete.title': 'Supprimer un article',
-  'products.modals.delete.description': 'Êtes-vous sûr de vouloir supprimer cet article ?',
+  'products.modals.delete.description': 'Voulez-vous vraiment supprimer cet article ?',
   'products.modals.delete.submit': 'Supprimer',
-  'products.modals.delete.submit.success': 'Article supprimé',
+  'products.modals.delete.submit.success': 'Article supprimé avec succès',
 
   // Settings > Users
-  'settings.users.title': 'Utilisateurs et Invitations',
+  'settings.users.title': 'Utilisateurs et invitations',
   'settings.users.tabs.users': 'Utilisateurs',
   'settings.users.tabs.invitations': 'Invitations',
 
   // Settings > Users > Users
   'settings.users.users.title': 'Utilisateurs',
-  'settings.users.users.description': "Gérer les utilisateurs ayant accès à votre entreprise",
-  'settings.users.users.list.headers.email': "Email",
-  'settings.users.users.list.headers.name': "Nom complet",
-  'settings.users.users.list.headers.role': "Role",
-  'settings.users.users.list.emptyText': "Aucun utilisateur",
+  'settings.users.users.description': 'Gérer les utilisateurs ayant accès à votre entreprise',
+  'settings.users.users.list.headers.email': 'Email',
+  'settings.users.users.list.headers.name': 'Nom complet',
+  'settings.users.users.list.headers.role': 'Rôle',
+  'settings.users.users.list.emptyText': 'Aucun utilisateur',
 
   // Settings > Users > Users > Modals > Remove
-  'settings.users.users.modals.remove.title': "Supprimer un utilisateur",
-  'settings.users.users.modals.remove.warning': "Attention ! En supprimant un utilisateur il n'aura plus accès aux données de l'entreprise vous devrez l'inviter à nouveau pour lui redonner accès",
-  'settings.users.users.modals.remove.submit': "Supprimer",
-  'settings.users.users.modals.remove.submit.success': "Utilisateur supprimé avec succès",
+  'settings.users.users.modals.remove.title': 'Supprimer un utilisateur',
+  'settings.users.users.modals.remove.warning':
+    "Attention ! En supprimant un utilisateur, il ne pourra plus accéder aux données de votre entreprise. Vous devrez l'inviter à nouveau pour lui redonner accès.",
+  'settings.users.users.modals.remove.submit': 'Supprimer',
+  'settings.users.users.modals.remove.submit.success': 'Utilisateur supprimé avec succès',
 
   // Settings > Users > Invitations
   'settings.users.invitations.title': 'Invitations',
   'settings.users.invitations.description': 'Gérer les invitations pour rejoindre votre entreprise',
   'settings.users.invitations.inviteButton': 'Inviter un utilisateur',
   'settings.users.invitations.list.headers.email': 'Email',
-  'settings.users.invitations.list.headers.role': 'Role',
-  'settings.users.invitations.list.headers.status': 'Status',
-  'settings.users.invitations.list.headers.createdAt': 'Créée le',
+  'settings.users.invitations.list.headers.role': 'Rôle',
+  'settings.users.invitations.list.headers.status': 'Statut',
+  'settings.users.invitations.list.headers.createdAt': 'Créé le',
   'settings.users.invitations.list.emptyText': 'Aucune invitation en attente',
 
   // Settings > Users > Invitations > Modals > Invite
   'settings.users.invitations.modals.invite.title': 'Inviter un utilisateur',
-  'settings.users.invitations.modals.invite.description': "Entrez l'email de l'utilisateur ainsi que le rôle désiré",
+  'settings.users.invitations.modals.invite.description':
+    "Entrez l'email de l'utilisateur ainsi que le rôle désiré",
   'settings.users.invitations.modals.invite.fields.email.label': 'Email',
-  'settings.users.invitations.modals.invite.fields.email.placeholder': 'test@exemple.com',
-  'settings.users.invitations.modals.invite.fields.role.label': 'Role',
+  'settings.users.invitations.modals.invite.fields.email.placeholder': 'test@example.com',
+  'settings.users.invitations.modals.invite.fields.role.label': 'Rôle',
   'settings.users.invitations.modals.invite.submit': 'Inviter',
   'settings.users.invitations.modals.invite.submit.success': 'Invitation envoyée avec succès',
 
+  // Settings > Users > Invitations > Modals > Cancel
+  'settings.users.invitations.modals.cancel.title': "Annuler l'invitation",
+  'settings.users.invitations.modals.cancel.description':
+    "Une fois l'invitation annulée, l'utilisateur ne pourra plus rejoindre votre entreprise",
+  'settings.users.invitations.modals.cancel.submit': "Annuler l'invitation",
+  'settings.users.invitations.modals.cancel.submit.success': 'Invitation annulée avec succès',
   // Settings > Users > Invitations > Modals > DeleteInvite
   'settings.users.invitations.modals.delete.title': 'Annuler une invitation',
-  'settings.users.invitations.modals.delete.description': "Une fois l'invitation annulé l'utilisateur ne pourra plus rejoindre votre entreprise",
+  'settings.users.invitations.modals.delete.description':
+    "Une fois l'invitation annulé l'utilisateur ne pourra plus rejoindre votre entreprise",
   'settings.users.invitations.modals.delete.submit': "Annuler l'invitation",
   'settings.users.invitations.modals.delete.submit.success': 'Invitation annulée avec succès',
 

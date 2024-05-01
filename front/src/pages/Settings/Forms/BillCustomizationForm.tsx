@@ -110,7 +110,7 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
         <TextArea
           label={t('settings.forms.billCustomization.footer.label')}
           id="footer"
-          rows={5}
+          rows={6}
           className="w-full"
           placeholder={t('settings.forms.billCustomization.footer.placeholder')}
           value={newBillCustomization.footer}
@@ -120,6 +120,8 @@ const BillCustomizationForm = ({ billCustomization }: BillCustomizationFormProps
               footer: e.target.value,
             })
           }
+          resize="none"
+          helper={t('settings.forms.billCustomization.footer.helper')}
         />
         <Button type="submit" size="md" block variant="success" onClick={onSubmit}>
           {t('settings.forms.billCustomization.submit')}
