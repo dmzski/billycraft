@@ -1,5 +1,11 @@
 # back
 
+## 1.24.0
+
+### Minor Changes
+
+- 737f0c6: fix: footer height
+
 ## 1.23.0
 
 ### Minor Changes

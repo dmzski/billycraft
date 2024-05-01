@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.31.0
+
+### Minor Changes
+
+- 737f0c6: feat: add resize to text area
+
 ## 1.30.0
 
 ### Minor Changes
