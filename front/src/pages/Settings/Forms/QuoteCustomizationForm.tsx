@@ -122,7 +122,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
             })
           }
           resize="none"
-          helper={t('settings.form.quoteCustomization.footer.placeholder')}
+          helper={t('settings.forms.quoteCustomization.footer.helper')}
         />
         <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
           {t('settings.forms.quoteCustomization.submit')}
