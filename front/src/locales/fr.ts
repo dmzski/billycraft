@@ -60,10 +60,12 @@ export default {
   etTotal: 'Total HT',
   itTotal: 'Total TTC',
   vat: 'TVA',
+  add: 'Ajouter',
   customer: 'Client',
   organization: 'Entreprise',
   title: 'Titre',
   bill: 'Facture',
+  cancel: 'Annuler',
   quote: 'Devis',
   accounting: 'Comptabilité',
   select: 'Sélectionner',
@@ -629,16 +631,18 @@ export default {
 
   'products.list.title': 'Articles',
   'products.list.add': 'Ajouter un article',
+  'products.list.updateStocks': 'Mettre à jour les stocks',
   'products.list.description':
     'Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les ajouter plus rapidement lors de la création de vos factures et devis.',
   'products.list.filters.fields.type.label': 'Type',
   'products.list.filters.fields.supplier.label': 'Fournisseur',
   'products.list.filters.fields.name.label': 'Désignation',
   'products.list.headers.supplier': 'Fournisseur',
-  'products.list.headers.type': 'Type de produits',
+  'products.list.headers.type': 'Type',
   'products.list.headers.name': 'Désignation',
-  'products.list.headers.etPrice': 'Prix HT (excl. TVA)',
-  'products.list.headers.itPrice': 'Prix TTC (incl. TVA)',
+  'products.list.headers.etPrice': 'Prix HT',
+  'products.list.headers.itPrice': 'Prix TTC',
+  'products.list.headers.remainingStock': 'Stock restant',
   'products.list.row.form.submit.success': 'Article enregistré avec succès',
   'products.list.row.form.submit.error': "Erreur lors de l'enregistrement de l'article",
 
@@ -647,7 +651,9 @@ export default {
 
   'products.components.formContent.fields.type.label': 'Type',
   'products.components.formContent.fields.name.label': 'Désignation',
-  'products.components.formContent.fields.description.placeholder': 'Description optionnelle',
+  'products.components.formContent.fields.description.placeholder': 'Description (optionnel)',
+  'products.components.formContent.fields.stock.label': 'Stock',
+  'products.components.formContent.fields.code.label': 'Stock',
   'products.components.formContent.fields.price.label': 'Prix HT',
   'products.components.formContent.fields.itPrice.label': 'Prix TTC',
   'products.components.formContent.fields.supplierId.label': 'Fournisseur',
@@ -721,4 +727,17 @@ export default {
   'invitations.status.PENDING': 'En attente',
   'invitations.status.ACCEPTED': 'Acceptée',
   'invitations.status.REFUSED': 'Refusée',
+
+
+  // Products > Modals > Update stocks
+  'products.modals.updateStocks.title': 'Mettre à jour les stocks',
+  'products.modals.updateStocks.description': 'Entrez la liste de tous les mouvements produits',
+  'products.modals.updateStocks.fields.mouvements': 'Mouvements',
+  'products.modals.updateStocks.fields.type.in': 'Entrée',
+  'products.modals.updateStocks.fields.type.out': 'Sortie',
+  'products.modals.updateStocks.fields.code.label': 'Code',
+  'products.modals.updateStocks.fields.code.scan': 'Scanner',
+  'products.modals.updateStocks.fields.code.placeholder': 'Entrez le code produit',
+  'products.modals.updateStocks.add': 'Ajouter un mouvement',
+  'products.modals.updateStocks.submit': 'Mettre à jour',
 } as const

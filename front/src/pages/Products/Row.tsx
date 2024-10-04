@@ -23,7 +23,7 @@ const ProductTableLine = ({ product, reloadProducts, supplier }: ProductTableLin
       <div className="md:col-span-1">
         <ProductTypeLabel short type={product.type} />
       </div>
-      <div className="md:col-span-6 flex flex-col gap-2">
+      <div className="md:col-span-5 flex flex-col gap-2">
         <p className="truncate">{product.name}</p>
         {product.description ? (
           <p className="pl-4 text-sm whitespace-pre-wrap">{product.description}</p>
@@ -31,6 +31,7 @@ const ProductTableLine = ({ product, reloadProducts, supplier }: ProductTableLin
       </div>
       <div>{formatCurrency(product.price)}</div>
       <div>{formatCurrency(calculatePriceTTC(product.price, supplier?.vat ?? 0))}</div>
+      <div>{product.stock ?? 0}</div>
       <div className="flex justify-end">
         <div className="flex gap-2 justify-end">
           <EditProductModal

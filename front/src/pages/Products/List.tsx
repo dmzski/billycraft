@@ -14,9 +14,10 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
       <div className="p-4 gap-2 grid md:grid-cols-12 bg-base-200 rounded-t">
         <div className="md:col-span-2">{t('products.list.headers.supplier')}</div>
         <div className="md:col-span-1">{t('products.list.headers.type')}</div>
-        <div className="md:col-span-6">{t('products.list.headers.name')}</div>
+        <div className="md:col-span-5">{t('products.list.headers.name')}</div>
         <div className="md:col-span-1">{t('products.list.headers.etPrice')}</div>
         <div className="md:col-span-1">{t('products.list.headers.itPrice')}</div>
+        <div className="md:col-span-1">{t('products.list.headers.remainingStock')}</div>
         <div className="md:col-span-1">&nbsp;</div>
       </div>
       <div>

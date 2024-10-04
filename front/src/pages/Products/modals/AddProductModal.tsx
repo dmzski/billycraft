@@ -24,6 +24,8 @@ const defaultValues: ProductFormValues = {
   description: '',
   supplierId: null,
   itPrice: 0,
+  code: null,
+  initialStock: null
 }
 
 const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFormProps) => {
