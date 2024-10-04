@@ -31,7 +31,7 @@ const ProductTableLine = ({ product, reloadProducts, supplier }: ProductTableLin
       </div>
       <div>{formatCurrency(product.price)}</div>
       <div>{formatCurrency(calculatePriceTTC(product.price, supplier?.vat ?? 0))}</div>
-      <div>{product.stock ?? 0}</div>
+      <div>{product.stock ?? "-"}</div>
       <div className="flex justify-end">
         <div className="flex gap-2 justify-end">
           <EditProductModal

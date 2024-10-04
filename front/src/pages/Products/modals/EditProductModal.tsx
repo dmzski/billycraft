@@ -46,7 +46,7 @@ const EditProductForm = ({
 					? suppliers?.find(({ id }) => id === product.supplierId)?.vat ?? 0
 					: 0,
 			),
-			initialStock: product.stock ?? null,
+			stock: product.stock ?? null,
 			code: product.code ?? null,
 		}),
 		[product, suppliers],
@@ -59,7 +59,11 @@ const EditProductForm = ({
 
 	const onSubmit = async (values: ProductFormValues) => {
 		try {
-			await ProductApi.update({ id: product.id, ...values });
+			if (values.type !== "ARTICLE") {
+				values.stock = null;
+				values.code = null;
+			}
+			await ProductApi.update({...values, id: product.id });
 			toast.success(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();
