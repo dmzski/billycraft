@@ -77,19 +77,18 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 
 	const onSubmit = async (values: UpdateStockFormValues) => {
 		console.log(values);
-    try {
-
-      await ProductApi.updateStocks({
-        in: values.inMovements,
-        out: values.outMovements
-      })
-      close();
-      toast.success(pageT("submit.success"));
-      onSubmitSuccess();
-    } catch (error) {
-      sendErrorToSentry(error)
-      toast.error(t('genericFormError'))
-    }
+		try {
+			await ProductApi.updateStocks({
+				in: values.inMovements,
+				out: values.outMovements,
+			});
+			close();
+			toast.success(pageT("submit.success"));
+			onSubmitSuccess();
+		} catch (error) {
+			sendErrorToSentry(error);
+			toast.error(t("genericFormError"));
+		}
 	};
 
 	const productOptions = useMemo(
@@ -115,14 +114,20 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 				.find(({ code }) => (code ? codes.includes(code) : false));
 			if (productFound) {
 				direction === "in"
-					? inMovementsFieldArray.append({
-							productId: productFound.id,
-							quantity: 1,
-						})
-					: outMovementsFieldArray.append({
-							productId: productFound.id,
-							quantity: 1,
-						});
+					? inMovementsFieldArray.append(
+							{
+								productId: productFound.id,
+								quantity: 1,
+							},
+							{ shouldFocus: false },
+						)
+					: outMovementsFieldArray.append(
+							{
+								productId: productFound.id,
+								quantity: 1,
+							},
+							{ shouldFocus: false },
+						);
 			} else {
 				toast.error(pageT("errors.noMatchingProduct"));
 			}
