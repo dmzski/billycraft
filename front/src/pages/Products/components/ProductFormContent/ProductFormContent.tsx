@@ -1,7 +1,14 @@
 import { useController, useFormContext } from "react-hook-form";
 import { ProductFormValues } from "./types";
-import { Button, Input, Select, TextArea, useToast } from "@coco-ui/core";
-import { ChangeEventHandler, ComponentProps, useMemo, useRef } from "react";
+import {
+	Button,
+	Input,
+	Modal,
+	Select,
+	TextArea,
+	useToast,
+} from "@coco-ui/core";
+import { ComponentProps, useMemo } from "react";
 import { LINE_TYPE } from "@/constants/line";
 import { useI18n } from "@/i18n";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
@@ -9,17 +16,19 @@ import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
 import Supplier from "@/models/Supplier";
 import { LineTypeEnum } from "@/models/LineTypeEnum";
 import { QrCodeIcon } from "@heroicons/react/24/solid";
+import { sendErrorToSentry } from "@/utils/errors";
+import { Scanner } from "@yudiel/react-qr-scanner";
+import { SCANNER_COMPONENTS, SCANNER_FORMATS } from "../../constants";
 
 type ProductFormContentProps = {
 	suppliers: Supplier[];
 };
 
 export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
+	const toast = useToast();
 	const { scopedT } = useI18n();
 	const pageT = scopedT("products.components.formContent");
 	const { control } = useFormContext<ProductFormValues>();
-  const fileScanRef = useRef<HTMLInputElement>(null)
-  const toast = useToast()
 
 	const { field: nameField, fieldState: nameFieldState } = useController({
 		control,
@@ -51,7 +60,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 	const { field: stockField, fieldState: stockFieldState } = useController({
 		control,
 		name: "stock",
-    shouldUnregister: true
+		shouldUnregister: true,
 	});
 	const { field: codeField, fieldState: codeFieldState } = useController({
 		control,
@@ -59,7 +68,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 		rules: {
 			minLength: 3,
 		},
-    shouldUnregister: true
+		shouldUnregister: true,
 	});
 	const { field: supplierIdField, fieldState: supplierIdFieldState } =
 		useController({
@@ -88,22 +97,6 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 	const selectedSupplier = supplierIdField.value
 		? suppliers.find(({ id }) => id === supplierIdField.value)
 		: undefined;
-
-  const selectFileScan = () => {
-    fileScanRef.current?.click()
-  }
-
-  const scanFileUploaded: ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log(e)
-    e.preventDefault()
-    try {
-      if (e.target?.files?.[0]) {
-        console.log(e.target.files[0])
-      }
-    } catch {
-      toast.error(pageT('fields.code.errors.scan'))
-    }
-  }
 
 	return (
 		<div className="flex flex-col gap-5">
@@ -143,21 +136,52 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 						type="number"
 						step={0.01}
 					/>
-          <div className="flex flex-row gap-2 items-end">
-            <Input
-               className="flex-grow"
-              name={codeField.name}
-              onChange={codeField.onChange}
-              onBlur={codeField.onBlur}
-              ref={codeField.ref}
-              label={pageT("fields.code.label")}
-              error={codeFieldState.invalid}
-              autoComplete="off"
-              value={codeField.value ?? ""}
-            />
-            <Button variant="primary" onClick={selectFileScan}><QrCodeIcon className="w-5" /></Button>
-            <input onChange={scanFileUploaded} ref={fileScanRef} id="file-scan" type="file" name="fileScan" className="hidden" />
-          </div>
+					<div className="flex flex-row gap-2 items-end">
+						<Input
+							className="flex-grow"
+							name={codeField.name}
+							onChange={codeField.onChange}
+							onBlur={codeField.onBlur}
+							ref={codeField.ref}
+							label={pageT("fields.code.label")}
+							error={codeFieldState.invalid}
+							autoComplete="off"
+							value={codeField.value ?? ""}
+						/>
+						<Modal
+							disclosure={
+								<Button type="button" variant="ghost" square>
+									<QrCodeIcon className="w-5" />
+								</Button>
+							}
+							hideOnClickOutside
+						>
+							{({ close }) => (
+                <div className="pt-6">
+                  <Scanner
+                    onScan={(result) => {
+                      if (result[0]) {
+                        codeField.onChange(result[0].rawValue);
+                      } else {
+                        toast.error(pageT("fields.code.errors.scan"));
+                      }
+                      close();
+                    }}
+                    classNames={{
+                      container: "scanner",
+                    }}
+                    formats={SCANNER_FORMATS}
+                    components={SCANNER_COMPONENTS}
+                    scanDelay={500}
+                    allowMultiple
+                    onError={(err) => {
+                      sendErrorToSentry(err);
+                    }}
+                  />
+                </div>
+							)}
+						</Modal>
+					</div>
 				</div>
 			) : null}
 			<div className="flex flex-col gap-2">

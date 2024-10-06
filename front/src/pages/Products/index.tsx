@@ -36,7 +36,7 @@ const ProductsPage = () => {
 					<p className="text-sm md:col-span-8">
 						{t("products.list.description")}
 					</p>
-					<div className="lg:col-span-4 flex lg:justify-end gap-2">
+					<div className="lg:col-span-4 flex flex-col lg:flex-row lg:justify-end gap-2">
 						<UpdateStockModal
 							onSubmitSuccess={reload}
 							disclosure={
