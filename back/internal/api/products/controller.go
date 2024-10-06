@@ -75,16 +75,16 @@ func create(c *fiber.Ctx) error {
 
 func updateStocks(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-  movements := requests.UpdateStockRequest{}
+	movements := requests.UpdateStockRequest{}
 	if err := c.BodyParser(&movements); err != nil {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
 
-  err := DAO.UpdateStocks(*user.CompanyID, movements)
+	err := DAO.UpdateStocks(*user.CompanyID, movements)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError,"Can't update stocks in database")
+		return fiber.NewError(fiber.StatusInternalServerError, "Can't update stocks in database")
 	}
 
-  return c.Status(fiber.StatusOK).SendString("Stock updated")
+	return c.Status(fiber.StatusOK).SendString("Stock updated")
 
 }

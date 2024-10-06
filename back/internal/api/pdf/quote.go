@@ -36,11 +36,11 @@ type QuoteViewData struct {
 	ItTotalTitle       string
 	EtTotalTitle       string
 	VatTitle           string
-  FreeStr            string
+	FreeStr            string
 }
 
 func (v QuoteViewData) IsFree(price float64) bool {
-  return price == 0
+	return price == 0
 }
 
 func (v QuoteViewData) GetItPriceStr(price float64) string {
@@ -127,7 +127,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 		VatTitle:           VAT_TITLE,
 		EtTotalTitle:       TOTALHT_TITLE,
 		ItTotalTitle:       TOTALTTC_TITLE,
-    FreeStr: FREE_STR,
+		FreeStr:            FREE_STR,
 	}
 
 	footerData := map[string]interface{}{

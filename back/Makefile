@@ -15,3 +15,6 @@ logs:
 
 deploy-docker:
 	docker build -f ${BACK_DOCKERFILES}/Dockerfile -t ${REGISTRY}/api:latest ../ && docker push ${REGISTRY}/api:latest
+
+format:
+	gofmt -w .

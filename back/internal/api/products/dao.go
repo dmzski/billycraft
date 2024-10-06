@@ -3,8 +3,8 @@ package products
 import (
 	"back/database"
 	"back/internal/lib/dtos"
-	"back/internal/lib/requests"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -59,22 +59,22 @@ func (dao Repository) Delete(id string, tenant string) {
 
 func (dao Repository) UpdateStocks(tenant string, changes requests.UpdateStockRequest) (err error) {
 	tx := database.DBConn.Begin()
-  for _, x := range changes.InMovements {
-    tx.Exec("UPDATE com_product SET stock = stock + ? WHERE company_id = ? AND id = ?", x.Quantity, tenant, x.ProductID)
-    if tx.Error != nil {
-      err = tx.Error
-      tx.Rollback()
-      return err
-    }
-  }
-  for _, x := range changes.OutMovements {
-    tx.Exec("UPDATE com_product SET stock = stock - ? WHERE company_id = ? AND id = ?", x.Quantity, tenant, x.ProductID)
-    if tx.Error != nil {
-      err = tx.Error
-      tx.Rollback()
-      return err
-    }
-  }
+	for _, x := range changes.InMovements {
+		tx.Exec("UPDATE com_product SET stock = stock + ? WHERE company_id = ? AND id = ?", x.Quantity, tenant, x.ProductID)
+		if tx.Error != nil {
+			err = tx.Error
+			tx.Rollback()
+			return err
+		}
+	}
+	for _, x := range changes.OutMovements {
+		tx.Exec("UPDATE com_product SET stock = stock - ? WHERE company_id = ? AND id = ?", x.Quantity, tenant, x.ProductID)
+		if tx.Error != nil {
+			err = tx.Error
+			tx.Rollback()
+			return err
+		}
+	}
 
 	tx.Commit()
 	return nil
