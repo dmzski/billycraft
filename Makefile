@@ -24,6 +24,12 @@ clean:
 	docker compose down -v
 
 #
+# Format
+#
+format-back-front:
+	cd ./back && gofmt -w . && cd ../front && pnpm run format
+
+#
 # Back
 #
 back-dev:
