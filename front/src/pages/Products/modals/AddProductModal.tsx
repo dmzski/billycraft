@@ -15,7 +15,9 @@ type AddProductModalProps = {
   initialValues?: ProductFormValues
 }
 
-type AddProductFormProps = Omit<AddProductModalProps, 'disclosure'> & { close: () => void }
+type AddProductFormProps = Omit<AddProductModalProps, 'disclosure'> & {
+  close: () => void
+}
 
 const defaultValues: ProductFormValues = {
   type: LineTypeEnum.ARTICLE,
@@ -24,6 +26,8 @@ const defaultValues: ProductFormValues = {
   description: '',
   supplierId: null,
   itPrice: 0,
+  code: null,
+  stock: null,
 }
 
 const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFormProps) => {
@@ -40,6 +44,10 @@ const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFor
 
   const onSubmit = async (values: ProductFormValues) => {
     try {
+      if (values.type !== 'ARTICLE') {
+        values.stock = null
+        values.code = null
+      }
       const res = await ProductApi.create(values)
       toast.success(pageT('submit.success'))
       await onSubmitSuccess(res.id)

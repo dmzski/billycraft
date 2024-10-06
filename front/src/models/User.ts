@@ -1,4 +1,4 @@
-import { RoleName } from "./dtos/Role"
+import { RoleName } from './dtos/Role'
 
 export type User = {
   email: string

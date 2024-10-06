@@ -5,7 +5,7 @@ pub struct Config {
     pub jwt_expires_in: String,
     pub jwt_max_age: i32,
     pub listen_addr: String,
-    pub domain: String
+    pub domain: String,
 }
 
 impl Config {
@@ -23,7 +23,7 @@ impl Config {
             jwt_expires_in,
             jwt_max_age: jwt_max_age.parse::<i32>().unwrap(),
             listen_addr,
-            domain
+            domain,
         }
     }
 }

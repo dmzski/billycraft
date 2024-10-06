@@ -8,6 +8,8 @@ interface Product {
   price: number
   companyId: string
   createdBy: string
+  stock?: number
+  code?: string
   supplierId?: string
 }
 

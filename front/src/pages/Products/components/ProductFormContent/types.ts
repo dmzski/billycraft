@@ -7,4 +7,6 @@ export type ProductFormValues = {
   price: number | null
   itPrice: number
   supplierId: string | null
+  stock: number | null
+  code: string | null
 }

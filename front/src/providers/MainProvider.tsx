@@ -11,7 +11,7 @@ type MainProviderProps = {
   children: ReactNode
 }
 const MainProvider = ({ children }: MainProviderProps) => (
-  <ThemeProvider storageKey='cocoerp-theme' defaultTheme='system'>
+  <ThemeProvider storageKey="cocoerp-theme" defaultTheme="system">
     <I18nProvider locale="fr">
       <DataLoaderProvider
         onError={err => {

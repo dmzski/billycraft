@@ -68,7 +68,7 @@ export const MainSwitch = () => {
 
   if (!user || (user.companyId && !organization)) {
     return (
-      <div className="flex justify-center items-center h-screen max-w-screen">
+      <div className="flex justify-center items-center h-screen w-screen">
         <div className="w-1/2">
           <PageLoader />
         </div>

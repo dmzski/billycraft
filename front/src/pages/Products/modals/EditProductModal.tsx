@@ -15,7 +15,9 @@ type EditProductModalProps = {
   disclosure: ComponentProps<typeof Modal>['disclosure']
 }
 
-type EditProductFormProps = Omit<EditProductModalProps, 'disclosure'> & { close: () => void }
+type EditProductFormProps = Omit<EditProductModalProps, 'disclosure'> & {
+  close: () => void
+}
 
 const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormProps) => {
   const { scopedT, t } = useI18n()
@@ -35,6 +37,8 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
         product.price,
         product.supplierId ? suppliers?.find(({ id }) => id === product.supplierId)?.vat ?? 0 : 0,
       ),
+      stock: product.stock ?? null,
+      code: product.code ?? null,
     }),
     [product, suppliers],
   )
@@ -46,7 +50,11 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
 
   const onSubmit = async (values: ProductFormValues) => {
     try {
-      await ProductApi.update({ id: product.id, ...values })
+      if (values.type !== 'ARTICLE') {
+        values.stock = null
+        values.code = null
+      }
+      await ProductApi.update({ ...values, id: product.id })
       toast.success(pageT('submit.success'))
       await onSubmitSuccess()
       close()

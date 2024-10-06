@@ -12,6 +12,7 @@
     "@scaleway/use-dataloader": "5.0.0",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
+    "@yudiel/react-qr-scanner": "^2.0.8",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "nanoid": "^3.3.7",

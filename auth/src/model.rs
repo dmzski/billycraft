@@ -20,9 +20,8 @@ pub struct TokenClaims {
     pub sub: String,
     pub iat: usize,
     pub exp: usize,
-    pub email: String
+    pub email: String,
 }
-
 
 #[derive(Debug, Serialize)]
 pub struct AppError {

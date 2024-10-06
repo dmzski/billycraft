@@ -7,11 +7,16 @@ import { Button } from '@coco-ui/core'
 import { Filters } from './Filters'
 import { useMemo, useState } from 'react'
 import { ProductFilters, filterProducts } from '@/utils/products'
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { ArrowsRightLeftIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { UpdateStockModal } from './modals/UpdateStockModal'
 
 const ProductsPage = () => {
   const { t } = useI18n()
-  const [filters, setFilters] = useState<ProductFilters>({ type: '', name: '', supplierId: '' })
+  const [filters, setFilters] = useState<ProductFilters>({
+    type: '',
+    name: '',
+    supplierId: '',
+  })
   const { data, isLoading, reload } = useAllProductsQuery()
 
   const enhancedData = useMemo(
@@ -23,14 +28,25 @@ const ProductsPage = () => {
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-5">
         <h1 className="text-3xl">{t('products.list.title')}</h1>
-        <div className="grid md:grid-cols-12">
-          <p className="text-sm md:col-span-10">{t('products.list.description')}</p>
-          <div className="md:col-span-2 flex justify-end">
+        <div className="grid lg:grid-cols-12 gap-2">
+          <p className="text-sm md:col-span-8">{t('products.list.description')}</p>
+          <div className="lg:col-span-4 flex flex-col lg:flex-row lg:justify-end gap-2">
+            <UpdateStockModal
+              onSubmitSuccess={reload}
+              disclosure={
+                <Button outline variant="default" className="gap-2">
+                  <ArrowsRightLeftIcon className="w-5" />
+                  {t('products.list.updateStocks')}
+                </Button>
+              }
+            />
             <AddProductModal
-              disclosure={<Button variant="primary" className='gap-2'>
-              <PlusIcon className="w-5" />
-              {t('products.list.add')}
-              </Button>}
+              disclosure={
+                <Button variant="primary" className="gap-2">
+                  <PlusIcon className="w-5" />
+                  {t('products.list.add')}
+                </Button>
+              }
               onSubmitSuccess={reload}
             />
           </div>

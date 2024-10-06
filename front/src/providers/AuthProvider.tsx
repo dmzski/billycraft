@@ -36,7 +36,8 @@ const AuthContext = createContext<AuthContextType>({
   refreshSession: () => Promise.resolve(),
 })
 
-const API_URL = import.meta.env.VITE_AUTH_API_URL ?? ''
+const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL ?? ''
+const API_URL = import.meta.env.VITE_API_URL ?? ''
 const LOCAL_STORAGE_KEY = 'coco_at'
 const { fetch: originalFetch } = window
 
@@ -44,11 +45,26 @@ const addInterceptFetch = (token: string) => {
   window.fetch = async (...args: Parameters<typeof originalFetch>) => {
     const [resource, config = {}] = args
 
+    const getShouldPlaceAuthorization = () => {
+      if (typeof args[0] === 'string') {
+        return args[0].startsWith(API_URL) || args[0].startsWith(API_URL)
+      }
+      if (typeof args[0] === 'object' && 'url' in args[0]) {
+        return args[0].url.startsWith(API_URL) || args[0].url.startsWith(AUTH_API_URL)
+      }
+
+      return false
+    }
+
     const response = await originalFetch(resource, {
       ...config,
       headers: {
         ...(config.headers ?? {}),
-        Authorization: 'Bearer ' + token,
+        ...(getShouldPlaceAuthorization()
+          ? {
+              Authorization: 'Bearer ' + token,
+            }
+          : {}),
       },
     })
 
@@ -72,7 +88,7 @@ export const AuthProvider = ({
 
   const login: AuthContextType['login'] = useCallback(
     async ({ email, password }) => {
-      const res = await fetch(`${API_URL}/auth/login`, {
+      const res = await fetch(`${AUTH_API_URL}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
@@ -101,7 +117,7 @@ export const AuthProvider = ({
 
   const register: AuthContextType['register'] = useCallback(
     async ({ email, password, name }) => {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch(`${AUTH_API_URL}/auth/register`, {
         method: 'POST',
         body: JSON.stringify({
           email,
@@ -123,7 +139,7 @@ export const AuthProvider = ({
   )
 
   const logout = useCallback(async () => {
-    const res = await fetch(`${API_URL}/auth/logout`, {
+    const res = await fetch(`${AUTH_API_URL}/auth/logout`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -143,9 +159,11 @@ export const AuthProvider = ({
   const refreshSession = useCallback(async () => {
     try {
       if (useAuthorizationHeader && localStorage.getItem(LOCAL_STORAGE_KEY)) {
-        const res = await fetch(`${API_URL}/auth/refresh`, {
+        const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
           credentials: 'include',
-          headers: { Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_KEY) },
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem(LOCAL_STORAGE_KEY),
+          },
         })
         if (res.ok) {
           const { token } = await res.json()
@@ -163,7 +181,9 @@ export const AuthProvider = ({
           throw new ApiError(res.status, message)
         }
       } else {
-        const res = await fetch(`${API_URL}/auth/refresh`, { credentials: 'include' })
+        const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
+          credentials: 'include',
+        })
         if (res.ok) {
           onRefreshSuccess?.()
           if (!isAuthenticated) {
@@ -204,7 +224,7 @@ export const AuthProvider = ({
     [isAuthenticated, refreshSession, register, logout, login],
   )
 
-  if (!API_URL || API_URL.endsWith('/')) {
+  if (!AUTH_API_URL || AUTH_API_URL.endsWith('/')) {
     throw new Error('VITE_AUTH_API_URL need to be set with no trailing slash')
   }
 
