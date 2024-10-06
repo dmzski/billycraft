@@ -29,6 +29,15 @@ clean:
 format-back-front:
 	cd ./back && gofmt -w . && cd ../front && pnpm run format
 
+format-auth:
+	cd ./auth && rustfmt --edition 2021 --emit files ./src/**
+
+format-back:
+	cd ./back && gofmt -w .
+
+format-front:
+	cd ./front && pnpm run format
+
 #
 # Back
 #

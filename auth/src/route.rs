@@ -8,8 +8,8 @@ use axum::{
 
 use crate::{
     handler::{
-        health_check_handler, login_user_handler, logout_handler,
-        register_user_handler, refresh_session, check_session,
+        check_session, health_check_handler, login_user_handler, logout_handler, refresh_session,
+        register_user_handler,
     },
     jwt_auth::auth,
     AppState,
@@ -27,8 +27,7 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
         )
         .route(
             "/api/auth/check",
-            get(check_session)
-                .route_layer(middleware::from_fn_with_state(app_state.clone(), auth)),
+            get(check_session).route_layer(middleware::from_fn_with_state(app_state.clone(), auth)),
         )
         .route(
             "/api/auth/refresh",
