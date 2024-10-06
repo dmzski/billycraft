@@ -19,7 +19,7 @@ const ProductTableLine = ({ product, reloadProducts, supplier }: ProductTableLin
 
   return (
     <div className="grid md:grid-cols-12 px-4 py-2 gap-2 border-b items-center">
-      <div className="md:col-span-2 truncate">{supplier?.name ?? "-"}</div>
+      <div className="md:col-span-2 truncate">{supplier?.name ?? '-'}</div>
       <div className="md:col-span-1">
         <ProductTypeLabel short type={product.type} />
       </div>
@@ -31,7 +31,7 @@ const ProductTableLine = ({ product, reloadProducts, supplier }: ProductTableLin
       </div>
       <div>{formatCurrency(product.price)}</div>
       <div>{formatCurrency(calculatePriceTTC(product.price, supplier?.vat ?? 0))}</div>
-      <div>{product.stock ?? "-"}</div>
+      <div>{product.stock ?? '-'}</div>
       <div className="flex justify-end">
         <div className="flex gap-2 justify-end">
           <EditProductModal

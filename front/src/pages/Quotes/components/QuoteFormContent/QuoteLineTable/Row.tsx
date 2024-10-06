@@ -183,7 +183,7 @@ const QuoteLineTableLine = ({
                       supplierId: null,
                       description: descriptionField.value,
                       code: null,
-                      stock: null
+                      stock: null,
                     }}
                     disclosure={
                       <button type="button" className="btn btn-ghost">

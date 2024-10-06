@@ -11,7 +11,9 @@ type I18nProviderProps = {
 
 type I18nContextValue = {
   t: ReturnType<typeof createT<GlobalLocale, undefined>>
-  scopedT: <Scope extends Scopes<GlobalLocale>>(scope: Scope) => ReturnType<typeof createT<GlobalLocale, Scope>>
+  scopedT: <Scope extends Scopes<GlobalLocale>>(
+    scope: Scope,
+  ) => ReturnType<typeof createT<GlobalLocale, Scope>>
 }
 
 export const I18nContext = createContext<I18nContextValue>({

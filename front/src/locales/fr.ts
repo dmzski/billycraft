@@ -729,7 +729,6 @@ export default {
   'invitations.status.ACCEPTED': 'Acceptée',
   'invitations.status.REFUSED': 'Refusée',
 
-
   // Products > Modals > Update stocks
   'products.modals.updateStocks.title': 'Mettre à jour les stocks',
   'products.modals.updateStocks.description': 'Entrez la liste de tous les mouvements produits',

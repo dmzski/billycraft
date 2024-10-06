@@ -42,7 +42,9 @@ const DeleteInvitationForm = ({ onSubmitSuccess, email }: DeleteInvitationFormPr
         <h2 className="text-3xl">{pageT('title')}</h2>
         <p className="text-error font-semibold">{pageT('description')}</p>
         <FormErrorAlert />
-        <Button type="submit" variant="error">{pageT('submit')}</Button>
+        <Button type="submit" variant="error">
+          {pageT('submit')}
+        </Button>
       </form>
     </FormProvider>
   )

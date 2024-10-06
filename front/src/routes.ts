@@ -195,9 +195,8 @@ export const ROUTES = {
             id: 'settings.users.invitations',
             exact: true,
             path: () => '/settings/users/invitations',
-          }
-        }
-        
+          },
+        },
       },
     },
   },
