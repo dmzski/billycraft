@@ -1,5 +1,11 @@
 # back
 
+## 1.25.0
+
+### Minor Changes
+
+- a2e0c0f: Users can now update multiple stocks at once
+
 ## 1.24.0
 
 ### Minor Changes
