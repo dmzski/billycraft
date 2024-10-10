@@ -640,6 +640,7 @@ export default {
   'products.list.headers.supplier': 'Fournisseur',
   'products.list.headers.type': 'Type',
   'products.list.headers.name': 'Désignation',
+  'products.list.headers.description': 'Description',
   'products.list.headers.etPrice': 'Prix HT',
   'products.list.headers.itPrice': 'Prix TTC',
   'products.list.headers.remainingStock': 'Stock restant',
