@@ -16,7 +16,7 @@ const ProductsPage = () => {
     type: '',
     name: '',
     supplierId: '',
-    groupId: ''
+    groupId: '',
   })
   const { data, isLoading, reload } = useAllProductsQuery()
 

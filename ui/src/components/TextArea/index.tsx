@@ -38,12 +38,12 @@ export type TextAreaProps = {
   placeholder?: string
   value?: string
   rows?: number
-  resize?: "vertical" | "horizontal" | "both" | "none"
+  resize?: 'vertical' | 'horizontal' | 'both' | 'none'
   helper?: string
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, label, error, id, helper, resize = "vertical", ...props }, ref) => {
+  ({ className, label, error, id, helper, resize = 'vertical', ...props }, ref) => {
     return (
       <div className={clsx(classes.container, className)}>
         {label ? (
@@ -57,20 +57,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             !error && 'focus:border-primary focus:outline-primary',
             error && classes.inputError,
             {
-              'resize-none': resize === "none",
-              'resize-y': resize === "vertical",
-              'resize-x': resize === "horizontal",
-              'resize': resize === "both"
-            }
+              'resize-none': resize === 'none',
+              'resize-y': resize === 'vertical',
+              'resize-x': resize === 'horizontal',
+              resize: resize === 'both',
+            },
           )}
           {...props}
           ref={ref}
           id={id}
         />
-        {helper && (!error || typeof error !== "string") ? (
-          <span className="label-text-alt opacity-70">
-          {helper}
-          </span>
+        {helper && (!error || typeof error !== 'string') ? (
+          <span className="label-text-alt opacity-70">{helper}</span>
         ) : null}
         {error && typeof error === 'string' ? (
           <span className="label-text-alt text-error mt-1">{error}</span>

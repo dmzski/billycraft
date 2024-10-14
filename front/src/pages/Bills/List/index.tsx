@@ -5,7 +5,7 @@ import { useI18n } from '@/i18n'
 
 type BillListProps = {
   data: Bill[]
-  page?: "list" | "archived"
+  page?: 'list' | 'archived'
 }
 
 const BillList = ({ data, page }: BillListProps) => {

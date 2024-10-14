@@ -9,8 +9,8 @@ type ProductGroup struct {
 	ID        string `gorm:"primaryKey;<-:false"`
 	CompanyID string `gorm:"<-:create"`
 	Name      string
-	CreatedBy string    `gorm:"<-:create"`
-	CreatedAt time.Time `gorm:"<-:false"`
+	CreatedBy string     `gorm:"<-:create"`
+	CreatedAt time.Time  `gorm:"<-:false"`
 	UpdatedAt *time.Time `gorm:"<-:false;autoUpdateTime"`
 }
 
