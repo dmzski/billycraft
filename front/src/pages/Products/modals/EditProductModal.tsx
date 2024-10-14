@@ -1,5 +1,5 @@
 import { useI18n } from '@/i18n'
-import { Button, Modal, useToast } from '@coco-ui/core'
+import { Modal, useToast } from '@coco-ui/core'
 import { ComponentProps, useId, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { ProductFormContent, ProductFormValues } from '../components/ProductFormContent'
@@ -8,6 +8,7 @@ import { ProductApi } from '@/api/ProductApi'
 import Product from '@/models/Product'
 import { calculatePriceTTC } from '@/utils/price'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
+import { Submit } from '@/components/form/Submit'
 
 type EditProductModalProps = {
   onSubmitSuccess: () => Promise<void>
@@ -39,6 +40,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
       ),
       stock: product.stock ?? null,
       code: product.code ?? null,
+      groupId: product.groupId ?? null,
     }),
     [product, suppliers],
   )
@@ -75,16 +77,13 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
         }}
         className="flex flex-col gap-3"
       >
-        <h2 className="text-2xl">{pageT('title')}</h2>
+        <Modal.Title>{pageT('title')}</Modal.Title>
         <ProductFormContent suppliers={suppliers ?? []} />
-        <Button
-          variant="primary"
-          type="submit"
-          form={id}
-          disabled={!methods.formState.isValid || methods.formState.isSubmitting}
-        >
-          {pageT('submit')}
-        </Button>
+        <Modal.Actions>
+          <Submit variant="primary" form={id}>
+            {pageT('submit')}
+          </Submit>
+        </Modal.Actions>
       </form>
     </FormProvider>
   )

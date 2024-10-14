@@ -3,7 +3,7 @@ import { useI18n } from '@/i18n'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { useBillByIdQuery } from '@/queries/useBillByIdQuery'
-import { BillRouteProps, ROUTES } from '@/routes'
+import { BillRouteProps, BillRouteQueryParams, ROUTES } from '@/routes'
 import {
   getBillTotal,
   getBillTotalEt,
@@ -23,11 +23,13 @@ import { PdfApi } from '@/api/PdfApi'
 import { calculatePriceTTC } from '@/utils/price'
 import { BillStatusEnum } from '@/models/Bill'
 import { useReducer } from 'react'
+import { useQueryParams } from '@/hooks/useQueryParams'
 
 export const Overview = () => {
   const { t, scopedT } = useI18n()
   const toast = useToast()
   const { id } = useParams<BillRouteProps>()
+  const { from } = useQueryParams<BillRouteQueryParams>()
   const { data: bill, isLoading, reload } = useBillByIdQuery(id)
   const { data: customer } = useCustomerQuery(bill?.customerId ?? '', {
     enabled: !!bill?.customerId,
@@ -70,7 +72,14 @@ export const Overview = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <Link to={ROUTES.BILLS.path()} className="link link-primary inline-flex items-center gap-1">
+      <Link
+        to={
+          from === 'archived'
+            ? ROUTES.HISTORY.routes.BILLS.routes.ARCHIVED.path()
+            : ROUTES.BILLS.path()
+        }
+        className="link link-primary inline-flex items-center gap-1"
+      >
         <ChevronLeftIcon className="w-5" />
         {pageT('backTo')}
       </Link>
@@ -103,7 +112,9 @@ export const Overview = () => {
               {customer ? (
                 <Link
                   className="link-hover link-primary"
-                  to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
+                  to={ROUTES.CUSTOMER_OVERVIEW.path({
+                    id: customer.id.toString(),
+                  })}
                 >
                   {customer.name ?? '-'}
                 </Link>
@@ -122,7 +133,8 @@ export const Overview = () => {
             <dt className="stat-title">{pageT('sections.information.total')}</dt>
             <dd className="stat-value">{formatCurrency(getBillTotal(bill))}</dd>
             <dd className="stat-desc">
-              {formatCurrency(getBillTotalEt(bill))}&nbsp;{t('shortExcludedTax')}
+              {formatCurrency(getBillTotalEt(bill))}&nbsp;
+              {t('shortExcludedTax')}
             </dd>
           </dl>
           <dl className="stat">
@@ -131,7 +143,8 @@ export const Overview = () => {
               {formatCurrency(getBillTotalForLineType(bill, LineTypeEnum.ARTICLE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.ARTICLE))}&nbsp;
+              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.ARTICLE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>
@@ -141,7 +154,8 @@ export const Overview = () => {
               {formatCurrency(getBillTotalForLineType(bill, LineTypeEnum.SERVICE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.SERVICE))}&nbsp;
+              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.SERVICE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>
@@ -151,7 +165,8 @@ export const Overview = () => {
               {formatCurrency(getBillTotalForLineType(bill, LineTypeEnum.OTHER_SERVICE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.OTHER_SERVICE))}&nbsp;
+              {formatCurrency(getBillTotalETForLineType(bill, LineTypeEnum.OTHER_SERVICE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>

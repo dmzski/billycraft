@@ -23,7 +23,7 @@ const HistoryTab = () => {
         filters={filters}
         setFilters={setFilters}
       />
-      <QuoteList data={quoteSorted} />
+      <QuoteList page="archived" data={quoteSorted} />
       {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />

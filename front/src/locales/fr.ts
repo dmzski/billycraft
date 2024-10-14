@@ -22,6 +22,8 @@ export default {
   'heads.onboarding.create': 'Créer votre entreprise',
   'heads.onboarding.join': 'Rejoindre une entreprise',
   'heads.products': 'Articles',
+  'heads.products.list': 'Liste',
+  'heads.products.groups': 'Groupes',
   'heads.quotes.overview': "Détails d'un devis",
   'heads.quotes.edit': 'Modifier un devis',
   'heads.quotes.add': 'Ajouter un devis',
@@ -629,17 +631,24 @@ export default {
   'history.tabs.todo.list.headers.doneAt': 'Fait le',
   'history.tabs.todo.list.headers.doneBy': 'Fait par',
 
-  'products.list.title': 'Articles',
+  'products.title': "Catalogue d'articles",
+  'products.tabs.list': 'Liste',
+  'products.tabs.groups': 'Groupes',
+  'products.list.title': 'Liste des articles',
   'products.list.add': 'Ajouter un article',
   'products.list.updateStocks': 'Mettre à jour les stocks',
   'products.list.description':
     'Retrouvez ci-dessous la liste des articles que vous avez enregistrés. Vous pourrez les ajouter plus rapidement lors de la création de vos factures et devis.',
+  'products.list.filters.buttons.display': 'Afficher les filtres',
+  'products.list.filters.buttons.hide': 'Masquer les filtres',
   'products.list.filters.fields.type.label': 'Type',
   'products.list.filters.fields.supplier.label': 'Fournisseur',
+  'products.list.filters.fields.group.label': 'Groupe',
   'products.list.filters.fields.name.label': 'Désignation',
   'products.list.headers.supplier': 'Fournisseur',
   'products.list.headers.type': 'Type',
   'products.list.headers.name': 'Désignation',
+  'products.list.headers.description': 'Description',
   'products.list.headers.etPrice': 'Prix HT',
   'products.list.headers.itPrice': 'Prix TTC',
   'products.list.headers.remainingStock': 'Stock restant',
@@ -658,6 +667,7 @@ export default {
   'products.components.formContent.fields.price.label': 'Prix HT',
   'products.components.formContent.fields.itPrice.label': 'Prix TTC',
   'products.components.formContent.fields.supplierId.label': 'Fournisseur',
+  'products.components.formContent.fields.groupId.label': 'Groupe',
 
   'products.modals.add.title': 'Ajouter un article',
   'products.modals.add.submit': 'Enregistrer',
@@ -747,4 +757,31 @@ export default {
   'products.modals.updateStocks.errors.noMatchingProduct': 'Aucun code produit correspondant',
   'products.modals.updateStocks.empty.noOut': 'Aucune sortie',
   'products.modals.updateStocks.empty.noIn': 'Aucune entrée',
+
+  // Products > Modals > Add group
+  'products.modals.addGroup.title': 'Ajouter un groupe',
+  'products.modals.addGroup.fields.name.label': 'Nom du groupe',
+  'products.modals.addGroup.fields.name.placeholder': 'Entrez un nom de groupe',
+  'products.modals.addGroup.submit': 'Ajouter un groupe',
+  'products.modals.addGroup.submit.success': 'Groupe ajouté avec succès',
+
+  // Products > Modals > Edit group
+  'products.modals.editGroup.title': 'Modifer un groupe',
+  'products.modals.editGroup.fields.name.label': 'Nom du groupe',
+  'products.modals.editGroup.fields.name.placeholder': 'Entrez un nom de groupe',
+  'products.modals.editGroup.submit': 'Modifier un groupe',
+  'products.modals.editGroup.submit.success': 'Groupe modifié avec succès',
+
+  // Products > Modals > Delete group
+  'products.modals.deleteGroup.title': 'Supprimer un groupe',
+  'products.modals.deleteGroup.description':
+    "Voulez-vous vraiment supprimer ce groupe ? En supprimant un groupe l'ensemble des produits associés au groupe seront conservés mais aucun groupe ne leur sera attribué",
+  'products.modals.deleteGroup.submit': 'Supprimer',
+  'products.modals.deleteGroup.submit.success': 'Groupe supprimé avec succès',
+
+  // Products > groups
+  'products.groups.title': 'Groupes de produit',
+  'products.groups.description':
+    "Utilisez les groupes de produit pour organiser votre catalogue d'articles",
+  'products.groups.add': 'Ajouter un groupe',
 } as const

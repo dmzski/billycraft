@@ -13,6 +13,8 @@ import { Scanner, type IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import { sendErrorToSentry } from '@/utils/errors'
 import { SCANNER_COMPONENTS, SCANNER_FORMATS } from '../constants'
 import { ProductApi } from '@/api/ProductApi'
+import { Submit } from '@/components/form/Submit'
+import { SelectField } from '@/components/form/SelectField'
 
 type UpdateStockModalProps = {
   disclosure: ComponentProps<typeof Modal>['disclosure']
@@ -122,8 +124,6 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
     }
   }
 
-  const { formState } = methods
-
   return (
     <FormProvider {...methods}>
       <form
@@ -132,12 +132,12 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
           event.stopPropagation()
           methods.handleSubmit(onSubmit)(event)
         }}
-        className="flex flex-col gap-10"
+        className="flex flex-col gap-12"
       >
-        <h2 className="text-2xl">{pageT('title')}</h2>
+        <Modal.Title>{pageT('title')}</Modal.Title>
         <div className="flex flex-col gap-4">
           <div className="shadow border rounded p-4 flex flex-col gap-8">
-            <p className="text-xl">{pageT('fields.type.in.header')}</p>
+            <p className="font-bold">{pageT('fields.type.in.header')}</p>
             <div className="flex flex-col gap-4">
               {inMovementsFieldArray.fields.length > 0 ? (
                 inMovementsFieldArray.fields.map((aMovement, index) => (
@@ -146,27 +146,15 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
                     className="grid md:grid-cols-12 gap-2 border-b pb-2 md:border-b-0 md:pb-0"
                   >
                     <div className="md:col-span-7 flex gap-2 min-w-0">
-                      <Controller
+                      <SelectField
                         control={methods.control}
                         name={`inMovements.${index}.productId`}
-                        rules={{
-                          required: true,
-                          minLength: 3,
-                        }}
-                        render={({ field, fieldState }) => (
-                          <Select
-                            name={`inMovements.${index}.code`}
-                            className="flex-grow min-w-0"
-                            onChange={field.onChange}
-                            options={productOptions}
-                            isSearchable
-                            error={fieldState.invalid}
-                            value={field.value}
-                            placeholder={pageT('fields.code.placeholder')}
-                            aria-label={pageT('fields.code.label')}
-                            ref={field.ref}
-                          />
-                        )}
+                        className="flex-grow min-w-0"
+                        options={productOptions}
+                        isSearchable
+                        required
+                        placeholder={pageT('fields.code.placeholder')}
+                        aria-label={pageT('fields.code.label')}
                       />
                     </div>
                     <Controller
@@ -193,7 +181,6 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
                         />
                       )}
                     />
-
                     <Button
                       variant="error"
                       className="md:grid-cols-2"
@@ -258,33 +245,20 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
             </div>
           </div>
           <div className="shadow p-4 border rounded flex flex-col gap-8">
-            <p className="text-xl">{pageT('fields.type.out.header')}</p>
+            <p className="font-bold">{pageT('fields.type.out.header')}</p>
             <div className="flex flex-col gap-4">
               {outMovementsFieldArray.fields.length > 0 ? (
                 outMovementsFieldArray.fields.map((aMovement, index) => (
                   <div key={aMovement.id} className="grid md:grid-cols-12 gap-2">
                     <div className="flex md:col-span-7 gap-2 min-w-0">
-                      <Controller
-                        control={methods.control}
+                      <SelectField
+                        className="flex-grow min-w-0"
                         name={`outMovements.${index}.productId`}
-                        rules={{
-                          required: true,
-                          minLength: 3,
-                        }}
-                        render={({ field, fieldState }) => (
-                          <Select
-                            className="flex-grow min-w-0"
-                            name={`outMovements.${index}.code`}
-                            onChange={field.onChange}
-                            options={productOptions}
-                            isSearchable
-                            error={fieldState.invalid}
-                            value={field.value}
-                            placeholder={pageT('fields.code.placeholder')}
-                            aria-label={pageT('fields.code.label')}
-                            ref={field.ref}
-                          />
-                        )}
+                        options={productOptions}
+                        isSearchable
+                        required
+                        placeholder={pageT('fields.code.placeholder')}
+                        aria-label={pageT('fields.code.label')}
                       />
                     </div>
                     <Controller
@@ -378,19 +352,13 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <Modal.Actions>
           <Button type="button" variant="default" outline onClick={close}>
             {t('cancel')}
           </Button>
 
-          <Button
-            type="submit"
-            disabled={!formState.isValid || formState.isSubmitting}
-            variant="primary"
-          >
-            {pageT('submit')}
-          </Button>
-        </div>
+          <Submit variant="primary">{pageT('submit')}</Submit>
+        </Modal.Actions>
       </form>
     </FormProvider>
   )

@@ -11,6 +11,7 @@ interface Product {
   stock?: number
   code?: string
   supplierId?: string
+  groupId?: string
 }
 
 export default Product

@@ -1,14 +1,14 @@
-import Loader from '../../components/Loader'
+import Loader from '@/components/Loader'
 import ProductTable from './List'
 import { useAllProductsQuery } from '@/queries/useAllProductsQuery'
 import { useI18n } from '@/i18n'
-import { AddProductModal } from './modals/AddProductModal'
+import { AddProductModal } from '../modals/AddProductModal'
 import { Button } from '@coco-ui/core'
 import { Filters } from './Filters'
 import { useMemo, useState } from 'react'
 import { ProductFilters, filterProducts } from '@/utils/products'
-import { ArrowsRightLeftIcon, PlusIcon } from '@heroicons/react/24/solid'
-import { UpdateStockModal } from './modals/UpdateStockModal'
+import { ArrowPathIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { UpdateStockModal } from '../modals/UpdateStockModal'
 
 const ProductsPage = () => {
   const { t } = useI18n()
@@ -16,6 +16,7 @@ const ProductsPage = () => {
     type: '',
     name: '',
     supplierId: '',
+    groupId: '',
   })
   const { data, isLoading, reload } = useAllProductsQuery()
 
@@ -35,7 +36,7 @@ const ProductsPage = () => {
               onSubmitSuccess={reload}
               disclosure={
                 <Button outline variant="default" className="gap-2">
-                  <ArrowsRightLeftIcon className="w-5" />
+                  <ArrowPathIcon className="w-5" />
                   {t('products.list.updateStocks')}
                 </Button>
               }

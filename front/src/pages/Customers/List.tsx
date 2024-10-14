@@ -2,6 +2,7 @@ import Customer from '@/models/Customer'
 import { useI18n } from '@/i18n'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
+import { UserIcon } from '@heroicons/react/24/solid'
 
 const CustomerTable = ({ data = [] }: { data: Customer[] }) => {
   const { t } = useI18n()
@@ -19,15 +20,18 @@ const CustomerTable = ({ data = [] }: { data: Customer[] }) => {
           <div key={customer.id} className="grid md:grid-cols-12 p-2 py-4 items-center border-b">
             <div className="md:col-span-3">
               <Link
-                to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
-                className="link-hover link-primary"
+                to={ROUTES.CUSTOMER_OVERVIEW.path({
+                  id: customer.id.toString(),
+                })}
+                className="link-hover link-primary inline-flex gap-2 items-center flex-wrap"
               >
+                <UserIcon className="w-8 p-2 text-primary bg-primary-content mask mask-squircle" />
                 {customer.name}
               </Link>
             </div>
-            <div className="md:col-span-3">{customer.contact ?? '-'}</div>
-            <div className="md:col-span-3">{customer.phoneNumber ?? '-'}</div>
-            <div className="md:col-span-3">{customer.email ?? '-'}</div>
+            <div className="md:col-span-3">{customer.contact || '-'}</div>
+            <div className="md:col-span-3">{customer.phoneNumber || '-'}</div>
+            <div className="md:col-span-3">{customer.email || '-'}</div>
           </div>
         ))}
       </div>

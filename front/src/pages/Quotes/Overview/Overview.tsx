@@ -3,7 +3,7 @@ import { useI18n } from '@/i18n'
 import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
-import { QuoteRouteProps, ROUTES } from '@/routes'
+import { QuoteRouteProps, QuoteRouteQueryParams, ROUTES } from '@/routes'
 import {
   getQuoteTotal,
   getQuoteTotalET,
@@ -26,11 +26,13 @@ import { QuoteApi } from '@/api/QuoteApi'
 import { calculatePriceTTC } from '@/utils/price'
 import { QuoteStatusEnum } from '@/models/Quote'
 import { useReducer } from 'react'
+import { useQueryParams } from '@/hooks/useQueryParams'
 
 export const Overview = () => {
   const { t, scopedT } = useI18n()
   const toast = useToast()
   const { id } = useParams<QuoteRouteProps>()
+  const { from } = useQueryParams<QuoteRouteQueryParams>()
   const { data: quote, isLoading, reload } = useQuoteByIdQuery(id)
   const { data: customer } = useCustomerQuery(quote?.customerId ?? '', {
     enabled: !!quote?.customerId,
@@ -93,7 +95,14 @@ export const Overview = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <Link to={ROUTES.QUOTES.path()} className="link link-primary inline-flex items-center gap-1">
+      <Link
+        to={
+          from === 'archived'
+            ? ROUTES.HISTORY.routes.QUOTES.routes.ARCHIVED.path()
+            : ROUTES.QUOTES.path()
+        }
+        className="link link-primary inline-flex items-center gap-1"
+      >
         <ChevronLeftIcon className="w-5" />
         {pageT('backTo')}
       </Link>
@@ -126,7 +135,9 @@ export const Overview = () => {
               {customer ? (
                 <Link
                   className="link-hover link-primary"
-                  to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
+                  to={ROUTES.CUSTOMER_OVERVIEW.path({
+                    id: customer.id.toString(),
+                  })}
                 >
                   {customer.name ?? '-'}
                 </Link>
@@ -145,7 +156,8 @@ export const Overview = () => {
             <dt className="stat-title">{pageT('sections.information.total')}</dt>
             <dd className="stat-value">{formatCurrency(getQuoteTotal(quote))}</dd>
             <dd className="stat-desc">
-              {formatCurrency(getQuoteTotalET(quote))}&nbsp;{t('shortExcludedTax')}
+              {formatCurrency(getQuoteTotalET(quote))}&nbsp;
+              {t('shortExcludedTax')}
             </dd>
           </dl>
           <dl className="stat">
@@ -154,7 +166,8 @@ export const Overview = () => {
               {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.ARTICLE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.ARTICLE))}&nbsp;
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.ARTICLE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>
@@ -164,7 +177,8 @@ export const Overview = () => {
               {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.SERVICE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.SERVICE))}&nbsp;
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.SERVICE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>
@@ -174,7 +188,8 @@ export const Overview = () => {
               {formatCurrency(getQuoteTotalForLineType(quote, LineTypeEnum.OTHER_SERVICE))}
             </dd>
             <dd className="stat-desc">
-              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.OTHER_SERVICE))}&nbsp;
+              {formatCurrency(getQuoteTotalETForLineType(quote, LineTypeEnum.OTHER_SERVICE))}
+              &nbsp;
               {t('shortExcludedTax')}
             </dd>
           </dl>

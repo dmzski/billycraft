@@ -8,6 +8,7 @@ import { sendErrorToSentry } from '@/utils/errors'
 import { ProductApi } from '@/api/ProductApi'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import Product from '@/models/Product'
+import { Submit } from '@/components/form/Submit'
 
 type AddProductModalProps = {
   onSubmitSuccess: (newId: Product['id']) => Promise<void> | void
@@ -28,6 +29,7 @@ const defaultValues: ProductFormValues = {
   itPrice: 0,
   code: null,
   stock: null,
+  groupId: null,
 }
 
 const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFormProps) => {
@@ -67,18 +69,19 @@ const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFor
           event.stopPropagation()
           methods.handleSubmit(onSubmit)(event)
         }}
-        className="flex flex-col gap-10"
+        className="flex flex-col gap-12"
       >
-        <h2 className="text-2xl">{pageT('title')}</h2>
+        <Modal.Title>{pageT('title')}</Modal.Title>
         <ProductFormContent suppliers={suppliers ?? []} />
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={!methods.formState.isValid || methods.formState.isSubmitting}
-          form={id}
-        >
-          {pageT('submit')}
-        </Button>
+        <Modal.Actions>
+          <Button variant="default" onClick={close} outline type="button">
+            {t('cancel')}
+          </Button>
+
+          <Submit variant="primary" form={id}>
+            {pageT('submit')}
+          </Submit>
+        </Modal.Actions>
       </form>
     </FormProvider>
   )

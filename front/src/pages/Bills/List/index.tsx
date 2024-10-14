@@ -3,7 +3,12 @@ import Bill from '@/models/Bill'
 import BillTableLine from './Row'
 import { useI18n } from '@/i18n'
 
-const BillList = ({ data }: { data: Bill[] }) => {
+type BillListProps = {
+  data: Bill[]
+  page?: 'list' | 'archived'
+}
+
+const BillList = ({ data, page }: BillListProps) => {
   const { t } = useI18n()
   const customers = useCustomers()
 
@@ -23,6 +28,7 @@ const BillList = ({ data }: { data: Bill[] }) => {
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
             bill={bill}
+            page={page}
           />
         ))}
       </div>

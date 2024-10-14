@@ -1,6 +1,6 @@
-import { useController, useFormContext } from 'react-hook-form'
+import { useController, useFormContext, useWatch } from 'react-hook-form'
 import { ProductFormValues } from './types'
-import { Button, Input, Modal, Select, TextArea, useToast } from '@coco-ui/core'
+import { Button, Input, Modal, TextArea, useToast } from '@coco-ui/core'
 import { ComponentProps, useMemo } from 'react'
 import { LINE_TYPE } from '@/constants/line'
 import { useI18n } from '@/i18n'
@@ -12,6 +12,9 @@ import { QrCodeIcon } from '@heroicons/react/24/solid'
 import { sendErrorToSentry } from '@/utils/errors'
 import { Scanner } from '@yudiel/react-qr-scanner'
 import { SCANNER_COMPONENTS, SCANNER_FORMATS } from '../../constants'
+import { InputField } from '@/components/form/InputField'
+import { SelectField } from '@/components/form/SelectField'
+import { useAllProductGroupsQuery } from '@/queries/useAllProductGroupsQuery'
 
 type ProductFormContentProps = {
   suppliers: Supplier[]
@@ -22,17 +25,8 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
   const { scopedT } = useI18n()
   const pageT = scopedT('products.components.formContent')
   const { control } = useFormContext<ProductFormValues>()
+  const { data: productGroups } = useAllProductGroupsQuery()
 
-  const { field: nameField, fieldState: nameFieldState } = useController({
-    control,
-    name: 'name',
-    rules: { required: true, minLength: 3 },
-  })
-  const { field: typeField, fieldState: typeFieldState } = useController({
-    control,
-    name: 'type',
-    rules: { required: true },
-  })
   const { field: descriptionField, fieldState: descriptionFieldState } = useController({
     control,
     name: 'description',
@@ -62,12 +56,13 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
     },
     shouldUnregister: true,
   })
-  const { field: supplierIdField, fieldState: supplierIdFieldState } = useController({
+
+  const [supplierId, selectedType] = useWatch({
     control,
-    name: 'supplierId',
+    name: ['supplierId', 'type'],
   })
 
-  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(
+  const typeOptions: ComponentProps<typeof SelectField>['options'] = useMemo(
     () =>
       Object.values(LINE_TYPE).map(type => ({
         value: type.enum,
@@ -76,7 +71,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
     [],
   )
 
-  const supplierOptions: ComponentProps<typeof Select>['options'] = useMemo(
+  const supplierOptions: ComponentProps<typeof SelectField>['options'] = useMemo(
     () =>
       suppliers.map(({ id, name }) => ({
         value: id,
@@ -85,32 +80,40 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
     [suppliers],
   )
 
-  const selectedSupplier = supplierIdField.value
-    ? suppliers.find(({ id }) => id === supplierIdField.value)
-    : undefined
+  const productGroupOptions = useMemo(
+    (): ComponentProps<typeof SelectField>['options'] =>
+      productGroups?.map(({ id, name }) => ({
+        value: id,
+        label: name,
+      })) ?? [],
+    [productGroups],
+  )
+
+  const selectedSupplier = supplierId ? suppliers.find(({ id }) => id === supplierId) : undefined
 
   return (
-    <div className="flex flex-col gap-5">
-      <Select
+    <div className="flex flex-col gap-4">
+      <SelectField
         options={supplierOptions}
-        name={supplierIdField.name}
-        onChange={supplierIdField.onChange}
-        ref={supplierIdField.ref}
+        control={control}
+        name="supplierId"
         label={pageT('fields.supplierId.label')}
-        error={supplierIdFieldState.invalid}
-        value={supplierIdField.value ?? ''}
         isSearchable
       />
-      <Select
-        options={typeOptions}
-        name={typeField.name}
-        onChange={typeField.onChange}
-        ref={typeField.ref}
-        label={pageT('fields.type.label')}
-        error={typeFieldState.invalid}
-        value={typeField.value}
+      <SelectField
+        options={productGroupOptions}
+        control={control}
+        name="groupId"
+        label={pageT('fields.groupId.label')}
+        isSearchable
       />
-      {typeField.value === 'ARTICLE' ? (
+      <SelectField
+        control={control}
+        options={typeOptions}
+        name="type"
+        label={pageT('fields.type.label')}
+      />
+      {selectedType === 'ARTICLE' ? (
         <div className="flex flex-col gap-4">
           <Input
             name={stockField.name}
@@ -148,7 +151,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
               hideOnClickOutside
             >
               {({ close }) => (
-                <div className="pt-6">
+                <div className="pt-8">
                   <Scanner
                     onScan={result => {
                       if (result[0]) {
@@ -176,17 +179,13 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
         </div>
       ) : null}
       <div className="flex flex-col gap-2">
-        <Input
-          name={nameField.name}
-          onChange={nameField.onChange}
-          onBlur={nameField.onBlur}
-          ref={nameField.ref}
+        <InputField
+          control={control}
+          name="name"
           required
           minLength={3}
           label={pageT('fields.name.label')}
-          error={nameFieldState.invalid}
           autoComplete="off"
-          value={nameField.value}
         />
         <TextArea
           name={descriptionField.name}
@@ -199,8 +198,8 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
           rows={1}
         />
       </div>
-      {typeField.value !== LineTypeEnum.TEXT ? (
-        <div className="grid md:grid-cols-2 gap-5">
+      {selectedType !== LineTypeEnum.TEXT ? (
+        <div className="grid md:grid-cols-2 gap-4">
           <Input
             name={priceField.name}
             onChange={priceField.onChange}

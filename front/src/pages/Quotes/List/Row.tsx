@@ -12,8 +12,9 @@ import { useAllQuotesNotArchivedAndNotRefused } from '@/queries/useAllQuotesNotA
 type QuoteTableLineProps = {
   quote: Quote
   customer?: Customer
+  page?: 'list' | 'archived'
 }
-const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
+const QuoteTableLine = ({ quote, customer, page }: QuoteTableLineProps) => {
   const { t } = useI18n()
   const { reload } = useAllQuotesNotArchivedAndNotRefused({ enabled: false })
   const toast = useToast()
@@ -64,7 +65,13 @@ const QuoteTableLine = ({ quote, customer }: QuoteTableLineProps) => {
   return (
     <div className="grid md:grid-cols-12 px-4 py-2 items-center border-b">
       <div className="md:col-span-1 text-sm">
-        <Link className="link-primary" to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}>
+        <Link
+          className="link-primary"
+          to={ROUTES.QUOTE_OVERVIEW.path(
+            { id: quote.id },
+            page === 'archived' ? { from: 'archived' } : undefined,
+          )}
+        >
           {quote.name}
         </Link>
       </div>

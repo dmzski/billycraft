@@ -2,8 +2,16 @@ export type QuoteRouteProps = {
   id: string
 }
 
+export type QuoteRouteQueryParams = {
+  from?: 'list' | 'archived'
+}
+
 export type BillRouteProps = {
   id: string
+}
+
+export type BillRouteQueryParams = {
+  from?: 'list' | 'archived'
 }
 
 export type CustomerRouteProps = {
@@ -57,7 +65,8 @@ export const ROUTES = {
   },
   BILL_OVERVIEW: {
     id: 'bills.form',
-    path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/overview/${params.id}`,
+    path: (params = DEFAULT_BILL_ROUTE_PARAMS, query?: BillRouteQueryParams) =>
+      `/bills/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ''}`,
   },
   CUSTOMERS: {
     id: 'customers',
@@ -140,8 +149,20 @@ export const ROUTES = {
   },
   PRODUCTS: {
     id: 'products',
-    exact: true,
+    exact: false,
     path: () => '/products',
+    routes: {
+      LIST: {
+        exact: true,
+        path: () => '/products/list',
+        id: 'products.list',
+      },
+      GROUPS: {
+        exact: true,
+        path: () => '/products/groups',
+        id: 'products.groups',
+      },
+    },
   },
   QUOTES: {
     id: 'quotes',
@@ -151,7 +172,8 @@ export const ROUTES = {
   QUOTE_OVERVIEW: {
     id: 'quotes.overview',
     exact: true,
-    path: (params = DEFAULT_QUOTE_ROUTE_PARAMS) => `/quotes/overview/${params.id}`,
+    path: (params = DEFAULT_QUOTE_ROUTE_PARAMS, query?: QuoteRouteQueryParams) =>
+      `/quotes/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ''}`,
   },
   QUOTE_EDIT: {
     id: 'quotes.edit',

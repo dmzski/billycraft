@@ -11,4 +11,5 @@ type Product struct {
 	CompanyID   string   `json:"companyId"`
 	CreatedBy   string   `json:"createdBy"`
 	SupplierID  *string  `json:"supplierId"`
+	GroupID     *string  `json:"groupId"`
 }

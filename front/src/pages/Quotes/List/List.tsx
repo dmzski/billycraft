@@ -5,8 +5,9 @@ import { useI18n } from '@/i18n'
 
 type QuoteListProps = {
   data: Quote[]
+  page?: 'list' | 'archived'
 }
-const QuoteList = ({ data }: QuoteListProps) => {
+const QuoteList = ({ data, page }: QuoteListProps) => {
   const { t } = useI18n()
   const customers = useCustomers()
 
@@ -26,6 +27,7 @@ const QuoteList = ({ data }: QuoteListProps) => {
             customer={customers.find(c => c.id === quote.customerId)}
             key={quote.id}
             quote={quote}
+            page={page}
           />
         ))}
       </div>
