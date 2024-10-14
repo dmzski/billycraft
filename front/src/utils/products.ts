@@ -1,6 +1,6 @@
 import Product from '@/models/Product'
 
-export type ProductFilters = Record<'type' | 'name' | 'supplierId', string>
+export type ProductFilters = Record<'type' | 'name' | 'supplierId' | 'groupId', string>
 
 export const filterProducts = (products: Product[], filter: ProductFilters) => {
   let filtered = products
@@ -9,6 +9,9 @@ export const filterProducts = (products: Product[], filter: ProductFilters) => {
   }
   if (filter.supplierId) {
     filtered = filtered.filter(({ supplierId }) => supplierId === filter.supplierId)
+  }
+  if (filter.groupId) {
+    filtered = filtered.filter(({ groupId }) => groupId === filter.groupId)
   }
   if (filter.name) {
     filtered = filtered.filter(({ name }) => name.toLowerCase().includes(filter.name.toLowerCase()))

@@ -7,4 +7,5 @@ export type ProductUpdateRequest = {
   description?: string | null
   price?: number | null
   supplierId?: string | null
+  groupId?: string | null
 }

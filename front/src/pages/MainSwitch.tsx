@@ -6,7 +6,7 @@ import { PageLoader } from '@/components/PageLoader'
 import Dashboard from './Dashboard'
 import Layout from '../layout/Layout'
 import Onboarding from './Onboarding/Onboarding'
-import ProductsPage from './Products'
+import ProductsSwitch from './Products/ProductsSwitch'
 import Settings from './Settings'
 import History from './History'
 import AccountingSwitch from './Accountings/AccountingSwitch'
@@ -34,7 +34,7 @@ const APP_ROUTES: PathComponentTuple[] = [
   [ROUTES.CUSTOMERS.path(), CustomerSwitch],
   [ROUTES.SUPPLIERS.path(), SupplierSwitch],
   [ROUTES.DASHBOARD.path(), Dashboard],
-  [ROUTES.PRODUCTS.path(), ProductsPage],
+  [ROUTES.PRODUCTS.path(), ProductsSwitch],
   [ROUTES.SETTINGS.path(), Settings],
   [ROUTES.HISTORY.path(), History],
 ]

@@ -21,7 +21,7 @@ const HistoryTab = () => {
   return (
     <>
       <BillFilterContainer disabledFilters={['status']} filters={filters} setFilters={setFilters} />
-      <BillTable data={billSorted} />
+      <BillTable page="archived" data={billSorted} />
       {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />
