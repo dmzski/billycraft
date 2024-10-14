@@ -199,6 +199,7 @@ const BillLineTableLine = ({ deleteLine, index, id }: BillLineTableLineProps) =>
                       description: descriptionField.value,
                       code: null,
                       stock: null,
+                      groupId: null,
                     }}
                     disclosure={
                       <button type="button" className="btn btn-ghost">
