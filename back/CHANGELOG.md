@@ -1,5 +1,11 @@
 # back
 
+## 1.26.0
+
+### Minor Changes
+
+- a7af714: Add group for products
+
 ## 1.25.0
 
 ### Minor Changes
