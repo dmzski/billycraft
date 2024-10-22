@@ -1,48 +1,32 @@
-import clsx from 'clsx'
-import { ReactNode, useMemo } from 'react'
+import { cva, type VariantProps } from "class-variance-authority"
 
-const classes = {
-  base: 'badge',
-  outline: 'badge-outline',
-  variants: {
-    primary: 'badge-primary',
-    secondary: 'badge-secondary',
-    accent: 'badge-accent',
-    ghost: 'badge-ghost',
-    info: 'badge-info',
-    success: 'badge-success',
-    warning: 'badge-warning',
-    error: 'badge-error',
-  },
-  sizes: {
-    xs: 'badge-xs',
-    sm: 'badge-sm',
-    md: 'badge-md',
-    lg: 'badge-lg',
-  },
-} as const
+import { tw } from "lib/utils"
+import { HTMLAttributes } from "react"
 
-export type BadgeProps = {
-  size?: keyof (typeof classes)['sizes']
-  className?: string
-  children?: ReactNode
-  variant?: keyof (typeof classes)['variants']
-  outline?: boolean
-}
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
-const Badge = ({ children, className, size = 'md', outline, variant, ...props }: BadgeProps) => {
-  const badgeClassName = useMemo(() => {
-    const sizeClass = size ? classes.sizes[size] : ''
-    const variantClass = variant ? classes.variants[variant] : ''
+export type BadgeProps = HTMLAttributes<HTMLDivElement> & VariantProps<typeof badgeVariants>
 
-    return clsx(variantClass, classes.base, sizeClass, outline && classes.outline, className)
-  }, [size, variant, className])
-
+export function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div className={badgeClassName} {...props}>
-      {children}
-    </div>
+    <div className={tw(badgeVariants({ variant }), className)} {...props} />
   )
 }
-
-export default Badge

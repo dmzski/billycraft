@@ -1,99 +1,109 @@
-import clsx from 'clsx'
-import { ChangeEventHandler, ForwardedRef, forwardRef } from 'react'
-
-const classes = {
-  label: 'label cursor-pointer',
-  text: 'label-text',
-  input: 'checkbox checkbox-primary',
-  inputError: 'checkbox checkbox-error',
-  inputSizes: {
-    xs: 'checkbox-xs',
-    sm: 'checkbox-sm',
-    md: 'chexbox-md',
-    lg: 'checkbox-lg',
-  },
-} as const
+import { CheckIcon } from "@heroicons/react/24/solid";
+import clsx from "clsx";
+import { Label } from "components/Label";
+import { tw } from "lib/utils";
+import { forwardRef, useId } from "react";
 
 export type CheckboxProps = {
-  label?: string
-  labelPosition?: 'left' | 'right'
-  checked: boolean
-  error?: boolean
-  size?: keyof (typeof classes)['inputSizes']
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  value?: string
-  onChange?: ChangeEventHandler<HTMLInputElement>
-  disabled?: boolean
-  name?: string
-  id?: string
-  className?: string
-}
+	label?: string;
+	labelPosition?: "left" | "right";
+	checked: boolean;
+	error?: boolean;
+	"aria-label"?: string;
+	"aria-labelledby"?: string;
+	value?: string;
+	onCheckedChange?: (newState: boolean) => void;
+	disabled?: boolean;
+	name?: string;
+	id?: string;
+	className?: string;
+};
 
-const Checkbox = forwardRef(
-  (
-    {
-      id,
-      label,
-      labelPosition = 'right',
-      name,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      value,
-      checked,
-      onChange,
-      disabled = false,
-      error = false,
-      className,
-      size,
-    }: CheckboxProps,
-    ref: ForwardedRef<HTMLInputElement>,
-  ) => {
-    return !label ? (
-      <input
-        id={id}
-        className={clsx(
-          !error && classes.input,
-          error && classes.inputError,
-          size && classes.inputSizes[size],
-          className,
-        )}
-        ref={ref}
-        type="checkbox"
-        name={name}
-        checked={checked}
-        value={value}
-        aria-label={ariaLabel ?? `${name}-checkbox`}
-        onChange={onChange}
-        disabled={disabled}
-      />
-    ) : (
-      <div className={clsx('form-control', className)}>
-        <label className={classes.label}>
-          {labelPosition === 'left' ? <span className={classes.text}>{label}</span> : null}
-          <input
-            disabled={disabled}
-            id={id}
-            className={clsx(
-              !error && classes.input,
-              error && classes.inputError,
-              size && classes.inputSizes[size],
-            )}
-            ref={ref}
-            type="checkbox"
-            name={name}
-            checked={checked}
-            value={value}
-            aria-labelledby={ariaLabelledBy}
-            aria-label={ariaLabel}
-            onChange={onChange}
-          />
-          {labelPosition === 'right' ? <span className={classes.text}>{label}</span> : null}
-        </label>
-      </div>
-    )
-  },
-)
-Checkbox.displayName = 'Checkbox'
+export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
+	(
+		{
+			id: idProp,
+			label,
+			labelPosition = "right",
+			name,
+			"aria-label": ariaLabel,
+			"aria-labelledby": ariaLabelledBy,
+			value,
+			checked,
+			onCheckedChange,
+			disabled = false,
+			error = false,
+			className,
+		},
+		ref,
+	) => {
+		const generatedId = useId();
+		const id = idProp ?? generatedId;
 
-export default Checkbox
+		if (!label) {
+			return (
+				<button
+					aria-label={ariaLabel}
+					aria-labelledby={ariaLabelledBy}
+					role="checkbox"
+					data-state={checked ? "checked" : "uncheck"}
+					aria-checked={checked}
+					ref={ref}
+					disabled={disabled}
+					name={name}
+					className={tw(
+						"flex items-center justify-center peer size-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+						className,
+					)}
+					aria-invalid={!!error}
+					value={value}
+					onClick={() => {
+						onCheckedChange?.(!checked);
+					}}
+				>
+					{checked ? (
+						<span
+							className={tw("flex items-center justify-center text-current")}
+						>
+							<CheckIcon className="size-4" />
+						</span>
+					) : null}
+				</button>
+			);
+		}
+
+		return (
+			<div className={clsx("flex items-center gap-2", className)}>
+				{labelPosition === "left" ? <Label htmlFor={id}>{label}</Label> : null}
+				<button
+					aria-label={ariaLabel}
+					aria-labelledby={ariaLabelledBy}
+					role="checkbox"
+					disabled={disabled}
+					name={name}
+					data-state={checked ? "checked" : "uncheck"}
+					aria-checked={checked}
+					ref={ref}
+					className={tw(
+						"flex items-center justify-center peer size-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+					)}
+					aria-invalid={!!error}
+					value={value}
+					onClick={() => {
+						onCheckedChange?.(!checked);
+					}}
+				>
+					{checked ? (
+						<span
+							className={tw("flex items-center justify-center text-current")}
+						>
+							<CheckIcon className="size-4" />
+						</span>
+					) : null}
+				</button>
+				{labelPosition === "right" ? <Label htmlFor={id}>{label}</Label> : null}
+			</div>
+		);
+	},
+);
+Checkbox.displayName = "Checkbox";

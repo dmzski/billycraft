@@ -30,10 +30,7 @@ export type ToastProviderProps = {
 
 type ToastContextType = {
   show: (render: ReactNode, info?: ToastOptions) => void
-  success: (render: ReactNode, info?: ToastOptions) => void
-  error: (render: ReactNode, info?: ToastOptions) => void
-  info: (render: ReactNode, info?: ToastOptions) => void
-  warning: (render: ReactNode, info?: ToastOptions) => void
+  destructive: (render: ReactNode, info?: ToastOptions) => void
 }
 const ToastContext = createContext<ToastContextType>({} as ToastContextType)
 
@@ -46,7 +43,7 @@ export const ToastProvider = ({
   const [toasts, setToasts] = useState<ToastInfo[]>([])
 
   const show = useCallback(
-    (render: ReactNode, info: ToastOptions = { variant: 'info' }) => {
+    (render: ReactNode, info: ToastOptions = { variant: 'default' }) => {
       const newToast = {} as ToastInfo
       newToast.id = counterRef.current
       counterRef.current += 1
@@ -60,30 +57,9 @@ export const ToastProvider = ({
     [duration],
   )
 
-  const success = useCallback(
+  const destructive = useCallback(
     (render: ReactNode, info?: ToastOptions) => {
-      show(render, { ...info, variant: 'success' })
-    },
-    [show],
-  )
-
-  const error = useCallback(
-    (render: ReactNode, info?: ToastOptions) => {
-      show(render, { ...info, variant: 'error' })
-    },
-    [show],
-  )
-
-  const warning = useCallback(
-    (render: ReactNode, info?: ToastOptions) => {
-      show(render, { ...info, variant: 'warning' })
-    },
-    [show],
-  )
-
-  const info = useCallback(
-    (render: ReactNode, info?: ToastOptions) => {
-      show(render, { ...info, variant: 'info' })
+      show(render, { ...info, variant: 'destructive' })
     },
     [show],
   )
@@ -108,14 +84,14 @@ export const ToastProvider = ({
   }, [toasts])
 
   const value = useMemo(
-    () => ({ show, error, success, info, warning }),
-    [show, success, info, error, warning],
+    () => ({ show, destructive }),
+    [show, destructive],
   )
 
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="toast">
+      <div className="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]">
         {toasts
           .filter(({ closed }) => !closed)
           .slice(0, maxConcurrent)

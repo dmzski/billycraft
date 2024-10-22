@@ -1,90 +1,51 @@
-import { ButtonHTMLAttributes, ForwardedRef, forwardRef, useMemo } from 'react'
-import clsx from 'clsx'
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 
-const baseClasses = 'btn'
-const outlineClasses = 'btn-outline'
-const squareClasses = 'btn-square'
-const roundedClasses = 'btn-circle'
-const loadingClasses = 'loading'
-const blockClasses = 'btn-block'
+import { tw } from "lib/utils";
 
-const BUTTON_SIZES = {
-  lg: 'btn-lg',
-  md: 'btn-md',
-  sm: 'btn-sm',
-  xs: 'btn-xs',
-} as const
+const buttonVariants = cva(
+	"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+	{
+		variants: {
+			variant: {
+				default: "bg-primary text-primary-foreground hover:bg-primary/90",
+				destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+				outline:
+					"border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+				secondary:
+					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
+				ghost: "hover:bg-accent hover:text-accent-foreground",
+				link: "text-primary underline-offset-4 hover:underline",
+			},
+			size: {
+				default: "h-10 px-4 py-2",
+				sm: "h-9 rounded-md px-3",
+				lg: "h-11 rounded-md px-8",
+				icon: "h-10 w-10",
+			},
+		},
+		defaultVariants: {
+			variant: "default",
+			size: "default",
+		},
+	},
+);
 
-const BUTTON_VARIANTS = {
-  default: '',
-  primary: 'btn-primary',
-  secondary: 'btn-secondary',
-  accent: 'btn-accent',
-  info: 'btn-info',
-  success: 'btn-success',
-  warning: 'btn-warning',
-  error: 'btn-error',
-  ghost: 'btn-ghost',
-  link: 'btn-link',
-  glass: 'glass',
-} as const
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+	VariantProps<typeof buttonVariants>;
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: keyof typeof BUTTON_VARIANTS
-  size?: keyof typeof BUTTON_SIZES
-  outline?: boolean
-  rounded?: boolean
-  square?: boolean
-  loading?: boolean
-  disabled?: boolean
-  block?: boolean
-}
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+	({ className, variant, size, type = "button", ...props }, ref) => {
+		return (
+			<button
+				type={type}
+				className={tw(buttonVariants({ variant, size, className }))}
+				ref={ref}
+				{...props}
+			/>
+		);
+	},
+);
+Button.displayName = "Button";
 
-const Button = forwardRef(
-  (
-    {
-      variant = 'default',
-      size = 'md',
-      outline = false,
-      rounded = false,
-      square = false,
-      loading = false,
-      block = false,
-      children,
-      className,
-      type = 'button',
-      disabled = false,
-      ...props
-    }: ButtonProps,
-    ref: ForwardedRef<HTMLButtonElement>,
-  ) => {
-    const computeClassName = useMemo(
-      () =>
-        clsx([
-          baseClasses,
-          BUTTON_VARIANTS[variant],
-          BUTTON_SIZES[size],
-          { [outlineClasses]: outline },
-          { [squareClasses]: square },
-          { [roundedClasses]: rounded },
-          { [loadingClasses]: loading },
-          { [blockClasses]: block },
-          className,
-        ]),
-      [variant, size, outline, rounded, square, loading, className],
-    )
-    return (
-      <button
-        className={computeClassName}
-        type={type ?? 'button'}
-        disabled={disabled}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </button>
-    )
-  },
-)
-
-export default Button
+export { Button };

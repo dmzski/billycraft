@@ -1,18 +1,25 @@
-import clsx from 'clsx'
-import { HTMLAttributes, ReactNode } from 'react'
+import clsx from "clsx";
+import { HTMLAttributes, ReactNode, forwardRef } from "react";
 
 export type RowProps = HTMLAttributes<HTMLDivElement> & {
-  template?: string
-  children?: ReactNode
-}
-const Row = ({ template, children, className, ...props }: RowProps) => {
-  const finalClasses = clsx('grid', className)
+	template?: string;
+	children?: ReactNode;
+};
 
-  return (
-    <div style={{ gridTemplateColumns: template }} className={finalClasses} {...props}>
-      {children}
-    </div>
-  )
-}
+export const Row = forwardRef<HTMLDivElement, RowProps>(
+	({ template, children, className, ...props }: RowProps) => {
+		const finalClasses = clsx("grid", className);
 
-export default Row
+		return (
+			<div
+				style={{ gridTemplateColumns: template }}
+				className={finalClasses}
+				{...props}
+			>
+				{children}
+			</div>
+		);
+	},
+);
+
+Row.displayName = "Row";

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StoryObj } from '@storybook/react'
 import Drawer, { DrawerProps } from '.'
-import Button from 'components/Button'
+import {Button} from 'components/Button'
 
 export default {
   title: 'Components/Drawer',
@@ -16,7 +16,7 @@ export const Basic: Story = {
 
     return (
       <>
-        <Button size="md" onClick={() => setIsOpen(true)}>
+        <Button onClick={() => setIsOpen(true)}>
           Open drawer
         </Button>
         <Drawer {...props} open={isOpen} onClose={() => setIsOpen(false)} />

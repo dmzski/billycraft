@@ -1,35 +1,66 @@
-import { MouseEventHandler, ReactNode, useMemo } from 'react'
-import clsx from 'clsx'
+import { HTMLAttributes, forwardRef, ReactNode } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { tw } from "lib/utils";
 
-const classes = {
-  base: 'alert',
-  variants: {
-    info: 'alert-info',
-    success: 'alert-success',
-    warning: 'alert-warning',
-    error: 'alert-error',
-  },
-} as const
+const alertVariants = cva(
+	"relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
+	{
+		variants: {
+			variant: {
+				default: "bg-background text-foreground",
+				destructive:
+					"border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+			},
+		},
+		defaultVariants: {
+			variant: "default",
+		},
+	},
+);
 
-export type AlertProps = {
-  variant?: keyof typeof classes.variants
-  className?: string
-  children: ReactNode
-  onClick?: MouseEventHandler<HTMLDivElement>
-}
+const AlertTitle = forwardRef<
+	HTMLParagraphElement,
+	React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+	<h5
+		ref={ref}
+		className={tw("mb-1 font-medium leading-none tracking-tight", className)}
+		{...props}
+	/>
+));
+AlertTitle.displayName = "AlertTitle";
 
-const Alert = ({ variant, className, children, onClick }: AlertProps) => {
-  const computedClassName = useMemo(() => {
-    const variantClasses = variant ? classes.variants[variant] : undefined
+const AlertDescription = forwardRef<
+	HTMLParagraphElement,
+	React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+	<div
+		ref={ref}
+		className={tw("text-sm [&_p]:leading-relaxed", className)}
+		{...props}
+	/>
+));
+AlertDescription.displayName = "AlertDescription";
 
-    return clsx(classes.base, variantClasses, className)
-  }, [variant, className])
+export type AlertProps = HTMLAttributes<HTMLDivElement> &
+	VariantProps<typeof alertVariants> & {
+		title?: ReactNode;
+		icon?: ReactNode;
+		description?: ReactNode;
+	};
 
-  return (
-    <div onClick={onClick} className={computedClassName}>
-      {children}
-    </div>
-  )
-}
-
-export default Alert
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(
+	({ className, variant, children, title, icon, ...props }, ref) => (
+		<div
+			ref={ref}
+			role="alert"
+			className={tw(alertVariants({ variant }), className)}
+			{...props}
+		>
+			{icon ? icon : null}
+			{title ? <AlertTitle>{title}</AlertTitle> : null}
+			{children ? <AlertDescription>{children}</AlertDescription> : null}
+		</div>
+	),
+);
+Alert.displayName = "Alert";

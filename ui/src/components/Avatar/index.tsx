@@ -1,45 +1,35 @@
-import clsx from 'clsx'
-import { HTMLAttributes } from 'react'
+import { tw } from "lib/utils";
+import { HTMLAttributes, useState } from "react";
 
 const classes = {
-  base: 'rounded-full flex justify-center items-center',
-  withoutSrc: 'p-4 select-none bg-base-300',
-}
-
-const getStringFromAlt = (altStr: string): string => {
-  if (!altStr) return ''
-  const array = altStr.split(' ')
-  if (array.length > 1) {
-    return `${array[0].substring(0, 1) + array[1].substring(0, 1)}`.toUpperCase()
-  }
-  return array.length ? `${array[0].substring(0, 1)}`.toUpperCase() : ''
-}
+	base: "relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full",
+};
 
 export type AvatarProps = HTMLAttributes<HTMLImageElement | HTMLDivElement> & {
-  size: number
-  src?: string
-  className?: string
-  alt: string
-}
+	src?: string;
+	className?: string;
+	alt?: string;
+  charCount?: number
+};
 
-const Avatar = ({ size = 24, src, alt, className, ...props }: AvatarProps) => {
-  return src ? (
-    <img
-      src={src}
-      alt={alt}
-      className={clsx(classes.base, className)}
-      style={{ width: size, height: size }}
-      {...props}
-    />
-  ) : (
-    <div
-      className={clsx(classes.base, classes.withoutSrc, className)}
-      style={{ width: size, height: size }}
-      {...props}
-    >
-      {getStringFromAlt(alt)}
-    </div>
-  )
-}
-
-export default Avatar
+export const Avatar = ({ src, alt, className, charCount = 1, ...props }: AvatarProps) => {
+	const [displayImg, setDisplayImg] = useState(src !== undefined);
+	return src && displayImg ? (
+		<img
+			src={src}
+			alt={alt}
+			className={tw(classes.base, className)}
+			onError={() => {
+				setDisplayImg(false);
+			}}
+			{...props}
+		/>
+	) : (
+		<div
+			className={tw(classes.base, "border", className)}
+			{...props}
+		>
+			{`${alt}`.slice(0, charCount).toUpperCase()}
+		</div>
+	);
+};
