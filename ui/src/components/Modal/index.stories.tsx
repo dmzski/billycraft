@@ -16,7 +16,7 @@ export const Basic: Story = {
 			disclosure={<Button>Open modal</Button>}
 			withoutPortal={withoutPortal}
 			hideOnClickOutside={hideOnClickOutside}
-      size={size}
+			size={size}
 		>
 			{({ close }) => (
 				<div>
@@ -59,6 +59,49 @@ export const Controlled: Story = {
 			</>
 		);
 	},
+	args: {
+		withoutPortal: false,
+		hideOnClickOutside: true,
+	},
+};
+
+export const WithScroll: Story = {
+	render: ({ withoutPortal, hideOnClickOutside }) => (
+		<>
+			<Modal
+				disclosure={<Button>Open scrollable modal</Button>}
+				withoutPortal={withoutPortal}
+				hideOnClickOutside={hideOnClickOutside}
+			>
+				<div className="flex flex-col gap-4">
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
+				</div>
+			</Modal>
+		</>
+	),
 	args: {
 		withoutPortal: false,
 		hideOnClickOutside: true,

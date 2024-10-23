@@ -23,8 +23,7 @@ data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]
 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg`;
 
 const dialogContentClassNames = `
-overflow-y-auto
-overflow-visible
+overflow-auto
 grid max-w-screen
 gap-4 border bg-background p-6 shadow-lg sm:rounded-lg
 `;
