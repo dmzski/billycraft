@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { StoryObj } from '@storybook/react'
-import Drawer, { DrawerProps } from '.'
+import {Drawer, DrawerProps } from '.'
 import {Button} from 'components/Button'
 
 export default {

@@ -9,11 +9,10 @@ import {
 	useRef,
 	useState,
 } from "react";
-import clsx from "clsx";
 import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
 import MonthCalendar from "./MonthCalendar";
 import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
-import TimeCalendar from "./TimeCalendar";
+import { tw } from "lib/utils";
 
 export type DateTimePickerProps = {
 	name?: string;
@@ -29,7 +28,7 @@ export type DateTimePickerProps = {
 	onClickOutside?: () => void | Promise<void>;
 };
 
-const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
+export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 	(
 		{
 			name,
@@ -111,8 +110,8 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 
 		const containerClassNames = useMemo(
 			() =>
-				clsx({
-					["absolute top-full shadow-xl rounded overflow-hidden z-100 bg-background"]: true,
+				tw({
+					["absolute top-full shadow-lg rounded-md overflow-hidden z-100 bg-background"]: true,
 					["sr-only"]: !open,
 				}),
 			[open],
@@ -120,10 +119,8 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 
 		const iconClassNames = useMemo(
 			() =>
-				clsx("h-6 absolute right-2 bottom-3", {
-					"text-gray-400": !error && !open,
-					"text-primary": !error && open,
-					"text-error": error,
+				tw("size-4 absolute right-2 bottom-0 mb-3 text-muted-foreground", {
+					"text-destructive": error,
 				}),
 			[error, variant, label, open],
 		);
@@ -153,16 +150,11 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 					<>
 						<CalendarIcon className={iconClassNames} />
 						<div className={containerClassNames}>
-							<div className="flex">
 								<MonthCalendar
 									selected={inputValue}
 									onDateClick={handleDateClick}
+                  onTimeClick={handleTimeClick}
 								/>
-								<TimeCalendar
-									selected={inputValue}
-									onTimeClick={handleTimeClick}
-								/>
-							</div>
 						</div>
 					</>
 				) : null}
@@ -172,4 +164,3 @@ const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 );
 
 DateTimePicker.displayName = "DateTimePicker";
-export default DateTimePicker;

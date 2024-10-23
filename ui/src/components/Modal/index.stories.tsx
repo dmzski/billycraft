@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from ".";
+import { Modal } from ".";
 import { Button } from "components/Button";
 import { StoryObj } from "@storybook/react";
 
@@ -11,13 +11,22 @@ export default {
 type Story = StoryObj<typeof Modal>;
 
 export const Basic: Story = {
-	render: ({ withoutPortal, hideOnClickOutside }) => (
+	render: ({ withoutPortal, hideOnClickOutside, size }) => (
 		<Modal
 			disclosure={<Button>Open modal</Button>}
 			withoutPortal={withoutPortal}
 			hideOnClickOutside={hideOnClickOutside}
+      size={size}
 		>
-			{<>You can close me</>}
+			{({ close }) => (
+				<div>
+					<Modal.Title>Title</Modal.Title>
+					<p>Description</p>
+					<Modal.Actions>
+						<Button onClick={close}>Close</Button>
+					</Modal.Actions>
+				</div>
+			)}
 		</Modal>
 	),
 	args: {

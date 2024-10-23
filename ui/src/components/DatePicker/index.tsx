@@ -12,6 +12,7 @@ import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
 import MonthCalendar from "./MonthCalendar";
 import clsx from "clsx";
 import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon";
+import { tw } from "lib/utils";
 
 export type DatePickerProps = {
 	name?: string;
@@ -25,7 +26,7 @@ export type DatePickerProps = {
 	required?: boolean;
 };
 
-const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
+export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 	(
 		{
 			name,
@@ -79,7 +80,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 		const containerClassNames = useMemo(
 			() =>
 				clsx({
-					["absolute top-full shadow rounded overflow-hidden z-100 bg-background"]: true,
+					["absolute text-foreground top-full shadow-lg rounded-md overflow-hidden z-100 bg-background"]: true,
 					["sr-only"]: !open,
 				}),
 			[open],
@@ -87,11 +88,9 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
 		const iconClassNames = useMemo(
 			() =>
-				clsx("absolute h-5 right-2", {
-					"text-gray-400": !error && !open,
-					"text-primary": !error && open,
-					"text-error": error,
-					"bottom-3": label,
+				tw("absolute size-5 right-2 mb-3 text-muted-foreground", {
+					"text-destructive": error,
+					"bottom-0": label,
 				}),
 			[error, label, open],
 		);
@@ -124,4 +123,3 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 );
 
 DatePicker.displayName = "DatePicker";
-export default DatePicker;

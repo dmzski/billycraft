@@ -1,5 +1,5 @@
 import { StoryObj } from "@storybook/react";
-import Dropdown from ".";
+import { Dropdown } from ".";
 import { Button } from "components/Button";
 
 export default {
@@ -12,27 +12,30 @@ type Story = StoryObj<typeof Dropdown>;
 export const Basic: Story = {
 	render: (args) => {
 		return (
-			<Dropdown {...args}>
-				<Button>Click me</Button>
-				<Dropdown.Content>
-					<Dropdown.Button>Action</Dropdown.Button>
-					<Dropdown.Button>Action</Dropdown.Button>
-					<Dropdown.Button>Action</Dropdown.Button>
-					<Dropdown.Button>Action</Dropdown.Button>
-					<Dropdown.Button>
-						Action that has a super long content
-					</Dropdown.Button>
-				</Dropdown.Content>
+			<Dropdown {...args} disclosure={<Button>Click me</Button>}>
+				{({ close }) => (
+					<Dropdown.Content>
+						<Dropdown.Link href="/">This is a link</Dropdown.Link>
+						<Dropdown.Button>Action</Dropdown.Button>
+						<Dropdown.Button>Action</Dropdown.Button>
+						<Dropdown.Button>Action</Dropdown.Button>
+						<Dropdown.Button onClick={close}>
+							Action that close dropdown
+						</Dropdown.Button>
+						<Dropdown.Button>
+							Action that has a super long content
+						</Dropdown.Button>
+					</Dropdown.Content>
+				)}
 			</Dropdown>
 		);
 	},
 };
 
-export const Customized: Story = {
+export const CustomStyles: Story = {
 	render: (args) => {
 		return (
-			<Dropdown {...args}>
-				<Button>Click me</Button>
+			<Dropdown {...args} disclosure={<Button>Click me w-52</Button>}>
 				<Dropdown.Content className="w-52">
 					<Dropdown.Button>Action</Dropdown.Button>
 					<Dropdown.Button>Action</Dropdown.Button>

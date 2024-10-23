@@ -1,21 +1,35 @@
+import { VariantProps, cva } from "class-variance-authority";
 import { tw } from "lib/utils";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-export const Link = forwardRef<
-	HTMLAnchorElement,
-	ComponentPropsWithoutRef<"a">
->(({ className, children, ...props }, ref) => {
-	return (
-		<a
-			ref={ref}
-			className={tw(
-				"text-foreground hover:underline font-semibold underline-offset-4 cursor-pointer",
-				className,
-			)}
-			{...props}
-		>
-			{children}
-		</a>
-	);
+const linkVariants = cva("cursor-pointer", {
+	variants: {
+		variant: {
+			default:
+				"text-foreground hover:underline font-semibold underline-offset-4",
+			button:
+				"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary h-10 px-4 py-2 hover:bg-accent hover:text-accent-foreground",
+		},
+	},
+	defaultVariants: {
+		variant: "default",
+	},
 });
+
+type LinkProps = ComponentPropsWithoutRef<"a"> &
+	VariantProps<typeof linkVariants>;
+
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+	({ className, children, variant, ...props }, ref) => {
+		return (
+			<a
+				ref={ref}
+				className={tw(linkVariants({ variant }), className)}
+				{...props}
+			>
+				{children}
+			</a>
+		);
+	},
+);
 Link.displayName = "Link";

@@ -1,15 +1,21 @@
 import { Fragment, useCallback, useMemo, useState } from "react";
 import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from "./helpers";
 import { Button } from "../Button";
-import clsx from "clsx";
 import ArrowLeftIcon from "@heroicons/react/24/outline/ArrowLeftIcon";
 import ArrowRightIcon from "@heroicons/react/24/outline/ArrowRightIcon";
+import { tw } from "lib/utils";
 
 type MonthCalendarButtonProps = {
 	date?: Date;
 	onDateClick?: (newDate: Date) => void;
 	selected?: Date;
 };
+
+const buttonClassNames = tw(
+		"user-select-none appearance-none text-sm rounded-md size-10",
+		"hover:bg-primary hover:text-primary-foreground",
+		"aria-[selected=true]:bg-primary aria-[selected=true]:text-primary-foreground",
+)
 const MonthCalendarButton = ({
 	date,
 	selected,
@@ -18,14 +24,6 @@ const MonthCalendarButton = ({
 	const isSelected =
 		selected && date ? datesAreOnSameDay(selected, date) : false;
 
-	const buttonClassNames = clsx(
-		"user-select-none appearance-none text-sm mb-2 h-6 w-6 rounded-full",
-		{
-			["hover:bg-primary hover:text-primary-content"]: !isSelected,
-			["bg-primary text-primary-content"]: isSelected,
-		},
-	);
-
 	if (date)
 		return (
 			<button
@@ -33,12 +31,13 @@ const MonthCalendarButton = ({
 					onDateClick?.(date);
 				}}
 				className={buttonClassNames}
+        aria-selected={isSelected}
 			>
 				{date.getDate()}
 			</button>
 		);
 
-	return <div className="mb-2 h-6 w-6" />;
+	return <div className="size-10" />;
 };
 
 type MonthCalendarProps = {
@@ -73,16 +72,16 @@ const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
 	const daysOfWeekStrings = useMemo(() => daysOfWeek(undefined), []);
 
 	return (
-		<div className="w-60">
+		<div className="w-70 flex flex-col gap-2">
 			<div className="flex flex-col">
-				<div className="gap-2 bg-primary text-primary-content flex items-center justify-between">
+				<div className="border-b gap-2 p-1 flex items-center justify-between">
 					<Button
 						aria-label="Previous"
 						type="button"
 						variant="ghost"
 						onClick={goPrevious}
 					>
-						<ArrowLeftIcon className="fill-current h-5" />
+						<ArrowLeftIcon className="size-5" />
 					</Button>
 					<div className="text-center">
 						{dateView
@@ -98,15 +97,15 @@ const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
 						variant="ghost"
 						onClick={goNext}
 					>
-						<ArrowRightIcon className="fill-current h-5" />
+						<ArrowRightIcon className="size-5" />
 					</Button>
 				</div>
 			</div>
-			<div className="mt-2 mx-2 grid grid-cols-7 gap-2">
+			<div className="px-2 grid grid-cols-7 gap-2">
 				{daysOfWeekStrings.map((dayString, dayIndex) => (
 					<div
 						key={`${dateView.getMonth()}-weekday-${dayIndex}`}
-						className="text-gray-500 text-center"
+						className="text-muted-foreground text-center"
 					>
 						{dayString}
 					</div>
@@ -124,8 +123,8 @@ const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
 					</Fragment>
 				))}
 			</div>
-			<div className="flex mb-2 justify-end">
-				<Button type="button" onClick={selectToday} size="sm" className="mx-2">
+			<div className="flex justify-end p-2">
+				<Button type="button" onClick={selectToday} size="sm">
 					Aujourd&apos;hui
 				</Button>
 			</div>

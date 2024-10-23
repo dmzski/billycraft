@@ -1,5 +1,5 @@
 import { StoryObj } from "@storybook/react";
-import {Link} from ".";
+import { Link } from ".";
 
 export default {
 	title: "Components/Link",
@@ -12,5 +12,13 @@ export const Basic: Story = {
 	render: (args) => <Link {...args} />,
 	args: {
 		children: "Basic",
+	},
+};
+
+export const ButtonVariant: Story = {
+	render: (args) => <Link {...args} />,
+	args: {
+		children: "Basic",
+		variant: "button",
 	},
 };

@@ -24,10 +24,10 @@ const positions = {
 const classes = {
   drawerContainer: (hasPortal?: boolean) => (hasPortal ? `` : `z-10 select-none`),
   backdrop: `fixed left-0 top-0 bg-opacity-20 bg-black w-full h-full`,
-  containerWithBackdrop: `bg-base-100 fixed p-2 shadow`,
+  containerWithBackdrop: `bg-base-100 fixed p-2 shadow-lg`,
   containerWithoutBackgrop: (hasPortal?: boolean) =>
     `${hasPortal ? '' : 'z-10'} bg-base-100 fixed p-2 shadow`,
-  closeButton: `stroke-current fill-current text-foreground stroke-0 p-2 w-8 h-8 bg-base-100 shadow-xl overflow-hidden rounded-full`,
+  closeButton: `stroke-current fill-current text-foreground stroke-0 p-2 w-8 h-8 bg-base-100 shadow-xl overflow-hidden rounded-md`,
 }
 
 type DrawerPosition = 'top' | 'right' | 'bottom' | 'left'
@@ -63,7 +63,7 @@ export type DrawerProps = {
   withoutPortal?: boolean
 }
 
-const Drawer = ({
+export const Drawer = ({
   children,
   open = false,
   hasBackdrop = false,
@@ -137,5 +137,3 @@ const Drawer = ({
 
   return withoutPortal ? modalRendered : createPortal(modalRendered, document.body)
 }
-
-export default Drawer
