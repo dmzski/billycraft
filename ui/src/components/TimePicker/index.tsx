@@ -15,7 +15,7 @@ export type TimePickerProps = {
   required?: boolean
 }
 
-const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
+export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
   (
     { value, className, disabled, error, id, step = 30, onChange, label, locales, required },
     ref,
@@ -70,5 +70,3 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
 )
 
 TimePicker.displayName = 'TimePicker'
-
-export default TimePicker
