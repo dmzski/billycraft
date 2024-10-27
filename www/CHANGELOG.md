@@ -1,5 +1,11 @@
 # @coco-erp/www
 
+## 1.2.0
+
+### Minor Changes
+
+- 6464dc8: Rename site
+
 ## 1.1.0
 
 ### Minor Changes
