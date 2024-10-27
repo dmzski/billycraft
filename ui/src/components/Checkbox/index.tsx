@@ -1,13 +1,13 @@
-import { CheckIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, MinusIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { Label } from "components/Label";
 import { tw } from "lib/utils";
-import { forwardRef, useId } from "react";
+import { forwardRef, useId, useMemo } from "react";
 
 export type CheckboxProps = {
 	label?: string;
 	labelPosition?: "left" | "right";
-	checked: boolean;
+	checked: boolean | ("checked" | "unchecked" | "indeterminate");
 	error?: boolean;
 	"aria-label"?: string;
 	"aria-labelledby"?: string;
@@ -29,7 +29,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 			"aria-label": ariaLabel,
 			"aria-labelledby": ariaLabelledBy,
 			value,
-			checked,
+			checked: checkedProp,
 			onCheckedChange,
 			disabled = false,
 			error = false,
@@ -39,6 +39,18 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 	) => {
 		const generatedId = useId();
 		const id = idProp ?? generatedId;
+
+		const checked = useMemo(() => {
+			if (checkedProp === undefined || checkedProp === null) {
+				return false;
+			}
+
+			if (typeof checkedProp === "boolean") {
+				return checkedProp;
+			}
+
+			return checkedProp !== "unchecked";
+		}, [checkedProp]);
 
 		if (!label) {
 			return (
@@ -65,7 +77,11 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 						<span
 							className={tw("flex items-center justify-center text-current")}
 						>
-							<CheckIcon className="size-4" />
+							{checkedProp === "indeterminate" ? (
+								<MinusIcon className="size-4" />
+							) : (
+								<CheckIcon className="size-4" />
+							)}
 						</span>
 					) : null}
 				</button>
@@ -85,7 +101,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 					aria-checked={checked}
 					ref={ref}
 					className={tw(
-						"flex items-center justify-center peer size-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+						"flex items-center justify-center peer size-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
 					)}
 					aria-invalid={!!error}
 					value={value}

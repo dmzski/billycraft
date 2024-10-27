@@ -23,10 +23,10 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
   const onSubmit = async () => {
     try {
       await ReportApi.delete(id)
-      toast.success(t('accounting.reports.modals.delete.submit.success'))
+      toast.show(t('accounting.reports.modals.delete.submit.success'))
       await onSubmitSuccess?.()
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -37,9 +37,9 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
       </h2>
       <div className="flex flex-col gap-5">
         <p>{t('accounting.reports.modals.delete.description')}</p>
-        <Alert variant="error">{t('accounting.reports.modals.delete.warning')}</Alert>
+        <Alert variant="destructive">{t('accounting.reports.modals.delete.warning')}</Alert>
       </div>
-      <Button type="submit" disabled={isSubmitting} variant="error" className="w-full mt-4">
+      <Button type="submit" disabled={isSubmitting} variant="destructive" className="w-full mt-4">
         {t('accounting.reports.modals.delete.submit')}
       </Button>
     </form>

@@ -28,7 +28,7 @@ const DeleteInvitationForm = ({ onSubmitSuccess, email }: DeleteInvitationFormPr
         email,
       })
 
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
     } catch (err) {
       sendErrorToSentry(err)
@@ -40,9 +40,9 @@ const DeleteInvitationForm = ({ onSubmitSuccess, email }: DeleteInvitationFormPr
     <FormProvider {...methods}>
       <form className="flex flex-col gap-10" onSubmit={methods.handleSubmit(onSubmit)}>
         <h2 className="text-3xl">{pageT('title')}</h2>
-        <p className="text-error font-semibold">{pageT('description')}</p>
+        <p className="text-destructive font-semibold">{pageT('description')}</p>
         <FormErrorAlert />
-        <Button type="submit" variant="error">
+        <Button type="submit" variant="destructive">
           {pageT('submit')}
         </Button>
       </form>

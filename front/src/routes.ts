@@ -3,7 +3,7 @@ export type QuoteRouteProps = {
 }
 
 export type QuoteRouteQueryParams = {
-  from?: 'list' | 'archived'
+  from?: 'list' | 'archived' | 'refused'
 }
 
 export type BillRouteProps = {
@@ -11,7 +11,7 @@ export type BillRouteProps = {
 }
 
 export type BillRouteQueryParams = {
-  from?: 'list' | 'archived'
+  from?: 'list' | 'archived' | 'refused'
 }
 
 export type CustomerRouteProps = {
@@ -96,7 +96,7 @@ export const ROUTES = {
     routes: {
       QUOTES: {
         id: 'history.quotes',
-        exact: true,
+        exact: false,
         path: () => `${ROUTES.HISTORY.path()}/quotes`,
         routes: {
           ARCHIVED: {
@@ -113,7 +113,7 @@ export const ROUTES = {
       },
       BILLS: {
         id: 'history.bills',
-        exact: true,
+        exact: false,
         path: () => '/history/bills',
         routes: {
           ARCHIVED: {
@@ -237,7 +237,7 @@ export const ROUTES = {
     routes: {
       OUTGOINGS: {
         id: 'accounting.outgoings',
-        exact: true,
+        exact: false,
         path: () => '/accounting/outgoings',
         routes: {
           OVERVIEW: {
@@ -263,7 +263,7 @@ export const ROUTES = {
         },
       },
       REPORTS: {
-        exact: true,
+        exact: false,
         id: 'accounting.reports',
         path: () => '/accounting/reports',
         routes: {

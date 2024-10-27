@@ -17,7 +17,7 @@ import clsx from "clsx";
 import { tw } from "lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 
-const DELAY_TRANSITION = 100
+const DELAY_TRANSITION = 100;
 const dialogClassNames = `z-50 duration-200 w-full backdrop:bg-black/70
 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0
 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg`;
@@ -26,6 +26,7 @@ const dialogContentClassNames = `
 overflow-auto
 grid max-w-screen
 gap-4 border bg-background p-6 shadow-lg sm:rounded-lg
+text-foreground
 `;
 
 const dialogVariants = cva(dialogClassNames, {
@@ -131,13 +132,17 @@ export const Modal = ({
 			const isOpen = dialogRef.current.open;
 			if (isOpen !== open) {
 				if (open) {
-					setTransitionState("opening");
+					setTransitionState((original) =>
+						original !== "open" ? "opening" : "open",
+					);
 					displayContentTimeout = setTimeout(() => {
 						dialogRef.current?.showModal();
 						setTransitionState("open");
 					}, DELAY_TRANSITION);
 				} else {
-					setTransitionState("closing");
+					setTransitionState((original) =>
+						original !== "closed" ? "closing" : "closed",
+					);
 					displayContentTimeout = setTimeout(() => {
 						setTransitionState("closed");
 						dialogRef.current?.close();
@@ -201,7 +206,7 @@ export const Modal = ({
 };
 
 const ModalActions = ({ children }: { children: ReactNode }) => {
-	return <div className="flex items-center justify-end">{children}</div>;
+	return <div className="flex items-center gap-2 justify-end">{children}</div>;
 };
 
 const ModalTitle = ({ children, className, ...props }: ModalTitleProps) => (

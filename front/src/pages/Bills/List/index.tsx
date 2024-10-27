@@ -5,7 +5,7 @@ import { useI18n } from '@/i18n'
 
 type BillListProps = {
   data: Bill[]
-  page?: 'list' | 'archived'
+  page?: 'list' | 'archived' | 'refused'
 }
 
 const BillList = ({ data, page }: BillListProps) => {
@@ -14,7 +14,7 @@ const BillList = ({ data, page }: BillListProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
+      <div className="p-4 grid md:grid-cols-12 bg-accent text-accent-foreground border-b rounded-t">
         <div className="col-span-1">{t('bills.list.headers.reference')}</div>
         <div className="col-span-3">{t('bills.list.headers.title')}</div>
         <div className="col-span-2">{t('bills.list.headers.customer')}</div>

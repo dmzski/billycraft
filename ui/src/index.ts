@@ -16,9 +16,30 @@ export { Switch } from "./components/Switch";
 export { Input } from "./components/Input";
 export { TextArea } from "./components/TextArea";
 export { Alert } from "./components/Alert";
+export * from "./components/Sidebar";
+export * from "./components/Tabs";
+export * from "./components/Table";
+export { Collapsible } from "./components/Collapsible";
 
 export { useToast, ToastProvider } from "./components/Toast/ToastProvider";
 
 // Hooks
 export { default as useClickOutsideHandler } from "./hooks/useClickOutsideHandler";
 export { default as useDebounce } from "./hooks/useDebounce";
+export { useIsMobile } from "./hooks/useIsMobile";
+
+// Reexport tanstack table
+export {
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+} from "@tanstack/react-table";
+export type {
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+} from "@tanstack/react-table";

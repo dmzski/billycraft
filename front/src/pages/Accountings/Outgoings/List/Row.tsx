@@ -1,9 +1,9 @@
 import { formatISO9075, parseJSON } from 'date-fns'
 import { OutgoingResponse } from '@/models/Outgoing'
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
+import { RRLink } from '@/components/RRLink'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
@@ -27,9 +27,9 @@ const Row = ({ outgoing }: RowProps) => {
   return (
     <div className="grid md:grid-cols-12 gap-4 p-4">
       <div className="md:col-span-3 truncate">
-        <Link to={routes.DETAILS.path({ id: outgoing.id })} className="link link-primary">
+        <RRLink to={routes.DETAILS.path({ id: outgoing.id })}>
           {outgoing.name}
-        </Link>
+        </RRLink>
       </div>
       <div className="md:col-span-3">
         {formatISO9075(parseJSON(outgoing.startDate), { representation: 'date' })}

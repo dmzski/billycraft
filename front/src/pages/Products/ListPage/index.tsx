@@ -31,20 +31,20 @@ const ProductsPage = () => {
         <h1 className="text-3xl">{t('products.list.title')}</h1>
         <div className="grid lg:grid-cols-12 gap-2">
           <p className="text-sm md:col-span-8">{t('products.list.description')}</p>
-          <div className="lg:col-span-4 flex flex-col lg:flex-row lg:justify-end gap-2">
+          <div className="lg:col-span-4 flex flex-col lg:flex-row lg:justify-end gap-4">
             <UpdateStockModal
               onSubmitSuccess={reload}
               disclosure={
-                <Button outline variant="default" className="gap-2">
-                  <ArrowPathIcon className="w-5" />
+                <Button variant="secondary">
+                  <ArrowPathIcon />
                   {t('products.list.updateStocks')}
                 </Button>
               }
             />
             <AddProductModal
               disclosure={
-                <Button variant="primary" className="gap-2">
-                  <PlusIcon className="w-5" />
+                <Button>
+                  <PlusIcon />
                   {t('products.list.add')}
                 </Button>
               }

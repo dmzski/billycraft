@@ -17,7 +17,7 @@ export const Users = () => {
   }
 
   if (!data) {
-    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    return <Alert variant="destructive">{t('genericDataLoadError')}</Alert>
   }
 
   return (

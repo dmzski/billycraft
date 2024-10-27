@@ -42,12 +42,12 @@ const EditProductGroupForm = ({ close, onSubmitSuccess, group }: EditProductGrou
   const handleSubmit = async ({ name }: EditProductGroupFormValues) => {
     try {
       await ProductGroupApi.update({ name, id: group.id })
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
       close()
     } catch (error) {
       sendErrorToSentry(error)
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -64,8 +64,8 @@ const EditProductGroupForm = ({ close, onSubmitSuccess, group }: EditProductGrou
           />
         </div>
         <Modal.Actions>
-          <Button onClick={close}>{t('cancel')}</Button>
-          <Submit variant="primary">{pageT('submit')}</Submit>
+          <Button variant="outline" onClick={close}>{t('cancel')}</Button>
+          <Submit>{pageT('submit')}</Submit>
         </Modal.Actions>
       </form>
     </FormProvider>

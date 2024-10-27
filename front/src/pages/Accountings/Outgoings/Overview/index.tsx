@@ -44,7 +44,7 @@ const Overview = () => {
           {t('accounting.outgoings.pages.overview.currentMonth')}
           {currentMonth}
         </h2>
-        <div className="flex items-center border border-primary rounded bg-primary-content text-primary p-4">
+        <div className="flex items-center border border-accent rounded bg-accent text-accent-foreground p-4">
           <p>{t('accounting.outgoings.pages.overview.totalThisMonth')}</p>
           <p className="flex-grow">{total}</p>
         </div>

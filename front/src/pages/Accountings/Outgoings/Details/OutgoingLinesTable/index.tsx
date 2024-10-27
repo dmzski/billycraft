@@ -10,7 +10,7 @@ const OutgoingLinesTable = ({ lines }: OutgoingTableProps) => {
 
   return (
     <div className="border rounded">
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 text-primary-700 items-center bg-base-300 border-b p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 font-semibold items-center border-b p-4">
         <div className="col-span-2">{t('accounting.outgoings.details.lines.headers.supplier')}</div>
         <div className="col-span-2">
           {t('accounting.outgoings.details.lines.headers.billReference')}

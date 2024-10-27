@@ -27,7 +27,7 @@ const FormPage = () => {
   return (
     <div>
       <Link to={routes.LIST.path}>
-        <Button type="button" size="xs" variant="ghost">
+        <Button type="button" variant="ghost">
           {t('accounting.outgoings.pages.form.goBack')}
         </Button>
       </Link>

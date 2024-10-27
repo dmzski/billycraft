@@ -18,8 +18,8 @@ const ProductGroupRow = ({ group, reloadGroups }: ProductGroupRowProps) => {
           group={group}
           onSubmitSuccess={reloadGroups}
           disclosure={
-            <Button variant="primary" outline>
-              <PencilIcon className="w-5" />
+            <Button size="icon">
+              <PencilIcon />
             </Button>
           }
         />
@@ -27,8 +27,8 @@ const ProductGroupRow = ({ group, reloadGroups }: ProductGroupRowProps) => {
           group={group}
           onSubmitSuccess={reloadGroups}
           disclosure={
-            <Button variant="error" outline>
-              <TrashIcon className="w-5" />
+            <Button variant="destructive" size="icon">
+              <TrashIcon />
             </Button>
           }
         />

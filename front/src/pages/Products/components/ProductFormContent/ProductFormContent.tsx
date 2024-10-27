@@ -144,8 +144,8 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
             />
             <Modal
               disclosure={
-                <Button type="button" variant="ghost" square>
-                  <QrCodeIcon className="w-5" />
+                <Button type="button" variant="ghost">
+                  <QrCodeIcon />
                 </Button>
               }
               hideOnClickOutside
@@ -157,7 +157,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
                       if (result[0]) {
                         codeField.onChange(result[0].rawValue)
                       } else {
-                        toast.error(pageT('fields.code.errors.scan'))
+                        toast.destructive(pageT('fields.code.errors.scan'))
                       }
                       close()
                     }}

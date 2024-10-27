@@ -26,7 +26,7 @@ export const Basic: Story = {
   args: {
     children: 'Basic',
     open: false,
-    hasBackdrop: true,
+    noBackdrop: true,
     withoutPortal: true,
   },
 }
@@ -45,8 +45,7 @@ export const Position: Story = {
         </div>
         <Drawer
           withoutPortal
-          hasBackdrop
-          position="top"
+          side="top"
           open={state === 'top'}
           onClose={() => setState('')}
         >
@@ -54,8 +53,7 @@ export const Position: Story = {
         </Drawer>
         <Drawer
           withoutPortal
-          hasBackdrop
-          position="right"
+          side="right"
           open={state === 'right'}
           onClose={() => setState('')}
         >
@@ -63,8 +61,7 @@ export const Position: Story = {
         </Drawer>
         <Drawer
           withoutPortal
-          hasBackdrop
-          position="bottom"
+          side="bottom"
           open={state === 'bottom'}
           onClose={() => setState('')}
         >
@@ -72,8 +69,7 @@ export const Position: Story = {
         </Drawer>
         <Drawer
           withoutPortal
-          hasBackdrop
-          position="left"
+          side="left"
           open={state === 'left'}
           onClose={() => setState('')}
         >

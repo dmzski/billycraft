@@ -13,7 +13,7 @@ const List = ({ data, reloadData }: ListProps) => {
   const pageT = scopedT('suppliers.list')
   return (
     <div>
-      <div className="px-2 py-4 grid md:grid-cols-12 bg-base-200 rounded-t">
+      <div className="px-2 py-4 grid md:grid-cols-12 bg-accent text-accent-foreground rounded-t">
         <div>{pageT('headers.color')}</div>
         <div className="md:col-span-9">{pageT('headers.name')}</div>
         <div>{pageT('headers.vat')}</div>
@@ -32,8 +32,8 @@ const List = ({ data, reloadData }: ListProps) => {
           <div className="flex justify-end">
             <SupplierModalForm
               disclosure={
-                <Button variant="primary" outline>
-                  <PencilIcon className="w-4" />
+                <Button>
+                  <PencilIcon />
                 </Button>
               }
               onSubmitSuccess={reloadData}

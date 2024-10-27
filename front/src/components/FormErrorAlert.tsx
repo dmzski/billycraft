@@ -7,7 +7,7 @@ export const FormErrorAlert = () => {
   } = useFormContext()
 
   if (errors.root?.message) {
-    return <Alert variant="error">{errors.root.message}</Alert>
+    return <Alert variant="destructive">{errors.root.message}</Alert>
   }
 
   return null

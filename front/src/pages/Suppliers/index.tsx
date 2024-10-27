@@ -23,7 +23,7 @@ const Suppliers = () => {
   }
 
   if (!data) {
-    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    return <Alert variant="destructive">{t('genericDataLoadError')}</Alert>
   }
 
   return (
@@ -32,8 +32,8 @@ const Suppliers = () => {
         <h1 className="text-3xl flex-grow">{pageT('title')}</h1>
         <SupplierModalForm
           disclosure={
-            <Button variant="primary" className="gap-2">
-              <PlusIcon className="w-5" />
+            <Button>
+              <PlusIcon />
               {pageT('addButton')}
             </Button>
           }

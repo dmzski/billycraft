@@ -13,7 +13,7 @@ const ListPage = () => {
       <div className="flex items-center pb-2 border-b">
         <h2 className="text-2xl flex-grow">{t('accounting.reports.list.title')}</h2>
         <CreateReportModal
-          disclosure={<Button variant="primary">{t('accounting.reports.list.create')}</Button>}
+          disclosure={<Button>{t('accounting.reports.list.create')}</Button>}
           onSubmitSuccess={reload}
         />
       </div>

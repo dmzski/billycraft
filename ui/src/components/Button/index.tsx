@@ -9,7 +9,8 @@ const buttonVariants = cva(
 		variants: {
 			variant: {
 				default: "bg-primary text-primary-foreground hover:bg-primary/90",
-				destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+				destructive:
+					"bg-destructive text-destructive-foreground hover:bg-destructive/90",
 				outline:
 					"border border-input bg-background hover:bg-accent hover:text-accent-foreground",
 				secondary:
@@ -32,10 +33,17 @@ const buttonVariants = cva(
 );
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-	VariantProps<typeof buttonVariants>;
+	VariantProps<typeof buttonVariants> & { asChild?: boolean };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, type = "button", ...props }, ref) => {
+	({ className, variant, size, type = "button", asChild, ...props }, ref) => {
+		if (asChild && React.isValidElement(props.children)) {
+			return React.cloneElement(props.children, {
+				...(props.children.props ?? {}),
+				className: tw(buttonVariants({ variant, size, className })),
+			} as any);
+		}
+
 		return (
 			<button
 				type={type}

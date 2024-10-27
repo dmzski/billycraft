@@ -57,12 +57,12 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
         values.code = null
       }
       await ProductApi.update({ ...values, id: product.id })
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: values })
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -80,7 +80,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
         <Modal.Title>{pageT('title')}</Modal.Title>
         <ProductFormContent suppliers={suppliers ?? []} />
         <Modal.Actions>
-          <Submit variant="primary" form={id}>
+          <Submit form={id}>
             {pageT('submit')}
           </Submit>
         </Modal.Actions>

@@ -3,8 +3,8 @@ import useCustomers from '@/hooks/useCustomers'
 import BillFilterContainer from '@/pages/Bills/Filters'
 import BillTable from '@/pages/Bills/List'
 import { useState, useMemo } from 'react'
-import { filterBills } from '@/utils/bill'
 import { useAllBillsArchivedQuery } from '@/queries/useAllBillsArchivedQuery'
+import { filterBillsOrQuotes } from '@/utils/filters'
 
 type BillFilters = Record<string, string>
 
@@ -14,7 +14,7 @@ const HistoryTab = () => {
   const { data, isLoading } = useAllBillsArchivedQuery()
 
   const billSorted = useMemo(
-    () => filterBills(data ?? [], filters, customers),
+    () => filterBillsOrQuotes(data ?? [], filters, customers),
     [customers, data, filters],
   )
 

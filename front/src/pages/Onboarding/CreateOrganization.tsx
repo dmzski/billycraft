@@ -55,10 +55,10 @@ export const CreateOrganization = () => {
       } as Company
       await CompanyApi.create(data)
       await reload()
-      toast.success(t('onboarding.create.success'))
+      toast.show(t('onboarding.create.success'))
     } catch (err) {
       sendErrorToSentry(err)
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -279,7 +279,7 @@ export const CreateOrganization = () => {
         <p>{t('onboarding.create.uploadLogoNotice')}</p>
       </div>
 
-      <Button type="submit" block variant="primary" disabled={isSubmitting || !isValid}>
+      <Button type="submit" disabled={isSubmitting || !isValid}>
         {t('onboarding.create.submit')}
       </Button>
     </form>

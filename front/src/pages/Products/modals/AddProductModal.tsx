@@ -51,12 +51,12 @@ const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFor
         values.code = null
       }
       const res = await ProductApi.create(values)
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess(res.id)
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: values })
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -74,11 +74,11 @@ const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFor
         <Modal.Title>{pageT('title')}</Modal.Title>
         <ProductFormContent suppliers={suppliers ?? []} />
         <Modal.Actions>
-          <Button variant="default" onClick={close} outline type="button">
+          <Button variant="outline" onClick={close} type="button">
             {t('cancel')}
           </Button>
 
-          <Submit variant="primary" form={id}>
+          <Submit form={id}>
             {pageT('submit')}
           </Submit>
         </Modal.Actions>

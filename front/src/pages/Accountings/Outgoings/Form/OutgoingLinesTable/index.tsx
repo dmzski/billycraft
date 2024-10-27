@@ -26,7 +26,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
 
   return (
     <div className="border rounded">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-base-300 border-b p-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-accent text-accent-foreground border-b p-4">
         <div className="md:col-span-2">{t('supplier')} *</div>
         <div className="md:col-span-2">
           {t('accounting.outgoings.details.lines.headers.billReference')}
@@ -45,7 +45,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
             <Row key={line.line} index={index} control={control} onDelete={() => remove(index)} />
           ))}
           <div className="mt-4 px-4">
-            <Button type="button" className="w-full" variant="default" onClick={addLine}>
+            <Button type="button" className="w-full" variant="outline" onClick={addLine}>
               {t('accounting.outgoings.forms.add.lines.add')}
             </Button>
           </div>

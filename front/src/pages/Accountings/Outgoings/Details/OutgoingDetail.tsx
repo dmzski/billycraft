@@ -16,7 +16,7 @@ const DetailsTableRow = ({ children }: OnlyChildrenProps) => (
 )
 
 const DetailsTableLeft = ({ children }: OnlyChildrenProps) => (
-  <dt className="md:col-span-6 border-b p-4 bg-base-200">{children}</dt>
+  <dt className="md:col-span-6 border-b p-4 font-semibold">{children}</dt>
 )
 
 const DetailsTableRight = ({ children }: OnlyChildrenProps) => (
@@ -109,7 +109,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
         <section className="md:pl-2 mt-4">
           <h2 className="text-lg mb-2">{t('accounting.outgoings.details.supplierDetail.title')}</h2>
           <div className="md:ml-2 flex flex-col gap-2 md:gap-0 rounded border">
-            <div className="grid md:grid-cols-12 bg-primary-50 text-primary-700 py-4 p-2">
+            <div className="grid md:grid-cols-12 bg-accent text-accent-foreground py-4 p-2">
               <div className="md:col-span-6">{t('supplier')}</div>
               <div className="md:col-span-6">{t('itTotal')}</div>
             </div>

@@ -3,8 +3,8 @@ import useCustomers from '@/hooks/useCustomers'
 import QuoteFilterContainer from '@/pages/Quotes/Filters'
 import QuoteList from '@/pages/Quotes/List/List'
 import { useMemo, useState } from 'react'
-import { filterQuotes } from '@/utils/quote'
 import { useAllQuotesRefusedQuery } from '@/queries/useAllQuotesRefusedQuery'
+import { filterBillsOrQuotes } from '@/utils/filters'
 
 type QuoteFilters = Record<string, string>
 const HistoryTab = () => {
@@ -13,7 +13,7 @@ const HistoryTab = () => {
 
   const { data, isLoading } = useAllQuotesRefusedQuery()
   const quoteSorted = useMemo(
-    () => filterQuotes(data ?? [], filters, customers),
+    () => filterBillsOrQuotes(data ?? [], filters, customers),
     [data, filters, customers],
   )
   return (
@@ -23,7 +23,7 @@ const HistoryTab = () => {
         filters={filters}
         setFilters={setFilters}
       />
-      <QuoteList data={quoteSorted} />
+      <QuoteList page="refused" data={quoteSorted} />
       {isLoading && !data ? (
         <div className="mt-2 flex justify-center">
           <Loader />

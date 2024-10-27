@@ -1,6 +1,6 @@
 import { VariantProps, cva } from "class-variance-authority";
 import { tw } from "lib/utils";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import { ComponentPropsWithoutRef, cloneElement, forwardRef, isValidElement } from "react";
 
 const linkVariants = cva("cursor-pointer", {
 	variants: {
@@ -17,10 +17,17 @@ const linkVariants = cva("cursor-pointer", {
 });
 
 type LinkProps = ComponentPropsWithoutRef<"a"> &
-	VariantProps<typeof linkVariants>;
+	VariantProps<typeof linkVariants> & {asChild?: boolean};
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-	({ className, children, variant, ...props }, ref) => {
+	({ className, children, variant, asChild, ...props }, ref) => {
+		if (asChild && isValidElement(children)) {
+			return cloneElement(children, {
+				...(children.props ?? {}),
+				className: tw(linkVariants({ variant, className })),
+			} as any);
+		}
+
 		return (
 			<a
 				ref={ref}

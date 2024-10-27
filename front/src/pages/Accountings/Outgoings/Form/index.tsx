@@ -40,7 +40,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
       const res = outgoing?.id
         ? await OutgoingApi.update(outgoing.id, data)
         : await OutgoingApi.create(data)
-      toast.success(
+      toast.show(
         t(
           outgoing?.id
             ? 'accounting.outgoings.forms.add.submit.edit.success'
@@ -49,7 +49,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
       )
       onSubmitSuccess?.(res)
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -113,12 +113,12 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
               type="month"
               disabled={disabledFields?.includes(field.name)}
             />
-            {error ? <span className="text-error-600 text-xs">{error.message}</span> : null}
+            {error ? <span className="text-destructive text-xs">{error.message}</span> : null}
           </div>
         )}
       />
       <OutgoingLinesTable control={control} />
-      <Button className="mt-4" disabled={isSubmitting || !isValid} type="submit" variant="primary">
+      <Button className="mt-4" disabled={isSubmitting || !isValid} type="submit">
         {t('save')}
       </Button>
     </form>

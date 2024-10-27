@@ -1,5 +1,4 @@
 import { Badge, Loader } from '@coco-ui/core'
-import { getBillTotal } from '@/utils/bill'
 import NotPaidBillList from './NotPaidBillList'
 import TodoList from './TodoList'
 import { BanknotesIcon, ExclamationTriangleIcon, PencilIcon } from '@heroicons/react/24/solid'
@@ -8,6 +7,7 @@ import { useAllTodosFinishedAfter } from '@/queries/useAllTodosFinishedAfter'
 import { useI18n } from '@/i18n'
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { useMemo } from 'react'
+import { getBillOrQuoteTotal } from '@/utils/price'
 
 const DATE_OFFSET_TODOS = 24 * 60 * 60 * 1000 * 7 // 5 days
 
@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   const totalNotPaid =
     notPaid && Array.isArray(notPaid)
-      ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillTotal(bill), 0) * 100) / 100
+      ? Math.floor(notPaid.reduce((acc, bill) => acc + getBillOrQuoteTotal(bill), 0) * 100) / 100
       : 0
 
   const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0
@@ -30,10 +30,10 @@ const Dashboard = () => {
       <div className="flex flex-col md:flex-row flex-wrap justify-between items-center mb-8">
         <h1 className="text-3xl mb-4">{t('dashboard.title')}</h1>
         <div className="grid md:grid-cols-2 gap-2 justify-center">
-          <Badge size="lg" variant={notPaid?.length ? 'error' : 'success'}>
+          <Badge variant={notPaid?.length ? 'default' : 'outline'}>
             {notPaid?.length} {t('dashboard.notPaidBillsBadge')}
           </Badge>
-          <Badge size="lg" variant={todoCount > 0 ? 'info' : 'success'}>
+          <Badge variant={todoCount > 0 ? 'default' : 'outline'}>
             {todoCount} {t('dashboard.todosBadge')}
           </Badge>
         </div>
@@ -43,7 +43,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-2">
             <PencilIcon className="w-5" />
             <h2 className="text-xl flex-grow">{t('dashboard.todos.title')}</h2>
-            <Badge variant="warning" className="hidden md:flex gap-1">
+            <Badge variant="outline" className="hidden md:flex gap-1">
               <ExclamationTriangleIcon className="w-4" />
               {t('dashboard.todosWarning')}
             </Badge>
@@ -57,7 +57,7 @@ const Dashboard = () => {
               <BanknotesIcon className="w-5" />
               <h2>{t('dashboard.notPaidBills.title')}</h2>
             </div>
-            {totalNotPaid > 0 ? <Badge variant="info">{formatCurrency(totalNotPaid)}</Badge> : null}
+            {totalNotPaid > 0 ? <Badge variant="default">{formatCurrency(totalNotPaid)}</Badge> : null}
           </div>
           {isLoading ? (
             <div className="flex justify-center">

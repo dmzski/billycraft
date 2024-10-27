@@ -84,7 +84,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
     <div className="flex flex-col gap-4">
       {Object.keys(groupBySuppliers).length > 0 ? (
         <div className="md:ml-2 flex flex-col rounded border">
-          <div className="grid md:grid-cols-12 bg-primary-50 text-primary-700 py-4 p-2">
+          <div className="grid md:grid-cols-12 bg-accent text-accent-foreground py-4 p-2">
             <div className="md:col-span-6">
               {t('accounting.reports.components.perSupplier.headers.supplier')}
             </div>

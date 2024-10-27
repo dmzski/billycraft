@@ -18,7 +18,7 @@ export const UsersList = ({ users, reload }: UsersListProps) => {
   return (
     <table className="flex flex-col py-2">
       <thead>
-        <tr className="text-left [&_>_th]:font-semibold px-4 py-2 md:h-16 items-center grid md:grid-cols-12 gap-3 bg-primary-content text-primary rounded-t border border-primary overflow-hidden">
+        <tr className="text-left [&_>_th]:font-semibold px-4 py-2 md:h-16 items-center grid md:grid-cols-12 gap-3 bg-accent text-accent-foreground rounded-t border border-primary overflow-hidden">
           <th className="md:col-span-3">{pageT('headers.email')}</th>
           <th className="md:col-span-3">{pageT('headers.name')}</th>
           <th className="md:col-span-3">{pageT('headers.role')}</th>
@@ -42,8 +42,8 @@ export const UsersList = ({ users, reload }: UsersListProps) => {
                     onSubmitSuccess={reload}
                     email={email}
                     disclosure={
-                      <Button variant="error" outline>
-                        <TrashIcon className="w-5" />
+                      <Button variant="destructive">
+                        <TrashIcon />
                       </Button>
                     }
                   />

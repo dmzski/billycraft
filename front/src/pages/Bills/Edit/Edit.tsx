@@ -1,5 +1,5 @@
 import { Button, Loader, useToast } from '@coco-ui/core'
-import { Link, Redirect, useHistory, useParams } from 'react-router-dom'
+import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { BillApi } from '@/api/BillApi'
 import { BillStatusEnum } from '@/models/Bill'
 import { ROUTES } from '@/routes'
@@ -12,6 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { BillUpdateRequest } from '@/models/dtos/BillUpdateRequest'
 import { calculatePriceTTC } from '@/utils/price'
 import { useMemo } from 'react'
+import { RRLink } from '@/components/RRLink'
 
 const defaultBill = {
   lines: [],
@@ -43,11 +44,11 @@ export const Edit = () => {
     try {
       if (bill?.id) {
         await BillApi.update(tmp)
-        toast.success(t('bills.form.submit.success'))
+        toast.show(t('bills.form.submit.success'))
         push(ROUTES.BILL_OVERVIEW.path({ id: bill.id }))
       }
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -89,14 +90,14 @@ export const Edit = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <Link
-        className="gap-1 link-hover link-primary flex items-center"
+      <RRLink
+        className="gap-1 flex items-center"
         to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
       >
         <ChevronLeftIcon className="w-5" /> {t('bills.form.edit.backTo')}
-      </Link>
+      </RRLink>
       <h1 className="text-4xl font-bold flex gap-5 items-center">
-        <CreditCardIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
+        <CreditCardIcon className="size-14 p-3 text-accent-foreground bg-accent rounded-lg" />
         <span>{bill.name}</span>
       </h1>
       <FormProvider {...methods}>
@@ -104,10 +105,8 @@ export const Edit = () => {
           <BillFormContent bill={bill} />
           {!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status ? (
             <Button
-              size="md"
               type="submit"
               disabled={!isValid || isSubmitting || disabled}
-              variant="primary"
             >
               {t('bills.form.submit')}
             </Button>
