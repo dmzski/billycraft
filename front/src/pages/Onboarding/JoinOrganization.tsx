@@ -22,7 +22,7 @@ export const JoinOrganization = () => {
         await InvitationApi.accept({
           companyId: data[0].companyId,
         })
-        toast.success(pageT('success'))
+        toast.show(pageT('success'))
         await reload()
       }
     } catch (err) {
@@ -45,7 +45,7 @@ export const JoinOrganization = () => {
   }
 
   if (!data) {
-    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    return <Alert variant="destructive">{t('genericDataLoadError')}</Alert>
   }
 
   return data.length === 0 ? (
@@ -64,7 +64,7 @@ export const JoinOrganization = () => {
           })}
         </p>
         <FormErrorAlert />
-        <Button variant="primary" type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {pageT('submit')}
         </Button>
       </form>

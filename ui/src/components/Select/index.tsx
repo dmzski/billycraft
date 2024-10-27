@@ -1,235 +1,256 @@
 import {
-  ForwardedRef,
-  forwardRef,
-  useMemo,
-  useState,
-  useCallback,
-  InputHTMLAttributes,
-  KeyboardEventHandler,
-  useRef,
-  useImperativeHandle,
-  useId,
-  ReactNode,
-} from 'react'
-import OptionList from './OptionList'
-import clsx from 'clsx'
-import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
+	forwardRef,
+	useMemo,
+	useState,
+	useCallback,
+	InputHTMLAttributes,
+	KeyboardEventHandler,
+	useRef,
+	useImperativeHandle,
+	useId,
+	ReactNode,
+} from "react";
+import OptionList from "./OptionList";
+import useClickOutsideHandler from "hooks/useClickOutsideHandler";
+import { VariantProps, cva } from "class-variance-authority";
+import { Label } from "components/Label";
+import { tw } from "lib/utils";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
-const errorClasses = 'select-error'
-const disabledClasses = 'select-disabled'
-const inputClasses = 'select inline-flex items-center min-w-0'
+const selectVariants = cva(
+	"flex justify-between h-10 w-full items-center bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 group-focus-within:ring-2 group-focus-within:ring-ring group-focus-within:ring-offset-2 data-[invalid=true]:border-destructive group-focus-within:data-[invalid=true]:ring-destructive",
+	{
+		variants: {
+			variant: {
+				default: "rounded-md border border-input",
+				"ghost": "border-none rounded-md hover:bg-accent transition-colors",
+			},
+		},
+		defaultVariants: {
+			variant: "default",
+		},
+	},
+);
 
-type Variants = 'no-border' | 'ghost' | 'default'
-const variants: Record<Variants, string> = {
-  'no-border': '',
-  ghost: 'select-ghost focus-within:select-primary',
-  default:
-    'select-bordered focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary focus-within:select-primary',
-}
-
-export type OptionValue = string | number
+export type OptionValue = string | number;
 export type SelectOptionType = {
-  value: OptionValue
-  label: ReactNode
-  render?: ReactNode
-  searchText?: string
-}
+	value: OptionValue;
+	label: ReactNode;
+	render?: ReactNode;
+	searchText?: string;
+};
 
-export type ValueType = OptionValue | Array<OptionValue> | undefined
+export type SelectValueType = OptionValue | Array<OptionValue> | undefined;
 export type SelectProps = Pick<
-  InputHTMLAttributes<HTMLInputElement>,
-  | 'autoFocus'
-  | 'placeholder'
-  | 'readOnly'
-  | 'disabled'
-  | 'required'
-  | 'className'
-  | 'id'
-  | 'aria-label'
-  | 'name'
+	InputHTMLAttributes<HTMLInputElement>,
+	| "autoFocus"
+	| "placeholder"
+	| "readOnly"
+	| "disabled"
+	| "required"
+	| "className"
+	| "id"
+	| "aria-label"
+	| "name"
 > & {
-  options: SelectOptionType[]
-  label?: string
-  onChange?: (result: ValueType) => unknown
-  value: ValueType
-  readOnly?: boolean
-  isSearchable?: boolean
-  isMulti?: boolean
-  error?: boolean | string
-  variant?: Variants
-}
+	options: SelectOptionType[];
+	label?: string;
+	onChange?: (result: SelectValueType) => unknown;
+	value: SelectValueType;
+	readOnly?: boolean;
+	isSearchable?: boolean;
+	isMulti?: boolean;
+	error?: boolean | string;
+	placeholderSearchText?: string;
+} & VariantProps<typeof selectVariants>;
 
 const KEYS = {
-  ArrowDown: 'ArrowDown',
-  ArrowUp: 'ArrowUp',
-  Tab: 'Tab',
-  Escape: 'Escape',
-  Enter: 'Enter',
-}
+	ArrowDown: "ArrowDown",
+	ArrowUp: "ArrowUp",
+	Tab: "Tab",
+	Escape: "Escape",
+	Enter: "Enter",
+};
 
-const Select = (
-  {
-    'aria-label': ariaLabel,
-    readOnly,
-    className,
-    id: idProp,
-    name,
-    options = [],
-    placeholder,
-    onChange,
-    isMulti,
-    value = isMulti ? [] : undefined,
-    disabled,
-    label,
-    isSearchable,
-    error,
-    required,
-    autoFocus,
-    variant = 'default',
-  }: SelectProps,
-  ref: ForwardedRef<HTMLInputElement>,
-) => {
-  const generatedId = useId()
-  const id = idProp ?? generatedId
-  const [isOpen, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+export const Select = forwardRef<HTMLInputElement, SelectProps>(
+	(
+		{
+			"aria-label": ariaLabel,
+			readOnly,
+			className,
+			id: idProp,
+			name,
+			options = [],
+			placeholder,
+			onChange,
+			isMulti,
+			value = isMulti ? [] : undefined,
+			disabled,
+			label,
+			isSearchable,
+			error,
+			required,
+			autoFocus,
+			placeholderSearchText,
+			variant,
+		},
+		ref,
+	) => {
+		const generatedId = useId();
+		const id = idProp ?? generatedId;
+		const [isOpen, setOpen] = useState(false);
+		const containerRef = useRef<HTMLDivElement>(null);
+		const inputRef = useRef<HTMLInputElement>(null);
 
-  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
+		useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
-  useClickOutsideHandler(containerRef, () => {
-    setOpen(false)
-  })
+		useClickOutsideHandler(containerRef, () => {
+			setOpen(false);
+		});
 
-  const handleOpen = useCallback(() => {
-    if (!disabled) {
-      setOpen(true)
-    }
-  }, [disabled])
+		const handleOpen = useCallback(() => {
+			if (!disabled) {
+				setOpen(true);
+			}
+		}, [disabled]);
 
-  // Click an option change the value only
-  const handleClickForMulti = useCallback(
-    (option: SelectOptionType) => {
-      if (!value || !Array.isArray(value)) {
-        onChange?.([option.value])
-        return
-      }
-      const index = value.findIndex(v => v === option.value)
+		// Click an option change the value only
+		const handleClickForMulti = useCallback(
+			(option: SelectOptionType) => {
+				if (!value || !Array.isArray(value)) {
+					onChange?.([option.value]);
+					return;
+				}
+				const index = value.findIndex((v) => v === option.value);
 
-      // Handle if we click on an option which is already in value
-      if (index > -1) {
-        const tmp = [...value]
-        tmp.splice(index, 1)
-        onChange?.([...tmp])
-      } else {
-        onChange?.([...value, option.value])
-      }
-    },
-    [onChange, value],
-  )
+				// Handle if we click on an option which is already in value
+				if (index > -1) {
+					const tmp = [...value];
+					tmp.splice(index, 1);
+					onChange?.([...tmp]);
+				} else {
+					onChange?.([...value, option.value]);
+				}
+			},
+			[onChange, value],
+		);
 
-  // Click an option change search and value then close the options
-  const handleClickForSingle = useCallback(
-    (option: SelectOptionType) => {
-      onChange?.(option.value)
-      inputRef.current?.focus()
-      setOpen(false)
-    },
-    [onChange],
-  )
+		// Click an option change search and value then close the options
+		const handleClickForSingle = useCallback(
+			(option: SelectOptionType) => {
+				onChange?.(option.value);
+				inputRef.current?.focus();
+				setOpen(false);
+			},
+			[onChange],
+		);
 
-  const handleKeyDown: KeyboardEventHandler = useCallback(
-    event => {
-      if (!isOpen) {
-        if (event.key === KEYS.ArrowDown) {
-          event.preventDefault()
-          handleOpen()
-        }
-      } else {
-        if (KEYS.Escape === event.key) {
-          setOpen(false)
-        }
-      }
-    },
-    [isOpen, handleOpen, setOpen],
-  )
+		const handleKeyDown: KeyboardEventHandler = useCallback(
+			(event) => {
+				if (!isOpen) {
+					if (event.key === KEYS.ArrowDown) {
+						event.preventDefault();
+						handleOpen();
+					}
+				} else {
+					if (KEYS.Escape === event.key) {
+						setOpen(false);
+					}
+				}
+			},
+			[isOpen, handleOpen, setOpen],
+		);
 
-  const inputClassName = clsx(inputClasses, 'relative', variants[variant] ?? variants.default, {
-    [errorClasses]: error,
-    [disabledClasses]: disabled,
-  })
+		const valueRender = useMemo(() => {
+			if (!value) {
+				return placeholder;
+			}
+			if (Array.isArray(value)) {
+				return value
+					.map((aValue) => {
+						const optionFound = options.find(
+							({ value: optionValue }) => optionValue === aValue,
+						);
 
-  const valueRender = useMemo(() => {
-    if (!value) {
-      return placeholder
-    }
-    if (Array.isArray(value)) {
-      return value
-        .map(aValue => {
-          const optionFound = options.find(({ value: optionValue }) => optionValue === aValue)
+						return optionFound?.render ?? optionFound?.label;
+					})
+					.filter(Boolean)
+					.map((valueNode, index) => (
+						<span
+							key={index}
+							className="bg-transparent border px-2 text-primary border-primary rounded"
+						>
+							{valueNode}
+						</span>
+					));
+			}
+			const optionFound = options.find((option) => value === option.value);
 
-          return optionFound?.render ?? optionFound?.label
-        })
-        .filter(Boolean)
-        .map((valueNode, index) => (
-          <span
-            key={index}
-            className="bg-transparent border px-2 text-primary border-primary rounded"
-          >
-            {valueNode}
-          </span>
-        ))
-    }
-    const optionFound = options.find(option => value === option.value)
+			return optionFound?.render ?? optionFound?.label;
+		}, [options, value]);
 
-    return optionFound?.render ?? optionFound?.label
-  }, [options, value])
+		return (
+			<div
+				aria-expanded={isOpen}
+				aria-disabled={disabled}
+				ref={containerRef}
+				onKeyDown={handleKeyDown}
+				onClick={handleOpen}
+				aria-invalid={!!error}
+				className={tw("grid group gap-1 w-full h-max", className)}
+			>
+				{label ? <Label htmlFor={id}>{label}</Label> : null}
+				<div className="relative flex-nowrap">
+					<div
+						tabIndex={0}
+						data-invalid={!!error}
+						className={selectVariants({ variant })}
+					>
+						<div className="flex gap-2 flex-row flex-nowrap truncate">
+							{valueRender}
+						</div>
+						<div className="flex items-center gap-2">
+							{required ? <span className="text-destructive">*</span> : null}
+							{isOpen ? (
+								<ChevronUpIcon className="size-4" />
+							) : (
+								<ChevronDownIcon className="size-4" />
+							)}
+						</div>
+					</div>
 
-  return (
-    <div
-      aria-expanded={isOpen}
-      aria-disabled={disabled}
-      ref={containerRef}
-      onKeyDown={handleKeyDown}
-      onClick={handleOpen}
-      aria-invalid={required && !value}
-      className={clsx('form-control', className)}
-    >
-      {label ? (
-        <label htmlFor={id} className="label py-1">
-          <span className="label-text">{label}</span>
-        </label>
-      ) : null}
-      <div tabIndex={0} className={clsx(inputClassName, 'relative flex-nowrap')}>
-        <span className="flex-grow inline-flex gap-2 truncate">{valueRender}</span>
-        <input
-          aria-haspopup="listbox"
-          autoFocus={autoFocus}
-          id={id}
-          className={clsx('sr-only')}
-          tabIndex={-1}
-          name={name}
-          disabled={disabled || readOnly}
-          aria-label={ariaLabel}
-          ref={inputRef}
-          onFocus={handleOpen}
-          onClick={handleOpen}
-          defaultValue={value?.toString() ?? ''}
-        />
-        {options?.length > 0 && isOpen ? (
-          <OptionList
-            isMulti={isMulti}
-            options={options}
-            value={value}
-            isSearchable={isSearchable}
-            onOptionClick={(option: SelectOptionType) => {
-              isMulti ? handleClickForMulti(option) : handleClickForSingle(option)
-            }}
-          />
-        ) : null}
-      </div>
-    </div>
-  )
-}
+					<input
+						aria-haspopup="listbox"
+						autoFocus={autoFocus}
+						id={id}
+						className="sr-only"
+						tabIndex={-1}
+						name={name}
+						disabled={disabled || readOnly}
+						aria-label={ariaLabel}
+						ref={inputRef}
+						onFocus={handleOpen}
+						onClick={handleOpen}
+						defaultValue={value?.toString() ?? ""}
+					/>
+					{options?.length > 0 && isOpen ? (
+						<OptionList
+							placeholderSearchText={placeholderSearchText}
+							isMulti={isMulti}
+							options={options}
+							value={value}
+							isSearchable={isSearchable}
+							onOptionClick={(option: SelectOptionType) => {
+								isMulti
+									? handleClickForMulti(option)
+									: handleClickForSingle(option);
+							}}
+						/>
+					) : null}
+				</div>
+			</div>
+		);
+	},
+);
 
-export default forwardRef(Select)
+Select.displayName = "Select";

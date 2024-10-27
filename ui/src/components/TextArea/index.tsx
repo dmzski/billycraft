@@ -1,82 +1,60 @@
-import clsx from 'clsx'
 import {
-  ChangeEventHandler,
-  FocusEventHandler,
-  forwardRef,
-  KeyboardEventHandler,
-  MouseEventHandler,
-} from 'react'
+	ChangeEventHandler,
+	FocusEventHandler,
+	forwardRef,
+	KeyboardEventHandler,
+	MouseEventHandler,
+	useId,
+} from "react";
 
-const classes = {
-  container: 'form-control',
-  input: 'textarea textarea-bordered',
-  label: 'label',
-  labelText: 'label-text',
-  inputError: 'textarea-error',
-  sizes: {
-    xs: 'textarea-xs',
-    sm: 'textarea-sm',
-    md: 'textarea-md',
-    lg: 'textarea-lg',
-  },
-} as const
+import { tw } from "lib/utils";
+import { Label } from "components/Label";
 
 export type TextAreaProps = {
-  label?: string
-  error?: string | boolean
-  required?: boolean
-  readOnly?: boolean
-  disabled?: boolean
-  className?: string
-  id?: string
-  name?: string
-  onBlur?: FocusEventHandler<HTMLTextAreaElement>
-  onChange?: ChangeEventHandler<HTMLTextAreaElement>
-  onClick?: MouseEventHandler<HTMLTextAreaElement>
-  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>
-  onKeyUp?: KeyboardEventHandler<HTMLTextAreaElement>
-  placeholder?: string
-  value?: string
-  rows?: number
-  resize?: 'vertical' | 'horizontal' | 'both' | 'none'
-  helper?: string
-}
+	label?: string;
+	error?: string | boolean;
+	required?: boolean;
+	readOnly?: boolean;
+	disabled?: boolean;
+	className?: string;
+	id?: string;
+	name?: string;
+	onBlur?: FocusEventHandler<HTMLTextAreaElement>;
+	onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+	onClick?: MouseEventHandler<HTMLTextAreaElement>;
+	onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>;
+	onKeyUp?: KeyboardEventHandler<HTMLTextAreaElement>;
+	placeholder?: string;
+	value?: string;
+	rows?: number;
+	helper?: string;
+};
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, label, error, id, helper, resize = 'vertical', ...props }, ref) => {
-    return (
-      <div className={clsx(classes.container, className)}>
-        {label ? (
-          <label htmlFor={id} className={classes.label}>
-            <span className={classes.labelText}>{label}</span>
-          </label>
-        ) : null}
-        <textarea
-          className={clsx(
-            classes.input,
-            !error && 'focus:border-primary focus:outline-primary',
-            error && classes.inputError,
-            {
-              'resize-none': resize === 'none',
-              'resize-y': resize === 'vertical',
-              'resize-x': resize === 'horizontal',
-              resize: resize === 'both',
-            },
-          )}
-          {...props}
-          ref={ref}
-          id={id}
-        />
-        {helper && (!error || typeof error !== 'string') ? (
-          <span className="label-text-alt opacity-70">{helper}</span>
-        ) : null}
-        {error && typeof error === 'string' ? (
-          <span className="label-text-alt text-error mt-1">{error}</span>
-        ) : null}
-      </div>
-    )
-  },
-)
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+	({ className, label, error, id: idProp, helper, ...props }, ref) => {
+		const generatedId = useId();
+		const id = idProp ?? generatedId;
+		return (
+			<div className={tw("grid w-full gap-1", className)}>
+				{label ? <Label htmlFor={id}>{label}</Label> : null}
+				<textarea
+					aria-invalid={!!error}
+					className={tw(
+						"flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+						"aria-[invalid=true]:border-destructive focus:aria-[invalid=true]:ring-destructive",
+					)}
+					ref={ref}
+					{...props}
+				/>
+				{helper && (!error || typeof error !== "string") ? (
+					<span className="label-text-alt opacity-70">{helper}</span>
+				) : null}
+				{error && typeof error === "string" ? (
+					<span className="label-text-alt text-error">{error}</span>
+				) : null}
+			</div>
+		);
+	},
+);
 
-TextArea.displayName = 'TextArea'
-export default TextArea
+TextArea.displayName = "TextArea";

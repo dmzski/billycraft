@@ -1,13 +1,14 @@
-import { Button, Checkbox, Input, useToast } from '@coco-ui/core'
+import { Button, Checkbox, Input, Link, useToast } from '@coco-ui/core'
 import { SUPPORT_EMAIL } from '@/constants/global'
 import { useI18n } from '@/i18n'
 import { ApiError } from '@/models/ApiError'
 import { useAuth } from '@/providers/AuthProvider'
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import { sendErrorToSentry } from '@/utils/errors'
+import { RRLink } from '@/components/RRLink'
 
 type RegisterFormValues = {
   email: string
@@ -45,16 +46,16 @@ export const Register = () => {
   const onSubmit = async (params: RegisterFormValues) => {
     try {
       await register(params)
-      toast.success(t('register.success'))
+      toast.show(t('register.success'))
       push(ROUTES.LOGIN.path())
     } catch (err) {
       if (!(err instanceof ApiError) || err.code === 500) {
         sendErrorToSentry(err)
       }
       if (err instanceof ApiError) {
-        toast.error(err.message)
+        toast.destructive(err.message)
       } else {
-        toast.error(t('genericFormError'))
+        toast.destructive(t('genericFormError'))
       }
     }
   }
@@ -134,31 +135,31 @@ export const Register = () => {
                 <div className="flex gap-2">
                   <Checkbox
                     name={field.name}
-                    onChange={field.onChange}
+                    onCheckedChange={field.onChange}
                     checked={field.value}
                     labelPosition="right"
                   />
-                  <a href="/tos.txt" target="_blank" className="link">
+                  <Link href="/tos.txt" target="_blank">
                     {t('register.fields.tos.label')}
-                  </a>
+                  </Link>
                 </div>
               )}
             />
-            <Button variant="primary" type="submit" disabled={!isValid || isSubmitting}>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
               {t('register.submit')}
             </Button>
             <div className="flex justify-center">
-              <Link to={ROUTES.LOGIN.path} className="link link-info">
+              <RRLink to={ROUTES.LOGIN.path}>
                 {t('login.title')}
-              </Link>
+              </RRLink>
             </div>
           </div>
         </form>
         <small className="text-xs">
           {t('supportPrefix')}
-          <a className="link" href={`mailto:${SUPPORT_EMAIL}`}>
+          <Link href={`mailto:${SUPPORT_EMAIL}`}>
             {SUPPORT_EMAIL}
-          </a>
+          </Link>
         </small>
       </div>
     </div>

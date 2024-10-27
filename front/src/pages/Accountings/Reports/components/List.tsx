@@ -1,8 +1,8 @@
 import { useFormatDate } from '@/hooks/useFormatDate'
 import { ReportResponse } from '@/models/Report'
-import { Link } from 'react-router-dom'
 import { REPORT_ROUTES } from '../constants'
 import { useI18n } from '@/i18n'
+import { RRLink } from '@/components/RRLink'
 
 type ReportRowProps = {
   report: ReportResponse
@@ -12,9 +12,9 @@ const ReportRow = ({ report }: ReportRowProps) => {
   return (
     <div className="grid md:grid-cols-12 p-2 border-t">
       <div className="md:col-span-3">
-        <Link className="link-primary" to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>
+        <RRLink to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>
           {report.name}
-        </Link>
+        </RRLink>
       </div>
       <div className="md:col-span-3">{toISO9075(report.startDate)}</div>
       <div className="md:col-span-3">{toISO9075(report.endDate)}</div>
@@ -31,7 +31,7 @@ const List = ({ reports }: ListProps) => {
 
   return (
     <div className="flex flex-col border rounded">
-      <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-base-300">
+      <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-accent text-accent-foreground">
         <div className="md:col-span-3">{t('accounting.reports.components.list.headers.name')}</div>
         <div className="md:col-span-3">
           {t('accounting.reports.components.list.headers.startDate')}

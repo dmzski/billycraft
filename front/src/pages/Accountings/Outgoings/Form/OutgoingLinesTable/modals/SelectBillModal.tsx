@@ -1,135 +1,104 @@
-import { Button, Input, Modal, Select } from '@coco-ui/core'
-import useCustomers from '@/hooks/useCustomers'
-import { ComponentProps, useMemo } from 'react'
-import { useController, useForm } from 'react-hook-form'
-import { useI18n } from '@/i18n'
-import { useAllBillsQuery } from '@/queries/useAllBillsQuery'
+import { Modal } from "@coco-ui/core";
+import useCustomers from "@/hooks/useCustomers";
+import { ComponentProps, useMemo } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useI18n } from "@/i18n";
+import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
+import { SelectField } from "@/components/form/SelectField";
+import { Submit } from "@/components/form/Submit";
 
 type SelectBillModalProps = {
-  onSubmit: (billId: string) => void | Promise<void>
-  disclosure: ComponentProps<typeof Modal>['disclosure']
-}
+	onSubmit: (billId: string) => void | Promise<void>;
+	disclosure: ComponentProps<typeof Modal>["disclosure"];
+};
 
-type SelectBillFormProps = Omit<SelectBillModalProps, 'disclosure'> & { close: () => void }
+type SelectBillFormProps = Omit<SelectBillModalProps, "disclosure"> & {
+	close: () => void;
+};
 
 type SelectBillModalFormValues = {
-  customerId?: string
-  title?: string
-  billId?: string
-}
+	customerId?: string;
+	title?: string;
+	billId?: string;
+};
 const SelectBillForm = ({ onSubmit, close }: SelectBillFormProps) => {
-  const { t } = useI18n()
-  const { data: bills } = useAllBillsQuery()
-  const customers = useCustomers()
+	const { t } = useI18n();
+	const { data: bills } = useAllBillsQuery();
+	const customers = useCustomers();
 
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    formState: { isSubmitting, isValid },
-  } = useForm<SelectBillModalFormValues>({
-    mode: 'onChange',
-  })
-  const customerController = useController({
-    name: 'customerId',
-    control,
-    defaultValue: undefined,
-    rules: {
-      onChange: () => {
-        setValue('billId', undefined)
-      },
-      deps: ['billId'],
-    },
-  })
-  const titleController = useController({
-    name: 'title',
-    defaultValue: '',
-    control,
-  })
-  const billIdController = useController({
-    name: 'billId',
-    control,
-    rules: {
-      required: true,
-    },
-  })
+	const methods = useForm<SelectBillModalFormValues>({
+		mode: "onChange",
+	});
 
-  const customerOptions = useMemo(
-    () => customers?.map(({ id, name }) => ({ value: id, label: name })) ?? [],
-    [customers],
-  )
+	const customerOptions = useMemo(
+		() => customers?.map(({ id, name }) => ({ value: id, label: name })) ?? [],
+		[customers],
+	);
 
-  const billOptions = useMemo(
-    () =>
-      bills
-        ?.filter(({ title, customerId }) => {
-          if (titleController.field.value && customerController.field.value)
-            return (
-              title.toUpperCase().includes(titleController.field.value.toUpperCase()) &&
-              customerController.field.value === customerId
-            )
+	const selectedCustomerId = methods.watch("customerId");
 
-          if (titleController.field.value)
-            return title.toUpperCase().includes(titleController.field.value.toUpperCase())
+	const billOptions = useMemo(
+		() =>
+			bills
+				?.filter(({ customerId }) =>
+					selectedCustomerId ? selectedCustomerId === customerId : true,
+				)
+				?.map(({ id, title, name }) => ({
+					value: id,
+					label: `${name} - ${title}`,
+				})) ?? [],
+		[bills, selectedCustomerId],
+	);
 
-          if (customerController.field.value) return customerController.field.value === customerId
+	const onFormSubmit = ({ billId }: SelectBillModalFormValues) => {
+		if (billId) {
+			onSubmit?.(billId);
+			close();
+		}
+	};
 
-          if (!titleController.field.value && !customerController.field.value) return true
-
-          return false
-        })
-        ?.map(({ id, title, name }) => ({ value: id, label: `${name} - ${title}` })) ?? [],
-    [titleController.field.value, customerController.field.value, bills],
-  )
-
-  const onFormSubmit = ({ billId }: SelectBillModalFormValues) => {
-    if (billId) {
-      onSubmit?.(billId)
-      close()
-    }
-  }
-
-  return (
-    <div className="flex flex-col gap-5">
-      <h2 className="text-xl">{t('accounting.outgoings.modals.selectBill.title')}</h2>
-      <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col gap-4">
-        <Select
-          options={customerOptions}
-          value={customerController.field.value}
-          name={customerController.field.name}
-          onChange={customerController.field.onChange}
-          ref={customerController.field.ref}
-          label={t('customer')}
-          isSearchable
-        />
-        <Input
-          value={titleController.field.value}
-          name={titleController.field.name}
-          onChange={titleController.field.onChange}
-          ref={titleController.field.ref}
-          label={t('title')}
-        />
-        <Select
-          options={billOptions}
-          value={billIdController.field.value}
-          name={billIdController.field.name}
-          onChange={billIdController.field.onChange}
-          ref={billIdController.field.ref}
-          label={t('bill')}
-          isSearchable
-        />
-        <Button type="submit" disabled={!isValid || isSubmitting}>
-          {t('select')}
-        </Button>
-      </form>
-    </div>
-  )
-}
+	return (
+		<FormProvider {...methods}>
+			<form
+				onSubmit={(event) => {
+					event.stopPropagation();
+					methods.handleSubmit(onFormSubmit)(event);
+				}}
+				className="flex flex-col gap-10"
+			>
+				<h2 className="text-xl">
+					{t("accounting.outgoings.modals.selectBill.title")}
+				</h2>
+				<SelectField
+					options={customerOptions}
+					control={methods.control}
+					name="customerId"
+					onChange={() => {
+						methods.setValue("billId", undefined, { shouldValidate: true });
+					}}
+					label={t("customer")}
+					isSearchable
+				/>
+				<SelectField
+					options={billOptions}
+					control={methods.control}
+					name="billId"
+					label={t("bill")}
+					isSearchable
+					required
+				/>
+				<Modal.Actions>
+					<Submit>{t("select")}</Submit>
+				</Modal.Actions>
+			</form>
+		</FormProvider>
+	);
+};
 
 const SelectBillModal = ({ onSubmit, disclosure }: SelectBillModalProps) => (
-  <Modal disclosure={disclosure}>
-    {({ close }) => <SelectBillForm close={close} onSubmit={onSubmit} />}
-  </Modal>
-)
+	<Modal disclosure={disclosure}>
+		{({ close }) => <SelectBillForm close={close} onSubmit={onSubmit} />}
+	</Modal>
+);
 
-export default SelectBillModal
+export default SelectBillModal;

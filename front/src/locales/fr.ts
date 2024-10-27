@@ -50,7 +50,7 @@ export default {
   // Global
   'forms.confirmation.delete.pattern': '^SUPPRIMER$',
   'forms.confirmation.delete.label': 'Ecrire SUPPRIMER pour confirmer',
-  appName: 'Coco ERP',
+  appName: 'Billycraft',
   underDevelopment: 'Fonctionnalité en cours de développment',
   contactSupport: 'Contactez le support',
   dataloaderError:
@@ -139,7 +139,7 @@ export default {
   'register.fields.tos.label': "J'accepte les Conditions Générales d'Utilisation",
 
   // Onboarding
-  'onboarding.home.title': 'Bienvenue dans Coco ERP',
+  'onboarding.home.title': 'Bienvenue dans Billycraft',
   'onboarding.home.description':
     'Souhaitez vous créer une nouvelle entreprise ou rejoindre une entreprise existante ?',
   'onboarding.home.button.create': 'Créer mon entreprise',
@@ -345,6 +345,7 @@ export default {
   'bills.form.lines.fields.totalItPrice.label': 'Total TTC',
   'bills.form.lines.fields.subTotal.label': 'Sous total TTC',
   'bills.form.lines.addDescription': 'Ajouter une description',
+  'bills.form.lines.deleteDescription': 'Supprimer la description',
 
   // Bills > Details
   'bills.details.backTo': 'Retourner à la liste des factures',
@@ -474,7 +475,7 @@ export default {
   'quotes.form.fields.title.label': 'Titre',
   'quotes.form.fields.title.placeholder': 'Titre du devis',
   'quotes.form.fields.customerId.label': 'Client',
-  'quotes.form.fields.customerId.placeholder': 'Nom du client',
+  'quotes.form.fields.customerId.placeholder': 'Sélectionner un client',
   'quotes.form.fields.vat.label': 'TVA (%)',
   'quotes.form.fields.vat.placeholder': '0',
   'quotes.form.submit': 'Enregistrer',
@@ -507,6 +508,7 @@ export default {
   'quotes.form.lines.fields.subTotal.label': 'Sous total TTC',
   'quotes.form.lines.add': 'Ajouter une ligne',
   'quotes.form.lines.addDescription': 'Ajouter une description',
+  'quotes.form.lines.deleteDescription': 'Supprimer la description',
 
   // Customers > Form > Form
   'customers.modals.form.name': 'Nom',

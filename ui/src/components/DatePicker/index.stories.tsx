@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import DatePicker, { DatePickerProps } from '.'
+import {DatePicker, DatePickerProps } from '.'
 import { StoryObj } from '@storybook/react'
 
 export default {

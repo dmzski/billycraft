@@ -118,11 +118,9 @@ const BillLineTable = () => {
             onChange={onProductSelectedChange}
           />
           <Button
-            block
             disabled={!productIdSelected}
             onClick={addExistingProductSelected}
             type="button"
-            variant="primary"
           >
             {t('bills.form.lines.existingProduct.add')}
           </Button>
@@ -143,8 +141,8 @@ const BillLineTable = () => {
         </DndContext>
       </div>
       {!disabled ? (
-        <Button className="gap-1 mt-2" type="button" block onClick={addLine}>
-          <PlusIcon className="w-5" />
+        <Button className="mt-2" type="button" variant="outline" onClick={addLine}>
+          <PlusIcon />
           {t('bills.form.lines.add')}
         </Button>
       ) : null}

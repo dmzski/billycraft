@@ -1,10 +1,11 @@
 import { InvitationApi } from '@/api/InvitationApi'
 import { FormErrorAlert } from '@/components/FormErrorAlert'
+import { Submit } from '@/components/form/Submit'
 import { ROLES } from '@/constants/roles'
 import { useI18n } from '@/i18n'
 import { RoleName } from '@/models/dtos/Role'
 import { sendErrorToSentry } from '@/utils/errors'
-import { Button, Input, Modal, Select, useToast } from '@coco-ui/core'
+import { Input, Modal, Select, useToast } from '@coco-ui/core'
 import { ComponentProps, useMemo } from 'react'
 import { FormProvider, useController, useForm } from 'react-hook-form'
 
@@ -65,7 +66,7 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
         role,
         email,
       })
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
     } catch (err) {
       sendErrorToSentry(err)
@@ -97,9 +98,9 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
           label={pageT('fields.role.label')}
         />
         <FormErrorAlert />
-        <Button type="submit" variant="primary">
+        <Submit>
           {pageT('submit')}
-        </Button>
+        </Submit>
       </form>
     </FormProvider>
   )

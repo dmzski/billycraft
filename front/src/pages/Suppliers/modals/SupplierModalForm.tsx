@@ -38,10 +38,10 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
     }
     try {
       await (supplier?.id ? SupplierApi.update(supplier.id, data) : SupplierApi.create(data))
-      toast.success(t('suppliers.modals.form.submit.success'))
+      toast.show(t('suppliers.modals.form.submit.success'))
       await onSubmitSuccess?.()
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -49,10 +49,10 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
     if (supplier?.id) {
       try {
         await SupplierApi.delete(supplier.id)
-        toast.success(t('suppliers.modals.form.delete.success'))
+        toast.show(t('suppliers.modals.form.delete.success'))
         onSubmitSuccess?.()
       } catch {
-        toast.error(t('genericFormError'))
+        toast.destructive(t('genericFormError'))
       }
     }
   }
@@ -82,8 +82,8 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
             : t('suppliers.modals.form.title.create')}
         </h3>
         {supplier?.id ? (
-          <Button variant="error" size="sm" className="gap-1" onClick={handleDelete}>
-            <TrashIcon className="w-5" />
+          <Button variant="destructive" onClick={handleDelete}>
+            <TrashIcon />
             <span>{t('delete')}</span>
           </Button>
         ) : null}
@@ -135,7 +135,6 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
         </div>
         <Button
           disabled={!isValid || isSubmitting}
-          variant="primary"
           className="w-full"
           type="submit"
         >

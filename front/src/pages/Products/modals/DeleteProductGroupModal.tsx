@@ -38,12 +38,12 @@ const DeleteProductGroupForm = ({ group, onSubmitSuccess, close }: DeleteProduct
   const onSubmit = async () => {
     try {
       await ProductGroupApi.delete(group.id)
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: group.id })
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -52,7 +52,7 @@ const DeleteProductGroupForm = ({ group, onSubmitSuccess, close }: DeleteProduct
       <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-12">
         <Modal.Title>{pageT('title')}</Modal.Title>
         <div className="flex flex-col gap-4">
-          <Alert variant="error">{pageT('description')}</Alert>
+          <Alert variant="destructive">{pageT('description')}</Alert>
           <InputField
             control={methods.control}
             name="confirm"
@@ -66,7 +66,7 @@ const DeleteProductGroupForm = ({ group, onSubmitSuccess, close }: DeleteProduct
           />
         </div>
         <Modal.Actions>
-          <Submit variant="error">{pageT('submit')}</Submit>
+          <Submit variant="destructive">{pageT('submit')}</Submit>
         </Modal.Actions>
       </form>
     </FormProvider>

@@ -38,10 +38,10 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
         endDate: formatRFC3339(endOfMonth(Date.parse(endDate))),
       } as ReportRequest
       await ReportApi.create(data)
-      toast.success(t('accounting.reports.modals.create.fields.submit.success'))
+      toast.show(t('accounting.reports.modals.create.fields.submit.success'))
       await onSubmitSuccess?.()
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 

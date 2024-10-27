@@ -24,7 +24,7 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     await QuoteCustomizationApi.updateMine(newQuoteCustomization)
-    toast.success(t('settings.forms.quoteCustomization.submit.success'))
+    toast.show(t('settings.forms.quoteCustomization.submit.success'))
   }
 
   useEffect(() => {
@@ -64,34 +64,30 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
             <Switch
               checked={newQuoteCustomization.displayCustomerEmail}
               id="displayCustomerEmail"
-              onChange={handleToggle('displayCustomerEmail')}
-            >
-              {t('display customer email')}
-            </Switch>
+              onCheckedChange={handleToggle('displayCustomerEmail')}
+              label={t('display customer email')}
+            />
             <Switch
               checked={newQuoteCustomization.displayCustomerPhoneNumber}
               id="displayCustomerPhoneNumber"
-              onChange={handleToggle('displayCustomerPhoneNumber')}
-            >
-              {t('display customer phonenumber')}
-            </Switch>
+              onCheckedChange={handleToggle('displayCustomerPhoneNumber')}
+              label={t('display customer phonenumber')}
+            />
           </div>
           <div className="flex flex-col flex-grow gap-2 items-start">
             <h3>{t('compagny informations')}</h3>
             <Switch
               checked={newQuoteCustomization.displayCompanyEmail}
               id="displayCompanyEmail"
-              onChange={handleToggle('displayCompanyEmail')}
-            >
-              {t('display compagny email')}
-            </Switch>
+              onCheckedChange={handleToggle('displayCompanyEmail')}
+              label={t('display compagny email')}
+            />
             <Switch
               checked={newQuoteCustomization.displayCompanyPhoneNumber}
               id="displayCompanyPhoneNumber"
-              onChange={handleToggle('displayCompanyPhoneNumber')}
-            >
-              {t('display compagny phonenumber')}
-            </Switch>
+              onCheckedChange={handleToggle('displayCompanyPhoneNumber')}
+              label={t('display compagny phonenumber')}
+            />
           </div>
         </div>
         <TextArea
@@ -121,10 +117,9 @@ const QuoteCustomizationForm = ({ quoteCustomization }: QuoteCustomizationFormPr
               footer: e.target.value,
             })
           }
-          resize="none"
           helper={t('settings.forms.quoteCustomization.footer.helper')}
         />
-        <Button type="submit" variant="success" block size="md" onClick={onSubmit}>
+        <Button type="submit" onClick={onSubmit}>
           {t('settings.forms.quoteCustomization.submit')}
         </Button>
       </div>

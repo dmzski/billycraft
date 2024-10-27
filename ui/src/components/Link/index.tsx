@@ -1,52 +1,42 @@
-import clsx from 'clsx'
-import { ComponentProps, ComponentType, ElementType, ReactNode, useMemo } from 'react'
+import { VariantProps, cva } from "class-variance-authority";
+import { tw } from "lib/utils";
+import { ComponentPropsWithoutRef, cloneElement, forwardRef, isValidElement } from "react";
 
-const classes = {
-  base: 'link',
-  hover: 'link-hover',
-  variants: {
-    primary: 'link-primary',
-    neutral: 'link-neutral',
-    secondary: 'link-secondary',
-    accent: 'link-accent',
-    success: 'link-success',
-    info: 'link-info',
-    warning: 'link-warning',
-    error: 'link-error',
-  },
-} as const
+const linkVariants = cva("cursor-pointer", {
+	variants: {
+		variant: {
+			default:
+				"text-foreground hover:underline font-semibold underline-offset-4",
+			button:
+				"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary h-10 px-4 py-2 hover:bg-accent hover:text-accent-foreground",
+		},
+	},
+	defaultVariants: {
+		variant: "default",
+	},
+});
 
-type Variant = keyof typeof classes.variants
+type LinkProps = ComponentPropsWithoutRef<"a"> &
+	VariantProps<typeof linkVariants> & {asChild?: boolean};
 
-export type LinkProps<T extends ComponentType | ElementType> = {
-  as?: T
-  className: string
-  children: ReactNode
-  href: string
-  variant: Variant
-  linkType?: 'hover' | 'normal'
-} & ComponentProps<T>
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+	({ className, children, variant, asChild, ...props }, ref) => {
+		if (asChild && isValidElement(children)) {
+			return cloneElement(children, {
+				...(children.props ?? {}),
+				className: tw(linkVariants({ variant, className })),
+			} as any);
+		}
 
-const Link = <T extends ComponentType | ElementType = 'a'>({
-  className,
-  children,
-  variant = 'primary',
-  linkType = 'normal',
-  as,
-  ...props
-}: LinkProps<T>) => {
-  const Component = as ?? 'a'
-  const computedClasses = useMemo(() => {
-    const variantClasses = variant ? classes.variants[variant as Variant] : ''
-
-    return clsx(classes.base, variantClasses, linkType === 'hover' && classes.hover, className)
-  }, [linkType, variant, className])
-
-  return (
-    <Component className={computedClasses} {...props}>
-      {children}
-    </Component>
-  )
-}
-
-export default Link
+		return (
+			<a
+				ref={ref}
+				className={tw(linkVariants({ variant }), className)}
+				{...props}
+			>
+				{children}
+			</a>
+		);
+	},
+);
+Link.displayName = "Link";

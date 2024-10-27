@@ -27,8 +27,8 @@ const ProductsPage = () => {
             <AddProductGroupModal
               onSubmitSuccess={reload}
               disclosure={
-                <Button variant="primary" className="items-center gap-2">
-                  <PlusIcon className="w-5" />
+                <Button>
+                  <PlusIcon />
                   {pageT('add')}
                 </Button>
               }

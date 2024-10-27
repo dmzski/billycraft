@@ -1,49 +1,36 @@
-import { Table } from '@coco-ui/core'
-import { formatISO9075 } from 'date-fns'
-import { Todo } from '@/models/Todo'
-import { useI18n } from '@/i18n'
+import { formatISO9075 } from "date-fns";
+import { Todo } from "@/models/Todo";
+import { useI18n } from "@/i18n";
 
 type TodoListProps = {
-  data: Todo[]
-}
+	data: Todo[];
+};
 
 const List = ({ data }: TodoListProps) => {
-  const { t } = useI18n()
+	const { t } = useI18n();
 
-  return (
-    <Table className="w-full table-fixed">
-      <Table.Head>
-        <Table.Row>
-          <Table.HeadCell className="w-48">
-            {t('history.tabs.todo.list.headers.createdAt')}
-          </Table.HeadCell>
-          <Table.HeadCell className="w-56">
-            {t('history.tabs.todo.list.headers.createdBy')}
-          </Table.HeadCell>
-          <Table.HeadCell className="w-full">
-            {t('history.tabs.todo.list.headers.description')}
-          </Table.HeadCell>
-          <Table.HeadCell className="w-48">
-            {t('history.tabs.todo.list.headers.doneAt')}
-          </Table.HeadCell>
-          <Table.HeadCell className="w-56">
-            {t('history.tabs.todo.list.headers.doneBy')}
-          </Table.HeadCell>
-        </Table.Row>
-      </Table.Head>
-      <Table.Body>
-        {data.map(todo => (
-          <Table.Row key={todo.id}>
-            <Table.Cell>{formatISO9075(new Date(todo.createdAt))}</Table.Cell>
-            <Table.Cell className="truncate">{todo.createdBy}</Table.Cell>
-            <Table.Cell className="truncate">{todo.description}</Table.Cell>
-            <Table.Cell>{todo.doneAt ? formatISO9075(new Date(todo.doneAt)) : ''}</Table.Cell>
-            <Table.Cell className="truncate">{todo.doneBy}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-  )
-}
+	return (
+		<div className="flex flex-col border rounded-t-lg">
+			<div className="grid grid-cols-5 gap-2 bg-accent text-accent-foreground p-4 rounded-t-md">
+				<div>{t("history.tabs.todo.list.headers.createdAt")}</div>
+				<div>{t("history.tabs.todo.list.headers.createdBy")}</div>
+				<div>{t("history.tabs.todo.list.headers.description")}</div>
+				<div>{t("history.tabs.todo.list.headers.doneAt")}</div>
+				<div>{t("history.tabs.todo.list.headers.doneBy")}</div>
+			</div>
+			<div className="flex flex-col gap-2">
+				{data.map((todo) => (
+					<div className="grid grid-cols-5 gap-2 px-4 py-2 [&:not(first)]:border-t" key={todo.id}>
+						<div>{formatISO9075(new Date(todo.createdAt))}</div>
+						<div className="truncate">{todo.createdBy}</div>
+						<div className="truncate">{todo.description}</div>
+						<div>{todo.doneAt ? formatISO9075(new Date(todo.doneAt)) : ""}</div>
+						<div className="truncate">{todo.doneBy}</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
 
-export default List
+export default List;

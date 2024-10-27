@@ -3,8 +3,8 @@ import useCustomers from '@/hooks/useCustomers'
 import QuoteFilterContainer from '@/pages/Quotes/Filters'
 import QuoteList from '@/pages/Quotes/List/List'
 import { useMemo, useState } from 'react'
-import { filterQuotes } from '@/utils/quote'
 import { useAllQuotesArchivedQuery } from '@/queries/useAllQuotesArchivedQuery'
+import { filterBillsOrQuotes } from '@/utils/filters'
 
 type QuoteFilters = Record<string, string>
 const HistoryTab = () => {
@@ -13,7 +13,7 @@ const HistoryTab = () => {
 
   const { data, isLoading } = useAllQuotesArchivedQuery()
   const quoteSorted = useMemo(
-    () => filterQuotes(data ?? [], filters, customers),
+    () => filterBillsOrQuotes(data ?? [], filters, customers),
     [customers, filters, data],
   )
   return (

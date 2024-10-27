@@ -1,141 +1,127 @@
-import { MouseEventHandler, ReactNode, useEffect, useState } from 'react'
-import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
-import clsx from 'clsx'
-import { createPortal } from 'react-dom'
-const positions = {
-  top: {
-    container: '-top-80 left-0 w-full h-64',
-    closeButton: `absolute -bottom-10 right-2`,
-  },
-  right: {
-    container: '-right-80 top-0 w-64 h-full',
-    closeButton: `absolute top-2 -left-10`,
-  },
-  bottom: {
-    container: '-bottom-80 left-0 w-full h-64',
-    closeButton: `absolute right-2 -top-10`,
-  },
-  left: {
-    container: '-left-80 top-0 w-64 h-full',
-    closeButton: `absolute top-2 -right-10`,
-  },
-}
+import { ReactNode, useEffect, useState } from "react";
+import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon";
+import { createPortal } from "react-dom";
+import { VariantProps, cva } from "class-variance-authority";
 
-const classes = {
-  drawerContainer: (hasPortal?: boolean) => (hasPortal ? `` : `z-10 select-none`),
-  backdrop: `fixed left-0 top-0 bg-opacity-20 bg-black w-full h-full`,
-  containerWithBackdrop: `bg-base-100 fixed p-2 shadow`,
-  containerWithoutBackgrop: (hasPortal?: boolean) =>
-    `${hasPortal ? '' : 'z-10'} bg-base-100 fixed p-2 shadow`,
-  closeButton: `stroke-current fill-current text-foreground stroke-0 p-2 w-8 h-8 bg-base-100 shadow-xl overflow-hidden rounded-full`,
-}
+const backdropClassnames =
+	"fixed inset-0 z-50 bg-black/80 fill-mode-forwards data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0";
 
-type DrawerPosition = 'top' | 'right' | 'bottom' | 'left'
-const animations = {
-  slide: (open = false, position: DrawerPosition = 'left') => {
-    let sideClasses = ''
-    switch (position) {
-      case 'top':
-        sideClasses = open ? 'translate-y-80' : '-translate-y-80'
-        break
-      case 'right':
-        sideClasses = open ? '-translate-x-80' : 'translate-x-80'
-        break
-      case 'bottom':
-        sideClasses = open ? '-translate-y-80' : 'translate-y-80'
-        break
-      case 'left':
-        sideClasses = open ? 'translate-x-80' : '-translate-x-80'
-        break
-    }
+const drawerVariants = cva(
+	"overflow-hidden overflow-y-auto fixed z-50 gap-4 bg-background p-6 fill-mode-forwards shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+	{
+		variants: {
+			side: {
+				top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+				bottom:
+					"inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+				left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+				right:
+					"inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+			},
+		},
+		defaultVariants: {
+			side: "right",
+		},
+	},
+);
 
-    return clsx('transition-transform duration-300 transform', sideClasses)
-  },
-}
+const closeButtonClassNames = `absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary
+`;
+
+const DELAY_TRANSITION = 300;
 
 export type DrawerProps = {
-  open: boolean
-  onClose?: MouseEventHandler<HTMLDivElement | SVGSVGElement>
-  position: keyof typeof positions
-  children?: ReactNode
-  hasBackdrop?: boolean
-  hasCloseButton?: boolean
-  withoutPortal?: boolean
-}
+	open: boolean;
+	onClose?: () => void;
+	children?: ReactNode;
+	noBackdrop?: boolean;
+	hasCloseButton?: boolean;
+	withoutPortal?: boolean;
+} & VariantProps<typeof drawerVariants>;
 
-const Drawer = ({
-  children,
-  open = false,
-  hasBackdrop = false,
-  hasCloseButton = true,
-  position = 'right',
-  onClose,
-  withoutPortal = false,
+export const Drawer = ({
+	children,
+	open: openProp = false,
+	noBackdrop = false,
+	hasCloseButton = true,
+	onClose,
+	withoutPortal = false,
+	side,
 }: DrawerProps) => {
-  const [isVisible, setIsVisible] = useState(open)
+	const [open, setOpen] = useState(openProp && onClose ? openProp : false);
+	const [transitionState, setTransitionState] = useState<
+		"opening" | "closing" | "open" | "closed"
+	>("closed");
 
-  useEffect(() => {
-    const handler = setTimeout(
-      () => {
-        setIsVisible(open)
-      },
-      open ? 0 : 500,
-    )
-    return () => clearTimeout(handler)
-  }, [open])
+	useEffect(() => {
+		if (onClose && openProp !== open) {
+			setOpen(!!openProp);
+		}
+	}, [openProp, onClose]);
 
-  const modalRendered = hasBackdrop ? (
-    <div
-      onDoubleClick={onClose}
-      className={isVisible ? classes.drawerContainer(withoutPortal) : `sr-only`}
-    >
-      <div className={isVisible ? classes.backdrop : `sr-only`}></div>
-      <div
-        onDoubleClick={e => e.stopPropagation()}
-        className={clsx(
-          classes.containerWithBackdrop,
-          positions[position]?.container,
-          animations.slide(open, position),
-        )}
-      >
-        {isVisible ? (
-          <>
-            {hasCloseButton ? (
-              <XMarkIcon
-                className={clsx(positions[position]?.closeButton, classes.closeButton)}
-                onClick={onClose}
-                role="button"
-              />
-            ) : null}
-            {children}
-          </>
-        ) : null}
-      </div>
-    </div>
-  ) : (
-    <div
-      className={clsx(
-        positions[position]?.container,
-        animations.slide(open, position),
-        classes.containerWithoutBackgrop(withoutPortal),
-      )}
-    >
-      {isVisible ? (
-        <>
-          {hasCloseButton ? (
-            <XMarkIcon
-              className={clsx(positions[position]?.closeButton, classes.closeButton)}
-              onClick={onClose}
-              role="button"
-            />
-          ) : null}
-          {children}
-        </>
-      ) : null}
-    </div>
-  )
+	useEffect(() => {
+		let displayContentTimeout: ReturnType<typeof setTimeout>;
+		if (open) {
+			setTransitionState((originalState) =>
+				originalState !== "open" ? "opening" : "open",
+			);
+			displayContentTimeout = setTimeout(() => {
+				setTransitionState("open");
+			}, DELAY_TRANSITION);
+		} else {
+			setTransitionState((originalState) =>
+				originalState !== "closed" ? "closing" : "closed",
+			);
+			displayContentTimeout = setTimeout(() => {
+				setTransitionState("closed");
+			}, DELAY_TRANSITION);
+		}
 
-  return withoutPortal ? modalRendered : createPortal(modalRendered, document.body)
-}
+		return () => {
+			if (displayContentTimeout) {
+				clearTimeout(displayContentTimeout);
+			}
+		};
+	}, [open]);
 
-export default Drawer
+	const modalRendered = (
+		<div
+			aria-hidden={transitionState === "closed"}
+			data-state={transitionState !== "closed" ? "open" : "closed"}
+			className="data-[state=closed]:sr-only"
+		>
+			{transitionState !== "closed" || open ? (
+				<>
+					{!noBackdrop ? (
+						<div
+							onClick={onClose}
+							data-state={open ? "open" : "closed"}
+							className={backdropClassnames}
+						/>
+					) : null}
+
+					<div
+						className={drawerVariants({ side })}
+						data-state={open ? "open" : "closed"}
+					>
+						{children}
+						{hasCloseButton ? (
+							<button
+								onClick={onClose}
+								className={closeButtonClassNames}
+								type="button"
+							>
+								<XMarkIcon className="size-4" />
+								<span className="sr-only">Close</span>
+							</button>
+						) : null}
+					</div>
+				</>
+			) : null}
+		</div>
+	);
+
+	return withoutPortal
+		? modalRendered
+		: createPortal(modalRendered, document.body);
+};

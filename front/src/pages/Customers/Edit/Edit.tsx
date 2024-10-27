@@ -3,10 +3,11 @@ import { CustomerApi } from '@/api/CustomerApi'
 import { useController, useForm } from 'react-hook-form'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { ROUTES } from '@/routes'
 import { CustomerUpdateRequest } from '@/models/dtos/CustomerUpdateRequest'
+import { RRLink } from '@/components/RRLink'
 
 const defaultCustomer = {
   address: '',
@@ -38,10 +39,10 @@ export const Edit = () => {
       if (customer?.id) {
         await CustomerApi.update(data)
         push(ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() }))
-        toast.success(t('customers.form.submit.success'))
+        toast.show(t('customers.form.submit.success'))
       }
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -86,18 +87,18 @@ export const Edit = () => {
   }
 
   if (!customer) {
-    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    return <Alert variant="destructive">{t('genericDataLoadError')}</Alert>
   }
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <Link
+      <RRLink
         to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer?.id.toString() })}
-        className="link-primary link-hover flex gap-2 items-center"
+        className="flex gap-2 items-center"
       >
         <ChevronLeftIcon className="w-5" />
         {t('customers.form.backToList')}
-      </Link>
+      </RRLink>
       <div className="flex flex-col md:flex-row justify-between items-center gap-2">
         <h1 className="text-3xl">{'Modifier un client'}</h1>
       </div>
@@ -187,7 +188,7 @@ export const Edit = () => {
             maxLength={100}
           />
         </div>
-        <Button variant="primary" disabled={!isValid || isSubmitting} type="submit">
+        <Button disabled={!isValid || isSubmitting} type="submit">
           {t('save')}
         </Button>
       </form>

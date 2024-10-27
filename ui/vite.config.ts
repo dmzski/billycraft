@@ -24,6 +24,7 @@ export const defaultConfig: UserConfig = {
     alias: [
       { find: 'components', replacement: path.resolve(__dirname, './src/components') },
       { find: 'hooks', replacement: path.resolve(__dirname, './src/hooks') },
+      { find: 'lib', replacement: path.resolve(__dirname, './src/lib') },
     ],
   },
   build: {

@@ -1,4 +1,4 @@
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import FormPage from './FormPage'
 import Details from './Details'
@@ -6,6 +6,8 @@ import ListPage from './ListPage'
 import Overview from './Overview'
 import { useI18n } from '@/i18n'
 import { ReactNode } from 'react'
+import { Tabs } from '@coco-ui/core'
+import { RRTab } from '@/components/RRTab'
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
@@ -20,13 +22,15 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-5">
         <h1 className="text-3xl mb-4">{t('accounting.outgoings.title')}</h1>
-        <div className="tabs tabs-bordered">
-          <NavLink activeClassName="tab-active" to={routes.OVERVIEW.path} className="tab flex-grow">
-            {t('accounting.outgoings.links.overview')}
-          </NavLink>
-          <NavLink activeClassName="tab-active" to={routes.LIST.path} className="tab flex-grow">
-            {t('accounting.outgoings.links.list')}
-          </NavLink>
+        <div>
+          <Tabs>
+            <RRTab to={routes.OVERVIEW.path()}>
+              {t('accounting.outgoings.links.overview')}
+            </RRTab>
+            <RRTab to={routes.LIST.path()}>
+              {t('accounting.outgoings.links.list')}
+            </RRTab>
+          </Tabs>
         </div>
       </div>
       {children}

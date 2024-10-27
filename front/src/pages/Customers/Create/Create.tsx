@@ -4,9 +4,10 @@ import { useController, useForm } from 'react-hook-form'
 import Customer from '@/models/Customer'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import { useI18n } from '@/i18n'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ROUTES } from '@/routes'
 import { CustomerCreateRequest } from '@/models/dtos/CustomerCreateRequest'
+import { RRLink } from '@/components/RRLink'
 
 const defaultCustomer = {
   address: '',
@@ -35,9 +36,9 @@ export const Create = () => {
     try {
       await CustomerApi.create(data)
       push(ROUTES.CUSTOMERS.path())
-      toast.success(t('customers.form.submit.success'))
+      toast.show(t('customers.form.submit.success'))
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -79,13 +80,13 @@ export const Create = () => {
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <Link
+      <RRLink
         to={ROUTES.CUSTOMERS.path()}
-        className="link-primary link-hover flex gap-2 items-center"
+        className="flex gap-2 items-center"
       >
         <ChevronLeftIcon className="w-5" />
         {t('customers.form.backToList')}
-      </Link>
+      </RRLink>
       <div className="flex flex-col md:flex-row justify-between items-center gap-2">
         <h1 className="text-3xl">{'Nouveau client'}</h1>
       </div>
@@ -175,7 +176,7 @@ export const Create = () => {
             maxLength={100}
           />
         </div>
-        <Button variant="primary" disabled={!isValid || isSubmitting} type="submit">
+        <Button disabled={!isValid || isSubmitting} type="submit">
           {t('save')}
         </Button>
       </form>

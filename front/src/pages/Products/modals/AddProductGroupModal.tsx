@@ -34,12 +34,12 @@ const AddProductGroupForm = ({ close, onSubmitSuccess }: AddProductGroupFormProp
   const handleSubmit = async ({ name }: AddProductGroupFormValues) => {
     try {
       await ProductGroupApi.create({ name })
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
       close()
     } catch (error) {
       sendErrorToSentry(error)
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -56,10 +56,10 @@ const AddProductGroupForm = ({ close, onSubmitSuccess }: AddProductGroupFormProp
           />
         </div>
         <Modal.Actions>
-          <Button variant="default" outline onClick={close}>
+          <Button variant="outline" onClick={close}>
             {t('cancel')}
           </Button>
-          <Submit variant="primary">{pageT('submit')}</Submit>
+          <Submit>{pageT('submit')}</Submit>
         </Modal.Actions>
       </form>
     </FormProvider>

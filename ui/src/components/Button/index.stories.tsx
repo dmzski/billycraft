@@ -1,106 +1,58 @@
-import { StoryObj } from '@storybook/react'
-import Button, { ButtonProps } from '.'
+import { StoryObj } from "@storybook/react";
+import { Button } from ".";
 
 export default {
-  title: 'Components/Button',
-  component: Button,
-}
-type Story = StoryObj<typeof Button>
-
-const BUTTON_SIZES = {
-  lg: 'btn-lg',
-  md: 'btn-md',
-  sm: 'btn-sm',
-  xs: 'btn-xs',
-} as const
-
-const BUTTON_VARIANTS = {
-  default: '',
-  primary: 'btn-primary',
-  secondary: 'btn-secondary',
-  accent: 'btn-accent',
-  info: 'btn-info',
-  success: 'btn-success',
-  warning: 'btn-warning',
-  error: 'btn-error',
-  ghost: 'btn-ghost',
-  link: 'btn-link',
-  glass: 'glass',
-} as const
+	title: "Components/Button",
+	component: Button,
+};
+type Story = StoryObj<typeof Button>;
 
 export const Basic: Story = {
-  args: {
-    children: 'Basic',
-    size: 'md',
-  },
-}
+	args: {
+		children: "Basic",
+		size: "default",
+	},
+};
 
 export const Variants = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} variant={variant as ButtonProps['variant']}>
-        {variant}
-      </Button>
-    ))}
-  </div>
-)
-
-export const Outlined = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} outline variant={variant as ButtonProps['variant']}>
-        {variant}
-      </Button>
-    ))}
-  </div>
-)
-
-export const Rounded = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} rounded variant={variant as ButtonProps['variant']}>
-        {variant.slice(0, 3)}
-      </Button>
-    ))}
-  </div>
-)
-
-export const Square = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} square variant={variant as ButtonProps['variant']}>
-        X
-      </Button>
-    ))}
-  </div>
-)
-
-export const Block = () => (
-  <>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} className="mt-2" block variant={variant as ButtonProps['variant']}>
-        {variant}
-      </Button>
-    ))}
-  </>
-)
+	<div style={{ display: "flex", gap: 4 }}>
+		<Button variant="default">default</Button>
+		<Button variant="secondary">secondary</Button>
+		<Button variant="destructive">destructive</Button>
+		<Button variant="link">link</Button>
+		<Button variant="ghost">ghost</Button>
+		<Button variant="outline">outline</Button>
+	</div>
+);
 
 export const Sizes = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_SIZES).map(size => (
-      <Button key={size} size={size as ButtonProps['size']}>
-        {size}
-      </Button>
-    ))}
-  </div>
-)
+	<div style={{ display: "flex", gap: 4 }}>
+		<Button size="default">default</Button>
+		<Button size="sm">sm</Button>
+		<Button size="lg">lg</Button>
+		<Button size="icon">icon</Button>
+	</div>
+);
 
 export const Disabled = () => (
-  <div style={{ display: 'flex', gap: 4 }}>
-    {Object.keys(BUTTON_VARIANTS).map(variant => (
-      <Button key={variant} variant={variant as ButtonProps['variant']} disabled>
-        {variant}
-      </Button>
-    ))}
-  </div>
-)
+	<div style={{ display: "flex", gap: 4 }}>
+		<Button disabled variant="default">
+			default
+		</Button>
+		<Button disabled variant="secondary">
+			secondary
+		</Button>
+		<Button disabled variant="destructive">
+			destructive
+		</Button>
+		<Button disabled variant="link">
+			link
+		</Button>
+		<Button disabled variant="ghost">
+			ghost
+		</Button>
+		<Button disabled variant="outline">
+			outline
+		</Button>
+	</div>
+);

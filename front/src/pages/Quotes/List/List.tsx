@@ -5,7 +5,7 @@ import { useI18n } from '@/i18n'
 
 type QuoteListProps = {
   data: Quote[]
-  page?: 'list' | 'archived'
+  page?: 'list' | 'archived' | 'refused'
 }
 const QuoteList = ({ data, page }: QuoteListProps) => {
   const { t } = useI18n()
@@ -13,7 +13,7 @@ const QuoteList = ({ data, page }: QuoteListProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="p-4 grid md:grid-cols-12 bg-base-300 border-b rounded-t">
+      <div className="p-4 grid md:grid-cols-12 bg-accent text-accent-foreground border-b rounded-t">
         <div className="md:col-span-1">{t('quotes.list.headers.reference')}</div>
         <div className="md:col-span-3">{t('quotes.list.headers.title')}</div>
         <div className="md:col-span-2">{t('quotes.list.headers.customer')}</div>

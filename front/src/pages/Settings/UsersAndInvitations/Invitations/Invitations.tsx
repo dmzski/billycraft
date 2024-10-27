@@ -19,7 +19,7 @@ export const Invitations = () => {
   }
 
   if (!data) {
-    return <Alert variant="error">{t('genericDataLoadError')}</Alert>
+    return <Alert variant="destructive">{t('genericDataLoadError')}</Alert>
   }
 
   return (
@@ -31,7 +31,7 @@ export const Invitations = () => {
           <InviteUserModal
             onSubmitSuccess={reload}
             disclosure={
-              <Button variant="primary" className="inline-flex gap-1 items-center">
+              <Button>
                 <PlusIcon className="w-5" />
                 <span>{pageT('inviteButton')}</span>
               </Button>

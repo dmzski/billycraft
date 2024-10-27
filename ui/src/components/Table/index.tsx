@@ -1,53 +1,117 @@
-import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from 'react'
-import TableBody from './TableBody'
-import TableHead from './TableHead'
-import TableHeadCell from './TableHeadCell'
-import TableRow from './TableRow'
-import clsx from 'clsx'
+import * as React from "react"
 
-export type TableProps = {
-  children: ReactNode
-  className?: string
-  pinRows?: boolean
-  pinCols?: boolean
-  size?: 'xs' | 'sm' | 'md' | 'lg'
-  zebra?: boolean
+import { tw } from "lib/utils"
+
+const Table = React.forwardRef<
+  HTMLTableElement,
+  React.HTMLAttributes<HTMLTableElement>
+>(({ className, ...props }, ref) => (
+  <div className="relative w-full overflow-auto">
+    <table
+      ref={ref}
+      className={tw("w-full caption-bottom text-sm", className)}
+      {...props}
+    />
+  </div>
+))
+Table.displayName = "Table"
+
+const TableHeader = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <thead ref={ref} className={tw("[&_tr]:border-b", className)} {...props} />
+))
+TableHeader.displayName = "TableHeader"
+
+const TableBody = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tbody
+    ref={ref}
+    className={tw("[&_tr:last-child]:border-0", className)}
+    {...props}
+  />
+))
+TableBody.displayName = "TableBody"
+
+const TableFooter = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tfoot
+    ref={ref}
+    className={tw(
+      "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+      className
+    )}
+    {...props}
+  />
+))
+TableFooter.displayName = "TableFooter"
+
+const TableRow = React.forwardRef<
+  HTMLTableRowElement,
+  React.HTMLAttributes<HTMLTableRowElement>
+>(({ className, ...props }, ref) => (
+  <tr
+    ref={ref}
+    className={tw(
+      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      className
+    )}
+    {...props}
+  />
+))
+TableRow.displayName = "TableRow"
+
+const TableHead = React.forwardRef<
+  HTMLTableCellElement,
+  React.ThHTMLAttributes<HTMLTableCellElement>
+>(({ className, ...props }, ref) => (
+  <th
+    ref={ref}
+    className={tw(
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      className
+    )}
+    {...props}
+  />
+))
+TableHead.displayName = "TableHead"
+
+const TableCell = React.forwardRef<
+  HTMLTableCellElement,
+  React.TdHTMLAttributes<HTMLTableCellElement>
+>(({ className, ...props }, ref) => (
+  <td
+    ref={ref}
+    className={tw("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    {...props}
+  />
+))
+TableCell.displayName = "TableCell"
+
+const TableCaption = React.forwardRef<
+  HTMLTableCaptionElement,
+  React.HTMLAttributes<HTMLTableCaptionElement>
+>(({ className, ...props }, ref) => (
+  <caption
+    ref={ref}
+    className={tw("mt-4 text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+TableCaption.displayName = "TableCaption"
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
 }
-const Table = ({ children, className, pinRows, zebra, size, pinCols, ...props }: TableProps) => {
-  const finalClassNames = clsx(
-    'table',
-    {
-      'table-pin-rows': pinRows,
-      'table-pin-cols': pinCols,
-      'table-zebra': zebra,
-    },
-    size ? `table-${size}` : '',
-    className,
-  )
-  return (
-    <table className={finalClassNames} {...props}>
-      {children}
-    </table>
-  )
-}
-
-Table.Head = TableHead
-Table.HeadCell = TableHeadCell
-Table.Body = TableBody
-Table.Row = TableRow
-
-type TableCellProps = HTMLAttributes<HTMLTableCellElement> & {
-  children: ReactNode
-}
-const TableCell = (
-  { children, ...props }: TableCellProps,
-  ref: ForwardedRef<HTMLTableCellElement>,
-) => (
-  <td ref={ref} {...props}>
-    {children}
-  </td>
-)
-
-Table.Cell = forwardRef(TableCell)
-
-export default Table

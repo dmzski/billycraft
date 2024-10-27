@@ -12,6 +12,7 @@
     "@scaleway/use-dataloader": "5.0.0",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
+    "@tanstack/react-table": "^8.20.5",
     "@yudiel/react-qr-scanner": "^2.0.8",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
@@ -67,6 +68,7 @@
     "prettier": "^2.8.4",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
+    "unplugin-fonts": "^1.1.1",
     "vite": "^5.1.4"
   }
 }

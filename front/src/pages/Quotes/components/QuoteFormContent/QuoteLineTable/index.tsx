@@ -121,10 +121,8 @@ const QuoteLineTable = ({
           />
           <Button
             disabled={!productIdSelected}
-            block
             onClick={addExistingProductSelected}
             type="button"
-            variant="primary"
           >
             {t('quotes.form.lines.existingProduct.add')}
           </Button>
@@ -139,15 +137,14 @@ const QuoteLineTable = ({
                 disabled={disabled}
                 id={line.id}
                 index={index}
-                control={control}
                 deleteLine={() => remove(index)}
               />
             ))}
           </SortableContext>
         </DndContext>
         {!disabled ? (
-          <Button className="gap-1 mt-2" type="button" block onClick={() => addLine()}>
-            <PlusIcon className="w-5" />
+          <Button className="mt-2" variant="outline" type="button" onClick={() => addLine()}>
+            <PlusIcon />
             {t('quotes.form.lines.add')}
           </Button>
         ) : null}

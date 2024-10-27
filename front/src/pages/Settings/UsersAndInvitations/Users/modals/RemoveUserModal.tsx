@@ -36,7 +36,7 @@ const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
   const onSubmit = async () => {
     try {
       await UserApi.removeUser({ email })
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
     } catch (err) {
       sendErrorToSentry(err)
@@ -48,7 +48,7 @@ const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
     <FormProvider {...methods}>
       <form className="flex flex-col gap-10" onSubmit={methods.handleSubmit(onSubmit)}>
         <h2 className="text-3xl">{pageT('title')}</h2>
-        <Alert variant="warning">{pageT('warning')}</Alert>
+        <Alert variant="destructive">{pageT('warning')}</Alert>
         <Input
           name={nameField.name}
           onChange={nameField.onChange}
@@ -62,7 +62,7 @@ const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
         />
         <FormErrorAlert />
         <Button
-          variant="error"
+          variant="destructive"
           type="submit"
           disabled={!methods.formState.isValid || methods.formState.isSubmitting}
         >

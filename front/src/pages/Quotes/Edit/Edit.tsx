@@ -1,5 +1,5 @@
 import { Button, Loader, useToast } from '@coco-ui/core'
-import { Link, Redirect, useHistory, useParams } from 'react-router-dom'
+import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from '@/api/QuoteApi'
 import { QuoteStatusEnum } from '@/models/Quote'
 import { ROUTES } from '@/routes'
@@ -12,6 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { QuoteUpdateRequest } from '@/models/dtos/QuoteUpdateRequest'
 import { useMemo } from 'react'
 import { calculatePriceTTC } from '@/utils/price'
+import { RRLink } from '@/components/RRLink'
 
 const defaultQuote = {
   lines: [],
@@ -43,11 +44,11 @@ export const Edit = () => {
     try {
       if (quote?.id) {
         await QuoteApi.update(tmp)
-        toast.success(t('quotes.form.submit.success'))
+        toast.show(t('quotes.form.submit.success'))
         push(ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }))
       }
     } catch {
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -89,14 +90,14 @@ export const Edit = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <Link
-        className="gap-1 link link-primary flex items-center"
+      <RRLink
+        className="gap-1 inline-flex items-center"
         to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}
       >
         <ChevronLeftIcon className="w-5" /> {t('quotes.form.backTo.edit')}
-      </Link>
+      </RRLink>
       <h1 className="text-4xl font-bold flex gap-5 items-center">
-        <DocumentIcon className="w-14 p-3 text-primary bg-primary-content mask mask-squircle" />
+        <DocumentIcon className="size-14 p-3 text-accent-foreground bg-accent rounded-lg" />
         <span>{quote.name}</span>
       </h1>
       <FormProvider {...methods}>
@@ -105,10 +106,8 @@ export const Edit = () => {
           <div className="grid md:grid-cols-2 gap-4">
             {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
               <Button
-                size="md"
                 type="submit"
                 disabled={!isValid || isSubmitting || disabled}
-                variant="primary"
               >
                 {t('quotes.form.submit')}
               </Button>

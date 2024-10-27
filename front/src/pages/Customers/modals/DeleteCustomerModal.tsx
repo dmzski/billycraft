@@ -32,12 +32,12 @@ const DeleteCustomerForm = ({ onSubmitSuccess, customer, close }: DeleteCustomer
   const onSubmit = async () => {
     try {
       await CustomerApi.delete(customer.id)
-      toast.success(pageT('submit.success'))
+      toast.show(pageT('submit.success'))
       await onSubmitSuccess()
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: customer.id })
-      toast.error(t('genericFormError'))
+      toast.destructive(t('genericFormError'))
     }
   }
 
@@ -50,7 +50,7 @@ const DeleteCustomerForm = ({ onSubmitSuccess, customer, close }: DeleteCustomer
   return (
     <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <h2 className="text-2xl">{pageT('title')}</h2>
-      <Alert variant="error">{pageT('description')}</Alert>
+      <Alert variant="destructive">{pageT('description')}</Alert>
       <Input
         name={nameField.name}
         onChange={nameField.onChange}
@@ -63,7 +63,7 @@ const DeleteCustomerForm = ({ onSubmitSuccess, customer, close }: DeleteCustomer
         error={nameFieldState.invalid}
       />
       <Button
-        variant="error"
+        variant="destructive"
         type="submit"
         disabled={!methods.formState.isValid || methods.formState.isSubmitting}
       >

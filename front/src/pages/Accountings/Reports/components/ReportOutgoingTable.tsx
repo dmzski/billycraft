@@ -21,7 +21,7 @@ const DetailsTableRow = ({ children }: { children: ReactNode }) => (
 )
 
 const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
-  <dt className={clsx('md:col-span-6 p-2 bg-base-300', noBorder ? '' : 'border-b')}>{children}</dt>
+  <dt className={clsx('md:col-span-6 p-2 font-semibold', noBorder ? '' : 'border-b')}>{children}</dt>
 )
 
 const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps) => (

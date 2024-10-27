@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Checkbox, { CheckboxProps } from '.'
+import {Checkbox, CheckboxProps } from '.'
 import { StoryObj } from '@storybook/react'
 
 export default {
@@ -17,7 +17,7 @@ export const Basic: Story = {
       setChecked(!isChecked)
     }
 
-    return <Checkbox {...props} checked={isChecked} onChange={onChange} />
+    return <Checkbox {...props} checked={isChecked} onCheckedChange={onChange} />
   },
   args: {
     checked: true,

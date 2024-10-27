@@ -1,8 +1,10 @@
 import { useI18n } from '@/i18n'
 import { ROUTES } from '@/routes'
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { Users } from './Users'
 import { Invitations } from './Invitations'
+import { Tabs } from '@coco-ui/core'
+import { RRTab } from '@/components/RRTab'
 
 export const UsersAndInvitations = () => {
   const { scopedT } = useI18n()
@@ -12,23 +14,19 @@ export const UsersAndInvitations = () => {
   return (
     <div className="flex flex-col gap-10">
       <h1 className="text-3xl">{pageT('title')}</h1>
-      <div role="tablist" className="tabs tabs-bordered">
-        <NavLink
-          role="tab"
-          className="tab"
-          activeClassName="tab-active"
-          to={ROUTES.SETTINGS.routes.USERS.routes.USERS.path()}
-        >
-          {pageT('tabs.users')}
-        </NavLink>
-        <NavLink
-          role="tab"
-          className="tab"
-          activeClassName="tab-active"
-          to={ROUTES.SETTINGS.routes.USERS.routes.INVITATIONS.path()}
-        >
-          {pageT('tabs.invitations')}
-        </NavLink>
+      <div>
+        <Tabs>
+          <RRTab
+            to={ROUTES.SETTINGS.routes.USERS.routes.USERS.path()}
+          >
+            {pageT('tabs.users')}
+          </RRTab>
+          <RRTab
+            to={ROUTES.SETTINGS.routes.USERS.routes.INVITATIONS.path()}
+          >
+            {pageT('tabs.invitations')}
+          </RRTab>
+        </Tabs>
       </div>
       <Switch>
         <Route path={ROUTES.SETTINGS.routes.USERS.routes.USERS.path()} component={Users} />
