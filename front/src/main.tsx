@@ -11,7 +11,7 @@ Sentry.init({
   enabled: !import.meta.env.DEV,
   integrations: [
     new BrowserTracing({
-      tracingOrigins: ['localhost', 'app.coco-erp.fr', 'api.coco-erp.fr'],
+      tracingOrigins: ['localhost', 'app.billycraft.fr', 'api.billycraft.fr'],
     }),
   ],
   tracesSampleRate: 1.0,
