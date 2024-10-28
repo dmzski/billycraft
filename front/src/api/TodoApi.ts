@@ -24,4 +24,5 @@ export const TodoApi = {
   update: (id: Todo['id'], request: TodoRequest): Promise<Todo> =>
     HttpClient.PATCH(`${TODO_URL}/${id}`, request),
   done: (id: Todo['id']): Promise<Todo> => HttpClient.POST(`${TODO_URL}/${id}/done`, {}),
+  undo: (id: Todo['id']): Promise<Todo> => HttpClient.POST(`${TODO_URL}/${id}/undo`, {}),
 }

@@ -26,9 +26,14 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
     },
   })
 
-  const handleDone = (id: string) => async () => {
+  const handleDoneUndo = async (id: string, newState: boolean) => {
     try {
-      await TodoApi.done(id)
+      if (newState) {
+        await TodoApi.done(id)
+
+      } else {
+        await TodoApi.undo(id)
+      }
       await onSubmitSuccess?.()
       toast.show(t('dashboard.todos.form.submit.edit.success'))
     } catch {
@@ -73,8 +78,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
               className="flex gap-4 p-4 items-center data-[done=true]:line-through"
             >
               <Checkbox
-                disabled={!!todo.doneAt}
-                onCheckedChange={handleDone(todo.id)}
+                onCheckedChange={(newState) => handleDoneUndo(todo.id, newState)}
                 checked={!!todo.doneAt}
               />
               <div className="flex flex-col">

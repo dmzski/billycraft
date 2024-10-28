@@ -19,6 +19,7 @@ func InitRoutes(api fiber.Router) {
 	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
 	router.Delete("/:id", auth.RoleRequired(enums.RoleEnumEditor), delete)
 	router.Post("/:id/done", done)
+	router.Post("/:id/undo", undo)
 }
 
 func findAll(c *fiber.Ctx) error {
@@ -89,6 +90,15 @@ func done(c *fiber.Ctx) error {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		return c.JSON(DAO.Done(id, user).ToDTO())
+	}
+}
+
+func undo(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	if id := c.Params("id", ""); id == "" {
+		return fiber.NewError(400, "No id provided")
+	} else {
+		return c.JSON(DAO.Undo(id, user).ToDTO())
 	}
 }
 

@@ -94,4 +94,22 @@ func (dao TodoDao) Done(id string, user models.User) (todo models.Todo) {
 	return
 }
 
+func (dao TodoDao) Undo(id string, user models.User) (todo models.Todo) {
+	tx := database.DBConn.Begin()
+	tx.Where("company_id = ? AND id = ?", user.CompanyID, id).First(&todo)
+	if tx.Error != nil {
+		panic(tx.Error)
+	}
+	tx.Model(&todo).Updates(models.Todo{
+		DoneAt: nil,
+		DoneBy: nil,
+	})
+	if tx.Error != nil {
+		panic(tx.Error)
+	}
+
+	tx.Commit()
+	return
+}
+
 var DAO = &TodoDao{}

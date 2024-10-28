@@ -12,6 +12,8 @@ interface Product {
   code?: string
   supplierId?: string
   groupId?: string
+  lowStock?: number
+  noStockAlert: boolean
 }
 
 export default Product
