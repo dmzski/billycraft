@@ -64,7 +64,9 @@ const EditProductGroupForm = ({ close, onSubmitSuccess, group }: EditProductGrou
           />
         </div>
         <Modal.Actions>
-          <Button variant="outline" onClick={close}>{t('cancel')}</Button>
+          <Button variant="outline" onClick={close}>
+            {t('cancel')}
+          </Button>
           <Submit>{pageT('submit')}</Submit>
         </Modal.Actions>
       </form>

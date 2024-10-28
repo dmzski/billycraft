@@ -57,7 +57,9 @@ const Dashboard = () => {
               <BanknotesIcon className="w-5" />
               <h2>{t('dashboard.notPaidBills.title')}</h2>
             </div>
-            {totalNotPaid > 0 ? <Badge variant="default">{formatCurrency(totalNotPaid)}</Badge> : null}
+            {totalNotPaid > 0 ? (
+              <Badge variant="default">{formatCurrency(totalNotPaid)}</Badge>
+            ) : null}
           </div>
           {isLoading ? (
             <div className="flex justify-center">

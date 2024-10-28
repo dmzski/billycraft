@@ -16,14 +16,8 @@ export const UsersAndInvitations = () => {
       <h1 className="text-3xl">{pageT('title')}</h1>
       <div>
         <Tabs>
-          <RRTab
-            to={ROUTES.SETTINGS.routes.USERS.routes.USERS.path()}
-          >
-            {pageT('tabs.users')}
-          </RRTab>
-          <RRTab
-            to={ROUTES.SETTINGS.routes.USERS.routes.INVITATIONS.path()}
-          >
+          <RRTab to={ROUTES.SETTINGS.routes.USERS.routes.USERS.path()}>{pageT('tabs.users')}</RRTab>
+          <RRTab to={ROUTES.SETTINGS.routes.USERS.routes.INVITATIONS.path()}>
             {pageT('tabs.invitations')}
           </RRTab>
         </Tabs>

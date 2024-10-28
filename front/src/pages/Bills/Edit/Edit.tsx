@@ -90,10 +90,7 @@ export const Edit = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <RRLink
-        className="gap-1 flex items-center"
-        to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
-      >
+      <RRLink className="gap-1 flex items-center" to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}>
         <ChevronLeftIcon className="w-5" /> {t('bills.form.edit.backTo')}
       </RRLink>
       <h1 className="text-4xl font-bold flex gap-5 items-center">
@@ -104,10 +101,7 @@ export const Edit = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <BillFormContent bill={bill} />
           {!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status ? (
-            <Button
-              type="submit"
-              disabled={!isValid || isSubmitting || disabled}
-            >
+            <Button type="submit" disabled={!isValid || isSubmitting || disabled}>
               {t('bills.form.submit')}
             </Button>
           ) : null}

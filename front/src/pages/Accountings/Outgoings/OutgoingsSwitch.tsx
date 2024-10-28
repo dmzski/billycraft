@@ -24,12 +24,8 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
         <h1 className="text-3xl mb-4">{t('accounting.outgoings.title')}</h1>
         <div>
           <Tabs>
-            <RRTab to={routes.OVERVIEW.path()}>
-              {t('accounting.outgoings.links.overview')}
-            </RRTab>
-            <RRTab to={routes.LIST.path()}>
-              {t('accounting.outgoings.links.list')}
-            </RRTab>
+            <RRTab to={routes.OVERVIEW.path()}>{t('accounting.outgoings.links.overview')}</RRTab>
+            <RRTab to={routes.LIST.path()}>{t('accounting.outgoings.links.list')}</RRTab>
           </Tabs>
         </div>
       </div>

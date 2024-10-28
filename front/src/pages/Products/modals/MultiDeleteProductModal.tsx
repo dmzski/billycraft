@@ -1,103 +1,99 @@
-import { useI18n } from "@/i18n";
-import { Alert, Button, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
-import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
-import Product from "@/models/Product";
-import { Submit } from "@/components/form/Submit";
-import { InputField } from "@/components/form/InputField";
-import { Form } from "@/components/form/Form";
+import { useI18n } from '@/i18n'
+import { Alert, Button, Modal, useToast } from '@coco-ui/core'
+import { ComponentProps } from 'react'
+import { useForm } from 'react-hook-form'
+import { sendErrorToSentry } from '@/utils/errors'
+import { ProductApi } from '@/api/ProductApi'
+import Product from '@/models/Product'
+import { Submit } from '@/components/form/Submit'
+import { InputField } from '@/components/form/InputField'
+import { Form } from '@/components/form/Form'
 
 type MultiDeleteProductModalProps = {
-	onSubmitSuccess: () => Promise<void>;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	productIds: Product["id"][];
-};
+  onSubmitSuccess: () => Promise<void>
+  disclosure: ComponentProps<typeof Modal>['disclosure']
+  productIds: Product['id'][]
+}
 
-type MultiDeleteProductFormProps = Omit<
-	MultiDeleteProductModalProps,
-	"disclosure"
-> & {
-	close: () => void;
-};
+type MultiDeleteProductFormProps = Omit<MultiDeleteProductModalProps, 'disclosure'> & {
+  close: () => void
+}
 
 type ConfirmValues = {
-	confirm: string;
-};
+  confirm: string
+}
 
 const MultiDeleteProductForm = ({
-	productIds,
-	onSubmitSuccess,
-	close,
+  productIds,
+  onSubmitSuccess,
+  close,
 }: MultiDeleteProductFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.multiDelete");
-	const confirmationString = t("forms.confirmation.delete.pattern");
+  const { scopedT, t } = useI18n()
+  const toast = useToast()
+  const pageT = scopedT('products.modals.multiDelete')
+  const confirmationString = t('forms.confirmation.delete.pattern')
 
-	const methods = useForm<ConfirmValues>({
-		mode: "onChange",
-		defaultValues: {
-			confirm: "",
-		},
-	});
+  const methods = useForm<ConfirmValues>({
+    mode: 'onChange',
+    defaultValues: {
+      confirm: '',
+    },
+  })
 
-	const onSubmit = async () => {
-		try {
-			await productIds.reduce(
-				(promise, productId) =>
-					promise.then(() => ProductApi.delete(productId)),
-				Promise.resolve(),
-			);
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
-			close();
-		} catch (err) {
-			sendErrorToSentry(err);
-			toast.destructive(t("genericFormError"));
-		}
-	};
+  const onSubmit = async () => {
+    try {
+      await productIds.reduce(
+        (promise, productId) => promise.then(() => ProductApi.delete(productId)),
+        Promise.resolve(),
+      )
+      toast.show(pageT('submit.success'))
+      await onSubmitSuccess()
+      close()
+    } catch (err) {
+      sendErrorToSentry(err)
+      toast.destructive(t('genericFormError'))
+    }
+  }
 
-	return (
-		<Form methods={methods} onSubmit={onSubmit}>
-			<div className="flex flex-col gap-8">
-				<Modal.Title>{pageT("title")}</Modal.Title>
-				<Alert variant="destructive">{pageT("description")}</Alert>
-				<InputField
-					control={methods.control}
-					name="confirm"
-					required
-					label={t("forms.confirmation.delete.label")}
-					autoComplete="off"
-					rules={{
-						required: true,
-						pattern: new RegExp(confirmationString, "i"),
-					}}
-				/>
-				<Modal.Actions>
-					<Button variant="outline" onClick={close}>
-						{t("cancel")}
-					</Button>
-					<Submit variant="destructive">{pageT("submit")}</Submit>
-				</Modal.Actions>
-			</div>
-		</Form>
-	);
-};
+  return (
+    <Form methods={methods} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-8">
+        <Modal.Title>{pageT('title')}</Modal.Title>
+        <Alert variant="destructive">{pageT('description')}</Alert>
+        <InputField
+          control={methods.control}
+          name="confirm"
+          required
+          label={t('forms.confirmation.delete.label')}
+          autoComplete="off"
+          rules={{
+            required: true,
+            pattern: new RegExp(confirmationString, 'i'),
+          }}
+        />
+        <Modal.Actions>
+          <Button variant="outline" onClick={close}>
+            {t('cancel')}
+          </Button>
+          <Submit variant="destructive">{pageT('submit')}</Submit>
+        </Modal.Actions>
+      </div>
+    </Form>
+  )
+}
 
 export const MultiDeleteProductModal = ({
-	productIds,
-	onSubmitSuccess,
-	disclosure,
+  productIds,
+  onSubmitSuccess,
+  disclosure,
 }: MultiDeleteProductModalProps) => (
-	<Modal disclosure={disclosure} size="sm">
-		{({ close }) => (
-			<MultiDeleteProductForm
-				productIds={productIds}
-				onSubmitSuccess={onSubmitSuccess}
-				close={close}
-			/>
-		)}
-	</Modal>
-);
+  <Modal disclosure={disclosure} size="sm">
+    {({ close }) => (
+      <MultiDeleteProductForm
+        productIds={productIds}
+        onSubmitSuccess={onSubmitSuccess}
+        close={close}
+      />
+    )}
+  </Modal>
+)

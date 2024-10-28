@@ -133,11 +133,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
             onBlur={colorField.onBlur}
           />
         </div>
-        <Button
-          disabled={!isValid || isSubmitting}
-          className="w-full"
-          type="submit"
-        >
+        <Button disabled={!isValid || isSubmitting} className="w-full" type="submit">
           {t('save')}
         </Button>
       </form>

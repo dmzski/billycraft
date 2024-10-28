@@ -98,9 +98,7 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
           label={pageT('fields.role.label')}
         />
         <FormErrorAlert />
-        <Submit>
-          {pageT('submit')}
-        </Submit>
+        <Submit>{pageT('submit')}</Submit>
       </form>
     </FormProvider>
   )

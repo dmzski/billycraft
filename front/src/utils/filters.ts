@@ -1,8 +1,7 @@
-import Bill from "@/models/Bill"
-import Customer from "@/models/Customer"
-import Quote from "@/models/Quote"
-import { formatISO9075, parseJSON } from "date-fns"
-
+import Bill from '@/models/Bill'
+import Customer from '@/models/Customer'
+import Quote from '@/models/Quote'
+import { formatISO9075, parseJSON } from 'date-fns'
 
 export function filterBillsOrQuotes<T extends Quote | Bill>(
   array: T[],

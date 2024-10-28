@@ -80,10 +80,7 @@ export const Create = () => {
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <RRLink
-        to={ROUTES.CUSTOMERS.path()}
-        className="flex gap-2 items-center"
-      >
+      <RRLink to={ROUTES.CUSTOMERS.path()} className="flex gap-2 items-center">
         <ChevronLeftIcon className="w-5" />
         {t('customers.form.backToList')}
       </RRLink>

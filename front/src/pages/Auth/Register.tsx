@@ -149,17 +149,13 @@ export const Register = () => {
               {t('register.submit')}
             </Button>
             <div className="flex justify-center">
-              <RRLink to={ROUTES.LOGIN.path}>
-                {t('login.title')}
-              </RRLink>
+              <RRLink to={ROUTES.LOGIN.path}>{t('login.title')}</RRLink>
             </div>
           </div>
         </form>
         <small className="text-xs">
           {t('supportPrefix')}
-          <Link href={`mailto:${SUPPORT_EMAIL}`}>
-            {SUPPORT_EMAIL}
-          </Link>
+          <Link href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</Link>
         </small>
       </div>
     </div>

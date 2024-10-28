@@ -105,10 +105,7 @@ export const Edit = () => {
           <QuoteFormContent quote={quote} />
           <div className="grid md:grid-cols-2 gap-4">
             {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
-              <Button
-                type="submit"
-                disabled={!isValid || isSubmitting || disabled}
-              >
+              <Button type="submit" disabled={!isValid || isSubmitting || disabled}>
                 {t('quotes.form.submit')}
               </Button>
             ) : null}

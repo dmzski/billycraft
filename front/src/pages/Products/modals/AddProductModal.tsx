@@ -78,9 +78,7 @@ const AddProductForm = ({ onSubmitSuccess, close, initialValues }: AddProductFor
             {t('cancel')}
           </Button>
 
-          <Submit form={id}>
-            {pageT('submit')}
-          </Submit>
+          <Submit form={id}>{pageT('submit')}</Submit>
         </Modal.Actions>
       </form>
     </FormProvider>

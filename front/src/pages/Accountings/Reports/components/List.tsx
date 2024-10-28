@@ -12,9 +12,7 @@ const ReportRow = ({ report }: ReportRowProps) => {
   return (
     <div className="grid md:grid-cols-12 p-2 border-t">
       <div className="md:col-span-3">
-        <RRLink to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>
-          {report.name}
-        </RRLink>
+        <RRLink to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>{report.name}</RRLink>
       </div>
       <div className="md:col-span-3">{toISO9075(report.startDate)}</div>
       <div className="md:col-span-3">{toISO9075(report.endDate)}</div>

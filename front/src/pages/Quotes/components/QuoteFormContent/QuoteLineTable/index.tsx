@@ -119,11 +119,7 @@ const QuoteLineTable = ({
             value={productIdSelected}
             onChange={onProductSelectedChange}
           />
-          <Button
-            disabled={!productIdSelected}
-            onClick={addExistingProductSelected}
-            type="button"
-          >
+          <Button disabled={!productIdSelected} onClick={addExistingProductSelected} type="button">
             {t('quotes.form.lines.existingProduct.add')}
           </Button>
         </div>
