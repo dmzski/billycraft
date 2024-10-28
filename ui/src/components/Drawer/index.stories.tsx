@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StoryObj } from '@storybook/react'
-import {Drawer, DrawerProps } from '.'
-import {Button} from 'components/Button'
+import { Drawer, DrawerProps } from '.'
+import { Button } from 'components/Button'
 
 export default {
   title: 'Components/Drawer',
@@ -16,9 +16,7 @@ export const Basic: Story = {
 
     return (
       <>
-        <Button onClick={() => setIsOpen(true)}>
-          Open drawer
-        </Button>
+        <Button onClick={() => setIsOpen(true)}>Open drawer</Button>
         <Drawer {...props} open={isOpen} onClose={() => setIsOpen(false)} />
       </>
     )
@@ -43,36 +41,16 @@ export const Position: Story = {
           <Button onClick={() => setState('bottom')}>Open bottom drawer</Button>
           <Button onClick={() => setState('left')}>Open left drawer</Button>
         </div>
-        <Drawer
-          withoutPortal
-          side="top"
-          open={state === 'top'}
-          onClose={() => setState('')}
-        >
+        <Drawer withoutPortal side="top" open={state === 'top'} onClose={() => setState('')}>
           {state}
         </Drawer>
-        <Drawer
-          withoutPortal
-          side="right"
-          open={state === 'right'}
-          onClose={() => setState('')}
-        >
+        <Drawer withoutPortal side="right" open={state === 'right'} onClose={() => setState('')}>
           {state}
         </Drawer>
-        <Drawer
-          withoutPortal
-          side="bottom"
-          open={state === 'bottom'}
-          onClose={() => setState('')}
-        >
+        <Drawer withoutPortal side="bottom" open={state === 'bottom'} onClose={() => setState('')}>
           {state}
         </Drawer>
-        <Drawer
-          withoutPortal
-          side="left"
-          open={state === 'left'}
-          onClose={() => setState('')}
-        >
+        <Drawer withoutPortal side="left" open={state === 'left'} onClose={() => setState('')}>
           {state}
         </Drawer>
       </>

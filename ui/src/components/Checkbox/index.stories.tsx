@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {Checkbox, CheckboxProps } from '.'
+import { Checkbox, CheckboxProps } from '.'
 import { StoryObj } from '@storybook/react'
 
 export default {

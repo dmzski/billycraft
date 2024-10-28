@@ -1,36 +1,36 @@
-import { StoryObj } from "@storybook/react";
-import { Badge } from ".";
+import { StoryObj } from '@storybook/react'
+import { Badge } from '.'
 
 export default {
-	title: "Components/Badge",
-	component: Badge,
-};
+  title: 'Components/Badge',
+  component: Badge,
+}
 
-type Story = StoryObj<typeof Badge>;
+type Story = StoryObj<typeof Badge>
 
 export const Basic: Story = {
-	args: {
-		children: "Basic",
-	},
-};
+  args: {
+    children: 'Basic',
+  },
+}
 
 export const Outline: Story = {
-	args: {
-		children: "outline",
-		variant: "outline",
-	},
-};
+  args: {
+    children: 'outline',
+    variant: 'outline',
+  },
+}
 
 export const Destructive: Story = {
-	args: {
-		children: "destructive",
-		variant: "destructive",
-	},
-};
+  args: {
+    children: 'destructive',
+    variant: 'destructive',
+  },
+}
 
 export const Secondary: Story = {
-	args: {
-		children: "secondary",
-		variant: "secondary",
-	},
-};
+  args: {
+    children: 'secondary',
+    variant: 'secondary',
+  },
+}

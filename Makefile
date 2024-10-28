@@ -38,6 +38,9 @@ format-back:
 format-front:
 	cd ./front && pnpm run format
 
+format-ui:
+	cd ./ui && pnpm run format
+
 #
 # Back
 #
