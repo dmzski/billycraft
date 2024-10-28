@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.41.0
+
+### Minor Changes
+
+- 28ee2b3: Product: Add multi actions on listing
+
 ## 2.40.0
 
 ### Minor Changes
