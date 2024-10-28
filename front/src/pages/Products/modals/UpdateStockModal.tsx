@@ -79,7 +79,6 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 	});
 
 	const onSubmit = async (values: UpdateStockFormValues) => {
-		console.log(values);
 		try {
 			await ProductApi.updateStocks({
 				in: values.inMovements,

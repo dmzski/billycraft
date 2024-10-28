@@ -10,5 +10,9 @@ export const FormErrorAlert = () => {
     return <Alert variant="destructive">{errors.root.message}</Alert>
   }
 
+  if (errors.root?.submit?.message) {
+    return <Alert variant="destructive">{errors.root.submit.message}</Alert>
+  }
+
   return null
 }

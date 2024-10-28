@@ -1,4 +1,4 @@
-import { Badge, Button, Collapsible } from "@coco-ui/core";
+import { Badge, Button, Checkbox, Collapsible } from "@coco-ui/core";
 import Product from "@/models/Product";
 import {
 	MinusIcon,
@@ -22,6 +22,8 @@ type ProductTableLineProps = {
 	supplier?: Supplier;
 	reloadProducts: () => Promise<void>;
 	groupName?: ProductGroup["name"];
+	selected: Product[];
+	setSelected: (newSelected: Product[]) => void;
 };
 
 const ProductTableLine = ({
@@ -29,6 +31,8 @@ const ProductTableLine = ({
 	reloadProducts,
 	supplier,
 	groupName,
+	selected,
+	setSelected,
 }: ProductTableLineProps) => {
 	const formatCurrency = useFormatCurrency();
 	const { t, scopedT } = useI18n();
@@ -36,15 +40,31 @@ const ProductTableLine = ({
 	const [open, toggleOpen] = useReducer((current) => !current, false);
 
 	return (
-		<div className="border rounded-lg p-4">
+		<div className="border rounded-lg p-4" onClick={toggleOpen}>
 			<Collapsible
 				open={open}
 				disclosure={
-					<div
-						onClick={toggleOpen}
-						className="flex flex-row gap-4 justify-between items-center flex-wrap"
-					>
+					<div className="flex flex-row gap-4 justify-between items-center flex-wrap">
 						<div className="flex flex-row gap-4 items-center overflow-hidden flex-grow">
+							<div
+								onClick={(event) => {
+									event.stopPropagation();
+								}}
+							>
+								<Checkbox
+									checked={!!selected.find(({ id }) => id === product.id)}
+									name={`${product.id}-checkbox`}
+									onCheckedChange={(newState) => {
+										if (newState) {
+											setSelected([...selected, product]);
+										} else {
+											setSelected(
+												selected.filter((value) => value.id !== product.id),
+											);
+										}
+									}}
+								/>
+							</div>
 							<div className="flex flex-col-reverse md:flex-row gap-2 items-center">
 								<ProductTypeLabel short type={product.type} />
 								{product.type === "ARTICLE" ? (
@@ -82,7 +102,7 @@ const ProductTableLine = ({
 					</div>
 				}
 			>
-				<div className="grid grid-cols-1 gap-8 p-4 w-full">
+				<div onClick={e => e.stopPropagation()} className="grid grid-cols-1 gap-8 p-4 w-full">
 					{product.description ? (
 						<dl>
 							<dt className="font-bold">{pageT("description")}</dt>
