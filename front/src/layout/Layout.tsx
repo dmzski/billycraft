@@ -49,7 +49,7 @@ const Layout = ({ children }: LayoutProps) => {
               <ThemeToggle />
             </div>
           </div>
-          <div className="px-4">{children}</div>
+          <div className="p-4">{children}</div>
         </main>
       </div>
     </SidebarProvider>
