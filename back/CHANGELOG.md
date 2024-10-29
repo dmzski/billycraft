@@ -1,5 +1,11 @@
 # back
 
+## 1.27.0
+
+### Minor Changes
+
+- 9cbaad2: Add product low stock and stock alert
+
 ## 1.26.0
 
 ### Minor Changes

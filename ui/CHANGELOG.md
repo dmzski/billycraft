@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.33.0
+
+### Minor Changes
+
+- 9cbaad2: Improve Select with clearable and Checkbox with indeterminate with label
+
 ## 1.32.0
 
 ### Minor Changes
