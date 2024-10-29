@@ -116,6 +116,8 @@ const BillLineTableLine = ({ deleteLine, index, id }: BillLineTableLineProps) =>
                         code: null,
                         stock: null,
                         groupId: null,
+                        lowStock: null,
+                        stockAlert: true
                       }}
                       disclosure={
                         <Button

@@ -115,6 +115,8 @@ const QuoteLineTableLine = ({ deleteLine, disabled, index, id }: QuoteLineTableL
                         code: null,
                         stock: null,
                         groupId: null,
+                        lowStock: null,
+                        stockAlert: true
                       }}
                       disclosure={
                         <Button variant="ghost" className="rounded-none rounded-r-md" size="icon">
