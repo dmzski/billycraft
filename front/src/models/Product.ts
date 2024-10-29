@@ -13,7 +13,7 @@ interface Product {
   supplierId?: string
   groupId?: string
   lowStock?: number
-  noStockAlert: boolean
+  stockAlert: boolean
 }
 
 export default Product

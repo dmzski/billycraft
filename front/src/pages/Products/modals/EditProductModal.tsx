@@ -1,6 +1,6 @@
 import { useI18n } from '@/i18n'
 import { Button, Modal, useToast } from '@coco-ui/core'
-import { ComponentProps, useId, useMemo } from 'react'
+import { ComponentProps, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { ProductFormContent, ProductFormValues } from '../components/ProductFormContent'
 import { sendErrorToSentry } from '@/utils/errors'
@@ -26,7 +26,6 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
   const toast = useToast()
   const pageT = scopedT('products.modals.edit')
   const { data: suppliers } = useAllSuppliersQuery()
-  const id = useId()
 
   const initialValues: ProductFormValues = useMemo(
     () => ({
@@ -42,6 +41,8 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
       stock: product.stock ?? null,
       code: product.code ?? null,
       groupId: product.groupId ?? null,
+      stockAlert: product.stockAlert ?? true,
+      lowStock: product.lowStock ?? null,
     }),
     [product, suppliers],
   )
@@ -55,6 +56,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
     try {
       if (values.type !== 'ARTICLE') {
         values.stock = null
+        values.lowStock = null
         values.code = null
       }
       await ProductApi.update({ ...values, id: product.id })
@@ -76,7 +78,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
           <Button onClick={close} variant="outline">
             {t('cancel')}
           </Button>
-          <Submit form={id}>{pageT('submit')}</Submit>
+          <Submit>{pageT('submit')}</Submit>
         </Modal.Actions>
       </div>
     </Form>

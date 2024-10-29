@@ -25,12 +25,31 @@ func (dao Repository) FindOneByIdAndTenant(id string, tenant string) (product mo
 	return
 }
 
-func (dao Repository) Update(id string, tenant string, changes dtos.Product) (product models.Product) {
+func (dao Repository) Update(id string, tenant string, dto dtos.Product) (product models.Product) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
+	changes := map[string]interface{}{}
+	if dto.Name != "" {
+		changes["Name"] = dto.Name
+	}
+	if dto.Type != "" {
+		changes["Type"] = dto.Type
+	}
+	if dto.Type == "ARTICLE" {
+		changes["Stock"] = dto.Stock
+		changes["Code"] = dto.Code
+		changes["StockAlert"] = dto.StockAlert
+		changes["LowStock"] = dto.LowStock
+		changes["Price"] = dto.Price
+	}
+
+	changes["Description"] = dto.Description
+	changes["GroupID"] = dto.GroupID
+	changes["SupplierID"] = dto.SupplierID
+
 	tx.Model(&product).Updates(changes)
 	if tx.Error != nil {
 		panic(tx.Error)

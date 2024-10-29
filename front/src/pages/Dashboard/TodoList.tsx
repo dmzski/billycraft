@@ -30,7 +30,6 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
     try {
       if (newState) {
         await TodoApi.done(id)
-
       } else {
         await TodoApi.undo(id)
       }
@@ -78,7 +77,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
               className="flex gap-4 p-4 items-center data-[done=true]:line-through"
             >
               <Checkbox
-                onCheckedChange={(newState) => handleDoneUndo(todo.id, newState)}
+                onCheckedChange={newState => handleDoneUndo(todo.id, newState)}
                 checked={!!todo.doneAt}
               />
               <div className="flex flex-col">

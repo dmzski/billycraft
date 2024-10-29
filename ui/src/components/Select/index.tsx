@@ -9,13 +9,15 @@ import {
   useImperativeHandle,
   useId,
   ReactNode,
+  MouseEventHandler,
 } from 'react'
 import OptionList from './OptionList'
 import useClickOutsideHandler from 'hooks/useClickOutsideHandler'
 import { VariantProps, cva } from 'class-variance-authority'
 import { Label } from 'components/Label'
 import { tw } from 'lib/utils'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { Button } from 'components/Button'
 
 const selectVariants = cva(
   'flex justify-between h-10 w-full items-center bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 group-focus-within:ring-2 group-focus-within:ring-ring group-focus-within:ring-offset-2 data-[invalid=true]:border-destructive group-focus-within:data-[invalid=true]:ring-destructive',
@@ -40,7 +42,7 @@ export type SelectOptionType = {
   searchText?: string
 }
 
-export type SelectValueType = OptionValue | Array<OptionValue> | undefined
+export type SelectValueType = OptionValue | Array<OptionValue> | undefined | null
 export type SelectProps = Pick<
   InputHTMLAttributes<HTMLInputElement>,
   | 'autoFocus'
@@ -56,6 +58,7 @@ export type SelectProps = Pick<
   options: SelectOptionType[]
   label?: string
   onChange?: (result: SelectValueType) => unknown
+  onBlur?: () => void
   value: SelectValueType
   readOnly?: boolean
   isSearchable?: boolean
@@ -72,17 +75,18 @@ const KEYS = {
   Enter: 'Enter',
 }
 
-export const Select = forwardRef<HTMLInputElement, SelectProps>(
+export const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
-      'aria-label': ariaLabel,
+      'aria-label': ariaLabel = 'Select',
       readOnly,
       className,
       id: idProp,
       name,
       options = [],
-      placeholder,
+      placeholder = 'Select',
       onChange,
+      onBlur,
       isMulti,
       value = isMulti ? [] : undefined,
       disabled,
@@ -91,21 +95,23 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
       error,
       required,
       autoFocus,
-      placeholderSearchText,
+      placeholderSearchText = 'Search',
       variant,
     },
     ref,
   ) => {
+    const clearable = !required
     const generatedId = useId()
     const id = idProp ?? generatedId
     const [isOpen, setOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLDivElement>(null)
 
-    useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
+    useImperativeHandle(ref, () => inputRef.current as HTMLDivElement)
 
     useClickOutsideHandler(containerRef, () => {
       setOpen(false)
+      onBlur?.()
     })
 
     const handleOpen = useCallback(() => {
@@ -145,6 +151,18 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
       [onChange],
     )
 
+    const handleClear: MouseEventHandler = useCallback(
+      event => {
+        event.stopPropagation()
+        if (isMulti) {
+          onChange?.([])
+        } else {
+          onChange?.(null)
+        }
+      },
+      [onChange, isMulti],
+    )
+
     const handleKeyDown: KeyboardEventHandler = useCallback(
       event => {
         if (!isOpen) {
@@ -162,8 +180,8 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
     )
 
     const valueRender = useMemo(() => {
-      if (!value) {
-        return placeholder
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        return <span className="text-muted-foreground">{placeholder}</span>
       }
       if (Array.isArray(value)) {
         return value
@@ -176,7 +194,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
           .map((valueNode, index) => (
             <span
               key={index}
-              className="bg-transparent border px-2 text-primary border-primary rounded"
+              className="bg-background border px-2 text-foreground border rounded-md"
             >
               {valueNode}
             </span>
@@ -185,11 +203,16 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
       const optionFound = options.find(option => value === option.value)
 
       return optionFound?.render ?? optionFound?.label
-    }, [options, value])
+    }, [options, value, placeholder])
+
+    const displayClearable =
+      clearable &&
+      ((value !== undefined && value !== null && typeof value === 'string' && value !== '') ||
+        (typeof value === 'number' && value !== null && value !== undefined) ||
+        (Array.isArray(value) && value.length > 0))
 
     return (
       <div
-        aria-expanded={isOpen}
         aria-disabled={disabled}
         ref={containerRef}
         onKeyDown={handleKeyDown}
@@ -199,10 +222,35 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
       >
         {label ? <Label htmlFor={id}>{label}</Label> : null}
         <div className="relative flex-nowrap">
-          <div tabIndex={0} data-invalid={!!error} className={selectVariants({ variant })}>
+          <div
+            id={id}
+            data-invalid={!!error}
+            className={selectVariants({ variant })}
+            aria-expanded={isOpen}
+            role="combobox"
+            aria-haspopup="listbox"
+            onFocus={handleOpen}
+            onClick={handleOpen}
+            defaultValue={value?.toString() ?? ''}
+            aria-disabled={disabled || readOnly}
+            aria-label={ariaLabel ?? name}
+            autoFocus={autoFocus}
+            ref={inputRef}
+          >
             <div className="flex gap-2 flex-row flex-nowrap truncate">{valueRender}</div>
             <div className="flex items-center gap-2">
               {required ? <span className="text-destructive">*</span> : null}
+              {displayClearable ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8"
+                  onClick={handleClear}
+                  aria-label="clear"
+                >
+                  <XMarkIcon className="size-4" />
+                </Button>
+              ) : null}
               {isOpen ? (
                 <ChevronUpIcon className="size-4" />
               ) : (
@@ -210,21 +258,6 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
               )}
             </div>
           </div>
-
-          <input
-            aria-haspopup="listbox"
-            autoFocus={autoFocus}
-            id={id}
-            className="sr-only"
-            tabIndex={-1}
-            name={name}
-            disabled={disabled || readOnly}
-            aria-label={ariaLabel}
-            ref={inputRef}
-            onFocus={handleOpen}
-            onClick={handleOpen}
-            defaultValue={value?.toString() ?? ''}
-          />
           {options?.length > 0 && isOpen ? (
             <OptionList
               placeholderSearchText={placeholderSearchText}

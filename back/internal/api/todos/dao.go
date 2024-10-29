@@ -100,9 +100,9 @@ func (dao TodoDao) Undo(id string, user models.User) (todo models.Todo) {
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Model(&todo).Updates(models.Todo{
-		DoneAt: nil,
-		DoneBy: nil,
+	tx.Model(&todo).Updates(map[string]interface{}{
+		"DoneAt": nil,
+		"DoneBy": nil,
 	})
 	if tx.Error != nil {
 		panic(tx.Error)

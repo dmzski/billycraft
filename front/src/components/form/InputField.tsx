@@ -16,13 +16,14 @@ export const InputField = <
   shouldUnregister,
   rules,
   asNumber,
+  defaultValue,
   ...props
 }: InputFieldProps<TFieldValues, TName>) => {
   const { field, fieldState } = useController({
     name: props.name,
     control,
     disabled: props.disabled,
-    defaultValue: props.defaultValue,
+    defaultValue,
     shouldUnregister,
     rules: {
       required: props.required,
@@ -41,9 +42,9 @@ export const InputField = <
       name={field.name}
       onChange={event => {
         if (asNumber) {
-          if (event.target.valueAsNumber) {
-            field.onChange(event.target.valueAsNumber)
-          } else if (!event.target.value) {
+          if (event.target.value !== '') {
+            field.onChange(+event.target.value)
+          } else {
             field.onChange(null)
           }
         } else {
@@ -52,12 +53,18 @@ export const InputField = <
         props.onChange?.(event)
       }}
       onBlur={event => {
+        if (asNumber) {
+          if (Number.isNaN(event.target.valueAsNumber)) {
+            field.onChange(null)
+            event.target.value = ''
+          }
+        }
         field.onBlur()
         props.onBlur?.(event)
       }}
       ref={field.ref}
       disabled={field.disabled || props.disabled}
-      value={field.value}
+      value={`${field.value ?? ''}`}
     />
   )
 }

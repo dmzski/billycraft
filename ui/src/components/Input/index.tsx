@@ -56,6 +56,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       required,
       type = 'text',
       disabled,
+      onChange,
       ...props
     },
     ref,
@@ -90,6 +91,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             className="bg-background grow min-w-0 outline-none placeholder:text-muted-foreground py-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
             {...props}
+            onChange={onChange}
             autoFocus={autoFocus}
             disabled={disabled}
             type={type}

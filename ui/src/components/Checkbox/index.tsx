@@ -109,7 +109,11 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         >
           {checked ? (
             <span className={tw('flex items-center justify-center text-current')}>
-              <CheckIcon className="size-4" />
+              {checkedProp === 'indeterminate' ? (
+                <MinusIcon className="size-4" />
+              ) : (
+                <CheckIcon className="size-4" />
+              )}
             </span>
           ) : null}
         </button>

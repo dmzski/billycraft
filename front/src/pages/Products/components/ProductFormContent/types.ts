@@ -11,5 +11,5 @@ export type ProductFormValues = {
   stock: number | null
   code: string | null
   lowStock: number | null
-  noStockAlert: boolean
+  stockAlert: boolean
 }

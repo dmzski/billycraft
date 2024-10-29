@@ -5,7 +5,7 @@ import { useAllProductGroupsQuery } from '@/queries/useAllProductGroupsQuery'
 import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
 import { useRef, useState } from 'react'
 import { MultiEditProductGroupModal } from '../modals/MultiEditProductGroupModal'
-import { Button } from '@coco-ui/core'
+import { Button, Checkbox } from '@coco-ui/core'
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { MultiDeleteProductModal } from '../modals/MultiDeleteProductModal'
 import { useI18n } from '@/i18n'
@@ -30,6 +30,22 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
 
   return (
     <div ref={divRef} className="relative flex flex-col gap-8">
+      <div className="flex px-4">
+        <Checkbox
+          checked={
+            selected.length === products.length
+              ? 'checked'
+              : selected.length > 0
+              ? 'indeterminate'
+              : 'unchecked'
+          }
+          onCheckedChange={newState => {
+            setSelected(() => (newState ? [...products] : []))
+          }}
+          value="all"
+          label={t('selectAll')}
+        />
+      </div>
       {products.map(product => (
         <ProductTableLine
           key={product.id}
