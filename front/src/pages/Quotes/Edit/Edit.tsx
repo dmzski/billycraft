@@ -1,7 +1,6 @@
 import { Button, Loader, useToast } from '@coco-ui/core'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from '@/api/QuoteApi'
-import { QuoteStatus } from '@/models/Quote'
 import { ROUTES } from '@/routes'
 import { QuoteFormContent } from '@/pages/Quotes/components/QuoteFormContent'
 import { ChevronLeftIcon, DocumentIcon } from '@heroicons/react/24/solid'
