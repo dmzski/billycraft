@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.44.0
+
+### Minor Changes
+
+- 8913bc5: Improve filters and Add row update product on quote and bill
+
 ## 2.43.0
 
 ### Minor Changes
