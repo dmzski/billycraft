@@ -12,7 +12,7 @@ import { Submit } from '@/components/form/Submit'
 import { Form } from '@/components/form/Form'
 
 type EditProductModalProps = {
-  onSubmitSuccess: () => Promise<void>
+  onSubmitSuccess: (newProduct: Product) => (Promise<void> | void)
   product: Product
   disclosure: ComponentProps<typeof Modal>['disclosure']
 }
@@ -59,9 +59,9 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
         values.lowStock = null
         values.code = null
       }
-      await ProductApi.update({ ...values, id: product.id })
+      const newProduct = await ProductApi.update({ ...values, id: product.id })
       toast.show(pageT('submit.success'))
-      await onSubmitSuccess()
+      await onSubmitSuccess(newProduct)
       close()
     } catch (err) {
       sendErrorToSentry(err, { data: values })

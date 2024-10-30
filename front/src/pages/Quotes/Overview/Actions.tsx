@@ -1,6 +1,6 @@
 import { QuoteApi } from '@/api/QuoteApi'
 import { useI18n } from '@/i18n'
-import Quote, { QuoteStatusEnum } from '@/models/Quote'
+import Quote, { QuoteStatus } from '@/models/Quote'
 import { Button, useToast } from '@coco-ui/core'
 import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
@@ -15,7 +15,7 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
   const toast = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const updateQuoteStatus = (status: QuoteStatusEnum) => async () => {
+  const updateQuoteStatus = (status: QuoteStatus) => async () => {
     setIsSubmitting(true)
     try {
       if (quote) {
@@ -32,10 +32,10 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 
   return (
     <section className="grid md:grid-cols-2 gap-4 justify-end">
-      {quote.id && quote.status === QuoteStatusEnum.DRAFT ? (
+      {quote.id && quote.status === "DRAFT" ? (
         <Button
           type="button"
-          onClick={updateQuoteStatus(QuoteStatusEnum.SENT)}
+          onClick={updateQuoteStatus("SENT")}
           disabled={isSubmitting}
           className="md:col-start-2"
         >
@@ -43,11 +43,11 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
           {t('quotes.form.actions.sent')}
         </Button>
       ) : null}
-      {quote.status === QuoteStatusEnum.SENT ? (
+      {quote.status === "SENT" ? (
         <>
           <Button
             type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.REFUSED)}
+            onClick={updateQuoteStatus("REFUSED")}
             variant="outline"
             disabled={isSubmitting}
           >
@@ -57,19 +57,19 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
           <Button
             disabled={isSubmitting}
             type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.ACCEPTED)}
+            onClick={updateQuoteStatus("ACCEPTED")}
           >
             <CheckIcon />
             {t('quotes.form.actions.accepted')}
           </Button>
         </>
       ) : null}
-      {quote.status === QuoteStatusEnum.REFUSED ? (
+      {quote.status === "REFUSED" ? (
         <>
           <Button
             disabled={isSubmitting}
             type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.DRAFT)}
+            onClick={updateQuoteStatus("DRAFT")}
             variant="outline"
           >
             {t('quotes.form.actions.backToDraft')}
@@ -78,20 +78,20 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
             disabled={isSubmitting}
             type="button"
             variant="destructive"
-            onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+            onClick={updateQuoteStatus("ARCHIVED")}
           >
             <InboxArrowDownIcon />
             {t('quotes.form.actions.archive')}
           </Button>
         </>
       ) : null}
-      {quote.status === QuoteStatusEnum.ACCEPTED ? (
+      {quote.status === "ACCEPTED" ? (
         <>
           <Button
             disabled={isSubmitting}
             type="button"
             variant="destructive"
-            onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+            onClick={updateQuoteStatus("ARCHIVED")}
           >
             <InboxArrowDownIcon />
             {t('quotes.form.actions.archive')}
@@ -99,18 +99,18 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
           <Button
             disabled={isSubmitting}
             type="button"
-            onClick={updateQuoteStatus(QuoteStatusEnum.DEPOSIT_ASK)}
+            onClick={updateQuoteStatus("DEPOSIT_ASK")}
           >
             {t('quotes.form.actions.depositAsk')}
           </Button>
         </>
       ) : null}
-      {quote.status === QuoteStatusEnum.DEPOSIT_ASK ? (
+      {quote.status === "DEPOSIT_ASK" ? (
         <Button
           disabled={isSubmitting}
           className="md:col-start-2"
           type="button"
-          onClick={updateQuoteStatus(QuoteStatusEnum.ARCHIVED)}
+          onClick={updateQuoteStatus("ARCHIVED")}
           variant="destructive"
         >
           <InboxArrowDownIcon />

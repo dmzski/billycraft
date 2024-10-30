@@ -1,5 +1,4 @@
 import { Button, Select } from '@coco-ui/core'
-import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { ComponentProps, useMemo, useRef, useState } from 'react'
 import { Control, useFieldArray, useWatch } from 'react-hook-form'
 import QuoteLineTableLine from './Row'
@@ -18,7 +17,7 @@ const defaultLine: QuoteFormValues['lines'][number] = {
   price: 0,
   itPrice: 0,
   quantity: 0,
-  type: LineTypeEnum.TEXT,
+  type: "TEXT",
   line: 0,
   quoteId: '',
   productId: null,
@@ -33,7 +32,7 @@ const QuoteLineTable = ({
 }) => {
   const { t } = useI18n()
   const selectExistingProductRef = useRef<HTMLInputElement>(null)
-  const { data: allProducts } = useAllProductsQuery()
+  const { data: allProducts, reload: reloadProducts } = useAllProductsQuery()
   const [productIdSelected, setProductIdSelected] = useState<string>()
 
   const onProductSelectedChange = (option: string) => {
@@ -134,6 +133,8 @@ const QuoteLineTable = ({
                 id={line.id}
                 index={index}
                 deleteLine={() => remove(index)}
+                product={line.productId ? allProducts?.find(({id}) => id === line.productId) : undefined}
+                reloadProducts={reloadProducts}
               />
             ))}
           </SortableContext>

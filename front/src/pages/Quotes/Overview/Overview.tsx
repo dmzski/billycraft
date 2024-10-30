@@ -1,6 +1,5 @@
 import { useFormatCurrency } from '@/hooks/useFormatCurrency'
 import { useI18n } from '@/i18n'
-import { LineTypeEnum } from '@/models/LineTypeEnum'
 import { useCustomerQuery } from '@/queries/useCustomerQuery'
 import { useQuoteByIdQuery } from '@/queries/useQuoteByIdQuery'
 import { QuoteRouteProps, QuoteRouteQueryParams, ROUTES } from '@/routes'
@@ -24,7 +23,7 @@ import { Actions } from './Actions'
 import { PdfApi } from '@/api/PdfApi'
 import { QuoteApi } from '@/api/QuoteApi'
 import { calculatePriceTTC } from '@/utils/price'
-import { QuoteStatusEnum } from '@/models/Quote'
+import { QuoteStatus } from '@/models/Quote'
 import { useMemo, useReducer } from 'react'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { RRLink } from '@/components/RRLink'
@@ -116,7 +115,7 @@ export const Overview = () => {
           <DocumentIcon className="size-14 p-3 text-accent-foreground rounded-md bg-accent" />
           <span>{quote.name}</span>
         </h1>
-        {quote.status === QuoteStatusEnum.DRAFT ? (
+        {quote.status === "DRAFT" ? (
           <Button asChild>
             <Link to={ROUTES.QUOTE_EDIT.path({ id: quote.id })}>
               <PencilIcon />
@@ -173,10 +172,10 @@ export const Overview = () => {
               {pageT('sections.information.totalProducts')}
             </dt>
             <dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, LineTypeEnum.ARTICLE))}
+              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, "ARTICLE"))}
             </dd>
             <dd className="text-center text-xs">
-              {formatCurrency(getBillOrQuoteTotalForLineType(quote, LineTypeEnum.ARTICLE))}
+              {formatCurrency(getBillOrQuoteTotalForLineType(quote, "ARTICLE"))}
               &nbsp;
               {t('shortIncludedTax')}
             </dd>
@@ -186,10 +185,10 @@ export const Overview = () => {
               {pageT('sections.information.totalServices')}
             </dt>
             <dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, LineTypeEnum.SERVICE))}
+              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, "SERVICE"))}
             </dd>
             <dd className="text-center text-xs">
-              {formatCurrency(getBillOrQuoteTotalForLineType(quote, LineTypeEnum.SERVICE))}
+              {formatCurrency(getBillOrQuoteTotalForLineType(quote, "SERVICE"))}
               &nbsp;
               {t('shortIncludedTax')}
             </dd>
@@ -199,10 +198,10 @@ export const Overview = () => {
               {pageT('sections.information.totalOthers')}
             </dt>
             <dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, LineTypeEnum.OTHER_SERVICE))}
+              {formatCurrency(getBillOrQuoteTotalETForLineType(quote, "OTHER_SERVICE"))}
             </dd>
             <dd className="text-center text-xs">
-              {formatCurrency(getBillOrQuoteTotalForLineType(quote, LineTypeEnum.OTHER_SERVICE))}
+              {formatCurrency(getBillOrQuoteTotalForLineType(quote, "OTHER_SERVICE"))}
               &nbsp;
               {t('shortIncludedTax')}
             </dd>
@@ -244,7 +243,7 @@ export const Overview = () => {
                   <p>{name}</p>
                   <p className="pl-4 text-muted-foreground whitespace-pre-wrap">{description}</p>
                 </div>
-                {type !== LineTypeEnum.TEXT ? (
+                {type !== "TEXT" ? (
                   <>
                     <div>{quantity}</div>
                     <div>{formatCurrency(price ?? 0)}</div>

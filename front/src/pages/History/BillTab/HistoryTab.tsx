@@ -6,11 +6,17 @@ import { useState, useMemo } from 'react'
 import { useAllBillsArchivedQuery } from '@/queries/useAllBillsArchivedQuery'
 import { filterBillsOrQuotes } from '@/utils/filters'
 
-type BillFilters = Record<string, string>
-
 const HistoryTab = () => {
   const customers = useCustomers()
-  const [filters, setFilters] = useState<BillFilters>({})
+	const [filters, setFilters] = useState<
+		Parameters<typeof filterBillsOrQuotes>[1]
+	>({
+		name: "",
+		customer: "",
+		createdAt: "",
+		title: "",
+		status: "",
+	});
   const { data, isLoading } = useAllBillsArchivedQuery()
 
   const billSorted = useMemo(
@@ -20,7 +26,10 @@ const HistoryTab = () => {
 
   return (
     <>
-      <BillFilterContainer disabledFilters={['status']} filters={filters} setFilters={setFilters} />
+    <div>
+    <BillFilterContainer filters={filters} setFilters={setFilters} />
+
+    </div>
       <BillTable page="archived" data={billSorted} />
       {isLoading && !data ? (
         <div className="mt-2 flex justify-center">

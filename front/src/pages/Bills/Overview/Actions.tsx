@@ -1,6 +1,6 @@
 import { BillApi } from '@/api/BillApi'
 import { useI18n } from '@/i18n'
-import Bill, { BillStatusEnum } from '@/models/Bill'
+import Bill, { BillStatus } from '@/models/Bill'
 import { Button, useToast } from '@coco-ui/core'
 import { CheckIcon, EnvelopeIcon, InboxArrowDownIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
@@ -15,7 +15,7 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
   const toast = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const updateBillStatus = (status: BillStatusEnum) => async () => {
+  const updateBillStatus = (status: BillStatus) => async () => {
     setIsSubmitting(true)
     try {
       if (bill) {
@@ -32,10 +32,10 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 
   return (
     <section className="grid md:grid-cols-2 gap-4 justify-end">
-      {bill.status === BillStatusEnum.DRAFT ? (
+      {bill.status === "DRAFT" ? (
         <Button
           type="button"
-          onClick={updateBillStatus(BillStatusEnum.SENT)}
+          onClick={updateBillStatus("SENT")}
           disabled={isSubmitting}
           className="gap-4 md:col-start-2"
         >
@@ -43,11 +43,11 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
           {t('bills.form.actions.sent')}
         </Button>
       ) : null}
-      {bill.status === BillStatusEnum.SENT ? (
+      {bill.status === "SENT" ? (
         <>
           <Button
             type="button"
-            onClick={updateBillStatus(BillStatusEnum.REFUSED)}
+            onClick={updateBillStatus("REFUSED")}
             variant="destructive"
             disabled={isSubmitting}
           >
@@ -57,19 +57,19 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
           <Button
             disabled={isSubmitting}
             type="button"
-            onClick={updateBillStatus(BillStatusEnum.TO_DECLARE)}
+            onClick={updateBillStatus("TO_DECLARE")}
           >
             <CheckIcon />
             {t('bills.form.actions.toDeclare')}
           </Button>
         </>
       ) : null}
-      {bill.status === BillStatusEnum.TO_DECLARE ? (
+      {bill.status === "TO_DECLARE" ? (
         <Button
           disabled={isSubmitting}
           className="gap-4 md:col-start-2"
           type="button"
-          onClick={updateBillStatus(BillStatusEnum.ARCHIVED)}
+          onClick={updateBillStatus("ARCHIVED")}
           variant="destructive"
         >
           <InboxArrowDownIcon />

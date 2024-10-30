@@ -1,7 +1,7 @@
 import { Button, Loader, useToast } from '@coco-ui/core'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { QuoteApi } from '@/api/QuoteApi'
-import { QuoteStatusEnum } from '@/models/Quote'
+import { QuoteStatus } from '@/models/Quote'
 import { ROUTES } from '@/routes'
 import { QuoteFormContent } from '@/pages/Quotes/components/QuoteFormContent'
 import { ChevronLeftIcon, DocumentIcon } from '@heroicons/react/24/solid'
@@ -71,7 +71,7 @@ export const Edit = () => {
     shouldFocusError: true,
     mode: 'onChange',
     values: initialValues,
-    disabled: !!(quote && quote.status !== QuoteStatusEnum.DRAFT),
+    disabled: !!(quote && quote.status !== "DRAFT"),
   })
 
   const { isValid, isSubmitting, disabled } = methods.formState
@@ -84,7 +84,7 @@ export const Edit = () => {
     return t('genericDataLoadError')
   }
 
-  if (quote.status !== QuoteStatusEnum.DRAFT) {
+  if (quote.status !== "DRAFT") {
     return <Redirect to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })} />
   }
 
@@ -104,7 +104,7 @@ export const Edit = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <QuoteFormContent quote={quote} />
           <div className="grid md:grid-cols-2 gap-4">
-            {!quote.id || quote.status === QuoteStatusEnum.DRAFT || !quote.status ? (
+            {!quote.id || quote.status === "DRAFT" || !quote.status ? (
               <Button type="submit" disabled={!isValid || isSubmitting || disabled}>
                 {t('quotes.form.submit')}
               </Button>

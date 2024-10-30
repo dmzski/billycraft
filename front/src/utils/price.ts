@@ -1,5 +1,5 @@
 import Bill from '@/models/Bill'
-import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { ProductType } from '@/models/LineTypeEnum'
 import Quote from '@/models/Quote'
 
 export function roundTwoDecimals(aPrice: number): number {
@@ -60,7 +60,7 @@ export function getBillOrQuoteTotalEt(billOrQuote: Bill | Quote): number {
 
 export function getBillOrQuoteTotalETForLineType(
   billOrQuote: Bill | Quote,
-  type: LineTypeEnum,
+  type: ProductType,
 ): number {
   const array = billOrQuote.lines
     .filter(line => line.price && line.quantity && line.type === type)
@@ -74,7 +74,7 @@ export function getBillOrQuoteTotalETForLineType(
 
 export function getBillOrQuoteTotalForLineType(
   billOrQuote: Bill | Quote,
-  type: LineTypeEnum,
+  type: ProductType,
 ): number {
   const array = billOrQuote.lines
     .filter(line => line.price && line.quantity && line.type === type)

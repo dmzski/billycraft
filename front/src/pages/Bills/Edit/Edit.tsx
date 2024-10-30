@@ -1,7 +1,6 @@
 import { Button, Loader, useToast } from '@coco-ui/core'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { BillApi } from '@/api/BillApi'
-import { BillStatusEnum } from '@/models/Bill'
 import { ROUTES } from '@/routes'
 import { BillFormContent } from '@/pages/Bills/components/BillFormContent'
 import { ChevronLeftIcon, CreditCardIcon } from '@heroicons/react/24/solid'
@@ -71,7 +70,7 @@ export const Edit = () => {
     shouldFocusError: false,
     mode: 'onChange',
     values: initialValues,
-    disabled: !!(bill && bill.status !== BillStatusEnum.DRAFT),
+    disabled: !!(bill && bill.status !== "DRAFT"),
   })
 
   const { isValid, isSubmitting, disabled } = methods.formState
@@ -84,7 +83,7 @@ export const Edit = () => {
     return t('genericDataLoadError')
   }
 
-  if (bill.status !== BillStatusEnum.DRAFT) {
+  if (bill.status !== "DRAFT") {
     return <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />
   }
 
@@ -100,7 +99,7 @@ export const Edit = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <BillFormContent bill={bill} />
-          {!bill.id || bill.status === BillStatusEnum.DRAFT || !bill.status ? (
+          {!bill.id || bill.status === "DRAFT" || !bill.status ? (
             <Button type="submit" disabled={!isValid || isSubmitting || disabled}>
               {t('bills.form.submit')}
             </Button>

@@ -1,5 +1,5 @@
-import { LineTypeEnum } from '../LineTypeEnum'
-import { QuoteStatusEnum } from '../Quote'
+import { ProductType } from '../LineTypeEnum'
+import { QuoteStatus } from '../Quote'
 
 export type QuoteUpdateRequestLine = {
   line: number
@@ -7,7 +7,7 @@ export type QuoteUpdateRequestLine = {
   price: number | null
   name: string
   description: string | null
-  type: LineTypeEnum
+  type: ProductType
   productId: string | null
 }
 
@@ -17,5 +17,5 @@ export type QuoteUpdateRequest = {
   tva: number
   title: string
   customerId: string
-  status?: QuoteStatusEnum
+  status?: QuoteStatus
 }

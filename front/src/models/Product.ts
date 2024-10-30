@@ -1,8 +1,8 @@
-import { LineTypeEnum } from './LineTypeEnum'
+import { ProductType } from './LineTypeEnum'
 
 interface Product {
   id: string
-  type: LineTypeEnum
+  type: ProductType
   name: string
   description: string
   price: number

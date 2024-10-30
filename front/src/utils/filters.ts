@@ -3,9 +3,11 @@ import Customer from '@/models/Customer'
 import Quote from '@/models/Quote'
 import { formatISO9075, parseJSON } from 'date-fns'
 
+type FilterKey = "name" | "status" | "createdAt" | "title" | "customer"
+
 export function filterBillsOrQuotes<T extends Quote | Bill>(
   array: T[],
-  filters: Record<string, string>,
+  filters: Record<FilterKey, string>,
   customers: Customer[],
 ): T[] {
   if (!array) return []
@@ -17,7 +19,7 @@ export function filterBillsOrQuotes<T extends Quote | Bill>(
     if (filters.name && !item.name.trim().includes(filters.name.toUpperCase().trim())) {
       takeIt = false
     }
-    if (filters.status && filters.status !== 'none' && item.status !== filters.status) {
+    if (filters.status && filters.status !== 'all' && item.status !== filters.status) {
       takeIt = false
     }
     if (

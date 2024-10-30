@@ -1,40 +1,47 @@
-import { LineTypeEnum } from './LineTypeEnum'
+import { ProductType } from "./LineTypeEnum";
 
-export enum BillStatusEnum {
-  DRAFT = 'DRAFT',
-  SENT = 'SENT',
-  ACCEPTED = 'ACCEPTED',
-  REFUSED = 'REFUSED',
-  TO_DECLARE = 'TO_DECLARE',
-  ARCHIVED = 'ARCHIVED',
-}
+export type BillStatus =
+	| "DRAFT"
+	| "SENT"
+	| "ACCEPTED"
+	| "REFUSED"
+	| "TO_DECLARE"
+	| "ARCHIVED";
+export const BILL_STATUS: BillStatus[] = [
+	"DRAFT",
+	"SENT",
+	"ACCEPTED",
+	"REFUSED",
+	"TO_DECLARE",
+	"ARCHIVED",
+];
 
 export type BillLine = {
-  billId: string
-  line: number
-  quantity: number | null
-  price: number | null
-  name: string
-  description: string | null
-  type: LineTypeEnum
-  productId: string | null
-}
+	billId: string;
+	line: number;
+	quantity: number | null;
+	price: number | null;
+	name: string;
+	description: string | null;
+	type: ProductType;
+	productId: string | null;
+};
 
 type Bill = {
-  id: string
-  name: string
-  title: string
-  tva: number
-  createdAt: string
-  updatedAt: string
-  sentAt?: string
-  status: BillStatusEnum
-  createdBy: string
-  companyId: string
-  customerId: string
-  fileName?: string
-  lines: BillLine[]
-  quoteId: string
-}
+	id: string;
+	name: string;
+	title: string;
+	tva: number;
+	createdAt: string;
+	updatedAt: string;
+	sentAt?: string;
+	status: BillStatus;
+	createdBy: string;
+	companyId: string;
+	customerId: string;
+	fileName?: string;
+	lines: BillLine[];
+	quoteId: string;
+};
 
-export default Bill
+export default Bill;

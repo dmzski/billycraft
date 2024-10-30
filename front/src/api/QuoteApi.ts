@@ -1,6 +1,6 @@
 import { API_URL } from '@/constants/global'
 import Bill from '@/models/Bill'
-import Quote, { QuoteStatusEnum } from '@/models/Quote'
+import Quote, { QuoteStatus } from '@/models/Quote'
 import { HttpClient } from './HttpClient'
 import { QuoteCreateRequest } from '@/models/dtos/QuoteCreateRequest'
 import { QuoteUpdateRequest } from '@/models/dtos/QuoteUpdateRequest'
@@ -73,7 +73,7 @@ export const QuoteApi = {
   },
   findById: async (id: string): Promise<Quote> => HttpClient.GET<Quote>(`${QUOTE_URL}/${id}`),
   send: async (id: string): Promise<Quote> => HttpClient.POST<Quote>(`${QUOTE_URL}/${id}/send`, {}),
-  updateStatus: async ({ id, status }: { id: string; status: QuoteStatusEnum }): Promise<Quote> =>
+  updateStatus: async ({ id, status }: { id: string; status: QuoteStatus }): Promise<Quote> =>
     HttpClient.PATCH(`${QUOTE_URL}/${id}`, { status }),
   createBill: async ({ id }: { id: string }): Promise<Bill> =>
     HttpClient.POST<Bill>(`${QUOTE_URL}/${id}/bill`, {}),

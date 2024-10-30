@@ -11,7 +11,7 @@ const QuoteSwitch = () => {
   const { t } = useI18n()
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <h1 className="text-2xl">{t('history.tabs.quote.title')}</h1>
       <div>
         <Tabs>

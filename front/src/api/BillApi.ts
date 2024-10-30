@@ -1,5 +1,5 @@
 import { API_URL } from '@/constants/global'
-import Bill, { BillStatusEnum } from '@/models/Bill'
+import Bill, { BillStatus } from '@/models/Bill'
 import { HttpClient } from './HttpClient'
 import { BillUpdateRequest } from '@/models/dtos/BillUpdateRequest'
 import { BillCreateRequest } from '@/models/dtos/BillCreateRequest'
@@ -57,6 +57,6 @@ export const BillApi = {
   send: async (id: string): Promise<Bill> => HttpClient.POST<Bill>(`${BILL_URL}/${id}/send`, {}),
   createFromQuote: async (quoteId: string): Promise<Bill> =>
     HttpClient.POST<Bill>(`${BILL_URL}/from-quote/${quoteId}`, {}),
-  updateStatus: async ({ id, status }: { id: string; status: BillStatusEnum }) =>
+  updateStatus: async ({ id, status }: { id: string; status: BillStatus }) =>
     HttpClient.PATCH(`${BILL_URL}/${id}`, { status }),
 }

@@ -1,5 +1,5 @@
-import { LineTypeEnum } from '../LineTypeEnum'
-import { BillStatusEnum } from '../Bill'
+import { ProductType } from '../LineTypeEnum'
+import { BillStatus } from '../Bill'
 
 export type BillCreateRequestLine = {
   line: number
@@ -7,7 +7,7 @@ export type BillCreateRequestLine = {
   price?: number | null
   name: string
   description?: string | null
-  type: LineTypeEnum
+  type: ProductType
   productId?: string | null
 }
 
@@ -16,5 +16,5 @@ export type BillCreateRequest = {
   tva: number
   title: string
   customerId: string
-  status?: BillStatusEnum
+  status?: BillStatus
 }

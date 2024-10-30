@@ -1,7 +1,7 @@
-import { LineTypeEnum } from '@/models/LineTypeEnum'
+import { ProductType } from "@/models/LineTypeEnum"
 
 export type ProductFormValues = {
-  type: LineTypeEnum
+  type: ProductType
   name: string
   description: string | null
   price: number | null

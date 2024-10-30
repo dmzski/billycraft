@@ -1,6 +1,1 @@
-export enum LineTypeEnum {
-  ARTICLE = 'ARTICLE',
-  SERVICE = 'SERVICE',
-  OTHER_SERVICE = 'OTHER_SERVICE',
-  TEXT = 'TEXT',
-}
+export type ProductType = "ARTICLE" | "SERVICE" | "OTHER_SERVICE" | "TEXT";

@@ -1,8 +1,8 @@
-import { LineTypeEnum } from '../LineTypeEnum'
+import { ProductType } from '../LineTypeEnum'
 
 export type ProductUpdateRequest = {
   id: string
-  type: LineTypeEnum
+  type: ProductType
   name: string
   description?: string | null
   price?: number | null
