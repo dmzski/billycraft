@@ -18,7 +18,7 @@ const HistoryTab = () => {
 		status: "",
 	});
 
-	const { data, isLoading } = useAllQuotesRefusedQuery();
+	const { data, isLoading, reload } = useAllQuotesRefusedQuery();
 	const quoteSorted = useMemo(
 		() => filterBillsOrQuotes(data ?? [], filters, customers),
 		[data, filters, customers],
@@ -28,7 +28,7 @@ const HistoryTab = () => {
 			<div>
 				<QuoteFilterContainer filters={filters} setFilters={setFilters} />
 			</div>
-			<QuoteList page="refused" data={quoteSorted} />
+			<QuoteList page="refused" reload={reload} data={quoteSorted} />
 			{isLoading && !data ? (
 				<div className="mt-2 flex justify-center">
 					<Loader />

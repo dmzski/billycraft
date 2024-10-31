@@ -18,7 +18,7 @@ const HistoryTab = () => {
 		status: "",
 	});
 
-	const { data, isLoading } = useAllQuotesArchivedQuery();
+	const { data, isLoading, reload } = useAllQuotesArchivedQuery();
 	const quoteSorted = useMemo(
 		() => filterBillsOrQuotes(data ?? [], filters, customers),
 		[customers, filters, data],
@@ -28,7 +28,7 @@ const HistoryTab = () => {
 			<div>
 				<QuoteFilterContainer filters={filters} setFilters={setFilters} />
 			</div>
-			<QuoteList page="archived" data={quoteSorted} />
+			<QuoteList page="archived" reload={reload} data={quoteSorted} />
 			{isLoading && !data ? (
 				<div className="flex justify-center">
 					<Loader />
