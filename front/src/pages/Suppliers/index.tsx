@@ -27,8 +27,8 @@ const Suppliers = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex mb-4">
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col md:flex-row gap-4">
         <h1 className="text-3xl flex-grow">{pageT('title')}</h1>
         <SupplierModalForm
           disclosure={

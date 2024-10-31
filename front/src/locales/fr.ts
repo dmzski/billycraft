@@ -296,7 +296,7 @@ export default {
   // Bills > List
   'bills.list.title': 'Factures',
   'bills.list.add': 'Nouvelle Facture',
-  'bills.list.headers.reference': '#',
+  'bills.list.headers.reference': 'Référence',
   'bills.list.headers.title': 'Titre',
   'bills.list.headers.customer': 'Client',
   'bills.list.headers.createdAt': 'Créée le',
@@ -305,7 +305,7 @@ export default {
   'bills.list.statusUpdated': 'Statut mis à jour',
 
   // Bills > List > Filters
-  'bills.list.filters.fields.reference.label': '#',
+  'bills.list.filters.fields.reference.label': 'Référence',
   'bills.list.filters.fields.title.label': 'Titre',
   'bills.list.filters.fields.customer.label': 'Client',
   'bills.list.filters.fields.createdAt.label': 'Créée le',
@@ -357,7 +357,7 @@ export default {
   // Bills > Details
   'bills.details.backTo': 'Retourner à la liste des factures',
   'bills.details.sections.information.title': 'Informations',
-  'bills.details.sections.information.id': 'Id',
+  'bills.details.sections.information.id': 'Référence',
   'bills.details.sections.information.status': 'État',
   'bills.details.sections.information.customer': 'Client',
   'bills.details.sections.information.vat': 'TVA',
@@ -385,7 +385,7 @@ export default {
   'customers.details.goBack': 'Retourner à la liste des clients',
   'customers.details.delete.success': 'Client supprimé',
   'customers.details.sections.informations.title': 'Informations',
-  'customers.details.sections.informations.id': 'Id',
+  'customers.details.sections.informations.id': 'Référence',
   'customers.details.sections.informations.name': 'Nom',
   'customers.details.sections.informations.address': 'Adresse',
   'customers.details.sections.informations.email': 'Email',
@@ -434,7 +434,7 @@ export default {
   // Quotes > List
   'quotes.list.title': 'Devis',
   'quotes.list.add': 'Nouveau devis',
-  'quotes.list.headers.reference': '#',
+  'quotes.list.headers.reference': 'Référence',
   'quotes.list.headers.title': 'Titre',
   'quotes.list.headers.customer': 'Client',
   'quotes.list.headers.createdAt': 'Créé le',
@@ -443,7 +443,7 @@ export default {
   'quotes.list.statusUpdated': 'Statut mis à jour',
 
   // Quotes > List > Filters
-  'quotes.list.filters.fields.reference.label': '#',
+  'quotes.list.filters.fields.reference.label': 'Référence',
   'quotes.list.filters.fields.title.label': 'Titre',
   'quotes.list.filters.fields.customer.label': 'Client',
   'quotes.list.filters.fields.createdAt.label': 'Créé le',

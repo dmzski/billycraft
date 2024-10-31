@@ -1,13 +1,15 @@
-import { Button, Dropdown, useToast } from "@coco-ui/core";
+import { Button, Collapsible, Dropdown, useToast } from "@coco-ui/core";
 import { BillApi } from "@/api/BillApi";
 import { formatISO9075, parseJSON } from "date-fns";
 import Bill, { BillStatus } from "@/models/Bill";
 import Customer from "@/models/Customer";
-import { useMemo, MouseEvent } from "react";
+import { useMemo, MouseEvent, useReducer } from "react";
 import { ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
-import { useAllBillsNotArchivedAndNotRefused } from "@/queries/useAllBillsNotArchivedAndNotRefused";
-import { RRLink } from "@/components/RRLink";
+import { BillLabel } from "@/components/labels/BillLabel";
+import { RowContent } from "./RowContent";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
 
 type BillTableLineProps = {
 	bill: Bill;
@@ -15,7 +17,8 @@ type BillTableLineProps = {
 	page?: "list" | "archived" | "refused";
 };
 const BillTableLine = ({ bill, customer, page }: BillTableLineProps) => {
-	const { reload } = useAllBillsNotArchivedAndNotRefused({ enabled: false });
+	const [open, toggleOpen] = useReducer((state) => !state, false);
+	const { reload } = useAllBillsQuery({ enabled: false });
 	const toast = useToast();
 	const { t } = useI18n();
 
@@ -47,39 +50,47 @@ const BillTableLine = ({ bill, customer, page }: BillTableLineProps) => {
 		}
 	}, [bill]);
 
-	// Prio info numero + nom du client + date reste dans le depliant
 	return (
-		<div className="grid md:grid-cols-12 px-4 py-2 items-center border-b md:h-16">
-			<div className="md:col-span-1 text-sm">
-				<RRLink to={ROUTES.BILL_OVERVIEW.path({ id: bill.id }, { from: page })}>
-					{bill.name}
-				</RRLink>
-			</div>
-			<div className="md:col-span-3 truncate">{bill.title}</div>
-			<div className="md:col-span-2 truncate">{customer?.name ?? "-"}</div>
-			<div className="md:col-span-2">
-				{formatISO9075(parseJSON(bill.createdAt))}
-			</div>
-			<div className="md:col-span-2">
-				{bill.updatedAt ? formatISO9075(parseJSON(bill.updatedAt)) : "-"}
-			</div>
-			<div className="md:col-span-2">
-				{nextStatuses.length > 0 ? (
-					<Dropdown
-						disclosure={<Button>{t(`bills.status.${bill.status}`)}</Button>}
-					>
-						<Dropdown.Content>
-							{nextStatuses.map((s) => (
-								<Dropdown.Button key={s} onClick={updateBillStatus(s)}>
-									{t(`bills.status.${s}`)}
-								</Dropdown.Button>
-							))}
-						</Dropdown.Content>
-					</Dropdown>
-				) : (
-					<p>{t(`bills.status.${bill.status}`)}</p>
-				)}
-			</div>
+		<div className="border rounded-md">
+			<Collapsible
+				open={open}
+				disclosure={
+					<div className="grid md:grid-cols-4 items-center md:h-16 p-2 gap-4">
+						<div className="flex items-center gap-4">
+              <Button onClick={toggleOpen} size="icon" variant="ghost">
+                {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              </Button>
+							<BillLabel
+								bill={bill}
+								to={ROUTES.BILL_OVERVIEW.path({ id: bill.id }, { from: page })}
+							/>
+						</div>
+						<div className="truncate">{customer?.name ?? "-"}</div>
+						<div>{formatISO9075(parseJSON(bill.createdAt))}</div>
+						<div>
+							{nextStatuses.length > 0 ? (
+								<Dropdown
+									disclosure={
+										<Button>{t(`bills.status.${bill.status}`)}</Button>
+									}
+								>
+									<Dropdown.Content>
+										{nextStatuses.map((s) => (
+											<Dropdown.Button key={s} onClick={updateBillStatus(s)}>
+												{t(`bills.status.${s}`)}
+											</Dropdown.Button>
+										))}
+									</Dropdown.Content>
+								</Dropdown>
+							) : (
+								<p>{t(`bills.status.${bill.status}`)}</p>
+							)}
+						</div>
+					</div>
+				}
+			>
+				<RowContent bill={bill} />
+			</Collapsible>
 		</div>
 	);
 };

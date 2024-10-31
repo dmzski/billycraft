@@ -7,9 +7,9 @@ import QuoteFilterContainer from "./Filters";
 import QuoteList from "./List/List";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
-import { useAllQuotesNotArchivedAndNotRefused } from "@/queries/useAllQuotesNotArchivedAndNotRefused";
 import { filterBillsOrQuotes } from "@/utils/filters";
 import { QUOTE_STATUS, QuoteStatus } from "@/models/Quote";
+import { useAllQuotesQuery } from "@/queries/useAllQuotesQuery";
 
 const QuotePage = () => {
 	const { t } = useI18n();
@@ -27,7 +27,7 @@ const QuotePage = () => {
 		title: "",
 	});
 
-	const { isLoading, data } = useAllQuotesNotArchivedAndNotRefused();
+	const { isLoading, data, reload } = useAllQuotesQuery();
 
 	const quoteSorted = useMemo(
 		() =>
@@ -71,7 +71,7 @@ const QuotePage = () => {
 			<div>
 				<QuoteFilterContainer filters={filters} setFilters={setFilters} />
 			</div>
-			<QuoteList data={quoteSorted} />
+			<QuoteList data={quoteSorted} reload={reload} />
 			{isLoading && !data ? (
 				<div className="mt-2 flex justify-center">
 					<Loader />

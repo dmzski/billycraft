@@ -14,15 +14,13 @@ const BillList = ({ data, page }: BillListProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="p-4 grid md:grid-cols-12 bg-accent text-accent-foreground border-b rounded-t">
-        <div className="col-span-1">{t('bills.list.headers.reference')}</div>
-        <div className="col-span-3">{t('bills.list.headers.title')}</div>
-        <div className="col-span-2">{t('bills.list.headers.customer')}</div>
-        <div className="col-span-2">{t('bills.list.headers.createdAt')}</div>
-        <div className="col-span-2">{t('bills.list.headers.updatedAt')}</div>
-        <div className="col-span-2">{t('bills.list.headers.status')}</div>
+      <div className="p-4 grid md:grid-cols-4 text-muted-foreground text-sm">
+        <div className="md:pl-12">{t('bills.list.headers.reference')}</div>
+        <div>{t('bills.list.headers.customer')}</div>
+        <div>{t('bills.list.headers.createdAt')}</div>
+        <div>{t('bills.list.headers.status')}</div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         {data.map(bill => (
           <BillTableLine
             customer={customers.find(c => c.id === bill.customerId)}

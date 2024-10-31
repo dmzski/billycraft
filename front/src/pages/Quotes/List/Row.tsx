@@ -1,22 +1,24 @@
-import { Button, Dropdown, useToast } from "@coco-ui/core";
+import { Button, Collapsible, Dropdown, useToast } from "@coco-ui/core";
 import { QuoteApi } from "@/api/QuoteApi";
 import { formatISO9075, parseJSON } from "date-fns";
 import Customer from "@/models/Customer";
 import Quote, { QuoteStatus } from "@/models/Quote";
-import { MouseEvent, useMemo } from "react";
+import { MouseEvent, useMemo, useReducer } from "react";
 import { ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
-import { useAllQuotesNotArchivedAndNotRefused } from "@/queries/useAllQuotesNotArchivedAndNotRefused";
-import { RRLink } from "@/components/RRLink";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { QuoteLabel } from "@/components/labels/QuoteLabel";
+import { RowContent } from "./RowContent";
 
 type QuoteTableLineProps = {
 	quote: Quote;
 	customer?: Customer;
 	page?: "list" | "archived" | "refused";
+  reload: () => Promise<void>
 };
-const QuoteTableLine = ({ quote, customer, page }: QuoteTableLineProps) => {
+const QuoteTableLine = ({ quote, customer, page, reload }: QuoteTableLineProps) => {
 	const { t } = useI18n();
-	const { reload } = useAllQuotesNotArchivedAndNotRefused({ enabled: false });
+  const [open, toggleOpen] = useReducer(state => !state, false)
 	const toast = useToast();
 
 	const updateQuoteStatus =
@@ -59,42 +61,46 @@ const QuoteTableLine = ({ quote, customer, page }: QuoteTableLineProps) => {
 	}, [quote]);
 
 	return (
-		<div className="grid md:grid-cols-12 px-4 py-2 items-center border-b md:h-16">
-			<div className="md:col-span-1 text-sm">
-				<RRLink
-					to={ROUTES.QUOTE_OVERVIEW.path(
-						{ id: quote.id },
-						page !== undefined ? { from: page } : undefined,
-					)}
-				>
-					{quote.name}
-				</RRLink>
-			</div>
-			<div className="md:col-span-3 truncate">{quote.title}</div>
-			<div className="md:col-span-2 truncate">{customer?.name ?? "-"}</div>
-			<div className="md:col-span-2">
-				{quote.createdAt ? formatISO9075(parseJSON(quote.createdAt)) : ""}
-			</div>
-			<div className="md:col-span-2">
-				{quote.updatedAt ? formatISO9075(parseJSON(quote.updatedAt)) : "-"}
-			</div>
-			<div className="md:col-span-2">
-				{nextStatuses.length > 0 ? (
-					<Dropdown
-						disclosure={<Button>{t(`quotes.status.${quote.status}`)}</Button>}
-					>
-						<Dropdown.Content>
-							{nextStatuses.map((s) => (
-								<Dropdown.Button key={s} onClick={updateQuoteStatus(s)}>
-									{t(`quotes.status.${s}`)}
-								</Dropdown.Button>
-							))}
-						</Dropdown.Content>
-					</Dropdown>
-				) : (
-					<p>{t(`quotes.status.${quote.status}`)}</p>
-				)}
-			</div>
+		<div className="border rounded-md">
+			<Collapsible
+				open={open}
+				disclosure={
+					<div className="grid md:grid-cols-4 items-center md:h-16 p-2 gap-4">
+						<div className="flex items-center gap-4">
+              <Button onClick={toggleOpen} size="icon" variant="ghost">
+                {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              </Button>
+							<QuoteLabel
+								quote={quote}
+								to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }, { from: page })}
+							/>
+						</div>
+						<div className="truncate">{customer?.name ?? "-"}</div>
+						<div>{formatISO9075(parseJSON(quote.createdAt))}</div>
+						<div>
+							{nextStatuses.length > 0 ? (
+								<Dropdown
+									disclosure={
+										<Button>{t(`quotes.status.${quote.status}`)}</Button>
+									}
+								>
+									<Dropdown.Content>
+										{nextStatuses.map((s) => (
+											<Dropdown.Button key={s} onClick={updateQuoteStatus(s)}>
+												{t(`quotes.status.${s}`)}
+											</Dropdown.Button>
+										))}
+									</Dropdown.Content>
+								</Dropdown>
+							) : (
+								<p>{t(`quotes.status.${quote.status}`)}</p>
+							)}
+						</div>
+					</div>
+				}
+			>
+				<RowContent quote={quote} />
+			</Collapsible>
 		</div>
 	);
 };
