@@ -1,5 +1,16 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.46.0
+
+### Minor Changes
+
+- 1fe259e: Feat: Improve UI
+
+### Patch Changes
+
+- Updated dependencies [1fe259e]
+  - @coco-ui/core@1.34.0
+
 ## 2.45.0
 
 ### Minor Changes

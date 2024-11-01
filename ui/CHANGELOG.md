@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.34.0
+
+### Minor Changes
+
+- 1fe259e: Improve UI/UX and portals
+
 ## 1.33.0
 
 ### Minor Changes
