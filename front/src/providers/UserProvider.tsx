@@ -1,4 +1,4 @@
-import Company from '@/models/Company'
+import { Company } from '@/models/Company'
 import { User } from '@/models/User'
 import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import * as Sentry from '@sentry/react'

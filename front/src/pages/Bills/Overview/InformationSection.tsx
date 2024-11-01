@@ -80,14 +80,14 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalProducts")}
 						</dt>
 						<dd className="text-center text-4xl">
-							{formatCurrency(
-								getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
-							)}
+            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
 						</dd>
 						<dd className="text-center text-xs">
-							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
+              {formatCurrency(
+                getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
+              )}
 							&nbsp;
-							{t("shortIncludedTax")}
+							{t("shortExcludedTax")}
 						</dd>
 					</dl>
 					<dl className="border shadow-lg rounded-md grid gap-4 p-4">
@@ -95,14 +95,14 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalServices")}
 						</dt>
 						<dd className="text-center text-4xl">
-							{formatCurrency(
-								getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
-							)}
+            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
 						</dd>
 						<dd className="text-center text-xs">
-							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
+              {formatCurrency(
+                getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
+              )}
 							&nbsp;
-							{t("shortIncludedTax")}
+							{t("shortExcludedTax")}
 						</dd>
 					</dl>
 					<dl className="border shadow-lg rounded-md grid gap-4 p-4">
@@ -110,16 +110,16 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalOthers")}
 						</dt>
 						<dd className="text-center text-4xl">
-							{formatCurrency(
-								getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
-							)}
+            {formatCurrency(
+              getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
+            )}
 						</dd>
 						<dd className="text-center text-xs">
-							{formatCurrency(
-								getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
-							)}
+              {formatCurrency(
+                getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
+              )}
 							&nbsp;
-							{t("shortIncludedTax")}
+							{t("shortExcludedTax")}
 						</dd>
 					</dl>
 				</div>

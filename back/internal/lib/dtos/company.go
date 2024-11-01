@@ -20,6 +20,7 @@ type CompanyResponse struct {
 	OthersTax       *float32   `json:"othersTax"`
 	AutoMonthReport bool       `json:"autoMonthReport"`
 	AutoYearReport  bool       `json:"autoYearReport"`
+	VatPercent      float32    `json:"vatPercent"`
 }
 
 type CompanyRequest struct {
@@ -36,4 +37,5 @@ type CompanyRequest struct {
 	OthersTax       *float32 `json:"othersTax"`
 	AutoMonthReport *bool    `json:"autoMonthReport"`
 	AutoYearReport  *bool    `json:"autoYearReport"`
+	VatPercent      float32  `json:"vatPercent"`
 }

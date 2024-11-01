@@ -20,6 +20,7 @@ type Company struct {
 	OthersTax       *float32
 	AutoMonthReport *bool
 	AutoYearReport  *bool
+	VatPercent      float32
 	CreatedBy       string     `gorm:"<-:create"`
 	CreatedAt       time.Time  `gorm:"<-:create"`
 	UpdatedAt       *time.Time `gorm:"autoUpdateTime"`
@@ -48,6 +49,7 @@ func (c Company) ToDTO() dtos.CompanyResponse {
 		OthersTax:       c.OthersTax,
 		AutoMonthReport: false,
 		AutoYearReport:  false,
+		VatPercent:      c.VatPercent,
 	}
 
 	if c.AutoMonthReport != nil {
@@ -75,6 +77,7 @@ func (Company) FromDTO(c dtos.CompanyRequest) Company {
 		OthersTax:       c.OthersTax,
 		AutoMonthReport: c.AutoMonthReport,
 		AutoYearReport:  c.AutoYearReport,
+		VatPercent:      c.VatPercent,
 	}
 
 }

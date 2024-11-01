@@ -58,7 +58,9 @@ func (dao BillDao) FindAllByTenantByStatusNotIn(tenant string, statuses []string
 }
 
 func (dao BillDao) FindAllByTenantByNotPaid(tenant string) (bills []models.Bill) {
-	if err := database.DBConn.Where("company_id = ? AND status = 'SENT' AND paid_at IS NULL", tenant).Order("created_at desc").Find(&bills).Error; err != nil {
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Where("company_id = ? AND status = 'SENT' AND paid_at IS NULL", tenant).Order("created_at desc").Find(&bills).Error; err != nil {
 		panic(err)
 	}
 	return

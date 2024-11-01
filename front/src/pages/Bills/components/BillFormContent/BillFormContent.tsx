@@ -75,7 +75,7 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
   })
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <Prompt when={isDirty && !isSubmitting} message={t('bills.form.exitWarning')} />
       <Input
         label={t('bills.form.fields.title.label')}
@@ -118,6 +118,6 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
         max={100}
       />
       <BillLineTable />
-    </>
+    </div>
   )
 }

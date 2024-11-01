@@ -6,7 +6,7 @@ import { Badge } from "@coco-ui/core";
 import { useI18n } from "@/i18n";
 
 const labelVariants = cva(
-	"inline-flex items-center justify-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg",
+	"inline-flex items-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg overflow-hidden",
 	{
 		variants: {
 			size: {
@@ -36,7 +36,7 @@ export const CustomerLabel = ({
 		return (
 			<p className={labelVariants({ size })}>
 				<IdentificationIcon />
-				<RRLink to={to}>{customer.name}</RRLink>
+				<RRLink className="truncate" to={to}>{customer.name}</RRLink>
 				{customer.deleted ? (
 					<Badge variant="destructive">
 						{t("deleted")}
@@ -49,7 +49,7 @@ export const CustomerLabel = ({
 	return (
 		<p className={labelVariants({ size })}>
 			<IdentificationIcon />
-			<span>{customer.name}</span>
+			<span className="truncate">{customer.name}</span>
 			{customer.deleted ? (
 				<Badge variant="destructive">
 					{t("deleted")}
