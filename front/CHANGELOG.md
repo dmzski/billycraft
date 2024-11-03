@@ -1,5 +1,16 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.48.0
+
+### Minor Changes
+
+- f2a878a: Improve UI/UX, rename articles, improve typing, add labels, add auto vat on bill/quote creation, improve navigation
+
+### Patch Changes
+
+- Updated dependencies [f2a878a]
+  - @coco-ui/core@1.35.0
+
 ## 2.47.0
 
 ### Minor Changes
