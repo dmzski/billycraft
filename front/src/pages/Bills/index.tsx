@@ -2,20 +2,23 @@ import { useMemo, useState } from "react";
 import { Button, Loader, Tabs } from "@coco-ui/core";
 import useCustomers from "@/hooks/useCustomers";
 import { Link } from "react-router-dom";
-import { ROUTES } from "@/routes";
+import { BillRouteQueryParams, ROUTES } from "@/routes";
 import BillFilterContainer from "./Filters";
 import BillTable from "./List";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { filterBillsOrQuotes } from "@/utils/filters";
-import { BILL_STATUS, BillStatus } from "@/models/Bill";
+import { BILL_STATUS } from "@/models/Bill";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
+import { useQueryParams } from "@/hooks/useQueryParams";
 
 const BillPage = () => {
 	const customers = useCustomers();
-	const [selectedStatus, setSelectedStatus] = useState<"all" | BillStatus>(
-		"all",
-	);
+	const { tab } = useQueryParams<BillRouteQueryParams>();
+	const [selectedStatus, setSelectedStatus] = useState<
+		BillRouteQueryParams["tab"]
+	>(tab && tab !== "all" && BILL_STATUS.includes(tab) ? tab : 'all');
+
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
 	>({
@@ -32,7 +35,7 @@ const BillPage = () => {
 		() =>
 			filterBillsOrQuotes(
 				data ?? [],
-				{ ...filters, status: selectedStatus },
+				{ ...filters, status: selectedStatus ?? "all" },
 				customers,
 			),
 		[customers, data, filters, selectedStatus],
@@ -49,28 +52,28 @@ const BillPage = () => {
 					</Link>
 				</Button>
 			</div>
-      <div className="overflow-x-auto">
-        <Tabs>
-          <Tabs.Tab
-            isActive={selectedStatus === "all"}
-            onClick={() => setSelectedStatus("all")}
-          >
-            {t("all")}
-          </Tabs.Tab>
-          {BILL_STATUS.map((status) => (
-            <Tabs.Tab
-              onClick={() => setSelectedStatus(status)}
-              isActive={status === selectedStatus}
-            >
-              {t(`bills.status.${status}`)}
-            </Tabs.Tab>
-          ))}
-        </Tabs>
-      </div>
+			<div className="overflow-x-auto">
+				<Tabs>
+					<Tabs.Tab
+						isActive={selectedStatus === 'all'}
+						onClick={() => setSelectedStatus('all')}
+					>
+						{t("all")}
+					</Tabs.Tab>
+					{BILL_STATUS.map((status) => (
+						<Tabs.Tab
+							onClick={() => setSelectedStatus(status)}
+							isActive={status === selectedStatus}
+						>
+							{t(`bills.status.${status}`)}
+						</Tabs.Tab>
+					))}
+				</Tabs>
+			</div>
 			<div>
 				<BillFilterContainer filters={filters} setFilters={setFilters} />
 			</div>
-			<BillTable data={billSorted} />
+			<BillTable selectedStatus={selectedStatus} data={billSorted} />
 			{isLoading ? (
 				<div className="mt-2 flex justify-center">
 					<Loader />

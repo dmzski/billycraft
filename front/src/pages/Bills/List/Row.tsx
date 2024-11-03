@@ -4,7 +4,7 @@ import { formatISO9075, parseJSON } from "date-fns";
 import Bill, { BillStatus } from "@/models/Bill";
 import Customer from "@/models/Customer";
 import { useMemo, MouseEvent, useReducer } from "react";
-import { ROUTES } from "@/routes";
+import { BillOverviewRouteQueryParams, ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
 import { BillLabel } from "@/components/labels/BillLabel";
 import { RowContent } from "./RowContent";
@@ -14,9 +14,13 @@ import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
 type BillTableLineProps = {
 	bill: Bill;
 	customer?: Customer;
-	page?: "list" | "archived" | "refused";
+	selectedStatus: BillOverviewRouteQueryParams["fromTab"];
 };
-const BillTableLine = ({ bill, customer, page }: BillTableLineProps) => {
+const BillTableLine = ({
+	bill,
+	customer,
+	selectedStatus,
+}: BillTableLineProps) => {
 	const [open, toggleOpen] = useReducer((state) => !state, false);
 	const { reload } = useAllBillsQuery({ enabled: false });
 	const toast = useToast();
@@ -57,12 +61,15 @@ const BillTableLine = ({ bill, customer, page }: BillTableLineProps) => {
 				disclosure={
 					<div className="grid md:grid-cols-4 items-center md:h-16 p-2 gap-4">
 						<div className="flex items-center gap-4">
-              <Button onClick={toggleOpen} size="icon" variant="ghost">
-                {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </Button>
+							<Button onClick={toggleOpen} size="icon" variant="ghost">
+								{open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+							</Button>
 							<BillLabel
 								bill={bill}
-								to={ROUTES.BILL_OVERVIEW.path({ id: bill.id }, { from: page })}
+								to={ROUTES.BILL_OVERVIEW.path(
+									{ id: bill.id },
+									{ fromTab: selectedStatus },
+								)}
 							/>
 						</div>
 						<div className="truncate">{customer?.name ?? "-"}</div>

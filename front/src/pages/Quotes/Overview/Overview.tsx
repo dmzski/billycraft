@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery";
-import { QuoteRouteProps, QuoteRouteQueryParams, ROUTES } from "@/routes";
+import { QuoteOverviewRouteQueryParams, QuoteRouteProps, ROUTES } from "@/routes";
 import { isQuoteMinimumAccepted } from "@/utils/quote";
 import { Alert, Button, Loader, useToast } from "@coco-ui/core";
 import {
@@ -13,7 +13,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
 import { PdfApi } from "@/api/PdfApi";
 import { QuoteApi } from "@/api/QuoteApi";
-import { useMemo, useReducer } from "react";
+import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { RRLink } from "@/components/RRLink";
 import { QuoteLabel } from "@/components/labels/QuoteLabel";
@@ -24,7 +24,7 @@ export const Overview = () => {
 	const { t, scopedT } = useI18n();
 	const toast = useToast();
 	const { id } = useParams<QuoteRouteProps>();
-	const { from } = useQueryParams<QuoteRouteQueryParams>();
+	const { fromTab } = useQueryParams<QuoteOverviewRouteQueryParams>();
 	const { data: quote, isLoading, reload } = useQuoteByIdQuery(id);
 	const { push } = useHistory();
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
@@ -75,17 +75,6 @@ export const Overview = () => {
 		}
 	};
 
-	const backLink = useMemo(() => {
-		if (from === "refused") {
-			return ROUTES.HISTORY.routes.QUOTES.routes.REFUSED.path();
-		}
-		if (from === "archived") {
-			return ROUTES.HISTORY.routes.QUOTES.routes.ARCHIVED.path();
-		}
-
-		return ROUTES.QUOTES.path();
-	}, [from]);
-
 	if (!quote && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
@@ -100,7 +89,10 @@ export const Overview = () => {
 
 	return (
 		<div className="flex flex-col gap-12">
-			<RRLink to={backLink} className="inline-flex items-center gap-1">
+			<RRLink
+				to={ROUTES.QUOTES.path({ tab: fromTab })}
+				className="inline-flex items-center gap-1"
+			>
 				<ChevronLeftIcon className="size-4" />
 				{pageT("backTo")}
 			</RRLink>
@@ -109,14 +101,14 @@ export const Overview = () => {
 					<QuoteLabel quote={quote} size="lg" />
 				</div>
 				<div className="flex gap-4 md:flex-row flex-col">
-          <Button
-            disabled={isDownloadingPDF}
-            onClick={downloadPdf}
-            variant="secondary"
-          >
-            <DocumentArrowDownIcon />
-            {t("quotes.form.downloadPdfButton")}
-          </Button>
+					<Button
+						disabled={isDownloadingPDF}
+						onClick={downloadPdf}
+						variant="secondary"
+					>
+						<DocumentArrowDownIcon />
+						{t("quotes.form.downloadPdfButton")}
+					</Button>
 					{quote.status === "DRAFT" ? (
 						<Button asChild>
 							<Link to={ROUTES.QUOTE_EDIT.path({ id: quote.id })}>
@@ -125,13 +117,13 @@ export const Overview = () => {
 							</Link>
 						</Button>
 					) : null}
-          <Button
-            onClick={createBill}
-            disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
-          >
-            <PlusIcon />
-            {t("quotes.form.createBill")}
-          </Button>
+					<Button
+						onClick={createBill}
+						disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
+					>
+						<PlusIcon />
+						{t("quotes.form.createBill")}
+					</Button>
 				</div>
 			</div>
 			<InformationSection quote={quote} />

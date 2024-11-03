@@ -4,7 +4,7 @@ import { formatISO9075, parseJSON } from "date-fns";
 import Customer from "@/models/Customer";
 import Quote, { QuoteStatus } from "@/models/Quote";
 import { MouseEvent, useMemo, useReducer } from "react";
-import { ROUTES } from "@/routes";
+import { QuoteRouteQueryParams, ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { QuoteLabel } from "@/components/labels/QuoteLabel";
@@ -13,10 +13,10 @@ import { RowContent } from "./RowContent";
 type QuoteTableLineProps = {
 	quote: Quote;
 	customer?: Customer;
-	page?: "list" | "archived" | "refused";
   reload: () => Promise<void>
+  selectedStatus: QuoteRouteQueryParams['tab']
 };
-const QuoteTableLine = ({ quote, customer, page, reload }: QuoteTableLineProps) => {
+const QuoteTableLine = ({ quote, customer, selectedStatus, reload }: QuoteTableLineProps) => {
 	const { t } = useI18n();
   const [open, toggleOpen] = useReducer(state => !state, false)
 	const toast = useToast();
@@ -72,7 +72,7 @@ const QuoteTableLine = ({ quote, customer, page, reload }: QuoteTableLineProps) 
               </Button>
 							<QuoteLabel
 								quote={quote}
-								to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }, { from: page })}
+								to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }, { fromTab: selectedStatus })}
 							/>
 						</div>
 						<div className="truncate">{customer?.name ?? "-"}</div>

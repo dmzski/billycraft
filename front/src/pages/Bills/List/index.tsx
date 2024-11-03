@@ -2,13 +2,14 @@ import useCustomers from '@/hooks/useCustomers'
 import Bill from '@/models/Bill'
 import BillTableLine from './Row'
 import { useI18n } from '@/i18n'
+import { BillOverviewRouteQueryParams } from '@/routes'
 
 type BillListProps = {
   data: Bill[]
-  page?: 'list' | 'archived' | 'refused'
+  selectedStatus?: BillOverviewRouteQueryParams['fromTab']
 }
 
-const BillList = ({ data, page }: BillListProps) => {
+const BillList = ({ data, selectedStatus }: BillListProps) => {
   const { t } = useI18n()
   const customers = useCustomers()
 
@@ -26,7 +27,7 @@ const BillList = ({ data, page }: BillListProps) => {
             customer={customers.find(c => c.id === bill.customerId)}
             key={bill.id}
             bill={bill}
-            page={page}
+            selectedStatus={selectedStatus}
           />
         ))}
       </div>

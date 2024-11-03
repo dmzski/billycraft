@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { useBillByIdQuery } from "@/queries/useBillByIdQuery";
-import { BillRouteProps, BillRouteQueryParams, ROUTES } from "@/routes";
+import { BillRouteProps, BillOverviewRouteQueryParams, ROUTES } from "@/routes";
 import { Alert, Button, Loader, useToast } from "@coco-ui/core";
 import {
 	ChevronLeftIcon,
@@ -10,7 +10,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
 import { PdfApi } from "@/api/PdfApi";
-import { useMemo, useReducer } from "react";
+import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { RRLink } from "@/components/RRLink";
 import { BillLabel } from "@/components/labels/BillLabel";
@@ -21,7 +21,7 @@ export const Overview = () => {
 	const { t, scopedT } = useI18n();
 	const toast = useToast();
 	const { id } = useParams<BillRouteProps>();
-	const { from } = useQueryParams<BillRouteQueryParams>();
+	const { fromTab } = useQueryParams<BillOverviewRouteQueryParams>();
 	const { data: bill, isLoading, reload } = useBillByIdQuery(id);
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
 		(state) => !state,
@@ -49,17 +49,6 @@ export const Overview = () => {
 		}
 	};
 
-	const backLink = useMemo(() => {
-		if (from === "refused") {
-			return ROUTES.HISTORY.routes.BILLS.routes.REFUSED.path();
-		}
-		if (from === "archived") {
-			return ROUTES.HISTORY.routes.BILLS.routes.ARCHIVED.path();
-		}
-
-		return ROUTES.BILLS.path();
-	}, [from]);
-
 	if (!bill && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
@@ -74,7 +63,10 @@ export const Overview = () => {
 
 	return (
 		<div className="flex flex-col gap-12">
-			<RRLink to={backLink} className="inline-flex items-center gap-1">
+			<RRLink
+				to={ROUTES.BILLS.path({ tab: fromTab })}
+				className="inline-flex items-center gap-1"
+			>
 				<ChevronLeftIcon className="size-4" />
 				{pageT("backTo")}
 			</RRLink>
@@ -91,14 +83,14 @@ export const Overview = () => {
 						<DocumentArrowDownIcon />
 						{t("bills.form.downloadPdfButton")}
 					</Button>
-          {bill.status === "DRAFT" ? (
-            <Button asChild>
-              <Link to={ROUTES.BILL_EDIT.path({ id: bill.id })}>
-                <PencilIcon />
-                <span>{t("edit")}</span>
-              </Link>
-            </Button>
-          ) : null}
+					{bill.status === "DRAFT" ? (
+						<Button asChild>
+							<Link to={ROUTES.BILL_EDIT.path({ id: bill.id })}>
+								<PencilIcon />
+								<span>{t("edit")}</span>
+							</Link>
+						</Button>
+					) : null}
 				</div>
 			</div>
 			<InformationSection bill={bill} />

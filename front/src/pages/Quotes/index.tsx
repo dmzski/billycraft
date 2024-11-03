@@ -1,22 +1,24 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Loader, Tabs } from "@coco-ui/core";
-import { ROUTES } from "@/routes";
+import { QuoteRouteQueryParams, ROUTES } from "@/routes";
 import useCustomers from "@/hooks/useCustomers";
 import QuoteFilterContainer from "./Filters";
 import QuoteList from "./List/List";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { filterBillsOrQuotes } from "@/utils/filters";
-import { QUOTE_STATUS, QuoteStatus } from "@/models/Quote";
+import { QUOTE_STATUS } from "@/models/Quote";
 import { useAllQuotesQuery } from "@/queries/useAllQuotesQuery";
+import { useQueryParams } from "@/hooks/useQueryParams";
 
 const QuotePage = () => {
 	const { t } = useI18n();
 	const customers = useCustomers();
-	const [selectedStatus, setSelectedStatus] = useState<"all" | QuoteStatus>(
-		"all",
-	);
+	const { tab } = useQueryParams<QuoteRouteQueryParams>();
+	const [selectedStatus, setSelectedStatus] = useState<
+		QuoteRouteQueryParams["tab"]
+	>(tab && tab !== "all" && QUOTE_STATUS.includes(tab) ? tab : 'all');
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
 	>({
@@ -33,7 +35,7 @@ const QuotePage = () => {
 		() =>
 			filterBillsOrQuotes(
 				data ?? [],
-				{ ...filters, status: selectedStatus },
+				{ ...filters, status: selectedStatus ?? "all" },
 				customers,
 			),
 		[customers, filters, data, selectedStatus],
@@ -42,7 +44,7 @@ const QuotePage = () => {
 	return (
 		<div className="flex flex-col gap-8">
 			<div className="flex justify-between">
-				<h2 className="text-3xl">Devis</h2>
+				<h2 className="text-3xl font-semibold">Devis</h2>
 				<Button asChild>
 					<Link to={ROUTES.QUOTE_ADD.path()}>
 						<PlusIcon />
@@ -53,8 +55,8 @@ const QuotePage = () => {
 			<div className="overflow-x-auto">
 				<Tabs>
 					<Tabs.Tab
-						isActive={selectedStatus === "all"}
-						onClick={() => setSelectedStatus("all")}
+						isActive={selectedStatus === 'all'}
+						onClick={() => setSelectedStatus('all')}
 					>
 						{t("all")}
 					</Tabs.Tab>
@@ -71,7 +73,11 @@ const QuotePage = () => {
 			<div>
 				<QuoteFilterContainer filters={filters} setFilters={setFilters} />
 			</div>
-			<QuoteList data={quoteSorted} reload={reload} />
+			<QuoteList
+				selectedStatus={selectedStatus}
+				data={quoteSorted}
+				reload={reload}
+			/>
 			{isLoading && !data ? (
 				<div className="mt-2 flex justify-center">
 					<Loader />

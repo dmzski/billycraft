@@ -2,13 +2,14 @@ import useCustomers from '@/hooks/useCustomers'
 import Quote from '@/models/Quote'
 import QuoteTableLine from './Row'
 import { useI18n } from '@/i18n'
+import { QuoteRouteQueryParams } from '@/routes'
 
 type QuoteListProps = {
   data: Quote[]
-  page?: 'list' | 'archived' | 'refused'
+  selectedStatus: QuoteRouteQueryParams['tab']
   reload: () => Promise<void>
 }
-const QuoteList = ({ data, page, reload }: QuoteListProps) => {
+const QuoteList = ({ data, selectedStatus, reload }: QuoteListProps) => {
   const { t } = useI18n()
   const customers = useCustomers()
 
@@ -27,7 +28,7 @@ const QuoteList = ({ data, page, reload }: QuoteListProps) => {
             customer={customers.find(c => c.id === quote.customerId)}
             key={quote.id}
             quote={quote}
-            page={page}
+            selectedStatus={selectedStatus}
           />
         ))}
       </div>

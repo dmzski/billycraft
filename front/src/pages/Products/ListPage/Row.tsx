@@ -114,7 +114,7 @@ const ProductTableLine = ({
 								<div className="grid justify-end">
 									<Badge
 										variant="outline"
-										className="gap-2 items-center inline-flex bg-background overflow-hidden"
+										className="gap-2 items-center inline-flex bg-background overflow-hidden text-sm"
 									>
 										<TagIcon className="size-4 min-w-4" />
 										<span className="truncate">{groupName}</span>
