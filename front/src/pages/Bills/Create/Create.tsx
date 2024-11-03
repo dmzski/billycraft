@@ -54,7 +54,7 @@ export const Create = () => {
 
 	return (
 		<div className="w-full px-4 flex flex-col gap-8">
-			<RRLink className="gap-2 flex items-center" to={ROUTES.BILLS.path}>
+			<RRLink className="gap-2 flex items-center" to={ROUTES.BILLS.path()}>
 				<ChevronLeftIcon className="size-5" />
 				<span>{t("bills.form.backTo")}</span>
 			</RRLink>

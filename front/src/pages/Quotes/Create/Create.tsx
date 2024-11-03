@@ -48,7 +48,7 @@ export const Create = () => {
 
   return (
     <div className="w-full px-4 flex flex-col gap-4">
-      <RRLink className="gap-1 flex items-center" to={ROUTES.QUOTES.path}>
+      <RRLink className="gap-1 flex items-center" to={ROUTES.QUOTES.path()}>
         <ChevronLeftIcon className="w-5" /> {t('quotes.form.backTo')}
       </RRLink>
       <div className="flex items-center flex-wrap border-b pb-2">
