@@ -39,7 +39,7 @@ export const JoinOrganization = () => {
   if (isLoading && !data) {
     return (
       <div className="flex justify-center items-center">
-        <Loader size="lg" />
+        <Loader />
       </div>
     )
   }

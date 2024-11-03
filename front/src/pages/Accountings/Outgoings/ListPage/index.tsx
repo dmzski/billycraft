@@ -23,7 +23,7 @@ const ListPage = () => {
       </div>
       {isLoading && !data ? (
         <div className="flex justify-center">
-          <Loader size="lg" />
+          <Loader />
         </div>
       ) : null}
       {data ? <OutgoingList data={data} /> : null}

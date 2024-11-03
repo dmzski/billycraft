@@ -4,7 +4,7 @@ interface Product {
   id: string
   type: ProductType
   name: string
-  description: string
+  description?: string
   price: number
   companyId: string
   createdBy: string

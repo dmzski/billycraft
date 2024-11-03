@@ -1,18 +1,21 @@
 import { SelectOptionType, SelectValueType } from ".";
 import Option from "./Option";
 import {
+	CSSProperties,
 	ChangeEventHandler,
 	KeyboardEventHandler,
 	RefObject,
+	useEffect,
 	useMemo,
 	useRef,
 	useState,
 } from "react";
 import { Input } from "components/Input";
 import { createPortal } from "react-dom";
+import useClickOutsideHandler from "hooks/useClickOutsideHandler";
 
 const listContainerClasses =
-	"max-h-56 flex flex-col flex-nowrap overflow-x-none absolute overflow-y-auto shadow-md border bg-popover text-popover-foreground rounded-md w-full z-50 min-w-max";
+	"h-auto flex flex-col flex-nowrap overflow-auto shadow-md border bg-popover text-popover-foreground rounded-md w-full min-w-max";
 
 const KEYS = {
 	ArrowDown: "ArrowDown",
@@ -30,6 +33,7 @@ type OptionListProps = {
 	isSearchable?: boolean;
 	placeholderSearchText?: string;
 	containerRef: RefObject<HTMLElement>;
+	close: (restoreFocus?: boolean) => void;
 };
 
 const filterOptions = ({
@@ -56,13 +60,23 @@ const OptionList = ({
 	isSearchable,
 	placeholderSearchText,
 	containerRef,
+	close,
 }: OptionListProps) => {
 	const listboxRef = useRef<HTMLDivElement>(null);
 	const [search, setSearch] = useState("");
+	const [styles, setStyles] = useState<CSSProperties | undefined>(undefined);
 
 	const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		setSearch(event.target.value);
 	};
+
+	useClickOutsideHandler(
+		listboxRef,
+		() => {
+			close(false);
+		},
+		[containerRef],
+	);
 
 	const filteredOptions = useMemo(
 		() => filterOptions({ options, search }),
@@ -70,6 +84,10 @@ const OptionList = ({
 	);
 
 	const handleKeyDown: KeyboardEventHandler = (event) => {
+		if (event.key === KEYS.Tab) {
+      event.preventDefault()
+			close(true);
+		}
 		if (event.key === KEYS.ArrowDown || event.key === KEYS.ArrowUp) {
 			event.preventDefault();
 			if (listboxRef.current && Object.values(KEYS).includes(event.key)) {
@@ -108,21 +126,32 @@ const OptionList = ({
 		}
 	};
 
-	const rect = containerRef.current?.getBoundingClientRect();
-	const scrollTop =
-		(window.scrollY || document.body.scrollTop) - document.body.clientTop;
+	useEffect(() => {
+		const run = () => {
+			const getRect = () => containerRef.current?.getBoundingClientRect();
+			const rect = getRect();
+			const getScrollTop = () =>
+				(window.scrollY || document.body.scrollTop) - document.body.clientTop;
+			const scrollTop = getScrollTop();
 
-	const styles = rect
-		? {
-				width: rect.width,
-				left: rect.left,
-				top: rect.bottom + scrollTop,
-			}
-		: {
-				width: 0,
-				left: -9999,
-				top: -9999,
-			};
+			setStyles(
+				rect
+					? {
+							width: rect.width,
+							left: rect.left,
+							top: rect.bottom + scrollTop,
+							bottom: 0,
+						}
+					: undefined,
+			);
+		};
+		window.addEventListener("resize", run);
+		run();
+
+		return () => {
+			window.removeEventListener("resize", run);
+		};
+	}, []);
 
 	return createPortal(
 		<div
@@ -131,48 +160,52 @@ const OptionList = ({
 			onClick={(e) => {
 				e.stopPropagation();
 			}}
-			className={listContainerClasses}
-			role="listbox"
+			aria-hidden={styles === undefined}
+			className={"absolute z-50 max-h-48 aria-[hidden=true]:hidden"}
 			ref={listboxRef}
 			style={styles}
 		>
-			{isSearchable ? (
-				<li className="px-2 py-2 border-b">
-					<Input
-						placeholder={placeholderSearchText}
-						autoComplete="off"
-						autoFocus
-						value={search}
-						onChange={handleSearchChange}
-						suffix={
-							<div className="px-4">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 16 16"
-									fill="currentColor"
-									className="size-4 text-muted-foreground"
-								>
-									<path
-										fillRule="evenodd"
-										d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-										clipRule="evenodd"
-									/>
-								</svg>
-							</div>
-						}
-					/>
-				</li>
+			{styles ? (
+				<ul className={listContainerClasses}>
+					{isSearchable ? (
+						<li className="px-2 py-2 border-b">
+							<Input
+								placeholder={placeholderSearchText}
+								autoComplete="off"
+								autoFocus
+								value={search}
+								onChange={handleSearchChange}
+								suffix={
+									<div className="px-4">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 16 16"
+											fill="currentColor"
+											className="size-4 text-muted-foreground"
+										>
+											<path
+												fillRule="evenodd"
+												d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+												clipRule="evenodd"
+											/>
+										</svg>
+									</div>
+								}
+							/>
+						</li>
+					) : null}
+					{filteredOptions.map((option: SelectOptionType, index) => (
+						<Option
+							autoFocus={index === 0 && !isSearchable}
+							key={option.value}
+							isMulti={isMulti}
+							option={option}
+							onOptionClick={onOptionClick}
+							value={value}
+						/>
+					))}
+				</ul>
 			) : null}
-			{filteredOptions.map((option: SelectOptionType, index) => (
-				<Option
-					autoFocus={index === 0 && !isSearchable}
-					key={option.value}
-					isMulti={isMulti}
-					option={option}
-					onOptionClick={onOptionClick}
-					value={value}
-				/>
-			))}
 		</div>,
 		document.body,
 	);

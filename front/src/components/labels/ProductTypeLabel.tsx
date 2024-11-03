@@ -1,21 +1,24 @@
-import { LINE_TYPE } from '@/constants/line'
-import { useI18n } from '@/i18n'
-import Product from '@/models/Product'
+import { PRODUCT_ICONS } from "@/constants/productIcons";
+import { useI18n } from "@/i18n";
+import Product from "@/models/Product";
 
 type ProductTypeLabelProps = {
-  type: Product['type']
-  short?: boolean
-}
+	type: Product["type"];
+	short?: boolean;
+};
+
 
 export const ProductTypeLabel = ({ type, short }: ProductTypeLabelProps) => {
-  const { scopedT } = useI18n()
-  const t = scopedT(`products.type.${type}`)
-  const IconComponent = LINE_TYPE[type]?.icon
+	const { scopedT } = useI18n();
+	const t = scopedT(`products.type.${type}`);
+	const IconComponent = PRODUCT_ICONS[type] ?? PRODUCT_ICONS.OTHER_SERVICE;
 
-  return (
-    <span className="inline-flex gap-2 items-center">
-      {IconComponent ? <IconComponent className="w-5" title={t('label')} /> : null}
-      {!short ? <span>{t('label')}</span> : null}
-    </span>
-  )
-}
+	return (
+		<span className="inline-flex gap-2 items-center">
+			{IconComponent ? (
+				<IconComponent className="size-5" title={t("label")} />
+			) : null}
+			{!short ? <span>{t("label")}</span> : null}
+		</span>
+	);
+};

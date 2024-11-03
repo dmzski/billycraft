@@ -4,6 +4,7 @@ import { Link } from "components/Link";
 import useClickOutsideHandler from "hooks/useClickOutsideHandler";
 import { tw } from "lib/utils";
 import {
+	CSSProperties,
 	ComponentProps,
 	ElementRef,
 	ReactNode,
@@ -15,7 +16,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-const dropdownContentClasses = `z-50 w-full max-w-screen min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md
+const dropdownContentClasses = `z-50 overflow-y-auto max-h-full w-full max-w-screen min-w-[8rem] rounded-md border bg-popover p-1 text-popover-foreground shadow-md
 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0
 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2
@@ -54,7 +55,7 @@ export const Dropdown = ({
 	const [open, setOpen] = useState(openProp && onClose ? openProp : false);
 	const disclosureRef = useRef<HTMLElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [styles, setStyles] = useState({
+	const [styles, setStyles] = useState<CSSProperties>({
 		width: 0,
 		left: -9999,
 		top: -9999,
@@ -106,9 +107,9 @@ export const Dropdown = ({
 			setStyles(
 				rect
 					? {
-							width: rect.width,
 							left: rect.left,
 							top: rect.bottom + scrollTop,
+							bottom: 0,
 						}
 					: {
 							width: 0,

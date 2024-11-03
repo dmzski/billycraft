@@ -1,41 +1,24 @@
-import clsx from 'clsx'
-import { useMemo } from 'react'
-
-const classes = {
-  base: 'loading loading-spinner',
-  variants: {
-    accent: 'text-accent',
-    secondary: 'text-secondary',
-    neutral: 'text-neutral',
-    error: ' text-error',
-    info: 'text-info',
-    primary: 'text-primary',
-    success: 'text-success',
-    warning: 'text-warning',
-  },
-  sizes: {
-    xs: 'loading-xs',
-    sm: 'loading-sm',
-    md: 'loading-md',
-    lg: 'loading-lg',
-  },
-} as const
+import { tw } from "lib/utils";
 
 export type LoaderProps = {
-  size?: keyof typeof classes.sizes
-  variant?: keyof typeof classes.variants
-  className?: string
-}
+	className?: string;
+};
 
-const Loader = ({ size = 'md', variant = 'primary', className = '' }: LoaderProps) => {
-  const computedClasses = useMemo(() => {
-    const variantClasses = variant ? classes.variants[variant] : ''
-    const sizeClasses = size ? classes.sizes[size] : ''
+const Loader = ({ className = "" }: LoaderProps) => {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth={2}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			className={tw("animate-spin size-8", className)}
+		>
+			<path d="M21 12a9 9 0 1 1-6.219-8.56" />
+		</svg>
+	);
+};
 
-    return clsx(classes.base, variantClasses, sizeClasses, className)
-  }, [variant, size, className])
-
-  return <div className={computedClasses} />
-}
-
-export default Loader
+export default Loader;

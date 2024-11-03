@@ -29,7 +29,7 @@ export const Overview = () => {
 	if (isLoading && !customer) {
 		return (
 			<div className="flex items-center justify-center">
-				<Loader size="lg" />
+				<Loader />
 			</div>
 		);
 	}

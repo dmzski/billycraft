@@ -1,4 +1,4 @@
-import { KeyboardEventHandler, MouseEventHandler, useEffect, useMemo, useRef } from 'react'
+import { KeyboardEventHandler, MouseEventHandler, useMemo, useRef } from 'react'
 import { SelectOptionType, SelectValueType } from '.'
 import { tw } from 'lib/utils'
 import { CheckIcon } from '@heroicons/react/24/solid'
@@ -22,14 +22,6 @@ const Option = ({ autoFocus, isMulti, value, option, onOptionClick }: OptionProp
   }, [value, option, isMulti])
 
   const optionRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (autoFocus && optionRef.current) {
-        optionRef.current.focus()
-      }
-    })
-  }, [autoFocus])
 
   const handleSelectOptionClick: MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault()

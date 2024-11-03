@@ -31,7 +31,7 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
   }
 
   return (
-    <section className="grid md:grid-cols-2 gap-4 justify-end">
+    <section className="flex flex-col md:flex-row gap-4 justify-end">
       {quote.id && quote.status === "DRAFT" ? (
         <Button
           type="button"

@@ -14,6 +14,8 @@ import { RRLink } from "@/components/RRLink";
 import { Submit } from "@/components/form/Submit";
 import { Form } from "@/components/form/Form";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { useMemo } from "react";
+import { useUser } from "@/providers/UserProvider";
 
 const defaultBill = {
 	lines: [],
@@ -26,11 +28,19 @@ export const Create = () => {
 	const { t } = useI18n();
 	const toast = useToast();
 	const { push } = useHistory();
+	const { organization } = useUser();
+
+	const initialValues = useMemo<BillFormValues>(
+		() => ({
+			...defaultBill,
+			tva: organization?.vatPercent ?? 0,
+		}),
+		[organization?.vatPercent],
+	);
 
 	const methods = useForm<BillFormValues>({
-		shouldFocusError: false,
 		mode: "onChange",
-		values: defaultBill,
+		values: initialValues,
 	});
 
 	const onSubmit = async (data: BillFormValues) => {
@@ -53,17 +63,19 @@ export const Create = () => {
 	};
 
 	return (
-		<div className="w-full px-4 flex flex-col gap-8">
+		<div className="w-full px-4 flex flex-col gap-12">
 			<RRLink className="gap-2 flex items-center" to={ROUTES.BILLS.path()}>
 				<ChevronLeftIcon className="size-5" />
 				<span>{t("bills.form.backTo")}</span>
 			</RRLink>
-      <h1 className="text-2xl font-semibold">{t("bills.form.title.new")}</h1>
+			<h1 className="text-3xl font-semibold">{t("bills.form.title.new")}</h1>
 			<Form methods={methods} onSubmit={onSubmit}>
-				<div className="flex flex-col gap-8">
+				<div className="flex flex-col gap-12">
 					<BillFormContent />
 					<FormErrorAlert />
-					<Submit>{t("bills.form.submit")}</Submit>
+					<div className="flex justify-end">
+						<Submit>{t("bills.form.submit")}</Submit>
+					</div>
 				</div>
 			</Form>
 		</div>

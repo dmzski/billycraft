@@ -52,7 +52,7 @@ export const Overview = () => {
 	if (!bill && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
-				<Loader size="lg" />
+				<Loader />
 			</div>
 		);
 	}

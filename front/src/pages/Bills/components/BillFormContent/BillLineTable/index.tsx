@@ -4,12 +4,12 @@ import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useI18n } from "@/i18n";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
 import { BillFormValues } from "../types";
-import { LINE_TYPE } from "@/constants/line";
 import { calculatePriceTTC } from "@/utils/price";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import BillLineTableLine from "./Row";
+import { ProductLabel } from "@/components/labels/ProductLabel";
 
 const defaultLine: BillFormValues["lines"][number] = {
 	description: null,
@@ -24,10 +24,7 @@ const defaultLine: BillFormValues["lines"][number] = {
 };
 
 const BillLineTable = () => {
-	const {
-		control,
-		formState: { disabled },
-	} = useFormContext<BillFormValues>();
+	const { control } = useFormContext<BillFormValues>();
 	const { t } = useI18n();
 	const selectExistingProductRef = useRef<HTMLInputElement>(null);
 	const { data: allProducts, reload: reloadProducts } = useAllProductsQuery();
@@ -63,16 +60,10 @@ const BillLineTable = () => {
 		useMemo(() => {
 			if (allProducts) {
 				return allProducts.map((product) => {
-					const IconComponent = LINE_TYPE[product.type]?.icon;
 					return {
 						value: product.id,
 						searchText: product.name,
-						label: (
-							<span className="inline-flex gap-2 items-center">
-								{IconComponent ? <IconComponent className="w-5" /> : null}
-								{product.name}
-							</span>
-						),
+						label: <ProductLabel product={product} />,
 					};
 				});
 			}
@@ -93,7 +84,7 @@ const BillLineTable = () => {
 					quantity: 0,
 					billId: "",
 					line: fields.length,
-					description: productFound.description,
+					description: productFound.description ?? null,
 					productId: productFound.id,
 				};
 				append(newLine, { shouldFocus: false });
@@ -112,30 +103,33 @@ const BillLineTable = () => {
 
 	return (
 		<div className="flex flex-col gap-4 border p-4 rounded">
-			{!disabled ? (
-				<div className="grid md:grid-cols-4 items-end gap-4">
-					<Select
-						ref={selectExistingProductRef}
-						className="md:col-span-3"
-						name="existing-product"
-						id="existing-product"
-						options={productOptions}
-						isSearchable
-						placeholder={t("bills.form.lines.existingProduct.label")}
-						value={productIdSelected}
-						onChange={onProductSelectedChange}
-					/>
-					<Button
-						disabled={!productIdSelected}
-						onClick={addExistingProductSelected}
-						type="button"
-					>
-						{t("bills.form.lines.existingProduct.add")}
-					</Button>
-				</div>
-			) : null}
-			<div className="flex flex-col divide-y">
-				<DndContext onDragEnd={onDragEnd}>
+			<div className="grid md:grid-cols-4 items-end gap-4">
+				<Select
+					ref={selectExistingProductRef}
+					className="md:col-span-3"
+					name="existing-product"
+					id="existing-product"
+					options={productOptions}
+					isSearchable
+					placeholder={t("bills.form.lines.existingProduct.label")}
+					value={productIdSelected}
+					onChange={onProductSelectedChange}
+				/>
+				<Button
+					disabled={!productIdSelected}
+					onClick={addExistingProductSelected}
+					type="button"
+				>
+					{t("bills.form.lines.existingProduct.add")}
+				</Button>
+			</div>
+			<div role="list" className="flex flex-col gap-2">
+				<DndContext
+					accessibility={{
+						restoreFocus: true,
+					}}
+					onDragEnd={onDragEnd}
+				>
 					<SortableContext items={fields}>
 						{fields.map((line, index) => (
 							<BillLineTableLine
@@ -148,23 +142,16 @@ const BillLineTable = () => {
 										? allProducts?.find(({ id }) => id === line.productId)
 										: undefined
 								}
-                reloadProducts={reloadProducts}
+								reloadProducts={reloadProducts}
 							/>
 						))}
 					</SortableContext>
 				</DndContext>
 			</div>
-			{!disabled ? (
-				<Button
-					className="mt-2"
-					type="button"
-					variant="outline"
-					onClick={addLine}
-				>
-					<PlusIcon />
-					{t("bills.form.lines.add")}
-				</Button>
-			) : null}
+			<Button variant="outline" onClick={addLine}>
+				<PlusIcon />
+				{t("bills.form.lines.add")}
+			</Button>
 		</div>
 	);
 };

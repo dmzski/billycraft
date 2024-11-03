@@ -1,111 +1,112 @@
-import { Button, Loader, useToast } from '@coco-ui/core'
-import { Redirect, useHistory, useParams } from 'react-router-dom'
-import { BillApi } from '@/api/BillApi'
-import { ROUTES } from '@/routes'
-import { BillFormContent } from '@/pages/Bills/components/BillFormContent'
-import { ChevronLeftIcon, CreditCardIcon } from '@heroicons/react/24/solid'
-import { useI18n } from '@/i18n'
-import { useBillByIdQuery } from '@/queries/useBillByIdQuery'
-import { BillFormValues } from '../components/BillFormContent'
-import { FormProvider, useForm } from 'react-hook-form'
-import { BillUpdateRequest } from '@/models/dtos/BillUpdateRequest'
-import { calculatePriceTTC } from '@/utils/price'
-import { useMemo } from 'react'
-import { RRLink } from '@/components/RRLink'
+import { Loader, useToast } from "@coco-ui/core";
+import { Redirect, useHistory, useParams } from "react-router-dom";
+import { BillApi } from "@/api/BillApi";
+import { ROUTES } from "@/routes";
+import { BillFormContent } from "@/pages/Bills/components/BillFormContent";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useI18n } from "@/i18n";
+import { useBillByIdQuery } from "@/queries/useBillByIdQuery";
+import { BillFormValues } from "../components/BillFormContent";
+import { useForm } from "react-hook-form";
+import { BillUpdateRequest } from "@/models/dtos/BillUpdateRequest";
+import { calculatePriceTTC } from "@/utils/price";
+import { useMemo } from "react";
+import { RRLink } from "@/components/RRLink";
+import { BillLabel } from "@/components/labels/BillLabel";
+import { Form } from "@/components/form/Form";
+import { Submit } from "@/components/form/Submit";
+import { FormErrorAlert } from "@/components/FormErrorAlert";
 
 const defaultBill = {
-  lines: [],
-  tva: 0,
-  title: '',
-  customerId: '',
-} as BillFormValues
+	lines: [],
+	tva: 0,
+	title: "",
+	customerId: "",
+} as BillFormValues;
 
 export const Edit = () => {
-  const { t } = useI18n()
-  const toast = useToast()
-  const { push } = useHistory()
-  const { id } = useParams<{ id: string }>()
-  const { data: bill, isLoading } = useBillByIdQuery(id, {
-    enabled: !!id,
-  })
+	const { t } = useI18n();
+	const toast = useToast();
+	const { push } = useHistory();
+	const { id } = useParams<{ id: string }>();
+	const { data: bill, isLoading } = useBillByIdQuery(id, {
+		enabled: !!id,
+	});
 
-  const onSubmit = async (data: BillFormValues) => {
-    const tmp: BillUpdateRequest = {
-      id: bill?.id ?? '',
-      ...data,
-      lines: data.lines.map((line, index: number) => ({
-        ...line,
-        line: index + 1,
-        price: line.price ? Number(`${line.price}`) : undefined,
-        quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
-      })),
-    }
-    try {
-      if (bill?.id) {
-        await BillApi.update(tmp)
-        toast.show(t('bills.form.submit.success'))
-        push(ROUTES.BILL_OVERVIEW.path({ id: bill.id }))
-      }
-    } catch {
-      toast.destructive(t('genericFormError'))
-    }
-  }
+	const onSubmit = async (data: BillFormValues) => {
+		const tmp: BillUpdateRequest = {
+			id: bill?.id ?? "",
+			...data,
+			lines: data.lines.map((line, index: number) => ({
+				...line,
+				line: index + 1,
+				price: line.price ? Number(`${line.price}`) : undefined,
+				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
+			})),
+		};
+		try {
+			if (bill?.id) {
+				await BillApi.update(tmp);
+				toast.show(t("bills.form.submit.success"));
+				push(ROUTES.BILL_OVERVIEW.path({ id: bill.id }));
+			}
+		} catch {
+			toast.destructive(t("genericFormError"));
+		}
+	};
 
-  const initialValues: BillFormValues = useMemo(
-    () =>
-      bill
-        ? {
-            ...bill,
-            lines: bill.lines.map(({ price, ...rest }) => ({
-              ...rest,
-              price,
-              itPrice: calculatePriceTTC(price, bill.tva),
-            })),
-          }
-        : defaultBill,
-    [bill],
-  )
+	const initialValues: BillFormValues = useMemo(
+		() =>
+			bill
+				? {
+						...bill,
+						lines: bill.lines.map(({ price, ...rest }) => ({
+							...rest,
+							price,
+							itPrice: calculatePriceTTC(price, bill.tva),
+						})),
+					}
+				: defaultBill,
+		[bill],
+	);
 
-  const methods = useForm<BillFormValues>({
-    shouldFocusError: false,
-    mode: 'onChange',
-    values: initialValues,
-    disabled: !!(bill && bill.status !== "DRAFT"),
-  })
+	const methods = useForm<BillFormValues>({
+		mode: "onChange",
+		values: initialValues,
+	});
 
-  const { isValid, isSubmitting, disabled } = methods.formState
+	if (!bill && isLoading) {
+		return <Loader />;
+	}
 
-  if (!bill && isLoading) {
-    return <Loader />
-  }
+	if (!bill) {
+		return t("genericDataLoadError");
+	}
 
-  if (!bill) {
-    return t('genericDataLoadError')
-  }
+	if (bill.status !== "DRAFT") {
+		return <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />;
+	}
 
-  if (bill.status !== "DRAFT") {
-    return <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />
-  }
-
-  return (
-    <div className="flex flex-col gap-10">
-      <RRLink className="gap-1 flex items-center" to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}>
-        <ChevronLeftIcon className="w-5" /> {t('bills.form.edit.backTo')}
-      </RRLink>
-      <h1 className="text-4xl font-bold flex gap-5 items-center">
-        <CreditCardIcon className="size-14 p-3 text-accent-foreground bg-accent rounded-lg" />
-        <span>{bill.name}</span>
-      </h1>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <BillFormContent bill={bill} />
-          {!bill.id || bill.status === "DRAFT" || !bill.status ? (
-            <Button type="submit" disabled={!isValid || isSubmitting || disabled}>
-              {t('bills.form.submit')}
-            </Button>
-          ) : null}
-        </form>
-      </FormProvider>
-    </div>
-  )
-}
+	return (
+		<div className="flex flex-col gap-12">
+			<RRLink
+				className="gap-1 flex items-center"
+				to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
+			>
+				<ChevronLeftIcon className="w-5" /> {t("bills.form.edit.backTo")}
+			</RRLink>
+			<div>
+				<BillLabel bill={bill} size="lg" />
+			</div>
+			<Form methods={methods} onSubmit={onSubmit}>
+				<div className="flex flex-col gap-12">
+					<BillFormContent bill={bill} />
+          <FormErrorAlert />
+					<div className="flex justify-end">
+						<Submit>{t("bills.form.submit")}</Submit>
+					</div>
+				</div>
+			</Form>
+		</div>
+	);
+};

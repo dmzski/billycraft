@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react'
+import { StoryObj } from '@storybook/react'
 import { Select, SelectValueType } from '.'
 import { Button } from 'components/Button'
 import { useState } from 'react'
@@ -6,10 +6,7 @@ import { useState } from 'react'
 export default {
   title: 'Components/Select',
   component: Select,
-  args: {
-    className: 'flex-grow',
-  },
-} as Meta<typeof Select>
+}
 
 const fakeOptions = [
   { label: 'Option 1', value: 1 },

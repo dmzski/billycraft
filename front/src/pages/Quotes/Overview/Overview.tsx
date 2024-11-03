@@ -78,7 +78,7 @@ export const Overview = () => {
 	if (!quote && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
-				<Loader size="lg" />
+				<Loader />
 			</div>
 		);
 	}

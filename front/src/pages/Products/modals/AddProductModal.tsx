@@ -27,7 +27,7 @@ const defaultValues: ProductFormValues = {
 	type: "ARTICLE",
 	name: "",
 	price: 0,
-	description: "",
+	description: null,
 	supplierId: null,
 	itPrice: 0,
 	code: null,

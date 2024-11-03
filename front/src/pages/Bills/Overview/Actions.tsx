@@ -31,7 +31,7 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
   }
 
   return (
-    <section className="grid md:grid-cols-2 gap-4 justify-end">
+    <section className="flex md:flex-row flex-col gap-4 justify-end">
       {bill.status === "DRAFT" ? (
         <Button
           type="button"

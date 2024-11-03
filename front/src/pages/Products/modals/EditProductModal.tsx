@@ -30,7 +30,7 @@ const EditProductForm = ({ product, onSubmitSuccess, close }: EditProductFormPro
   const initialValues: ProductFormValues = useMemo(
     () => ({
       name: product.name,
-      description: product.description,
+      description: product.description ?? null,
       price: product.price,
       type: product.type,
       supplierId: product.supplierId ?? null,

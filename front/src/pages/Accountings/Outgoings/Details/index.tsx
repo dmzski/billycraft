@@ -38,7 +38,7 @@ const Details = () => {
       </div>
       {isLoading ? (
         <div className="grid items-center justify-center flex-grow">
-          <Loader size="lg" />
+          <Loader />
         </div>
       ) : null}
       {outgoing ? (

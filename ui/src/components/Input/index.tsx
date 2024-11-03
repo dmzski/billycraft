@@ -69,7 +69,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label ? (
           <Label htmlFor={id} className="flex items-center">
             {label}
-            {required ? <span className="text-error">*</span> : null}
+            {required ? <span>*</span> : null}
           </Label>
         ) : null}
         <div
@@ -84,13 +84,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             'focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
             'aria-[disabled=true]:cursor-not-allowed aria-[disabled=true]:opacity-50',
             'data-[has-prefix=true]:pl-0 data-[has-suffix=true]:pr-0',
-            'aria-[invalid=true]:border-error focus-within:aria-[invalid=true]:ring-destructive',
+            'aria-[invalid=true]:border-destructive focus-within:aria-[invalid=true]:ring-destructive',
           )}
         >
           {prefix ? <div className="border-r h-full flex items-center">{prefix}</div> : null}
           <input
             className="bg-background grow min-w-0 outline-none placeholder:text-muted-foreground py-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
             {...props}
+            aria-invalid={!!error}
             onChange={onChange}
             autoFocus={autoFocus}
             disabled={disabled}
@@ -99,11 +100,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             required={required}
             id={id}
           />
-          {required && !label ? <span className="text-destructive">*</span> : null}
+          {required && !label ? <span>*</span> : null}
           {suffix ? <div className="border-l h-full flex items-center">{suffix}</div> : null}
         </div>
         {error && typeof error === 'string' ? (
-          <span className="label-text-alt text-destructive">{error}</span>
+          <span className="text-xs text-destructive">{error}</span>
         ) : null}
       </div>
     )

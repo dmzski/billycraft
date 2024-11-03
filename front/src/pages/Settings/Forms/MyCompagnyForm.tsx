@@ -35,7 +35,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 				articlesTax: Number(values.articlesTax) || 0,
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
-				vatPercent: Number(values.othersTax) || 0,
+				vatPercent: Number(values.vatPercent) || 0,
 			};
 			const res = company?.id
 				? await CompanyApi.updateMine(data)

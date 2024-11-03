@@ -1,7 +1,6 @@
 import { Button, Input } from "@coco-ui/core";
 import { ComponentProps, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { LINE_TYPE } from "@/constants/line";
 import {
 	ArrowsUpDownIcon,
 	CloudArrowDownIcon,
@@ -21,22 +20,24 @@ import { SelectField } from "@/components/form/SelectField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
 import Product from "@/models/Product";
+import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
 
 type QuoteLineTableLineProps = {
 	deleteLine: () => void;
 	disabled?: boolean;
 	index: number;
 	id: string;
-  product?: Product
-  reloadProducts: () => Promise<void>
+	product?: Product;
+	reloadProducts: () => Promise<void>;
 };
 const QuoteLineTableLine = ({
 	deleteLine,
 	disabled,
 	index,
 	id,
-  product,
-  reloadProducts
+	product,
+	reloadProducts,
 }: QuoteLineTableLineProps) => {
 	const { control, setValue } = useFormContext<QuoteFormValues>();
 	const { t } = useI18n();
@@ -67,18 +68,11 @@ const QuoteLineTableLine = ({
 	}, [itPrice, quantity]);
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] =
-		Object.values(LINE_TYPE).map(
-			({ name, icon: IconComponent, enum: value }) => ({
-				value,
-				label: (
-					<span className="inline-flex gap-1 items-center">
-						<IconComponent className="w-5" />
-						{name}
-					</span>
-				),
-				render: <IconComponent className="w-5" />,
-			}),
-		);
+		Object.values(PRODUCT_TYPES).map((type) => ({
+			value: type,
+			label: <ProductTypeLabel type={type} />,
+			render: <ProductTypeLabel type={type} short />,
+		}));
 
 	const lineValue = useWatch({ control, name: `lines.${index}` });
 
@@ -126,7 +120,7 @@ const QuoteLineTableLine = ({
 								...lineValue,
 								price: newProduct.price,
 								name: newProduct.name,
-								description: newProduct.description,
+								description: newProduct.description ?? null,
 								itPrice: calculatePriceTTC(newProduct.price, tva) ?? null,
 							},
 							{ shouldValidate: true },
@@ -141,16 +135,14 @@ const QuoteLineTableLine = ({
 
 	return (
 		<div
-			className="flex gap-2 py-2 bg-background items-start"
+			className="border rounded-md flex gap-2 p-2 bg-background items-start"
 			ref={setNodeRef}
 			style={style}
 		>
-			<div>
-				<div className="pt-4">
-					<Button variant="ghost" size="icon" {...listeners}>
-						<ArrowsUpDownIcon />
-					</Button>
-				</div>
+			<div className="self-center">
+				<Button variant="ghost" size="icon" {...listeners}>
+					<ArrowsUpDownIcon />
+				</Button>
 			</div>
 			<div className="flex flex-col flex-grow gap-4">
 				<div className="grid md:grid-cols-[repeat(10,minmax(0,1fr))_minmax(0,auto)] gap-4">

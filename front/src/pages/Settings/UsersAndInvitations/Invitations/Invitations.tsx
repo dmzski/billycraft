@@ -13,7 +13,7 @@ export const Invitations = () => {
   if (!data && isLoading) {
     return (
       <div className="flex items-center justify-center">
-        <Loader size="lg" />
+        <Loader />
       </div>
     )
   }

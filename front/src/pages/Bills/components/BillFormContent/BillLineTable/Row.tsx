@@ -1,7 +1,6 @@
 import { Button, Input } from "@coco-ui/core";
 import { ComponentProps, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { LINE_TYPE } from "@/constants/line";
 import {
 	ArrowsUpDownIcon,
 	CloudArrowDownIcon,
@@ -21,26 +20,24 @@ import { InputField } from "@/components/form/InputField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
 import Product from "@/models/Product";
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
+import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
 
 type BillLineTableLineProps = {
 	deleteLine: () => void;
 	index: number;
 	id: string;
 	product?: Product;
-  reloadProducts: () => Promise<void>
+	reloadProducts: () => Promise<void>;
 };
 const BillLineTableLine = ({
 	deleteLine,
 	index,
 	id,
 	product,
-  reloadProducts,
+	reloadProducts,
 }: BillLineTableLineProps) => {
-	const {
-		control,
-		setValue,
-		formState: { disabled },
-	} = useFormContext<BillFormValues>();
+	const { control, setValue } = useFormContext<BillFormValues>();
 	const { t } = useI18n();
 	const { listeners, setNodeRef, transform, transition, isDragging } =
 		useSortable({
@@ -69,18 +66,11 @@ const BillLineTableLine = ({
 	}, [itPrice, quantity]);
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] =
-		Object.values(LINE_TYPE).map(
-			({ name, icon: IconComponent, enum: value }) => ({
-				value,
-				label: (
-					<span className="inline-flex gap-1 items-center">
-						<IconComponent className="w-5" />
-						{name}
-					</span>
-				),
-				render: <IconComponent className="w-5" />,
-			}),
-		);
+		Object.values(PRODUCT_TYPES).map((type) => ({
+			value: type,
+			label: <ProductTypeLabel type={type} />,
+			render: <ProductTypeLabel type={type} short />,
+		}));
 
 	const lineValue = useWatch({ control, name: `lines.${index}` });
 
@@ -100,7 +90,7 @@ const BillLineTableLine = ({
 						</Button>
 					}
 					onSubmitSuccess={async (newId) => {
-            await reloadProducts()
+						await reloadProducts();
 						setValue(`lines.${index}.productId`, newId);
 					}}
 				/>
@@ -121,14 +111,14 @@ const BillLineTableLine = ({
 						</Button>
 					}
 					onSubmitSuccess={async (newProduct) => {
-            await reloadProducts()
+						await reloadProducts();
 						setValue(
 							`lines.${index}`,
 							{
 								...lineValue,
 								price: newProduct.price,
 								name: newProduct.name,
-								description: newProduct.description,
+								description: newProduct.description ?? null,
 								itPrice: calculatePriceTTC(newProduct.price, tva) ?? null,
 							},
 							{ shouldValidate: true },
@@ -143,11 +133,12 @@ const BillLineTableLine = ({
 
 	return (
 		<div
-			className="flex items-start gap-2 py-2 bg-background"
+			className="border rounded-md shadow-xl flex items-start gap-2 p-2 bg-background"
 			ref={setNodeRef}
 			style={style}
+			role="listitem"
 		>
-			<div className="pt-4">
+			<div className="self-center">
 				<Button variant="ghost" size="icon" {...listeners}>
 					<ArrowsUpDownIcon />
 				</Button>
@@ -162,7 +153,6 @@ const BillLineTableLine = ({
 								name={`lines.${index}.type`}
 								aria-label={t("bills.form.lines.fields.type.label")}
 								label={t("bills.form.lines.fields.type.label")}
-								disabled={disabled}
 								required
 								onChange={(type) => {
 									if (type === "TEXT") {
@@ -179,7 +169,6 @@ const BillLineTableLine = ({
 								label={t("bills.form.lines.fields.name.label")}
 								required
 								placeholder={t("bills.form.lines.fields.name.placeholder")}
-								disabled={disabled}
 								suffix={inputSuffix}
 							/>
 						</div>
@@ -191,7 +180,6 @@ const BillLineTableLine = ({
 									)}
 									className="md:col-span-6"
 									rows={1}
-									disabled={disabled}
 									control={control}
 									name={`lines.${index}.description`}
 								/>
@@ -228,7 +216,6 @@ const BillLineTableLine = ({
 									control={control}
 									name={`lines.${index}.quantity`}
 									label={t("bills.form.lines.fields.quantity.label")}
-									disabled={disabled}
 									placeholder={t(
 										"bills.form.lines.fields.quantity.placeholder",
 									)}
@@ -243,7 +230,6 @@ const BillLineTableLine = ({
 									control={control}
 									name={`lines.${index}.price`}
 									label={t("bills.form.lines.fields.etPrice.label")}
-									disabled={disabled}
 									required
 									placeholder={t("bills.form.lines.fields.etPrice.placeholder")}
 									type="number"
@@ -283,13 +269,11 @@ const BillLineTableLine = ({
 					) : (
 						<div className="md:col-span-4" />
 					)}
-					{!disabled ? (
-						<div className="pt-4 flex justify-end">
-							<Button variant="destructive" size="icon" onClick={deleteLine}>
-								<TrashIcon />
-							</Button>
-						</div>
-					) : null}
+					<div className="pt-4 flex justify-end">
+						<Button variant="destructive" size="icon" onClick={deleteLine}>
+							<TrashIcon />
+						</Button>
+					</div>
 				</div>
 			</div>
 		</div>

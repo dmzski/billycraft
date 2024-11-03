@@ -2,7 +2,6 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { ProductFormValues } from "./types";
 import { Button, useToast } from "@coco-ui/core";
 import { ComponentProps, useMemo } from "react";
-import { LINE_TYPE } from "@/constants/line";
 import { useI18n } from "@/i18n";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
 import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
@@ -14,6 +13,7 @@ import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { SwitchField } from "@/components/form/SwitchField";
+import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
 
 type ProductFormContentProps = {
 	suppliers: Supplier[];
@@ -33,9 +33,9 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] = useMemo(
 		() =>
-			Object.values(LINE_TYPE).map((type) => ({
-				value: type.enum,
-				label: <ProductTypeLabel type={type.enum} />,
+			Object.values(PRODUCT_TYPES).map((type) => ({
+				value: type,
+				label: <ProductTypeLabel type={type} />,
 			})),
 		[],
 	);
@@ -71,6 +71,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 					control={control}
 					name="groupId"
 					label={pageT("fields.groupId.label")}
+					placeholder={pageT("fields.groupId.label")}
 					isSearchable
 				/>
 				<SelectField
@@ -78,6 +79,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 					options={typeOptions}
 					name="type"
 					label={pageT("fields.type.label")}
+					placeholder={pageT("fields.type.label")}
           required
 				/>
 			</div>
@@ -88,6 +90,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 					required
 					minLength={3}
 					label={pageT("fields.name.label")}
+					placeholder={pageT("fields.name.label")}
 					autoComplete="off"
 				/>
 				{description !== null ? (
@@ -131,6 +134,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							name="stock"
 							asNumber
 							label={pageT("fields.stock.label")}
+							placeholder="0"
 							autoComplete="off"
 							type="number"
 							step={0.01}
@@ -140,6 +144,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							control={control}
 							name="lowStock"
 							label={pageT("fields.lowStock.label")}
+							placeholder="0"
 							step={0.01}
 							asNumber
 							autoComplete="off"
@@ -156,6 +161,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							className="flex-grow"
 							name="code"
 							label={pageT("fields.code.label")}
+							placeholder={pageT("fields.code.label")}
 							autoComplete="off"
 						/>
 						<ScanArticleCodeModal
@@ -184,6 +190,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 						control={control}
 						name="supplierId"
 						label={pageT("fields.supplierId.label")}
+						placeholder={pageT("fields.supplierId.label")}
 						isSearchable
 					/>
 					<div className="grid md:grid-cols-2 gap-4">
@@ -202,6 +209,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							}}
 							asNumber
 							label={pageT("fields.price.label")}
+							placeholder="0"
 							autoComplete="off"
 							type="number"
 							suffix={<span className="px-2">€</span>}
@@ -221,6 +229,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 								setValue("price", newEtPrice, { shouldValidate: true });
 							}}
 							label={pageT("fields.itPrice.label")}
+							placeholder="0"
 							autoComplete="off"
 							type="number"
 							step={0.01}

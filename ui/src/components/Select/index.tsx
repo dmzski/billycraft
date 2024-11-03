@@ -3,7 +3,6 @@ import {
 	useMemo,
 	useState,
 	useCallback,
-	InputHTMLAttributes,
 	KeyboardEventHandler,
 	useRef,
 	useImperativeHandle,
@@ -12,7 +11,6 @@ import {
 	MouseEventHandler,
 } from "react";
 import OptionList from "./OptionList";
-import useClickOutsideHandler from "hooks/useClickOutsideHandler";
 import { VariantProps, cva } from "class-variance-authority";
 import { Label } from "components/Label";
 import { tw } from "lib/utils";
@@ -51,18 +49,16 @@ export type SelectValueType =
 	| Array<OptionValue>
 	| undefined
 	| null;
-export type SelectProps = Pick<
-	InputHTMLAttributes<HTMLInputElement>,
-	| "autoFocus"
-	| "placeholder"
-	| "readOnly"
-	| "disabled"
-	| "required"
-	| "className"
-	| "id"
-	| "aria-label"
-	| "name"
-> & {
+
+export type SelectProps = {
+	autoFocus?: boolean;
+	disabled?: boolean;
+	placeholder?: string;
+	className?: string;
+	required?: boolean;
+	id?: string;
+	"aria-label"?: string;
+	name?: string;
 	options: SelectOptionType[];
 	label?: string;
 	onChange?: (result: SelectValueType) => unknown;
@@ -117,16 +113,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
 		useImperativeHandle(ref, () => inputRef.current as HTMLDivElement);
 
-		useClickOutsideHandler(containerRef, () => {
-			setOpen(false);
-			onBlur?.();
-		});
-
 		const handleOpen = useCallback(() => {
-			if (!disabled) {
-				setOpen(true);
+			if (!disabled && !readOnly) {
+				setOpen(() => true);
 			}
-		}, [disabled]);
+		}, [disabled, readOnly]);
+
+		const handleClose = (restoreFocus?: boolean) => {
+			if (restoreFocus) {
+				inputRef.current?.focus();
+			}
+			setOpen(() => false);
+		};
 
 		// Click an option change the value only
 		const handleClickForMulti = useCallback(
@@ -153,8 +151,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 		const handleClickForSingle = useCallback(
 			(option: SelectOptionType) => {
 				onChange?.(option.value);
-				inputRef.current?.focus();
-				setOpen(false);
+				handleClose(true);
 			},
 			[onChange],
 		);
@@ -178,13 +175,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 						event.preventDefault();
 						handleOpen();
 					}
-				} else {
-					if (KEYS.Escape === event.key) {
-						setOpen(false);
-					}
 				}
 			},
-			[isOpen, handleOpen, setOpen],
+			[isOpen, handleOpen],
 		);
 
 		const valueRender = useMemo(() => {
@@ -228,33 +221,38 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 			<div
 				aria-disabled={disabled}
 				ref={containerRef}
-				onKeyDown={handleKeyDown}
-				onClick={handleOpen}
 				aria-invalid={!!error}
 				className={tw("grid group gap-1 w-full h-max", className)}
 			>
-				{label ? <Label htmlFor={id}>{label}</Label> : null}
+				{label ? (
+					<Label htmlFor={id}>
+						{label}
+						{required ? <span>*</span> : null}
+					</Label>
+				) : null}
 				<div className="relative flex-nowrap">
 					<div
+            tabIndex={0}
+						onKeyDown={handleKeyDown}
 						id={id}
 						data-invalid={!!error}
 						className={selectVariants({ variant })}
 						aria-expanded={isOpen}
 						role="combobox"
 						aria-haspopup="listbox"
-						onFocus={handleOpen}
 						onClick={handleOpen}
+						onBlur={onBlur}
 						defaultValue={value?.toString() ?? ""}
 						aria-disabled={disabled || readOnly}
 						aria-label={ariaLabel ?? name}
 						autoFocus={autoFocus}
 						ref={inputRef}
 					>
-						<div className="flex gap-2 flex-row flex-nowrap truncate">
+						<span className="flex gap-2 flex-row flex-nowrap truncate">
 							{valueRender}
-						</div>
+						</span>
 						<div className="flex items-center gap-2">
-							{required ? <span className="text-destructive">*</span> : null}
+							{required && !label ? <span>*</span> : null}
 							{displayClearable ? (
 								<Button
 									variant="ghost"
@@ -275,12 +273,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 					</div>
 					{options?.length > 0 && isOpen ? (
 						<OptionList
+							close={handleClose}
 							placeholderSearchText={placeholderSearchText}
 							isMulti={isMulti}
 							options={options}
 							value={value}
 							isSearchable={isSearchable}
-              containerRef={containerRef}
+							containerRef={containerRef}
 							onOptionClick={(option: SelectOptionType) => {
 								isMulti
 									? handleClickForMulti(option)

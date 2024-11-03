@@ -11,7 +11,7 @@ export const Users = () => {
   if (!data && isLoading) {
     return (
       <div className="flex justify-center items-center">
-        <Loader size="lg" />
+        <Loader />
       </div>
     )
   }

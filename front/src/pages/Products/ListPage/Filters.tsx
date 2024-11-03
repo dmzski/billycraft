@@ -1,133 +1,135 @@
-import { LINE_TYPE } from '@/constants/line'
-import { useI18n } from '@/i18n'
-import { useAllProductGroupsQuery } from '@/queries/useAllProductGroupsQuery'
-import { useAllSuppliersQuery } from '@/queries/useAllSuppliersQuery'
-import { ProductFilters } from '@/utils/products'
-import { Button, Collapsible, Input, Select } from '@coco-ui/core'
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid'
-import { ChangeEvent, ComponentProps, useMemo, useReducer } from 'react'
+import { useI18n } from "@/i18n";
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
+import { ProductFilters } from "@/utils/products";
+import { Button, Collapsible, Input, Select, Switch } from "@coco-ui/core";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { ChangeEvent, ComponentProps, useMemo, useReducer } from "react";
 
 type FiltersProps = {
-  filters: ProductFilters
-  onChangeFilters: (newFilters: ProductFilters) => void
-}
+	filters: ProductFilters;
+	onChangeFilters: (newFilters: ProductFilters) => void;
+};
 
 export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
-  const { scopedT, t } = useI18n()
-  const [openFilters, toggleOpenFilters] = useReducer(state => !state, false)
-  const { data: suppliers } = useAllSuppliersQuery()
-  const { data: groups } = useAllProductGroupsQuery()
-  const pageT = scopedT('products.list.filters')
+	const { scopedT, t } = useI18n();
+	const [openFilters, toggleOpenFilters] = useReducer((state) => !state, true);
+	const { data: suppliers } = useAllSuppliersQuery();
+	const { data: groups } = useAllProductGroupsQuery();
+	const pageT = scopedT("products.list.filters");
 
-  const handleInputChange = (field: keyof ProductFilters, event: ChangeEvent<HTMLInputElement>) => {
-    onChangeFilters({
-      ...filters,
-      [field]: event.target.value ?? '',
-    })
-  }
+	const handleInputChange = (
+		field: keyof ProductFilters,
+		event: ChangeEvent<HTMLInputElement>,
+	) => {
+		onChangeFilters({
+			...filters,
+			[field]: event.target.value ?? "",
+		});
+	};
 
-  const handleSelectChange = (field: keyof ProductFilters, newValue: string) => {
-    onChangeFilters({
-      ...filters,
-      [field]: newValue ?? '',
-    })
-  }
+	const handleSelectChange = (
+		field: keyof ProductFilters,
+		newValue: string,
+	) => {
+		onChangeFilters({
+			...filters,
+			[field]: newValue ?? "",
+		});
+	};
 
-  const typeOptions: ComponentProps<typeof Select>['options'] = useMemo(
-    () => [
-      { value: '', label: t('select') },
-      ...Object.values(LINE_TYPE).map(type => ({
-        value: type.enum,
-        label: type.name,
-      })),
-    ],
-    [t],
-  )
+	const supplierOptions: ComponentProps<typeof Select>["options"] = useMemo(
+		() => [
+			{ value: "", label: t("select") },
+			...(suppliers?.map(({ id, name }) => ({
+				value: id,
+				label: name,
+			})) ?? []),
+		],
+		[suppliers, t],
+	);
 
-  const supplierOptions: ComponentProps<typeof Select>['options'] = useMemo(
-    () => [
-      { value: '', label: t('select') },
-      ...(suppliers?.map(({ id, name }) => ({
-        value: id,
-        label: name,
-      })) ?? []),
-    ],
-    [suppliers, t],
-  )
+	const productGroupOptions = useMemo(
+		(): ComponentProps<typeof Select>["options"] => [
+			{ value: "", label: t("select") },
+			...(groups?.map(({ id, name }) => ({
+				value: id,
+				label: name,
+			})) ?? []),
+		],
+		[groups, t],
+	);
 
-  const productGroupOptions = useMemo(
-    (): ComponentProps<typeof Select>['options'] => [
-      { value: '', label: t('select') },
-      ...(groups?.map(({ id, name }) => ({
-        value: id,
-        label: name,
-      })) ?? []),
-    ],
-    [groups, t],
-  )
-
-  return (
-    <Collapsible
-      open={openFilters}
-      disclosure={
-        <div>
-          <Button onClick={toggleOpenFilters} variant="ghost">
-            {openFilters ? <EyeSlashIcon className="w-5" /> : <EyeIcon className="w-5" />}
-            {openFilters ? pageT('buttons.hide') : pageT('buttons.display')}
-          </Button>
-        </div>
-      }
-    >
-      <div className="grid md:grid-cols-12 gap-4 border rounded-lg p-4">
-        <Select
-          options={typeOptions}
-          className="md:col-span-2"
-          placeholder={t('select')}
-          label={pageT('fields.type.label')}
-          value={filters.type}
-          name="filters.type"
-          onChange={e => {
-            if (typeof e === 'string') {
-              handleSelectChange('type', e)
-            }
-          }}
-        />
-        <Select
-          options={productGroupOptions}
-          className="md:col-span-2"
-          label={pageT('fields.group.label')}
-          value={filters.groupId}
-          name="filters.group"
-          placeholder={t('select')}
-          onChange={e => {
-            if (typeof e === 'string') {
-              handleSelectChange('groupId', e)
-            }
-          }}
-          isSearchable
-        />
-        <Select
-          options={supplierOptions}
-          className="md:col-span-2"
-          label={pageT('fields.supplier.label')}
-          value={filters.supplierId}
-          name="filters.supplier"
-          placeholder={t('select')}
-          onChange={e => {
-            if (typeof e === 'string') {
-              handleSelectChange('supplierId', e)
-            }
-          }}
-          isSearchable
-        />
+	return (
+		<Collapsible
+			open={openFilters}
+			disclosure={
+				<div>
+					<Button onClick={toggleOpenFilters} variant="ghost">
+						{openFilters ? (
+							<EyeSlashIcon className="w-5" />
+						) : (
+							<EyeIcon className="w-5" />
+						)}
+						{openFilters ? pageT("buttons.hide") : pageT("buttons.display")}
+					</Button>
+				</div>
+			}
+		>
+			<div className="grid md:grid-cols-2 gap-4 border rounded-lg p-4">
         <Input
-          className="md:col-span-6"
-          label={pageT('fields.name.label')}
+          placeholder={pageT("fields.name.label")}
+          label={pageT("fields.name.label")}
           value={filters.name}
           name="filters.name"
-          onChange={e => handleInputChange('name', e)}
+          onChange={(e) => handleInputChange("name", e)}
         />
-      </div>
-    </Collapsible>
-  )
-}
+				<Select
+					options={productGroupOptions}
+					label={pageT("fields.group.label")}
+					value={filters.groupId}
+					name="filters.group"
+					placeholder={t("select")}
+					onChange={(e) => {
+						if (typeof e === "string") {
+							handleSelectChange("groupId", e);
+						}
+					}}
+					isSearchable
+				/>
+				<Select
+					options={supplierOptions}
+					label={pageT("fields.supplier.label")}
+					value={filters.supplierId}
+					name="filters.supplier"
+					placeholder={t("select")}
+					onChange={(e) => {
+						if (typeof e === "string") {
+							handleSelectChange("supplierId", e);
+						}
+					}}
+					isSearchable
+				/>
+        <div className="flex flex-col md:flex-row md:items-end md:pb-2 gap-4">
+
+				<Switch
+					checked={filters.noStockOnly}
+					name="filters.noStockOnly"
+					label={pageT("fields.noStockOnly.label")}
+					onCheckedChange={(newState) =>
+						onChangeFilters({ ...filters, noStockOnly: newState })
+					}
+				/>
+				<Switch
+					checked={filters.lowStockOnly}
+					name="filters.lowStockOnly"
+					label={pageT("fields.lowStockOnly.label")}
+					onCheckedChange={(newState) =>
+						onChangeFilters({ ...filters, lowStockOnly: newState })
+					}
+				/>
+        </div>
+			</div>
+		</Collapsible>
+	);
+};

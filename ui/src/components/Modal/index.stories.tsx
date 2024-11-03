@@ -131,7 +131,15 @@ export const WithSelectDropdown: Story = {
 							</Dropdown.Content>
 						</Dropdown>
 						<Select options={[
-              { value: "1", label: "1" }
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
+              { value: "1", label: "1" },
             ]} value="" />
 					</div>
 					<Modal.Actions>

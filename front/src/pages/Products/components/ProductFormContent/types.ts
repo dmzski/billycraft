@@ -3,7 +3,7 @@ import { ProductType } from "@/models/LineTypeEnum"
 export type ProductFormValues = {
   type: ProductType
   name: string
-  description: string | null
+  description?: string | null
   price: number | null
   itPrice: number
   supplierId: string | null

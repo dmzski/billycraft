@@ -1,123 +1,106 @@
-import { Input, Select } from '@coco-ui/core'
-import { ComponentProps, useMemo } from 'react'
-import { useController, useFormContext } from 'react-hook-form'
-import { Prompt } from 'react-router-dom'
-import useCustomers from '@/hooks/useCustomers'
-import Bill from '@/models/Bill'
-import BillLineTable from './BillLineTable'
-import { useI18n } from '@/i18n'
-import { BillFormValues } from './types'
-import { calculatePriceTTC } from '@/utils/price'
+import { Select } from "@coco-ui/core";
+import { ComponentProps, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
+import { Prompt } from "react-router-dom";
+import useCustomers from "@/hooks/useCustomers";
+import Bill from "@/models/Bill";
+import BillLineTable from "./BillLineTable";
+import { useI18n } from "@/i18n";
+import { BillFormValues } from "./types";
+import { calculatePriceTTC } from "@/utils/price";
+import { InputField } from "@/components/form/InputField";
+import { SelectField } from "@/components/form/SelectField";
 
 type BillFormProps = {
-  bill?: Bill
-}
+	bill?: Bill;
+};
 
 export const BillFormContent = ({ bill }: BillFormProps) => {
-  const { t } = useI18n()
-  const customers = useCustomers()
-  const {
-    control,
-    formState: { isDirty, isSubmitting, disabled },
-    getValues,
-    setValue,
-  } = useFormContext<BillFormValues>()
+	const { t } = useI18n();
+	const customers = useCustomers();
+	const {
+		control,
+		formState: { isDirty, isSubmitting },
+		getValues,
+		setValue,
+	} = useFormContext<BillFormValues>();
 
-  const customerOptions: ComponentProps<typeof Select>['options'] = useMemo(() => {
-    const array: ComponentProps<typeof Select>['options'] = []
-    if (customers) {
-      array.push(
-        ...customers
-          .filter(({ deleted }) => !deleted)
-          .map(customer => ({
-            value: customer.id,
-            label: customer.name,
-          })),
-      )
-    }
-    if (bill?.customerId && !array.find(({ value }) => value === bill.customerId)) {
-      const customer = customers.find(({ id }) => id === bill.customerId)
-      if (customer) array.push({ value: customer.id, label: customer.name })
-    }
+	const customerOptions: ComponentProps<typeof Select>["options"] =
+		useMemo(() => {
+			const array: ComponentProps<typeof Select>["options"] = [];
+			if (customers) {
+				array.push(
+					...customers
+						.filter(({ deleted }) => !deleted)
+						.map((customer) => ({
+							value: customer.id,
+							label: customer.name,
+						})),
+				);
+			}
+			if (
+				bill?.customerId &&
+				!array.find(({ value }) => value === bill.customerId)
+			) {
+				const customer = customers.find(({ id }) => id === bill.customerId);
+				if (customer) array.push({ value: customer.id, label: customer.name });
+			}
 
-    return array
-  }, [customers, bill?.customerId])
+			return array;
+		}, [customers, bill?.customerId]);
 
-  const { field: titleField, fieldState: titleFieldState } = useController({
-    control,
-    name: 'title',
-    rules: { required: true, minLength: 3 },
-  })
-  const { field: customerIdField, fieldState: customerIdFieldState } = useController({
-    control,
-    name: 'customerId',
-    rules: { required: true },
-  })
-  const { field: tvaField, fieldState: tvaFieldState } = useController({
-    control,
-    name: 'tva',
-    rules: {
-      required: true,
-      min: 0,
-      max: 100,
-      onBlur: event => {
-        const values = getValues()
-        setValue(
-          'lines',
-          values.lines.map(({ price, ...restLine }) => ({
-            ...restLine,
-            price,
-            itPrice: calculatePriceTTC(price, Number(event.target.value)),
-          })),
-        )
-      },
-    },
-  })
-
-  return (
-    <div className="flex flex-col gap-4">
-      <Prompt when={isDirty && !isSubmitting} message={t('bills.form.exitWarning')} />
-      <Input
-        label={t('bills.form.fields.title.label')}
-        error={titleFieldState.invalid}
-        placeholder={t('bills.form.fields.title.placeholder')}
-        onChange={titleField.onChange}
-        onBlur={titleField.onBlur}
-        name={titleField.name}
-        value={titleField.value}
-        ref={titleField.ref}
-        disabled={disabled}
-        required
-      />
-      <Select
-        error={customerIdFieldState.invalid}
-        label={t('bills.form.fields.customerId.label')}
-        id="customer-select"
-        name={customerIdField.name}
-        disabled={disabled || !customers}
-        onChange={customerIdField.onChange}
-        options={customerOptions}
-        placeholder={t('bills.form.fields.customerId.placeholder')}
-        value={customerIdField.value}
-        isSearchable
-        ref={customerIdField.ref}
-        required
-      />
-      <Input
-        label={t('bills.form.fields.vat.label')}
-        disabled={disabled}
-        placeholder={t('bills.form.fields.vat.placeholder')}
-        type="number"
-        value={tvaField.value}
-        name={tvaField.name}
-        onChange={e => tvaField.onChange(Number(e.target.value))}
-        onBlur={tvaField.onBlur}
-        error={tvaFieldState.invalid}
-        ref={tvaField.ref}
-        min={0}
-        max={100}
-      />
-      <BillLineTable />
-    </div>
-  )
-}
+	return (
+		<div className="flex flex-col gap-12">
+			<Prompt
+				when={isDirty && !isSubmitting}
+				message={t("bills.form.exitWarning")}
+			/>
+			<div className="grid md:grid-cols-12 gap-4">
+				<SelectField
+					control={control}
+					name="customerId"
+					label={t("bills.form.fields.customerId.label")}
+					options={customerOptions}
+					placeholder={t("bills.form.fields.customerId.placeholder")}
+					isSearchable
+					required
+					className="md:col-span-12"
+				/>
+				<InputField
+					className="md:col-span-10"
+					control={control}
+					name="title"
+					label={t("bills.form.fields.title.label")}
+					placeholder={t("bills.form.fields.title.placeholder")}
+					required
+					minLength={3}
+				/>
+				<InputField
+					className="md:col-span-2"
+					control={control}
+					name="tva"
+					asNumber
+					label={t("bills.form.fields.vat.label")}
+					placeholder={t("bills.form.fields.vat.placeholder")}
+					type="number"
+					required
+					min={0}
+					max={100}
+					suffix={<span className="px-2">%</span>}
+					onBlur={(event) => {
+						const values = getValues();
+						setValue(
+							"lines",
+							values.lines.map(({ price, ...restLine }) => ({
+								...restLine,
+								price,
+								itPrice: calculatePriceTTC(price, Number(event.target.value)),
+							})),
+						);
+					}}
+				/>
+			</div>
+			<BillLineTable />
+		</div>
+	);
+};
