@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.47.0
+
+### Minor Changes
+
+- a356be9: Improve Bill and Quote navigation, drop history tab and increase font size of product group
+
 ## 2.46.0
 
 ### Minor Changes
