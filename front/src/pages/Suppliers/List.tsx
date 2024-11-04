@@ -13,13 +13,7 @@ const List = ({ data, reloadData }: ListProps) => {
 	const { scopedT } = useI18n();
 	const pageT = scopedT("suppliers.list");
 	return (
-		<div>
-			<div className="hidden md:grid p-4 md:grid-cols-12 text-muted-foreground">
-				<div>{pageT("headers.color")}</div>
-				<div className="md:col-span-9">{pageT("headers.name")}</div>
-				<div>{pageT("headers.vat")}</div>
-				<div />
-			</div>
+		<div className="flex flex-col gap-4">
 			{data.map((supplier) => (
 				<div
 					key={supplier.id}
@@ -34,7 +28,10 @@ const List = ({ data, reloadData }: ListProps) => {
 					<div className="flex-grow truncate flex items-center">
 						<SupplierLabel supplier={supplier} />
 					</div>
-					<div>{supplier.vat}&nbsp;%</div>
+					<div className="flex flex-col">
+						<div className="text-xs text-muted-foreground">{pageT("headers.vat")}</div>
+						<span>{supplier.vat}&nbsp;%</span>
+					</div>
 					<div className="flex justify-end">
 						<SupplierModalForm
 							disclosure={

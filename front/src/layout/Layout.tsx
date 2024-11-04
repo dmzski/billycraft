@@ -29,9 +29,9 @@ const Layout = ({ children }: LayoutProps) => {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<div className="min-h-screen lg:w-screen overflow-x-auto flex overflow-hidden min-w-screen w-screen">
+			<div className="min-h-screen lg:w-screen flex min-w-screen w-screen">
 				<main className="w-full flex flex-col h-full gap-4">
-					<div className="border-b p-2 flex justify-between items-center gap-4 flex-no-wrap">
+					<div className="border-b px-4 p-2 flex justify-between items-center gap-4 flex-no-wrap">
 						<SidebarTrigger />
 						<div className="flex flex-no-wrap gap-4 items-center overflow-hidden">
 							<Dropdown

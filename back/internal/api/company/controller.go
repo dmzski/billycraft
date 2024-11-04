@@ -20,6 +20,7 @@ func InitRoutes(group fiber.Router) {
 	router.Patch("/mine", auth.RoleRequired(enums.RoleEnumOwner), updateMine)
 	router.Post("/", create)
 	router.Post("/upload-logo", auth.RoleRequired(enums.RoleEnumOwner), uploadLogo)
+  router.Get("/:id/logo", getLogo)
 }
 
 func findMine(c *fiber.Ctx) error {
@@ -75,9 +76,21 @@ func uploadLogo(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error when saving logo file : " + err.Error())
 	}
-	newPath := fmt.Sprintf("%s/api/logo/%s", c.BaseURL(), company.ID)
+	newPath := fmt.Sprintf("%s/api/v1/company/%s/logo", c.BaseURL(), *user.CompanyID)
 	company = DAO.Update(company.ID, dtos.CompanyRequest{
 		Logo: &newPath,
 	})
 	return c.SendString(newPath)
+}
+
+func getLogo(c *fiber.Ctx) error {
+	companyId := c.Params("id")
+	if companyId == "" {
+		return c.Status(400).JSON(&dtos.Error{
+			Code:    400,
+			Message: "No id specified",
+		})
+	}
+
+	return c.SendFile(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", companyId))
 }

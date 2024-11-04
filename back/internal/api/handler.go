@@ -7,7 +7,6 @@ import (
 	"back/internal/api/company"
 	"back/internal/api/customers"
 	"back/internal/api/invitations"
-	"back/internal/api/logo"
 	"back/internal/api/outgoings"
 	"back/internal/api/pdf"
 	"back/internal/api/product_groups"
@@ -44,6 +43,5 @@ func InitApiRoutes(app *fiber.App) {
 	suppliers.InitRoutes(v1)
 	outgoings.InitRoutes(v1)
 	invitations.InitRoutes(v1)
-	logo.InitRoutes(v1)
 	product_groups.InitRoutes(v1)
 }
