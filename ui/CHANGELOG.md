@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.36.0
+
+### Minor Changes
+
+- daa5ffe: Fix update display img on src hcange
+
 ## 1.35.0
 
 ### Minor Changes

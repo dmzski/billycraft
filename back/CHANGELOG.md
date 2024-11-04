@@ -1,5 +1,11 @@
 # back
 
+## 1.29.0
+
+### Minor Changes
+
+- daa5ffe: Change logo endpoint
+
 ## 1.28.0
 
 ### Minor Changes
