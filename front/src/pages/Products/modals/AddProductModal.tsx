@@ -49,7 +49,7 @@ const AddProductForm = ({
 
 	const methods = useForm<ProductFormValues>({
 		mode: "onChange",
-		values: { ...defaultValues, ...(initialValues ?? {}) },
+		values: { ...defaultValues, ...initialValues },
 	});
 
 	const onSubmit = async (values: ProductFormValues) => {

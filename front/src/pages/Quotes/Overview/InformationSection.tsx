@@ -68,10 +68,10 @@ export const InformationSection = ({ quote }: InformationSectionProps) => {
 							{pageT("sections.information.total")}
 						</dt>
 						<dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotal(quote))}
+							{formatCurrency(getBillOrQuoteTotal(quote))}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(getBillOrQuoteTotalEt(quote))}&nbsp;
+							{formatCurrency(getBillOrQuoteTotalEt(quote))}&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
 					</dl>
@@ -80,12 +80,12 @@ export const InformationSection = ({ quote }: InformationSectionProps) => {
 							{pageT("sections.information.totalProducts")}
 						</dt>
 						<dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotalForLineType(quote, "ARTICLE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(quote, "ARTICLE"))}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(quote, "ARTICLE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(quote, "ARTICLE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -95,12 +95,12 @@ export const InformationSection = ({ quote }: InformationSectionProps) => {
 							{pageT("sections.information.totalServices")}
 						</dt>
 						<dd className="text-center text-4xl">
-              {formatCurrency(getBillOrQuoteTotalForLineType(quote, "SERVICE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(quote, "SERVICE"))}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(quote, "SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(quote, "SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -110,14 +110,14 @@ export const InformationSection = ({ quote }: InformationSectionProps) => {
 							{pageT("sections.information.totalOthers")}
 						</dt>
 						<dd className="text-center text-4xl">
-              {formatCurrency(
-                getBillOrQuoteTotalForLineType(quote, "OTHER_SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalForLineType(quote, "OTHER_SERVICE"),
+							)}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(quote, "OTHER_SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(quote, "OTHER_SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>

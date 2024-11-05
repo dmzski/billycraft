@@ -1,34 +1,36 @@
-import { Button, Loader } from '@coco-ui/core'
-import { ROUTES } from '@/routes'
-import { Link } from 'react-router-dom'
-import OutgoingList from '../List'
-import { useI18n } from '@/i18n'
-import { useAllOutgoingsQuery } from '@/queries/useAllOutgoingsQuery'
+import { Button, Loader } from "@coco-ui/core";
+import { ROUTES } from "@/routes";
+import { Link } from "react-router-dom";
+import OutgoingList from "../List";
+import { useI18n } from "@/i18n";
+import { useAllOutgoingsQuery } from "@/queries/useAllOutgoingsQuery";
 
-const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
+const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
 
 const ListPage = () => {
-  const { t } = useI18n()
-  const { data, isLoading } = useAllOutgoingsQuery()
+	const { t } = useI18n();
+	const { data, isLoading } = useAllOutgoingsQuery();
 
-  return (
-    <div>
-      <div className="flex justify-between border-b my-4 pb-2 items-center">
-        <h2 className="text-xl">{t('accounting.outgoings.pages.list.title')}</h2>
-        <Button asChild>
-          <Link to={routes.FORM.path({ id: 'new' })}>
-            {t('accounting.outgoings.pages.list.add')}
-          </Link>
-        </Button>
-      </div>
-      {isLoading && !data ? (
-        <div className="flex justify-center">
-          <Loader />
-        </div>
-      ) : null}
-      {data ? <OutgoingList data={data} /> : null}
-    </div>
-  )
-}
+	return (
+		<div>
+			<div className="flex justify-between border-b my-4 pb-2 items-center">
+				<h2 className="text-xl">
+					{t("accounting.outgoings.pages.list.title")}
+				</h2>
+				<Button asChild>
+					<Link to={routes.FORM.path({ id: "new" })}>
+						{t("accounting.outgoings.pages.list.add")}
+					</Link>
+				</Button>
+			</div>
+			{isLoading && !data ? (
+				<div className="flex justify-center">
+					<Loader />
+				</div>
+			) : null}
+			{data ? <OutgoingList data={data} /> : null}
+		</div>
+	);
+};
 
-export default ListPage
+export default ListPage;

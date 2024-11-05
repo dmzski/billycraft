@@ -101,7 +101,7 @@ export const Edit = () => {
 			<Form methods={methods} onSubmit={onSubmit}>
 				<div className="flex flex-col gap-12">
 					<BillFormContent bill={bill} />
-          <FormErrorAlert />
+					<FormErrorAlert />
 					<div className="flex justify-end">
 						<Submit>{t("bills.form.submit")}</Submit>
 					</div>

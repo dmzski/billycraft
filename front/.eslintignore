@@ -1,7 +1,0 @@
-# From .gitignore
-node_modules/
-serviceWorker.ts
-*.css
-*.svg
-tailwind.config.js
-postcss.config.js

@@ -30,11 +30,7 @@ const BillFilterContainer = ({
 			open={open}
 			disclosure={
 				<Button onClick={toggleOpen} variant="ghost">
-					{open ? (
-						<EyeSlashIcon />
-					) : (
-						<EyeIcon />
-					)}
+					{open ? <EyeSlashIcon /> : <EyeIcon />}
 					{open ? t("hideFilters") : t("displayFilters")}
 				</Button>
 			}

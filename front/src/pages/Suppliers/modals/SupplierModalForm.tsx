@@ -103,7 +103,7 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
 						<InputField
 							prefix={
 								<input
-                className="size-10 rounded-l-md"
+									className="size-10 rounded-l-md"
 									type="color"
 									value={colorField.value}
 									onChange={colorField.onChange}

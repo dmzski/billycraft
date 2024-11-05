@@ -1,8 +1,8 @@
-import { QuoteLine } from '@/models/Quote'
+import { QuoteLine } from "@/models/Quote";
 
 export type QuoteFormValues = {
-  lines: Array<QuoteLine & { itPrice: number }>
-  tva: number
-  title: string
-  customerId: string
-}
+	lines: Array<QuoteLine & { itPrice: number }>;
+	tva: number;
+	title: string;
+	customerId: string;
+};

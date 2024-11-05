@@ -130,17 +130,20 @@ export const WithSelectDropdown: Story = {
 								<Dropdown.Button>4</Dropdown.Button>
 							</Dropdown.Content>
 						</Dropdown>
-						<Select options={[
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-              { value: "1", label: "1" },
-            ]} value="" />
+						<Select
+							options={[
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+								{ value: "1", label: "1" },
+							]}
+							value=""
+						/>
 					</div>
 					<Modal.Actions>
 						<Button onClick={close}>Close</Button>

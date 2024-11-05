@@ -1,5 +1,5 @@
 export type ProductGroup = {
-  id: string
-  name: string
-  createdBy: string
-}
+	id: string;
+	name: string;
+	createdBy: string;
+};

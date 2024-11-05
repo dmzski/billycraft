@@ -7,7 +7,6 @@ type ProductTypeLabelProps = {
 	short?: boolean;
 };
 
-
 export const ProductTypeLabel = ({ type, short }: ProductTypeLabelProps) => {
 	const { scopedT } = useI18n();
 	const t = scopedT(`products.type.${type}`);

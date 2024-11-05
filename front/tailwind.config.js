@@ -1,7 +1,11 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  content: ['./src/**/*.{ts,tsx}', './node_modules/@coco-ui/core/**/*.js', './public/index.html'],
+	content: [
+		"./src/**/*.{ts,tsx}",
+		"./node_modules/@coco-ui/core/**/*.js",
+		"./public/index.html",
+	],
 	theme: {
 		container: {
 			center: true,
@@ -45,16 +49,16 @@ module.exports = {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",
 				},
-        sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
-  				foreground: 'hsl(var(--sidebar-foreground))',
-  				primary: 'hsl(var(--sidebar-primary))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				accent: 'hsl(var(--sidebar-accent))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-  				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
-  			}
+				sidebar: {
+					DEFAULT: "hsl(var(--sidebar-background))",
+					foreground: "hsl(var(--sidebar-foreground))",
+					primary: "hsl(var(--sidebar-primary))",
+					"primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+					accent: "hsl(var(--sidebar-accent))",
+					"accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+					border: "hsl(var(--sidebar-border))",
+					ring: "hsl(var(--sidebar-ring))",
+				},
 			},
 			borderRadius: {
 				lg: `var(--radius)`,
@@ -63,7 +67,7 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ["var(--font-sans)", ...fontFamily.sans],
-        geist: ['Geist', 'sans-serif'],
+				geist: ["Geist", "sans-serif"],
 			},
 			keyframes: {
 				"accordion-down": {
@@ -82,9 +86,9 @@ module.exports = {
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
-        "toast-progress-bar": "toast-progress-bar 1s linear",
+				"toast-progress-bar": "toast-progress-bar 1s linear",
 			},
 		},
 	},
-  plugins: [require("tailwindcss-animate")],
-}
+	plugins: [require("tailwindcss-animate")],
+};

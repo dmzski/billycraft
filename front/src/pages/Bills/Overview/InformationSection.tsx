@@ -80,12 +80,12 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalProducts")}
 						</dt>
 						<dd className="text-center text-4xl">
-            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -95,12 +95,12 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalServices")}
 						</dt>
 						<dd className="text-center text-4xl">
-            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -110,14 +110,14 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 							{pageT("sections.information.totalOthers")}
 						</dt>
 						<dd className="text-center text-4xl">
-            {formatCurrency(
-              getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
-            )}
+							{formatCurrency(
+								getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
+							)}
 						</dd>
 						<dd className="text-center text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>

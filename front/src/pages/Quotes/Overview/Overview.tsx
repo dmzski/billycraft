@@ -1,6 +1,10 @@
 import { useI18n } from "@/i18n";
 import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery";
-import { QuoteOverviewRouteQueryParams, QuoteRouteProps, ROUTES } from "@/routes";
+import {
+	QuoteOverviewRouteQueryParams,
+	QuoteRouteProps,
+	ROUTES,
+} from "@/routes";
 import { isQuoteMinimumAccepted } from "@/utils/quote";
 import { Alert, Button, Loader, useToast } from "@coco-ui/core";
 import {

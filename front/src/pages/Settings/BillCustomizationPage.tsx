@@ -1,23 +1,25 @@
-import BillCustomization from '@/models/BillCustomization'
-import BillCustomizationForm from './Forms/BillCustomizationForm'
-import { useMyBillCustomizationQuery } from '@/queries/useMyBillCustomizationQuery'
-import { Loader } from '@coco-ui/core'
+import BillCustomization from "@/models/BillCustomization";
+import BillCustomizationForm from "./Forms/BillCustomizationForm";
+import { useMyBillCustomizationQuery } from "@/queries/useMyBillCustomizationQuery";
+import { Loader } from "@coco-ui/core";
 
 const BillCustomizationPage = () => {
-  const { data: billCustomization, isLoading } = useMyBillCustomizationQuery()
+	const { data: billCustomization, isLoading } = useMyBillCustomizationQuery();
 
-  if (isLoading && !billCustomization) {
-    return (
-      <div className="flex items-center justify-center">
-        <Loader />
-      </div>
-    )
-  }
-  return (
-    <div className="w-full">
-      <BillCustomizationForm billCustomization={billCustomization ?? ({} as BillCustomization)} />
-    </div>
-  )
-}
+	if (isLoading && !billCustomization) {
+		return (
+			<div className="flex items-center justify-center">
+				<Loader />
+			</div>
+		);
+	}
+	return (
+		<div className="w-full">
+			<BillCustomizationForm
+				billCustomization={billCustomization ?? ({} as BillCustomization)}
+			/>
+		</div>
+	);
+};
 
-export default BillCustomizationPage
+export default BillCustomizationPage;

@@ -85,7 +85,7 @@ const OptionList = ({
 
 	const handleKeyDown: KeyboardEventHandler = (event) => {
 		if (event.key === KEYS.Tab) {
-      event.preventDefault()
+			event.preventDefault();
 			close(true);
 		}
 		if (event.key === KEYS.ArrowDown || event.key === KEYS.ArrowUp) {

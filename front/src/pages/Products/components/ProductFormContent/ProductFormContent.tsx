@@ -80,7 +80,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 					name="type"
 					label={pageT("fields.type.label")}
 					placeholder={pageT("fields.type.label")}
-          required
+					required
 				/>
 			</div>
 			<div className="flex flex-col">

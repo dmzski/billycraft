@@ -1,29 +1,29 @@
-export type ToastVariant = 'success' | 'warning' | 'error' | 'info' | 'default'
+export type ToastVariant = "success" | "warning" | "error" | "info" | "default";
 export class Toast {
-  static nextId = 0
+	static nextId = 0;
 
-  id: number
+	id: number;
 
-  message: string
+	message: string;
 
-  open: boolean
+	open: boolean;
 
-  duration: number
+	duration: number;
 
-  vertical?: 'top' | 'bottom'
+	vertical?: "top" | "bottom";
 
-  horizontal?: 'left' | 'center' | 'right'
+	horizontal?: "left" | "center" | "right";
 
-  variant: ToastVariant
+	variant: ToastVariant;
 
-  callback?: () => unknown
+	callback?: () => unknown;
 
-  constructor() {
-    this.id = Toast.nextId
-    this.message = ''
-    this.variant = 'default'
-    this.open = true
-    this.duration = 5000
-    Toast.nextId += 1
-  }
+	constructor() {
+		this.id = Toast.nextId;
+		this.message = "";
+		this.variant = "default";
+		this.open = true;
+		this.duration = 5000;
+		Toast.nextId += 1;
+	}
 }

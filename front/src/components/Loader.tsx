@@ -1,5 +1,5 @@
-import { Loader as CocoLoader } from '@coco-ui/core'
+import { Loader as CocoLoader } from "@coco-ui/core";
 
-const Loader = () => <CocoLoader />
+const Loader = () => <CocoLoader />;
 
-export default Loader
+export default Loader;

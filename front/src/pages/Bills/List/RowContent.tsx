@@ -64,11 +64,9 @@ export const RowContent = ({ bill }: RowContentProps) => {
 						<dt className="font-semibold">
 							{pageT("sections.information.total")}
 						</dt>
-						<dd>
-            {formatCurrency(getBillOrQuoteTotal(bill))}
-						</dd>
+						<dd>{formatCurrency(getBillOrQuoteTotal(bill))}</dd>
 						<dd className="text-muted-foreground text-xs">
-              {formatCurrency(getBillOrQuoteTotalEt(bill))}&nbsp;
+							{formatCurrency(getBillOrQuoteTotalEt(bill))}&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
 					</dl>
@@ -77,12 +75,12 @@ export const RowContent = ({ bill }: RowContentProps) => {
 							{pageT("sections.information.totalProducts")}
 						</dt>
 						<dd>
-            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "ARTICLE"))}
 						</dd>
 						<dd className="text-xs text-muted-foreground">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "ARTICLE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -92,12 +90,12 @@ export const RowContent = ({ bill }: RowContentProps) => {
 							{pageT("sections.information.totalServices")}
 						</dt>
 						<dd>
-            {formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
+							{formatCurrency(getBillOrQuoteTotalForLineType(bill, "SERVICE"))}
 						</dd>
 						<dd className="text-xs text-muted-foreground">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>
@@ -107,14 +105,14 @@ export const RowContent = ({ bill }: RowContentProps) => {
 							{pageT("sections.information.totalOthers")}
 						</dt>
 						<dd>
-            {formatCurrency(
-              getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
-            )}
+							{formatCurrency(
+								getBillOrQuoteTotalForLineType(bill, "OTHER_SERVICE"),
+							)}
 						</dd>
 						<dd className="text-muted-foreground text-xs">
-              {formatCurrency(
-                getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
-              )}
+							{formatCurrency(
+								getBillOrQuoteTotalETForLineType(bill, "OTHER_SERVICE"),
+							)}
 							&nbsp;
 							{t("shortExcludedTax")}
 						</dd>

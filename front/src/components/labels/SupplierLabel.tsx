@@ -23,7 +23,11 @@ type SupplierLabelProps = {
 	to?: string;
 } & VariantProps<typeof labelVariants>;
 
-export const SupplierLabel = ({ supplier, to, size = "md" }: SupplierLabelProps) => {
+export const SupplierLabel = ({
+	supplier,
+	to,
+	size = "md",
+}: SupplierLabelProps) => {
 	if (to) {
 		return (
 			<p className={labelVariants({ size })}>

@@ -1,5 +1,5 @@
-import HistorySwitch from './HistorySwitch'
+import HistorySwitch from "./HistorySwitch";
 
-const History = () => <HistorySwitch />
+const History = () => <HistorySwitch />;
 
-export default History
+export default History;

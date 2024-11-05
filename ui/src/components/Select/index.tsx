@@ -232,7 +232,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 				) : null}
 				<div className="relative flex-nowrap">
 					<div
-            tabIndex={0}
+						tabIndex={0}
 						onKeyDown={handleKeyDown}
 						id={id}
 						data-invalid={!!error}

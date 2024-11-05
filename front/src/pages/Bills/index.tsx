@@ -17,7 +17,7 @@ const BillPage = () => {
 	const { tab } = useQueryParams<BillRouteQueryParams>();
 	const [selectedStatus, setSelectedStatus] = useState<
 		BillRouteQueryParams["tab"]
-	>(tab && tab !== "all" && BILL_STATUS.includes(tab) ? tab : 'all');
+	>(tab && tab !== "all" && BILL_STATUS.includes(tab) ? tab : "all");
 
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
@@ -55,13 +55,14 @@ const BillPage = () => {
 			<div className="overflow-x-auto">
 				<Tabs>
 					<Tabs.Tab
-						isActive={selectedStatus === 'all'}
-						onClick={() => setSelectedStatus('all')}
+						isActive={selectedStatus === "all"}
+						onClick={() => setSelectedStatus("all")}
 					>
 						{t("all")}
 					</Tabs.Tab>
 					{BILL_STATUS.map((status) => (
 						<Tabs.Tab
+              key={status}
 							onClick={() => setSelectedStatus(status)}
 							isActive={status === selectedStatus}
 						>

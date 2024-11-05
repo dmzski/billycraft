@@ -17,7 +17,7 @@ export const useOrganizationLogoQuery = (
 				return new Promise<string>((resolve, reject) => {
 					reader.onloadend = () => resolve(reader.result as string);
 					reader.onerror = reject;
-          reader.readAsDataURL(blob);
+					reader.readAsDataURL(blob);
 				});
 			}
 

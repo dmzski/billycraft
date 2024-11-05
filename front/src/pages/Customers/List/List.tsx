@@ -8,9 +8,15 @@ export const List = ({ data = [] }: { data: Customer[] }) => {
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="hidden md:grid px-2 py-4 md:grid-cols-12 gap-4 text-muted-foreground text-sm">
-				<div className="pl-12 md:col-span-6">{t("customers.list.headers.name")}</div>
-				<div className="md:col-span-2">{t("customers.list.headers.contact")}</div>
-				<div className="md:col-span-2">{t("customers.list.headers.phoneNumber")}</div>
+				<div className="pl-12 md:col-span-6">
+					{t("customers.list.headers.name")}
+				</div>
+				<div className="md:col-span-2">
+					{t("customers.list.headers.contact")}
+				</div>
+				<div className="md:col-span-2">
+					{t("customers.list.headers.phoneNumber")}
+				</div>
 				<div className="md:col-span-2">{t("customers.list.headers.email")}</div>
 			</div>
 			<div>

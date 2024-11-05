@@ -1,3 +1,3 @@
-import type fr from './fr'
+import type fr from "./fr";
 
-export type GlobalLocale = typeof fr
+export type GlobalLocale = typeof fr;

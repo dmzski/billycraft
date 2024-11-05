@@ -1,9 +1,9 @@
-import { RoleName } from './dtos/Role'
+import { RoleName } from "./dtos/Role";
 
 export type User = {
-  email: string
-  firstName: string
-  lastName: string
-  companyId?: string
-  role: RoleName
-}
+	email: string;
+	firstName: string;
+	lastName: string;
+	companyId?: string;
+	role: RoleName;
+};

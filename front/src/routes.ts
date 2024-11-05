@@ -9,7 +9,7 @@ export type QuoteRouteQueryParams = {
 };
 
 export type QuoteOverviewRouteQueryParams = {
-	fromTab?: QuoteRouteQueryParams['tab'];
+	fromTab?: QuoteRouteQueryParams["tab"];
 };
 
 export type BillRouteProps = {
@@ -21,7 +21,7 @@ export type BillRouteQueryParams = {
 };
 
 export type BillOverviewRouteQueryParams = {
-	fromTab?: BillRouteQueryParams['tab'];
+	fromTab?: BillRouteQueryParams["tab"];
 };
 
 export type CustomerRouteProps = {

@@ -1,10 +1,10 @@
-import { create } from '@storybook/theming'
+import { create } from "@storybook/theming";
 
 export default create({
-  base: 'light',
-  brandTitle: 'COCO UI',
-  brandUrl: 'https://coco-erp.fr',
+	base: "light",
+	brandTitle: "COCO UI",
+	brandUrl: "https://coco-erp.fr",
 
-  colorPrimary: '#8B5CF6',
-  colorSecondary: '#F97316',
-})
+	colorPrimary: "#8B5CF6",
+	colorSecondary: "#F97316",
+});

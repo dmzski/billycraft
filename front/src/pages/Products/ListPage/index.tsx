@@ -18,8 +18,8 @@ const ProductsPage = () => {
 		name: "",
 		supplierId: "",
 		groupId: "",
-    lowStockOnly: false,
-    noStockOnly: false
+		lowStockOnly: false,
+		noStockOnly: false,
 	});
 	const { data, isLoading, reload } = useAllProductsQuery();
 	const [tab, setTab] = useState<"all" | ProductType>("all");
@@ -43,7 +43,7 @@ const ProductsPage = () => {
 							{t("all")}
 						</Tabs.Tab>
 						{PRODUCT_TYPES.map((type) => (
-							<Tabs.Tab isActive={tab === type} onClick={() => setTab(type)}>
+							<Tabs.Tab key={type} isActive={tab === type} onClick={() => setTab(type)}>
 								{t(`products.type.${type}.label`)}
 							</Tabs.Tab>
 						))}

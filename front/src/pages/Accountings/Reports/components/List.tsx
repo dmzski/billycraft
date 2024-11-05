@@ -1,51 +1,55 @@
-import { useFormatDate } from '@/hooks/useFormatDate'
-import { ReportResponse } from '@/models/Report'
-import { REPORT_ROUTES } from '../constants'
-import { useI18n } from '@/i18n'
-import { RRLink } from '@/components/RRLink'
+import { useFormatDate } from "@/hooks/useFormatDate";
+import { ReportResponse } from "@/models/Report";
+import { REPORT_ROUTES } from "../constants";
+import { useI18n } from "@/i18n";
+import { RRLink } from "@/components/RRLink";
 
 type ReportRowProps = {
-  report: ReportResponse
-}
+	report: ReportResponse;
+};
 const ReportRow = ({ report }: ReportRowProps) => {
-  const { toISO9075 } = useFormatDate()
-  return (
-    <div className="grid md:grid-cols-12 p-2 border-t">
-      <div className="md:col-span-3">
-        <RRLink to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>{report.name}</RRLink>
-      </div>
-      <div className="md:col-span-3">{toISO9075(report.startDate)}</div>
-      <div className="md:col-span-3">{toISO9075(report.endDate)}</div>
-      <div className="md:col-span-3">{toISO9075(report.createdAt)}</div>
-    </div>
-  )
-}
+	const { toISO9075 } = useFormatDate();
+	return (
+		<div className="grid md:grid-cols-12 p-2 border-t">
+			<div className="md:col-span-3">
+				<RRLink to={REPORT_ROUTES.routes.DETAILS.path({ id: report.id })}>
+					{report.name}
+				</RRLink>
+			</div>
+			<div className="md:col-span-3">{toISO9075(report.startDate)}</div>
+			<div className="md:col-span-3">{toISO9075(report.endDate)}</div>
+			<div className="md:col-span-3">{toISO9075(report.createdAt)}</div>
+		</div>
+	);
+};
 
 type ListProps = {
-  reports: ReportResponse[]
-}
+	reports: ReportResponse[];
+};
 const List = ({ reports }: ListProps) => {
-  const { t } = useI18n()
+	const { t } = useI18n();
 
-  return (
-    <div className="flex flex-col border rounded">
-      <div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-accent text-accent-foreground">
-        <div className="md:col-span-3">{t('accounting.reports.components.list.headers.name')}</div>
-        <div className="md:col-span-3">
-          {t('accounting.reports.components.list.headers.startDate')}
-        </div>
-        <div className="md:col-span-3">
-          {t('accounting.reports.components.list.headers.endDate')}
-        </div>
-        <div className="md:col-span-3">
-          {t('accounting.reports.components.list.headers.createdAt')}
-        </div>
-      </div>
-      {reports.map(report => (
-        <ReportRow key={report.id} report={report} />
-      ))}
-    </div>
-  )
-}
+	return (
+		<div className="flex flex-col border rounded">
+			<div className="grid md:grid-cols-12 py-4 px-2 gap-2 bg-accent text-accent-foreground">
+				<div className="md:col-span-3">
+					{t("accounting.reports.components.list.headers.name")}
+				</div>
+				<div className="md:col-span-3">
+					{t("accounting.reports.components.list.headers.startDate")}
+				</div>
+				<div className="md:col-span-3">
+					{t("accounting.reports.components.list.headers.endDate")}
+				</div>
+				<div className="md:col-span-3">
+					{t("accounting.reports.components.list.headers.createdAt")}
+				</div>
+			</div>
+			{reports.map((report) => (
+				<ReportRow key={report.id} report={report} />
+			))}
+		</div>
+	);
+};
 
-export default List
+export default List;

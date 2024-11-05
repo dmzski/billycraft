@@ -77,13 +77,13 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 			}
 		>
 			<div className="grid md:grid-cols-2 gap-4 border rounded-lg p-4">
-        <Input
-          placeholder={pageT("fields.name.label")}
-          label={pageT("fields.name.label")}
-          value={filters.name}
-          name="filters.name"
-          onChange={(e) => handleInputChange("name", e)}
-        />
+				<Input
+					placeholder={pageT("fields.name.label")}
+					label={pageT("fields.name.label")}
+					value={filters.name}
+					name="filters.name"
+					onChange={(e) => handleInputChange("name", e)}
+				/>
 				<Select
 					options={productGroupOptions}
 					label={pageT("fields.group.label")}
@@ -110,25 +110,24 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 					}}
 					isSearchable
 				/>
-        <div className="flex flex-col md:flex-row md:items-end md:pb-2 gap-4">
-
-				<Switch
-					checked={filters.noStockOnly}
-					name="filters.noStockOnly"
-					label={pageT("fields.noStockOnly.label")}
-					onCheckedChange={(newState) =>
-						onChangeFilters({ ...filters, noStockOnly: newState })
-					}
-				/>
-				<Switch
-					checked={filters.lowStockOnly}
-					name="filters.lowStockOnly"
-					label={pageT("fields.lowStockOnly.label")}
-					onCheckedChange={(newState) =>
-						onChangeFilters({ ...filters, lowStockOnly: newState })
-					}
-				/>
-        </div>
+				<div className="flex flex-col md:flex-row md:items-end md:pb-2 gap-4">
+					<Switch
+						checked={filters.noStockOnly}
+						name="filters.noStockOnly"
+						label={pageT("fields.noStockOnly.label")}
+						onCheckedChange={(newState) =>
+							onChangeFilters({ ...filters, noStockOnly: newState })
+						}
+					/>
+					<Switch
+						checked={filters.lowStockOnly}
+						name="filters.lowStockOnly"
+						label={pageT("fields.lowStockOnly.label")}
+						onCheckedChange={(newState) =>
+							onChangeFilters({ ...filters, lowStockOnly: newState })
+						}
+					/>
+				</div>
 			</div>
 		</Collapsible>
 	);

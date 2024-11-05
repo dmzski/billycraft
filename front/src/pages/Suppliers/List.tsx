@@ -29,7 +29,9 @@ const List = ({ data, reloadData }: ListProps) => {
 						<SupplierLabel supplier={supplier} />
 					</div>
 					<div className="flex flex-col">
-						<div className="text-xs text-muted-foreground">{pageT("headers.vat")}</div>
+						<div className="text-xs text-muted-foreground">
+							{pageT("headers.vat")}
+						</div>
 						<span>{supplier.vat}&nbsp;%</span>
 					</div>
 					<div className="flex justify-end">

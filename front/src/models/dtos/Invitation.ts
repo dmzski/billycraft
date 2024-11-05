@@ -1,39 +1,39 @@
-import { RoleName } from './Role'
+import { RoleName } from "./Role";
 
-export type InvitationStatus = 'ACCEPTED' | 'PENDING' | 'REFUSED'
+export type InvitationStatus = "ACCEPTED" | "PENDING" | "REFUSED";
 
 export type InvitationResponse = {
-  email: string
-  createdAt: string
-  status: InvitationStatus
-  role: RoleName
-}
+	email: string;
+	createdAt: string;
+	status: InvitationStatus;
+	role: RoleName;
+};
 
 export type MyInvitationResponse = {
-  companyId: string
-  companyName: string
-  createdAt: string
-  status: InvitationStatus
-  role: RoleName
-}
+	companyId: string;
+	companyName: string;
+	createdAt: string;
+	status: InvitationStatus;
+	role: RoleName;
+};
 
 export type InvitationRequest = {
-  email: string
-  role: RoleName
-}
+	email: string;
+	role: RoleName;
+};
 
 export type AcceptInvitationRequest = {
-  companyId: string
-}
+	companyId: string;
+};
 
 export type RefuseInvitationRequest = {
-  companyId: string
-}
+	companyId: string;
+};
 
 export type DeleteInvitationRequest = {
-  email: string
-}
+	email: string;
+};
 
 export type InvitationFindAllParams = {
-  status?: InvitationStatus
-}
+	status?: InvitationStatus;
+};

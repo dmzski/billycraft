@@ -1,11 +1,11 @@
-import { ProductType } from '../LineTypeEnum'
+import { ProductType } from "../LineTypeEnum";
 
 export type ProductUpdateRequest = {
-  id: string
-  type: ProductType
-  name: string
-  description?: string | null
-  price?: number | null
-  supplierId?: string | null
-  groupId?: string | null
-}
+	id: string;
+	type: ProductType;
+	name: string;
+	description?: string | null;
+	price?: number | null;
+	supplierId?: string | null;
+	groupId?: string | null;
+};

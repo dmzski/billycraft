@@ -13,12 +13,17 @@ import { RowContent } from "./RowContent";
 type QuoteTableLineProps = {
 	quote: Quote;
 	customer?: Customer;
-  reload: () => Promise<void>
-  selectedStatus: QuoteRouteQueryParams['tab']
+	reload: () => Promise<void>;
+	selectedStatus: QuoteRouteQueryParams["tab"];
 };
-const QuoteTableLine = ({ quote, customer, selectedStatus, reload }: QuoteTableLineProps) => {
+const QuoteTableLine = ({
+	quote,
+	customer,
+	selectedStatus,
+	reload,
+}: QuoteTableLineProps) => {
 	const { t } = useI18n();
-  const [open, toggleOpen] = useReducer(state => !state, false)
+	const [open, toggleOpen] = useReducer((state) => !state, false);
 	const toast = useToast();
 
 	const updateQuoteStatus =
@@ -67,12 +72,15 @@ const QuoteTableLine = ({ quote, customer, selectedStatus, reload }: QuoteTableL
 				disclosure={
 					<div className="grid md:grid-cols-4 items-center md:h-16 p-2 gap-4">
 						<div className="flex items-center gap-4">
-              <Button onClick={toggleOpen} size="icon" variant="ghost">
-                {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </Button>
+							<Button onClick={toggleOpen} size="icon" variant="ghost">
+								{open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+							</Button>
 							<QuoteLabel
 								quote={quote}
-								to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }, { fromTab: selectedStatus })}
+								to={ROUTES.QUOTE_OVERVIEW.path(
+									{ id: quote.id },
+									{ fromTab: selectedStatus },
+								)}
 							/>
 						</div>
 						<div className="truncate">{customer?.name ?? "-"}</div>

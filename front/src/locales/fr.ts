@@ -48,9 +48,9 @@ export default {
 	"heads.accounting.reports.list": "Rapports > Liste",
 
 	// Global
-  "themes.light": "Clair",
-  "themes.dark": "Sombre",
-  "themes.system": "Système",
+	"themes.light": "Clair",
+	"themes.dark": "Sombre",
+	"themes.system": "Système",
 
 	"forms.confirmation.delete.pattern": "^SUPPRIMER$",
 	"forms.confirmation.delete.label": "Ecrire SUPPRIMER pour confirmer",

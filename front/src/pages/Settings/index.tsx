@@ -1,5 +1,5 @@
-import SettingsSwitch from './SettingsSwitch'
+import SettingsSwitch from "./SettingsSwitch";
 
-const Settings = () => <SettingsSwitch />
+const Settings = () => <SettingsSwitch />;
 
-export default Settings
+export default Settings;

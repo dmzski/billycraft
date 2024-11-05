@@ -66,7 +66,7 @@ const addInterceptFetch = (token: string) => {
 			credentials: !shouldPlaceAuthorizationHeader ? "include" : undefined,
 			...config,
 			headers: {
-				...(config.headers ?? {}),
+				...config.headers,
 				...(shouldPlaceAuthorizationHeader
 					? {
 							Authorization: "Bearer " + token,

@@ -21,7 +21,11 @@ export const Basic = () => (
 					<Dropdown.Button>3</Dropdown.Button>
 				</Dropdown.Content>
 			</Dropdown>
-			<Select label="text me" options={[{ label: "test", value: "test" }]} value="" />
+			<Select
+				label="text me"
+				options={[{ label: "test", value: "test" }]}
+				value=""
+			/>
 		</div>
 	</Collapsible>
 );

@@ -36,11 +36,11 @@ export const CustomerLabel = ({
 		return (
 			<p className={labelVariants({ size })}>
 				<IdentificationIcon />
-				<RRLink className="truncate" to={to}>{customer.name}</RRLink>
+				<RRLink className="truncate" to={to}>
+					{customer.name}
+				</RRLink>
 				{customer.deleted ? (
-					<Badge variant="destructive">
-						{t("deleted")}
-					</Badge>
+					<Badge variant="destructive">{t("deleted")}</Badge>
 				) : null}
 			</p>
 		);
@@ -51,9 +51,7 @@ export const CustomerLabel = ({
 			<IdentificationIcon />
 			<span className="truncate">{customer.name}</span>
 			{customer.deleted ? (
-				<Badge variant="destructive">
-					{t("deleted")}
-				</Badge>
+				<Badge variant="destructive">{t("deleted")}</Badge>
 			) : null}
 		</p>
 	);

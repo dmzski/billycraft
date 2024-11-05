@@ -1,10 +1,10 @@
-import { UserApi } from '@/api/UserApi'
-import { User } from '@/models/User'
-import { useDataLoader } from '@scaleway/use-dataloader'
+import { UserApi } from "@/api/UserApi";
+import { User } from "@/models/User";
+import { useDataLoader } from "@scaleway/use-dataloader";
 
-type DataLoaderOptions = Parameters<typeof useDataLoader<User>>[2]
+type DataLoaderOptions = Parameters<typeof useDataLoader<User>>[2];
 export const useMyInformationQuery = (options: DataLoaderOptions) => {
-  const key = ['my-information']
+	const key = ["my-information"];
 
-  return useDataLoader(key, () => UserApi.getMyInformation(), options)
-}
+	return useDataLoader(key, () => UserApi.getMyInformation(), options);
+};

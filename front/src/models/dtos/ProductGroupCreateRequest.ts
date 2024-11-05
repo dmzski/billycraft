@@ -1,3 +1,3 @@
 export type ProductGroupCreateRequest = {
-  name: string
-}
+	name: string;
+};

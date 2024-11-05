@@ -18,7 +18,7 @@ const QuotePage = () => {
 	const { tab } = useQueryParams<QuoteRouteQueryParams>();
 	const [selectedStatus, setSelectedStatus] = useState<
 		QuoteRouteQueryParams["tab"]
-	>(tab && tab !== "all" && QUOTE_STATUS.includes(tab) ? tab : 'all');
+	>(tab && tab !== "all" && QUOTE_STATUS.includes(tab) ? tab : "all");
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
 	>({
@@ -55,13 +55,14 @@ const QuotePage = () => {
 			<div className="overflow-x-auto">
 				<Tabs>
 					<Tabs.Tab
-						isActive={selectedStatus === 'all'}
-						onClick={() => setSelectedStatus('all')}
+						isActive={selectedStatus === "all"}
+						onClick={() => setSelectedStatus("all")}
 					>
 						{t("all")}
 					</Tabs.Tab>
 					{QUOTE_STATUS.map((status) => (
 						<Tabs.Tab
+              key={status}
 							onClick={() => setSelectedStatus(status)}
 							isActive={status === selectedStatus}
 						>
