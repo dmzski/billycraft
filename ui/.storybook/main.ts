@@ -3,7 +3,7 @@ import path from 'path';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
   framework: '@storybook/react-vite',
   addons: [
@@ -11,7 +11,8 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
-    '@storybook/addon-mdx-gfm'
+    '@storybook/addon-mdx-gfm',
+    '@chromatic-com/storybook'
   ],
 
   core: {
@@ -39,9 +40,7 @@ const config: StorybookConfig = {
     reactDocgen: 'react-docgen-typescript',
   },
 
-  docs: {
-    autodocs: true
-  }
+  docs: {}
 }
 
 export default config

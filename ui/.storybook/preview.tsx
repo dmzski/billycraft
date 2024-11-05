@@ -2,7 +2,6 @@ import '../src/index.css'
 import { ComponentType, ReactNode } from 'react'
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -36,3 +35,4 @@ export const decorators = [
     </Root>
   ),
 ]
+export const tags = ['autodocs'];
