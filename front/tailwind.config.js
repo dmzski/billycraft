@@ -3,7 +3,7 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 module.exports = {
 	content: [
 		"./src/**/*.{ts,tsx}",
-		"./node_modules/@coco-ui/core/**/*.js",
+		"./../ui/src/**/*.{ts,tsx}",
 		"./public/index.html",
 	],
 	theme: {
