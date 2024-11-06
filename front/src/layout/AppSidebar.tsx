@@ -15,7 +15,7 @@ import {
 	Button,
 } from "@coco-ui/core";
 import { useUser } from "@/providers/UserProvider";
-import { ROUTES, RouteId } from "@/routes";
+import { ROUTES, type RouteId } from "@/routes";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useI18n } from "@/i18n";
 import { useOrganizationLogoQuery } from "@/queries/useOrganizationLogoQuery";
@@ -72,10 +72,10 @@ export const AppSidebar = ({
 	return (
 		<Sidebar side="left" variant="floating" {...props}>
 			<SidebarHeader>
-				<div className="flex items-center">
+				<div className="grid">
 					<Dropdown
 						disclosure={
-							<Button className="h-auto" variant="ghost">
+							<Button className="h-auto truncate" variant="ghost">
 								{logo ? (
 									<Avatar
 										className="object-contain"
