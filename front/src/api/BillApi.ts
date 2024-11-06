@@ -1,8 +1,9 @@
 import { API_URL } from "@/constants/global";
-import Bill, { BillStatus } from "@/models/Bill";
+import type Bill from "@/models/Bill";
+import type { BillStatus } from "@/models/Bill";
 import { HttpClient } from "./HttpClient";
-import { BillUpdateRequest } from "@/models/dtos/BillUpdateRequest";
-import { BillCreateRequest } from "@/models/dtos/BillCreateRequest";
+import type { BillUpdateRequest } from "@/models/dtos/BillUpdateRequest";
+import type { BillCreateRequest } from "@/models/dtos/BillCreateRequest";
 
 export const BILL_URL = `${API_URL}/bills`;
 
@@ -81,4 +82,6 @@ export const BillApi = {
 		HttpClient.POST<Bill>(`${BILL_URL}/from-quote/${quoteId}`, {}),
 	updateStatus: async ({ id, status }: { id: string; status: BillStatus }) =>
 		HttpClient.PATCH(`${BILL_URL}/${id}`, { status }),
+	duplicate: async ({ id }: { id: string }): Promise<Bill> =>
+		HttpClient.POST(`${BILL_URL}/${id}/duplicate`),
 };

@@ -31,7 +31,10 @@ export const InvitationsList = ({
 			{invitations && invitations.length > 0 ? (
 				<tbody>
 					{invitations.map(({ email, role, status, createdAt }) => (
-						<tr key={email} className="px-4 py-2 gap-3 grid md:grid-cols-12 border-b items-center">
+						<tr
+							key={email}
+							className="px-4 py-2 gap-3 grid md:grid-cols-12 border-b items-center"
+						>
 							<td className="md:col-span-3">{email}</td>
 							<td className="md:col-span-2">{role}</td>
 							<td className="md:col-span-2">

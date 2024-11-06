@@ -62,7 +62,7 @@ const BillPage = () => {
 					</Tabs.Tab>
 					{BILL_STATUS.map((status) => (
 						<Tabs.Tab
-              key={status}
+							key={status}
 							onClick={() => setSelectedStatus(status)}
 							isActive={status === selectedStatus}
 						>

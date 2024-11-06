@@ -2,6 +2,7 @@ package models
 
 import (
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"fmt"
 	"log"
 	"time"
@@ -19,7 +20,7 @@ type Bill struct {
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
 	PaidAt     *time.Time
 	SentAt     *time.Time
-	Status     string
+	Status     enums.BillStatus
 	CreatedBy  string `gorm:"<-:create"`
 	CompanyID  string `gorm:"<-:create"`
 	CustomerID *string
@@ -70,7 +71,7 @@ func (Bill) FromDTO(b dtos.Bill) Bill {
 		lines = append(lines, BillLine{}.FromDTO(x))
 	}
 
-	status := "DRAFT"
+	status := enums.BillStatusDraft
 
 	if b.Status != nil {
 		status = *b.Status
@@ -112,7 +113,7 @@ func (b Bill) FromQuote(q Quote) Bill {
 	return Bill{
 		Title:      q.Title,
 		Tva:        q.Tva,
-		Status:     "DRAFT",
+		Status:     enums.BillStatusDraft,
 		CustomerID: q.CustomerID,
 		Lines:      lines,
 	}

@@ -1,5 +1,5 @@
 import { Button } from "@coco-ui/core";
-import Supplier from "@/models/Supplier";
+import type Supplier from "@/models/Supplier";
 import SupplierModalForm from "./modals/SupplierModalForm";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
@@ -13,7 +13,7 @@ const List = ({ data, reloadData }: ListProps) => {
 	const { scopedT } = useI18n();
 	const pageT = scopedT("suppliers.list");
 	return (
-		<div className="flex flex-col gap-4">
+		<div className="flex flex-col gap-2">
 			{data.map((supplier) => (
 				<div
 					key={supplier.id}

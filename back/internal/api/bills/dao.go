@@ -84,25 +84,26 @@ func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill mod
 		panic(err)
 	}
 	if changes.Status != nil {
-		if enums.BillStatus(*changes.Status).IsGreaterThanOrEqualSent() {
+		if *changes.Status == enums.BillStatusDraft {
+			tx.Model(&bill).Updates(map[string]interface{}{
+				"sent_at": gorm.Expr("NULL"),
+				"paid_at": gorm.Expr("NULL"),
+			})
+		} else {
 			if bill.SentAt == nil {
 				now := time.Now()
 				changes.SentAt = &now
 			}
-		} else {
-			tx.Model(&bill).Updates(map[string]interface{}{
-				"sent_at": gorm.Expr("NULL"),
-			})
-		}
-		if enums.BillStatus(*changes.Status).IsPaid() {
-			if bill.PaidAt == nil {
-				now := time.Now()
-				changes.PaidAt = &now
+			if *changes.Status == enums.BillStatusSent && bill.PaidAt != nil {
+				tx.Model(&bill).Updates(map[string]interface{}{
+					"paid_at": gorm.Expr("NULL"),
+				})
+			} else {
+				if *changes.Status == enums.BillStatusArchived && bill.PaidAt == nil {
+					now := time.Now()
+					changes.PaidAt = &now
+				}
 			}
-		} else {
-			tx.Model(&bill).Updates(map[string]interface{}{
-				"paid_at": gorm.Expr("NULL"),
-			})
 		}
 	}
 	tx.Model(&bill).Updates(changes)
@@ -140,6 +141,45 @@ func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill mod
 	}).Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
 		err := tx.Error
+		tx.Rollback()
+		panic(err)
+	}
+	tx.Commit()
+	return
+}
+
+func (dao BillDao) Duplicate(id string, tenant string) (bill models.Bill) {
+	existingBill := models.Bill{}
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_bill_line.line asc")
+	}).Find(&existingBill, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
+		panic(err)
+	}
+	tx := database.DBConn.Begin()
+
+	// Reset fields
+	bill = existingBill
+	bill.ID = ""
+	bill.PaidAt = nil
+	bill.SentAt = nil
+	bill.Status = "DRAFT"
+	bill.CompanyID = existingBill.CompanyID
+	bill.CreatedBy = existingBill.CreatedBy
+	// End reset fields
+
+	tx.Model(&bill).Omit(clause.Associations).Create(&bill)
+	if tx.Error != nil {
+		tx.Rollback()
+		panic(tx.Error)
+	}
+	var lines []models.BillLine
+	for _, x := range bill.Lines {
+		x.BillID = bill.ID
+		newLine := models.BillLine{}.FromDTO(x.ToDTO())
+		lines = append(lines, newLine)
+	}
+	err := tx.Model(&bill).Association("Lines").Append(&lines)
+	if err != nil {
 		tx.Rollback()
 		panic(err)
 	}

@@ -1,7 +1,8 @@
 import { RRLink } from "@/components/RRLink";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
+import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import Bill from "@/models/Bill";
+import type Bill from "@/models/Bill";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
 import {
@@ -19,6 +20,7 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 	const { t, scopedT } = useI18n();
 	const pageT = scopedT("bills.details");
 	const formatCurrency = useFormatCurrency();
+	const { toISO9075 } = useFormatDate();
 	const { data: customer } = useCustomerQuery(bill?.customerId ?? "", {
 		enabled: !!bill?.customerId,
 	});
@@ -60,6 +62,24 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 					<dl>
 						<dt className="font-bold">{pageT("sections.information.vat")}</dt>
 						<dd>{bill.tva}&nbsp;%</dd>
+					</dl>
+					<dl>
+						<dt className="font-bold">
+							{pageT("sections.information.creationDate")}
+						</dt>
+						<dd>{toISO9075(bill.createdAt)}</dd>
+					</dl>
+					<dl>
+						<dt className="font-bold">
+							{pageT("sections.information.sentAt")}
+						</dt>
+						<dd>{bill.sentAt ? toISO9075(bill.sentAt) : "-"}</dd>
+					</dl>
+					<dl>
+						<dt className="font-bold">
+							{pageT("sections.information.paidAt")}
+						</dt>
+						<dd>{bill.paidAt ? toISO9075(bill.paidAt) : "-"}</dd>
 					</dl>
 				</div>
 				<div className="grid md:grid-cols-4 gap-4">

@@ -12,4 +12,8 @@ export const PdfApi = {
 		HttpClient.GET(`${PDF_URL}/bill/${billId}`)
 			.then((res: Request) => res.blob())
 			.then((blob: Blob) => blob),
+	getMultipleBillPdf: async (billIds: string[]): Promise<Blob> =>
+		HttpClient.POST(`${PDF_URL}/multiple/bill`, { billIds })
+			.then((res: Request) => res.blob())
+			.then((blob: Blob) => blob),
 };

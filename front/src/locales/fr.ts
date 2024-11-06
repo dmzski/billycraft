@@ -346,6 +346,12 @@ export default {
 	"bills.form.title.new": "Nouvelle facture",
 	"bills.form.title.edit": "Modification de facture",
 	"bills.form.downloadPdfButton": "Télécharger le PDF",
+
+	// Duplicate
+	"bills.form.duplicateButton": "Dupliquer",
+	"bills.form.duplicateSuccess": "Facture dupliquée",
+	"bills.form.duplicateError": "Erreur lors de la duplication de la facture",
+
 	"bills.form.exitWarning":
 		"Attention ! Certaines modifications ne sont pas enregistrées",
 	"bills.form.fields.title.label": "Titre",
@@ -393,6 +399,9 @@ export default {
 	"bills.details.sections.information.totalProducts": "Total du matériel",
 	"bills.details.sections.information.totalServices": "Total des services",
 	"bills.details.sections.information.totalOthers": "Total autres",
+	"bills.details.sections.information.creationDate": "Date de création",
+	"bills.details.sections.information.sentAt": "Date d'envoi",
+	"bills.details.sections.information.paidAt": "Date de paiement",
 	"bills.details.sections.content.title": "Contenu de la facture",
 	"bills.details.sections.content.name": "Titre",
 	"bills.details.sections.content.headers.name": "Désignation",
@@ -881,4 +890,14 @@ export default {
 	"products.modals.multiDelete.submit": "Supprimer",
 	"products.modals.multiDelete.submit.success":
 		"Produits supprimés avec succès",
+
+	// Bills > Modals > MultidownloadPdf
+	"bills.modals.multiDownloadPdf.title": "Télécharger les PDFs",
+	"bills.modals.multiDownloadPdf.description":
+		"Cette action vous permet de récupérer plusieurs factures au format PDF dans un fichier ZIP.",
+	"bills.modals.multiDownloadPdf.submit": "Télécharger",
+	"bills.modals.multiDownloadPdf.submit.success":
+		"Téléchargement ZIP généré avec succès",
+	"bills.modals.multiDownloadPdf.submit.error":
+		"Une erreur est survenue durant la génération du ZIP",
 } as const;

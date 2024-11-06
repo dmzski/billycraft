@@ -1,9 +1,9 @@
 import { BillApi } from "@/api/BillApi";
 import { useI18n } from "@/i18n";
-import Bill, { BillStatus } from "@/models/Bill";
+import type Bill from "@/models/Bill";
+import type { BillStatus } from "@/models/Bill";
 import { Button, useToast } from "@coco-ui/core";
 import {
-	CheckIcon,
 	EnvelopeIcon,
 	InboxArrowDownIcon,
 	XMarkIcon,
@@ -61,25 +61,14 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 					</Button>
 					<Button
 						disabled={isSubmitting}
+						className="gap-4 md:col-start-2"
 						type="button"
-						onClick={updateBillStatus("TO_DECLARE")}
+						onClick={updateBillStatus("ARCHIVED")}
 					>
-						<CheckIcon />
-						{t("bills.form.actions.toDeclare")}
+						<InboxArrowDownIcon />
+						{t("bills.form.actions.archive")}
 					</Button>
 				</>
-			) : null}
-			{bill.status === "TO_DECLARE" ? (
-				<Button
-					disabled={isSubmitting}
-					className="gap-4 md:col-start-2"
-					type="button"
-					onClick={updateBillStatus("ARCHIVED")}
-					variant="destructive"
-				>
-					<InboxArrowDownIcon />
-					{t("bills.form.actions.archive")}
-				</Button>
 			) : null}
 		</section>
 	);

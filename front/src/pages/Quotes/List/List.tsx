@@ -1,8 +1,8 @@
 import useCustomers from "@/hooks/useCustomers";
-import Quote from "@/models/Quote";
+import type Quote from "@/models/Quote";
 import QuoteTableLine from "./Row";
 import { useI18n } from "@/i18n";
-import { QuoteRouteQueryParams } from "@/routes";
+import type { QuoteRouteQueryParams } from "@/routes";
 
 type QuoteListProps = {
 	data: Quote[];

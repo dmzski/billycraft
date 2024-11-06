@@ -85,7 +85,7 @@ func generateBillPDF(bill models.Bill) *os.File {
 	var FOLDER = BILLS_FOLDER
 
 	date := time.Now()
-	if bill.SentAt != nil && bill.Status != "DRAFT" {
+	if bill.SentAt != nil {
 		date = *bill.SentAt
 	}
 	company := company.DAO.FindOneById(bill.CompanyID)
@@ -95,7 +95,6 @@ func generateBillPDF(bill models.Bill) *os.File {
 		customer = customers.DAO.FindOneByIdAndTenant(*bill.CustomerID, bill.CompanyID)
 	}
 
-	// Put the Logo
 	logoSrc := ""
 	if company.Logo != nil {
 		logoSrc = *company.Logo

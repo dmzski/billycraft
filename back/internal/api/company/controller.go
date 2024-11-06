@@ -20,7 +20,7 @@ func InitRoutes(group fiber.Router) {
 	router.Patch("/mine", auth.RoleRequired(enums.RoleEnumOwner), updateMine)
 	router.Post("/", create)
 	router.Post("/upload-logo", auth.RoleRequired(enums.RoleEnumOwner), uploadLogo)
-  router.Get("/:id/logo", getLogo)
+	router.Get("/:id/logo", getLogo)
 }
 
 func findMine(c *fiber.Ctx) error {

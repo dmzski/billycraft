@@ -1,4 +1,4 @@
-import Customer from "@/models/Customer";
+import type Customer from "@/models/Customer";
 import { useI18n } from "@/i18n";
 import { ListRow } from "./ListRow";
 
@@ -19,7 +19,7 @@ export const List = ({ data = [] }: { data: Customer[] }) => {
 				</div>
 				<div className="md:col-span-2">{t("customers.list.headers.email")}</div>
 			</div>
-			<div>
+			<div className="flex flex-col gap-2">
 				{data.map((customer) => (
 					<ListRow customer={customer} key={customer.id} />
 				))}

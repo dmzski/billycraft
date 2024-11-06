@@ -29,7 +29,7 @@ export const UsersList = ({ users, reload }: UsersListProps) => {
 				<tbody>
 					{users.map(({ email, lastName, firstName, role }) => (
 						<tr
-              key={email}
+							key={email}
 							className={clsx(
 								"px-4 py-2 gap-3 grid md:grid-cols-12 border-b items-center md:h-16",
 							)}

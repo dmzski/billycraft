@@ -1,13 +1,17 @@
 import { useI18n } from "@/i18n";
 import { useBillByIdQuery } from "@/queries/useBillByIdQuery";
-import { BillRouteProps, BillOverviewRouteQueryParams, ROUTES } from "@/routes";
+import {
+	type BillRouteProps,
+	type BillOverviewRouteQueryParams,
+	ROUTES,
+} from "@/routes";
 import { Alert, Button, Loader, useToast } from "@coco-ui/core";
 import {
 	ChevronLeftIcon,
 	DocumentArrowDownIcon,
 	PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
 import { PdfApi } from "@/api/PdfApi";
 import { useReducer } from "react";
@@ -16,14 +20,21 @@ import { RRLink } from "@/components/RRLink";
 import { BillLabel } from "@/components/labels/BillLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
+import { BillApi } from "@/api/BillApi";
+import { sendErrorToSentry } from "@/utils/errors";
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n();
 	const toast = useToast();
 	const { id } = useParams<BillRouteProps>();
+	const { push } = useHistory();
 	const { fromTab } = useQueryParams<BillOverviewRouteQueryParams>();
 	const { data: bill, isLoading, reload } = useBillByIdQuery(id);
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
+		(state) => !state,
+		false,
+	);
+	const [isDuplicating, toggleIsDuplicating] = useReducer(
 		(state) => !state,
 		false,
 	);
@@ -46,6 +57,22 @@ export const Overview = () => {
 		} catch {
 			toast.destructive(t("bills.form.pdfError"));
 			toggleIsDownloadingPDF();
+		}
+	};
+
+	const duplicate = async () => {
+		if (bill?.id && !isDuplicating) {
+			toggleIsDuplicating();
+			try {
+				const newBill = await BillApi.duplicate({ id: bill.id });
+				toast.show(t("bills.form.duplicateSuccess"));
+				push(ROUTES.BILL_OVERVIEW.path({ id: newBill.id }));
+			} catch (error) {
+				sendErrorToSentry(error);
+				toast.destructive(t("bills.form.duplicateError"));
+			} finally {
+				toggleIsDuplicating();
+			}
 		}
 	};
 
@@ -83,6 +110,16 @@ export const Overview = () => {
 						<DocumentArrowDownIcon />
 						{t("bills.form.downloadPdfButton")}
 					</Button>
+					{bill.status !== "DRAFT" ? (
+						<Button
+							disabled={isDuplicating}
+							onClick={duplicate}
+							variant="outline"
+						>
+							<DocumentArrowDownIcon />
+							{t("bills.form.duplicateButton")}
+						</Button>
+					) : null}
 					{bill.status === "DRAFT" ? (
 						<Button asChild>
 							<Link to={ROUTES.BILL_EDIT.path({ id: bill.id })}>

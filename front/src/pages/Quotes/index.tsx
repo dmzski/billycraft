@@ -62,7 +62,7 @@ const QuotePage = () => {
 					</Tabs.Tab>
 					{QUOTE_STATUS.map((status) => (
 						<Tabs.Tab
-              key={status}
+							key={status}
 							onClick={() => setSelectedStatus(status)}
 							isActive={status === selectedStatus}
 						>

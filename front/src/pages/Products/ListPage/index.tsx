@@ -43,7 +43,11 @@ const ProductsPage = () => {
 							{t("all")}
 						</Tabs.Tab>
 						{PRODUCT_TYPES.map((type) => (
-							<Tabs.Tab key={type} isActive={tab === type} onClick={() => setTab(type)}>
+							<Tabs.Tab
+								key={type}
+								isActive={tab === type}
+								onClick={() => setTab(type)}
+							>
 								{t(`products.type.${type}.label`)}
 							</Tabs.Tab>
 						))}

@@ -16,6 +16,7 @@ func InitRoutes(api fiber.Router) {
 	router.Get("/", findAll)
 	router.Get("/:id", findById)
 	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
+	router.Post("/:id/duplicate", auth.RoleRequired(enums.RoleEnumEditor), duplicate)
 	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
 }
 
@@ -79,6 +80,20 @@ func create(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(DAO.Create(user, newBill).ToDTO())
+}
+
+func duplicate(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	if id := c.Params("id", ""); id != "" {
+		existingBill := DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		println(existingBill.Status)
+		if existingBill.Status.IsDuplicable() {
+			return c.JSON(DAO.Duplicate(id, *user.CompanyID).ToDTO())
+		} else {
+			return fiber.NewError(400, "Bill is not duplicable it must be REFUSED or ARCHIVED")
+		}
+	}
+	return fiber.NewError(400, "No id provided")
 }
 
 func makeArrayResponse(c *fiber.Ctx, array []models.Bill) error {

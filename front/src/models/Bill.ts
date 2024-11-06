@@ -1,4 +1,4 @@
-import { ProductType } from "./LineTypeEnum";
+import type { ProductType } from "./LineTypeEnum";
 
 export type BillStatus =
 	| "DRAFT"
@@ -7,6 +7,7 @@ export type BillStatus =
 	| "REFUSED"
 	| "TO_DECLARE"
 	| "ARCHIVED";
+
 export const BILL_STATUS: BillStatus[] = [
 	"DRAFT",
 	"SENT",
@@ -35,6 +36,7 @@ type Bill = {
 	createdAt: string;
 	updatedAt: string;
 	sentAt?: string;
+	paidAt?: string;
 	status: BillStatus;
 	createdBy: string;
 	companyId: string;

@@ -1,10 +1,17 @@
-import { Button, Collapsible, Dropdown, useToast } from "@coco-ui/core";
+import {
+	Button,
+	Checkbox,
+	Collapsible,
+	Dropdown,
+	useToast,
+} from "@coco-ui/core";
 import { BillApi } from "@/api/BillApi";
 import { formatISO9075, parseJSON } from "date-fns";
-import Bill, { BillStatus } from "@/models/Bill";
-import Customer from "@/models/Customer";
-import { useMemo, MouseEvent, useReducer } from "react";
-import { BillOverviewRouteQueryParams, ROUTES } from "@/routes";
+import type Bill from "@/models/Bill";
+import type { BillStatus } from "@/models/Bill";
+import type Customer from "@/models/Customer";
+import { useMemo, type MouseEvent, useReducer } from "react";
+import { type BillOverviewRouteQueryParams, ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
 import { BillLabel } from "@/components/labels/BillLabel";
 import { RowContent } from "./RowContent";
@@ -15,11 +22,15 @@ type BillTableLineProps = {
 	bill: Bill;
 	customer?: Customer;
 	selectedStatus: BillOverviewRouteQueryParams["fromTab"];
+	checked: boolean;
+	onCheckedChange: (newState: boolean) => void;
 };
 const BillTableLine = ({
 	bill,
 	customer,
 	selectedStatus,
+	checked,
+	onCheckedChange,
 }: BillTableLineProps) => {
 	const [open, toggleOpen] = useReducer((state) => !state, false);
 	const { reload } = useAllBillsQuery({ enabled: false });
@@ -43,27 +54,34 @@ const BillTableLine = ({
 	const nextStatuses: BillStatus[] = useMemo(() => {
 		switch (bill.status) {
 			case "SENT":
-				return ["REFUSED", "TO_DECLARE", "ARCHIVED"];
+				return ["REFUSED", "ARCHIVED"];
 			case "TO_DECLARE":
 				return ["ARCHIVED"];
 			case "ARCHIVED":
 			case "REFUSED":
 				return [];
 			default:
-				return ["SENT", "ARCHIVED"];
+				return ["SENT"];
 		}
-	}, [bill]);
+	}, [bill.status]);
 
 	return (
 		<div className="border rounded-md">
 			<Collapsible
 				open={open}
 				disclosure={
-					<div className="grid md:grid-cols-4 items-center md:h-16 p-2 gap-4">
+					<div className="grid md:grid-cols-4 items-center md:h-16 px-4 py-2 gap-4">
 						<div className="flex items-center gap-4">
-							<Button onClick={toggleOpen} size="icon" variant="ghost">
-								{open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-							</Button>
+							<div className="flex flex-col items-center md:flex-row gap-2">
+								<Checkbox
+									name={bill.name}
+									checked={checked}
+									onCheckedChange={onCheckedChange}
+								/>
+								<Button onClick={toggleOpen} size="icon" variant="ghost">
+									{open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+								</Button>
+							</div>
 							<BillLabel
 								bill={bill}
 								to={ROUTES.BILL_OVERVIEW.path(

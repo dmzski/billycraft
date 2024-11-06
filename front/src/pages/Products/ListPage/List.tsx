@@ -1,6 +1,6 @@
 import { BottomActionBar } from "@/components/BottomActionBar";
 import ProductTableLine from "./Row";
-import Product from "@/models/Product";
+import type Product from "@/models/Product";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { useEffect, useRef, useState } from "react";
@@ -33,11 +33,13 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
 			: undefined;
 
 	useEffect(() => {
-		setSelected([]);
+		if (products) {
+			setSelected([]);
+		}
 	}, [products]);
 
 	return (
-		<div ref={divRef} className="relative flex flex-col gap-8">
+		<div ref={divRef} className="relative flex flex-col gap-2">
 			{products?.length > 0 ? (
 				<div className="flex px-4">
 					<Checkbox

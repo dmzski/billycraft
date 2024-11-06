@@ -55,8 +55,10 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 		if (!label) {
 			return (
 				<button
+					type="button"
 					aria-label={ariaLabel}
 					aria-labelledby={ariaLabelledBy}
+					// biome-ignore lint/a11y/useSemanticElements: <explanation>
 					role="checkbox"
 					data-state={checked ? "checked" : "uncheck"}
 					aria-checked={checked}
@@ -92,8 +94,10 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 			<div className={clsx("flex items-center gap-2", className)}>
 				{labelPosition === "left" ? <Label htmlFor={id}>{label}</Label> : null}
 				<button
+					type="button"
 					aria-label={ariaLabel}
 					aria-labelledby={ariaLabelledBy}
+					// biome-ignore lint/a11y/useSemanticElements: <explanation>
 					role="checkbox"
 					disabled={disabled}
 					name={name}
