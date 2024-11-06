@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.50.1
+
+### Patch Changes
+
+- 4e73bbd: chore: truncate organization name on sidebar
+
 ## 2.50.0
 
 ### Minor Changes

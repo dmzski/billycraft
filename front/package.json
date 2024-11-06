@@ -1,6 +1,6 @@
 {
 	"name": "@coco-erp/front",
-	"version": "2.50.0",
+	"version": "2.50.1",
 	"private": true,
 	"dependencies": {
 		"@coco-ui/core": "workspace:*",
