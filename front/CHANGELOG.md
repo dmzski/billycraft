@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.50.0
+
+### Minor Changes
+
+- fa55dc0: Integrate massive pdf export, duplicate bill and more secure bill status update
+
 ## 2.49.0
 
 ### Minor Changes

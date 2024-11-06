@@ -1,5 +1,11 @@
 # back
 
+## 1.30.0
+
+### Minor Changes
+
+- fa55dc0: Integrate massive pdf export, duplicate bill and more secure bill status update
+
 ## 1.29.0
 
 ### Minor Changes
