@@ -8,6 +8,7 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/responses"
 	"fmt"
 	"os"
 
@@ -86,7 +87,7 @@ func uploadLogo(c *fiber.Ctx) error {
 func getLogo(c *fiber.Ctx) error {
 	companyId := c.Params("id")
 	if companyId == "" {
-		return c.Status(400).JSON(&dtos.Error{
+		return c.Status(400).JSON(&responses.ErrorResponse{
 			Code:    400,
 			Message: "No id specified",
 		})

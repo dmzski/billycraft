@@ -2,9 +2,10 @@ package todos
 
 import (
 	"back/internal/lib/auth"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 	"fmt"
 	"time"
 
@@ -33,7 +34,7 @@ func findAll(c *fiber.Ctx) error {
 	if doneAfter != "" {
 		doneAfterDate, err := time.Parse(time.RFC3339, doneAfter)
 		if err != nil {
-			return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+			return c.Status(fiber.ErrBadRequest.Code).JSON(&responses.ErrorResponse{
 				Code:    fiber.ErrBadRequest.Code,
 				Message: "Can't parse date",
 			})
@@ -49,19 +50,19 @@ func findById(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
+		return c.JSON(responses.CreateTodoResponse(DAO.FindOneByIdAndTenant(id, *user.CompanyID)))
 	}
 }
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newTodo := dtos.TodoRequest{}
+	newTodo := requests.TodoRequest{}
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
 		if err := c.BodyParser(&newTodo); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 		}
-		return c.JSON(DAO.Update(id, *user.CompanyID, newTodo).ToDTO())
+		return c.JSON(responses.CreateTodoResponse(DAO.Update(id, *user.CompanyID, newTodo)))
 	}
 }
 
@@ -76,12 +77,12 @@ func delete(c *fiber.Ctx) error {
 }
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newTodo := dtos.TodoRequest{}
+	newTodo := requests.TodoRequest{}
 	if err := c.BodyParser(&newTodo); err != nil {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
 
-	return c.JSON(DAO.Create(user, newTodo).ToDTO())
+	return c.JSON(responses.CreateTodoResponse(DAO.Create(user, newTodo)))
 }
 
 func done(c *fiber.Ctx) error {
@@ -89,7 +90,7 @@ func done(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		return c.JSON(DAO.Done(id, user).ToDTO())
+		return c.JSON(responses.CreateTodoResponse(DAO.Done(id, user)))
 	}
 }
 
@@ -98,15 +99,15 @@ func undo(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		return c.JSON(DAO.Undo(id, user).ToDTO())
+		return c.JSON(responses.CreateTodoResponse(DAO.Undo(id, user)))
 	}
 }
 
 func makeArrayResponse(c *fiber.Ctx, array []models.Todo) error {
-	var res []dtos.TodoResponse
-	for _, x := range array {
-		newDto := x.ToDTO()
-		res = append(res, newDto)
+	var res []responses.TodoResponse
+	for _, todo := range array {
+		newResponse := responses.CreateTodoResponse(todo)
+		res = append(res, newResponse)
 	}
 
 	if len(res) == 0 {

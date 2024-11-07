@@ -1,6 +1,6 @@
-package dtos
+package responses
 
-type Error struct {
+type ErrorResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }

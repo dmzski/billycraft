@@ -2,9 +2,9 @@ package quotes
 
 import (
 	"back/internal/lib/auth"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"back/internal/lib/responses"
 	"encoding/json"
 	"fmt"
@@ -19,6 +19,7 @@ func InitRoutes(api fiber.Router) {
 	router.Post("/", auth.RoleRequired(enums.RoleEnumEditor), create)
 	router.Post("/:id/bill", auth.RoleRequired(enums.RoleEnumEditor), createBill)
 	router.Patch("/:id", auth.RoleRequired(enums.RoleEnumEditor), update)
+	router.Post("/:id/duplicate", auth.RoleRequired(enums.RoleEnumEditor), duplicate)
 }
 
 func findAll(c *fiber.Ctx) error {
@@ -30,17 +31,17 @@ func findAll(c *fiber.Ctx) error {
 		if err := json.Unmarshal([]byte(status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
 		}
-		return makeArrayResponse(c, DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr))
+		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr)).Quotes)
 	}
 	if not_status != "" {
 		var arr []string
 		if err := json.Unmarshal([]byte(not_status), &arr); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
 		}
-		return makeArrayResponse(c, DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr))
+		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr)).Quotes)
 	}
 
-	return makeArrayResponse(c, DAO.FindAllByTenant(*user.CompanyID))
+	return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenant(*user.CompanyID)).Quotes)
 }
 
 func findById(c *fiber.Ctx) error {
@@ -54,7 +55,7 @@ func findById(c *fiber.Ctx) error {
 
 func update(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newQuote := dtos.Quote{}
+	newQuote := requests.UpdateQuoteRequest{}
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
@@ -67,7 +68,7 @@ func update(c *fiber.Ctx) error {
 
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	newQuote := dtos.Quote{}
+	newQuote := requests.CreateQuoteRequest{}
 	if err := c.BodyParser(&newQuote); err != nil {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
@@ -82,15 +83,17 @@ func createBill(c *fiber.Ctx) error {
 	} else {
 		return c.JSON(DAO.CreateBill(user, id).ToDTO())
 	}
-
 }
 
-func makeArrayResponse(c *fiber.Ctx, array []models.Quote) error {
-	res := make([]dtos.Quote, 0)
-	for _, x := range array {
-		newDto := x.ToDTO()
-		res = append(res, newDto)
+func duplicate(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	if id := c.Params("id", ""); id != "" {
+		existingQuote := DAO.FindOneByIdAndTenant(id, *user.CompanyID)
+		if existingQuote.Status.IsDuplicable() {
+			return c.JSON(responses.CreateQuoteResponse(DAO.Duplicate(id, *user.CompanyID)))
+		} else {
+			return fiber.NewError(400, "Quote is not duplicable it must be REFUSED or ARCHIVED")
+		}
 	}
-
-	return c.JSON(res)
+	return fiber.NewError(400, "No id provided")
 }

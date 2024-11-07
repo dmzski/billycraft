@@ -1,7 +1,6 @@
 package users
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
@@ -20,9 +19,7 @@ func InitRoutes(api fiber.Router) {
 
 func findMe(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	dto := new(responses.UserResponse)
-	dto.FromModel(user)
-	return c.JSON(dto)
+	return c.JSON(responses.CreateUserResponse(user))
 }
 
 func findAll(c *fiber.Ctx) error {
@@ -38,10 +35,10 @@ func findAll(c *fiber.Ctx) error {
 }
 
 func updateMe(c *fiber.Ctx) error {
-	newUser := dtos.User{}
+	newUser := requests.UserRequest{}
 	err := c.BodyParser(&newUser)
 	if err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&responses.ErrorResponse{
 			Code:    fiber.ErrBadRequest.Code,
 			Message: "Can't parse user",
 		})
@@ -50,10 +47,8 @@ func updateMe(c *fiber.Ctx) error {
 	user.FirstName = newUser.FirstName
 	user.LastName = newUser.LastName
 	DAO.SaveUser(user)
-	dto := new(responses.UserResponse)
-	dto.FromModel(user)
 
-	return c.JSON(user)
+	return c.JSON(responses.CreateUserResponse(user))
 }
 
 func removeUser(c *fiber.Ctx) error {
@@ -62,7 +57,7 @@ func removeUser(c *fiber.Ctx) error {
 	request := requests.RemoveUserRequest{}
 	err := c.BodyParser(&request)
 	if err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&responses.ErrorResponse{
 			Code:    fiber.ErrBadRequest.Code,
 			Message: "Can't parse request",
 		})
@@ -80,9 +75,8 @@ func removeUser(c *fiber.Ctx) error {
 
 func makeArrayResponse(c *fiber.Ctx, array []models.User) error {
 	res := make([]responses.UserResponse, 0)
-	for _, x := range array {
-		newDto := responses.UserResponse{}
-		newDto.FromModel(x)
+	for _, user := range array {
+		newDto := responses.CreateUserResponse(user)
 		res = append(res, newDto)
 	}
 

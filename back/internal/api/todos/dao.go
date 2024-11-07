@@ -2,8 +2,8 @@ package todos
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 	"time"
 )
@@ -39,7 +39,7 @@ func (dao TodoDao) FindOneByIdAndTenant(id string, tenant string) (todo models.T
 	return
 }
 
-func (dao TodoDao) Update(id string, tenant string, changes dtos.TodoRequest) (todo models.Todo) {
+func (dao TodoDao) Update(id string, tenant string, changes requests.TodoRequest) (todo models.Todo) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&todo)
 	if tx.Error != nil {
@@ -56,7 +56,7 @@ func (dao TodoDao) Update(id string, tenant string, changes dtos.TodoRequest) (t
 	return
 }
 
-func (dao TodoDao) Create(creator models.User, newTodo dtos.TodoRequest) (todo models.Todo) {
+func (dao TodoDao) Create(creator models.User, newTodo requests.TodoRequest) (todo models.Todo) {
 	todo = models.Todo{
 		Description: newTodo.Description,
 		CompanyID:   *creator.CompanyID,

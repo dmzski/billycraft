@@ -2,9 +2,9 @@ package quotes
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"time"
 
 	"gorm.io/gorm"
@@ -66,7 +66,7 @@ func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant string) (quote models
 	return
 }
 
-func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote models.Quote) {
+func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuoteRequest) (quote models.Quote) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
 	if tx.Error != nil {
@@ -75,7 +75,9 @@ func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote 
 	if changes.Status != enums.QuoteStatusDraft {
 		if quote.SentAt == nil {
 			now := time.Now()
-			changes.SentAt = &now
+			tx.Model(&quote).Updates(map[string]interface{}{
+				"sent_at": &now,
+			})
 		}
 	} else {
 		if quote.SentAt != nil {
@@ -94,8 +96,8 @@ func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote 
 	if changes.Lines != nil {
 		var lines []models.QuoteLine
 		for _, x := range changes.Lines {
-			x.QuoteID = quote.ID
-			newLine := models.QuoteLine{}.FromDTO(x)
+			newLine := requests.MarshalQuoteLineRequest(x)
+      newLine.QuoteID = quote.ID
 			lines = append(lines, newLine)
 		}
 		tx.Where("quote_id = ?", quote.ID).Delete(models.QuoteLine{})
@@ -114,9 +116,47 @@ func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote 
 	return
 }
 
-func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote models.Quote) {
+func (dao QuoteDao) Duplicate(id string, tenant string) (quote models.Quote) {
+	existingQuote := models.Quote{}
+	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
+		return db.Order("com_quote_line.line asc")
+	}).Find(&existingQuote, "company_id = ? AND id = ?", tenant, id).Error; err != nil {
+		panic(err)
+	}
 	tx := database.DBConn.Begin()
-	quote = quote.FromDTO(newQuote)
+
+	// Reset fields
+	quote = existingQuote
+	quote.ID = ""
+	quote.SentAt = nil
+	quote.Status = "DRAFT"
+	quote.CompanyID = existingQuote.CompanyID
+	quote.CreatedBy = existingQuote.CreatedBy
+	// End reset fields
+
+	tx.Model(&quote).Omit(clause.Associations).Create(&quote)
+	if tx.Error != nil {
+		tx.Rollback()
+		panic(tx.Error)
+	}
+	var lines []models.QuoteLine
+	for _, x := range quote.Lines {
+		x.QuoteID = quote.ID
+		newLine := models.QuoteLine{}.FromDTO(x.ToDTO())
+		lines = append(lines, newLine)
+	}
+	err := tx.Model(&quote).Association("Lines").Append(&lines)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+	tx.Commit()
+	return
+}
+
+func (dao QuoteDao) Create(creator models.User, newQuote requests.CreateQuoteRequest) (quote models.Quote) {
+	tx := database.DBConn.Begin()
+	quote = requests.MarshalCreateQuoteRequest(newQuote)
 	quote.CompanyID = *creator.CompanyID
 	quote.CreatedBy = creator.Email
 	tx.Model(&quote).Omit(clause.Associations).Create(&quote)
@@ -126,8 +166,8 @@ func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote mode
 	}
 	var lines []models.QuoteLine
 	for _, x := range newQuote.Lines {
-		x.QuoteID = quote.ID
-		newLine := models.QuoteLine{}.FromDTO(x)
+    newLine := requests.MarshalQuoteLineRequest(x)
+		newLine.QuoteID = quote.ID
 		lines = append(lines, newLine)
 	}
 	err := tx.Model(&quote).Association("Lines").Append(&lines)

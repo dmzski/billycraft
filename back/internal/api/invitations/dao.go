@@ -65,8 +65,7 @@ func (dao InvitationDao) FindAllMyInvitationsPending(email string) (invitations 
 
 func (dao InvitationDao) Create(organizationId string, dto requests.InvitationRequest) (invitation models.Invitation, err error) {
 	tx := database.DBConn.Begin()
-	invitation = models.Invitation{}
-	invitation.FromDTO(dto)
+	invitation = requests.MarshalInvitationRequest(dto)
 	invitation.CompanyID = organizationId
 
 	tx.Create(&invitation)

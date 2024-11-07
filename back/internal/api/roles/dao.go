@@ -2,8 +2,8 @@ package role
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 )
 
 type RoleDao struct {
@@ -26,11 +26,13 @@ func (dao RoleDao) FindOneByOrganizationAndUserNotAccepted(organizationId string
 	return
 }
 
-func (dao RoleDao) Create(organizationId string, dto dtos.RoleRequest) (newRole models.Role, err error) {
+func (dao RoleDao) Create(organizationId string, dto requests.RoleRequest) (newRole models.Role, err error) {
 	tx := database.DBConn.Begin()
-	newRole = models.Role{}
-	newRole.FromDTO(dto)
-	newRole.CompanyID = organizationId
+	newRole = models.Role{
+    Role: dto.Role,
+    Email: dto.Email,
+    CompanyID: organizationId,
+  }
 
 	tx.Create(&newRole)
 	if tx.Error != nil {
@@ -42,11 +44,13 @@ func (dao RoleDao) Create(organizationId string, dto dtos.RoleRequest) (newRole 
 	return
 }
 
-func (dao RoleDao) Update(organizationId string, dto dtos.RoleRequest) (newRole models.Role, err error) {
+func (dao RoleDao) Update(organizationId string, dto requests.RoleRequest) (newRole models.Role, err error) {
 	tx := database.DBConn.Begin()
-	newRole = models.Role{}
-	newRole.FromDTO(dto)
-	newRole.CompanyID = organizationId
+	newRole = models.Role{
+    CompanyID: organizationId,
+    Email: dto.Email,
+    Role: dto.Role,
+  }
 
 	tx.Model(&newRole).Updates(&newRole)
 	if tx.Error != nil {

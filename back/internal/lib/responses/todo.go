@@ -1,6 +1,9 @@
-package dtos
+package responses
 
-import "time"
+import (
+	"back/internal/lib/models"
+	"time"
+)
 
 type TodoResponse struct {
 	ID          string     `json:"id"`
@@ -13,6 +16,15 @@ type TodoResponse struct {
 	DoneBy      *string    `json:"doneBy"`
 }
 
-type TodoRequest struct {
-	Description string
+func CreateTodoResponse (t models.Todo) TodoResponse {
+	return TodoResponse{
+		ID:          t.ID,
+		Description: t.Description,
+		CompanyID:   t.CompanyID,
+		CreatedBy:   t.CreatedBy,
+		CreatedAt:   t.CreatedAt,
+		UpdatedAt:   t.UpdatedAt,
+		DoneBy:      t.DoneBy,
+		DoneAt:      t.DoneAt,
+	}
 }

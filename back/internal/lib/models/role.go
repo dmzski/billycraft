@@ -1,7 +1,6 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 )
 
@@ -15,14 +14,4 @@ func (Role) TableName() string {
 	return "com_role"
 }
 
-func (r Role) ToDTO() dtos.RoleResponse {
-	return dtos.RoleResponse{
-		Email: r.Email,
-		Role:  r.Role,
-	}
-}
 
-func (r *Role) FromDTO(dto dtos.RoleRequest) {
-	r.Role = dto.Role
-	r.Email = dto.Email
-}
