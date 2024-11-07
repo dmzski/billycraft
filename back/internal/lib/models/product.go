@@ -2,11 +2,12 @@ package models
 
 import (
 	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 )
 
 type Product struct {
 	ID          string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
-	Type        string
+	Type        enums.ProductType
 	Name        string
 	Description *string
 	Price       *float64

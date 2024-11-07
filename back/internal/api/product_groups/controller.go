@@ -2,10 +2,10 @@ package product_groups
 
 import (
 	"back/internal/lib/auth"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,9 +22,9 @@ func InitRoutes(api fiber.Router) {
 
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	var dtos []dtos.ProductGroup
-	for _, x := range DAO.FindAllByTenant(*user.CompanyID) {
-		newDto := x.ToDTO()
+	var dtos []responses.ProductGroupResponse
+	for _, productGroup := range DAO.FindAllByTenant(*user.CompanyID) {
+		newDto := responses.CreateProductGroupResponse(productGroup)
 		dtos = append(dtos, newDto)
 	}
 	if len(dtos) == 0 {
@@ -37,7 +37,7 @@ func findById(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
+		return c.JSON(responses.CreateProductGroupResponse(DAO.FindOneByIdAndTenant(id, *user.CompanyID)))
 	}
 }
 func update(c *fiber.Ctx) error {
@@ -49,7 +49,7 @@ func update(c *fiber.Ctx) error {
 		if err := c.BodyParser(&newProduct); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 		}
-		return c.JSON(DAO.Update(id, *user.CompanyID, newProduct).ToDTO())
+		return c.JSON(responses.CreateProductGroupResponse(DAO.Update(id, *user.CompanyID, newProduct)))
 	}
 }
 
@@ -69,5 +69,5 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
 
-	return c.JSON(DAO.Create(user, newProduct).ToDTO())
+	return c.JSON(responses.CreateProductGroupResponse(DAO.Create(user, newProduct)))
 }

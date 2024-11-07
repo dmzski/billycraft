@@ -1,7 +1,8 @@
-package dtos
+package responses
 
 import (
 	"back/internal/lib/enums"
+	"back/internal/lib/models"
 	"time"
 )
 
@@ -20,18 +21,11 @@ type MyInvitationResponse struct {
 	Role        enums.RoleEnum             `json:"role"`
 }
 
-type InvitationRequest struct {
-	Email string         `json:"email"`
-	Role  enums.RoleEnum `json:"role"`
-}
-
-type AcceptInvitationRequest struct {
-	CompanyID string `json:"companyId"`
-}
-
-type RefuseInvitationRequest struct {
-	CompanyID string `json:"companyId"`
-}
-type DeleteInvitationRequest struct {
-	Email string `json:"email"`
+func CreateInvitationResponse(i models.Invitation) InvitationResponse {
+	return InvitationResponse{
+		Role:      i.Role,
+		Email:     i.Email,
+		CreatedAt: i.CreatedAt,
+		Status:    i.Status,
+	}
 }

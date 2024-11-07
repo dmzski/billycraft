@@ -1,6 +1,9 @@
 package models
 
-import "back/internal/lib/dtos"
+import (
+	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
+)
 
 type QuoteLine struct {
 	QuoteID     string `gorm:"primaryKey"`
@@ -9,7 +12,7 @@ type QuoteLine struct {
 	Price       float64
 	Name        string
 	Description *string
-	Type        string
+	Type        enums.ProductType
 	ProductID   *string
 }
 

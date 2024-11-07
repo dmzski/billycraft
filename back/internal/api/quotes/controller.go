@@ -5,6 +5,7 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/responses"
 	"encoding/json"
 	"fmt"
 
@@ -47,7 +48,7 @@ func findById(c *fiber.Ctx) error {
 	if id := c.Params("id", ""); id == "" {
 		return fiber.NewError(400, "No id provided")
 	} else {
-		return c.JSON(DAO.FindOneByIdAndTenant(id, *user.CompanyID).ToDTO())
+		return c.JSON(responses.CreateQuoteResponse(DAO.FindOneByIdAndTenant(id, *user.CompanyID)))
 	}
 }
 
@@ -60,7 +61,7 @@ func update(c *fiber.Ctx) error {
 		if err := c.BodyParser(&newQuote); err != nil {
 			return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 		}
-		return c.JSON(DAO.Update(id, *user.CompanyID, newQuote).ToDTO())
+		return c.JSON(responses.CreateQuoteResponse(DAO.Update(id, *user.CompanyID, newQuote)))
 	}
 }
 
@@ -71,7 +72,7 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(400, fmt.Sprintln("Malformed body : ", err.Error()))
 	}
 
-	return c.JSON(DAO.Create(user, newQuote).ToDTO())
+	return c.JSON(responses.CreateQuoteResponse(DAO.Create(user, newQuote)))
 }
 
 func createBill(c *fiber.Ctx) error {

@@ -2,10 +2,10 @@ package invitations
 
 import (
 	"back/internal/lib/auth"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -45,7 +45,7 @@ func findAll(c *fiber.Ctx) error {
 func createInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	invitationRequest := dtos.InvitationRequest{}
+	invitationRequest := requests.InvitationRequest{}
 	err := c.BodyParser(&invitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -59,13 +59,13 @@ func createInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't add invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
 func acceptInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	acceptInvitationRequest := dtos.AcceptInvitationRequest{}
+	acceptInvitationRequest := requests.AcceptInvitationRequest{}
 	err := c.BodyParser(&acceptInvitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -75,13 +75,13 @@ func acceptInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't accept invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
 func refuseInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	acceptInvitationRequest := dtos.AcceptInvitationRequest{}
+	acceptInvitationRequest := requests.AcceptInvitationRequest{}
 	err := c.BodyParser(&acceptInvitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -91,7 +91,7 @@ func refuseInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't accept invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
 func deleteInvite(c *fiber.Ctx) error {
@@ -100,7 +100,7 @@ func deleteInvite(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnauthorized, "You can't do this")
 	}
 
-	deleteInvitationRequest := dtos.DeleteInvitationRequest{}
+	deleteInvitationRequest := requests.DeleteInvitationRequest{}
 	err := c.BodyParser(&deleteInvitationRequest)
 	if err != nil || deleteInvitationRequest.Email == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse request")
@@ -113,10 +113,10 @@ func deleteInvite(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).SendString("Invitation deleted")
 }
 
-func makeArrayResponse(array []models.Invitation) []dtos.InvitationResponse {
-	res := make([]dtos.InvitationResponse, 0)
-	for _, x := range array {
-		newDto := x.ToDTO()
+func makeArrayResponse(array []models.Invitation) []responses.InvitationResponse {
+	res := make([]responses.InvitationResponse, 0)
+	for _, anInvitation := range array {
+		newDto := responses.CreateInvitationResponse(anInvitation)
 		res = append(res, newDto)
 	}
 

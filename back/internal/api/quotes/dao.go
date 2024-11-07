@@ -5,7 +5,6 @@ import (
 	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
-	"log"
 	"time"
 
 	"gorm.io/gorm"
@@ -73,7 +72,7 @@ func (dao QuoteDao) Update(id string, tenant string, changes dtos.Quote) (quote 
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	if enums.QuoteStatus(changes.Status).IsGreaterThanOrEqualSent() {
+	if changes.Status != enums.QuoteStatusDraft {
 		if quote.SentAt == nil {
 			now := time.Now()
 			changes.SentAt = &now
@@ -125,7 +124,6 @@ func (dao QuoteDao) Create(creator models.User, newQuote dtos.Quote) (quote mode
 		tx.Rollback()
 		panic(tx.Error)
 	}
-	log.Println("quoteId", quote.ID)
 	var lines []models.QuoteLine
 	for _, x := range newQuote.Lines {
 		x.QuoteID = quote.ID

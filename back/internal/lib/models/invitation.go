@@ -1,8 +1,8 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
+	"back/internal/lib/requests"
 	"time"
 )
 
@@ -19,16 +19,7 @@ func (Invitation) TableName() string {
 	return "com_invitation"
 }
 
-func (i Invitation) ToDTO() dtos.InvitationResponse {
-	return dtos.InvitationResponse{
-		Role:      i.Role,
-		Email:     i.Email,
-		CreatedAt: i.CreatedAt,
-		Status:    i.Status,
-	}
-}
-
-func (i *Invitation) FromDTO(dto dtos.InvitationRequest) {
+func (i *Invitation) FromDTO(dto requests.InvitationRequest) {
 	i.Status = enums.InvitationStatusPending
 	i.CompanyID = ""
 	i.CreatedAt = time.Now()

@@ -85,7 +85,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	var TITLE = QUOTE_TITLE
 
 	date := time.Now()
-	if quote.SentAt != nil && quote.Status != "DRAFT" {
+	if quote.SentAt != nil {
 		date = *quote.SentAt
 	}
 	company := company.DAO.FindOneById(quote.CompanyID)
