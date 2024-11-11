@@ -135,4 +135,3 @@ func findForYear(c *fiber.Ctx) error {
 	}
 	return c.JSON(responses.CreateReportResponse(DAO.BuildForYear(*user.CompanyID, date)))
 }
-

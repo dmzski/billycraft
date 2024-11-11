@@ -132,4 +132,3 @@ func makeArrayResponse(c *fiber.Ctx, array []models.Customer) error {
 
 	return c.JSON(res)
 }
-

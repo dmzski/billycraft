@@ -131,4 +131,3 @@ func create(c *fiber.Ctx) error {
 
 	return c.JSON(responses.CreateQuoteCustomizationResponse(DAO.Create(*user.CompanyID, newQuoteCustomization)))
 }
-

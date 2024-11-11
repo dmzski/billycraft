@@ -179,4 +179,3 @@ func makeArrayResponse(array []models.Invitation) []responses.InvitationResponse
 
 	return res
 }
-

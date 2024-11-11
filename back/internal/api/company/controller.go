@@ -142,4 +142,3 @@ func getLogo(c *fiber.Ctx) error {
 
 	return c.SendFile(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", organizationId))
 }
-

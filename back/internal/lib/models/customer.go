@@ -16,9 +16,9 @@ type Customer struct {
 	Address     string
 	Email       string
 	CreatedAt   time.Time
-	UpdatedAt   *time.Time     `gorm:"autoUpdateTime"`
+	UpdatedAt   *time.Time      `gorm:"autoUpdateTime"`
 	DeletedAt   *gorm.DeletedAt `gorm:"index"`
-	CompanyID   string         `gorm:"<-:create"`
+	CompanyID   string          `gorm:"<-:create"`
 	Company     Organization
 }
 

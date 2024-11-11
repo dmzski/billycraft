@@ -118,4 +118,3 @@ func create(c *fiber.Ctx) error {
 
 	return c.JSON(responses.CreateSupplierResponse(DAO.Create(user, newSupplier)))
 }
-

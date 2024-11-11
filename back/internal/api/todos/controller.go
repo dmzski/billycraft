@@ -184,4 +184,3 @@ func makeArrayResponse(c *fiber.Ctx, array []models.Todo) error {
 
 	return c.JSON(res)
 }
-

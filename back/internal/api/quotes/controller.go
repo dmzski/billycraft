@@ -151,4 +151,3 @@ func duplicate(c *fiber.Ctx) error {
 	}
 	return fiber.NewError(400, "No id provided")
 }
-

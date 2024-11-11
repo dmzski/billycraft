@@ -142,4 +142,3 @@ func updateStocks(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).SendString("Stock updated")
 }
-

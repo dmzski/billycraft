@@ -190,4 +190,3 @@ func getOrGenerateQuotes(c *fiber.Ctx) error {
 
 	return c.Download(zip.Name())
 }
-
