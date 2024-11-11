@@ -18,7 +18,7 @@ import (
 
 type QuoteViewData struct {
 	Quote              models.Quote
-	Company            models.Company
+	Company            models.Organization
 	Title              string
 	QuoteCustomization models.QuoteCustomization
 	Customer           models.Customer

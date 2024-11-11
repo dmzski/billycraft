@@ -29,10 +29,10 @@ func (dao RoleDao) FindOneByOrganizationAndUserNotAccepted(organizationId string
 func (dao RoleDao) Create(organizationId string, dto requests.RoleRequest) (newRole models.Role, err error) {
 	tx := database.DBConn.Begin()
 	newRole = models.Role{
-    Role: dto.Role,
-    Email: dto.Email,
-    CompanyID: organizationId,
-  }
+		Role:      dto.Role,
+		Email:     dto.Email,
+		CompanyID: organizationId,
+	}
 
 	tx.Create(&newRole)
 	if tx.Error != nil {
@@ -47,10 +47,10 @@ func (dao RoleDao) Create(organizationId string, dto requests.RoleRequest) (newR
 func (dao RoleDao) Update(organizationId string, dto requests.RoleRequest) (newRole models.Role, err error) {
 	tx := database.DBConn.Begin()
 	newRole = models.Role{
-    CompanyID: organizationId,
-    Email: dto.Email,
-    Role: dto.Role,
-  }
+		CompanyID: organizationId,
+		Email:     dto.Email,
+		Role:      dto.Role,
+	}
 
 	tx.Model(&newRole).Updates(&newRole)
 	if tx.Error != nil {

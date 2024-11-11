@@ -15,13 +15,13 @@ type UserResponse struct {
 }
 
 func CreateUserResponse(u models.User) UserResponse {
-  r := UserResponse{
-    CompanyID: u.CompanyID,
-    Email: u.Email,
-    LastName: u.LastName,
-    FirstName: u.FirstName,
-    Role: enums.RoleEnumViewer,
-  }
+	r := UserResponse{
+		CompanyID: u.CompanyID,
+		Email:     u.Email,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Role:      enums.RoleEnumViewer,
+	}
 
 	roleIndex := slices.IndexFunc(u.Roles, func(aRole *models.Role) bool {
 		return aRole.CompanyID == *u.CompanyID
@@ -30,5 +30,5 @@ func CreateUserResponse(u models.User) UserResponse {
 		r.Role = u.Roles[roleIndex].Role
 	}
 
-  return r
+	return r
 }

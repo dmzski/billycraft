@@ -1,6 +1,9 @@
-package dtos
+package responses
 
-import "time"
+import (
+	"back/internal/lib/models"
+	"time"
+)
 
 type OutgoingResponse struct {
 	ID        string                 `json:"id"`
@@ -21,18 +24,28 @@ type OutgoingLineResponse struct {
 	VAT                   float32 `json:"vat"`
 }
 
-type OutgoingRequest struct {
-	Name      *string               `json:"name"`
-	StartDate *time.Time            `json:"startDate"`
-	EndDate   *time.Time            `json:"endDate"`
-	Lines     []OutgoingLineRequest `json:"lines"`
-}
+func CreateOutgoingResponse(o models.Outgoing) OutgoingResponse {
 
-type OutgoingLineRequest struct {
-	Line                  int     `json:"line"`
-	SupplierID            *string `json:"supplierId"`
-	SupplierBillReference *string `json:"supplierBillReference"`
-	BillID                *string `json:"billId"`
-	TotalHT               float64 `json:"totalHT"`
-	VAT                   float32 `json:"vat"`
+	dto := OutgoingResponse{
+		ID:        o.ID,
+		CreatedBy: o.CreatedBy,
+		CompanyID: o.CompanyID,
+		Name:      o.Name,
+		StartDate: o.StartDate,
+		EndDate:   o.EndDate,
+		Lines:     make([]OutgoingLineResponse, 0),
+	}
+
+	for _, line := range o.Lines {
+		dto.Lines = append(dto.Lines, OutgoingLineResponse{
+			SupplierID:            line.SupplierID,
+			SupplierBillReference: line.SupplierBillReference,
+			BillID:                line.BillID,
+			TotalHT:               line.TotalHT,
+			VAT:                   line.VAT,
+			Line:                  line.Line,
+		})
+	}
+
+	return dto
 }

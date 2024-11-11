@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// InitRoutes initializes the invitation-related routes
 func InitRoutes(group fiber.Router) {
 	router := group.Group("/invitations")
 	router.Post("/", auth.RoleRequired(enums.RoleEnumAdmin), createInvite)
@@ -20,6 +21,13 @@ func InitRoutes(group fiber.Router) {
 	router.Get("/", auth.RoleRequired(enums.RoleEnumAdmin), findAll)
 }
 
+// findAllMinePending retrieves all pending invitations for the current user
+// @Summary Retrieves all pending invitations for the user
+// @Tags Invitations
+// @Produce json
+// @Success 200 {array} models.Invitation "List of pending invitations"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations/mine/pending [get]
 func findAllMinePending(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
@@ -28,6 +36,14 @@ func findAllMinePending(c *fiber.Ctx) error {
 	return c.JSON(invitations)
 }
 
+// findAll retrieves all invitations for the current user's organization
+// @Summary Retrieves all invitations for the organization
+// @Tags Invitations
+// @Produce json
+// @Param filters query requests.InvitationFindAllParams false "Filters for invitations"
+// @Success 200 {array} responses.InvitationResponse "List of invitations"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations [get]
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	params := new(requests.InvitationFindAllParams)
@@ -42,6 +58,16 @@ func findAll(c *fiber.Ctx) error {
 	return c.JSON(makeArrayResponse(invitations))
 }
 
+// createInvite creates a new invitation for a user
+// @Summary Creates a new invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param invitation body requests.InvitationRequest true "Invitation data"
+// @Success 200 {object} responses.InvitationResponse "Created invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations [post]
 func createInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
@@ -62,6 +88,16 @@ func createInvite(c *fiber.Ctx) error {
 	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// acceptInvite allows a user to accept an invitation to join an organization
+// @Summary Accepts an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param acceptInvitationRequest body requests.AcceptInvitationRequest true "Accept invitation data"
+// @Success 200 {object} responses.InvitationResponse "Accepted invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations/accept [post]
 func acceptInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
@@ -78,6 +114,16 @@ func acceptInvite(c *fiber.Ctx) error {
 	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// refuseInvite allows a user to refuse an invitation
+// @Summary Refuses an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param acceptInvitationRequest body requests.AcceptInvitationRequest true "Refuse invitation data"
+// @Success 200 {object} responses.InvitationResponse "Refused invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations/refuse [post]
 func refuseInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
@@ -94,6 +140,16 @@ func refuseInvite(c *fiber.Ctx) error {
 	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// deleteInvite removes an invitation based on the provided email
+// @Summary Deletes an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce plain
+// @Param deleteInvitationRequest body requests.DeleteInvitationRequest true "Delete invitation data"
+// @Success 200 {string} string "Invitation deleted"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations [delete]
 func deleteInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	if user.CompanyID == nil {
@@ -113,6 +169,7 @@ func deleteInvite(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).SendString("Invitation deleted")
 }
 
+// makeArrayResponse formats an array of invitations into JSON
 func makeArrayResponse(array []models.Invitation) []responses.InvitationResponse {
 	res := make([]responses.InvitationResponse, 0)
 	for _, anInvitation := range array {
@@ -122,3 +179,4 @@ func makeArrayResponse(array []models.Invitation) []responses.InvitationResponse
 
 	return res
 }
+

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"fmt"
 	"log"
@@ -25,7 +24,7 @@ type Bill struct {
 	CompanyID  string `gorm:"<-:create"`
 	CustomerID *string
 	FileName   *string
-	Company    Company
+	Company    Organization
 	Customer   *Customer
 	Lines      []BillLine
 }
@@ -62,82 +61,4 @@ func (b *Bill) BeforeUpdate(tx *gorm.DB) (err error) {
 	}
 
 	return
-}
-
-func (Bill) FromDTO(b dtos.Bill) Bill {
-	lines := []BillLine{}
-	for _, x := range b.Lines {
-		x.BillID = ""
-		lines = append(lines, BillLine{}.FromDTO(x))
-	}
-
-	status := enums.BillStatusDraft
-
-	if b.Status != nil {
-		status = *b.Status
-	}
-
-	return Bill{
-		ID:         b.ID,
-		Name:       b.Name,
-		Title:      b.Title,
-		Tva:        b.Tva,
-		CreatedAt:  b.CreatedAt,
-		UpdatedAt:  b.UpdatedAt,
-		PaidAt:     b.PaidAt,
-		SentAt:     b.SentAt,
-		Status:     status,
-		CreatedBy:  b.CreatedBy,
-		CompanyID:  b.CompanyID,
-		CustomerID: b.CustomerID,
-		FileName:   b.FileName,
-		Lines:      lines,
-	}
-}
-
-func (b Bill) FromQuote(q Quote) Bill {
-	lines := []BillLine{}
-	for _, x := range q.Lines {
-		lines = append(lines, BillLine{
-			Bill:        b,
-			BillID:      b.ID,
-			Line:        x.Line,
-			Quantity:    x.Quantity,
-			Price:       x.Price,
-			Name:        x.Name,
-			Description: x.Description,
-			Type:        x.Type,
-			ProductID:   x.ProductID,
-		})
-	}
-	return Bill{
-		Title:      q.Title,
-		Tva:        q.Tva,
-		Status:     enums.BillStatusDraft,
-		CustomerID: q.CustomerID,
-		Lines:      lines,
-	}
-}
-
-func (bill Bill) ToDTO() dtos.Bill {
-	lines := []dtos.BillLine{}
-	for _, x := range bill.Lines {
-		lines = append(lines, x.ToDTO())
-	}
-	return dtos.Bill{
-		ID:         bill.ID,
-		Name:       bill.Name,
-		Title:      bill.Title,
-		Tva:        bill.Tva,
-		CreatedAt:  bill.CreatedAt,
-		UpdatedAt:  bill.UpdatedAt,
-		PaidAt:     bill.PaidAt,
-		SentAt:     bill.SentAt,
-		Status:     &bill.Status,
-		CreatedBy:  bill.CreatedBy,
-		CompanyID:  bill.CompanyID,
-		CustomerID: bill.CustomerID,
-		FileName:   bill.FileName,
-		Lines:      lines,
-	}
 }

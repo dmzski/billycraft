@@ -13,5 +13,3 @@ type Role struct {
 func (Role) TableName() string {
 	return "com_role"
 }
-
-

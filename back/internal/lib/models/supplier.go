@@ -11,7 +11,7 @@ type Supplier struct {
 	Vat       float32
 	CompanyID string `gorm:"<-:create"`
 	CreatedBy string `gorm:"foreignKey:Email;<-:create"`
-	DeletedAt gorm.DeletedAt
+	DeletedAt *gorm.DeletedAt
 }
 
 func (p Supplier) TableName() string {

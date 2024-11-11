@@ -18,7 +18,7 @@ import (
 
 type BillViewData struct {
 	Bill              models.Bill
-	Company           models.Company
+	Company           models.Organization
 	Title             string
 	BillCustomization models.BillCustomization
 	Customer          models.Customer

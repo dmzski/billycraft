@@ -2,8 +2,8 @@ package quoteCustomization
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -38,7 +38,7 @@ func (dao QuoteCustomizationDao) FindOneByIdAndTenant(id string, tenant string) 
 	return
 }
 
-func (dao QuoteCustomizationDao) Update(id string, tenant string, changes dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
+func (dao QuoteCustomizationDao) Update(id string, tenant string, changes requests.QuoteCustomizationRequest) (quoteCustomization models.QuoteCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quoteCustomization)
 	if tx.Error != nil {
@@ -53,8 +53,8 @@ func (dao QuoteCustomizationDao) Update(id string, tenant string, changes dtos.Q
 	return
 }
 
-func (dao QuoteCustomizationDao) Create(companyId string, newQuoteCustomization dtos.QuoteCustomization) (quoteCustomization models.QuoteCustomization) {
-	quoteCustomization = quoteCustomization.FromDTO(newQuoteCustomization)
+func (dao QuoteCustomizationDao) Create(companyId string, newQuoteCustomization requests.QuoteCustomizationRequest) (quoteCustomization models.QuoteCustomization) {
+	quoteCustomization = requests.MarshalQuoteCustomizationRequest(newQuoteCustomization)
 	quoteCustomization.CompanyID = companyId
 
 	if err := database.DBConn.Omit("Company").Create(&quoteCustomization).Error; err != nil {

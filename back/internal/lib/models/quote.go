@@ -9,6 +9,21 @@ import (
 	"gorm.io/gorm"
 )
 
+type QuoteLine struct {
+	QuoteID     string `gorm:"primaryKey"`
+	Line        int    `gorm:"primaryKey"`
+	Quantity    float64
+	Price       float64
+	Name        string
+	Description *string
+	Type        enums.ProductType
+	ProductID   *string
+}
+
+func (QuoteLine) TableName() string {
+	return "com_quote_line"
+}
+
 type Quote struct {
 	ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
 	Name       string `gorm:"<-:create"`
@@ -22,7 +37,7 @@ type Quote struct {
 	CompanyID  string `gorm:"<-:create"`
 	CustomerID *string
 	FileName   *string
-	Company    Company
+	Company    Organization
 	Customer   *Customer
 	Lines      []QuoteLine
 }

@@ -24,16 +24,16 @@ type CreateQuoteRequest struct {
 }
 
 type QuoteLineRequest struct {
-	Line        int     `json:"line"`
-	Quantity    float64 `json:"quantity"`
-	Price       float64 `json:"price"`
-	Name        string  `json:"name"`
-	Description *string `json:"description"`
-	Type        enums.ProductType  `json:"type"`
-	ProductID   *string `json:"productId"`
+	Line        int               `json:"line"`
+	Quantity    float64           `json:"quantity"`
+	Price       float64           `json:"price"`
+	Name        string            `json:"name"`
+	Description *string           `json:"description"`
+	Type        enums.ProductType `json:"type"`
+	ProductID   *string           `json:"productId"`
 }
 
-func MarshalCreateQuoteRequest (req CreateQuoteRequest) models.Quote {
+func MarshalCreateQuoteRequest(req CreateQuoteRequest) models.Quote {
 	lines := []models.QuoteLine{}
 	for _, x := range req.Lines {
 		lines = append(lines, MarshalQuoteLineRequest(x))
@@ -48,7 +48,7 @@ func MarshalCreateQuoteRequest (req CreateQuoteRequest) models.Quote {
 	}
 }
 
-func MarshalUpdateQuoteRequest (req CreateQuoteRequest) models.Quote {
+func MarshalUpdateQuoteRequest(req CreateQuoteRequest) models.Quote {
 	lines := []models.QuoteLine{}
 	for _, x := range req.Lines {
 		lines = append(lines, MarshalQuoteLineRequest(x))
@@ -63,7 +63,7 @@ func MarshalUpdateQuoteRequest (req CreateQuoteRequest) models.Quote {
 	}
 }
 
-func MarshalQuoteLineRequest (line QuoteLineRequest) models.QuoteLine {
+func MarshalQuoteLineRequest(line QuoteLineRequest) models.QuoteLine {
 	return models.QuoteLine{
 		Line:        line.Line,
 		Quantity:    line.Quantity,

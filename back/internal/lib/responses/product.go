@@ -1,8 +1,11 @@
-package dtos
+package responses
 
-import "back/internal/lib/enums"
+import (
+	"back/internal/lib/enums"
+	"back/internal/lib/models"
+)
 
-type Product struct {
+type ProductResponse struct {
 	ID          string            `json:"id"`
 	Type        enums.ProductType `json:"type"`
 	Name        string            `json:"name"`
@@ -16,4 +19,22 @@ type Product struct {
 	GroupID     *string           `json:"groupId"`
 	LowStock    *float64          `json:"lowStock"`
 	StockAlert  bool              `json:"stockAlert"`
+}
+
+func CreateProductResponse(p models.Product) ProductResponse {
+	return ProductResponse{
+		ID:          p.ID,
+		Type:        p.Type,
+		Name:        p.Name,
+		Description: p.Description,
+		Price:       p.Price,
+		Stock:       p.Stock,
+		Code:        p.Code,
+		CompanyID:   p.CompanyID,
+		CreatedBy:   p.CreatedBy,
+		SupplierID:  p.SupplierID,
+		GroupID:     p.GroupID,
+		LowStock:    p.LowStock,
+		StockAlert:  p.StockAlert,
+	}
 }

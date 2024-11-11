@@ -27,12 +27,12 @@ type DeleteInvitationRequest struct {
 }
 
 func MarshalInvitationRequest(req InvitationRequest) models.Invitation {
-  i := models.Invitation{}
+	i := models.Invitation{}
 	i.Status = enums.InvitationStatusPending
 	i.CompanyID = ""
 	i.CreatedAt = time.Now()
 	i.Email = req.Email
 	i.Role = req.Role
-  return i
+	return i
 
 }

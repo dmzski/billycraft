@@ -5,7 +5,7 @@ type User struct {
 	FirstName string
 	LastName  string
 	CompanyID *string
-	Company   *Company
+	Company   *Organization
 	Roles     []*Role `gorm:"foreignKey:Email;references:Email"`
 }
 

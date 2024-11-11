@@ -11,8 +11,8 @@ type RoleRequest struct {
 }
 
 func MarshalRoleRequest(dto RoleRequest) models.Role {
-  return models.Role{
-    Role: dto.Role,
-    Email: dto.Email,
-  }
+	return models.Role{
+		Role:  dto.Role,
+		Email: dto.Email,
+	}
 }

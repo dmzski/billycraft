@@ -5,7 +5,7 @@ import (
 	"back/database"
 	"back/internal/api"
 	cocoCron "back/internal/cron"
-	"back/internal/lib/dtos"
+	"back/internal/lib/responses"
 	"errors"
 	"log"
 	"os"
@@ -73,7 +73,7 @@ func main() {
 			}
 
 			// Send custom error page
-			err = ctx.Status(code).JSON(dtos.Error{Code: code, Message: err.Error()})
+			err = ctx.Status(code).JSON(responses.ErrorResponse{Code: code, Message: err.Error()})
 			if err != nil {
 				// In case the SendFile fails
 				return ctx.Status(500).SendString("Internal Server Error")

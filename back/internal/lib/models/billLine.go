@@ -1,7 +1,6 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 )
 
@@ -19,30 +18,4 @@ type BillLine struct {
 
 func (BillLine) TableName() string {
 	return "com_bill_line"
-}
-
-func (line BillLine) ToDTO() dtos.BillLine {
-	return dtos.BillLine{
-		BillID:      line.BillID,
-		Line:        line.Line,
-		Quantity:    line.Quantity,
-		Price:       line.Price,
-		Name:        line.Name,
-		Description: line.Description,
-		Type:        line.Type,
-		ProductID:   line.ProductID,
-	}
-}
-
-func (BillLine) FromDTO(line dtos.BillLine) BillLine {
-	return BillLine{
-		BillID:      line.BillID,
-		Line:        line.Line,
-		Quantity:    line.Quantity,
-		Price:       line.Price,
-		Name:        line.Name,
-		Description: line.Description,
-		Type:        line.Type,
-		ProductID:   line.ProductID,
-	}
 }

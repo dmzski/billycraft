@@ -8,7 +8,6 @@ type SupplierRequest struct {
 	Vat   float32 `json:"vat"`
 }
 
-
 func MarshalSupplierRequest(req SupplierRequest) models.Supplier {
 	return models.Supplier{
 		Name:  req.Name,

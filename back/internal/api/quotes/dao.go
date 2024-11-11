@@ -97,7 +97,7 @@ func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuot
 		var lines []models.QuoteLine
 		for _, x := range changes.Lines {
 			newLine := requests.MarshalQuoteLineRequest(x)
-      newLine.QuoteID = quote.ID
+			newLine.QuoteID = quote.ID
 			lines = append(lines, newLine)
 		}
 		tx.Where("quote_id = ?", quote.ID).Delete(models.QuoteLine{})
@@ -142,8 +142,7 @@ func (dao QuoteDao) Duplicate(id string, tenant string) (quote models.Quote) {
 	var lines []models.QuoteLine
 	for _, x := range quote.Lines {
 		x.QuoteID = quote.ID
-		newLine := models.QuoteLine{}.FromDTO(x.ToDTO())
-		lines = append(lines, newLine)
+		lines = append(lines, x)
 	}
 	err := tx.Model(&quote).Association("Lines").Append(&lines)
 	if err != nil {
@@ -166,7 +165,7 @@ func (dao QuoteDao) Create(creator models.User, newQuote requests.CreateQuoteReq
 	}
 	var lines []models.QuoteLine
 	for _, x := range newQuote.Lines {
-    newLine := requests.MarshalQuoteLineRequest(x)
+		newLine := requests.MarshalQuoteLineRequest(x)
 		newLine.QuoteID = quote.ID
 		lines = append(lines, newLine)
 	}
@@ -187,10 +186,27 @@ func (dao QuoteDao) CreateBill(creator models.User, id string) (bill models.Bill
 	}).Find(&quote, "company_id = ? AND id = ?", creator.CompanyID, id).Error; err != nil {
 		panic(err)
 	}
-	bill = bill.FromQuote(quote)
-	bill.CompanyID = *creator.CompanyID
-	bill.CreatedBy = creator.Email
-	bill.Status = "DRAFT"
+	lines := []models.BillLine{}
+	for _, x := range quote.Lines {
+		lines = append(lines, models.BillLine{
+			Line:        x.Line,
+			Quantity:    x.Quantity,
+			Price:       x.Price,
+			Name:        x.Name,
+			Description: x.Description,
+			Type:        x.Type,
+			ProductID:   x.ProductID,
+		})
+	}
+	bill = models.Bill{
+		Tva:        quote.Tva,
+		Title:      quote.Title,
+		Status:     enums.BillStatusDraft,
+		CompanyID:  *creator.CompanyID,
+		CreatedBy:  creator.Email,
+		CustomerID: quote.CustomerID,
+		Lines:      lines,
+	}
 
 	if err := tx.Omit("Company", "Custom").Create(&bill).Error; err != nil {
 		tx.Rollback()

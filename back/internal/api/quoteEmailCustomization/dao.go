@@ -2,8 +2,8 @@ package quoteEmailCustomization
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -31,7 +31,7 @@ func (dao QuoteEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant str
 	return
 }
 
-func (dao QuoteEmailCustomizationDao) Update(id string, tenant string, changes dtos.QuoteEmailCustomization) (quoteEmailCustomization models.QuoteEmailCustomization) {
+func (dao QuoteEmailCustomizationDao) Update(id string, tenant string, changes requests.QuoteEmailCustomizationRequest) (quoteEmailCustomization models.QuoteEmailCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? and id = ?", tenant, id).First(&quoteEmailCustomization)
 	if tx.Error != nil {
@@ -46,8 +46,8 @@ func (dao QuoteEmailCustomizationDao) Update(id string, tenant string, changes d
 	return
 }
 
-func (dao QuoteEmailCustomizationDao) Create(creator models.User, newQuoteEmailCustomization dtos.QuoteEmailCustomization) (quoteEmailCustomization models.QuoteEmailCustomization) {
-	quoteEmailCustomization = quoteEmailCustomization.FromDTO(newQuoteEmailCustomization)
+func (dao QuoteEmailCustomizationDao) Create(creator models.User, newQuoteEmailCustomization requests.QuoteEmailCustomizationRequest) (quoteEmailCustomization models.QuoteEmailCustomization) {
+	quoteEmailCustomization = requests.MarshalQuoteEmailCustomizationRequest(newQuoteEmailCustomization)
 	quoteEmailCustomization.CompanyID = *creator.CompanyID
 
 	if err := database.DBConn.Omit("Company").Create(&quoteEmailCustomization).Error; err != nil {

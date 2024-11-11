@@ -16,7 +16,7 @@ type TodoResponse struct {
 	DoneBy      *string    `json:"doneBy"`
 }
 
-func CreateTodoResponse (t models.Todo) TodoResponse {
+func CreateTodoResponse(t models.Todo) TodoResponse {
 	return TodoResponse{
 		ID:          t.ID,
 		Description: t.Description,

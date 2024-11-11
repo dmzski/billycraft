@@ -2,6 +2,7 @@ package responses
 
 import (
 	"back/internal/lib/enums"
+	"back/internal/lib/models"
 	"time"
 )
 
@@ -14,7 +15,7 @@ type BillResponse struct {
 	UpdatedAt  *time.Time         `json:"updatedAt"`
 	PaidAt     *time.Time         `json:"paidAt"`
 	SentAt     *time.Time         `json:"sentAt"`
-	Status     *enums.BillStatus  `json:"status"`
+	Status     enums.BillStatus   `json:"status"`
 	CreatedBy  string             `json:"createdBy"`
 	CompanyID  string             `json:"companyId"`
 	CustomerID *string            `json:"customerId"`
@@ -31,4 +32,57 @@ type BillLineResponse struct {
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type"`
 	ProductID   *string           `json:"productId"`
+}
+
+type BillResponseList struct {
+	Bills      []BillResponse `json:"bills"`
+	TotalCount int            `json:"totalCount"`
+}
+
+func createBillLineResponse(line models.BillLine) BillLineResponse {
+	return BillLineResponse{
+		BillID:      line.BillID,
+		Line:        line.Line,
+		Quantity:    line.Quantity,
+		Price:       line.Price,
+		Name:        line.Name,
+		Description: line.Description,
+		Type:        line.Type,
+		ProductID:   line.ProductID,
+	}
+}
+
+func CreateBillResponse(bill models.Bill) BillResponse {
+	lines := []BillLineResponse{}
+	for _, x := range bill.Lines {
+		lines = append(lines, createBillLineResponse(x))
+	}
+	return BillResponse{
+		ID:         bill.ID,
+		Name:       bill.Name,
+		Title:      bill.Title,
+		Tva:        bill.Tva,
+		CreatedAt:  bill.CreatedAt,
+		UpdatedAt:  bill.UpdatedAt,
+		SentAt:     bill.SentAt,
+		Status:     bill.Status,
+		CreatedBy:  bill.CreatedBy,
+		CompanyID:  bill.CompanyID,
+		CustomerID: bill.CustomerID,
+		FileName:   bill.FileName,
+		Lines:      lines,
+	}
+}
+
+func CreateBillResponseList(quotes []models.Bill) BillResponseList {
+	list := []BillResponse{}
+	for _, quote := range quotes {
+		list = append(list, CreateBillResponse(quote))
+	}
+
+	return BillResponseList{
+		Bills:      list,
+		TotalCount: len(list),
+	}
+
 }
