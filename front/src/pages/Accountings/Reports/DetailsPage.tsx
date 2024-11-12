@@ -1,4 +1,4 @@
-import { Alert, Button, Loader } from "@coco-ui/core";
+import { Alert, Button, Loader } from "@billycraft/ui";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { ReportRequest } from "@/models/Report";
 import { Link, useHistory, useParams } from "react-router-dom";

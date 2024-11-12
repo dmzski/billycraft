@@ -3,7 +3,7 @@ import ProductTable from "./List";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
 import { useI18n } from "@/i18n";
 import { AddProductModal } from "../modals/AddProductModal";
-import { Button, Tabs } from "@coco-ui/core";
+import { Button, Tabs } from "@billycraft/ui";
 import { Filters } from "./Filters";
 import { useMemo, useState } from "react";
 import { ProductFilters, filterProducts } from "@/utils/products";

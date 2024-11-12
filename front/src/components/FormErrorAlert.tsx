@@ -1,4 +1,4 @@
-import { Alert } from "@coco-ui/core";
+import { Alert } from "@billycraft/ui";
 import { useFormContext } from "react-hook-form";
 
 export const FormErrorAlert = () => {

@@ -1,7 +1,7 @@
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
 import { InvitationResponse } from "@/models/dtos/Invitation";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { DeleteInvitationModal } from "./modals/DeleteInvitationModal";
 

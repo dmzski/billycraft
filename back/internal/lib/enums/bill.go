@@ -1,6 +1,6 @@
 package enums
 
-type BillStatus string
+type BillStatus string //@name BillStatus
 
 const (
 	BillStatusDraft    BillStatus = "DRAFT"

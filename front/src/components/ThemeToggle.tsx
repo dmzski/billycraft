@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { useTheme } from "@/providers/ThemeProvider";
-import { Button, Dropdown } from "@coco-ui/core";
+import { Button, Dropdown } from "@billycraft/ui";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 export function ThemeToggle() {

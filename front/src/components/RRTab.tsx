@@ -1,4 +1,4 @@
-import { Tab } from "@coco-ui/core";
+import { Tab } from "@billycraft/ui";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 

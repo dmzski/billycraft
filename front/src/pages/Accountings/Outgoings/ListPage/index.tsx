@@ -1,4 +1,4 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { ROUTES } from "@/routes";
 import { Link } from "react-router-dom";
 import OutgoingList from "../List";

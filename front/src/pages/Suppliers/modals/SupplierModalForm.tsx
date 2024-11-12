@@ -1,4 +1,4 @@
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import { SupplierApi } from "@/api/SupplierApi";
 import Supplier, { SupplierRequest } from "@/models/Supplier";
 import { useController, useForm } from "react-hook-form";

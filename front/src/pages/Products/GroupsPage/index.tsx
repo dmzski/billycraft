@@ -3,7 +3,7 @@ import ProductGroupList from "./List";
 import { useI18n } from "@/i18n";
 import { useMemo } from "react";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { AddProductGroupModal } from "../modals/AddProductGroupModal";
 import { PlusIcon } from "@heroicons/react/24/solid";
 

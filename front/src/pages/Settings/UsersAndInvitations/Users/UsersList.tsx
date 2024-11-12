@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { User } from "@/models/User";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { RemoveUserModal } from "./modals/RemoveUserModal";
 import clsx from "clsx";

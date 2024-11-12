@@ -1,4 +1,4 @@
-import { Alert, Button, Loader } from "@coco-ui/core";
+import { Alert, Button, Loader } from "@billycraft/ui";
 import SupplierList from "./List";
 import SupplierModalForm from "./modals/SupplierModalForm";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";

@@ -1,6 +1,6 @@
 package enums
 
-type QuoteStatus string
+type QuoteStatus string //@name QuoteStatus
 
 const (
 	QuoteStatusDraft    QuoteStatus = "DRAFT"

@@ -1,4 +1,4 @@
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import type Supplier from "@/models/Supplier";
 import SupplierModalForm from "./modals/SupplierModalForm";
 import { PencilIcon } from "@heroicons/react/24/solid";

@@ -4,7 +4,7 @@ import { Submit } from "@/components/form/Submit";
 import { useI18n } from "@/i18n";
 import { ProductGroup } from "@/models/ProductGroup";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 

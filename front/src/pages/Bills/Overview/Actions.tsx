@@ -2,7 +2,7 @@ import { BillApi } from "@/api/BillApi";
 import { useI18n } from "@/i18n";
 import type Bill from "@/models/Bill";
 import type { BillStatus } from "@/models/Bill";
-import { Button, useToast } from "@coco-ui/core";
+import { Button, useToast } from "@billycraft/ui";
 import {
 	EnvelopeIcon,
 	InboxArrowDownIcon,

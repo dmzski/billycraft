@@ -1,4 +1,4 @@
-import { Switch } from "@coco-ui/core";
+import { Switch } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import {
 	FieldPath,

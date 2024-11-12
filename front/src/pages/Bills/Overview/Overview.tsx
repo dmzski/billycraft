@@ -5,7 +5,7 @@ import {
 	type BillOverviewRouteQueryParams,
 	ROUTES,
 } from "@/routes";
-import { Alert, Button, Loader, useToast } from "@coco-ui/core";
+import { Alert, Button, Loader, useToast } from "@billycraft/ui";
 import {
 	ChevronLeftIcon,
 	DocumentArrowDownIcon,

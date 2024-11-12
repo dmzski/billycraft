@@ -17,7 +17,7 @@ type ReportSummaryResponse struct {
 	OtherTaxes   float64                 `json:"otherTaxes"`
 	Outgoings    float64                 `json:"outgoings"`
 	Details      []ReportSummaryResponse `json:"details"`
-}
+}//@name ReportSummaryResponse
 
 type ReportResponse struct {
 	ID             string                   `json:"id"`
@@ -35,7 +35,7 @@ type ReportResponse struct {
 	TotalOutgoings float64                  `json:"totalOutgoings"`
 	Bills          []ReportBillResponse     `json:"bills"`
 	Outgoings      []ReportOutgoingResponse `json:"outgoings"`
-}
+}//@name ReportResponse
 
 type ReportOutgoingResponse struct {
 	OutgoingID string                       `json:"outgoingId"`
@@ -44,7 +44,7 @@ type ReportOutgoingResponse struct {
 	EndDate    time.Time                    `json:"endDate"`
 	CreatedBy  string                       `json:"createdBy"`
 	Lines      []ReportOutgoingLineResponse `json:"lines"`
-}
+}//@name ReportOutgoingResponse
 
 type ReportOutgoingLineResponse struct {
 	Line                  int     `json:"line"`
@@ -53,7 +53,7 @@ type ReportOutgoingLineResponse struct {
 	SupplierBillReference *string `json:"supplierBillReference"`
 	TotalHT               float64 `json:"totalHT"`
 	VAT                   float32 `json:"vat"`
-}
+}//@name ReportOutgoingLineResponse
 
 type ReportBillResponse struct {
 	Title        string    `json:"title"`
@@ -67,7 +67,7 @@ type ReportBillResponse struct {
 	ServiceTaxes float64   `json:"servicetaxes"`
 	OtherTaxes   float64   `json:"otherTaxes"`
 	CreatedBy    string    `json:"createdBy"`
-}
+}//@name ReportBillResponse
 
 func CreateReportResponse(r models.Report) ReportResponse {
 	dto := ReportResponse{

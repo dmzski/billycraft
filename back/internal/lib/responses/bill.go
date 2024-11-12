@@ -21,7 +21,7 @@ type BillResponse struct {
 	CustomerID *string            `json:"customerId"`
 	FileName   *string            `json:"fileName"`
 	Lines      []BillLineResponse `json:"lines"`
-}
+}//@name BillResponse
 
 type BillLineResponse struct {
 	BillID      string            `json:"billId"`
@@ -32,12 +32,12 @@ type BillLineResponse struct {
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type"`
 	ProductID   *string           `json:"productId"`
-}
+}//@name BillLineResponse
 
 type BillResponseList struct {
 	Bills      []BillResponse `json:"bills"`
 	TotalCount int            `json:"totalCount"`
-}
+}//@name BillResponseList
 
 func createBillLineResponse(line models.BillLine) BillLineResponse {
 	return BillLineResponse{

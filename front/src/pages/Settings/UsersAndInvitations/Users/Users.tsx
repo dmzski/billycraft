@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { useAllUsersQuery } from "@/queries/useAllUsersQuery";
-import { Alert, Loader } from "@coco-ui/core";
+import { Alert, Loader } from "@billycraft/ui";
 import { UsersList } from "./UsersList";
 
 export const Users = () => {

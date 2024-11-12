@@ -1,4 +1,4 @@
-import { Loader } from "@coco-ui/core";
+import { Loader } from "@billycraft/ui";
 import QuoteCustomization from "@/models/QuoteCustomization";
 import QuoteCustomizationForm from "./Forms/QuoteCustomizationForm";
 import { useMyQuoteCustomizationQuery } from "@/queries/useMyQuoteCustomizationQuery";

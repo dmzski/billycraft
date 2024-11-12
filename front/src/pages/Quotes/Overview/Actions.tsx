@@ -1,7 +1,7 @@
 import { QuoteApi } from "@/api/QuoteApi";
 import { useI18n } from "@/i18n";
 import Quote, { QuoteStatus } from "@/models/Quote";
-import { Button, useToast } from "@coco-ui/core";
+import { Button, useToast } from "@billycraft/ui";
 import {
 	CheckIcon,
 	EnvelopeIcon,

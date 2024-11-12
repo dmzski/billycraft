@@ -13,7 +13,7 @@ type OutgoingResponse struct {
 	Lines     []OutgoingLineResponse `json:"lines"`
 	CompanyID string                 `json:"companyId"`
 	CreatedBy string                 `json:"createdBy"`
-}
+}//@name OutgoingResponse
 
 type OutgoingLineResponse struct {
 	Line                  int     `json:"line"`
@@ -22,7 +22,7 @@ type OutgoingLineResponse struct {
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
 	VAT                   float32 `json:"vat"`
-}
+}//@name OutgoingLineResponse
 
 func CreateOutgoingResponse(o models.Outgoing) OutgoingResponse {
 

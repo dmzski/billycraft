@@ -2,7 +2,7 @@ import { InvitationApi } from "@/api/InvitationApi";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { useI18n } from "@/i18n";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 

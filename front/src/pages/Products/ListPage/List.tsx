@@ -5,7 +5,7 @@ import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { useEffect, useRef, useState } from "react";
 import { MultiEditProductGroupModal } from "../modals/MultiEditProductGroupModal";
-import { Button, Checkbox } from "@coco-ui/core";
+import { Button, Checkbox } from "@billycraft/ui";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { MultiDeleteProductModal } from "../modals/MultiDeleteProductModal";
 import { useI18n } from "@/i18n";

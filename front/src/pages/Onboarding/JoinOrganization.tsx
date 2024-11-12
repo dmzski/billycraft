@@ -1,4 +1,4 @@
-import { Alert, Button, Loader, useToast } from "@coco-ui/core";
+import { Alert, Button, Loader, useToast } from "@billycraft/ui";
 import { useI18n } from "@/i18n";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormErrorAlert } from "@/components/FormErrorAlert";

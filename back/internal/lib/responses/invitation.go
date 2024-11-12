@@ -11,7 +11,7 @@ type InvitationResponse struct {
 	CreatedAt time.Time                  `json:"createdAt"`
 	Status    enums.InvitationStatusEnum `json:"status"`
 	Role      enums.RoleEnum             `json:"role"`
-}
+}//@name InvitationResponse
 
 type MyInvitationResponse struct {
 	CompanyID   string                     `json:"companyId"`
@@ -19,7 +19,7 @@ type MyInvitationResponse struct {
 	CreatedAt   time.Time                  `json:"createdAt"`
 	Status      enums.InvitationStatusEnum `json:"status"`
 	Role        enums.RoleEnum             `json:"role"`
-}
+}//@name MyInvitationResponse
 
 func CreateInvitationResponse(i models.Invitation) InvitationResponse {
 	return InvitationResponse{

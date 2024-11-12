@@ -1,4 +1,4 @@
-import { Loader, useToast } from "@coco-ui/core";
+import { Loader, useToast } from "@billycraft/ui";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { QuoteApi } from "@/api/QuoteApi";
 import { QuoteRouteProps, ROUTES } from "@/routes";

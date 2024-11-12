@@ -20,7 +20,7 @@ type QuoteResponse struct {
 	CustomerID *string             `json:"customerId"`
 	FileName   *string             `json:"fileName"`
 	Lines      []QuoteLineResponse `json:"lines"`
-}
+}//@name QuoteResponse
 
 type QuoteLineResponse struct {
 	QuoteID     string            `json:"quoteId"`
@@ -31,12 +31,12 @@ type QuoteLineResponse struct {
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type"`
 	ProductID   *string           `json:"productId"`
-}
+}//@name QuoteLineResponse
 
 type QuoteResponseList struct {
 	Quotes     []QuoteResponse `json:"quotes"`
 	TotalCount int             `json:"totalCount"`
-}
+}//@name QuoteResponseList
 
 func createQuoteLineResponse(line models.QuoteLine) QuoteLineResponse {
 	return QuoteLineResponse{

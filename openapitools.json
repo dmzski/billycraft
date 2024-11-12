@@ -1,0 +1,21 @@
+{
+	"$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+	"spaces": 2,
+	"generator-cli": {
+    "useDocker": true,
+		"version": "7.9.0",
+		"generators": {
+			"sdk-front": {
+				"generatorName": "typescript",
+        "skipValidateSpec": true,
+				"output": "./sdk",
+				"inputSpec": "./back/docs/swagger.json",
+				"additionalProperties": {
+					"npmName": "@billycraft/sdk",
+          "stringEnums": true,
+          "enumNameSuffix": ""
+				}
+			}
+		}
+	}
+}

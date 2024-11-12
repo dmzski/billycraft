@@ -1,6 +1,6 @@
 import { ReportApi } from "@/api/ReportApi";
 import { useI18n } from "@/i18n";
-import { Alert, Button, Modal, useToast } from "@coco-ui/core";
+import { Alert, Button, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 

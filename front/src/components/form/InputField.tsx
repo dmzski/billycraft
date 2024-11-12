@@ -1,4 +1,4 @@
-import { Input } from "@coco-ui/core";
+import { Input } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import {
 	FieldPath,

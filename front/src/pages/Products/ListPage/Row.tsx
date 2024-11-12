@@ -1,4 +1,4 @@
-import { Badge, Button, Checkbox, Collapsible } from "@coco-ui/core";
+import { Badge, Button, Checkbox, Collapsible } from "@billycraft/ui";
 import Product from "@/models/Product";
 import {
 	ChevronDownIcon,

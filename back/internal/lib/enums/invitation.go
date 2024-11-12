@@ -1,6 +1,6 @@
 package enums
 
-type InvitationStatusEnum string
+type InvitationStatusEnum string //@name InvitationStatusEnum
 
 const (
 	InvitationStatusPending  InvitationStatusEnum = "PENDING"

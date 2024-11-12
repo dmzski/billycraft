@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { useAllInvitationsQuery } from "@/queries/useAllInvitationsQuery";
-import { Alert, Button, Loader } from "@coco-ui/core";
+import { Alert, Button, Loader } from "@billycraft/ui";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { InvitationsList } from "./InvitationsList";
 import { InviteUserModal } from "./modals/InviteUserModal";

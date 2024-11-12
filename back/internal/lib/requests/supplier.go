@@ -6,7 +6,7 @@ type SupplierRequest struct {
 	Name  string  `json:"name"`
 	Color *string `json:"color"`
 	Vat   float32 `json:"vat"`
-}
+}//@name SupplierRequest
 
 func MarshalSupplierRequest(req SupplierRequest) models.Supplier {
 	return models.Supplier{

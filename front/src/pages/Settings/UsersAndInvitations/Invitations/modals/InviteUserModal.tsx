@@ -5,7 +5,7 @@ import { ROLES } from "@/constants/roles";
 import { useI18n } from "@/i18n";
 import { RoleName } from "@/models/dtos/Role";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Input, Modal, Select, useToast } from "@coco-ui/core";
+import { Input, Modal, Select, useToast } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { FormProvider, useController, useForm } from "react-hook-form";
 

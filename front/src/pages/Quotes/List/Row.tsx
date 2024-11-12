@@ -1,4 +1,4 @@
-import { Button, Collapsible, Dropdown, useToast } from "@coco-ui/core";
+import { Button, Collapsible, Dropdown, useToast } from "@billycraft/ui";
 import { QuoteApi } from "@/api/QuoteApi";
 import { formatISO9075, parseJSON } from "date-fns";
 import Customer from "@/models/Customer";

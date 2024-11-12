@@ -1,7 +1,7 @@
 import { useI18n } from "@/i18n";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { CustomerRouteProps, ROUTES } from "@/routes";
-import { Alert, Button, Loader } from "@coco-ui/core";
+import { Alert, Button, Loader } from "@billycraft/ui";
 import {
 	ChevronLeftIcon,
 	ClipboardIcon,

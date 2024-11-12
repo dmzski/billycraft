@@ -1,20 +1,23 @@
-import { ChangeEvent, useEffect, useRef } from "react";
+import { Form } from "@/components/form/Form";
+import { InputField } from "@/components/form/InputField";
+import { Submit } from "@/components/form/Submit";
+import { SwitchField } from "@/components/form/SwitchField";
+import { TextAreaField } from "@/components/form/TextAreaField";
 import useLoadingState from "@/hooks/useLoadingState";
-import { CompanyApi } from "@/api/CompanyApi";
-import { Button, useToast } from "@coco-ui/core";
-import { Company } from "@/models/Company";
-import { useForm } from "react-hook-form";
 import { useI18n } from "@/i18n";
 import { useUser } from "@/providers/UserProvider";
-import { Form } from "@/components/form/Form";
-import { Submit } from "@/components/form/Submit";
-import { InputField } from "@/components/form/InputField";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import { SwitchField } from "@/components/form/SwitchField";
+import {
+	CompanyService,
+	type OrganizationRequest,
+	type OrganizationResponse,
+} from "@/sdk";
+import { Button, useToast } from "@billycraft/ui";
+import { type ChangeEvent, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 
 type MyCompagnyFormProps = {
-	company: Company;
-	onSubmitSuccess?: (res: Company) => void | Promise<void>;
+	company: OrganizationResponse;
+	onSubmitSuccess?: (res: OrganizationResponse) => void | Promise<void>;
 };
 const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 	const { t } = useI18n();
@@ -28,9 +31,9 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 	});
 	const { setValue, reset } = methods;
 
-	const onSubmit = async (values: Company) => {
+	const onSubmit = async (values: OrganizationRequest) => {
 		try {
-			const data: Company = {
+			const data: OrganizationRequest = {
 				...values,
 				articlesTax: Number(values.articlesTax) || 0,
 				servicesTax: Number(values.servicesTax) || 0,
@@ -38,11 +41,20 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 				vatPercent: Number(values.vatPercent) || 0,
 			};
 			const res = company?.id
-				? await CompanyApi.updateMine(data)
-				: await CompanyApi.create(data);
-			await reload();
-			toast.show(t("settings.forms.myCompagnyForm.submit.success"));
-			onSubmitSuccess?.(res);
+				? await CompanyService.patchCompanyMine({ body: data }).then(
+						({ data }) => data,
+					)
+				: await CompanyService.postCompany({ body: data }).then(
+						({ data }) => data,
+					);
+			if (!res) {
+				toast.destructive(t("genericFormError"));
+				await reload();
+			} else {
+				await reload();
+				toast.show(t("settings.forms.myCompagnyForm.submit.success"));
+				onSubmitSuccess?.(res);
+			}
 		} catch {
 			toast.destructive(t("genericFormError"));
 		}
@@ -59,7 +71,9 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 		try {
 			if (!uploadLogoState.isLoading && e.target?.files?.[0]) {
 				uploadLogoState.update("loading");
-				const url = await CompanyApi.uploadLogo(e.target.files[0]);
+				const url = await CompanyService.postCompanyUploadLogo({
+					body: e.target.files[0],
+				}).then(({ data }) => data);
 				setValue("logo", url);
 				uploadLogoState.update("idle");
 				toast.show(

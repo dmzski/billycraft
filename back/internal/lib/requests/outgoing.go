@@ -10,7 +10,7 @@ type OutgoingRequest struct {
 	StartDate *time.Time            `json:"startDate"`
 	EndDate   *time.Time            `json:"endDate"`
 	Lines     []OutgoingLineRequest `json:"lines"`
-}
+}//@name OutgoingRequest
 
 type OutgoingLineRequest struct {
 	Line                  int     `json:"line"`
@@ -19,7 +19,7 @@ type OutgoingLineRequest struct {
 	BillID                *string `json:"billId"`
 	TotalHT               float64 `json:"totalHT"`
 	VAT                   float32 `json:"vat"`
-}
+}//@name OutgoingLineRequest
 
 func MarshalOutgoingRequest(r OutgoingRequest) models.Outgoing {
 	outgoing := models.Outgoing{

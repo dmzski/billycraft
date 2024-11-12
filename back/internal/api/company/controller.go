@@ -43,7 +43,7 @@ func findMine(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param organization body requests.OrganizationRequest true "New organization data"
-// @Success 201 {object} models.Organization "Created organization"
+// @Success 201 {object} responses.OrganizationResponse "Created organization"
 // @Failure 400 {object} string "Malformed organization data"
 // @Failure 409 {object} string "Organization already exists"
 // @Failure 500 {object} string "Server error"
@@ -67,7 +67,7 @@ func create(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Organization creation error")
 	}
 	user.CompanyID = &organization.ID
-	return c.JSON(organization)
+	return c.JSON(responses.CreateOrganizationResponse(organization))
 }
 
 // updateMine updates the user's organization information

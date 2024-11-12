@@ -1,4 +1,4 @@
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { useFormState } from "react-hook-form";
 

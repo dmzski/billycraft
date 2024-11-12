@@ -19,7 +19,7 @@ type ProductResponse struct {
 	GroupID     *string           `json:"groupId"`
 	LowStock    *float64          `json:"lowStock"`
 	StockAlert  bool              `json:"stockAlert"`
-}
+}//@name ProductResponse
 
 func CreateProductResponse(p models.Product) ProductResponse {
 	return ProductResponse{

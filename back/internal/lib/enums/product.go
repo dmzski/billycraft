@@ -1,6 +1,6 @@
 package enums
 
-type ProductType string
+type ProductType string //@name ProductType
 
 const (
 	ProductTypeArticle ProductType = "ARTICLE"

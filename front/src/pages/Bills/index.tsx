@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, Loader, Tabs } from "@coco-ui/core";
+import { Button, Loader, Tabs } from "@billycraft/ui";
 import useCustomers from "@/hooks/useCustomers";
 import { Link } from "react-router-dom";
 import { BillRouteQueryParams, ROUTES } from "@/routes";

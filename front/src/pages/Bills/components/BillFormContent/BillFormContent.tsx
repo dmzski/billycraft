@@ -1,4 +1,4 @@
-import { Select } from "@coco-ui/core";
+import { Select } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { Prompt } from "react-router-dom";

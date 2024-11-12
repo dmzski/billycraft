@@ -4,7 +4,7 @@ import {
 	Collapsible,
 	Dropdown,
 	useToast,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { BillApi } from "@/api/BillApi";
 import { formatISO9075, parseJSON } from "date-fns";
 import type Bill from "@/models/Bill";

@@ -1,4 +1,4 @@
-import { Button, Input, Switch, TextArea, useToast } from "@coco-ui/core";
+import { Button, Input, Switch, TextArea, useToast } from "@billycraft/ui";
 import { BillCustomizationApi } from "@/api/BillCustomizationApi";
 import BillCustomization from "@/models/BillCustomization";
 import { ChangeEvent, useEffect, useState } from "react";

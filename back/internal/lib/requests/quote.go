@@ -12,7 +12,7 @@ type UpdateQuoteRequest struct {
 	Status     enums.QuoteStatus  `json:"status"`
 	CustomerID *string            `json:"customerId"`
 	Lines      []QuoteLineRequest `json:"lines"`
-}
+}//@name UpdateQuoteRequest
 
 type CreateQuoteRequest struct {
 	Title      string             `json:"title"`
@@ -21,7 +21,7 @@ type CreateQuoteRequest struct {
 	Status     enums.QuoteStatus  `json:"status"`
 	CustomerID *string            `json:"customerId"`
 	Lines      []QuoteLineRequest `json:"lines"`
-}
+}//@name CreateQuoteRequest
 
 type QuoteLineRequest struct {
 	Line        int               `json:"line"`
@@ -31,7 +31,7 @@ type QuoteLineRequest struct {
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type"`
 	ProductID   *string           `json:"productId"`
-}
+}//@name QuoteLineRequest
 
 func MarshalCreateQuoteRequest(req CreateQuoteRequest) models.Quote {
 	lines := []models.QuoteLine{}

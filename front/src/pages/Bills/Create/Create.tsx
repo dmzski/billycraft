@@ -1,4 +1,4 @@
-import { useToast } from "@coco-ui/core";
+import { useToast } from "@billycraft/ui";
 import { useHistory } from "react-router-dom";
 import { BillApi } from "@/api/BillApi";
 import { ROUTES } from "@/routes";

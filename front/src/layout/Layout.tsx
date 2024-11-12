@@ -12,7 +12,7 @@ import {
 	Link,
 	SidebarProvider,
 	SidebarTrigger,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useUser } from "@/providers/UserProvider";
 import { SUPPORT_EMAIL } from "@/constants/global";

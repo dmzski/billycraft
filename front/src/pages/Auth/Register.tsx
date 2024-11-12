@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Link, useToast } from "@coco-ui/core";
+import { Button, Checkbox, Input, Link, useToast } from "@billycraft/ui";
 import { SUPPORT_EMAIL } from "@/constants/global";
 import { useI18n } from "@/i18n";
 import { ApiError } from "@/models/ApiError";

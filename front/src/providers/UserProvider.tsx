@@ -1,7 +1,5 @@
-import { Company } from "@/models/Company";
-import { User } from "@/models/User";
 import {
-	ReactNode,
+	type ReactNode,
 	createContext,
 	useCallback,
 	useContext,
@@ -12,10 +10,11 @@ import * as Sentry from "@sentry/react";
 import { useAuth } from "./AuthProvider";
 import { useMyInformationQuery } from "@/queries/useMyInformationQuery";
 import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery";
+import type { OrganizationResponse, UserResponse } from "@/sdk";
 
 type UserContextType = {
-	user?: User;
-	organization?: Company;
+	user?: UserResponse;
+	organization?: OrganizationResponse;
 	reload: () => Promise<void>;
 };
 const UserContext = createContext<UserContextType>({

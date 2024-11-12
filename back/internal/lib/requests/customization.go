@@ -12,13 +12,13 @@ type BillCustomizationRequest struct {
 	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber"`
 	DisplayCustomerEmail       bool   `json:"displayCustomerEmail"`
 	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber"`
-}
+}//@name BillCustomizationRequest
 
 type BillEmailCustomizationRequest struct {
 	Body              string `json:"body"`
 	Object            string `json:"object"`
 	SendAutomatically bool   `json:"sendAutomatically"`
-}
+}//@name BillEmailCustomizationRequest
 
 type QuoteCustomizationRequest struct {
 	AfterTable                 string `json:"afterTable"`
@@ -28,13 +28,13 @@ type QuoteCustomizationRequest struct {
 	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber"`
 	DisplayCustomerEmail       bool   `json:"displayCustomerEmail"`
 	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber"`
-}
+}//@name QuoteCustomizationRequest
 
 type QuoteEmailCustomizationRequest struct {
 	Body              string `json:"body"`
 	Object            string `json:"object"`
 	SendAutomatically bool   `json:"sendAutomatically"`
-}
+}//@name QuoteEmailCustomizationRequest
 
 func MarshalQuoteCustomizationRequest(q QuoteCustomizationRequest) models.QuoteCustomization {
 	return models.QuoteCustomization{

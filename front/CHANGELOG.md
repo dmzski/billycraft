@@ -21,7 +21,7 @@
 ### Patch Changes
 
 - Updated dependencies [daa5ffe]
-  - @coco-ui/core@1.36.0
+  - @billycraft/ui@1.36.0
 
 ## 2.48.0
 
@@ -32,7 +32,7 @@
 ### Patch Changes
 
 - Updated dependencies [f2a878a]
-  - @coco-ui/core@1.35.0
+  - @billycraft/ui@1.35.0
 
 ## 2.47.0
 
@@ -49,7 +49,7 @@
 ### Patch Changes
 
 - Updated dependencies [1fe259e]
-  - @coco-ui/core@1.34.0
+  - @billycraft/ui@1.34.0
 
 ## 2.45.0
 
@@ -72,7 +72,7 @@
 ### Patch Changes
 
 - Updated dependencies [9cbaad2]
-  - @coco-ui/core@1.33.0
+  - @billycraft/ui@1.33.0
 
 ## 2.42.0
 
@@ -101,7 +101,7 @@
 ### Patch Changes
 
 - Updated dependencies [a7af714]
-  - @coco-ui/core@1.32.0
+  - @billycraft/ui@1.32.0
 
 ## 2.38.0
 
@@ -118,7 +118,7 @@
 ### Patch Changes
 
 - Updated dependencies [737f0c6]
-  - @coco-ui/core@1.31.0
+  - @billycraft/ui@1.31.0
 
 ## 2.36.0
 
@@ -157,7 +157,7 @@
 ### Patch Changes
 
 - Updated dependencies [8246d69]
-  - @coco-ui/core@1.30.0
+  - @billycraft/ui@1.30.0
 
 ## 2.31.0
 
@@ -193,7 +193,7 @@
 - Updated dependencies [7097660]
 - Updated dependencies [ee3e82a]
 - Updated dependencies [9c51f2d]
-  - @coco-ui/core@1.29.0
+  - @billycraft/ui@1.29.0
 
 ## 2.27.0
 
@@ -244,7 +244,7 @@
 
 - 9422908: chore: refactor queries into a single directory
 - Updated dependencies [9422908]
-  - @coco-ui/core@1.28.1
+  - @billycraft/ui@1.28.1
 
 ## 2.21.0
 
@@ -259,7 +259,7 @@
 
 - Updated dependencies [1c2e945]
 - Updated dependencies [3e2eb01]
-  - @coco-ui/core@1.28.0
+  - @billycraft/ui@1.28.0
 
 ## 2.20.1
 

@@ -8,4 +8,4 @@ type CustomerRequest struct {
 	PostalCode  string `json:"postalCode"`
 	Address     string `json:"address"`
 	Email       string `json:"email"`
-}
+}//@name CustomerRequest

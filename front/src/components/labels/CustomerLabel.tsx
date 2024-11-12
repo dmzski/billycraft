@@ -2,7 +2,7 @@ import Customer from "@/models/Customer";
 import { IdentificationIcon } from "@heroicons/react/24/solid";
 import { RRLink } from "../RRLink";
 import { VariantProps, cva } from "class-variance-authority";
-import { Badge } from "@coco-ui/core";
+import { Badge } from "@billycraft/ui";
 import { useI18n } from "@/i18n";
 
 const labelVariants = cva(

@@ -3,7 +3,7 @@ import { Link, Route, Switch } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { CreateOrganization } from "./CreateOrganization";
 import { JoinOrganization } from "./JoinOrganization";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 
 export const Onboarding = () => {
 	const { t } = useI18n();

@@ -17,7 +17,7 @@ type OrganizationRequest struct {
 	AutoMonthReport *bool    `json:"autoMonthReport"`
 	AutoYearReport  *bool    `json:"autoYearReport"`
 	VatPercent      float32  `json:"vatPercent"`
-}
+}//@name OrganizationRequest
 
 func MarshalOrganizationRequest(c OrganizationRequest) models.Organization {
 	return models.Organization{

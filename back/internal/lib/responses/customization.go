@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+
 type BillCustomizationResponse struct {
 	ID                         string     `json:"id"`
 	CompanyID                  string     `json:"companyId"`
@@ -17,7 +18,7 @@ type BillCustomizationResponse struct {
 	DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber"`
 	CreatedAt                  time.Time  `json:"createdAt"`
 	UpdatedAt                  *time.Time `json:"updatedAt"`
-}
+}//@name BillCustomizationResponse
 
 type BillEmailCustomizationResponse struct {
 	ID                string `json:"id"`
@@ -25,7 +26,7 @@ type BillEmailCustomizationResponse struct {
 	Object            string `json:"object"`
 	SendAutomatically bool   `json:"sendAutomatically"`
 	CompanyID         string `json:"companyId"`
-}
+}//@name BillEmailCustomizationResponse 
 
 type QuoteCustomizationResponse struct {
 	ID                         string     `json:"id"`
@@ -39,7 +40,7 @@ type QuoteCustomizationResponse struct {
 	DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber"`
 	CreatedAt                  time.Time  `json:"createdAt"`
 	UpdatedAt                  *time.Time `json:"updatedAt"`
-}
+}//@name QuoteCustomizationResponse
 
 type QuoteEmailCustomizationResponse struct {
 	ID                string `json:"id"`
@@ -47,7 +48,7 @@ type QuoteEmailCustomizationResponse struct {
 	Object            string `json:"object"`
 	SendAutomatically bool   `json:"sendAutomatically"`
 	CompanyID         string `json:"companyId"`
-}
+}//@name QuoteEmailCustomizationResponse
 
 func CreateQuoteCustomizationResponse(q models.QuoteCustomization) QuoteCustomizationResponse {
 	return QuoteCustomizationResponse{

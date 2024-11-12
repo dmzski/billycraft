@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 import {

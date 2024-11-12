@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { Alert, Modal, useToast } from "@coco-ui/core";
+import { Alert, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";

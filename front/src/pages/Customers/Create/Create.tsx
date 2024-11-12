@@ -1,4 +1,4 @@
-import { Button, Input, TextArea, useToast } from "@coco-ui/core";
+import { Button, Input, TextArea, useToast } from "@billycraft/ui";
 import { CustomerApi } from "@/api/CustomerApi";
 import { useController, useForm } from "react-hook-form";
 import Customer from "@/models/Customer";

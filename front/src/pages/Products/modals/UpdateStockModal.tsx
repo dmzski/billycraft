@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { Button, Input, Modal, Select, useToast } from "@coco-ui/core";
+import { Button, Input, Modal, Select, useToast } from "@billycraft/ui";
 import {
 	Controller,
 	FormProvider,

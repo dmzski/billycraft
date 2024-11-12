@@ -13,7 +13,7 @@ import {
 	Avatar,
 	Dropdown,
 	Button,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { useUser } from "@/providers/UserProvider";
 import { ROUTES, type RouteId } from "@/routes";
 import { Link, useRouteMatch } from "react-router-dom";

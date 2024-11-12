@@ -9,7 +9,7 @@ type SupplierResponse struct {
 	CompanyID string  `json:"companyId"`
 	Vat       float32 `json:"vat"`
 	CreatedBy string  `json:"createdBy"`
-}
+}//@name SupplierResponse
 
 func CreateSupplierResponse(supplier models.Supplier) SupplierResponse {
 	return SupplierResponse{

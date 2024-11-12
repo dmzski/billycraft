@@ -1,4 +1,4 @@
-import { Button, Select } from "@coco-ui/core";
+import { Button, Select } from "@billycraft/ui";
 import { ComponentProps, useMemo, useRef, useState } from "react";
 import { Control, useFieldArray, useWatch } from "react-hook-form";
 import QuoteLineTableLine from "./Row";

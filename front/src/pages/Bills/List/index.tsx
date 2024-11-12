@@ -6,7 +6,7 @@ import type { BillOverviewRouteQueryParams } from "@/routes";
 import { useEffect, useRef, useState } from "react";
 import { BottomActionBar } from "@/components/BottomActionBar";
 import { MultiDownloadPdfModal } from "../modals/MultiDownloadPdfModal";
-import { Button, Checkbox } from "@coco-ui/core";
+import { Button, Checkbox } from "@billycraft/ui";
 import { ArrowDownOnSquareIcon } from "@heroicons/react/24/solid";
 
 type BillListProps = {

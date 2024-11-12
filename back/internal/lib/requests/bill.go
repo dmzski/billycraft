@@ -11,7 +11,7 @@ type BillRequest struct {
 	CompanyID  string            `json:"companyId"`
 	CustomerID *string           `json:"customerId"`
 	Lines      []BillLineRequest `json:"lines"`
-}
+}//@name BillRequest
 
 type BillLineRequest struct {
 	Line        int               `json:"line"`
@@ -21,4 +21,4 @@ type BillLineRequest struct {
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type"`
 	ProductID   *string           `json:"productId"`
-}
+}//@name BillLineRequest

@@ -1,6 +1,6 @@
 import { useFormContext, useWatch } from "react-hook-form";
 import { ProductFormValues } from "./types";
-import { Button, useToast } from "@coco-ui/core";
+import { Button, useToast } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { useI18n } from "@/i18n";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";

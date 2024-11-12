@@ -18,7 +18,7 @@ type CustomerResponse struct {
 	UpdatedAt   *time.Time `json:"updatedAt"`
 	Deleted     bool       `json:"deleted"`
 	CompanyID   string     `json:"companyId"`
-}
+}//@name CustomerResponse
 
 func CreateCustomerResponse(c models.Customer) CustomerResponse {
 	return CustomerResponse{

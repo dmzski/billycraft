@@ -1,4 +1,4 @@
-import { TextArea } from "@coco-ui/core";
+import { TextArea } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import {
 	FieldPath,

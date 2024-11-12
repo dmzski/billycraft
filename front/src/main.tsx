@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
 import App from "./App";
 import "./index.css";
-import { Badge } from "@coco-ui/core";
+import { Badge } from "@billycraft/ui";
 
 Sentry.init({
 	dsn: "https://aeb327770bc44d91900c6250daa08721@o1262999.ingest.sentry.io/6442376",

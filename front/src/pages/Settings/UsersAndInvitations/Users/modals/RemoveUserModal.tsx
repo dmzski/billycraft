@@ -2,7 +2,7 @@ import { UserApi } from "@/api/UserApi";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { useI18n } from "@/i18n";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Alert, Button, Input, Modal, useToast } from "@coco-ui/core";
+import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { FormProvider, useController, useForm } from "react-hook-form";
 

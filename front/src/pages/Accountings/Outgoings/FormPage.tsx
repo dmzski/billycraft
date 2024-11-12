@@ -1,4 +1,4 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { useCallback } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "@/routes";

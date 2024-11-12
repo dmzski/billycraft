@@ -12,7 +12,7 @@ type ProductGroupResponse struct {
 	CreatedBy string     `json:"createdBy"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt *time.Time `json:"updatedAt"`
-}
+}//@name ProductGroupResponse
 
 func CreateProductGroupResponse(group models.ProductGroup) ProductGroupResponse {
 	return ProductGroupResponse{

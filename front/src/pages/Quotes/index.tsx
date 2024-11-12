@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Loader, Tabs } from "@coco-ui/core";
+import { Button, Loader, Tabs } from "@billycraft/ui";
 import { QuoteRouteQueryParams, ROUTES } from "@/routes";
 import useCustomers from "@/hooks/useCustomers";
 import QuoteFilterContainer from "./Filters";

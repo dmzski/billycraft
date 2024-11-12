@@ -1,4 +1,4 @@
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import List from "./components/List";
 import CreateReportModal from "./modals/CreateReportModal";
 import { useI18n } from "@/i18n";

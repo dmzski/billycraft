@@ -1,4 +1,4 @@
-import { Loader as CocoLoader } from "@coco-ui/core";
+import { Loader as CocoLoader } from "@billycraft/ui";
 
 const Loader = () => <CocoLoader />;
 

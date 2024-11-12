@@ -1,4 +1,4 @@
-import { Checkbox, useToast } from "@coco-ui/core";
+import { Checkbox, useToast } from "@billycraft/ui";
 import { TodoApi } from "@/api/TodoApi";
 import { formatRelative } from "date-fns";
 import { fr } from "date-fns/locale";

@@ -1,4 +1,4 @@
-import { Button, Input, useToast } from "@coco-ui/core";
+import { Button, Input, useToast } from "@billycraft/ui";
 import { OutgoingApi } from "@/api/OutgoingApi";
 import { endOfMonth, format, formatRFC3339 } from "date-fns";
 import { OutgoingRequest, OutgoingResponse } from "@/models/Outgoing";

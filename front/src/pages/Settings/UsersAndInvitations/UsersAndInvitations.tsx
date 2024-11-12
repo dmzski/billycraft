@@ -3,7 +3,7 @@ import { ROUTES } from "@/routes";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Users } from "./Users";
 import { Invitations } from "./Invitations";
-import { Tabs } from "@coco-ui/core";
+import { Tabs } from "@billycraft/ui";
 import { RRTab } from "@/components/RRTab";
 
 export const UsersAndInvitations = () => {

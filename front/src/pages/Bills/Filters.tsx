@@ -1,4 +1,4 @@
-import { Button, Collapsible, Input } from "@coco-ui/core";
+import { Button, Collapsible, Input } from "@billycraft/ui";
 import {
 	ChangeEventHandler,
 	Dispatch,

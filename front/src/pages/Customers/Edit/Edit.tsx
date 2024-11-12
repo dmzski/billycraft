@@ -5,7 +5,7 @@ import {
 	Loader,
 	TextArea,
 	useToast,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { CustomerApi } from "@/api/CustomerApi";
 import { useController, useForm } from "react-hook-form";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";

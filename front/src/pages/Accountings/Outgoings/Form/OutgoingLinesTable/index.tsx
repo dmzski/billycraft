@@ -1,4 +1,4 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { OutgoingRequest } from "@/models/Outgoing";
 import { Control, useFieldArray } from "react-hook-form";
 import Row from "./Row";

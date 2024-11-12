@@ -2,7 +2,7 @@ import { CustomerApi } from "@/api/CustomerApi";
 import { useI18n } from "@/i18n";
 import Customer from "@/models/Customer";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Alert, Button, Input, Modal, useToast } from "@coco-ui/core";
+import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps } from "react";
 import { useController, useForm } from "react-hook-form";
 

@@ -1,4 +1,4 @@
-import { Button, Input } from "@coco-ui/core";
+import { Button, Input } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import {

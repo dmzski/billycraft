@@ -25,7 +25,7 @@ func InitRoutes(group fiber.Router) {
 // @Summary Retrieves all pending invitations for the user
 // @Tags Invitations
 // @Produce json
-// @Success 200 {array} models.Invitation "List of pending invitations"
+// @Success 200 {array} responses.MyInvitationResponse "List of pending invitations"
 // @Failure 401 {object} string "Unauthorized"
 // @Router /invitations/mine/pending [get]
 func findAllMinePending(c *fiber.Ctx) error {

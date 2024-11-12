@@ -1,7 +1,7 @@
 import { Form } from "@/components/form/Form";
 import { useI18n } from "@/i18n";
 import Product from "@/models/Product";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import { ComponentProps, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { FormErrorAlert } from "@/components/FormErrorAlert";

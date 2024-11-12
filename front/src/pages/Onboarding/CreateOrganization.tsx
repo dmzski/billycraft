@@ -1,11 +1,10 @@
-import { Button, Input, useToast } from "@coco-ui/core";
-import { CompanyApi } from "@/api/CompanyApi";
+import { Button, Input, useToast } from "@billycraft/ui";
 import { useI18n } from "@/i18n";
-import { Company } from "@/models/Company";
 import { Controller, useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@/providers/UserProvider";
+import { CompanyService, type OrganizationRequest } from "@/sdk";
 
 type CreateOrganizationFormValues = {
 	articlesTax: number;
@@ -52,8 +51,8 @@ export const CreateOrganization = () => {
 				articlesTax: Number(values.articlesTax) || 0,
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
-			} as Company;
-			await CompanyApi.create(data);
+			} as OrganizationRequest;
+			await CompanyService.postCompany({ body: data });
 			await reload();
 			toast.show(t("onboarding.create.success"));
 		} catch (err) {

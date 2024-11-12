@@ -1,7 +1,7 @@
 import BillCustomization from "@/models/BillCustomization";
 import BillCustomizationForm from "./Forms/BillCustomizationForm";
 import { useMyBillCustomizationQuery } from "@/queries/useMyBillCustomizationQuery";
-import { Loader } from "@coco-ui/core";
+import { Loader } from "@billycraft/ui";
 
 const BillCustomizationPage = () => {
 	const { data: billCustomization, isLoading } = useMyBillCustomizationQuery();

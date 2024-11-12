@@ -12,7 +12,7 @@ type UserResponse struct {
 	LastName  string         `json:"lastName"`
 	CompanyID *string        `json:"companyId"`
 	Role      enums.RoleEnum `json:"role"`
-}
+}//@name UserResponse
 
 func CreateUserResponse(u models.User) UserResponse {
 	r := UserResponse{

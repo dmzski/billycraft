@@ -1,7 +1,7 @@
 import { ProductGroup } from "@/models/ProductGroup";
 import { EditProductGroupModal } from "../modals/EditProductGroupModal";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { DeleteProductGroupModal } from "../modals/DeleteProductGroupModal";
 
 type ProductGroupRowProps = {

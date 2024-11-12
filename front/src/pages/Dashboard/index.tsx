@@ -1,4 +1,4 @@
-import { Badge } from "@coco-ui/core";
+import { Badge } from "@billycraft/ui";
 import TodoList from "./TodoList";
 import { ListBulletIcon } from "@heroicons/react/24/solid";
 import { useAllTodosFinishedAfter } from "@/queries/useAllTodosFinishedAfter";

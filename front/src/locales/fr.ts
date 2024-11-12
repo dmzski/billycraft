@@ -900,4 +900,13 @@ export default {
 		"Téléchargement ZIP généré avec succès",
 	"bills.modals.multiDownloadPdf.submit.error":
 		"Une erreur est survenue durant la génération du ZIP",
+
+  // My settings
+  'mySettings.title': 'Mon compte',
+  'mySettings.fields.name.label': 'Nom complet',
+  'mySettings.fields.oldPassword.label': 'Mot de passe actuel',
+  'mySettings.fields.newPassword.label': 'Nouveau mot de passe',
+  'mySettings.submit': 'Enregistrer',
+  'mySettings.submit.success': 'Vos informations ont été mise à jour',
+  'mySettings.submit.error': 'Une erreur est survenue lors de la mise à jour de vos informations',
 } as const;

@@ -14,7 +14,7 @@ type TodoResponse struct {
 	CompanyID   string     `json:"compagnyId"`
 	CreatedBy   string     `json:"createdBy"`
 	DoneBy      *string    `json:"doneBy"`
-}
+}//@name TodoResponse
 
 func CreateTodoResponse(t models.Todo) TodoResponse {
 	return TodoResponse{

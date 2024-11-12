@@ -24,7 +24,7 @@ type OrganizationResponse struct {
 	AutoMonthReport bool       `json:"autoMonthReport"`
 	AutoYearReport  bool       `json:"autoYearReport"`
 	VatPercent      float32    `json:"vatPercent"`
-}
+}//@name OrganizationResponse
 
 func CreateOrganizationResponse(c models.Organization) OrganizationResponse {
 	dto := OrganizationResponse{

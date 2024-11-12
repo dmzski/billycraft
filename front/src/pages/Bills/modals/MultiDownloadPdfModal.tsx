@@ -5,7 +5,7 @@ import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
 import type Bill from "@/models/Bill";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 

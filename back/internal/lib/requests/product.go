@@ -8,12 +8,12 @@ import (
 type UpdateStockMovement struct {
 	Quantity  float64 `json:"quantity"`
 	ProductID string  `json:"productId"`
-}
+}//@name UpdateStockMovement
 
 type UpdateStockRequest struct {
 	InMovements  []UpdateStockMovement `json:"in"`
 	OutMovements []UpdateStockMovement `json:"out"`
-}
+}//@name UpdateStockRequest
 
 type CreateProductRequest struct {
 	Type        enums.ProductType `json:"type"`
@@ -26,7 +26,7 @@ type CreateProductRequest struct {
 	GroupID     *string           `json:"groupId"`
 	LowStock    *float64          `json:"lowStock"`
 	StockAlert  bool              `json:"stockAlert"`
-}
+}//@name CreateProductRequest
 
 type UpdateProductRequest struct {
 	Type        enums.ProductType `json:"type"`
@@ -39,7 +39,7 @@ type UpdateProductRequest struct {
 	GroupID     *string           `json:"groupId"`
 	LowStock    *float64          `json:"lowStock"`
 	StockAlert  bool              `json:"stockAlert"`
-}
+}//@name UpdateProductRequest
 
 func MarshalCreateProductRequest(p CreateProductRequest) models.Product {
 	return models.Product{

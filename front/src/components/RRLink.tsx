@@ -1,4 +1,4 @@
-import { Link } from "@coco-ui/core";
+import { Link } from "@billycraft/ui";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { ComponentProps, forwardRef } from "react";
 
