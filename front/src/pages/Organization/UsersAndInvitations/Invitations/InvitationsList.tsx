@@ -18,9 +18,9 @@ export const InvitationsList = ({
 	const pageT = scopedT("settings.users.invitations.list");
 
 	return (
-		<table className="flex flex-col">
+		<table className="flex flex-col gap-2">
 			<thead>
-				<tr className="text-left [&_>_th]:font-semibold p-4 grid md:grid-cols-12 gap-3 bg-accent text-accent-foreground rounded-t border border-accent overflow-hidden">
+				<tr className="text-left px-4 grid md:grid-cols-12 gap-4 text-muted-foreground text-sm overflow-hidden">
 					<th className="md:col-span-3">{pageT("headers.email")}</th>
 					<th className="md:col-span-2">{pageT("headers.role")}</th>
 					<th className="md:col-span-2">{pageT("headers.status")}</th>
@@ -29,11 +29,11 @@ export const InvitationsList = ({
 				</tr>
 			</thead>
 			{invitations && invitations.length > 0 ? (
-				<tbody>
+				<tbody className="flex flex-col gap-2">
 					{invitations.map(({ email, role, status, createdAt }) => (
 						<tr
 							key={email}
-							className="px-4 py-2 gap-3 grid md:grid-cols-12 border-b items-center"
+							className="border rounded-md px-4 md:h-16 gap-4 grid md:grid-cols-12 items-center"
 						>
 							<td className="md:col-span-3">{email}</td>
 							<td className="md:col-span-2">{role}</td>
@@ -61,8 +61,8 @@ export const InvitationsList = ({
 				</tbody>
 			) : (
 				<tbody>
-					<tr className="grid md:grid-cols-12 px-4 py-4">
-						<td className="md:col-span-12 text-center">{pageT("emptyText")}</td>
+					<tr className="grid p-4">
+						<td className="text-center">{pageT("emptyText")}</td>
 					</tr>
 				</tbody>
 			)}

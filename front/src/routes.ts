@@ -173,45 +173,52 @@ export const ROUTES = {
     exact: true,
     path: () => "/account",
   },
-	SETTINGS: {
-		id: "settings",
-		exact: false,
-		path: () => "/settings",
-		routes: {
-			MY_COMPANY: {
-				id: "settings.myOrganization",
+  ORGANIZATION: {
+    id: 'organization',
+    path: () => "/organization/",
+    exact: false,
+    routes: {
+      SETTINGS: {
+				id: "organization.settings",
 				exact: true,
-				path: () => "/settings/my-company",
-			},
-			QUOTE_CUSTOMIZATION: {
-				id: "settings.quoteCustomization",
-				exact: true,
-				path: () => "/settings/quote-customization",
-			},
-			BILL_CUSTOMIZATION: {
-				id: "settings.billCustomization",
-				exact: true,
-				path: () => "/settings/bill-customization",
-			},
-			USERS: {
-				id: "settings.users",
+				path: () => "/organization/settings",
+      },
+      USERS: {
+				id: "organization.users",
 				exact: false,
-				path: () => "/settings/users",
+				path: () => "/organization/users",
 				routes: {
 					USERS: {
-						id: "settings.users.users",
+						id: "organization.users.users",
 						exact: true,
-						path: () => "/settings/users/users",
+						path: () => "/organization/users/users",
 					},
 					INVITATIONS: {
-						id: "settings.users.invitations",
+						id: "organization.users.invitations",
 						exact: true,
-						path: () => "/settings/users/invitations",
+						path: () => "/organization/users/invitations",
 					},
 				},
-			},
-		},
-	},
+      },
+      CUSTOMIZATION: {
+        id: 'organization.customization',
+        exact: false,
+        path: () => "/organization/customization",
+        routes: {
+          BILL: {
+            id: 'organization.customization.bill',
+            exact: true,
+            path: () => "/organization/customization/bill",
+          },
+          QUOTE: {
+            id: 'organization.customization.quote',
+            exact: true,
+            path: () => "/organization/customization/quote",
+          }
+        }
+      }
+    }
+  },
 	SUPPLIERS: {
 		id: "suppliers",
 		exact: true,

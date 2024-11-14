@@ -92,10 +92,10 @@ export const Edit = () => {
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
-				className="gap-1 flex items-center"
+				className="gap-2 flex items-center"
 				to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
 			>
-				<ChevronLeftIcon className="w-5" /> {t("bills.form.edit.backTo")}
+				<ChevronLeftIcon className="size-5" /> {t("bills.form.edit.backTo")}
 			</RRLink>
 			<div>
 				<BillLabel bill={bill} size="lg" />

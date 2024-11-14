@@ -47,7 +47,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 					/>
 				</div>
 			) : null}
-			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm">
+			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm gap-4">
 				<div className="md:pl-20">{t("bills.list.headers.reference")}</div>
 				<div>{t("bills.list.headers.customer")}</div>
 				<div>{t("bills.list.headers.createdAt")}</div>

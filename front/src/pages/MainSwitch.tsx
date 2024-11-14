@@ -7,7 +7,6 @@ import Dashboard from "./Dashboard";
 import Layout from "../layout/Layout";
 import Onboarding from "./Onboarding/Onboarding";
 import ProductsSwitch from "./Products/ProductsSwitch";
-import Settings from "./Settings";
 import History from "./History";
 import AccountingSwitch from "./Accountings/AccountingSwitch";
 import QuoteSwitch from "./Quotes/QuoteSwitch";
@@ -18,6 +17,7 @@ import { Login } from "./Auth/Login";
 import { Register } from "./Auth/Register";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Account } from "./Account/Account";
+import { Organization } from "./Organization/Organization";
 
 type PathComponentTuple = [string, () => JSX.Element];
 
@@ -38,7 +38,7 @@ const APP_ROUTES: PathComponentTuple[] = [
 	[ROUTES.SUPPLIERS.path(), SupplierSwitch],
 	[ROUTES.DASHBOARD.path(), Dashboard],
 	[ROUTES.PRODUCTS.path(), ProductsSwitch],
-	[ROUTES.SETTINGS.path(), Settings],
+	[ROUTES.ORGANIZATION.path(), Organization],
 	[ROUTES.HISTORY.path(), History],
 	[ROUTES.ACCOUNT.path(), Account],
 ];

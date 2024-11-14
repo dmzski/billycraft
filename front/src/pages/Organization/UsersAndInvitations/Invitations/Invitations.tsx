@@ -25,8 +25,8 @@ export const Invitations = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-5">
-			<h2 className="text-3xl">{pageT("title")}</h2>
+		<div className="flex flex-col gap-4">
+			<h2 className="text-xl font-semibold">{pageT("title")}</h2>
 			<div className="grid md:grid-cols-12">
 				<p className="md:col-span-10">{pageT("description")}</p>
 				<div className="md:col-span-2 md:flex md:justify-end">
@@ -34,7 +34,7 @@ export const Invitations = () => {
 						onSubmitSuccess={reload}
 						disclosure={
 							<Button>
-								<PlusIcon className="w-5" />
+								<PlusIcon />
 								<span>{pageT("inviteButton")}</span>
 							</Button>
 						}

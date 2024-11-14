@@ -64,7 +64,7 @@ export const Account = () => {
 		<div className="flex flex-col gap-12">
 			<h1 className="text-3xl font-semibold">{pageT("title")}</h1>
 			<div>
-				<h2>{pageT("updateMyInformation")}</h2>
+				<h2 className="text-xl font-semibold">{pageT("updateMyInformation")}</h2>
 				<Form methods={methods} onSubmit={onSubmit}>
 					<div className="flex flex-col gap-8 border p-4 rounded-md">
 						<div className="grid md:grid-cols-2 gap-8">

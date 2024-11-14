@@ -21,8 +21,8 @@ export const Users = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-5">
-			<h2 className="text-3xl">{pageT("title")}</h2>
+		<div className="flex flex-col gap-4">
+			<h2 className="text-xl font-semibold">{pageT("title")}</h2>
 			<p>{pageT("description")}</p>
 			<UsersList users={data} reload={reload} />
 		</div>

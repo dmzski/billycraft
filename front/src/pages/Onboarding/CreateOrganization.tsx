@@ -301,7 +301,7 @@ export const CreateOrganization = () => {
 				</div>
 			</div>
 			<div className="alert flex flex-row gap-2 justify-start items-center">
-				<InformationCircleIcon className="w-5" />
+				<InformationCircleIcon className="size-5" />
 				<p>{t("onboarding.create.uploadLogoNotice")}</p>
 			</div>
 

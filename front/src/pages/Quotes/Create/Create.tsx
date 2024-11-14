@@ -72,8 +72,8 @@ export const Create = () => {
 
 	return (
 		<div className="w-full px-4 flex flex-col gap-12">
-			<RRLink className="gap-1 flex items-center" to={ROUTES.QUOTES.path()}>
-				<ChevronLeftIcon className="w-5" /> {t("quotes.form.backTo")}
+			<RRLink className="gap-2 flex items-center" to={ROUTES.QUOTES.path()}>
+				<ChevronLeftIcon className="size-5" /> {t("quotes.form.backTo")}
 			</RRLink>
 			<div className="flex items-center flex-wrap">
 				<div className="flex items-center gap-4 flex-grow">

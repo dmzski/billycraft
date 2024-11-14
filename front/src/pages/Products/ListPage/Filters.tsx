@@ -67,9 +67,9 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 				<div>
 					<Button onClick={toggleOpenFilters} variant="ghost">
 						{openFilters ? (
-							<EyeSlashIcon className="w-5" />
+							<EyeSlashIcon />
 						) : (
-							<EyeIcon className="w-5" />
+							<EyeIcon />
 						)}
 						{openFilters ? pageT("buttons.hide") : pageT("buttons.display")}
 					</Button>

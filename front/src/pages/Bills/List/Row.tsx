@@ -125,7 +125,7 @@ const BillTableLine = ({
 					</div>
 				}
 			>
-				<RowContent bill={bill} />
+				<RowContent bill={bill} customer={customer} />
 			</Collapsible>
 		</div>
 	);

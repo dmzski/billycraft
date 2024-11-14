@@ -1,3 +1,5 @@
+import { Alert, Loader } from "@billycraft/ui";
+import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery";
 import { Form } from "@/components/form/Form";
 import { InputField } from "@/components/form/InputField";
 import { Submit } from "@/components/form/Submit";
@@ -5,23 +7,17 @@ import { SwitchField } from "@/components/form/SwitchField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import useLoadingState from "@/hooks/useLoadingState";
 import { useI18n } from "@/i18n";
-import { useUser } from "@/providers/UserProvider";
 import {
 	CompanyService,
 	type OrganizationRequest,
-	type OrganizationResponse,
 } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
-import { type ChangeEvent, useEffect, useRef } from "react";
+import { type ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 
-type MyCompagnyFormProps = {
-	company: OrganizationResponse;
-	onSubmitSuccess?: (res: OrganizationResponse) => void | Promise<void>;
-};
-const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
+export const Settings = () => {
+	const { data: company, reload, isLoading } = useMyOrganizationQuery();
 	const { t } = useI18n();
-	const { reload } = useUser();
 	const toast = useToast();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const uploadLogoState = useLoadingState();
@@ -29,7 +25,7 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 		mode: "onChange",
 		defaultValues: company as OrganizationRequest,
 	});
-	const { setValue, reset } = methods;
+	const { setValue } = methods;
 
 	const onSubmit = async (values: OrganizationRequest) => {
 		try {
@@ -53,7 +49,6 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 			} else {
 				await reload();
 				toast.show(t("settings.forms.myCompagnyForm.submit.success"));
-				onSubmitSuccess?.(res);
 			}
 		} catch {
 			toast.destructive(t("genericFormError"));
@@ -86,15 +81,18 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 		}
 	};
 
-	useEffect(() => {
-		if (reset && company) {
-			reset(company);
-		}
-	}, [company, reset]);
+	if (!company && isLoading) {
+		return <Loader />;
+	}
+
+	if (!company) {
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
 			<div className="flex flex-col gap-8">
+        <h1 className="text-3xl font-semibold">{t('organization.settings.title')}</h1>
 				<section className="flex flex-col">
 					<div className="text-xl font-semibold">
 						{t("compagny informations")}
@@ -263,5 +261,3 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 		</Form>
 	);
 };
-
-export default MyCompagnyForm;

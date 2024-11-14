@@ -2,9 +2,8 @@ import { RRLink } from "@/components/RRLink";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
-import type { BillResponse } from "@/sdk";
+import type { BillResponse, CustomerResponse } from "@/sdk";
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
@@ -14,16 +13,15 @@ import {
 
 type RowContentProps = {
 	bill: BillResponse;
+  customer?: CustomerResponse
 };
 
-export const RowContent = ({ bill }: RowContentProps) => {
+export const RowContent = ({ bill, customer }: RowContentProps) => {
 	const { t, scopedT } = useI18n();
 	const pageT = scopedT("bills.details");
 	const formatCurrency = useFormatCurrency();
 	const { toISO9075 } = useFormatDate();
-	const { data: customer } = useCustomerQuery(bill?.customerId ?? "", {
-		enabled: !!bill?.customerId,
-	});
+
 	return (
 		<div className="border-t">
 			<div className="flex flex-col gap-4 p-4">

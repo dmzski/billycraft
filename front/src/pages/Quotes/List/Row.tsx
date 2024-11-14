@@ -105,7 +105,7 @@ const QuoteTableLine = ({
 					</div>
 				}
 			>
-				<RowContent quote={quote} />
+				<RowContent quote={quote} customer={customer} />
 			</Collapsible>
 		</div>
 	);

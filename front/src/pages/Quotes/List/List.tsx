@@ -14,8 +14,8 @@ const QuoteList = ({ data, selectedStatus, reload }: QuoteListProps) => {
 	const customers = useCustomers();
 
 	return (
-		<div className="flex flex-col">
-			<div className="p-4 grid md:grid-cols-4 text-muted-foreground text-sm">
+		<div className="flex flex-col gap-2">
+			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm gap-4">
 				<div className="md:pl-12">{t("bills.list.headers.reference")}</div>
 				<div>{t("bills.list.headers.customer")}</div>
 				<div>{t("bills.list.headers.createdAt")}</div>

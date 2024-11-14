@@ -11,7 +11,7 @@ export const List = ({ data = [] }: ListProps) => {
 
 	return (
 		<div className="flex flex-col gap-2">
-			<div className="hidden md:grid px-2 py-4 md:grid-cols-12 gap-4 text-muted-foreground text-sm">
+			<div className="hidden md:grid px-2 md:grid-cols-12 gap-4 text-muted-foreground text-sm">
 				<div className="pl-12 md:col-span-6">
 					{t("customers.list.headers.name")}
 				</div>
