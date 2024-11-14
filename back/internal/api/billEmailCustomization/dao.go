@@ -2,8 +2,8 @@ package billEmailCustomization
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -31,7 +31,7 @@ func (dao BillEmailCustomizationDao) FindOneByIdAndTenant(id string, tenant stri
 	return
 }
 
-func (dao BillEmailCustomizationDao) Update(id string, tenant string, changes dtos.BillEmailCustomization) (billEmailCustomization models.BillEmailCustomization) {
+func (dao BillEmailCustomizationDao) Update(id string, tenant string, changes requests.BillEmailCustomizationRequest) (billEmailCustomization models.BillEmailCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&billEmailCustomization)
 	if tx.Error != nil {
@@ -46,9 +46,9 @@ func (dao BillEmailCustomizationDao) Update(id string, tenant string, changes dt
 	return
 }
 
-func (dao BillEmailCustomizationDao) Create(creator models.User, newBillEmailCustomization dtos.BillEmailCustomization) (billEmailCustomization models.BillEmailCustomization) {
-	billEmailCustomization = billEmailCustomization.FromDTO(newBillEmailCustomization)
-	billEmailCustomization.CompanyID = *creator.CompanyID
+func (dao BillEmailCustomizationDao) Create(organizationId string, newBillEmailCustomization requests.BillEmailCustomizationRequest) (billEmailCustomization models.BillEmailCustomization) {
+	billEmailCustomization = requests.MarshalBillEmailCustomizationRequest(newBillEmailCustomization)
+	billEmailCustomization.CompanyID = organizationId
 
 	if err := database.DBConn.Omit("Company").Create(&billEmailCustomization).Error; err != nil {
 		log.Println("Error : ", err.Error())

@@ -1,7 +1,39 @@
 package requests
 
-import "back/internal/lib/enums"
+import (
+	"back/internal/lib/enums"
+	"back/internal/lib/models"
+	"time"
+)
 
 type InvitationFindAllParams struct {
 	Status *enums.InvitationStatusEnum `query:"status"`
+}//@name InvitationFindAllParams
+
+type InvitationRequest struct {
+	Email string         `json:"email" validate:"required"`
+	Role  enums.RoleEnum `json:"role" validate:"required"`
+}//@name InvitationRequest
+
+type AcceptInvitationRequest struct {
+	CompanyID string `json:"companyId" validate:"required"`
+}//@name AcceptInvitationRequest
+
+type RefuseInvitationRequest struct {
+	CompanyID string `json:"companyId" validate:"required"`
+}//@name RefuseInvitationRequest
+
+type DeleteInvitationRequest struct {
+	Email string `json:"email" validate:"required"`
+}//@name DeleteInvitationRequest
+
+func MarshalInvitationRequest(req InvitationRequest) models.Invitation {
+	i := models.Invitation{}
+	i.Status = enums.InvitationStatusPending
+	i.CompanyID = ""
+	i.CreatedAt = time.Now()
+	i.Email = req.Email
+	i.Role = req.Role
+	return i
+
 }

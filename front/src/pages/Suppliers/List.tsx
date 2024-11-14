@@ -1,12 +1,12 @@
-import { Button } from "@coco-ui/core";
-import type Supplier from "@/models/Supplier";
+import { Button } from "@billycraft/ui";
+import type { SupplierResponse } from "@/sdk";
 import SupplierModalForm from "./modals/SupplierModalForm";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { SupplierLabel } from "@/components/labels/SupplierLabel";
 
 type ListProps = {
-	data: Supplier[];
+	data: SupplierResponse[];
 	reloadData: () => Promise<void>;
 };
 const List = ({ data, reloadData }: ListProps) => {
@@ -28,7 +28,7 @@ const List = ({ data, reloadData }: ListProps) => {
 					<div className="flex-grow truncate flex items-center">
 						<SupplierLabel supplier={supplier} />
 					</div>
-					<div className="flex flex-col">
+					<div className="flex-col items-end hidden md:flex">
 						<div className="text-xs text-muted-foreground">
 							{pageT("headers.vat")}
 						</div>

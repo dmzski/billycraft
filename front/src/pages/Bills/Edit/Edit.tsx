@@ -1,14 +1,12 @@
-import { Loader, useToast } from "@coco-ui/core";
+import { Loader, useToast } from "@billycraft/ui";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import { BillApi } from "@/api/BillApi";
 import { ROUTES } from "@/routes";
 import { BillFormContent } from "@/pages/Bills/components/BillFormContent";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { useBillByIdQuery } from "@/queries/useBillByIdQuery";
-import { BillFormValues } from "../components/BillFormContent";
+import type { BillFormValues } from "../components/BillFormContent";
 import { useForm } from "react-hook-form";
-import { BillUpdateRequest } from "@/models/dtos/BillUpdateRequest";
 import { calculatePriceTTC } from "@/utils/price";
 import { useMemo } from "react";
 import { RRLink } from "@/components/RRLink";
@@ -16,6 +14,7 @@ import { BillLabel } from "@/components/labels/BillLabel";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { type BillRequest, BillsService } from "@/sdk";
 
 const defaultBill = {
 	lines: [],
@@ -34,11 +33,13 @@ export const Edit = () => {
 	});
 
 	const onSubmit = async (data: BillFormValues) => {
-		const tmp: BillUpdateRequest = {
-			id: bill?.id ?? "",
+		const tmp: BillRequest = {
 			...data,
 			lines: data.lines.map((line, index: number) => ({
-				...line,
+				type: line.type,
+				description: line.description ?? undefined,
+				name: line.name,
+				productId: line.productId ?? undefined,
 				line: index + 1,
 				price: line.price ? Number(`${line.price}`) : undefined,
 				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
@@ -46,7 +47,7 @@ export const Edit = () => {
 		};
 		try {
 			if (bill?.id) {
-				await BillApi.update(tmp);
+				await BillsService.patchBillsById({ path: { id }, body: tmp });
 				toast.show(t("bills.form.submit.success"));
 				push(ROUTES.BILL_OVERVIEW.path({ id: bill.id }));
 			}
@@ -55,11 +56,12 @@ export const Edit = () => {
 		}
 	};
 
-	const initialValues: BillFormValues = useMemo(
+	const initialValues = useMemo<BillFormValues>(
 		() =>
 			bill
 				? {
 						...bill,
+						tva: bill.tva ?? 0,
 						lines: bill.lines.map(({ price, ...rest }) => ({
 							...rest,
 							price,
@@ -90,10 +92,10 @@ export const Edit = () => {
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
-				className="gap-1 flex items-center"
+				className="gap-2 flex items-center"
 				to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
 			>
-				<ChevronLeftIcon className="w-5" /> {t("bills.form.edit.backTo")}
+				<ChevronLeftIcon className="size-5" /> {t("bills.form.edit.backTo")}
 			</RRLink>
 			<div>
 				<BillLabel bill={bill} size="lg" />

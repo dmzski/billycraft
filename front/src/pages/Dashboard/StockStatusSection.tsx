@@ -1,7 +1,7 @@
 import { useI18n } from "@/i18n";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
 import { ROUTES } from "@/routes";
-import { Button } from "@coco-ui/core";
+import { Button } from "@billycraft/ui";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 

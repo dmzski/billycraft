@@ -1,4 +1,4 @@
-import Quote from "../models/Quote";
+import type { QuoteResponse } from "@/sdk";
 
-export const isQuoteMinimumAccepted = ({ status }: Quote): boolean =>
+export const isQuoteMinimumAccepted = ({ status }: QuoteResponse): boolean =>
 	["ARCHIVED", "ACCEPTED", "DEPOSIT_ASK"].includes(status);

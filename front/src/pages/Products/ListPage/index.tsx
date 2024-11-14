@@ -3,13 +3,13 @@ import ProductTable from "./List";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
 import { useI18n } from "@/i18n";
 import { AddProductModal } from "../modals/AddProductModal";
-import { Button, Tabs } from "@coco-ui/core";
+import { Button, Tabs } from "@billycraft/ui";
 import { Filters } from "./Filters";
 import { useMemo, useState } from "react";
-import { ProductFilters, filterProducts } from "@/utils/products";
+import { type ProductFilters, filterProducts } from "@/utils/products";
 import { ArrowPathIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { UpdateStockModal } from "../modals/UpdateStockModal";
-import { PRODUCT_TYPES, ProductType } from "@/models/LineTypeEnum";
+import { ProductTypeSchema, type ProductType } from "@/sdk";
 
 const ProductsPage = () => {
 	const { t } = useI18n();
@@ -28,7 +28,7 @@ const ProductsPage = () => {
 		() =>
 			filterProducts(data?.sort((a, b) => a.name.localeCompare(b.name)) ?? [], {
 				...filters,
-				type: tab !== "all" && PRODUCT_TYPES.includes(tab) ? tab : "",
+				type: tab !== "all" && ProductTypeSchema.enum.includes(tab) ? tab : "",
 			}),
 		[data, filters, tab],
 	);
@@ -42,7 +42,7 @@ const ProductsPage = () => {
 						<Tabs.Tab isActive={tab === "all"} onClick={() => setTab("all")}>
 							{t("all")}
 						</Tabs.Tab>
-						{PRODUCT_TYPES.map((type) => (
+						{ProductTypeSchema.enum.map((type) => (
 							<Tabs.Tab
 								key={type}
 								isActive={tab === type}

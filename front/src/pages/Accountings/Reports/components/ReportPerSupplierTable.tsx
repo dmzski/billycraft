@@ -1,13 +1,12 @@
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import { ReportResponse } from "@/models/Report";
-import Supplier from "@/models/Supplier";
+import type { ReportResponse, SupplierResponse } from "@/sdk";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { useMemo } from "react";
 
 type SupplierDetailRowProps = {
 	value: number;
-	supplier?: Supplier;
+	supplier?: SupplierResponse;
 };
 const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 	const formatCurrency = useFormatCurrency();
@@ -44,31 +43,27 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 					.flat()
 					.reduce(
 						(acc, line) => {
-							if (line.supplierId) {
-								return {
-									...acc,
-									[line.supplierId]: {
-										total:
-											(Number(acc[line.supplierId]) || 0) +
-											line.totalHT * (1 - line.vat),
-										supplier: acc[line.supplierId].supplier,
-									},
+							if (line.supplierId && acc[line.supplierId]) {
+								acc[line.supplierId] = {
+									total:
+										(Number(acc[line.supplierId]) || 0) +
+										line.totalHT * (1 - line.vat),
+									supplier: acc[line.supplierId].supplier,
 								};
+
+								return acc;
 							}
 
 							const supplier = suppliers?.find(
 								({ id: supplierId }) => supplierId === line.supplierId,
 							);
 
-							if (supplier) {
-								return {
-									...acc,
-									[supplier.id]: {
-										total:
-											(Number(acc[supplier.id]) || 0) +
-											line.totalHT * (1 - line.vat),
-										supplier,
-									},
+							if (supplier && line.supplierId) {
+								acc[line.supplierId] = {
+									total:
+										(Number(acc[supplier.id]) || 0) +
+										line.totalHT * (1 - line.vat),
+									supplier,
 								};
 							}
 
@@ -78,7 +73,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 							string,
 							{
 								total: number;
-								supplier: Supplier;
+								supplier: SupplierResponse;
 							}
 						>,
 					),

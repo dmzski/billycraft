@@ -1,5 +1,5 @@
-import { Button } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { Button, Loader } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import { useFormState } from "react-hook-form";
 
 type SubmitProps = ComponentProps<typeof Button>;
@@ -13,6 +13,7 @@ export const Submit = ({ disabled, children, ...rest }: SubmitProps) => {
 			disabled={disabled || !isValid || isValidating || isSubmitting}
 			type="submit"
 		>
+			{isSubmitting ? <Loader /> : null}
 			{children}
 		</Button>
 	);

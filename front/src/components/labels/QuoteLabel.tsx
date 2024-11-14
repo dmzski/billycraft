@@ -1,7 +1,7 @@
+import type { QuoteResponse } from "@/sdk";
 import { DocumentIcon } from "@heroicons/react/24/solid";
+import { type VariantProps, cva } from "class-variance-authority";
 import { RRLink } from "../RRLink";
-import { VariantProps, cva } from "class-variance-authority";
-import Quote from "@/models/Quote";
 
 const labelVariants = cva(
 	"inline-flex items-center justify-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg",
@@ -19,7 +19,7 @@ const labelVariants = cva(
 );
 
 type QuoteLabelProps = {
-	quote: Quote;
+	quote: QuoteResponse;
 	to?: string;
 } & VariantProps<typeof labelVariants>;
 

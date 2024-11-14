@@ -1,12 +1,12 @@
-import { Button, Input, Select } from "@coco-ui/core";
-import { OutgoingRequest } from "@/models/Outgoing";
+import { Button, Input, Select } from "@billycraft/ui";
 import { useMemo } from "react";
-import { Control, useController, useWatch } from "react-hook-form";
+import { type Control, useController, useWatch } from "react-hook-form";
 import SelectBillModal from "./modals/SelectBillModal";
 import { TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { calculatePriceTTC } from "@/utils/price";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
+import type { OutgoingRequest } from "@/sdk";
 
 type RowProps = {
 	control: Control<OutgoingRequest>;

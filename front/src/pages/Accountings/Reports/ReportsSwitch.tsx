@@ -4,9 +4,9 @@ import DetailsPage from "./DetailsPage";
 import ListPage from "./ListPage";
 import OverviewPage from "./OverviewPage";
 import { useI18n } from "@/i18n";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { RRTab } from "@/components/RRTab";
-import { Tabs } from "@coco-ui/core";
+import { Tabs } from "@billycraft/ui";
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.REPORTS;
 

@@ -1,8 +1,8 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { useCallback } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "@/routes";
-import { OutgoingResponse } from "@/models/Outgoing";
+import type { OutgoingResponse } from "@/sdk";
 import OutgoingForm from "./Form";
 import { useI18n } from "@/i18n";
 import { useOutgoingByIdQuery } from "@/queries/useOutgoingByIdQuery";

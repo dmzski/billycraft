@@ -1,12 +1,18 @@
-import { BillApi } from "@/api/BillApi";
-import Bill from "@/models/Bill";
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import { type BillResponse, BillsService, type GetBillsByIdData } from "@/sdk";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useBillByIdQuery = (
-	id: Parameters<typeof BillApi.findById>[0],
-	config?: UseDataLoaderConfig<Bill, Error>,
+	id: GetBillsByIdData["path"]["id"],
+	config?: UseDataLoaderConfig<BillResponse, Error>,
 ) => {
 	const key = ["bill", "by-id", id];
 
-	return useDataLoader(key, () => BillApi.findById(id), config);
+	return useDataLoader(
+		key,
+		() => BillsService.getBillsById({ path: { id } }).then(({ data }) => data),
+		config,
+	);
 };

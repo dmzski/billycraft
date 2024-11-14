@@ -1,9 +1,9 @@
-import { Input } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { Input } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import {
-	FieldPath,
-	FieldValues,
-	UseControllerProps,
+	type FieldPath,
+	type FieldValues,
+	type UseControllerProps,
 	useController,
 } from "react-hook-form";
 

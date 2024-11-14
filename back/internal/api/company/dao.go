@@ -2,58 +2,58 @@ package company
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 )
 
-type CompanyDao struct {
+type OrganizationDao struct {
 }
 
-func (dao CompanyDao) FindAll() (companies []models.Company) {
-	database.DBConn.Find(&companies)
+func (dao OrganizationDao) FindAll() (organizations []models.Organization) {
+	database.DBConn.Find(&organizations)
 	return
 }
 
-func (dao CompanyDao) FindAllForMonthCron() (companies []models.Company) {
-	database.DBConn.Where("auto_month_report = true").Find(&companies)
+func (dao OrganizationDao) FindAllForMonthCron() (organizations []models.Organization) {
+	database.DBConn.Where("auto_month_report = true").Find(&organizations)
 	return
 }
-func (dao CompanyDao) FindAllForYearCron() (companies []models.Company) {
-	database.DBConn.Where("auto_year_report = true").Find(&companies)
+func (dao OrganizationDao) FindAllForYearCron() (organizations []models.Organization) {
+	database.DBConn.Where("auto_year_report = true").Find(&organizations)
 	return
 }
 
-func (dao CompanyDao) FindOneById(id string) (company models.Company) {
+func (dao OrganizationDao) FindOneById(id string) (company models.Organization) {
 	database.DBConn.Where("id = ?", id).First(&company)
 	return
 }
 
-func (dao CompanyDao) Create(creator string, dto dtos.CompanyRequest) (company models.Company) {
+func (dao OrganizationDao) Create(creator string, dto requests.OrganizationRequest) (organization models.Organization) {
 	tx := database.DBConn.Begin()
-	company = company.FromDTO(dto)
-	company.CreatedBy = creator
-	tx.Omit("ID").Create(&company)
+	organization = requests.MarshalOrganizationRequest(dto)
+	organization.CreatedBy = creator
+	tx.Omit("ID").Create(&organization)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
 		panic(err)
 	}
-	tx.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", company.ID, creator)
-	tx.Exec("INSERT INTO com_role (company_id, email, role) VALUES (?, ?, 'OWNER')", company.ID, creator)
+	tx.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", organization.ID, creator)
+	tx.Exec("INSERT INTO com_role (company_id, email, role) VALUES (?, ?, 'OWNER')", organization.ID, creator)
 
 	tx.Commit()
 	return
 }
 
-func (dao CompanyDao) Update(id string, dto dtos.CompanyRequest) (company models.Company) {
+func (dao OrganizationDao) Update(id string, dto requests.OrganizationRequest) (organization models.Organization) {
 	tx := database.DBConn.Begin()
-	tx.Where("id = ?", id).First(&company)
+	tx.Where("id = ?", id).First(&organization)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
 		panic(err)
 	}
-	tx.Model(&company).Updates(models.Company{}.FromDTO(dto))
+	tx.Model(&organization).Updates(dto)
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()
@@ -64,5 +64,5 @@ func (dao CompanyDao) Update(id string, dto dtos.CompanyRequest) (company models
 }
 
 var (
-	DAO = &CompanyDao{}
+	DAO = &OrganizationDao{}
 )

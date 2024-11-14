@@ -1,11 +1,11 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { ProductFormValues } from "./types";
-import { Button, useToast } from "@coco-ui/core";
-import { ComponentProps, useMemo } from "react";
+import type { ProductFormValues } from "./types";
+import { Button, useToast } from "@billycraft/ui";
+import { type ComponentProps, useMemo } from "react";
 import { useI18n } from "@/i18n";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
 import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
-import Supplier from "@/models/Supplier";
+import { ProductTypeSchema, type SupplierResponse } from "@/sdk";
 import { QrCodeIcon } from "@heroicons/react/24/solid";
 import { InputField } from "@/components/form/InputField";
 import { SelectField } from "@/components/form/SelectField";
@@ -13,10 +13,9 @@ import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { SwitchField } from "@/components/form/SwitchField";
-import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
 
 type ProductFormContentProps = {
-	suppliers: Supplier[];
+	suppliers: SupplierResponse[];
 };
 
 export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
@@ -33,7 +32,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] = useMemo(
 		() =>
-			Object.values(PRODUCT_TYPES).map((type) => ({
+			Object.values(ProductTypeSchema.enum).map((type) => ({
 				value: type,
 				label: <ProductTypeLabel type={type} />,
 			})),

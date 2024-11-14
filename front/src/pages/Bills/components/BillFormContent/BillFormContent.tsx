@@ -1,18 +1,18 @@
-import { Select } from "@coco-ui/core";
-import { ComponentProps, useMemo } from "react";
+import type { Select } from "@billycraft/ui";
+import { type ComponentProps, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { Prompt } from "react-router-dom";
 import useCustomers from "@/hooks/useCustomers";
-import Bill from "@/models/Bill";
 import BillLineTable from "./BillLineTable";
 import { useI18n } from "@/i18n";
-import { BillFormValues } from "./types";
+import type { BillFormValues } from "./types";
 import { calculatePriceTTC } from "@/utils/price";
 import { InputField } from "@/components/form/InputField";
 import { SelectField } from "@/components/form/SelectField";
+import type { BillResponse } from "@/sdk";
 
 type BillFormProps = {
-	bill?: Bill;
+	bill?: BillResponse;
 };
 
 export const BillFormContent = ({ bill }: BillFormProps) => {

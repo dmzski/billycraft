@@ -2,8 +2,8 @@ package outgoings
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 	"time"
 )
@@ -39,14 +39,14 @@ func (dao Repository) FindAllBetweenDates(tenant string, start time.Time, end ti
 	return
 }
 
-func (dao Repository) Update(id string, tenant string, changes dtos.OutgoingRequest) (outgoing models.Outgoing) {
+func (dao Repository) Update(id string, tenant string, changes requests.OutgoingRequest) (outgoing models.Outgoing) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&outgoing)
 	if tx.Error != nil {
 		tx.Rollback()
 		panic(tx.Error)
 	}
-	tx.Model(&outgoing).Updates(models.Outgoing{}.FromDTO(changes))
+	tx.Model(&outgoing).Updates(changes)
 	if tx.Error != nil {
 		tx.Rollback()
 		panic(tx.Error)
@@ -56,7 +56,16 @@ func (dao Repository) Update(id string, tenant string, changes dtos.OutgoingRequ
 	if changes.Lines != nil {
 		var lines []models.OutgoingLine
 		for _, x := range changes.Lines {
-			newLine := models.OutgoingLine{}.FromDTO(x)
+			newLine := models.OutgoingLine{
+				VAT:                   x.VAT,
+				BillID:                x.BillID,
+				SupplierID:            x.SupplierID,
+				Line:                  x.Line,
+				TotalHT:               x.TotalHT,
+				SupplierBillReference: x.SupplierBillReference,
+				OutgoingID:            id,
+			}
+
 			lines = append(lines, newLine)
 		}
 
@@ -78,8 +87,8 @@ func (dao Repository) Update(id string, tenant string, changes dtos.OutgoingRequ
 	return
 }
 
-func (dao Repository) Create(creator models.User, request dtos.OutgoingRequest) (outgoing models.Outgoing) {
-	outgoing = outgoing.FromDTO(request)
+func (dao Repository) Create(creator models.User, request requests.OutgoingRequest) (outgoing models.Outgoing) {
+	outgoing = requests.MarshalOutgoingRequest(request)
 	outgoing.CompanyID = *creator.CompanyID
 	outgoing.CreatedBy = creator.Email
 	if err := database.DBConn.Create(&outgoing).Error; err != nil {

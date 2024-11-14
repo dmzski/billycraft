@@ -1,11 +1,14 @@
-import { Button, Input, useToast } from "@coco-ui/core";
-import { OutgoingApi } from "@/api/OutgoingApi";
+import { Button, Input, useToast } from "@billycraft/ui";
 import { endOfMonth, format, formatRFC3339 } from "date-fns";
-import { OutgoingRequest, OutgoingResponse } from "@/models/Outgoing";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import OutgoingLinesTable from "./OutgoingLinesTable";
 import { useI18n } from "@/i18n";
+import {
+	type OutgoingRequest,
+	type OutgoingResponse,
+	OutgoingsService,
+} from "@/sdk";
 
 type FormProps = {
 	outgoing?: OutgoingResponse;
@@ -25,7 +28,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 	});
 
 	const onSubmit = async ({ name, lines, startDate }: OutgoingRequest) => {
-		const data = {
+		const values = {
 			lines: lines.map((line, index) => ({
 				...line,
 				line: index + 1,
@@ -33,13 +36,20 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 				vat: Number(line.vat) || 0,
 			})),
 			name,
-			startDate: formatRFC3339(Date.parse(startDate)),
-			endDate: formatRFC3339(endOfMonth(Date.parse(startDate))),
+			startDate: formatRFC3339(startDate ? Date.parse(startDate) : Date.now()),
+			endDate: formatRFC3339(
+				endOfMonth(startDate ? Date.parse(startDate) : Date.now()),
+			),
 		} as OutgoingRequest;
 		try {
 			const res = outgoing?.id
-				? await OutgoingApi.update(outgoing.id, data)
-				: await OutgoingApi.create(data);
+				? await OutgoingsService.patchOutgoingsById({
+						path: { id: outgoing.id },
+						body: values,
+					}).then(({ data }) => data)
+				: await OutgoingsService.postOutgoings({ body: values }).then(
+						({ data }) => data,
+					);
 			toast.show(
 				t(
 					outgoing?.id
@@ -47,7 +57,9 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 						: "accounting.outgoings.forms.add.submit.new.success",
 				),
 			);
-			onSubmitSuccess?.(res);
+			if (res) {
+				onSubmitSuccess?.(res);
+			}
 		} catch {
 			toast.destructive(t("genericFormError"));
 		}
@@ -90,9 +102,9 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 					validate: async (value) => {
 						if (disabledFields?.includes("startDate")) return undefined;
 
-						const date = Date.parse(value);
+						const date = formatRFC3339(value ? Date.parse(value) : Date.now());
 						try {
-							await OutgoingApi.findFirstWithDateIn(date);
+							await OutgoingsService.getOutgoingsFirst({ path: { date } });
 							return t("accounting.outgoings.forms.add.error.alreadyExist");
 						} catch {
 							return undefined;

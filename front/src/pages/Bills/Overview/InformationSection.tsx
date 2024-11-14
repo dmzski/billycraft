@@ -2,9 +2,9 @@ import { RRLink } from "@/components/RRLink";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import type Bill from "@/models/Bill";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
+import type { BillResponse } from "@/sdk";
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
@@ -13,7 +13,7 @@ import {
 } from "@/utils/price";
 
 type InformationSectionProps = {
-	bill: Bill;
+	bill: BillResponse;
 };
 
 export const InformationSection = ({ bill }: InformationSectionProps) => {

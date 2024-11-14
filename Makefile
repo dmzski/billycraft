@@ -84,6 +84,10 @@ front-release:
 front-stg-release:
 	cd front && make stg-deploy-docker
 
+generate-sdk:
+	# cd back && swag init --ot json && cd ../ && pnpm openapi-generator-cli generate --generator-key sdk-front --skip-validate-spec
+	cd back && swag init --ot json -q && cd ../ && pnpx @hey-api/openapi-ts -i back/docs/swagger.json -o front/src/sdk -c @hey-api/client-fetch
+
 
 #
 # WWW

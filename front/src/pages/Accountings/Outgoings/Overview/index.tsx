@@ -1,5 +1,5 @@
 import { formatRFC3339 } from "date-fns";
-import { OutgoingResponse } from "@/models/Outgoing";
+import type { OutgoingResponse } from "@/sdk";
 import { useMemo } from "react";
 import OutgoingForm from "../Form";
 import { useI18n } from "@/i18n";

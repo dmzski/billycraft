@@ -1,5 +1,6 @@
 export default {
 	// Menu
+	"heads.account": "Mon compte",
 	"heads.login": "Se connecter",
 	"heads.register": "S'inscrire",
 	"heads.bills": "Factures",
@@ -27,13 +28,14 @@ export default {
 	"heads.quotes.overview": "Détails d'un devis",
 	"heads.quotes.edit": "Modifier un devis",
 	"heads.quotes.add": "Ajouter un devis",
-	"heads.settings": "Paramètres",
-	"heads.settings.myOrganization": "Mon entreprise",
-	"heads.settings.quoteCustomization": "PDF des devis",
-	"heads.settings.billCustomization": "PDF des factures",
-	"heads.settings.users": "Utilisateurs et Invitations",
-	"heads.settings.users.users": "Utilisateurs",
-	"heads.settings.users.invitations": "Invitations",
+	"heads.organization": "Mon entreprise",
+	"heads.organization.settings": "Paramètres",
+	"heads.organization.customization": "Customisation",
+	"heads.organization.customization.quote": "Devis",
+	"heads.organization.customization.bill": "Factures",
+	"heads.organization.users": "Utilisateurs et Invitations",
+	"heads.organization.users.users": "Utilisateurs",
+	"heads.organization.users.invitations": "Invitations",
 	"heads.suppliers": "Fournisseurs",
 	"heads.suppliers.form": "Fournisseurs > Formulaire",
 	"heads.accounting": "Compatibilité",
@@ -94,6 +96,7 @@ export default {
 	"customer information": "Informations du client",
 	"display customer email": "Afficher l'email du client",
 	"display customer phonenumber": "Afficher le téléphone du client",
+	"organization.settings.title": "Paramètres de l'entreprise",
 	"compagny informations": "Informations de l'entreprise",
 	"display compagny email": "Afficher l'email de mon entreprise",
 	"display compagny phonenumber": "Afficher le téléphone de mon entreprise",
@@ -151,7 +154,8 @@ export default {
 	"register.success": "Compte crée avec succès",
 	"register.fields.email.label": "Email",
 	"register.fields.password.label": "Mot de passe",
-	"register.fields.name.label": "Nom complet",
+	"register.fields.firstName.label": "Prénom",
+	"register.fields.lastName.label": "Nom",
 	"register.fields.tos.label":
 		"J'accepte les Conditions Générales d'Utilisation",
 
@@ -315,9 +319,7 @@ export default {
 	"bills.status.DRAFT": "Brouillon",
 	"bills.status.SENT": "Envoyée",
 	"bills.status.REFUSED": "Refusée",
-	"bills.status.PAYMENT_PAID": "Payée",
-	"bills.status.TO_DECLARE": "A déclarer",
-	"bills.status.ACCEPTED": "Acceptée",
+	"bills.status.PAID": "Payée",
 	"bills.status.ARCHIVED": "Archivée",
 
 	// Bills > List
@@ -900,4 +902,21 @@ export default {
 		"Téléchargement ZIP généré avec succès",
 	"bills.modals.multiDownloadPdf.submit.error":
 		"Une erreur est survenue durant la génération du ZIP",
+
+	// My settings
+	"account.title": "Mon compte",
+	"account.updateMyInformation": "Mettre à jour mes informations",
+	"account.fields.firstName.label": "Prénom",
+	"account.fields.lastName.label": "Nom",
+	"account.fields.oldPassword.label": "Mot de passe actuel",
+	"account.fields.newPassword.label": "Nouveau mot de passe",
+	"account.submit": "Enregistrer",
+	"account.submit.success": "Vos informations ont été mise à jour",
+	"account.submit.error":
+		"Une erreur est survenue lors de la mise à jour de vos informations",
+
+	// Organization > Customization
+	"organization.customization.title": "Personnalisation",
+	"organization.customization.tabs.bill": "Factures",
+	"organization.customization.tabs.quote": "Devis",
 } as const;

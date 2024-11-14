@@ -1,4 +1,4 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { OUTGOING_ROUTES } from "../constants";
 import OutgoingDetail from "./OutgoingDetail";

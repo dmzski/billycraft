@@ -3,7 +3,7 @@ import { useI18n } from "@/i18n";
 import { useAllBillsNotPaidQuery } from "@/queries/useAllBillsNotPaidQuery";
 import { ROUTES } from "@/routes";
 import { getBillOrQuoteTotal } from "@/utils/price";
-import { Badge, Button, Loader } from "@coco-ui/core";
+import { Badge, Button, Loader } from "@billycraft/ui";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 

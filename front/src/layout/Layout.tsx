@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/i18n";
@@ -12,10 +12,12 @@ import {
 	Link,
 	SidebarProvider,
 	SidebarTrigger,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useUser } from "@/providers/UserProvider";
 import { SUPPORT_EMAIL } from "@/constants/global";
+import { ROUTES } from "@/routes";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 type LayoutProps = {
 	children: ReactNode;
@@ -46,12 +48,22 @@ const Layout = ({ children }: LayoutProps) => {
 									</Button>
 								}
 							>
-								<Dropdown.Content className="w-full">
-									<Dropdown.Button variant="destructive" onClick={logout}>
-										<ArrowRightStartOnRectangleIcon />
-										<span>{t("logout")}</span>
-									</Dropdown.Button>
-								</Dropdown.Content>
+								{({ close }) => (
+									<Dropdown.Content className="w-full">
+										<Dropdown.Button asChild>
+											<ReactRouterLink
+												onClick={close}
+												to={ROUTES.ACCOUNT.path()}
+											>
+												<span>{t("heads.account")}</span>
+											</ReactRouterLink>
+										</Dropdown.Button>
+										<Dropdown.Button variant="destructive" onClick={logout}>
+											<ArrowRightStartOnRectangleIcon />
+											<span>{t("logout")}</span>
+										</Dropdown.Button>
+									</Dropdown.Content>
+								)}
 							</Dropdown>
 							<ThemeToggle />
 						</div>

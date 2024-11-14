@@ -1,4 +1,4 @@
-import { Button, Loader } from "@coco-ui/core";
+import { Button, Loader } from "@billycraft/ui";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useAllCustomersNotDeleted } from "@/queries/useAllCustomersNotDeleted";
 import { useI18n } from "@/i18n";

@@ -2,8 +2,8 @@ package customers
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 	"strings"
 )
@@ -32,7 +32,7 @@ func (dao CustomerDao) FindOneByIdAndTenant(id string, tenant string) (customer 
 	return
 }
 
-func (dao CustomerDao) Update(id string, tenant string, changes dtos.Customer) (customer models.Customer) {
+func (dao CustomerDao) Update(id string, tenant string, changes requests.CustomerRequest) (customer models.Customer) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&customer)
 	if tx.Error != nil {
@@ -47,9 +47,17 @@ func (dao CustomerDao) Update(id string, tenant string, changes dtos.Customer) (
 	return
 }
 
-func (dao CustomerDao) Create(creator models.User, newCustomer dtos.Customer) (customer models.Customer) {
-	customer = customer.FromDTO(newCustomer)
-	customer.CompanyID = *creator.CompanyID
+func (dao CustomerDao) Create(creator models.User, newCustomer requests.CustomerRequest) (customer models.Customer) {
+	customer = models.Customer{
+		Contact:     newCustomer.Contact,
+		City:        newCustomer.City,
+		Address:     newCustomer.Address,
+		Email:       newCustomer.Email,
+		PostalCode:  newCustomer.PostalCode,
+		PhoneNumber: newCustomer.PhoneNumber,
+		CompanyID:   *creator.CompanyID,
+		Name:        newCustomer.Name,
+	}
 	// customer.CreatedBy = creator.Email
 	if err := database.DBConn.Create(&customer).Error; err != nil {
 		log.Println("Error : ", err.Error())

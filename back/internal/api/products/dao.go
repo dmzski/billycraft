@@ -2,7 +2,6 @@ package products
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
 	"log"
@@ -25,7 +24,7 @@ func (dao Repository) FindOneByIdAndTenant(id string, tenant string) (product mo
 	return
 }
 
-func (dao Repository) Update(id string, tenant string, dto dtos.Product) (product models.Product) {
+func (dao Repository) Update(id string, tenant string, dto requests.UpdateProductRequest) (product models.Product) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&product)
 	if tx.Error != nil {
@@ -59,8 +58,8 @@ func (dao Repository) Update(id string, tenant string, dto dtos.Product) (produc
 	return
 }
 
-func (dao Repository) Create(creator models.User, newProduct dtos.Product) (product models.Product) {
-	product = product.FromDTO(newProduct)
+func (dao Repository) Create(creator models.User, newProduct requests.CreateProductRequest) (product models.Product) {
+	product = requests.MarshalCreateProductRequest(newProduct)
 	product.CompanyID = *creator.CompanyID
 	product.CreatedBy = creator.Email
 	if err := database.DBConn.Create(&product).Error; err != nil {

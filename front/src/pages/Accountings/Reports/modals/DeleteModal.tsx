@@ -1,7 +1,7 @@
-import { ReportApi } from "@/api/ReportApi";
 import { useI18n } from "@/i18n";
-import { Alert, Button, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { ReportsService } from "@/sdk";
+import { Alert, Button, Modal, useToast } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 
 type DeleteModalProps = {
@@ -22,7 +22,7 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
 
 	const onSubmit = async () => {
 		try {
-			await ReportApi.delete(id);
+			await ReportsService.deleteReportsById({ path: { id } });
 			toast.show(t("accounting.reports.modals.delete.submit.success"));
 			await onSubmitSuccess?.();
 		} catch {

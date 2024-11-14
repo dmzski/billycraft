@@ -1,7 +1,7 @@
 import { SUPPORT_EMAIL } from "@/constants/global";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button } from "@coco-ui/core";
-import { Component, ReactNode } from "react";
+import { Button } from "@billycraft/ui";
+import { Component, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 type ErrorBoundaryProps = { children: ReactNode };

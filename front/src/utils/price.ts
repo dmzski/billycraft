@@ -1,6 +1,4 @@
-import Bill from "@/models/Bill";
-import { ProductType } from "@/models/LineTypeEnum";
-import Quote from "@/models/Quote";
+import type { BillResponse, ProductType, QuoteResponse } from "@/sdk";
 
 export function roundTwoDecimals(aPrice: number): number {
 	return Math.round(aPrice * 100) / 100;
@@ -13,7 +11,7 @@ export function calculatePriceTTC(
 	if (!price) {
 		return 0;
 	}
-	const typedPrice = parseFloat(`${price}`);
+	const typedPrice = Number.parseFloat(`${price}`);
 	const computedVat = tva / 100;
 	return roundTwoDecimals(typedPrice * (1 + computedVat));
 }
@@ -32,18 +30,21 @@ export function calculatePriceETFromIT(
 	if (!price) {
 		return 0;
 	}
-	const typedPrice = parseFloat(`${price}`);
+	const typedPrice = Number.parseFloat(`${price}`);
 	const computedVat = tva / 100;
 
 	return roundTwoDecimals(typedPrice / (1 + computedVat));
 }
 
-export function getBillOrQuoteTotal(billOrQuote: Bill | Quote): number {
+export function getBillOrQuoteTotal(
+	billOrQuote: BillResponse | QuoteResponse,
+): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
-		.map(
-			(line) =>
+		.map((line) =>
+			roundTwoDecimals(
 				calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0),
+			),
 		);
 
 	if (array && array.length > 0) {
@@ -55,10 +56,14 @@ export function getBillOrQuoteTotal(billOrQuote: Bill | Quote): number {
 	return 0;
 }
 
-export function getBillOrQuoteTotalEt(billOrQuote: Bill | Quote): number {
+export function getBillOrQuoteTotalEt(
+	billOrQuote: BillResponse | QuoteResponse,
+): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
-		.map((line) => calculatePriceET(line.price) * (line.quantity ?? 0));
+		.map((line) =>
+			roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ?? 0)),
+		);
 
 	if (array && array.length > 0) {
 		return array.reduce(
@@ -70,14 +75,15 @@ export function getBillOrQuoteTotalEt(billOrQuote: Bill | Quote): number {
 }
 
 export function getBillOrQuoteTotalETForLineType(
-	billOrQuote: Bill | Quote,
+	billOrQuote: BillResponse | QuoteResponse,
 	type: ProductType,
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity && line.type === type)
-		.map(
-			(line) =>
+		.map((line) =>
+			roundTwoDecimals(
 				calculatePriceET(line.price) * (line.quantity ? line.quantity : 0),
+			),
 		);
 
 	if (array && array.length > 0) {
@@ -90,15 +96,16 @@ export function getBillOrQuoteTotalETForLineType(
 }
 
 export function getBillOrQuoteTotalForLineType(
-	billOrQuote: Bill | Quote,
+	billOrQuote: BillResponse | QuoteResponse,
 	type: ProductType,
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity && line.type === type)
-		.map(
-			(line) =>
+		.map((line) =>
+			roundTwoDecimals(
 				calculatePriceTTC(line.price, billOrQuote.tva) *
-				(line.quantity ? line.quantity : 0),
+					(line.quantity ? line.quantity : 0),
+			),
 		);
 
 	if (array && array.length > 0) {

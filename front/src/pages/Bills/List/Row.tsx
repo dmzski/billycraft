@@ -4,12 +4,8 @@ import {
 	Collapsible,
 	Dropdown,
 	useToast,
-} from "@coco-ui/core";
-import { BillApi } from "@/api/BillApi";
+} from "@billycraft/ui";
 import { formatISO9075, parseJSON } from "date-fns";
-import type Bill from "@/models/Bill";
-import type { BillStatus } from "@/models/Bill";
-import type Customer from "@/models/Customer";
 import { useMemo, type MouseEvent, useReducer } from "react";
 import { type BillOverviewRouteQueryParams, ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
@@ -17,10 +13,16 @@ import { BillLabel } from "@/components/labels/BillLabel";
 import { RowContent } from "./RowContent";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
+import {
+	BillsService,
+	type BillResponse,
+	type BillStatus,
+	type CustomerResponse,
+} from "@/sdk";
 
 type BillTableLineProps = {
-	bill: Bill;
-	customer?: Customer;
+	bill: BillResponse;
+	customer?: CustomerResponse;
 	selectedStatus: BillOverviewRouteQueryParams["fromTab"];
 	checked: boolean;
 	onCheckedChange: (newState: boolean) => void;
@@ -41,7 +43,16 @@ const BillTableLine = ({
 		e.stopPropagation();
 		const updateStatus = async () => {
 			try {
-				if (bill.id) await BillApi.updateStatus({ id: bill.id, status });
+				if (bill.id)
+					await BillsService.patchBillsById({
+						path: { id: bill.id },
+						body: {
+							status,
+							lines: bill.lines,
+							title: bill.title,
+							customerId: bill.customerId,
+						},
+					});
 				toast.show(t("bills.list.statusUpdated"));
 				reload();
 			} catch {
@@ -55,8 +66,6 @@ const BillTableLine = ({
 		switch (bill.status) {
 			case "SENT":
 				return ["REFUSED", "ARCHIVED"];
-			case "TO_DECLARE":
-				return ["ARCHIVED"];
 			case "ARCHIVED":
 			case "REFUSED":
 				return [];
@@ -91,7 +100,9 @@ const BillTableLine = ({
 							/>
 						</div>
 						<div className="truncate">{customer?.name ?? "-"}</div>
-						<div>{formatISO9075(parseJSON(bill.createdAt))}</div>
+						<div>
+							{bill.createdAt ? formatISO9075(parseJSON(bill.createdAt)) : "-"}
+						</div>
 						<div>
 							{nextStatuses.length > 0 ? (
 								<Dropdown
@@ -114,7 +125,7 @@ const BillTableLine = ({
 					</div>
 				}
 			>
-				<RowContent bill={bill} />
+				<RowContent bill={bill} customer={customer} />
 			</Collapsible>
 		</div>
 	);

@@ -1,20 +1,23 @@
 import { useI18n } from "@/i18n";
-import { Button, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { Button, Modal, useToast } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 import {
 	ProductFormContent,
-	ProductFormValues,
+	type ProductFormValues,
 } from "../components/ProductFormContent";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import Product from "@/models/Product";
 import { Submit } from "@/components/form/Submit";
 import { Form } from "@/components/form/Form";
+import {
+	type CreateProductRequest,
+	type ProductResponse,
+	ProductsService,
+} from "@/sdk";
 
 type AddProductModalProps = {
-	onSubmitSuccess: (newId: Product["id"]) => Promise<void> | void;
+	onSubmitSuccess: (newId: ProductResponse["id"]) => Promise<void> | void;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
 	initialValues?: Partial<ProductFormValues>;
 };
@@ -59,9 +62,13 @@ const AddProductForm = ({
 				values.lowStock = null;
 				values.code = null;
 			}
-			const res = await ProductApi.create(values);
+			const res = await ProductsService.postProducts({
+				body: values as CreateProductRequest,
+			}).then(({ data }) => data);
 			toast.show(pageT("submit.success"));
-			await onSubmitSuccess(res.id);
+			if (res) {
+				await onSubmitSuccess(res.id);
+			}
 			close();
 		} catch (err) {
 			sendErrorToSentry(err, { data: values });

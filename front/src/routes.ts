@@ -1,5 +1,4 @@
-import { BillStatus } from "./models/Bill";
-import { QuoteStatus } from "./models/Quote";
+import type { BillStatus, QuoteStatus } from "./sdk";
 
 export type QuoteRouteProps = {
 	id: string;
@@ -68,7 +67,7 @@ export const ROUTES = {
 	},
 	BILL_ADD: {
 		id: "bills.form",
-		path: () => `/bills/create`,
+		path: () => "/bills/create",
 	},
 	BILL_EDIT: {
 		id: "bills.form",
@@ -169,40 +168,52 @@ export const ROUTES = {
 		id: "quotes.add",
 		path: () => "/quotes/create",
 	},
-	SETTINGS: {
-		id: "settings",
+	ACCOUNT: {
+		id: "account",
+		exact: true,
+		path: () => "/account",
+	},
+	ORGANIZATION: {
+		id: "organization",
+		path: () => "/organization/",
 		exact: false,
-		path: () => "/settings",
 		routes: {
-			MY_COMPANY: {
-				id: "settings.myOrganization",
+			SETTINGS: {
+				id: "organization.settings",
 				exact: true,
-				path: () => "/settings/my-company",
-			},
-			QUOTE_CUSTOMIZATION: {
-				id: "settings.quoteCustomization",
-				exact: true,
-				path: () => "/settings/quote-customization",
-			},
-			BILL_CUSTOMIZATION: {
-				id: "settings.billCustomization",
-				exact: true,
-				path: () => "/settings/bill-customization",
+				path: () => "/organization/settings",
 			},
 			USERS: {
-				id: "settings.users",
+				id: "organization.users",
 				exact: false,
-				path: () => "/settings/users",
+				path: () => "/organization/users",
 				routes: {
 					USERS: {
-						id: "settings.users.users",
+						id: "organization.users.users",
 						exact: true,
-						path: () => "/settings/users/users",
+						path: () => "/organization/users/users",
 					},
 					INVITATIONS: {
-						id: "settings.users.invitations",
+						id: "organization.users.invitations",
 						exact: true,
-						path: () => "/settings/users/invitations",
+						path: () => "/organization/users/invitations",
+					},
+				},
+			},
+			CUSTOMIZATION: {
+				id: "organization.customization",
+				exact: false,
+				path: () => "/organization/customization",
+				routes: {
+					BILL: {
+						id: "organization.customization.bill",
+						exact: true,
+						path: () => "/organization/customization/bill",
+					},
+					QUOTE: {
+						id: "organization.customization.quote",
+						exact: true,
+						path: () => "/organization/customization/quote",
 					},
 				},
 			},

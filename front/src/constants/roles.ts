@@ -1,6 +1,6 @@
-import { RoleName } from "@/models/dtos/Role";
+import type { RoleEnum } from "@/sdk";
 
-export const ROLES: RoleName[] = [
+export const ROLES: RoleEnum[] = [
 	"OWNER",
 	"ADMIN",
 	"EDITOR",

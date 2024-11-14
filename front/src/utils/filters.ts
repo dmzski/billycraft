@@ -1,14 +1,12 @@
-import Bill from "@/models/Bill";
-import Customer from "@/models/Customer";
-import Quote from "@/models/Quote";
+import type { BillResponse, CustomerResponse, QuoteResponse } from "@/sdk";
 import { formatISO9075, parseJSON } from "date-fns";
 
 type FilterKey = "name" | "status" | "createdAt" | "title" | "customer";
 
-export function filterBillsOrQuotes<T extends Quote | Bill>(
+export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 	array: T[],
 	filters: Record<FilterKey, string>,
-	customers: Customer[],
+	customers: CustomerResponse[],
 ): T[] {
 	if (!array) return [];
 	if (!filters) return array;

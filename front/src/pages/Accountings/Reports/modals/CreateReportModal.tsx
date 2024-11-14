@@ -1,10 +1,9 @@
-import { Button, Input, Modal, useToast } from "@coco-ui/core";
-import { ReportApi } from "@/api/ReportApi";
-import { endOfMonth, formatRFC3339 } from "date-fns";
-import { ReportRequest } from "@/models/Report";
-import { ComponentProps } from "react";
-import { useController, useForm } from "react-hook-form";
 import { useI18n } from "@/i18n";
+import { type ReportRequest, ReportsService } from "@/sdk";
+import { Button, Input, Modal, useToast } from "@billycraft/ui";
+import { endOfMonth, formatRFC3339 } from "date-fns";
+import type { ComponentProps } from "react";
+import { useController, useForm } from "react-hook-form";
 
 type CreateReportModalProps = {
 	onSubmitSuccess?: () => void | Promise<void>;
@@ -41,7 +40,7 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
 				startDate: formatRFC3339(Date.parse(startDate)),
 				endDate: formatRFC3339(endOfMonth(Date.parse(endDate))),
 			} as ReportRequest;
-			await ReportApi.create(data);
+			await ReportsService.postReports({ body: data });
 			toast.show(t("accounting.reports.modals.create.fields.submit.success"));
 			await onSubmitSuccess?.();
 		} catch {

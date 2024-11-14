@@ -1,6 +1,6 @@
-import { Modal } from "@coco-ui/core";
+import { Modal } from "@billycraft/ui";
 import useCustomers from "@/hooks/useCustomers";
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useI18n } from "@/i18n";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";

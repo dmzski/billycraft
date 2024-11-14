@@ -4,8 +4,8 @@ import (
 	"back/database"
 	"back/internal/api/company"
 	"back/internal/api/outgoings"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"time"
 )
 
@@ -26,7 +26,7 @@ func (Repository) FindOneByTenantAndId(tenant string, id string) (report models.
 	return
 }
 
-func (dao Repository) Create(user models.User, dto dtos.ReportRequest) models.Report {
+func (dao Repository) Create(user models.User, dto requests.ReportRequest) models.Report {
 	startMonth, err := time.Parse(time.RFC3339, dto.StartDate)
 	if err != nil {
 		panic("Can't parse date")
@@ -164,7 +164,7 @@ func getLinePrice(bill models.Bill, line models.BillLine) float64 {
 
 }
 
-func addReportTaxes(company models.Company, report models.Report) models.Report {
+func addReportTaxes(company models.Organization, report models.Report) models.Report {
 	if company.ArticlesTax != nil {
 		report.ArticleTaxes += float64(*company.ArticlesTax) / 100 * report.ArticleSales
 	}
@@ -177,7 +177,7 @@ func addReportTaxes(company models.Company, report models.Report) models.Report 
 	return report
 }
 
-func addBillReportTaxes(company models.Company, report models.ReportBill) models.ReportBill {
+func addBillReportTaxes(company models.Organization, report models.ReportBill) models.ReportBill {
 	if company.ArticlesTax != nil {
 		report.ArticleTaxes += float64(*company.ArticlesTax) / 100 * report.ArticleSales
 	}

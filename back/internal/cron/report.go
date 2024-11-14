@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var BOT_EMAIL = "bot@coco-erp.fr"
+var BOT_EMAIL = "bot@billycraft.fr"
 
 func LaunchMonthReportJob() {
 	generateMonthReports()

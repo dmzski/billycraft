@@ -40,3 +40,12 @@ pub struct LoginUserSchema {
     pub email: String,
     pub password: String,
 }
+
+
+#[derive(Deserialize)]
+pub struct UpdateUserSchema {
+    pub name: Option<String>,
+    #[serde(rename = "oldPassword")]
+    pub old_password: Option<String>,
+    pub password: Option<String>,
+}

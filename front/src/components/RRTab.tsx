@@ -1,5 +1,5 @@
-import { Tab } from "@coco-ui/core";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import { Tab } from "@billycraft/ui";
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
 type RRTabProps = ComponentPropsWithoutRef<typeof Tab> & {

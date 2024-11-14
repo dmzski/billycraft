@@ -1,12 +1,23 @@
-import { CustomerApi } from "@/api/CustomerApi";
-import Customer from "@/models/Customer";
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import { type CustomerResponse, CustomersService } from "@/sdk";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useCustomerQuery = (
-	id: Parameters<typeof CustomerApi.findById>[0],
-	config?: UseDataLoaderConfig<Customer, Error>,
+	id: CustomerResponse["id"],
+	config?: UseDataLoaderConfig<CustomerResponse, Error>,
 ) => {
 	const key = ["customers", "by-id", id];
 
-	return useDataLoader(key, () => CustomerApi.findById(id), config);
+	return useDataLoader(
+		key,
+		() =>
+			CustomersService.getCustomersById({
+				path: {
+					id: id ?? "",
+				},
+			}).then(({ data }) => data),
+		config,
+	);
 };

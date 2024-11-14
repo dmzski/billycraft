@@ -1,16 +1,16 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Loader, Tabs } from "@coco-ui/core";
-import { QuoteRouteQueryParams, ROUTES } from "@/routes";
+import { Button, Loader, Tabs } from "@billycraft/ui";
+import { type QuoteRouteQueryParams, ROUTES } from "@/routes";
 import useCustomers from "@/hooks/useCustomers";
 import QuoteFilterContainer from "./Filters";
 import QuoteList from "./List/List";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { filterBillsOrQuotes } from "@/utils/filters";
-import { QUOTE_STATUS } from "@/models/Quote";
 import { useAllQuotesQuery } from "@/queries/useAllQuotesQuery";
 import { useQueryParams } from "@/hooks/useQueryParams";
+import { QuoteStatusSchema } from "@/sdk";
 
 const QuotePage = () => {
 	const { t } = useI18n();
@@ -18,7 +18,7 @@ const QuotePage = () => {
 	const { tab } = useQueryParams<QuoteRouteQueryParams>();
 	const [selectedStatus, setSelectedStatus] = useState<
 		QuoteRouteQueryParams["tab"]
-	>(tab && tab !== "all" && QUOTE_STATUS.includes(tab) ? tab : "all");
+	>(tab && tab !== "all" && QuoteStatusSchema.enum.includes(tab) ? tab : "all");
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
 	>({
@@ -60,7 +60,7 @@ const QuotePage = () => {
 					>
 						{t("all")}
 					</Tabs.Tab>
-					{QUOTE_STATUS.map((status) => (
+					{QuoteStatusSchema.enum.map((status) => (
 						<Tabs.Tab
 							key={status}
 							onClick={() => setSelectedStatus(status)}

@@ -1,10 +1,15 @@
 import { useI18n } from "@/i18n";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { ProductFilters } from "@/utils/products";
-import { Button, Collapsible, Input, Select, Switch } from "@coco-ui/core";
+import type { ProductFilters } from "@/utils/products";
+import { Button, Collapsible, Input, Select, Switch } from "@billycraft/ui";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { ChangeEvent, ComponentProps, useMemo, useReducer } from "react";
+import {
+	type ChangeEvent,
+	type ComponentProps,
+	useMemo,
+	useReducer,
+} from "react";
 
 type FiltersProps = {
 	filters: ProductFilters;
@@ -66,11 +71,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 			disclosure={
 				<div>
 					<Button onClick={toggleOpenFilters} variant="ghost">
-						{openFilters ? (
-							<EyeSlashIcon className="w-5" />
-						) : (
-							<EyeIcon className="w-5" />
-						)}
+						{openFilters ? <EyeSlashIcon /> : <EyeIcon />}
 						{openFilters ? pageT("buttons.hide") : pageT("buttons.display")}
 					</Button>
 				</div>

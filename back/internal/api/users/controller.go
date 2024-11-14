@@ -1,7 +1,6 @@
 package users
 
 import (
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
@@ -10,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// InitRoutes initializes the routes for managing users
 func InitRoutes(api fiber.Router) {
 	router := api.Group("/users")
 	router.Get("/", findAll)
@@ -18,13 +18,26 @@ func InitRoutes(api fiber.Router) {
 	router.Delete("/remove-user", removeUser)
 }
 
+// findMe retrieves the current authenticated user's data
+// @Summary Retrieves the current user's data
+// @Tags Users
+// @Produce json
+// @Success 200 {object} responses.UserResponse "Current user details"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /users/me [get]
 func findMe(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	dto := new(responses.UserResponse)
-	dto.FromModel(user)
-	return c.JSON(dto)
+	return c.JSON(responses.CreateUserResponse(user))
 }
 
+// findAll retrieves all users in the company for an admin
+// @Summary Retrieves all users in the company
+// @Tags Users
+// @Produce json
+// @Success 200 {array} responses.UserResponse "List of users"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 403 {object} string "Forbidden"
+// @Router /users [get]
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	role := c.Locals("role").(enums.RoleEnum)
@@ -37,11 +50,20 @@ func findAll(c *fiber.Ctx) error {
 	return makeArrayResponse(c, users)
 }
 
+// updateMe allows the current user to update their own profile
+// @Summary Updates the current user's profile
+// @Tags Users
+// @Produce json
+// @Param body body requests.UserRequest true "User update data"
+// @Success 200 {object} responses.UserResponse "Updated user details"
+// @Failure 400 {object} string "Bad request"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /users/me [patch]
 func updateMe(c *fiber.Ctx) error {
-	newUser := dtos.User{}
+	newUser := requests.UserRequest{}
 	err := c.BodyParser(&newUser)
 	if err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&responses.ErrorResponse{
 			Code:    fiber.ErrBadRequest.Code,
 			Message: "Can't parse user",
 		})
@@ -50,19 +72,27 @@ func updateMe(c *fiber.Ctx) error {
 	user.FirstName = newUser.FirstName
 	user.LastName = newUser.LastName
 	DAO.SaveUser(user)
-	dto := new(responses.UserResponse)
-	dto.FromModel(user)
 
-	return c.JSON(user)
+	return c.JSON(responses.CreateUserResponse(user))
 }
 
+// removeUser removes a user from the company by email
+// @Summary Removes a user from the company
+// @Tags Users
+// @Produce json
+// @Param body body requests.RemoveUserRequest true "Remove user request data"
+// @Success 204 {string} string "User removed from company"
+// @Failure 400 {object} string "Bad request"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 404 {object} string "User not found"
+// @Router /users/remove-user [delete]
 func removeUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	role := c.Locals("role").(enums.RoleEnum)
 	request := requests.RemoveUserRequest{}
 	err := c.BodyParser(&request)
 	if err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(&dtos.Error{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(&responses.ErrorResponse{
 			Code:    fiber.ErrBadRequest.Code,
 			Message: "Can't parse request",
 		})
@@ -72,17 +102,17 @@ func removeUser(c *fiber.Ctx) error {
 	}
 	err = DAO.LeaveCompany(request.Email, *user.CompanyID)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Error occured during processing your request")
+		return c.Status(fiber.StatusInternalServerError).SendString("Error occurred during processing your request")
 	}
 
 	return c.Status(fiber.StatusNoContent).SendString("User removed from company")
 }
 
+// makeArrayResponse converts a list of users into a response array
 func makeArrayResponse(c *fiber.Ctx, array []models.User) error {
 	res := make([]responses.UserResponse, 0)
-	for _, x := range array {
-		newDto := responses.UserResponse{}
-		newDto.FromModel(x)
+	for _, user := range array {
+		newDto := responses.CreateUserResponse(user)
 		res = append(res, newDto)
 	}
 

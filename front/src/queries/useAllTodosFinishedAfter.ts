@@ -1,10 +1,14 @@
-import { TodoApi } from "@/api/TodoApi";
+import { type GetTodosData, TodosService } from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
 export const useAllTodosFinishedAfter = (
-	params: Parameters<(typeof TodoApi)["findAllFinishedAfter"]>[0],
+	params: NonNullable<GetTodosData["query"]>["done_after"],
 ) => {
-	const key = ["todos", "findAllFinishedAfter", Object.values(params)].flat();
+	const key = ["todos", "findAllFinishedAfter", params].flat();
 
-	return useDataLoader(key, () => TodoApi.findAllFinishedAfter(params));
+	return useDataLoader(key, () =>
+		TodosService.getTodos({ query: { done_after: params } }).then(
+			({ data }) => data,
+		),
+	);
 };

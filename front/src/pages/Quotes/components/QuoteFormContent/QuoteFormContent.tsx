@@ -1,10 +1,10 @@
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { Prompt } from "react-router-dom";
 import useCustomers from "@/hooks/useCustomers";
 import QuoteLineTable from "./QuoteLineTable";
 import { useI18n } from "@/i18n";
-import { QuoteFormValues } from "./types";
+import type { QuoteFormValues } from "./types";
 import { calculatePriceTTC } from "@/utils/price";
 import { InputField } from "@/components/form/InputField";
 import { SelectField } from "@/components/form/SelectField";

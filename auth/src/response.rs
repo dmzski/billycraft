@@ -3,7 +3,7 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct FilteredUser {
+pub struct UserResponse {
     pub id: String,
     pub name: String,
     pub email: String,
@@ -14,11 +14,11 @@ pub struct FilteredUser {
 
 #[derive(Serialize, Debug)]
 pub struct UserData {
-    pub user: FilteredUser,
+    pub user: UserResponse,
 }
 
 #[derive(Serialize, Debug)]
-pub struct UserResponse {
+pub struct UserDataResponse {
     pub status: String,
     pub data: UserData,
 }

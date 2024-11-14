@@ -1,18 +1,21 @@
-import { Button, Collapsible, Dropdown, useToast } from "@coco-ui/core";
-import { QuoteApi } from "@/api/QuoteApi";
+import { Button, Collapsible, Dropdown, useToast } from "@billycraft/ui";
 import { formatISO9075, parseJSON } from "date-fns";
-import Customer from "@/models/Customer";
-import Quote, { QuoteStatus } from "@/models/Quote";
-import { MouseEvent, useMemo, useReducer } from "react";
-import { QuoteRouteQueryParams, ROUTES } from "@/routes";
+import { type MouseEvent, useMemo, useReducer } from "react";
+import { type QuoteRouteQueryParams, ROUTES } from "@/routes";
 import { useI18n } from "@/i18n";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { QuoteLabel } from "@/components/labels/QuoteLabel";
 import { RowContent } from "./RowContent";
+import {
+	QuotesService,
+	type CustomerResponse,
+	type QuoteResponse,
+	type QuoteStatus,
+} from "@/sdk";
 
 type QuoteTableLineProps = {
-	quote: Quote;
-	customer?: Customer;
+	quote: QuoteResponse;
+	customer?: CustomerResponse;
 	reload: () => Promise<void>;
 	selectedStatus: QuoteRouteQueryParams["tab"];
 };
@@ -31,7 +34,11 @@ const QuoteTableLine = ({
 			e.stopPropagation();
 			const updateStatus = async () => {
 				try {
-					if (quote.id) await QuoteApi.updateStatus({ id: quote.id, status });
+					if (quote.id)
+						await QuotesService.patchQuotesById({
+							path: { id: quote.id },
+							body: { ...quote, status },
+						});
 					toast.show(t("quotes.list.statusUpdated"));
 					reload();
 				} catch {
@@ -44,24 +51,15 @@ const QuoteTableLine = ({
 	const nextStatuses = useMemo<QuoteStatus[]>(() => {
 		switch (quote.status) {
 			case "SENT":
-				return ["ACCEPTED", "REFUSED", "DEPOSIT_ASK", "ARCHIVED"];
+				return ["ACCEPTED", "REFUSED", "ARCHIVED"];
 			case "REFUSED":
 				return ["DRAFT", "ARCHIVED"];
 			case "ACCEPTED":
-				return ["DEPOSIT_ASK", "ARCHIVED"];
-			case "DEPOSIT_ASK":
 				return ["ARCHIVED"];
 			case "ARCHIVED":
 				return [];
 			default:
-				return [
-					"DRAFT",
-					"SENT",
-					"DEPOSIT_ASK",
-					"ACCEPTED",
-					"REFUSED",
-					"ARCHIVED",
-				];
+				return ["SENT"];
 		}
 	}, [quote]);
 
@@ -107,7 +105,7 @@ const QuoteTableLine = ({
 					</div>
 				}
 			>
-				<RowContent quote={quote} />
+				<RowContent quote={quote} customer={customer} />
 			</Collapsible>
 		</div>
 	);

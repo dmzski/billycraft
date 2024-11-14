@@ -2,9 +2,9 @@ package bills
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"time"
 
 	"gorm.io/gorm"
@@ -75,7 +75,7 @@ func (dao BillDao) FindOneByIdAndTenant(id string, tenant string) (bill models.B
 	return
 }
 
-func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill models.Bill) {
+func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest) (bill models.Bill) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
@@ -92,7 +92,9 @@ func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill mod
 		} else {
 			if bill.SentAt == nil {
 				now := time.Now()
-				changes.SentAt = &now
+				tx.Model(&bill).Updates(map[string]interface{}{
+					"paid_at": &now,
+				})
 			}
 			if *changes.Status == enums.BillStatusSent && bill.PaidAt != nil {
 				tx.Model(&bill).Updates(map[string]interface{}{
@@ -101,7 +103,9 @@ func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill mod
 			} else {
 				if *changes.Status == enums.BillStatusArchived && bill.PaidAt == nil {
 					now := time.Now()
-					changes.PaidAt = &now
+					tx.Model(&bill).Updates(map[string]interface{}{
+						"paid_at": &now,
+					})
 				}
 			}
 		}
@@ -118,8 +122,16 @@ func (dao BillDao) Update(id string, tenant string, changes dtos.Bill) (bill mod
 	if changes.Lines != nil {
 		var lines []models.BillLine
 		for _, x := range changes.Lines {
-			x.BillID = bill.ID
-			newLine := models.BillLine{}.FromDTO(x)
+			newLine := models.BillLine{
+				BillID:      bill.ID,
+				Description: x.Description,
+				Line:        x.Line,
+				Quantity:    x.Quantity,
+				Price:       x.Price,
+				ProductID:   x.ProductID,
+				Name:        x.Name,
+				Type:        x.Type,
+			}
 			lines = append(lines, newLine)
 		}
 
@@ -174,8 +186,16 @@ func (dao BillDao) Duplicate(id string, tenant string) (bill models.Bill) {
 	}
 	var lines []models.BillLine
 	for _, x := range bill.Lines {
-		x.BillID = bill.ID
-		newLine := models.BillLine{}.FromDTO(x.ToDTO())
+		newLine := models.BillLine{
+			BillID:      bill.ID,
+			Description: x.Description,
+			Line:        x.Line,
+			Quantity:    x.Quantity,
+			Price:       x.Price,
+			ProductID:   x.ProductID,
+			Name:        x.Name,
+			Type:        x.Type,
+		}
 		lines = append(lines, newLine)
 	}
 	err := tx.Model(&bill).Association("Lines").Append(&lines)
@@ -187,11 +207,16 @@ func (dao BillDao) Duplicate(id string, tenant string) (bill models.Bill) {
 	return
 }
 
-func (dao BillDao) Create(creator models.User, newBill dtos.Bill) (bill models.Bill) {
+func (dao BillDao) Create(creator models.User, newBill requests.BillRequest) (bill models.Bill) {
 	tx := database.DBConn.Begin()
-	bill = bill.FromDTO(newBill)
-	bill.CompanyID = *creator.CompanyID
-	bill.CreatedBy = creator.Email
+	bill = models.Bill{
+		Tva:        newBill.Tva,
+		Title:      newBill.Title,
+		Status:     enums.BillStatusDraft,
+		CompanyID:  *creator.CompanyID,
+		CustomerID: newBill.CustomerID,
+		CreatedBy:  creator.Email,
+	}
 	tx.Model(&bill).Omit(clause.Associations).Create(&bill)
 	if tx.Error != nil {
 		tx.Rollback()
@@ -199,8 +224,16 @@ func (dao BillDao) Create(creator models.User, newBill dtos.Bill) (bill models.B
 	}
 	var lines []models.BillLine
 	for _, x := range newBill.Lines {
-		x.BillID = bill.ID
-		newLine := models.BillLine{}.FromDTO(x)
+		newLine := models.BillLine{
+			BillID:      bill.ID,
+			Description: x.Description,
+			Line:        x.Line,
+			Quantity:    x.Quantity,
+			Price:       x.Price,
+			ProductID:   x.ProductID,
+			Name:        x.Name,
+			Type:        x.Type,
+		}
 		lines = append(lines, newLine)
 	}
 	err := tx.Model(&bill).Association("Lines").Append(&lines)

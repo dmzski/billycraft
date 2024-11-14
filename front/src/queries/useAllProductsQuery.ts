@@ -1,11 +1,17 @@
-import { ProductApi } from "@/api/ProductApi";
-import Product from "@/models/Product";
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import { type ProductResponse, ProductsService } from "@/sdk";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useAllProductsQuery = (
-	config?: UseDataLoaderConfig<Product[], Error>,
+	config?: UseDataLoaderConfig<ProductResponse[], Error>,
 ) => {
 	const key = ["products", "all"];
 
-	return useDataLoader(key, () => ProductApi.findAll(), config);
+	return useDataLoader(
+		key,
+		() => ProductsService.getProducts().then(({ data }) => data),
+		config,
+	);
 };

@@ -2,8 +2,8 @@ package billCustomization
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -38,7 +38,7 @@ func (dao BillCustomizationDao) FindOneByIdAndTenant(id string, tenant string) (
 	return
 }
 
-func (dao BillCustomizationDao) Update(id string, tenant string, changes dtos.BillCustomization) (billCustomization models.BillCustomization) {
+func (dao BillCustomizationDao) Update(id string, tenant string, changes requests.BillCustomizationRequest) (billCustomization models.BillCustomization) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&billCustomization)
 	if tx.Error != nil {
@@ -53,8 +53,8 @@ func (dao BillCustomizationDao) Update(id string, tenant string, changes dtos.Bi
 	return
 }
 
-func (dao BillCustomizationDao) Create(companyId string, newBillCustomization dtos.BillCustomization) (billCustomization models.BillCustomization) {
-	billCustomization = billCustomization.FromDTO(newBillCustomization)
+func (dao BillCustomizationDao) Create(companyId string, newBillCustomization requests.BillCustomizationRequest) (billCustomization models.BillCustomization) {
+	billCustomization = requests.MarshalBillCustomizationRequest(newBillCustomization)
 	billCustomization.CompanyID = companyId
 
 	if err := database.DBConn.Omit("Company").Create(&billCustomization).Error; err != nil {

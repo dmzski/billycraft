@@ -1,7 +1,6 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
 	"time"
 )
 
@@ -19,17 +18,4 @@ type Todo struct {
 
 func (t Todo) TableName() string {
 	return "com_todo"
-}
-
-func (t Todo) ToDTO() dtos.TodoResponse {
-	return dtos.TodoResponse{
-		ID:          t.ID,
-		Description: t.Description,
-		CompanyID:   t.CompanyID,
-		CreatedBy:   t.CreatedBy,
-		CreatedAt:   t.CreatedAt,
-		UpdatedAt:   t.UpdatedAt,
-		DoneBy:      t.DoneBy,
-		DoneAt:      t.DoneAt,
-	}
 }

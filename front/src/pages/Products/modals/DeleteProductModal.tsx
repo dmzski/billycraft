@@ -1,18 +1,17 @@
 import { useI18n } from "@/i18n";
-import { Alert, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { Alert, Modal, useToast } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
-import Product from "@/models/Product";
 import { Submit } from "@/components/form/Submit";
 import { InputField } from "@/components/form/InputField";
 import { Form } from "@/components/form/Form";
+import { type ProductResponse, ProductsService } from "@/sdk";
 
 type DeleteProductModalProps = {
 	onSubmitSuccess: () => Promise<void>;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	product: Product;
+	product: ProductResponse;
 };
 
 type DeleteProductFormProps = Omit<DeleteProductModalProps, "disclosure"> & {
@@ -42,7 +41,7 @@ const DeleteProductForm = ({
 
 	const onSubmit = async () => {
 		try {
-			await ProductApi.delete(product.id);
+			await ProductsService.deleteProductsById({ path: { id: product.id } });
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();

@@ -1,11 +1,13 @@
-import { Alert, Button, Loader, useToast } from "@coco-ui/core";
+import { Alert, Loader, useToast } from "@billycraft/ui";
 import { useI18n } from "@/i18n";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { useAllMyInvitationsQuery } from "@/queries/useAllMyInvitationsQuery";
 import { sendErrorToSentry } from "@/utils/errors";
-import { InvitationApi } from "@/api/InvitationApi";
 import { useUser } from "@/providers/UserProvider";
+import { InvitationsService } from "@/sdk";
+import { Form } from "@/components/form/Form";
+import { Submit } from "@/components/form/Submit";
 
 export const JoinOrganization = () => {
 	const { scopedT, t } = useI18n();
@@ -19,8 +21,10 @@ export const JoinOrganization = () => {
 	const onSubmit = async () => {
 		try {
 			if (data && data.length > 0) {
-				await InvitationApi.accept({
-					companyId: data[0].companyId,
+				await InvitationsService.postInvitationsAccept({
+					body: {
+						companyId: data[0].companyId,
+					},
 				});
 				toast.show(pageT("success"));
 				await reload();
@@ -30,11 +34,6 @@ export const JoinOrganization = () => {
 			methods.setError("root", { message: t("genericFormError") });
 		}
 	};
-
-	const {
-		handleSubmit,
-		formState: { isSubmitting },
-	} = methods;
 
 	if (isLoading && !data) {
 		return (
@@ -56,11 +55,8 @@ export const JoinOrganization = () => {
 			<p>{pageT("description")}</p>
 		</div>
 	) : (
-		<FormProvider {...methods}>
-			<form
-				className="flex flex-col gap-4 items-center"
-				onSubmit={handleSubmit(onSubmit)}
-			>
+		<Form methods={methods} onSubmit={onSubmit}>
+			<div className="flex flex-col gap-4 items-center">
 				<h2 className="text-3xl font-bold text-center">
 					{t("onboarding.join.title")}
 				</h2>
@@ -71,10 +67,8 @@ export const JoinOrganization = () => {
 					})}
 				</p>
 				<FormErrorAlert />
-				<Button type="submit" disabled={isSubmitting}>
-					{pageT("submit")}
-				</Button>
-			</form>
-		</FormProvider>
+				<Submit>{pageT("submit")}</Submit>
+			</div>
+		</Form>
 	);
 };

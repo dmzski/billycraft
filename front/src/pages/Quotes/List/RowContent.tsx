@@ -1,9 +1,8 @@
 import { RRLink } from "@/components/RRLink";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import Quote from "@/models/Quote";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
+import type { CustomerResponse, QuoteResponse } from "@/sdk";
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
@@ -12,16 +11,15 @@ import {
 } from "@/utils/price";
 
 type RowContentProps = {
-	quote: Quote;
+	quote: QuoteResponse;
+	customer?: CustomerResponse;
 };
 
-export const RowContent = ({ quote }: RowContentProps) => {
+export const RowContent = ({ quote, customer }: RowContentProps) => {
 	const { t, scopedT } = useI18n();
 	const pageT = scopedT("quotes.details");
 	const formatCurrency = useFormatCurrency();
-	const { data: customer } = useCustomerQuery(quote?.customerId ?? "", {
-		enabled: !!quote?.customerId,
-	});
+
 	return (
 		<div className="border-t">
 			<div className="flex flex-col gap-4 p-4">

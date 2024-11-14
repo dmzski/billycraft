@@ -1,8 +1,8 @@
 import { CustomerLabel } from "@/components/labels/CustomerLabel";
 import { useI18n } from "@/i18n";
-import Customer from "@/models/Customer";
+import type { CustomerResponse } from "@/sdk";
 import { ROUTES } from "@/routes";
-import { Button, Collapsible } from "@coco-ui/core";
+import { Button, Collapsible } from "@billycraft/ui";
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
@@ -11,7 +11,7 @@ import {
 import { useReducer } from "react";
 
 type ListRowProps = {
-	customer: Customer;
+	customer: CustomerResponse;
 };
 
 export const ListRow = ({ customer }: ListRowProps) => {

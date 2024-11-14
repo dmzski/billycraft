@@ -1,11 +1,23 @@
-import { BillCustomizationApi } from "@/api/BillCustomizationApi";
-import BillCustomization from "@/models/BillCustomization";
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import {
+	type BillCustomizationResponse,
+	BillCustomizationService,
+} from "@/sdk";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useMyBillCustomizationQuery = (
-	config?: UseDataLoaderConfig<BillCustomization, Error>,
+	config?: UseDataLoaderConfig<BillCustomizationResponse, Error>,
 ) => {
 	const key = ["bill-customization", "mine"];
 
-	return useDataLoader(key, () => BillCustomizationApi.findMine(), config);
+	return useDataLoader(
+		key,
+		() =>
+			BillCustomizationService.getBillCustomizationMine().then(
+				({ data }) => data,
+			),
+		config,
+	);
 };

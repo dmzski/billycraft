@@ -1,18 +1,17 @@
-import { Checkbox, useToast } from "@coco-ui/core";
-import { TodoApi } from "@/api/TodoApi";
-import { formatRelative } from "date-fns";
-import { fr } from "date-fns/locale";
-import { Todo } from "@/models/Todo";
-import { useForm } from "react-hook-form";
-import { useI18n } from "@/i18n";
 import { Form } from "@/components/form/Form";
 import { InputField } from "@/components/form/InputField";
 import { Submit } from "@/components/form/Submit";
+import { useI18n } from "@/i18n";
+import { type TodoResponse, TodosService } from "@/sdk";
+import { Checkbox, useToast } from "@billycraft/ui";
+import { formatRelative } from "date-fns";
+import { fr } from "date-fns/locale";
+import { useForm } from "react-hook-form";
 
 type TodoFormValues = { description: string };
 
 type TodoListProps = {
-	data?: Todo[];
+	data?: TodoResponse[];
 	onSubmitSuccess?: () => Promise<void>;
 };
 const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
@@ -29,9 +28,9 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
 	const handleDoneUndo = async (id: string, newState: boolean) => {
 		try {
 			if (newState) {
-				await TodoApi.done(id);
+				await TodosService.postTodosByIdDone({ path: { id } });
 			} else {
-				await TodoApi.undo(id);
+				await TodosService.postTodosByIdUndo({ path: { id } });
 			}
 			await onSubmitSuccess?.();
 			toast.show(t("dashboard.todos.form.submit.edit.success"));
@@ -42,7 +41,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
 
 	const onSubmit = async (values: TodoFormValues) => {
 		try {
-			await TodoApi.create(values);
+			await TodosService.postTodos({ body: values });
 			await onSubmitSuccess?.();
 			methods.reset({ description: "" });
 			toast.show(t("dashboard.todos.form.submit.success"));

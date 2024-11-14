@@ -1,7 +1,7 @@
-import { Button, Link, useToast } from "@coco-ui/core";
+import { Button, Link, useToast } from "@billycraft/ui";
 import { SUPPORT_EMAIL } from "@/constants/global";
 import { useI18n } from "@/i18n";
-import { ApiError } from "@/models/ApiError";
+import { ApiError } from "@/lib/ApiError";
 import { useAuth } from "@/providers/AuthProvider";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";

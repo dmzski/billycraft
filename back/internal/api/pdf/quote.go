@@ -18,7 +18,7 @@ import (
 
 type QuoteViewData struct {
 	Quote              models.Quote
-	Company            models.Company
+	Company            models.Organization
 	Title              string
 	QuoteCustomization models.QuoteCustomization
 	Customer           models.Customer
@@ -85,7 +85,7 @@ func generateQuotePDF(quote models.Quote) *os.File {
 	var TITLE = QUOTE_TITLE
 
 	date := time.Now()
-	if quote.SentAt != nil && quote.Status != "DRAFT" {
+	if quote.SentAt != nil {
 		date = *quote.SentAt
 	}
 	company := company.DAO.FindOneById(quote.CompanyID)

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { ReportResponse } from "@/models/Report";
-import { ReactNode, useMemo } from "react";
+import type { ReportResponse } from "@/sdk";
+import { type ReactNode, useMemo } from "react";
 import { useI18n } from "@/i18n";
 
 type ReportTableProps = {

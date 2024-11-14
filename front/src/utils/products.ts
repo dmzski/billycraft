@@ -1,4 +1,4 @@
-import Product from "@/models/Product";
+import type { ProductResponse } from "@/sdk";
 import { isUndefinedOrNull } from "./isUndefinedOrNull";
 
 export type ProductFilters = Record<
@@ -6,7 +6,10 @@ export type ProductFilters = Record<
 	string
 > & { lowStockOnly: boolean; noStockOnly: boolean };
 
-export const filterProducts = (products: Product[], filter: ProductFilters) => {
+export const filterProducts = (
+	products: ProductResponse[],
+	filter: ProductFilters,
+) => {
 	let filtered = products;
 	if (filter.type) {
 		filtered = filtered.filter(({ type }) => type === filter.type);

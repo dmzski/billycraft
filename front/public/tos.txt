@@ -1,10 +1,10 @@
-Conditions Générales d'Utilisation de CocoBilling
+Conditions Générales d'Utilisation de Billycraft
 
-Les présentes Conditions Générales d'Utilisation (ci-après dénommées les "CGU") régissent l'utilisation de l'application CocoBilling (ci-après dénommée "l'Application") par les utilisateurs (ci-après dénommés les "Utilisateurs"). En utilisant l'Application, vous acceptez d'être lié par ces CGU. Si vous n'acceptez pas ces CGU, veuillez ne pas utiliser l'Application.
+Les présentes Conditions Générales d'Utilisation (ci-après dénommées les "CGU") régissent l'utilisation de l'application Billycraft (ci-après dénommée "l'Application") par les utilisateurs (ci-après dénommés les "Utilisateurs"). En utilisant l'Application, vous acceptez d'être lié par ces CGU. Si vous n'acceptez pas ces CGU, veuillez ne pas utiliser l'Application.
 
 1. Objet de l'Application
 
-CocoBilling est une application de gestion de devis et de factures conçue pour aider les utilisateurs à gérer efficacement leurs transactions commerciales. L'Application permet aux Utilisateurs de créer, stocker et suivre des devis et des factures électroniques.
+Billycraft est une application de gestion de devis et de factures conçue pour aider les utilisateurs à gérer efficacement leurs transactions commerciales. L'Application permet aux Utilisateurs de créer, stocker et suivre des devis et des factures électroniques.
 
 2. Accès à l'Application
 
@@ -16,15 +16,15 @@ Les Utilisateurs s'engagent à utiliser l'Application conformément à la loi ap
 
 4. Propriété intellectuelle
 
-Tous les droits de propriété intellectuelle relatifs à l'Application et à son contenu restent la propriété de CocoBilling ou de ses concédants de licence. Aucun droit de propriété intellectuelle n'est transféré aux Utilisateurs en vertu des présentes CGU.
+Tous les droits de propriété intellectuelle relatifs à l'Application et à son contenu restent la propriété de Billycraft ou de ses concédants de licence. Aucun droit de propriété intellectuelle n'est transféré aux Utilisateurs en vertu des présentes CGU.
 
 5. Limitation de responsabilité
 
-CocoBilling s'efforce de fournir une application fiable et sécurisée. Cependant, en aucun cas, CocoBilling ne pourra être tenu responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application.
+Billycraft s'efforce de fournir une application fiable et sécurisée. Cependant, en aucun cas, Billycraft ne pourra être tenu responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application.
 
 6. Modifications des CGU
 
-CocoBilling se réserve le droit de modifier les présentes CGU à tout moment. Les Utilisateurs seront informés de toute modification par le biais de l'Application. L'utilisation continue de l'Application après la publication des modifications constitue l'acceptation des CGU révisées.
+Billycraft se réserve le droit de modifier les présentes CGU à tout moment. Les Utilisateurs seront informés de toute modification par le biais de l'Application. L'utilisation continue de l'Application après la publication des modifications constitue l'acceptation des CGU révisées.
 
 7. Droit applicable et juridiction compétente
 

@@ -13,7 +13,7 @@ import {
 	Avatar,
 	Dropdown,
 	Button,
-} from "@coco-ui/core";
+} from "@billycraft/ui";
 import { useUser } from "@/providers/UserProvider";
 import { ROUTES, type RouteId } from "@/routes";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -95,33 +95,25 @@ export const AppSidebar = ({
 								<Dropdown.Button asChild>
 									<Link
 										onClick={close}
-										to={ROUTES.SETTINGS.routes.MY_COMPANY.path()}
+										to={ROUTES.ORGANIZATION.routes.SETTINGS.path()}
 									>
-										{t("heads.settings.myOrganization")}
+										{t("heads.organization.settings")}
 									</Link>
 								</Dropdown.Button>
 								<Dropdown.Button asChild>
 									<Link
 										onClick={close}
-										to={ROUTES.SETTINGS.routes.USERS.path()}
+										to={ROUTES.ORGANIZATION.routes.USERS.path()}
 									>
-										{t("heads.settings.users")}
+										{t("heads.organization.users")}
 									</Link>
 								</Dropdown.Button>
 								<Dropdown.Button asChild>
 									<Link
 										onClick={close}
-										to={ROUTES.SETTINGS.routes.BILL_CUSTOMIZATION.path()}
+										to={ROUTES.ORGANIZATION.routes.CUSTOMIZATION.path()}
 									>
-										{t("heads.settings.billCustomization")}
-									</Link>
-								</Dropdown.Button>
-								<Dropdown.Button asChild>
-									<Link
-										onClick={close}
-										to={ROUTES.SETTINGS.routes.QUOTE_CUSTOMIZATION.path()}
-									>
-										{t("heads.settings.quoteCustomization")}
+										{t("heads.organization.customization")}
 									</Link>
 								</Dropdown.Button>
 							</Dropdown.Content>
@@ -131,33 +123,42 @@ export const AppSidebar = ({
 			</SidebarHeader>
 			<SidebarContent className="overflow-y-auto">
 				{/* We create a SidebarGroup for each parent. */}
-				{menuRoutes.map((route) =>
-					"routes" in route ? (
-						<SidebarGroup key={route.id}>
-							<SidebarGroupLabel>{t(`heads.${route.id}`)}</SidebarGroupLabel>
-							<SidebarGroupContent>
-								<SidebarMenu>
-									{Object.values(route.routes).map((subRoute) => (
-										<AppSidebarMenuItem
-											key={subRoute.id}
-											id={subRoute.id}
-											path={subRoute.path()}
-											exact={subRoute.exact}
-										/>
-									))}
+				<SidebarGroup key="main">
+					<SidebarGroupContent>
+						{menuRoutes
+							.filter((route) => !("routes" in route))
+							.map((route) => (
+								<SidebarMenu key={route.id}>
+									<AppSidebarMenuItem
+										id={route.id}
+										path={route.path()}
+										exact={false}
+									/>
 								</SidebarMenu>
-							</SidebarGroupContent>
-						</SidebarGroup>
-					) : (
-						<SidebarMenu key={route.id}>
-							<AppSidebarMenuItem
-								id={route.id}
-								path={route.path()}
-								exact={false}
-							/>
-						</SidebarMenu>
-					),
-				)}
+							))}
+					</SidebarGroupContent>
+				</SidebarGroup>
+				{menuRoutes
+					.filter((route) => "routes" in route)
+					.map((route) =>
+						"routes" in route ? (
+							<SidebarGroup key={route.id}>
+								<SidebarGroupLabel>{t(`heads.${route.id}`)}</SidebarGroupLabel>
+								<SidebarGroupContent className="pl-1">
+									<SidebarMenu>
+										{Object.values(route.routes).map((subRoute) => (
+											<AppSidebarMenuItem
+												key={subRoute.id}
+												id={subRoute.id}
+												path={subRoute.path()}
+												exact={subRoute.exact}
+											/>
+										))}
+									</SidebarMenu>
+								</SidebarGroupContent>
+							</SidebarGroup>
+						) : null,
+					)}
 			</SidebarContent>
 			<SidebarRail />
 		</Sidebar>

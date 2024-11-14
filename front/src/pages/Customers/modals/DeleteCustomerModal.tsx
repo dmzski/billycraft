@@ -1,14 +1,13 @@
-import { CustomerApi } from "@/api/CustomerApi";
 import { useI18n } from "@/i18n";
-import Customer from "@/models/Customer";
+import { type CustomerResponse, CustomersService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Alert, Button, Input, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps } from "react";
+import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui";
+import type { ComponentProps } from "react";
 import { useController, useForm } from "react-hook-form";
 
 type DeleteCustomerModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	customer: Customer;
+	customer: CustomerResponse;
 	onSubmitSuccess: () => Promise<void>;
 };
 
@@ -35,7 +34,7 @@ const DeleteCustomerForm = ({
 
 	const onSubmit = async () => {
 		try {
-			await CustomerApi.delete(customer.id);
+			await CustomersService.deleteCustomersById({ path: { id: customer.id } });
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();

@@ -1,17 +1,26 @@
+import { API_URL } from "@/constants/global";
+import { ApiError } from "@/lib/ApiError";
+import { client } from "@/sdk/services.gen";
 import {
+	type ReactNode,
 	createContext,
-	ReactNode,
 	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
 	useState,
 } from "react";
-import { ApiError } from "@/models/ApiError";
+
+type UpdateUserParams = {
+	name?: string;
+	oldPassword?: string;
+	password?: string;
+};
 
 type AuthContextType = {
 	login: (params: { email: string; password: string }) => Promise<void>;
 	logout: () => Promise<void>;
+	updateUser: (params: UpdateUserParams) => Promise<void>;
 	register: (params: {
 		email: string;
 		password: string;
@@ -24,10 +33,10 @@ type AuthContextType = {
 
 type AuthProviderProps = {
 	children: ReactNode;
-	onLoginSuccess?: () => Promise<void>;
-	onLogoutSuccess?: () => Promise<void>;
-	onRefreshSuccess?: () => Promise<void>;
-	onRegisterSuccess?: () => Promise<void>;
+	onLoginSuccess?: () => Promise<void> | void;
+	onLogoutSuccess?: () => Promise<void> | void;
+	onRefreshSuccess?: () => Promise<void> | void;
+	onRegisterSuccess?: () => Promise<void> | void;
 	useAuthorizationHeader?: boolean;
 };
 
@@ -37,50 +46,24 @@ const AuthContext = createContext<AuthContextType>({
 	login: () => Promise.resolve(),
 	logout: () => Promise.resolve(),
 	register: () => Promise.resolve(),
+	updateUser: () => Promise.resolve(),
 	refreshSession: () => Promise.resolve(),
 });
 
-const APP_DOMAIN = import.meta.env.VITE_APP_DOMAIN ?? "";
 const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL ?? "";
 const LOCAL_STORAGE_KEY = "coco_at";
-const { fetch: originalFetch } = window;
 
-const addInterceptFetch = (token: string) => {
-	window.fetch = async (...args: Parameters<typeof originalFetch>) => {
-		const [resource, config = {}] = args;
-
-		const getShouldPlaceAuthorization = () => {
-			if (typeof args[0] === "string") {
-				return args[0].includes(APP_DOMAIN);
-			}
-			if (typeof args[0] === "object" && "url" in args[0]) {
-				return args[0].url.includes(APP_DOMAIN);
-			}
-
-			return false;
-		};
-
-		const shouldPlaceAuthorizationHeader = getShouldPlaceAuthorization();
-
-		const response = await originalFetch(resource, {
-			credentials: !shouldPlaceAuthorizationHeader ? "include" : undefined,
-			...config,
-			headers: {
-				...config.headers,
-				...(shouldPlaceAuthorizationHeader
-					? {
-							Authorization: "Bearer " + token,
-						}
-					: {}),
-			},
-		});
-
-		return response;
-	};
-};
-
-const clearFetch = () => {
-	window.fetch = originalFetch;
+const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
+	client.setConfig({
+		baseUrl: API_URL,
+		credentials: "include",
+		throwOnError: true,
+		headers: needAuthorizationHeader
+			? {
+					Authorization: `Bearer ${token}`,
+				}
+			: undefined,
+	});
 };
 
 export const AuthProvider = ({
@@ -109,11 +92,11 @@ export const AuthProvider = ({
 				},
 			});
 			if (res.ok) {
+				const { token } = await res.json();
 				if (useAuthorizationHeader) {
-					const { token } = await res.json();
-					addInterceptFetch(token);
 					localStorage.setItem(LOCAL_STORAGE_KEY, token);
 				}
+				configureClient(token, useAuthorizationHeader);
 				setIsAuthenticated(true);
 				await onLoginSuccess?.();
 			} else {
@@ -149,7 +132,6 @@ export const AuthProvider = ({
 
 	const logout = useCallback(async () => {
 		if (useAuthorizationHeader) {
-			clearFetch();
 			localStorage.removeItem(LOCAL_STORAGE_KEY);
 			await onLogoutSuccess?.();
 
@@ -160,7 +142,6 @@ export const AuthProvider = ({
 			credentials: "include",
 		});
 		if (res.ok) {
-			clearFetch();
 			await onLogoutSuccess?.();
 		} else {
 			const { message } = await res.json();
@@ -174,17 +155,17 @@ export const AuthProvider = ({
 			if (useAuthorizationHeader && localStorage.getItem(LOCAL_STORAGE_KEY)) {
 				const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
 					headers: {
-						Authorization: "Bearer " + localStorage.getItem(LOCAL_STORAGE_KEY),
+						Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_KEY)}`,
 					},
 				});
 				if (res.ok) {
 					const { token } = await res.json();
-					addInterceptFetch(token);
+					configureClient(token, useAuthorizationHeader);
 					localStorage.setItem(LOCAL_STORAGE_KEY, token);
-					onRefreshSuccess?.();
 					if (!isAuthenticated) {
 						setIsAuthenticated(true);
 					}
+					await onRefreshSuccess?.();
 				} else {
 					if (isAuthenticated || isAuthenticated === undefined) {
 						setIsAuthenticated(false);
@@ -197,10 +178,10 @@ export const AuthProvider = ({
 					credentials: "include",
 				});
 				if (res.ok) {
-					onRefreshSuccess?.();
 					if (!isAuthenticated) {
 						setIsAuthenticated(true);
 					}
+					await onRefreshSuccess?.();
 				} else {
 					if (isAuthenticated || isAuthenticated === undefined) {
 						setIsAuthenticated(false);
@@ -217,6 +198,47 @@ export const AuthProvider = ({
 		}
 	}, [useAuthorizationHeader, onRefreshSuccess, isAuthenticated]);
 
+	const updateUser = useCallback(
+		async ({ name, password, oldPassword }: UpdateUserParams) => {
+			if (useAuthorizationHeader && localStorage.getItem(LOCAL_STORAGE_KEY)) {
+				const res = await fetch(`${AUTH_API_URL}/auth/update`, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_KEY)}`,
+						"Content-Type": "application/json",
+					},
+					method: "PATCH",
+					body: JSON.stringify({
+						name,
+						password,
+						oldPassword,
+					}),
+				});
+				if (!res.ok) {
+					const { message } = await res.json();
+					throw new ApiError(res.status, message);
+				}
+			} else {
+				const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
+					credentials: "include",
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						name,
+						password,
+						oldPassword,
+					}),
+				});
+				if (!res.ok) {
+					const { message } = await res.json();
+					throw new ApiError(res.status, message);
+				}
+			}
+		},
+		[useAuthorizationHeader],
+	);
+
 	useEffect(() => {
 		if (!isAuthenticated) {
 			refreshSession().catch(() => null);
@@ -229,11 +251,12 @@ export const AuthProvider = ({
 				isInitializing: isAuthenticated === undefined,
 				isAuthenticated: !!isAuthenticated,
 				refreshSession,
+				updateUser,
 				register,
 				logout,
 				login,
 			}) as AuthContextType,
-		[isAuthenticated, refreshSession, register, logout, login],
+		[isAuthenticated, refreshSession, register, logout, login, updateUser],
 	);
 
 	if (!AUTH_API_URL || AUTH_API_URL.endsWith("/")) {

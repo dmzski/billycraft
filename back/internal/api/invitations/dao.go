@@ -2,10 +2,10 @@ package invitations
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 	"log"
 
 	"gorm.io/gorm"
@@ -45,8 +45,8 @@ func (dao InvitationDao) FindOneByOrganizationAndUserAcceptedIsPeding(organizati
 	}
 	return
 }
-func (dao InvitationDao) FindAllMyInvitationsPending(email string) (invitations []dtos.MyInvitationResponse) {
-	invitations = make([]dtos.MyInvitationResponse, 0)
+func (dao InvitationDao) FindAllMyInvitationsPending(email string) (invitations []responses.MyInvitationResponse) {
+	invitations = make([]responses.MyInvitationResponse, 0)
 	if err := database.DBConn.Raw(`
   SELECT
     i.company_id as company_id,
@@ -63,10 +63,9 @@ func (dao InvitationDao) FindAllMyInvitationsPending(email string) (invitations 
 	return
 }
 
-func (dao InvitationDao) Create(organizationId string, dto dtos.InvitationRequest) (invitation models.Invitation, err error) {
+func (dao InvitationDao) Create(organizationId string, dto requests.InvitationRequest) (invitation models.Invitation, err error) {
 	tx := database.DBConn.Begin()
-	invitation = models.Invitation{}
-	invitation.FromDTO(dto)
+	invitation = requests.MarshalInvitationRequest(dto)
 	invitation.CompanyID = organizationId
 
 	tx.Create(&invitation)

@@ -1,8 +1,8 @@
-import { Button, Collapsible, Input } from "@coco-ui/core";
+import { Button, Collapsible, Input } from "@billycraft/ui";
 import {
-	ChangeEventHandler,
-	Dispatch,
-	SetStateAction,
+	type ChangeEventHandler,
+	type Dispatch,
+	type SetStateAction,
 	useReducer,
 } from "react";
 import { useI18n } from "@/i18n";

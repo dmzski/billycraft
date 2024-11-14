@@ -1,7 +1,7 @@
-import Supplier from "@/models/Supplier";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/solid";
 import { RRLink } from "../RRLink";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
+import type { SupplierResponse } from "@/sdk";
 
 const labelVariants = cva(
 	"inline-flex items-center justify-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg",
@@ -19,7 +19,7 @@ const labelVariants = cva(
 );
 
 type SupplierLabelProps = {
-	supplier: Supplier;
+	supplier: SupplierResponse;
 	to?: string;
 } & VariantProps<typeof labelVariants>;
 

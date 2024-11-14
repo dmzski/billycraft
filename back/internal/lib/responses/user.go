@@ -7,19 +7,21 @@ import (
 )
 
 type UserResponse struct {
-	Email     string         `json:"email"`
-	FirstName string         `json:"firstName"`
-	LastName  string         `json:"lastName"`
+  Email     string         `json:"email" validate:"required"`
+  FirstName string         `json:"firstName" validate:"required"`
+  LastName  string         `json:"lastName" validate:"required"`
 	CompanyID *string        `json:"companyId"`
-	Role      enums.RoleEnum `json:"role"`
-}
+  Role      enums.RoleEnum `json:"role" validate:"required"`
+}//@name UserResponse
 
-func (r *UserResponse) FromModel(u models.User) {
-	r.CompanyID = u.CompanyID
-	r.Email = u.Email
-	r.LastName = u.LastName
-	r.FirstName = u.FirstName
-	r.Role = enums.RoleEnumViewer
+func CreateUserResponse(u models.User) UserResponse {
+	r := UserResponse{
+		CompanyID: u.CompanyID,
+		Email:     u.Email,
+		LastName:  u.LastName,
+		FirstName: u.FirstName,
+		Role:      enums.RoleEnumViewer,
+	}
 
 	roleIndex := slices.IndexFunc(u.Roles, func(aRole *models.Role) bool {
 		return aRole.CompanyID == *u.CompanyID
@@ -27,4 +29,6 @@ func (r *UserResponse) FromModel(u models.User) {
 	if roleIndex > -1 {
 		r.Role = u.Roles[roleIndex].Role
 	}
+
+	return r
 }

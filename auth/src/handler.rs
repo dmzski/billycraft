@@ -13,8 +13,8 @@ use rand_core::OsRng;
 use serde_json::json;
 
 use crate::{
-    model::{AppError, LoginUserSchema, RegisterUserSchema, TokenClaims, User},
-    response::FilteredUser,
+    model::{AppError, LoginUserSchema, RegisterUserSchema, TokenClaims, UpdateUserSchema, User},
+    response::UserResponse,
     AppState,
 };
 
@@ -210,8 +210,8 @@ pub async fn refresh_session(
     Ok(response)
 }
 
-fn filter_user_record(user: &User) -> FilteredUser {
-    FilteredUser {
+fn filter_user_record(user: &User) -> UserResponse {
+    UserResponse {
         id: user.id.to_string(),
         email: user.email.to_owned(),
         name: user.name.to_owned(),
@@ -242,4 +242,82 @@ fn build_cookie<'a>(data: Arc<AppState>, token: String, duration: time::Duration
         .max_age(duration)
         .http_only(true)
         .finish();
+}
+
+
+pub async fn update_user_handler(
+    State(data): State<Arc<AppState>>,
+    Extension(user): Extension<User>,
+    Json(body): Json<UpdateUserSchema>,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    // Préparez les champs de mise à jour
+    let mut name = user.name.clone();
+    let mut hashed_password = user.password.clone();
+
+    if let Some(new_name) = &body.name {
+        name = new_name.clone();
+    }
+    if let Some(new_password) = &body.password {
+        if let Some(old_password) = &body.old_password {
+            let is_valid = match PasswordHash::new(&user.password) {
+                Ok(parsed_hash) => Argon2::default()
+                    .verify_password(old_password.as_bytes(), &parsed_hash)
+                    .map_or(false, |_| true),
+                Err(_) => false,
+            };
+
+            if !is_valid {
+                let error_response = AppError {
+                    message: "Old password doesnt match existing one".to_string(),
+                };
+                return Err((StatusCode::BAD_REQUEST, Json(json!(error_response))));
+            }
+
+            // Hachage du nouveau mot de passe
+            let salt = SaltString::generate(&mut OsRng);
+            hashed_password = Argon2::default()
+                .hash_password(new_password.as_bytes(), &salt)
+                .map_err(|e| {
+                    let error_response = AppError {
+                        message: format!("Error while hashing password: {}", e),
+                    };
+                    (
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        Json(json!(error_response)),
+                    )
+                })?
+                .to_string();
+
+        } else {
+                let error_response = AppError {
+                    message: "Old password must be provided".to_string(),
+                };
+                return Err((StatusCode::BAD_REQUEST, Json(json!(error_response))));
+
+        }
+    }
+
+    // Mise à jour dans la base de données
+    let updated_user = sqlx::query_as!(
+        User,
+        "UPDATE users SET name = $1, password = $2 WHERE id = $3 RETURNING *",
+        name,
+        hashed_password,
+        user.id
+    )
+    .fetch_one(&data.db)
+    .await
+    .map_err(|e| {
+        let error_response = AppError {
+            message: format!("Database error: {}", e),
+        };
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(json!(error_response)),
+        )
+    })?;
+
+    // Filtrer les informations utilisateur pour la réponse
+    let user_response = filter_user_record(&updated_user);
+    Ok(Json(json!(user_response)))
 }

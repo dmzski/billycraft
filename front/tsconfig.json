@@ -29,5 +29,10 @@
 			"path": "./tsconfig.node.json"
 		}
 	],
-	"exclude": ["postcss.config.js", "tailwind.config.js", "node_modules", "vite.config.ts"]
+	"exclude": [
+		"postcss.config.js",
+		"tailwind.config.js",
+		"node_modules",
+		"vite.config.ts"
+	]
 }

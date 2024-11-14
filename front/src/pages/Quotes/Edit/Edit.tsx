@@ -1,14 +1,12 @@
-import { Loader, useToast } from "@coco-ui/core";
+import { Loader, useToast } from "@billycraft/ui";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import { QuoteApi } from "@/api/QuoteApi";
-import { QuoteRouteProps, ROUTES } from "@/routes";
+import { type QuoteRouteProps, ROUTES } from "@/routes";
 import { QuoteFormContent } from "@/pages/Quotes/components/QuoteFormContent";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery";
-import { QuoteFormValues } from "../components/QuoteFormContent";
+import type { QuoteFormValues } from "../components/QuoteFormContent";
 import { useForm } from "react-hook-form";
-import { QuoteUpdateRequest } from "@/models/dtos/QuoteUpdateRequest";
 import { useMemo } from "react";
 import { calculatePriceTTC } from "@/utils/price";
 import { RRLink } from "@/components/RRLink";
@@ -16,6 +14,7 @@ import { QuoteLabel } from "@/components/labels/QuoteLabel";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { QuotesService, type UpdateQuoteRequest } from "@/sdk";
 
 const defaultQuote = {
 	lines: [],
@@ -34,19 +33,24 @@ export const Edit = () => {
 	});
 
 	const onSubmit = async (data: QuoteFormValues) => {
-		const tmp: QuoteUpdateRequest = {
-			id: quote?.id ?? "",
+		const tmp: UpdateQuoteRequest = {
 			...data,
 			lines: data.lines.map((line, index: number) => ({
-				...line,
+				name: line.name,
+				type: line.type,
+				description: line.description ?? undefined,
+				productId: line.productId ?? undefined,
 				line: index + 1,
-				price: line.price ? Number(`${line.price}`) : null,
-				quantity: line.quantity ? Number(`${line.quantity}`) : null,
+				price: line.price ? Number(`${line.price}`) : undefined,
+				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
 			})),
 		};
 		try {
 			if (quote?.id) {
-				await QuoteApi.update(tmp);
+				await QuotesService.patchQuotesById({
+					path: { id: quote.id },
+					body: tmp,
+				});
 				toast.show(t("quotes.form.submit.success"));
 				push(ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }));
 			}
@@ -55,11 +59,12 @@ export const Edit = () => {
 		}
 	};
 
-	const initialValues: QuoteFormValues = useMemo(
+	const initialValues = useMemo<QuoteFormValues>(
 		() =>
 			quote
 				? {
 						...quote,
+						tva: quote.tva ?? 0,
 						lines: quote.lines.map(({ price, ...rest }) => ({
 							...rest,
 							price,

@@ -1,18 +1,21 @@
 import { Form } from "@/components/form/Form";
 import { useI18n } from "@/i18n";
-import Product from "@/models/Product";
-import { Button, Modal, useToast } from "@coco-ui/core";
-import { ComponentProps, useMemo } from "react";
+import { Button, Modal, useToast } from "@billycraft/ui";
+import { type ComponentProps, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { Submit } from "@/components/form/Submit";
-import { ProductApi } from "@/api/ProductApi";
 import { sendErrorToSentry } from "@/utils/errors";
 import { SelectField } from "@/components/form/SelectField";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
+import {
+	type ProductResponse,
+	ProductsService,
+	type UpdateProductRequest,
+} from "@/sdk";
 
 type MultiEditProductGroupModalProps = {
-	products: Product[];
+	products: ProductResponse[];
 	onSubmitSuccess: () => Promise<void>;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
 };
@@ -62,7 +65,12 @@ export const MultiEditProductGroupForm = ({
 						.catch(() => {
 							hasError = true;
 						})
-						.then(() => ProductApi.update({ ...product, groupId })),
+						.then(() =>
+							ProductsService.patchProductsById({
+								path: { id: product.id },
+								body: { ...product, groupId } as UpdateProductRequest,
+							}),
+						),
 				Promise.resolve(),
 			);
 

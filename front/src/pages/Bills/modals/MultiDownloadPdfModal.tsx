@@ -1,17 +1,17 @@
-import { PdfApi } from "@/api/PdfApi";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import type Bill from "@/models/Bill";
+import type { BillResponse } from "@/sdk";
+import { PdFsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@coco-ui/core";
+import { Button, Modal, useToast } from "@billycraft/ui";
 import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 
 type MultiDownloadPdfModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	billIds: Bill["id"][];
+	billIds: BillResponse["id"][];
 };
 
 type MultiDownloadPdfFormProps = Omit<
@@ -32,7 +32,12 @@ export const MultiDownloadPdfForm = ({
 	const toast = useToast();
 	const handleSubmit = async () => {
 		try {
-			const blob = await PdfApi.getMultipleBillPdf(billIds);
+			const blob = await PdFsService.postPdfsMultipleBill({
+				body: { billIds },
+			}).then(({ data }) => data);
+			if (!blob) {
+				throw new Error("Invalid Bill ZIP");
+			}
 			const link = document.createElement("a");
 			link.download = `billycraft_bills_export_${toISO9075(Date.now())}`;
 			link.href = URL.createObjectURL(blob);

@@ -2,8 +2,8 @@ package suppliers
 
 import (
 	"back/database"
-	"back/internal/lib/dtos"
 	"back/internal/lib/models"
+	"back/internal/lib/requests"
 	"log"
 )
 
@@ -24,13 +24,13 @@ func (dao Repository) FindOneByIdAndTenant(id string, tenant string) (supplier m
 	return
 }
 
-func (dao Repository) Update(id string, tenant string, changes dtos.SupplierRequest) (supplier models.Supplier) {
+func (dao Repository) Update(id string, tenant string, changes requests.SupplierRequest) (supplier models.Supplier) {
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id = ?", tenant, id).First(&supplier)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	tx.Model(&supplier).Updates(models.Supplier{}.FromDTO(changes))
+	tx.Model(&supplier).Updates(requests.MarshalSupplierRequest(changes))
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
@@ -39,8 +39,8 @@ func (dao Repository) Update(id string, tenant string, changes dtos.SupplierRequ
 	return
 }
 
-func (dao Repository) Create(creator models.User, newSupplier dtos.SupplierRequest) (supplier models.Supplier) {
-	supplier = supplier.FromDTO(newSupplier)
+func (dao Repository) Create(creator models.User, newSupplier requests.SupplierRequest) (supplier models.Supplier) {
+	supplier = requests.MarshalSupplierRequest(newSupplier)
 	supplier.CompanyID = *creator.CompanyID
 	supplier.CreatedBy = creator.Email
 	if err := database.DBConn.Create(&supplier).Error; err != nil {

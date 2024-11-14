@@ -1,13 +1,28 @@
 package models
 
 import (
-	"back/internal/lib/dtos"
+	"back/internal/lib/enums"
 	"fmt"
 	"log"
 	"time"
 
 	"gorm.io/gorm"
 )
+
+type QuoteLine struct {
+	QuoteID     string `gorm:"primaryKey"`
+	Line        int    `gorm:"primaryKey"`
+	Quantity    float64
+	Price       float64
+	Name        string
+	Description *string
+	Type        enums.ProductType
+	ProductID   *string
+}
+
+func (QuoteLine) TableName() string {
+	return "com_quote_line"
+}
 
 type Quote struct {
 	ID         string `gorm:"primaryKey;<-:false;default:uuid_generate_v4()"`
@@ -17,12 +32,12 @@ type Quote struct {
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time `gorm:"autoUpdateTime"`
 	SentAt     *time.Time
-	Status     string
+	Status     enums.QuoteStatus
 	CreatedBy  string `gorm:"<-:create"`
 	CompanyID  string `gorm:"<-:create"`
 	CustomerID *string
 	FileName   *string
-	Company    Company
+	Company    Organization
 	Customer   *Customer
 	Lines      []QuoteLine
 }
@@ -53,49 +68,4 @@ func (q *Quote) BeforeUpdate(tx *gorm.DB) (err error) {
 	tx.Statement.Omit("Company", "Customer")
 
 	return
-}
-
-func (Quote) FromDTO(q dtos.Quote) Quote {
-	lines := []QuoteLine{}
-	for _, x := range q.Lines {
-		x.QuoteID = ""
-		lines = append(lines, QuoteLine{}.FromDTO(x))
-	}
-	return Quote{
-		ID:         q.ID,
-		Name:       q.Name,
-		Title:      q.Title,
-		Tva:        q.Tva,
-		CreatedAt:  q.CreatedAt,
-		UpdatedAt:  q.UpdatedAt,
-		SentAt:     q.SentAt,
-		Status:     q.Status,
-		CreatedBy:  q.CreatedBy,
-		CompanyID:  q.CompanyID,
-		CustomerID: q.CustomerID,
-		FileName:   q.FileName,
-		Lines:      lines,
-	}
-}
-
-func (quote Quote) ToDTO() dtos.Quote {
-	lines := []dtos.QuoteLine{}
-	for _, x := range quote.Lines {
-		lines = append(lines, x.ToDTO())
-	}
-	return dtos.Quote{
-		ID:         quote.ID,
-		Name:       quote.Name,
-		Title:      quote.Title,
-		Tva:        quote.Tva,
-		CreatedAt:  quote.CreatedAt,
-		UpdatedAt:  quote.UpdatedAt,
-		SentAt:     quote.SentAt,
-		Status:     quote.Status,
-		CreatedBy:  quote.CreatedBy,
-		CompanyID:  quote.CompanyID,
-		CustomerID: quote.CustomerID,
-		FileName:   quote.FileName,
-		Lines:      lines,
-	}
 }

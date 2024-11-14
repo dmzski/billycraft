@@ -1,4 +1,7 @@
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useOrganizationLogoQuery = (
 	src: string,

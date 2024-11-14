@@ -1,9 +1,9 @@
-import Customer from "@/models/Customer";
-import { IdentificationIcon } from "@heroicons/react/24/solid";
-import { RRLink } from "../RRLink";
-import { VariantProps, cva } from "class-variance-authority";
-import { Badge } from "@coco-ui/core";
 import { useI18n } from "@/i18n";
+import type { CustomerResponse } from "@/sdk";
+import { Badge } from "@billycraft/ui";
+import { IdentificationIcon } from "@heroicons/react/24/solid";
+import { type VariantProps, cva } from "class-variance-authority";
+import { RRLink } from "../RRLink";
 
 const labelVariants = cva(
 	"inline-flex items-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg overflow-hidden",
@@ -21,7 +21,7 @@ const labelVariants = cva(
 );
 
 type CustomerLabelProps = {
-	customer: Customer;
+	customer: CustomerResponse;
 	to?: string;
 } & VariantProps<typeof labelVariants>;
 

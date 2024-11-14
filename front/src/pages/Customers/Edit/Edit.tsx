@@ -5,16 +5,15 @@ import {
 	Loader,
 	TextArea,
 	useToast,
-} from "@coco-ui/core";
-import { CustomerApi } from "@/api/CustomerApi";
+} from "@billycraft/ui";
 import { useController, useForm } from "react-hook-form";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { useHistory, useParams } from "react-router-dom";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
-import { CustomerUpdateRequest } from "@/models/dtos/CustomerUpdateRequest";
 import { RRLink } from "@/components/RRLink";
+import { type CustomerRequest, CustomersService } from "@/sdk";
 
 const defaultCustomer = {
 	address: "",
@@ -24,7 +23,7 @@ const defaultCustomer = {
 	contact: "",
 	email: "",
 	postalCode: "",
-} as CustomerUpdateRequest;
+} as CustomerRequest;
 
 export const Edit = () => {
 	const { id } = useParams<{ id: string }>();
@@ -36,15 +35,18 @@ export const Edit = () => {
 		handleSubmit,
 		control,
 		formState: { isValid, isSubmitting },
-	} = useForm<CustomerUpdateRequest>({
+	} = useForm<CustomerRequest>({
 		mode: "onChange",
 		values: customer ?? defaultCustomer,
 	});
 
-	const onSubmit = async (data: CustomerUpdateRequest) => {
+	const onSubmit = async (data: CustomerRequest) => {
 		try {
 			if (customer?.id) {
-				await CustomerApi.update(data);
+				await CustomersService.patchCustomersById({
+					body: data,
+					path: { id: customer.id },
+				});
 				push(ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() }));
 				toast.show(t("customers.form.submit.success"));
 			}
@@ -102,7 +104,7 @@ export const Edit = () => {
 	return (
 		<div className="flex flex-col w-full gap-5">
 			<RRLink
-				to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer?.id.toString() })}
+				to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
 				className="flex gap-2 items-center"
 			>
 				<ChevronLeftIcon className="w-5" />

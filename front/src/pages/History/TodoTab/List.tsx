@@ -1,9 +1,9 @@
 import { formatISO9075 } from "date-fns";
-import { Todo } from "@/models/Todo";
 import { useI18n } from "@/i18n";
+import type { TodoResponse } from "@/sdk";
 
 type TodoListProps = {
-	data: Todo[];
+	data: TodoResponse[];
 };
 
 const List = ({ data }: TodoListProps) => {

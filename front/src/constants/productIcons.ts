@@ -1,4 +1,4 @@
-import { ProductType } from "@/models/LineTypeEnum";
+import type { ProductType } from "@/sdk";
 import {
 	HandRaisedIcon,
 	PencilIcon,

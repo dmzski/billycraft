@@ -1,11 +1,17 @@
-import { BillApi } from "@/api/BillApi";
-import Bill from "@/models/Bill";
+import { BillsService, type GetBillsResponse } from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
-type DataLoaderConfig = Parameters<typeof useDataLoader<Bill[]>>[2];
+type DataLoaderConfig = Parameters<typeof useDataLoader<GetBillsResponse>>[2];
 
 export const useAllBillsArchivedQuery = (config?: DataLoaderConfig) => {
 	const key = ["bills", "all", "archived"];
 
-	return useDataLoader(key, () => BillApi.findAllArchived(), config);
+	return useDataLoader(
+		key,
+		() =>
+			BillsService.getBills({
+				query: { status: ["ARCHIVED"] },
+			}).then(({ data }) => data),
+		config,
+	);
 };

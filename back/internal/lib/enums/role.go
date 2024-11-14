@@ -2,7 +2,7 @@ package enums
 
 import "slices"
 
-type RoleEnum string
+type RoleEnum string //@name RoleEnum
 
 const (
 	RoleEnumOwner   RoleEnum = "OWNER"

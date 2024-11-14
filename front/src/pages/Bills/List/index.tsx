@@ -1,16 +1,16 @@
 import useCustomers from "@/hooks/useCustomers";
-import type Bill from "@/models/Bill";
+import type { BillResponse } from "@/sdk";
 import BillTableLine from "./Row";
 import { useI18n } from "@/i18n";
 import type { BillOverviewRouteQueryParams } from "@/routes";
 import { useEffect, useRef, useState } from "react";
 import { BottomActionBar } from "@/components/BottomActionBar";
 import { MultiDownloadPdfModal } from "../modals/MultiDownloadPdfModal";
-import { Button, Checkbox } from "@coco-ui/core";
+import { Button, Checkbox } from "@billycraft/ui";
 import { ArrowDownOnSquareIcon } from "@heroicons/react/24/solid";
 
 type BillListProps = {
-	data: Bill[];
+	data: BillResponse[];
 	selectedStatus?: BillOverviewRouteQueryParams["fromTab"];
 };
 
@@ -18,7 +18,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 	const { t } = useI18n();
 	const customers = useCustomers();
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [selected, setSelected] = useState<Bill[]>([]);
+	const [selected, setSelected] = useState<BillResponse[]>([]);
 
 	useEffect(() => {
 		if (data) {
@@ -47,7 +47,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 					/>
 				</div>
 			) : null}
-			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm">
+			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm gap-4">
 				<div className="md:pl-20">{t("bills.list.headers.reference")}</div>
 				<div>{t("bills.list.headers.customer")}</div>
 				<div>{t("bills.list.headers.createdAt")}</div>

@@ -1,6 +1,8 @@
 package models
 
-import "back/internal/lib/dtos"
+import (
+	"back/internal/lib/enums"
+)
 
 type BillLine struct {
 	BillID      string `gorm:"primaryKey"`
@@ -9,37 +11,11 @@ type BillLine struct {
 	Price       float64
 	Name        string
 	Description *string
-	Type        string
+	Type        enums.ProductType
 	ProductID   *string
 	Bill        Bill
 }
 
 func (BillLine) TableName() string {
 	return "com_bill_line"
-}
-
-func (line BillLine) ToDTO() dtos.BillLine {
-	return dtos.BillLine{
-		BillID:      line.BillID,
-		Line:        line.Line,
-		Quantity:    line.Quantity,
-		Price:       line.Price,
-		Name:        line.Name,
-		Description: line.Description,
-		Type:        line.Type,
-		ProductID:   line.ProductID,
-	}
-}
-
-func (BillLine) FromDTO(line dtos.BillLine) BillLine {
-	return BillLine{
-		BillID:      line.BillID,
-		Line:        line.Line,
-		Quantity:    line.Quantity,
-		Price:       line.Price,
-		Name:        line.Name,
-		Description: line.Description,
-		Type:        line.Type,
-		ProductID:   line.ProductID,
-	}
 }

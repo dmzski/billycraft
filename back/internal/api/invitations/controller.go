@@ -2,14 +2,15 @@ package invitations
 
 import (
 	"back/internal/lib/auth"
-	"back/internal/lib/dtos"
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
+	"back/internal/lib/responses"
 
 	"github.com/gofiber/fiber/v2"
 )
 
+// InitRoutes initializes the invitation-related routes
 func InitRoutes(group fiber.Router) {
 	router := group.Group("/invitations")
 	router.Post("/", auth.RoleRequired(enums.RoleEnumAdmin), createInvite)
@@ -20,6 +21,13 @@ func InitRoutes(group fiber.Router) {
 	router.Get("/", auth.RoleRequired(enums.RoleEnumAdmin), findAll)
 }
 
+// findAllMinePending retrieves all pending invitations for the current user
+// @Summary Retrieves all pending invitations for the user
+// @Tags Invitations
+// @Produce json
+// @Success 200 {array} responses.MyInvitationResponse "List of pending invitations"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations/mine/pending [get]
 func findAllMinePending(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
@@ -28,6 +36,14 @@ func findAllMinePending(c *fiber.Ctx) error {
 	return c.JSON(invitations)
 }
 
+// findAll retrieves all invitations for the current user's organization
+// @Summary Retrieves all invitations for the organization
+// @Tags Invitations
+// @Produce json
+// @Param filters query requests.InvitationFindAllParams false "Filters for invitations"
+// @Success 200 {array} responses.InvitationResponse "List of invitations"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations [get]
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	params := new(requests.InvitationFindAllParams)
@@ -42,10 +58,20 @@ func findAll(c *fiber.Ctx) error {
 	return c.JSON(makeArrayResponse(invitations))
 }
 
+// createInvite creates a new invitation for a user
+// @Summary Creates a new invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param invitation body requests.InvitationRequest true "Invitation data"
+// @Success 200 {object} responses.InvitationResponse "Created invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 401 {object} string "Unauthorized"
+// @Router /invitations [post]
 func createInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	invitationRequest := dtos.InvitationRequest{}
+	invitationRequest := requests.InvitationRequest{}
 	err := c.BodyParser(&invitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -59,13 +85,23 @@ func createInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't add invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// acceptInvite allows a user to accept an invitation to join an organization
+// @Summary Accepts an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param acceptInvitationRequest body requests.AcceptInvitationRequest true "Accept invitation data"
+// @Success 200 {object} responses.InvitationResponse "Accepted invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations/accept [post]
 func acceptInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	acceptInvitationRequest := dtos.AcceptInvitationRequest{}
+	acceptInvitationRequest := requests.AcceptInvitationRequest{}
 	err := c.BodyParser(&acceptInvitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -75,13 +111,23 @@ func acceptInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't accept invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// refuseInvite allows a user to refuse an invitation
+// @Summary Refuses an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce json
+// @Param acceptInvitationRequest body requests.AcceptInvitationRequest true "Refuse invitation data"
+// @Success 200 {object} responses.InvitationResponse "Refused invitation"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations/refuse [post]
 func refuseInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 
-	acceptInvitationRequest := dtos.AcceptInvitationRequest{}
+	acceptInvitationRequest := requests.AcceptInvitationRequest{}
 	err := c.BodyParser(&acceptInvitationRequest)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse invitation request")
@@ -91,16 +137,26 @@ func refuseInvite(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Can't accept invitation in database")
 	}
 
-	return c.JSON(anInvitation.ToDTO())
+	return c.JSON(responses.CreateInvitationResponse(anInvitation))
 }
 
+// deleteInvite removes an invitation based on the provided email
+// @Summary Deletes an invitation
+// @Tags Invitations
+// @Accept json
+// @Produce plain
+// @Param deleteInvitationRequest body requests.DeleteInvitationRequest true "Delete invitation data"
+// @Success 200 {string} string "Invitation deleted"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /invitations [delete]
 func deleteInvite(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	if user.CompanyID == nil {
 		return fiber.NewError(fiber.StatusUnauthorized, "You can't do this")
 	}
 
-	deleteInvitationRequest := dtos.DeleteInvitationRequest{}
+	deleteInvitationRequest := requests.DeleteInvitationRequest{}
 	err := c.BodyParser(&deleteInvitationRequest)
 	if err != nil || deleteInvitationRequest.Email == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "Can't parse request")
@@ -113,10 +169,11 @@ func deleteInvite(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).SendString("Invitation deleted")
 }
 
-func makeArrayResponse(array []models.Invitation) []dtos.InvitationResponse {
-	res := make([]dtos.InvitationResponse, 0)
-	for _, x := range array {
-		newDto := x.ToDTO()
+// makeArrayResponse formats an array of invitations into JSON
+func makeArrayResponse(array []models.Invitation) []responses.InvitationResponse {
+	res := make([]responses.InvitationResponse, 0)
+	for _, anInvitation := range array {
+		newDto := responses.CreateInvitationResponse(anInvitation)
 		res = append(res, newDto)
 	}
 

@@ -5,8 +5,8 @@ import Details from "./Details";
 import ListPage from "./ListPage";
 import Overview from "./Overview";
 import { useI18n } from "@/i18n";
-import { ReactNode } from "react";
-import { Tabs } from "@coco-ui/core";
+import type { ReactNode } from "react";
+import { Tabs } from "@billycraft/ui";
 import { RRTab } from "@/components/RRTab";
 
 const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
