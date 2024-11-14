@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.37.0
+
+### Minor Changes
+
+- 7b26d7d: Add required on checkbox
+
 ## 1.36.0
 
 ### Minor Changes

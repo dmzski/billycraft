@@ -1,13 +1,15 @@
 {
 	"name": "@billycraft/ui",
-	"version": "1.36.0",
+	"version": "1.37.0",
 	"private": false,
 	"type": "module",
 	"license": "MIT",
 	"main": "dist/index.js",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
@@ -72,7 +74,11 @@
 		"format": "pnpm biome format --write"
 	},
 	"browserslist": {
-		"production": [">0.2%", "not dead", "not op_mini all"],
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
 		"development": [
 			"last 1 chrome version",
 			"last 1 firefox version",

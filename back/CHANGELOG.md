@@ -1,5 +1,11 @@
 # back
 
+## 1.31.0
+
+### Minor Changes
+
+- 7b26d7d: Add swagger drop dtos and use request and response and add more security
+
 ## 1.30.0
 
 ### Minor Changes

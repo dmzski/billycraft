@@ -1,5 +1,11 @@
 # @coco/auth
 
+## 1.3.0
+
+### Minor Changes
+
+- 7b26d7d: Add update user info
+
 ## 1.2.0
 
 ### Minor Changes
