@@ -4,7 +4,12 @@ import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import type { ProductFilters } from "@/utils/products";
 import { Button, Collapsible, Input, Select, Switch } from "@billycraft/ui";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { type ChangeEvent, type ComponentProps, useMemo, useReducer } from "react";
+import {
+	type ChangeEvent,
+	type ComponentProps,
+	useMemo,
+	useReducer,
+} from "react";
 
 type FiltersProps = {
 	filters: ProductFilters;
@@ -66,11 +71,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 			disclosure={
 				<div>
 					<Button onClick={toggleOpenFilters} variant="ghost">
-						{openFilters ? (
-							<EyeSlashIcon />
-						) : (
-							<EyeIcon />
-						)}
+						{openFilters ? <EyeSlashIcon /> : <EyeIcon />}
 						{openFilters ? pageT("buttons.hide") : pageT("buttons.display")}
 					</Button>
 				</div>

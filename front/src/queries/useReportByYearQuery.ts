@@ -1,4 +1,8 @@
-import { type GetReportsYearData, type ReportResponse, ReportsService } from "@/sdk";
+import {
+	type GetReportsYearData,
+	type ReportResponse,
+	ReportsService,
+} from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
 type DataLoaderConfig = Parameters<typeof useDataLoader<ReportResponse>>[2];

@@ -8,7 +8,11 @@ import { Submit } from "@/components/form/Submit";
 import { sendErrorToSentry } from "@/utils/errors";
 import { SelectField } from "@/components/form/SelectField";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { type ProductResponse, ProductsService, type UpdateProductRequest } from "@/sdk";
+import {
+	type ProductResponse,
+	ProductsService,
+	type UpdateProductRequest,
+} from "@/sdk";
 
 type MultiEditProductGroupModalProps = {
 	products: ProductResponse[];

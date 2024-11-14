@@ -44,10 +44,12 @@ export const Overview = () => {
 		try {
 			if (bill?.id && !isDownloadingPDF) {
 				toggleIsDownloadingPDF();
-				const blob = await PdFsService.getPdfsBillById({path: {id: bill.id}}).then(({data}) => data);
-        if (!blob) {
-          throw new Error('Invalid Bill PDF')
-        }
+				const blob = await PdFsService.getPdfsBillById({
+					path: { id: bill.id },
+				}).then(({ data }) => data);
+				if (!blob) {
+					throw new Error("Invalid Bill PDF");
+				}
 				const link = document.createElement("a");
 				link.download = bill.name;
 				link.href = URL.createObjectURL(blob);

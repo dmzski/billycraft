@@ -1,5 +1,8 @@
 import { type TodoResponse, TodosService } from "@/sdk";
-import { type UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useAllTodosFinishedQuery = (
 	config?: UseDataLoaderConfig<TodoResponse[], Error>,

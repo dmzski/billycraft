@@ -67,9 +67,7 @@ export const JoinOrganization = () => {
 					})}
 				</p>
 				<FormErrorAlert />
-				<Submit>
-					{pageT("submit")}
-				</Submit>
+				<Submit>{pageT("submit")}</Submit>
 			</div>
 		</Form>
 	);

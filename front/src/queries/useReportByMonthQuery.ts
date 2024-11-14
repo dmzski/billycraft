@@ -15,7 +15,10 @@ export const useReportByMonthQuery = (
 
 	return useDataLoader(
 		key,
-		() => ReportsService.getReportsMonth({ query: { date } }).then(({data}) => data),
+		() =>
+			ReportsService.getReportsMonth({ query: { date } }).then(
+				({ data }) => data,
+			),
 		config,
 	);
 };

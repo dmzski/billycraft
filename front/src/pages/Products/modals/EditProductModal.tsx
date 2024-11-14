@@ -11,7 +11,11 @@ import { calculatePriceTTC } from "@/utils/price";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { Submit } from "@/components/form/Submit";
 import { Form } from "@/components/form/Form";
-import { type ProductResponse, ProductsService, type UpdateProductRequest } from "@/sdk";
+import {
+	type ProductResponse,
+	ProductsService,
+	type UpdateProductRequest,
+} from "@/sdk";
 
 type EditProductModalProps = {
 	onSubmitSuccess: (newProduct: ProductResponse) => Promise<void> | void;

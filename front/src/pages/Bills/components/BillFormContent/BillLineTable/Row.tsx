@@ -19,7 +19,7 @@ import { SelectField } from "@/components/form/SelectField";
 import { InputField } from "@/components/form/InputField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
-import {ProductTypeSchema, type ProductResponse} from "@/sdk";
+import { ProductTypeSchema, type ProductResponse } from "@/sdk";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
 
 type BillLineTableLineProps = {

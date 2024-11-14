@@ -7,10 +7,7 @@ import { SwitchField } from "@/components/form/SwitchField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import useLoadingState from "@/hooks/useLoadingState";
 import { useI18n } from "@/i18n";
-import {
-	CompanyService,
-	type OrganizationRequest,
-} from "@/sdk";
+import { CompanyService, type OrganizationRequest } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
 import { type ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -92,7 +89,9 @@ export const Settings = () => {
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
 			<div className="flex flex-col gap-8">
-        <h1 className="text-3xl font-semibold">{t('organization.settings.title')}</h1>
+				<h1 className="text-3xl font-semibold">
+					{t("organization.settings.title")}
+				</h1>
 				<section className="flex flex-col">
 					<div className="text-xl font-semibold">
 						{t("compagny informations")}

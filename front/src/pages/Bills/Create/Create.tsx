@@ -46,10 +46,10 @@ export const Create = () => {
 		const tmp: BillRequest = {
 			...data,
 			lines: data.lines.map((line, index: number) => ({
-        type: line.type,
-        description: line.description ?? undefined,
-        name: line.name,
-        productId: line.productId ?? undefined,
+				type: line.type,
+				description: line.description ?? undefined,
+				name: line.name,
+				productId: line.productId ?? undefined,
 				line: index + 1,
 				price: line.price ? Number(`${line.price}`) : undefined,
 				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,

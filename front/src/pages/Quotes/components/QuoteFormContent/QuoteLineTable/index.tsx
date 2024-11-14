@@ -62,10 +62,7 @@ const QuoteLineTable = ({
 	};
 
 	const addLine = (newLine = defaultLine) => {
-		append(
-			{ ...newLine, line: fields.length },
-			{ shouldFocus: false },
-		);
+		append({ ...newLine, line: fields.length }, { shouldFocus: false });
 	};
 	const productOptions: ComponentProps<typeof Select>["options"] =
 		useMemo(() => {

@@ -168,22 +168,22 @@ export const ROUTES = {
 		id: "quotes.add",
 		path: () => "/quotes/create",
 	},
-  ACCOUNT: {
-    id: "account",
-    exact: true,
-    path: () => "/account",
-  },
-  ORGANIZATION: {
-    id: 'organization',
-    path: () => "/organization/",
-    exact: false,
-    routes: {
-      SETTINGS: {
+	ACCOUNT: {
+		id: "account",
+		exact: true,
+		path: () => "/account",
+	},
+	ORGANIZATION: {
+		id: "organization",
+		path: () => "/organization/",
+		exact: false,
+		routes: {
+			SETTINGS: {
 				id: "organization.settings",
 				exact: true,
 				path: () => "/organization/settings",
-      },
-      USERS: {
+			},
+			USERS: {
 				id: "organization.users",
 				exact: false,
 				path: () => "/organization/users",
@@ -199,26 +199,26 @@ export const ROUTES = {
 						path: () => "/organization/users/invitations",
 					},
 				},
-      },
-      CUSTOMIZATION: {
-        id: 'organization.customization',
-        exact: false,
-        path: () => "/organization/customization",
-        routes: {
-          BILL: {
-            id: 'organization.customization.bill',
-            exact: true,
-            path: () => "/organization/customization/bill",
-          },
-          QUOTE: {
-            id: 'organization.customization.quote',
-            exact: true,
-            path: () => "/organization/customization/quote",
-          }
-        }
-      }
-    }
-  },
+			},
+			CUSTOMIZATION: {
+				id: "organization.customization",
+				exact: false,
+				path: () => "/organization/customization",
+				routes: {
+					BILL: {
+						id: "organization.customization.bill",
+						exact: true,
+						path: () => "/organization/customization/bill",
+					},
+					QUOTE: {
+						id: "organization.customization.quote",
+						exact: true,
+						path: () => "/organization/customization/quote",
+					},
+				},
+			},
+		},
+	},
 	SUPPLIERS: {
 		id: "suppliers",
 		exact: true,

@@ -12,7 +12,7 @@ import {
 
 type RowContentProps = {
 	quote: QuoteResponse;
-  customer?: CustomerResponse
+	customer?: CustomerResponse;
 };
 
 export const RowContent = ({ quote, customer }: RowContentProps) => {

@@ -204,7 +204,7 @@ export const AuthProvider = ({
 				const res = await fetch(`${AUTH_API_URL}/auth/update`, {
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_KEY)}`,
-            "Content-Type": "application/json",
+						"Content-Type": "application/json",
 					},
 					method: "PATCH",
 					body: JSON.stringify({

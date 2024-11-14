@@ -51,7 +51,10 @@ const Layout = ({ children }: LayoutProps) => {
 								{({ close }) => (
 									<Dropdown.Content className="w-full">
 										<Dropdown.Button asChild>
-											<ReactRouterLink onClick={close} to={ROUTES.ACCOUNT.path()}>
+											<ReactRouterLink
+												onClick={close}
+												to={ROUTES.ACCOUNT.path()}
+											>
 												<span>{t("heads.account")}</span>
 											</ReactRouterLink>
 										</Dropdown.Button>

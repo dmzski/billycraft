@@ -19,7 +19,9 @@ export const UsersAndInvitations = () => {
 					<RRTab to={ROUTES.ORGANIZATION.routes.USERS.routes.USERS.path()}>
 						{pageT("tabs.users")}
 					</RRTab>
-					<RRTab to={ROUTES.ORGANIZATION.routes.USERS.routes.INVITATIONS.path()}>
+					<RRTab
+						to={ROUTES.ORGANIZATION.routes.USERS.routes.INVITATIONS.path()}
+					>
 						{pageT("tabs.invitations")}
 					</RRTab>
 				</Tabs>
@@ -35,7 +37,9 @@ export const UsersAndInvitations = () => {
 				/>
 				<Route
 					render={() => (
-						<Redirect to={ROUTES.ORGANIZATION.routes.USERS.routes.USERS.path()} />
+						<Redirect
+							to={ROUTES.ORGANIZATION.routes.USERS.routes.USERS.path()}
+						/>
 					)}
 				/>
 			</Switch>

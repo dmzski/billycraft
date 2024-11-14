@@ -93,10 +93,7 @@ const BillLineTable = () => {
 	};
 
 	const addLine = () => {
-		append(
-			{ ...defaultLine, line: fields.length },
-			{ shouldFocus: false },
-		);
+		append({ ...defaultLine, line: fields.length }, { shouldFocus: false });
 	};
 
 	return (

@@ -1,5 +1,8 @@
 import { type BillResponse, BillsService, type GetBillsByIdData } from "@/sdk";
-import { type UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useBillByIdQuery = (
 	id: GetBillsByIdData["path"]["id"],

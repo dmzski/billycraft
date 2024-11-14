@@ -23,7 +23,6 @@ export const Bill = () => {
 		values: (billCustomization ?? {}) as BillCustomizationRequest,
 	});
 
-
 	const onSubmit = async (values: BillCustomizationRequest) => {
 		if (billCustomization) {
 			billCustomization.id
@@ -127,9 +126,9 @@ export const Bill = () => {
 						/>
 					</div>
 				</div>
-        <div className="flex justify-end">
-          <Submit>{t("settings.forms.billCustomization.submit")}</Submit>
-        </div>
+				<div className="flex justify-end">
+					<Submit>{t("settings.forms.billCustomization.submit")}</Submit>
+				</div>
 			</div>
 		</Form>
 	);

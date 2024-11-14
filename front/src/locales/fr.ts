@@ -915,8 +915,8 @@ export default {
 	"account.submit.error":
 		"Une erreur est survenue lors de la mise à jour de vos informations",
 
-  // Organization > Customization
-  'organization.customization.title': 'Personnalisation',
-  'organization.customization.tabs.bill': 'Factures',
-  'organization.customization.tabs.quote': 'Devis',
+	// Organization > Customization
+	"organization.customization.title": "Personnalisation",
+	"organization.customization.tabs.bill": "Factures",
+	"organization.customization.tabs.quote": "Devis",
 } as const;

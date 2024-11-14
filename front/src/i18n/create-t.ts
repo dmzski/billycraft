@@ -64,7 +64,7 @@ export function createT<
 		>
 	) {
 		const paramObject = params[0];
-    let computedKey: Key = key
+		let computedKey: Key = key;
 		let isPlural = false;
 
 		if (paramObject && "count" in paramObject) {
@@ -73,7 +73,8 @@ export function createT<
 				: pluralKeys.has(computedKey);
 
 			if (isPluralKey) {
-				computedKey = `${computedKey}#${getPluralKey(paramObject.count)}` as Key;
+				computedKey =
+					`${computedKey}#${getPluralKey(paramObject.count)}` as Key;
 				isPlural = true;
 			}
 		}

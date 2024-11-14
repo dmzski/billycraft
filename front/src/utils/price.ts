@@ -41,9 +41,10 @@ export function getBillOrQuoteTotal(
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
-		.map(
-			(line) =>
-				roundTwoDecimals(calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0)),
+		.map((line) =>
+			roundTwoDecimals(
+				calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0),
+			),
 		);
 
 	if (array && array.length > 0) {
@@ -60,7 +61,9 @@ export function getBillOrQuoteTotalEt(
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
-		.map((line) => roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ?? 0)));
+		.map((line) =>
+			roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ?? 0)),
+		);
 
 	if (array && array.length > 0) {
 		return array.reduce(
@@ -77,9 +80,10 @@ export function getBillOrQuoteTotalETForLineType(
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity && line.type === type)
-		.map(
-			(line) =>
-				roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ? line.quantity : 0)),
+		.map((line) =>
+			roundTwoDecimals(
+				calculatePriceET(line.price) * (line.quantity ? line.quantity : 0),
+			),
 		);
 
 	if (array && array.length > 0) {

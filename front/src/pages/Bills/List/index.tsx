@@ -1,5 +1,5 @@
 import useCustomers from "@/hooks/useCustomers";
-import type {BillResponse} from "@/sdk";
+import type { BillResponse } from "@/sdk";
 import BillTableLine from "./Row";
 import { useI18n } from "@/i18n";
 import type { BillOverviewRouteQueryParams } from "@/routes";

@@ -16,8 +16,10 @@ const Dashboard = () => {
 		() => new Date(Date.now() - DATE_OFFSET_TODOS),
 		[],
 	);
-  const {toRFC3339} = useFormatDate()
-	const { data: todos, reload } = useAllTodosFinishedAfter(toRFC3339(dateOffset));
+	const { toRFC3339 } = useFormatDate();
+	const { data: todos, reload } = useAllTodosFinishedAfter(
+		toRFC3339(dateOffset),
+	);
 
 	const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0;
 
@@ -25,7 +27,7 @@ const Dashboard = () => {
 		<div className="flex flex-col gap-12">
 			<div className="flex flex-col md:flex-row flex-wrap justify-between items-center">
 				<h1 className="text-3xl font-bold">{t("dashboard.title")}</h1>
-				<div className="grid md:grid-cols-2 gap-2 justify-center items-center"/>
+				<div className="grid md:grid-cols-2 gap-2 justify-center items-center" />
 			</div>
 			<div className="flex flex-col gap-12">
 				<section className="flex flex-col gap-4 border rounded-md p-4">

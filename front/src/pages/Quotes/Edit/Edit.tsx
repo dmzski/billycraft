@@ -64,7 +64,7 @@ export const Edit = () => {
 			quote
 				? {
 						...quote,
-            tva: quote.tva ?? 0,
+						tva: quote.tva ?? 0,
 						lines: quote.lines.map(({ price, ...rest }) => ({
 							...rest,
 							price,

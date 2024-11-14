@@ -41,7 +41,6 @@ export const Quote = () => {
 		}
 	};
 
-
 	const { field: colorField } = useController({
 		name: "mainColor",
 		control: methods.control,

@@ -4,7 +4,11 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import OutgoingLinesTable from "./OutgoingLinesTable";
 import { useI18n } from "@/i18n";
-import { type OutgoingRequest, type OutgoingResponse, OutgoingsService } from "@/sdk";
+import {
+	type OutgoingRequest,
+	type OutgoingResponse,
+	OutgoingsService,
+} from "@/sdk";
 
 type FormProps = {
 	outgoing?: OutgoingResponse;

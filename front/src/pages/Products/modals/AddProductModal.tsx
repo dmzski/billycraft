@@ -10,7 +10,11 @@ import { sendErrorToSentry } from "@/utils/errors";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { Submit } from "@/components/form/Submit";
 import { Form } from "@/components/form/Form";
-import { type CreateProductRequest, type ProductResponse, ProductsService } from "@/sdk";
+import {
+	type CreateProductRequest,
+	type ProductResponse,
+	ProductsService,
+} from "@/sdk";
 
 type AddProductModalProps = {
 	onSubmitSuccess: (newId: ProductResponse["id"]) => Promise<void> | void;
@@ -58,9 +62,9 @@ const AddProductForm = ({
 				values.lowStock = null;
 				values.code = null;
 			}
-			const res = await ProductsService.postProducts({ body: values as CreateProductRequest }).then(
-				({ data }) => data,
-			);
+			const res = await ProductsService.postProducts({
+				body: values as CreateProductRequest,
+			}).then(({ data }) => data);
 			toast.show(pageT("submit.success"));
 			if (res) {
 				await onSubmitSuccess(res.id);

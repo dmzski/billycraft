@@ -1,5 +1,8 @@
 import { InvitationsService, type MyInvitationResponse } from "@/sdk";
-import { type UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import {
+	type UseDataLoaderConfig,
+	useDataLoader,
+} from "@scaleway/use-dataloader";
 
 export const useAllMyInvitationsQuery = (
 	config?: UseDataLoaderConfig<MyInvitationResponse[], Error>,

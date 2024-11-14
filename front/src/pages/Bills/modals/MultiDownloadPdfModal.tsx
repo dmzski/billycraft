@@ -2,7 +2,7 @@ import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import type {BillResponse} from "@/sdk";
+import type { BillResponse } from "@/sdk";
 import { PdFsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Button, Modal, useToast } from "@billycraft/ui";

@@ -13,7 +13,7 @@ import {
 
 type RowContentProps = {
 	bill: BillResponse;
-  customer?: CustomerResponse
+	customer?: CustomerResponse;
 };
 
 export const RowContent = ({ bill, customer }: RowContentProps) => {
