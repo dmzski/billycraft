@@ -1,9 +1,9 @@
 import { Button, Select } from "@billycraft/ui";
-import { ComponentProps, useMemo, useRef, useState } from "react";
+import { type ComponentProps, useMemo, useRef, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useI18n } from "@/i18n";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import { BillFormValues } from "../types";
+import type { BillFormValues } from "../types";
 import { calculatePriceTTC } from "@/utils/price";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { DndContext } from "@dnd-kit/core";
@@ -18,7 +18,6 @@ const defaultLine: BillFormValues["lines"][number] = {
 	quantity: 0,
 	type: "TEXT",
 	line: 0,
-	billId: "",
 	itPrice: 0,
 	productId: null,
 };
@@ -82,7 +81,6 @@ const BillLineTable = () => {
 					price: productFound.price,
 					itPrice: calculatePriceTTC(productFound.price, tva),
 					quantity: 0,
-					billId: "",
 					line: fields.length,
 					description: productFound.description ?? null,
 					productId: productFound.id,
@@ -96,7 +94,7 @@ const BillLineTable = () => {
 
 	const addLine = () => {
 		append(
-			{ ...defaultLine, billId: "", line: fields.length },
+			{ ...defaultLine, line: fields.length },
 			{ shouldFocus: false },
 		);
 	};
@@ -123,7 +121,7 @@ const BillLineTable = () => {
 					{t("bills.form.lines.existingProduct.add")}
 				</Button>
 			</div>
-			<div role="list" className="flex flex-col gap-2">
+			<div className="flex flex-col gap-2">
 				<DndContext
 					accessibility={{
 						restoreFocus: true,

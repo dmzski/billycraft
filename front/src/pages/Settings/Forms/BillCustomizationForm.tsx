@@ -1,11 +1,10 @@
 import { Button, Input, Switch, TextArea, useToast } from "@billycraft/ui";
-import { BillCustomizationApi } from "@/api/BillCustomizationApi";
-import BillCustomization from "@/models/BillCustomization";
-import { ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 import { useI18n } from "@/i18n";
+import { type BillCustomizationResponse, BillCustomizationService } from "@/sdk";
 
 type BillCustomizationFormProps = {
-	billCustomization: BillCustomization;
+	billCustomization: BillCustomizationResponse;
 };
 
 const BillCustomizationForm = ({
@@ -13,11 +12,11 @@ const BillCustomizationForm = ({
 }: BillCustomizationFormProps) => {
 	const { t } = useI18n();
 	const [newBillCustomization, setNewBillCustomization] = useState(
-		{} as BillCustomization,
+		{} as BillCustomizationResponse,
 	);
 	const toast = useToast();
 
-	const handleToggle = (property: keyof BillCustomization) => () => {
+	const handleToggle = (property: keyof BillCustomizationResponse) => () => {
 		setNewBillCustomization((current) => ({
 			...current,
 			[property]: !current[property],
@@ -26,7 +25,14 @@ const BillCustomizationForm = ({
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		await BillCustomizationApi.updateMine(newBillCustomization);
+		newBillCustomization.id
+			? await BillCustomizationService.patchBillCustomizationById({
+					path: { id: newBillCustomization.id },
+					body: newBillCustomization,
+				})
+			: await BillCustomizationService.postBillCustomization({
+					body: newBillCustomization,
+				});
 		toast.show(t("settings.forms.billCustomization.submit.success"));
 	};
 

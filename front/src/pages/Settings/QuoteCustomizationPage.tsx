@@ -1,5 +1,5 @@
 import { Loader } from "@billycraft/ui";
-import QuoteCustomization from "@/models/QuoteCustomization";
+import type { QuoteCustomizationResponse } from "@/sdk";
 import QuoteCustomizationForm from "./Forms/QuoteCustomizationForm";
 import { useMyQuoteCustomizationQuery } from "@/queries/useMyQuoteCustomizationQuery";
 
@@ -13,7 +13,7 @@ const QuoteCustomizationPage = () => {
 				<div className="w-full">
 					<QuoteCustomizationForm
 						quoteCustomization={
-							quoteCustomization ?? ({} as QuoteCustomization)
+							quoteCustomization ?? ({} as QuoteCustomizationResponse)
 						}
 					/>
 				</div>

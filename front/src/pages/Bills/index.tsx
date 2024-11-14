@@ -2,22 +2,22 @@ import { useMemo, useState } from "react";
 import { Button, Loader, Tabs } from "@billycraft/ui";
 import useCustomers from "@/hooks/useCustomers";
 import { Link } from "react-router-dom";
-import { BillRouteQueryParams, ROUTES } from "@/routes";
+import { type BillRouteQueryParams, ROUTES } from "@/routes";
 import BillFilterContainer from "./Filters";
 import BillTable from "./List";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { filterBillsOrQuotes } from "@/utils/filters";
-import { BILL_STATUS } from "@/models/Bill";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
 import { useQueryParams } from "@/hooks/useQueryParams";
+import { BillStatusSchema } from "@/sdk";
 
 const BillPage = () => {
 	const customers = useCustomers();
 	const { tab } = useQueryParams<BillRouteQueryParams>();
 	const [selectedStatus, setSelectedStatus] = useState<
 		BillRouteQueryParams["tab"]
-	>(tab && tab !== "all" && BILL_STATUS.includes(tab) ? tab : "all");
+	>(tab && tab !== "all" && BillStatusSchema.enum.includes(tab) ? tab : "all");
 
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
@@ -60,7 +60,7 @@ const BillPage = () => {
 					>
 						{t("all")}
 					</Tabs.Tab>
-					{BILL_STATUS.map((status) => (
+					{BillStatusSchema.enum.map((status) => (
 						<Tabs.Tab
 							key={status}
 							onClick={() => setSelectedStatus(status)}

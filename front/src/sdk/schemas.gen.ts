@@ -2,6 +2,7 @@
 
 export const AcceptInvitationRequestSchema = {
     type: 'object',
+    required: ['companyId'],
     properties: {
         companyId: {
             type: 'string'
@@ -11,6 +12,7 @@ export const AcceptInvitationRequestSchema = {
 
 export const BillCustomizationRequestSchema = {
     type: 'object',
+    required: ['afterTable', 'displayCompanyEmail', 'displayCompanyPhoneNumber', 'displayCustomerEmail', 'displayCustomerPhoneNumber', 'footer', 'mainColor'],
     properties: {
         afterTable: {
             type: 'string'
@@ -38,6 +40,7 @@ export const BillCustomizationRequestSchema = {
 
 export const BillCustomizationResponseSchema = {
     type: 'object',
+    required: ['afterTable', 'companyId', 'displayCompanyEmail', 'displayCompanyPhoneNumber', 'displayCustomerEmail', 'displayCustomerPhoneNumber', 'footer', 'id', 'mainColor'],
     properties: {
         afterTable: {
             type: 'string'
@@ -77,6 +80,7 @@ export const BillCustomizationResponseSchema = {
 
 export const BillEmailCustomizationRequestSchema = {
     type: 'object',
+    required: ['body', 'object', 'sendAutomatically'],
     properties: {
         body: {
             type: 'string'
@@ -92,6 +96,7 @@ export const BillEmailCustomizationRequestSchema = {
 
 export const BillEmailCustomizationResponseSchema = {
     type: 'object',
+    required: ['body', 'companyId', 'id', 'object', 'sendAutomatically'],
     properties: {
         body: {
             type: 'string'
@@ -113,6 +118,7 @@ export const BillEmailCustomizationResponseSchema = {
 
 export const BillLineRequestSchema = {
     type: 'object',
+    required: ['line', 'name', 'type'],
     properties: {
         description: {
             type: 'string'
@@ -140,6 +146,7 @@ export const BillLineRequestSchema = {
 
 export const BillLineResponseSchema = {
     type: 'object',
+    required: ['billId', 'line', 'name', 'price', 'quantity', 'type'],
     properties: {
         billId: {
             type: 'string'
@@ -170,10 +177,8 @@ export const BillLineResponseSchema = {
 
 export const BillRequestSchema = {
     type: 'object',
+    required: ['lines', 'title'],
     properties: {
-        companyId: {
-            type: 'string'
-        },
         customerId: {
             type: 'string'
         },
@@ -197,6 +202,7 @@ export const BillRequestSchema = {
 
 export const BillResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdAt', 'createdBy', 'id', 'lines', 'name', 'status', 'title'],
     properties: {
         companyId: {
             type: 'string'
@@ -254,6 +260,7 @@ export const BillStatusSchema = {
 
 export const CreateProductRequestSchema = {
     type: 'object',
+    required: ['name', 'type'],
     properties: {
         code: {
             type: 'string'
@@ -290,6 +297,7 @@ export const CreateProductRequestSchema = {
 
 export const CreateQuoteRequestSchema = {
     type: 'object',
+    required: ['lines', 'title'],
     properties: {
         customerId: {
             type: 'string'
@@ -317,6 +325,7 @@ export const CreateQuoteRequestSchema = {
 
 export const CustomerRequestSchema = {
     type: 'object',
+    required: ['address', 'city', 'name', 'postalCode'],
     properties: {
         address: {
             type: 'string'
@@ -344,6 +353,7 @@ export const CustomerRequestSchema = {
 
 export const CustomerResponseSchema = {
     type: 'object',
+    required: ['address', 'city', 'companyId', 'contact', 'createdAt', 'deleted', 'email', 'id', 'name', 'phoneNumber', 'postalCode'],
     properties: {
         address: {
             type: 'string'
@@ -386,6 +396,7 @@ export const CustomerResponseSchema = {
 
 export const DeleteInvitationRequestSchema = {
     type: 'object',
+    required: ['email'],
     properties: {
         email: {
             type: 'string'
@@ -395,6 +406,7 @@ export const DeleteInvitationRequestSchema = {
 
 export const ErrorResponseSchema = {
     type: 'object',
+    required: ['code', 'message'],
     properties: {
         code: {
             type: 'integer'
@@ -407,6 +419,7 @@ export const ErrorResponseSchema = {
 
 export const InvitationRequestSchema = {
     type: 'object',
+    required: ['email', 'role'],
     properties: {
         email: {
             type: 'string'
@@ -419,6 +432,7 @@ export const InvitationRequestSchema = {
 
 export const InvitationResponseSchema = {
     type: 'object',
+    required: ['createdAt', 'email', 'role', 'status'],
     properties: {
         createdAt: {
             type: 'string'
@@ -443,6 +457,7 @@ export const InvitationStatusEnumSchema = {
 
 export const MultipleBillPdfRequestSchema = {
     type: 'object',
+    required: ['billIds'],
     properties: {
         billIds: {
             type: 'array',
@@ -455,6 +470,7 @@ export const MultipleBillPdfRequestSchema = {
 
 export const MultipleQuotePdfRequestSchema = {
     type: 'object',
+    required: ['quoteIds'],
     properties: {
         quoteIds: {
             type: 'array',
@@ -467,6 +483,7 @@ export const MultipleQuotePdfRequestSchema = {
 
 export const MyInvitationResponseSchema = {
     type: 'object',
+    required: ['companyId', 'companyName', 'createdAt', 'role', 'status'],
     properties: {
         companyId: {
             type: 'string'
@@ -488,6 +505,7 @@ export const MyInvitationResponseSchema = {
 
 export const OrganizationRequestSchema = {
     type: 'object',
+    required: ['address', 'city', 'name', 'postalCode', 'siret'],
     properties: {
         address: {
             type: 'string'
@@ -536,6 +554,7 @@ export const OrganizationRequestSchema = {
 
 export const OrganizationResponseSchema = {
     type: 'object',
+    required: ['address', 'autoMonthReport', 'autoYearReport', 'city', 'createdAt', 'createdBy', 'email', 'id', 'name', 'phoneNumber', 'postalCode', 'siret', 'vatPercent'],
     properties: {
         address: {
             type: 'string'
@@ -596,6 +615,7 @@ export const OrganizationResponseSchema = {
 
 export const OutgoingLineRequestSchema = {
     type: 'object',
+    required: ['line', 'totalHT', 'vat'],
     properties: {
         billId: {
             type: 'string'
@@ -620,6 +640,7 @@ export const OutgoingLineRequestSchema = {
 
 export const OutgoingLineResponseSchema = {
     type: 'object',
+    required: ['line', 'totalHT', 'vat'],
     properties: {
         billId: {
             type: 'string'
@@ -644,6 +665,7 @@ export const OutgoingLineResponseSchema = {
 
 export const OutgoingRequestSchema = {
     type: 'object',
+    required: ['lines'],
     properties: {
         endDate: {
             type: 'string'
@@ -665,6 +687,7 @@ export const OutgoingRequestSchema = {
 
 export const OutgoingResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdBy', 'endDate', 'id', 'lines', 'name', 'startDate'],
     properties: {
         companyId: {
             type: 'string'
@@ -695,6 +718,7 @@ export const OutgoingResponseSchema = {
 
 export const ProductGroupCreateRequestSchema = {
     type: 'object',
+    required: ['name'],
     properties: {
         name: {
             type: 'string'
@@ -704,6 +728,7 @@ export const ProductGroupCreateRequestSchema = {
 
 export const ProductGroupResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdAt', 'createdBy', 'id', 'name'],
     properties: {
         companyId: {
             type: 'string'
@@ -728,6 +753,7 @@ export const ProductGroupResponseSchema = {
 
 export const ProductGroupUpdateRequestSchema = {
     type: 'object',
+    required: ['name'],
     properties: {
         name: {
             type: 'string'
@@ -737,6 +763,7 @@ export const ProductGroupUpdateRequestSchema = {
 
 export const ProductResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdBy', 'id', 'name', 'stockAlert', 'type'],
     properties: {
         code: {
             type: 'string'
@@ -788,6 +815,7 @@ export const ProductTypeSchema = {
 
 export const QuoteCustomizationRequestSchema = {
     type: 'object',
+    required: ['afterTable', 'displayCompanyEmail', 'displayCompanyPhoneNumber', 'displayCustomerEmail', 'displayCustomerPhoneNumber', 'footer', 'mainColor'],
     properties: {
         afterTable: {
             type: 'string'
@@ -815,6 +843,7 @@ export const QuoteCustomizationRequestSchema = {
 
 export const QuoteCustomizationResponseSchema = {
     type: 'object',
+    required: ['afterTable', 'companyId', 'createdAt', 'displayCompanyEmail', 'displayCompanyPhoneNumber', 'displayCustomerEmail', 'displayCustomerPhoneNumber', 'footer', 'id', 'mainColor'],
     properties: {
         afterTable: {
             type: 'string'
@@ -854,6 +883,7 @@ export const QuoteCustomizationResponseSchema = {
 
 export const QuoteEmailCustomizationRequestSchema = {
     type: 'object',
+    required: ['body', 'object', 'sendAutomatically'],
     properties: {
         body: {
             type: 'string'
@@ -869,6 +899,7 @@ export const QuoteEmailCustomizationRequestSchema = {
 
 export const QuoteEmailCustomizationResponseSchema = {
     type: 'object',
+    required: ['body', 'companyId', 'id', 'object', 'sendAutomatically'],
     properties: {
         body: {
             type: 'string'
@@ -890,6 +921,7 @@ export const QuoteEmailCustomizationResponseSchema = {
 
 export const QuoteLineRequestSchema = {
     type: 'object',
+    required: ['line', 'name', 'type'],
     properties: {
         description: {
             type: 'string'
@@ -917,6 +949,7 @@ export const QuoteLineRequestSchema = {
 
 export const QuoteLineResponseSchema = {
     type: 'object',
+    required: ['line', 'name', 'price', 'quantity', 'quoteId', 'type'],
     properties: {
         description: {
             type: 'string'
@@ -947,6 +980,7 @@ export const QuoteLineResponseSchema = {
 
 export const QuoteResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdAt', 'createdBy', 'id', 'lines', 'name', 'status', 'title'],
     properties: {
         companyId: {
             type: 'string'
@@ -1001,6 +1035,7 @@ export const QuoteStatusSchema = {
 
 export const RemoveUserRequestSchema = {
     type: 'object',
+    required: ['email'],
     properties: {
         email: {
             type: 'string'
@@ -1010,6 +1045,7 @@ export const RemoveUserRequestSchema = {
 
 export const ReportBillResponseSchema = {
     type: 'object',
+    required: ['articleSales', 'articleTaxes', 'billId', 'createdBy', 'otherSales', 'otherTaxes', 'paidAt', 'sentAt', 'serviceSales', 'servicetaxes', 'title'],
     properties: {
         articleSales: {
             type: 'number'
@@ -1049,6 +1085,7 @@ export const ReportBillResponseSchema = {
 
 export const ReportOutgoingLineResponseSchema = {
     type: 'object',
+    required: ['line', 'totalHT', 'vat'],
     properties: {
         billId: {
             type: 'string'
@@ -1073,6 +1110,7 @@ export const ReportOutgoingLineResponseSchema = {
 
 export const ReportOutgoingResponseSchema = {
     type: 'object',
+    required: ['createdBy', 'endDate', 'lines', 'name', 'outgoingId', 'startDate'],
     properties: {
         createdBy: {
             type: 'string'
@@ -1100,6 +1138,7 @@ export const ReportOutgoingResponseSchema = {
 
 export const ReportRequestSchema = {
     type: 'object',
+    required: ['endDate', 'name', 'startDate'],
     properties: {
         endDate: {
             type: 'string'
@@ -1115,6 +1154,7 @@ export const ReportRequestSchema = {
 
 export const ReportResponseSchema = {
     type: 'object',
+    required: ['articleSales', 'articleTaxes', 'bills', 'createdAt', 'endDate', 'id', 'name', 'otherSales', 'otherTaxes', 'outgoings', 'sales', 'serviceSales', 'serviceTaxes', 'startDate', 'totalOutgoings'],
     properties: {
         articleSales: {
             type: 'number'
@@ -1178,6 +1218,7 @@ export const RoleEnumSchema = {
 
 export const SupplierRequestSchema = {
     type: 'object',
+    required: ['name', 'vat'],
     properties: {
         color: {
             type: 'string'
@@ -1193,6 +1234,7 @@ export const SupplierRequestSchema = {
 
 export const SupplierResponseSchema = {
     type: 'object',
+    required: ['companyId', 'createdBy', 'id', 'name', 'vat'],
     properties: {
         color: {
             type: 'string'
@@ -1217,6 +1259,7 @@ export const SupplierResponseSchema = {
 
 export const TodoRequestSchema = {
     type: 'object',
+    required: ['description'],
     properties: {
         description: {
             type: 'string'
@@ -1226,6 +1269,7 @@ export const TodoRequestSchema = {
 
 export const TodoResponseSchema = {
     type: 'object',
+    required: ['compagnyId', 'createdAt', 'createdBy', 'description', 'id', 'updatedAt'],
     properties: {
         compagnyId: {
             type: 'string'
@@ -1256,6 +1300,7 @@ export const TodoResponseSchema = {
 
 export const UpdateProductRequestSchema = {
     type: 'object',
+    required: ['name', 'type'],
     properties: {
         code: {
             type: 'string'
@@ -1292,6 +1337,7 @@ export const UpdateProductRequestSchema = {
 
 export const UpdateQuoteRequestSchema = {
     type: 'object',
+    required: ['lines', 'title'],
     properties: {
         customerId: {
             type: 'string'
@@ -1319,6 +1365,7 @@ export const UpdateQuoteRequestSchema = {
 
 export const UpdateStockMovementSchema = {
     type: 'object',
+    required: ['productId', 'quantity'],
     properties: {
         productId: {
             type: 'string'
@@ -1331,6 +1378,7 @@ export const UpdateStockMovementSchema = {
 
 export const UpdateStockRequestSchema = {
     type: 'object',
+    required: ['in', 'out'],
     properties: {
         in: {
             type: 'array',
@@ -1349,6 +1397,7 @@ export const UpdateStockRequestSchema = {
 
 export const UserRequestSchema = {
     type: 'object',
+    required: ['email', 'firstName', 'lastName', 'role'],
     properties: {
         companyId: {
             type: 'string'
@@ -1370,6 +1419,7 @@ export const UserRequestSchema = {
 
 export const UserResponseSchema = {
     type: 'object',
+    required: ['email', 'firstName', 'lastName', 'role'],
     properties: {
         companyId: {
             type: 'string'

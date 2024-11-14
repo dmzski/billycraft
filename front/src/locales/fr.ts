@@ -315,9 +315,7 @@ export default {
 	"bills.status.DRAFT": "Brouillon",
 	"bills.status.SENT": "Envoyée",
 	"bills.status.REFUSED": "Refusée",
-	"bills.status.PAYMENT_PAID": "Payée",
-	"bills.status.TO_DECLARE": "A déclarer",
-	"bills.status.ACCEPTED": "Acceptée",
+	"bills.status.PAID": "Payée",
 	"bills.status.ARCHIVED": "Archivée",
 
 	// Bills > List
@@ -901,12 +899,13 @@ export default {
 	"bills.modals.multiDownloadPdf.submit.error":
 		"Une erreur est survenue durant la génération du ZIP",
 
-  // My settings
-  'mySettings.title': 'Mon compte',
-  'mySettings.fields.name.label': 'Nom complet',
-  'mySettings.fields.oldPassword.label': 'Mot de passe actuel',
-  'mySettings.fields.newPassword.label': 'Nouveau mot de passe',
-  'mySettings.submit': 'Enregistrer',
-  'mySettings.submit.success': 'Vos informations ont été mise à jour',
-  'mySettings.submit.error': 'Une erreur est survenue lors de la mise à jour de vos informations',
+	// My settings
+	"mySettings.title": "Mon compte",
+	"mySettings.fields.name.label": "Nom complet",
+	"mySettings.fields.oldPassword.label": "Mot de passe actuel",
+	"mySettings.fields.newPassword.label": "Nouveau mot de passe",
+	"mySettings.submit": "Enregistrer",
+	"mySettings.submit.success": "Vos informations ont été mise à jour",
+	"mySettings.submit.error":
+		"Une erreur est survenue lors de la mise à jour de vos informations",
 } as const;

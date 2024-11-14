@@ -1,6 +1,5 @@
-import { QuoteApi } from "@/api/QuoteApi";
 import { useI18n } from "@/i18n";
-import Quote, { QuoteStatus } from "@/models/Quote";
+import { type QuoteResponse, QuotesService, type QuoteStatus } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
 import {
 	CheckIcon,
@@ -11,7 +10,7 @@ import {
 import { useState } from "react";
 
 type ActionsProps = {
-	quote: Quote;
+	quote: QuoteResponse;
 	reloadQuote: () => Promise<void>;
 };
 
@@ -24,7 +23,10 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 		setIsSubmitting(true);
 		try {
 			if (quote) {
-				await QuoteApi.updateStatus({ id: quote.id, status });
+				await QuotesService.patchQuotesById({
+					path: { id: quote.id },
+					body: { ...quote, status },
+				});
 				toast.show(t("quotes.form.submit.edit.success"));
 				await reloadQuote();
 			}
@@ -91,32 +93,11 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 				</>
 			) : null}
 			{quote.status === "ACCEPTED" ? (
-				<>
-					<Button
-						disabled={isSubmitting}
-						type="button"
-						variant="destructive"
-						onClick={updateQuoteStatus("ARCHIVED")}
-					>
-						<InboxArrowDownIcon />
-						{t("quotes.form.actions.archive")}
-					</Button>
-					<Button
-						disabled={isSubmitting}
-						type="button"
-						onClick={updateQuoteStatus("DEPOSIT_ASK")}
-					>
-						{t("quotes.form.actions.depositAsk")}
-					</Button>
-				</>
-			) : null}
-			{quote.status === "DEPOSIT_ASK" ? (
 				<Button
 					disabled={isSubmitting}
-					className="md:col-start-2"
 					type="button"
-					onClick={updateQuoteStatus("ARCHIVED")}
 					variant="destructive"
+					onClick={updateQuoteStatus("ARCHIVED")}
 				>
 					<InboxArrowDownIcon />
 					{t("quotes.form.actions.archive")}

@@ -3622,6 +3622,9 @@
     "definitions": {
         "AcceptInvitationRequest": {
             "type": "object",
+            "required": [
+                "companyId"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -3630,6 +3633,15 @@
         },
         "BillCustomizationRequest": {
             "type": "object",
+            "required": [
+                "afterTable",
+                "displayCompanyEmail",
+                "displayCompanyPhoneNumber",
+                "displayCustomerEmail",
+                "displayCustomerPhoneNumber",
+                "footer",
+                "mainColor"
+            ],
             "properties": {
                 "afterTable": {
                     "type": "string"
@@ -3656,6 +3668,17 @@
         },
         "BillCustomizationResponse": {
             "type": "object",
+            "required": [
+                "afterTable",
+                "companyId",
+                "displayCompanyEmail",
+                "displayCompanyPhoneNumber",
+                "displayCustomerEmail",
+                "displayCustomerPhoneNumber",
+                "footer",
+                "id",
+                "mainColor"
+            ],
             "properties": {
                 "afterTable": {
                     "type": "string"
@@ -3694,6 +3717,11 @@
         },
         "BillEmailCustomizationRequest": {
             "type": "object",
+            "required": [
+                "body",
+                "object",
+                "sendAutomatically"
+            ],
             "properties": {
                 "body": {
                     "type": "string"
@@ -3708,6 +3736,13 @@
         },
         "BillEmailCustomizationResponse": {
             "type": "object",
+            "required": [
+                "body",
+                "companyId",
+                "id",
+                "object",
+                "sendAutomatically"
+            ],
             "properties": {
                 "body": {
                     "type": "string"
@@ -3728,6 +3763,11 @@
         },
         "BillLineRequest": {
             "type": "object",
+            "required": [
+                "line",
+                "name",
+                "type"
+            ],
             "properties": {
                 "description": {
                     "type": "string"
@@ -3754,6 +3794,14 @@
         },
         "BillLineResponse": {
             "type": "object",
+            "required": [
+                "billId",
+                "line",
+                "name",
+                "price",
+                "quantity",
+                "type"
+            ],
             "properties": {
                 "billId": {
                     "type": "string"
@@ -3783,10 +3831,11 @@
         },
         "BillRequest": {
             "type": "object",
+            "required": [
+                "lines",
+                "title"
+            ],
             "properties": {
-                "companyId": {
-                    "type": "string"
-                },
                 "customerId": {
                     "type": "string"
                 },
@@ -3809,6 +3858,16 @@
         },
         "BillResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdAt",
+                "createdBy",
+                "id",
+                "lines",
+                "name",
+                "status",
+                "title"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -3876,6 +3935,10 @@
         },
         "CreateProductRequest": {
             "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
             "properties": {
                 "code": {
                     "type": "string"
@@ -3911,6 +3974,10 @@
         },
         "CreateQuoteRequest": {
             "type": "object",
+            "required": [
+                "lines",
+                "title"
+            ],
             "properties": {
                 "customerId": {
                     "type": "string"
@@ -3937,6 +4004,12 @@
         },
         "CustomerRequest": {
             "type": "object",
+            "required": [
+                "address",
+                "city",
+                "name",
+                "postalCode"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -3963,6 +4036,19 @@
         },
         "CustomerResponse": {
             "type": "object",
+            "required": [
+                "address",
+                "city",
+                "companyId",
+                "contact",
+                "createdAt",
+                "deleted",
+                "email",
+                "id",
+                "name",
+                "phoneNumber",
+                "postalCode"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -4004,6 +4090,9 @@
         },
         "DeleteInvitationRequest": {
             "type": "object",
+            "required": [
+                "email"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -4012,6 +4101,10 @@
         },
         "ErrorResponse": {
             "type": "object",
+            "required": [
+                "code",
+                "message"
+            ],
             "properties": {
                 "code": {
                     "type": "integer"
@@ -4023,6 +4116,10 @@
         },
         "InvitationRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "role"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -4034,6 +4131,12 @@
         },
         "InvitationResponse": {
             "type": "object",
+            "required": [
+                "createdAt",
+                "email",
+                "role",
+                "status"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string"
@@ -4064,6 +4167,9 @@
         },
         "MultipleBillPdfRequest": {
             "type": "object",
+            "required": [
+                "billIds"
+            ],
             "properties": {
                 "billIds": {
                     "type": "array",
@@ -4075,6 +4181,9 @@
         },
         "MultipleQuotePdfRequest": {
             "type": "object",
+            "required": [
+                "quoteIds"
+            ],
             "properties": {
                 "quoteIds": {
                     "type": "array",
@@ -4086,6 +4195,13 @@
         },
         "MyInvitationResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "companyName",
+                "createdAt",
+                "role",
+                "status"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -4106,6 +4222,13 @@
         },
         "OrganizationRequest": {
             "type": "object",
+            "required": [
+                "address",
+                "city",
+                "name",
+                "postalCode",
+                "siret"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -4153,6 +4276,21 @@
         },
         "OrganizationResponse": {
             "type": "object",
+            "required": [
+                "address",
+                "autoMonthReport",
+                "autoYearReport",
+                "city",
+                "createdAt",
+                "createdBy",
+                "email",
+                "id",
+                "name",
+                "phoneNumber",
+                "postalCode",
+                "siret",
+                "vatPercent"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -4212,6 +4350,11 @@
         },
         "OutgoingLineRequest": {
             "type": "object",
+            "required": [
+                "line",
+                "totalHT",
+                "vat"
+            ],
             "properties": {
                 "billId": {
                     "type": "string"
@@ -4235,6 +4378,11 @@
         },
         "OutgoingLineResponse": {
             "type": "object",
+            "required": [
+                "line",
+                "totalHT",
+                "vat"
+            ],
             "properties": {
                 "billId": {
                     "type": "string"
@@ -4258,6 +4406,9 @@
         },
         "OutgoingRequest": {
             "type": "object",
+            "required": [
+                "lines"
+            ],
             "properties": {
                 "endDate": {
                     "type": "string"
@@ -4278,6 +4429,15 @@
         },
         "OutgoingResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdBy",
+                "endDate",
+                "id",
+                "lines",
+                "name",
+                "startDate"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -4307,6 +4467,9 @@
         },
         "ProductGroupCreateRequest": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -4315,6 +4478,13 @@
         },
         "ProductGroupResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdAt",
+                "createdBy",
+                "id",
+                "name"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -4338,6 +4508,9 @@
         },
         "ProductGroupUpdateRequest": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -4346,6 +4519,14 @@
         },
         "ProductResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdBy",
+                "id",
+                "name",
+                "stockAlert",
+                "type"
+            ],
             "properties": {
                 "code": {
                     "type": "string"
@@ -4405,6 +4586,15 @@
         },
         "QuoteCustomizationRequest": {
             "type": "object",
+            "required": [
+                "afterTable",
+                "displayCompanyEmail",
+                "displayCompanyPhoneNumber",
+                "displayCustomerEmail",
+                "displayCustomerPhoneNumber",
+                "footer",
+                "mainColor"
+            ],
             "properties": {
                 "afterTable": {
                     "type": "string"
@@ -4431,6 +4621,18 @@
         },
         "QuoteCustomizationResponse": {
             "type": "object",
+            "required": [
+                "afterTable",
+                "companyId",
+                "createdAt",
+                "displayCompanyEmail",
+                "displayCompanyPhoneNumber",
+                "displayCustomerEmail",
+                "displayCustomerPhoneNumber",
+                "footer",
+                "id",
+                "mainColor"
+            ],
             "properties": {
                 "afterTable": {
                     "type": "string"
@@ -4469,6 +4671,11 @@
         },
         "QuoteEmailCustomizationRequest": {
             "type": "object",
+            "required": [
+                "body",
+                "object",
+                "sendAutomatically"
+            ],
             "properties": {
                 "body": {
                     "type": "string"
@@ -4483,6 +4690,13 @@
         },
         "QuoteEmailCustomizationResponse": {
             "type": "object",
+            "required": [
+                "body",
+                "companyId",
+                "id",
+                "object",
+                "sendAutomatically"
+            ],
             "properties": {
                 "body": {
                     "type": "string"
@@ -4503,6 +4717,11 @@
         },
         "QuoteLineRequest": {
             "type": "object",
+            "required": [
+                "line",
+                "name",
+                "type"
+            ],
             "properties": {
                 "description": {
                     "type": "string"
@@ -4529,6 +4748,14 @@
         },
         "QuoteLineResponse": {
             "type": "object",
+            "required": [
+                "line",
+                "name",
+                "price",
+                "quantity",
+                "quoteId",
+                "type"
+            ],
             "properties": {
                 "description": {
                     "type": "string"
@@ -4558,6 +4785,16 @@
         },
         "QuoteResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdAt",
+                "createdBy",
+                "id",
+                "lines",
+                "name",
+                "status",
+                "title"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -4622,6 +4859,9 @@
         },
         "RemoveUserRequest": {
             "type": "object",
+            "required": [
+                "email"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -4630,6 +4870,19 @@
         },
         "ReportBillResponse": {
             "type": "object",
+            "required": [
+                "articleSales",
+                "articleTaxes",
+                "billId",
+                "createdBy",
+                "otherSales",
+                "otherTaxes",
+                "paidAt",
+                "sentAt",
+                "serviceSales",
+                "servicetaxes",
+                "title"
+            ],
             "properties": {
                 "articleSales": {
                     "type": "number"
@@ -4668,6 +4921,11 @@
         },
         "ReportOutgoingLineResponse": {
             "type": "object",
+            "required": [
+                "line",
+                "totalHT",
+                "vat"
+            ],
             "properties": {
                 "billId": {
                     "type": "string"
@@ -4691,6 +4949,14 @@
         },
         "ReportOutgoingResponse": {
             "type": "object",
+            "required": [
+                "createdBy",
+                "endDate",
+                "lines",
+                "name",
+                "outgoingId",
+                "startDate"
+            ],
             "properties": {
                 "createdBy": {
                     "type": "string"
@@ -4717,6 +4983,11 @@
         },
         "ReportRequest": {
             "type": "object",
+            "required": [
+                "endDate",
+                "name",
+                "startDate"
+            ],
             "properties": {
                 "endDate": {
                     "type": "string"
@@ -4731,6 +5002,23 @@
         },
         "ReportResponse": {
             "type": "object",
+            "required": [
+                "articleSales",
+                "articleTaxes",
+                "bills",
+                "createdAt",
+                "endDate",
+                "id",
+                "name",
+                "otherSales",
+                "otherTaxes",
+                "outgoings",
+                "sales",
+                "serviceSales",
+                "serviceTaxes",
+                "startDate",
+                "totalOutgoings"
+            ],
             "properties": {
                 "articleSales": {
                     "type": "number"
@@ -4804,6 +5092,10 @@
         },
         "SupplierRequest": {
             "type": "object",
+            "required": [
+                "name",
+                "vat"
+            ],
             "properties": {
                 "color": {
                     "type": "string"
@@ -4818,6 +5110,13 @@
         },
         "SupplierResponse": {
             "type": "object",
+            "required": [
+                "companyId",
+                "createdBy",
+                "id",
+                "name",
+                "vat"
+            ],
             "properties": {
                 "color": {
                     "type": "string"
@@ -4841,6 +5140,9 @@
         },
         "TodoRequest": {
             "type": "object",
+            "required": [
+                "description"
+            ],
             "properties": {
                 "description": {
                     "type": "string"
@@ -4849,6 +5151,14 @@
         },
         "TodoResponse": {
             "type": "object",
+            "required": [
+                "compagnyId",
+                "createdAt",
+                "createdBy",
+                "description",
+                "id",
+                "updatedAt"
+            ],
             "properties": {
                 "compagnyId": {
                     "type": "string"
@@ -4878,6 +5188,10 @@
         },
         "UpdateProductRequest": {
             "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
             "properties": {
                 "code": {
                     "type": "string"
@@ -4913,6 +5227,10 @@
         },
         "UpdateQuoteRequest": {
             "type": "object",
+            "required": [
+                "lines",
+                "title"
+            ],
             "properties": {
                 "customerId": {
                     "type": "string"
@@ -4939,6 +5257,10 @@
         },
         "UpdateStockMovement": {
             "type": "object",
+            "required": [
+                "productId",
+                "quantity"
+            ],
             "properties": {
                 "productId": {
                     "type": "string"
@@ -4950,6 +5272,10 @@
         },
         "UpdateStockRequest": {
             "type": "object",
+            "required": [
+                "in",
+                "out"
+            ],
             "properties": {
                 "in": {
                     "type": "array",
@@ -4967,6 +5293,12 @@
         },
         "UserRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName",
+                "role"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"
@@ -4987,6 +5319,12 @@
         },
         "UserResponse": {
             "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName",
+                "role"
+            ],
             "properties": {
                 "companyId": {
                     "type": "string"

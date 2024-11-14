@@ -1,11 +1,13 @@
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { OutgoingResponse } from "@/models/Outgoing";
-import { ReportOutgoingResponse } from "@/models/Report";
-import Supplier from "@/models/Supplier";
-import { ReactNode, useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
 import OutgoingLinesTable from "./OutgoingLinesTable";
 import { useI18n } from "@/i18n";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
+import type {
+	OutgoingResponse,
+	ReportOutgoingResponse,
+	SupplierResponse,
+} from "@/sdk";
 
 type OnlyChildrenProps = {
 	children: ReactNode;
@@ -25,7 +27,7 @@ const DetailsTableRight = ({ children }: OnlyChildrenProps) => (
 
 type SupplierDetailRowProps = {
 	value: number;
-	supplier?: Supplier;
+	supplier?: SupplierResponse;
 };
 const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 	const formatCurrency = useFormatCurrency();
@@ -70,12 +72,9 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
 				? outgoing.lines.reduce(
 						(acc, line) => {
 							if (line.supplierId) {
-								return {
-									...acc,
-									[line.supplierId]:
-										(Number(acc[line.supplierId]) || 0) +
-										line.totalHT * (1 + line.vat / 100),
-								};
+								acc[line.supplierId] =
+									(Number(acc[line.supplierId]) || 0) +
+									line.totalHT * (1 + line.vat / 100);
 							}
 
 							return acc;

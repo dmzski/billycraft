@@ -1,13 +1,13 @@
-import { InvitationApi } from "@/api/InvitationApi";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { ROLES } from "@/constants/roles";
 import { useI18n } from "@/i18n";
-import { RoleName } from "@/models/dtos/Role";
+import { InvitationsService, type RoleEnum } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Input, Modal, Select, useToast } from "@billycraft/ui";
-import { ComponentProps, useMemo } from "react";
-import { FormProvider, useController, useForm } from "react-hook-form";
+import { type ComponentProps, useMemo } from "react";
+import { useController, useForm } from "react-hook-form";
 
 type InviteUserModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
@@ -18,7 +18,7 @@ type InviteUserFormProps = Omit<InviteUserModalProps, "disclosure">;
 
 type InviteUserFormValues = {
 	email: string;
-	role: RoleName;
+	role: RoleEnum;
 };
 
 const initValues: InviteUserFormValues = {
@@ -62,9 +62,11 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 
 	const onSubmit = async ({ email, role }: InviteUserFormValues) => {
 		try {
-			await InvitationApi.create({
-				role,
-				email,
+			await InvitationsService.postInvitations({
+				body: {
+					role,
+					email,
+				},
 			});
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
@@ -75,11 +77,8 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 	};
 
 	return (
-		<FormProvider {...methods}>
-			<form
-				onSubmit={methods.handleSubmit(onSubmit)}
-				className="flex flex-col gap-5"
-			>
+		<Form methods={methods} onSubmit={onSubmit}>
+			<div className="flex flex-col gap-5">
 				<h2 className="text-3xl">{pageT("title")}</h2>
 				<p>{pageT("description")}</p>
 				<Input
@@ -102,8 +101,8 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 				/>
 				<FormErrorAlert />
 				<Submit>{pageT("submit")}</Submit>
-			</form>
-		</FormProvider>
+			</div>
+		</Form>
 	);
 };
 

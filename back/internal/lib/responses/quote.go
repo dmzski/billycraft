@@ -7,35 +7,35 @@ import (
 )
 
 type QuoteResponse struct {
-	ID         string              `json:"id"`
-	Title      string              `json:"title"`
-	Name       string              `json:"name"`
+  ID         string              `json:"id" validate:"required"`
+  Title      string              `json:"title" validate:"required"`
+  Name       string              `json:"name" validate:"required"`
 	Tva        *float32            `json:"tva"`
-	CreatedAt  time.Time           `json:"createdAt"`
+  CreatedAt  time.Time           `json:"createdAt" validate:"required"`
 	UpdatedAt  *time.Time          `json:"updatedAt"`
 	SentAt     *time.Time          `json:"sentAt"`
-	Status     enums.QuoteStatus   `json:"status"`
-	CreatedBy  string              `json:"createdBy"`
-	CompanyID  string              `json:"companyId"`
+  Status     enums.QuoteStatus   `json:"status" validate:"required"`
+  CreatedBy  string              `json:"createdBy" validate:"required"`
+  CompanyID  string              `json:"companyId" validate:"required"`
 	CustomerID *string             `json:"customerId"`
 	FileName   *string             `json:"fileName"`
-	Lines      []QuoteLineResponse `json:"lines"`
+  Lines      []QuoteLineResponse `json:"lines" validate:"required"`
 }//@name QuoteResponse
 
 type QuoteLineResponse struct {
-	QuoteID     string            `json:"quoteId"`
-	Line        int               `json:"line"`
-	Quantity    float64           `json:"quantity"`
-	Price       float64           `json:"price"`
-	Name        string            `json:"name"`
+  QuoteID     string            `json:"quoteId" validate:"required"`
+  Line        int               `json:"line" validate:"required"`
+  Quantity    float64           `json:"quantity" validate:"required"`
+  Price       float64           `json:"price" validate:"required"`
+  Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
-	Type        enums.ProductType `json:"type"`
+  Type        enums.ProductType `json:"type" validate:"required"`
 	ProductID   *string           `json:"productId"`
 }//@name QuoteLineResponse
 
 type QuoteResponseList struct {
-	Quotes     []QuoteResponse `json:"quotes"`
-	TotalCount int             `json:"totalCount"`
+  Quotes     []QuoteResponse `json:"quotes" validate:"required"`
+  TotalCount int             `json:"totalCount" validate:"required"`
 }//@name QuoteResponseList
 
 func createQuoteLineResponse(line models.QuoteLine) QuoteLineResponse {

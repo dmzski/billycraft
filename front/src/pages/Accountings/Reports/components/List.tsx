@@ -1,5 +1,5 @@
 import { useFormatDate } from "@/hooks/useFormatDate";
-import { ReportResponse } from "@/models/Report";
+import type { ReportResponse } from "@/sdk";
 import { REPORT_ROUTES } from "../constants";
 import { useI18n } from "@/i18n";
 import { RRLink } from "@/components/RRLink";

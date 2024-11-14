@@ -6,11 +6,11 @@ import (
 )
 
 type ProductGroupResponse struct {
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	CompanyID string     `json:"companyId"`
-	CreatedBy string     `json:"createdBy"`
-	CreatedAt time.Time  `json:"createdAt"`
+  ID        string     `json:"id" validate:"required"`
+  Name      string     `json:"name" validate:"required"`
+  CompanyID string     `json:"companyId" validate:"required"`
+  CreatedBy string     `json:"createdBy" validate:"required"`
+  CreatedAt time.Time  `json:"createdAt" validate:"required"`
 	UpdatedAt *time.Time `json:"updatedAt"`
 }//@name ProductGroupResponse
 

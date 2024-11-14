@@ -1,5 +1,5 @@
 import { formatISO9075, parseJSON } from "date-fns";
-import { OutgoingResponse } from "@/models/Outgoing";
+import type { OutgoingResponse } from "@/sdk";
 import { useMemo } from "react";
 import { ROUTES } from "@/routes";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";

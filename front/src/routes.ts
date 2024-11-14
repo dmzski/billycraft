@@ -1,5 +1,4 @@
-import { BillStatus } from "./models/Bill";
-import { QuoteStatus } from "./models/Quote";
+import type { BillStatus, QuoteStatus } from "./sdk";
 
 export type QuoteRouteProps = {
 	id: string;
@@ -68,7 +67,7 @@ export const ROUTES = {
 	},
 	BILL_ADD: {
 		id: "bills.form",
-		path: () => `/bills/create`,
+		path: () => "/bills/create",
 	},
 	BILL_EDIT: {
 		id: "bills.form",

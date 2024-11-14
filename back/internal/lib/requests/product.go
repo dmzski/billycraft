@@ -6,18 +6,18 @@ import (
 )
 
 type UpdateStockMovement struct {
-	Quantity  float64 `json:"quantity"`
-	ProductID string  `json:"productId"`
+	Quantity  float64 `json:"quantity" validate:"required"`
+	ProductID string  `json:"productId" validate:"required"`
 }//@name UpdateStockMovement
 
 type UpdateStockRequest struct {
-	InMovements  []UpdateStockMovement `json:"in"`
-	OutMovements []UpdateStockMovement `json:"out"`
+	InMovements  []UpdateStockMovement `json:"in" validate:"required"`
+	OutMovements []UpdateStockMovement `json:"out" validate:"required"`
 }//@name UpdateStockRequest
 
 type CreateProductRequest struct {
-	Type        enums.ProductType `json:"type"`
-	Name        string            `json:"name"`
+	Type        enums.ProductType `json:"type" validate:"required"`
+	Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
 	Price       *float64          `json:"price"`
 	Stock       *float64          `json:"stock"`
@@ -29,8 +29,8 @@ type CreateProductRequest struct {
 }//@name CreateProductRequest
 
 type UpdateProductRequest struct {
-	Type        enums.ProductType `json:"type"`
-	Name        string            `json:"name"`
+	Type        enums.ProductType `json:"type" validate:"required"`
+	Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
 	Price       *float64          `json:"price"`
 	Stock       *float64          `json:"stock"`

@@ -1,8 +1,7 @@
-import { BillApi } from "@/api/BillApi";
-import Bill from "@/models/Bill";
+import { type BillResponse, BillsService } from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
-type DataLoaderConfig = Parameters<typeof useDataLoader<Bill[]>>[2];
+type DataLoaderConfig = Parameters<typeof useDataLoader<BillResponse[]>>[2];
 
 export const useAllBillsNotArchivedAndNotRefused = (
 	config?: DataLoaderConfig,
@@ -11,7 +10,10 @@ export const useAllBillsNotArchivedAndNotRefused = (
 
 	return useDataLoader(
 		key,
-		() => BillApi.findAllNotArchivedAndNotRefused(),
+		() =>
+			BillsService.getBills({
+				query: { not_status: ["ARCHIVED", "REFUSED"] },
+			}).then(({ data }) => data),
 		config,
 	);
 };

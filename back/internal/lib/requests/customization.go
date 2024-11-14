@@ -5,35 +5,35 @@ import (
 )
 
 type BillCustomizationRequest struct {
-	AfterTable                 string `json:"afterTable"`
-	Footer                     string `json:"footer"`
-	MainColor                  string `json:"mainColor"`
-	DisplayCompanyEmail        bool   `json:"displayCompanyEmail"`
-	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber"`
-	DisplayCustomerEmail       bool   `json:"displayCustomerEmail"`
-	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber"`
+	AfterTable                 string `json:"afterTable" validate:"required"`
+	Footer                     string `json:"footer" validate:"required"`
+	MainColor                  string `json:"mainColor" validate:"required"`
+	DisplayCompanyEmail        bool   `json:"displayCompanyEmail" validate:"required"`
+	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber" validate:"required"`
+	DisplayCustomerEmail       bool   `json:"displayCustomerEmail" validate:"required"`
+	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber" validate:"required"`
 }//@name BillCustomizationRequest
 
 type BillEmailCustomizationRequest struct {
-	Body              string `json:"body"`
-	Object            string `json:"object"`
-	SendAutomatically bool   `json:"sendAutomatically"`
+	Body              string `json:"body" validate:"required"`
+	Object            string `json:"object" validate:"required"`
+	SendAutomatically bool   `json:"sendAutomatically" validate:"required"`
 }//@name BillEmailCustomizationRequest
 
 type QuoteCustomizationRequest struct {
-	AfterTable                 string `json:"afterTable"`
-	Footer                     string `json:"footer"`
-	MainColor                  string `json:"mainColor"`
-	DisplayCompanyEmail        bool   `json:"displayCompanyEmail"`
-	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber"`
-	DisplayCustomerEmail       bool   `json:"displayCustomerEmail"`
-	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber"`
+	AfterTable                 string `json:"afterTable" validate:"required"`
+	Footer                     string `json:"footer" validate:"required"`
+	MainColor                  string `json:"mainColor" validate:"required"`
+	DisplayCompanyEmail        bool   `json:"displayCompanyEmail" validate:"required"`
+	DisplayCompanyPhoneNumber  bool   `json:"displayCompanyPhoneNumber" validate:"required"`
+	DisplayCustomerEmail       bool   `json:"displayCustomerEmail" validate:"required"`
+	DisplayCustomerPhoneNumber bool   `json:"displayCustomerPhoneNumber" validate:"required"`
 }//@name QuoteCustomizationRequest
 
 type QuoteEmailCustomizationRequest struct {
-	Body              string `json:"body"`
-	Object            string `json:"object"`
-	SendAutomatically bool   `json:"sendAutomatically"`
+	Body              string `json:"body" validate:"required"`
+	Object            string `json:"object" validate:"required"`
+	SendAutomatically bool   `json:"sendAutomatically" validate:"required"`
 }//@name QuoteEmailCustomizationRequest
 
 func MarshalQuoteCustomizationRequest(q QuoteCustomizationRequest) models.QuoteCustomization {

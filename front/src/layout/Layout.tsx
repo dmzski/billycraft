@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/i18n";

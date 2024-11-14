@@ -1,21 +1,23 @@
 import { Button, Input, Switch, TextArea, useToast } from "@billycraft/ui";
-import { QuoteCustomizationApi } from "@/api/QuoteCustomizationApi";
-import QuoteCustomization from "@/models/QuoteCustomization";
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
 import { useI18n } from "@/i18n";
+import {
+	type QuoteCustomizationResponse,
+	QuoteCustomizationService,
+} from "@/sdk";
 
 type QuoteCustomizationFormProps = {
-	quoteCustomization: QuoteCustomization;
+	quoteCustomization: QuoteCustomizationResponse;
 };
 const QuoteCustomizationForm = ({
 	quoteCustomization,
 }: QuoteCustomizationFormProps) => {
 	const { t } = useI18n();
 	const [newQuoteCustomization, setNewQuoteCustomization] =
-		useState<QuoteCustomization>({} as QuoteCustomization);
+		useState<QuoteCustomizationResponse>({} as QuoteCustomizationResponse);
 	const toast = useToast();
 
-	const handleToggle = (property: keyof QuoteCustomization) => () => {
+	const handleToggle = (property: keyof QuoteCustomizationResponse) => () => {
 		setNewQuoteCustomization((current) => ({
 			...current,
 			[property]: !current[property],
@@ -24,7 +26,15 @@ const QuoteCustomizationForm = ({
 
 	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		await QuoteCustomizationApi.updateMine(newQuoteCustomization);
+		newQuoteCustomization.id
+			? await QuoteCustomizationService.patchQuoteCustomizationById({
+					path: { id: newQuoteCustomization.id },
+					body: newQuoteCustomization,
+				})
+			: await QuoteCustomizationService.patchQuoteCustomizationById({
+					path: { id: newQuoteCustomization.id },
+					body: newQuoteCustomization,
+				});
 		toast.show(t("settings.forms.quoteCustomization.submit.success"));
 	};
 

@@ -1,6 +1,6 @@
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import { OutgoingLineResponse } from "@/models/Outgoing";
+import type { OutgoingLineResponse } from "@/sdk";
 import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { useMemo } from "react";

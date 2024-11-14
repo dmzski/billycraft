@@ -3,13 +3,13 @@ package requests
 import "back/internal/lib/models"
 
 type OrganizationRequest struct {
-	Name            string   `json:"name"`
-	City            string   `json:"city"`
-	Address         string   `json:"address"`
-	PostalCode      string   `json:"postalCode"`
+	Name            string   `json:"name" validate:"required"`
+	City            string   `json:"city" validate:"required"`
+	Address         string   `json:"address" validate:"required"`
+	PostalCode      string   `json:"postalCode" validate:"required"`
 	PhoneNumber     string   `json:"phoneNumber"`
 	Logo            *string  `json:"logo"`
-	Siret           string   `json:"siret"`
+	Siret           string   `json:"siret" validate:"required"`
 	Email           string   `json:"email"`
 	ArticlesTax     *float32 `json:"articlesTax"`
 	ServicesTax     *float32 `json:"servicesTax"`

@@ -5,20 +5,19 @@ import (
 )
 
 type BillRequest struct {
-	Title      string            `json:"title"`
+	Title      string            `json:"title" validate:"required"`
 	Tva        *float32          `json:"tva"`
 	Status     *enums.BillStatus `json:"status"`
-	CompanyID  string            `json:"companyId"`
 	CustomerID *string           `json:"customerId"`
-	Lines      []BillLineRequest `json:"lines"`
-}//@name BillRequest
+	Lines      []BillLineRequest `json:"lines" validate:"required"`
+} //@name BillRequest
 
 type BillLineRequest struct {
-	Line        int               `json:"line"`
-	Quantity    float64           `json:"quantity"`
-	Price       float64           `json:"price"`
-	Name        string            `json:"name"`
+	Line        int               `json:"line" validate:"required"`
+	Quantity    float64          `json:"quantity"`
+	Price       float64          `json:"price"`
+	Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
-	Type        enums.ProductType `json:"type"`
+	Type        enums.ProductType `json:"type" validate:"required"`
 	ProductID   *string           `json:"productId"`
-}//@name BillLineRequest
+} //@name BillLineRequest

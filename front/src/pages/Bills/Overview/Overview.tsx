@@ -13,15 +13,14 @@ import {
 } from "@heroicons/react/24/solid";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
-import { PdfApi } from "@/api/PdfApi";
 import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { RRLink } from "@/components/RRLink";
 import { BillLabel } from "@/components/labels/BillLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
-import { BillApi } from "@/api/BillApi";
 import { sendErrorToSentry } from "@/utils/errors";
+import { BillsService, PdFsService } from "@/sdk";
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n();
@@ -45,7 +44,10 @@ export const Overview = () => {
 		try {
 			if (bill?.id && !isDownloadingPDF) {
 				toggleIsDownloadingPDF();
-				const blob = await PdfApi.getBillPdf(bill.id);
+				const blob = await PdFsService.getPdfsBillById({path: {id: bill.id}}).then(({data}) => data);
+        if (!blob) {
+          throw new Error('Invalid Bill PDF')
+        }
 				const link = document.createElement("a");
 				link.download = bill.name;
 				link.href = URL.createObjectURL(blob);
@@ -64,9 +66,15 @@ export const Overview = () => {
 		if (bill?.id && !isDuplicating) {
 			toggleIsDuplicating();
 			try {
-				const newBill = await BillApi.duplicate({ id: bill.id });
+				const newBill = await BillsService.postBillsByIdDuplicate({
+					path: { id: bill.id },
+				}).then(({ data }) => data);
 				toast.show(t("bills.form.duplicateSuccess"));
-				push(ROUTES.BILL_OVERVIEW.path({ id: newBill.id }));
+				push(
+					newBill?.id
+						? ROUTES.BILL_OVERVIEW.path({ id: newBill.id })
+						: ROUTES.BILLS.path(),
+				);
 			} catch (error) {
 				sendErrorToSentry(error);
 				toast.destructive(t("bills.form.duplicateError"));

@@ -1,14 +1,24 @@
-import { OutgoingApi } from "@/api/OutgoingApi";
-import { OutgoingResponse } from "@/models/Outgoing";
+import {
+	type GetOutgoingsByIdData,
+	type OutgoingResponse,
+	OutgoingsService,
+} from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
 type DataLoaderConfig = Parameters<typeof useDataLoader<OutgoingResponse>>[2];
 
 export const useOutgoingByIdQuery = (
-	id: Parameters<typeof OutgoingApi.findOneById>[0],
+	id: GetOutgoingsByIdData["path"]["id"],
 	config?: DataLoaderConfig,
 ) => {
 	const key = ["outgoings", "by-id", id].flat();
 
-	return useDataLoader(key, () => OutgoingApi.findOneById(id), config);
+	return useDataLoader(
+		key,
+		() =>
+			OutgoingsService.getOutgoingsById({ path: { id } }).then(
+				({ data }) => data,
+			),
+		config,
+	);
 };

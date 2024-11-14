@@ -64,28 +64,29 @@ export function createT<
 		>
 	) {
 		const paramObject = params[0];
+    let computedKey: Key = key
 		let isPlural = false;
 
 		if (paramObject && "count" in paramObject) {
 			const isPluralKey = scope
-				? pluralKeys.has(`${scope}.${key}`)
-				: pluralKeys.has(key);
+				? pluralKeys.has(`${scope}.${computedKey}`)
+				: pluralKeys.has(computedKey);
 
 			if (isPluralKey) {
-				key = `${key}#${getPluralKey(paramObject.count)}` as Key;
+				computedKey = `${computedKey}#${getPluralKey(paramObject.count)}` as Key;
 				isPlural = true;
 			}
 		}
 
 		let value: string = scope
-			? (content[`${scope}.${key}`] as string)
-			: (content[key] as string);
+			? (content[`${scope}.${computedKey}`] as string)
+			: (content[computedKey] as string);
 
 		if (!value && isPlural) {
-			const baseKey = key.split("#", 1)[0] as Key;
-			value = (content[`${baseKey}#other`] || key)?.toString();
+			const baseKey = computedKey.split("#", 1)[0] as Key;
+			value = (content[`${baseKey}#other`] || computedKey)?.toString();
 		} else {
-			value = (value || key)?.toString();
+			value = (value || computedKey)?.toString();
 		}
 
 		if (!paramObject) {

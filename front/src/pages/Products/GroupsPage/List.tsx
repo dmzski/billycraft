@@ -1,8 +1,8 @@
+import type { ProductGroupResponse } from "@/sdk";
 import ProductGroupRow from "./Row";
-import type { ProductGroup } from "@/models/ProductGroup";
 
 type ProductGroupListProps = {
-	groups: ProductGroup[];
+	groups: ProductGroupResponse[];
 	reloadGroups: () => Promise<void>;
 };
 

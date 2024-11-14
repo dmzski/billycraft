@@ -2,7 +2,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import ListPage from "./ListPage";
 import GroupsPage from "./GroupsPage";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const { routes } = ROUTES.PRODUCTS;
 

@@ -1,6 +1,6 @@
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import Quote from "@/models/Quote";
+import type { QuoteResponse } from "@/sdk";
 import {
 	calculatePriceTTC,
 	getBillOrQuoteTotal,
@@ -8,7 +8,7 @@ import {
 } from "@/utils/price";
 
 type ContentSectionProps = {
-	quote: Quote;
+	quote: QuoteResponse;
 };
 
 export const ContentSection = ({ quote }: ContentSectionProps) => {

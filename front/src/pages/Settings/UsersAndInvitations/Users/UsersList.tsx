@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { User } from "@/models/User";
+import type { UserResponse } from "@/sdk";
 import { Button } from "@billycraft/ui";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { RemoveUserModal } from "./modals/RemoveUserModal";
@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useUser } from "@/providers/UserProvider";
 
 type UsersListProps = {
-	users: User[];
+	users: UserResponse[];
 	reload: () => Promise<void>;
 };
 export const UsersList = ({ users, reload }: UsersListProps) => {

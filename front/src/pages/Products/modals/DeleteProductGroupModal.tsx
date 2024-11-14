@@ -1,17 +1,16 @@
 import { useI18n } from "@/i18n";
 import { Alert, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductGroup } from "@/models/ProductGroup";
-import { ProductGroupApi } from "@/api/ProductGroupApi";
 import { Submit } from "@/components/form/Submit";
 import { InputField } from "@/components/form/InputField";
+import { type ProductGroupResponse, ProductGroupsService } from "@/sdk";
 
 type DeleteProductGroupModalProps = {
 	onSubmitSuccess: () => Promise<void>;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	group: ProductGroup;
+	group: ProductGroupResponse;
 };
 
 type DeleteProductGroupFormProps = Omit<
@@ -44,7 +43,9 @@ const DeleteProductGroupForm = ({
 
 	const onSubmit = async () => {
 		try {
-			await ProductGroupApi.delete(group.id);
+			await ProductGroupsService.deleteProductGroupsById({
+				path: { id: group.id },
+			});
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();

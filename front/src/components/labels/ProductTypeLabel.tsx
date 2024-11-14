@@ -1,9 +1,9 @@
 import { PRODUCT_ICONS } from "@/constants/productIcons";
 import { useI18n } from "@/i18n";
-import Product from "@/models/Product";
+import type { ProductType } from "@/sdk";
 
 type ProductTypeLabelProps = {
-	type: Product["type"];
+	type: ProductType;
 	short?: boolean;
 };
 

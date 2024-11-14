@@ -7,47 +7,47 @@ import (
 
 
 type BillCustomizationResponse struct {
-	ID                         string     `json:"id"`
-	CompanyID                  string     `json:"companyId"`
-	AfterTable                 string     `json:"afterTable"`
-	Footer                     string     `json:"footer"`
-	MainColor                  string     `json:"mainColor"`
-	DisplayCompanyEmail        bool       `json:"displayCompanyEmail"`
-	DisplayCompanyPhoneNumber  bool       `json:"displayCompanyPhoneNumber"`
-	DisplayCustomerEmail       bool       `json:"displayCustomerEmail"`
-	DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber"`
+  ID                         string     `json:"id" validate:"required"`
+  CompanyID                  string     `json:"companyId" validate:"required"`
+  AfterTable                 string     `json:"afterTable" validate:"required"`
+  Footer                     string     `json:"footer" validate:"required"`
+  MainColor                  string     `json:"mainColor" validate:"required"`
+  DisplayCompanyEmail        bool       `json:"displayCompanyEmail" validate:"required"`
+  DisplayCompanyPhoneNumber  bool       `json:"displayCompanyPhoneNumber" validate:"required"`
+  DisplayCustomerEmail       bool       `json:"displayCustomerEmail" validate:"required"`
+  DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber" validate:"required"`
 	CreatedAt                  time.Time  `json:"createdAt"`
 	UpdatedAt                  *time.Time `json:"updatedAt"`
 }//@name BillCustomizationResponse
 
 type BillEmailCustomizationResponse struct {
-	ID                string `json:"id"`
-	Body              string `json:"body"`
-	Object            string `json:"object"`
-	SendAutomatically bool   `json:"sendAutomatically"`
-	CompanyID         string `json:"companyId"`
+  ID                string `json:"id" validate:"required"`
+  Body              string `json:"body" validate:"required"`
+  Object            string `json:"object" validate:"required"`
+  SendAutomatically bool   `json:"sendAutomatically" validate:"required"`
+  CompanyID         string `json:"companyId" validate:"required"`
 }//@name BillEmailCustomizationResponse 
 
 type QuoteCustomizationResponse struct {
-	ID                         string     `json:"id"`
-	CompanyID                  string     `json:"companyId"`
-	AfterTable                 string     `json:"afterTable"`
-	Footer                     string     `json:"footer"`
-	MainColor                  string     `json:"mainColor"`
-	DisplayCompanyEmail        bool       `json:"displayCompanyEmail"`
-	DisplayCompanyPhoneNumber  bool       `json:"displayCompanyPhoneNumber"`
-	DisplayCustomerEmail       bool       `json:"displayCustomerEmail"`
-	DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber"`
-	CreatedAt                  time.Time  `json:"createdAt"`
+  ID                         string     `json:"id" validate:"required"`
+  CompanyID                  string     `json:"companyId" validate:"required"`
+  AfterTable                 string     `json:"afterTable" validate:"required"`
+  Footer                     string     `json:"footer" validate:"required"`
+  MainColor                  string     `json:"mainColor" validate:"required"`
+  DisplayCompanyEmail        bool       `json:"displayCompanyEmail" validate:"required"`
+  DisplayCompanyPhoneNumber  bool       `json:"displayCompanyPhoneNumber" validate:"required"`
+  DisplayCustomerEmail       bool       `json:"displayCustomerEmail" validate:"required"`
+  DisplayCustomerPhoneNumber bool       `json:"displayCustomerPhoneNumber" validate:"required"`
+  CreatedAt                  time.Time  `json:"createdAt" validate:"required"`
 	UpdatedAt                  *time.Time `json:"updatedAt"`
 }//@name QuoteCustomizationResponse
 
 type QuoteEmailCustomizationResponse struct {
-	ID                string `json:"id"`
-	Body              string `json:"body"`
-	Object            string `json:"object"`
-	SendAutomatically bool   `json:"sendAutomatically"`
-	CompanyID         string `json:"companyId"`
+  ID                string `json:"id" validate:"required"`
+  Body              string `json:"body" validate:"required"`
+  Object            string `json:"object" validate:"required"`
+  SendAutomatically bool   `json:"sendAutomatically" validate:"required"`
+  CompanyID         string `json:"companyId" validate:"required"`
 }//@name QuoteEmailCustomizationResponse
 
 func CreateQuoteCustomizationResponse(q models.QuoteCustomization) QuoteCustomizationResponse {

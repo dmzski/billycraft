@@ -6,67 +6,67 @@ import (
 )
 
 type ReportSummaryResponse struct {
-	StartDate    string                  `json:"startDate"`
-	EndDate      string                  `json:"endDate"`
-	Sales        float64                 `json:"sales"`
-	ArticleSales float64                 `json:"articleSales"`
-	ServiceSales float64                 `json:"serviceSales"`
-	OtherSales   float64                 `json:"otherSales"`
-	ArticleTaxes float64                 `json:"articleTaxes"`
-	ServiceTaxes float64                 `json:"serviceTaxes"`
-	OtherTaxes   float64                 `json:"otherTaxes"`
-	Outgoings    float64                 `json:"outgoings"`
-	Details      []ReportSummaryResponse `json:"details"`
+  StartDate    string                  `json:"startDate" validate:"required"`
+  EndDate      string                  `json:"endDate" validate:"required"`
+  Sales        float64                 `json:"sales" validate:"required"`
+  ArticleSales float64                 `json:"articleSales" validate:"required"`
+  ServiceSales float64                 `json:"serviceSales" validate:"required"`
+  OtherSales   float64                 `json:"otherSales" validate:"required"`
+  ArticleTaxes float64                 `json:"articleTaxes" validate:"required"`
+  ServiceTaxes float64                 `json:"serviceTaxes" validate:"required"`
+  OtherTaxes   float64                 `json:"otherTaxes" validate:"required"`
+  Outgoings    float64                 `json:"outgoings" validate:"required"`
+  Details      []ReportSummaryResponse `json:"details" validate:"required"`
 }//@name ReportSummaryResponse
 
 type ReportResponse struct {
-	ID             string                   `json:"id"`
-	Name           string                   `json:"name"`
-	CreatedAt      time.Time                `json:"createdAt"`
-	StartDate      time.Time                `json:"startDate"`
-	EndDate        time.Time                `json:"endDate"`
-	Sales          float64                  `json:"sales"`
-	ArticleSales   float64                  `json:"articleSales"`
-	ServiceSales   float64                  `json:"serviceSales"`
-	OtherSales     float64                  `json:"otherSales"`
-	ArticleTaxes   float64                  `json:"articleTaxes"`
-	ServiceTaxes   float64                  `json:"serviceTaxes"`
-	OtherTaxes     float64                  `json:"otherTaxes"`
-	TotalOutgoings float64                  `json:"totalOutgoings"`
-	Bills          []ReportBillResponse     `json:"bills"`
-	Outgoings      []ReportOutgoingResponse `json:"outgoings"`
+  ID             string                   `json:"id" validate:"required"`
+  Name           string                   `json:"name" validate:"required"`
+  CreatedAt      time.Time                `json:"createdAt" validate:"required"`
+  StartDate      time.Time                `json:"startDate" validate:"required"`
+  EndDate        time.Time                `json:"endDate" validate:"required"`
+  Sales          float64                  `json:"sales" validate:"required"`
+  ArticleSales   float64                  `json:"articleSales" validate:"required"`
+  ServiceSales   float64                  `json:"serviceSales" validate:"required"`
+  OtherSales     float64                  `json:"otherSales" validate:"required"`
+  ArticleTaxes   float64                  `json:"articleTaxes" validate:"required"`
+  ServiceTaxes   float64                  `json:"serviceTaxes" validate:"required"`
+  OtherTaxes     float64                  `json:"otherTaxes" validate:"required"`
+  TotalOutgoings float64                  `json:"totalOutgoings" validate:"required"`
+  Bills          []ReportBillResponse     `json:"bills" validate:"required"`
+  Outgoings      []ReportOutgoingResponse `json:"outgoings" validate:"required"`
 }//@name ReportResponse
 
 type ReportOutgoingResponse struct {
-	OutgoingID string                       `json:"outgoingId"`
-	Name       string                       `json:"name"`
-	StartDate  time.Time                    `json:"startDate"`
-	EndDate    time.Time                    `json:"endDate"`
-	CreatedBy  string                       `json:"createdBy"`
-	Lines      []ReportOutgoingLineResponse `json:"lines"`
+  OutgoingID string                       `json:"outgoingId" validate:"required"`
+  Name       string                       `json:"name" validate:"required"`
+  StartDate  time.Time                    `json:"startDate" validate:"required"`
+  EndDate    time.Time                    `json:"endDate" validate:"required"`
+  CreatedBy  string                       `json:"createdBy" validate:"required"`
+  Lines      []ReportOutgoingLineResponse `json:"lines" validate:"required"`
 }//@name ReportOutgoingResponse
 
 type ReportOutgoingLineResponse struct {
-	Line                  int     `json:"line"`
+  Line                  int     `json:"line" validate:"required"`
 	SupplierID            *string `json:"supplierId"`
 	BillID                *string `json:"billId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
-	TotalHT               float64 `json:"totalHT"`
-	VAT                   float32 `json:"vat"`
+  TotalHT               float64 `json:"totalHT" validate:"required"`
+  VAT                   float32 `json:"vat" validate:"required"`
 }//@name ReportOutgoingLineResponse
 
 type ReportBillResponse struct {
-	Title        string    `json:"title"`
-	BillID       string    `json:"billId"`
-	PaidAt       time.Time `json:"paidAt"`
-	SentAt       time.Time `json:"sentAt"`
-	ArticleSales float64   `json:"articleSales"`
-	ServiceSales float64   `json:"serviceSales"`
-	OtherSales   float64   `json:"otherSales"`
-	ArticleTaxes float64   `json:"articleTaxes"`
-	ServiceTaxes float64   `json:"servicetaxes"`
-	OtherTaxes   float64   `json:"otherTaxes"`
-	CreatedBy    string    `json:"createdBy"`
+  Title        string    `json:"title" validate:"required"`
+  BillID       string    `json:"billId" validate:"required"`
+  PaidAt       time.Time `json:"paidAt" validate:"required"`
+  SentAt       time.Time `json:"sentAt" validate:"required"`
+  ArticleSales float64   `json:"articleSales" validate:"required"`
+  ServiceSales float64   `json:"serviceSales" validate:"required"`
+  OtherSales   float64   `json:"otherSales" validate:"required"`
+  ArticleTaxes float64   `json:"articleTaxes" validate:"required"`
+  ServiceTaxes float64   `json:"servicetaxes" validate:"required"`
+  OtherTaxes   float64   `json:"otherTaxes" validate:"required"`
+  CreatedBy    string    `json:"createdBy" validate:"required"`
 }//@name ReportBillResponse
 
 func CreateReportResponse(r models.Report) ReportResponse {

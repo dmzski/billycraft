@@ -1,8 +1,17 @@
-import { QuoteLine } from "@/models/Quote";
+import type { ProductType } from "@/sdk";
 
 export type QuoteFormValues = {
-	lines: Array<QuoteLine & { itPrice: number }>;
-	tva: number;
+	lines: {
+		description?: string | null;
+		line: number;
+		name: string;
+		price?: number | null;
+		productId?: string | null;
+		quantity?: number | null;
+		type: ProductType;
+		itPrice: number;
+	}[];
+	tva?: number;
 	title: string;
-	customerId: string;
+	customerId?: string;
 };

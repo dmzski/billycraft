@@ -1,8 +1,12 @@
-import type Customer from "@/models/Customer";
+import type { CustomerResponse } from "@/sdk";
 import { useI18n } from "@/i18n";
 import { ListRow } from "./ListRow";
 
-export const List = ({ data = [] }: { data: Customer[] }) => {
+type ListProps = {
+	data?: CustomerResponse[];
+};
+
+export const List = ({ data = [] }: ListProps) => {
 	const { t } = useI18n();
 
 	return (

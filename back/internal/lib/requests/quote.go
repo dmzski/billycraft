@@ -6,30 +6,30 @@ import (
 )
 
 type UpdateQuoteRequest struct {
-	Title      string             `json:"title"`
+	Title      string             `json:"title" validate:"required"`
 	Name       string             `json:"name"`
 	Tva        *float32           `json:"tva"`
 	Status     enums.QuoteStatus  `json:"status"`
 	CustomerID *string            `json:"customerId"`
-	Lines      []QuoteLineRequest `json:"lines"`
+	Lines      []QuoteLineRequest `json:"lines" validate:"required"`
 }//@name UpdateQuoteRequest
 
 type CreateQuoteRequest struct {
-	Title      string             `json:"title"`
+	Title      string             `json:"title" validate:"required"`
 	Name       string             `json:"name"`
 	Tva        *float32           `json:"tva"`
 	Status     enums.QuoteStatus  `json:"status"`
 	CustomerID *string            `json:"customerId"`
-	Lines      []QuoteLineRequest `json:"lines"`
+	Lines      []QuoteLineRequest `json:"lines" validate:"required"`
 }//@name CreateQuoteRequest
 
 type QuoteLineRequest struct {
-	Line        int               `json:"line"`
+	Line        int               `json:"line" validate:"required"`
 	Quantity    float64           `json:"quantity"`
 	Price       float64           `json:"price"`
-	Name        string            `json:"name"`
+	Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
-	Type        enums.ProductType `json:"type"`
+	Type        enums.ProductType `json:"type" validate:"required"`
 	ProductID   *string           `json:"productId"`
 }//@name QuoteLineRequest
 

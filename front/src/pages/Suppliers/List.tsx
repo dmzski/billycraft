@@ -1,12 +1,12 @@
 import { Button } from "@billycraft/ui";
-import type Supplier from "@/models/Supplier";
+import type { SupplierResponse } from "@/sdk";
 import SupplierModalForm from "./modals/SupplierModalForm";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { SupplierLabel } from "@/components/labels/SupplierLabel";
 
 type ListProps = {
-	data: Supplier[];
+	data: SupplierResponse[];
 	reloadData: () => Promise<void>;
 };
 const List = ({ data, reloadData }: ListProps) => {

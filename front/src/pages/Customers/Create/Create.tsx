@@ -1,13 +1,11 @@
 import { Button, Input, TextArea, useToast } from "@billycraft/ui";
-import { CustomerApi } from "@/api/CustomerApi";
 import { useController, useForm } from "react-hook-form";
-import Customer from "@/models/Customer";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { useHistory } from "react-router-dom";
 import { ROUTES } from "@/routes";
-import { CustomerCreateRequest } from "@/models/dtos/CustomerCreateRequest";
 import { RRLink } from "@/components/RRLink";
+import { type CustomerRequest, CustomersService } from "@/sdk";
 
 const defaultCustomer = {
 	address: "",
@@ -17,7 +15,7 @@ const defaultCustomer = {
 	contact: "",
 	email: "",
 	postalCode: "",
-} as Customer;
+} as CustomerRequest;
 
 export const Create = () => {
 	const { t } = useI18n();
@@ -27,14 +25,14 @@ export const Create = () => {
 		handleSubmit,
 		control,
 		formState: { isValid, isSubmitting },
-	} = useForm<CustomerCreateRequest>({
+	} = useForm<CustomerRequest>({
 		mode: "onChange",
 		values: defaultCustomer,
 	});
 
-	const onSubmit = async (data: CustomerCreateRequest) => {
+	const onSubmit = async (data: CustomerRequest) => {
 		try {
-			await CustomerApi.create(data);
+			await CustomersService.postCustomers({ body: data });
 			push(ROUTES.CUSTOMERS.path());
 			toast.show(t("customers.form.submit.success"));
 		} catch {

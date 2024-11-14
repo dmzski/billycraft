@@ -1,7 +1,7 @@
 import CounterAnimated from "@/components/CounterAnimated";
-import { ComponentType, ReactNode, useMemo } from "react";
+import { type ComponentType, type ReactNode, useMemo } from "react";
 import clsx from "clsx";
-import { ReportResponse } from "@/models/Report";
+import type { ReportResponse } from "@/sdk";
 import {
 	BanknotesIcon,
 	CubeIcon,

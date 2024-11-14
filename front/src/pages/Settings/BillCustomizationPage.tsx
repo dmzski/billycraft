@@ -1,4 +1,4 @@
-import BillCustomization from "@/models/BillCustomization";
+import type { BillCustomizationResponse } from "@/sdk";
 import BillCustomizationForm from "./Forms/BillCustomizationForm";
 import { useMyBillCustomizationQuery } from "@/queries/useMyBillCustomizationQuery";
 import { Loader } from "@billycraft/ui";
@@ -16,7 +16,9 @@ const BillCustomizationPage = () => {
 	return (
 		<div className="w-full">
 			<BillCustomizationForm
-				billCustomization={billCustomization ?? ({} as BillCustomization)}
+				billCustomization={
+					billCustomization ?? ({} as BillCustomizationResponse)
+				}
 			/>
 		</div>
 	);

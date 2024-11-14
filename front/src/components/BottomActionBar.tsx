@@ -1,7 +1,7 @@
 import {
-	MutableRefObject,
-	ReactNode,
-	RefObject,
+	type MutableRefObject,
+	type ReactNode,
+	type RefObject,
 	useEffect,
 	useState,
 } from "react";
@@ -31,7 +31,7 @@ export const BottomActionBar = ({
 		return () => {
 			observer.disconnect();
 		};
-	}, [initialRect, containerRef]);
+	}, [containerRef]);
 
 	return (
 		<div

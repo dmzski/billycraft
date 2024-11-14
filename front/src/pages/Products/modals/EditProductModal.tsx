@@ -1,22 +1,21 @@
 import { useI18n } from "@/i18n";
 import { Button, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import {
 	ProductFormContent,
-	ProductFormValues,
+	type ProductFormValues,
 } from "../components/ProductFormContent";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
-import Product from "@/models/Product";
 import { calculatePriceTTC } from "@/utils/price";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { Submit } from "@/components/form/Submit";
 import { Form } from "@/components/form/Form";
+import { type ProductResponse, ProductsService, type UpdateProductRequest } from "@/sdk";
 
 type EditProductModalProps = {
-	onSubmitSuccess: (newProduct: Product) => Promise<void> | void;
-	product: Product;
+	onSubmitSuccess: (newProduct: ProductResponse) => Promise<void> | void;
+	product: ProductResponse;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
 };
 
@@ -34,7 +33,7 @@ const EditProductForm = ({
 	const pageT = scopedT("products.modals.edit");
 	const { data: suppliers } = useAllSuppliersQuery();
 
-	const initialValues: ProductFormValues = useMemo(
+	const initialValues = useMemo<ProductFormValues>(
 		() => ({
 			name: product.name,
 			description: product.description ?? null,
@@ -68,9 +67,14 @@ const EditProductForm = ({
 				values.lowStock = null;
 				values.code = null;
 			}
-			const newProduct = await ProductApi.update({ ...values, id: product.id });
+			const newProduct = await ProductsService.patchProductsById({
+				path: { id: product.id },
+				body: values as UpdateProductRequest,
+			}).then(({ data }) => data);
 			toast.show(pageT("submit.success"));
-			await onSubmitSuccess(newProduct);
+			if (newProduct) {
+				await onSubmitSuccess(newProduct);
+			}
 			close();
 		} catch (err) {
 			sendErrorToSentry(err, { data: values });

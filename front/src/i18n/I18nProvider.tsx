@@ -1,8 +1,8 @@
 import { createT } from "@/i18n/create-t";
 import { locales } from "@/locales";
-import { GlobalLocale } from "@/locales/types";
-import { Scopes } from "international-types";
-import { ReactNode, createContext, useCallback, useMemo } from "react";
+import type { GlobalLocale } from "@/locales/types";
+import type { Scopes } from "international-types";
+import { type ReactNode, createContext, useCallback, useMemo } from "react";
 
 type I18nProviderProps = {
 	locale: string;

@@ -1,10 +1,12 @@
-import { InvitationApi } from "@/api/InvitationApi";
+import { Form } from "@/components/form/Form";
+import { Submit } from "@/components/form/Submit";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { useI18n } from "@/i18n";
+import { InvitationsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { Modal, useToast } from "@billycraft/ui";
+import type { ComponentProps } from "react";
+import { useForm } from "react-hook-form";
 
 type DeleteInvitationModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
@@ -27,8 +29,10 @@ const DeleteInvitationForm = ({
 
 	const onSubmit = async () => {
 		try {
-			await InvitationApi.delete({
-				email,
+			await InvitationsService.deleteInvitations({
+				body: {
+					email,
+				},
 			});
 
 			toast.show(pageT("submit.success"));
@@ -40,19 +44,14 @@ const DeleteInvitationForm = ({
 	};
 
 	return (
-		<FormProvider {...methods}>
-			<form
-				className="flex flex-col gap-10"
-				onSubmit={methods.handleSubmit(onSubmit)}
-			>
+		<Form methods={methods} onSubmit={onSubmit}>
+			<div className="flex flex-col gap-10">
 				<h2 className="text-3xl">{pageT("title")}</h2>
 				<p className="text-destructive font-semibold">{pageT("description")}</p>
 				<FormErrorAlert />
-				<Button type="submit" variant="destructive">
-					{pageT("submit")}
-				</Button>
-			</form>
-		</FormProvider>
+				<Submit variant="destructive">{pageT("submit")}</Submit>
+			</div>
+		</Form>
 	);
 };
 

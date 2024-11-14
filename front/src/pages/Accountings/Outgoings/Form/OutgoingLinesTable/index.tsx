@@ -1,8 +1,8 @@
 import { Button, Loader } from "@billycraft/ui";
-import { OutgoingRequest } from "@/models/Outgoing";
-import { Control, useFieldArray } from "react-hook-form";
+import { type Control, useFieldArray } from "react-hook-form";
 import Row from "./Row";
 import { useI18n } from "@/i18n";
+import type { OutgoingRequest } from "@/sdk";
 
 type OutgoingTableProps = {
 	isLoading?: boolean;

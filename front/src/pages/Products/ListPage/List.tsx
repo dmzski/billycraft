@@ -1,6 +1,6 @@
 import { BottomActionBar } from "@/components/BottomActionBar";
 import ProductTableLine from "./Row";
-import type Product from "@/models/Product";
+import type { ProductResponse } from "@/sdk";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
 import { useEffect, useRef, useState } from "react";
@@ -11,7 +11,7 @@ import { MultiDeleteProductModal } from "../modals/MultiDeleteProductModal";
 import { useI18n } from "@/i18n";
 
 type ProductTableProps = {
-	products: Product[];
+	products: ProductResponse[];
 	reloadProducts: () => Promise<void>;
 };
 
@@ -21,13 +21,13 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
 	const { data: groups } = useAllProductGroupsQuery();
 	const divRef = useRef<HTMLDivElement>(null);
 
-	const [selected, setSelected] = useState<Product[]>([]);
-	const getSupplier = (product: Product) =>
+	const [selected, setSelected] = useState<ProductResponse[]>([]);
+	const getSupplier = (product: ProductResponse) =>
 		product.supplierId
 			? suppliers?.find(({ id }) => id === product.supplierId)
 			: undefined;
 
-	const getGroupName = (product: Product) =>
+	const getGroupName = (product: ProductResponse) =>
 		product.groupId
 			? groups?.find(({ id }) => id === product.groupId)?.name
 			: undefined;

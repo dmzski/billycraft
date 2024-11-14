@@ -4,6 +4,7 @@ export default defineConfig({
   client: '@hey-api/client-fetch',
   input: './back/docs/swagger.json',
   output: './front/src/sdk',
+  experimentalParser: true,
   plugins: [
     '@hey-api/schemas', // preserves default output
     '@hey-api/types', // preserves default output

@@ -1,7 +1,7 @@
 package requests
 
 type ReportRequest struct {
-	StartDate string `json:"startDate"`
-	EndDate   string `json:"endDate"`
-	Name      string `json:"name"`
+	StartDate string `json:"startDate" validate:"required"`
+	EndDate   string `json:"endDate" validate:"required"`
+	Name      string `json:"name" validate:"required"`
 }//@name ReportRequest

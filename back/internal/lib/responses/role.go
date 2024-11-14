@@ -6,8 +6,8 @@ import (
 )
 
 type RoleResponse struct {
-	Email string         `json:"email"`
-	Role  enums.RoleEnum `json:"role"`
+  Email string         `json:"email" validate:"required"`
+  Role  enums.RoleEnum `json:"role" validate:"required"`
 }//@name RoleResponse
 
 func CreateRoleResponse(r models.Role) RoleResponse {

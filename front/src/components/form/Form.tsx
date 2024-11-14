@@ -1,7 +1,8 @@
 import { sendErrorToSentry } from "@/utils/errors";
-import { ReactNode } from "react";
-import { FieldValues, FormProvider, UseFormReturn } from "react-hook-form";
+import type { ReactNode } from "react";
+import { type FieldValues, FormProvider, type UseFormReturn } from "react-hook-form";
 
+// biome-ignore lint/suspicious/noConfusingVoidType: We need void for no return
 type OnSubmitReturn = string | null | undefined | void;
 
 type FormProps<TFieldValues extends FieldValues> = {

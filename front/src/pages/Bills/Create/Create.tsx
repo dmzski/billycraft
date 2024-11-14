@@ -1,21 +1,20 @@
-import { useToast } from "@billycraft/ui";
-import { useHistory } from "react-router-dom";
-import { BillApi } from "@/api/BillApi";
-import { ROUTES } from "@/routes";
+import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { RRLink } from "@/components/RRLink";
+import { Form } from "@/components/form/Form";
+import { Submit } from "@/components/form/Submit";
+import { useI18n } from "@/i18n";
 import {
 	BillFormContent,
 	type BillFormValues,
 } from "@/pages/Bills/components/BillFormContent";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { useForm } from "react-hook-form";
-import { BillCreateRequest } from "@/models/dtos/BillCreateRequest";
-import { RRLink } from "@/components/RRLink";
-import { Submit } from "@/components/form/Submit";
-import { Form } from "@/components/form/Form";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { useMemo } from "react";
 import { useUser } from "@/providers/UserProvider";
+import { ROUTES } from "@/routes";
+import { type BillRequest, BillsService } from "@/sdk";
+import { useToast } from "@billycraft/ui";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 
 const defaultBill = {
 	lines: [],
@@ -44,19 +43,28 @@ export const Create = () => {
 	});
 
 	const onSubmit = async (data: BillFormValues) => {
-		const tmp: BillCreateRequest = {
+		const tmp: BillRequest = {
 			...data,
 			lines: data.lines.map((line, index: number) => ({
-				...line,
+        type: line.type,
+        description: line.description ?? undefined,
+        name: line.name,
+        productId: line.productId ?? undefined,
 				line: index + 1,
 				price: line.price ? Number(`${line.price}`) : undefined,
 				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
 			})),
 		};
 		try {
-			const { id } = await BillApi.create(tmp);
+			const newBill = await BillsService.postBills({ body: tmp }).then(
+				({ data }) => data,
+			);
 			toast.show(t("bills.form.submit.success"));
-			push(ROUTES.BILL_OVERVIEW.path({ id }));
+			push(
+				newBill?.id
+					? ROUTES.BILL_OVERVIEW.path({ id: newBill.id })
+					: ROUTES.BILLS.path(),
+			);
 		} catch {
 			toast.destructive(t("genericFormError"));
 		}

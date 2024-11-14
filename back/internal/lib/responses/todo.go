@@ -6,13 +6,13 @@ import (
 )
 
 type TodoResponse struct {
-	ID          string     `json:"id"`
-	Description string     `json:"description"`
-	CreatedAt   time.Time  `json:"createdAt"`
-	UpdatedAt   time.Time  `json:"updatedAt"`
+  ID          string     `json:"id" validate:"required"`
+  Description string     `json:"description" validate:"required"`
+  CreatedAt   time.Time  `json:"createdAt" validate:"required"`
+  UpdatedAt   time.Time  `json:"updatedAt" validate:"required"`
 	DoneAt      *time.Time `json:"doneAt"`
-	CompanyID   string     `json:"compagnyId"`
-	CreatedBy   string     `json:"createdBy"`
+  CompanyID   string     `json:"compagnyId" validate:"required"`
+  CreatedBy   string     `json:"createdBy" validate:"required"`
 	DoneBy      *string    `json:"doneBy"`
 }//@name TodoResponse
 

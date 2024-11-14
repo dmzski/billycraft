@@ -1,10 +1,10 @@
-import { ProductGroupApi } from "@/api/ProductGroupApi";
 import { InputField } from "@/components/form/InputField";
 import { Submit } from "@/components/form/Submit";
 import { useI18n } from "@/i18n";
+import { ProductGroupsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Button, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 type AddProductGroupModalProps = {
@@ -39,7 +39,7 @@ const AddProductGroupForm = ({
 
 	const handleSubmit = async ({ name }: AddProductGroupFormValues) => {
 		try {
-			await ProductGroupApi.create({ name });
+			await ProductGroupsService.postProductGroups({ body: { name } });
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();

@@ -1,9 +1,9 @@
-import { UserApi } from "@/api/UserApi";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { useI18n } from "@/i18n";
+import { UsersService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { FormProvider, useController, useForm } from "react-hook-form";
 
 type RemoveUserModalProps = {
@@ -35,7 +35,7 @@ const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
 
 	const onSubmit = async () => {
 		try {
-			await UserApi.removeUser({ email });
+			await UsersService.deleteUsersRemoveUser({ body: { email } });
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 		} catch (err) {

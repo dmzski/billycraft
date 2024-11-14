@@ -2,9 +2,9 @@ import { useI18n } from "@/i18n";
 import { Button, Collapsible, Input } from "@billycraft/ui";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import {
-	ChangeEventHandler,
-	Dispatch,
-	SetStateAction,
+	type ChangeEventHandler,
+	type Dispatch,
+	type SetStateAction,
 	useReducer,
 } from "react";
 

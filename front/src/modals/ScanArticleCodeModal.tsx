@@ -1,5 +1,5 @@
 import { Scanner } from "@yudiel/react-qr-scanner";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Modal } from "@billycraft/ui";
 import { SCANNER_COMPONENTS, SCANNER_FORMATS } from "@/constants/scanner";

@@ -1,5 +1,5 @@
 import useCustomers from "@/hooks/useCustomers";
-import type Bill from "@/models/Bill";
+import type {BillResponse} from "@/sdk";
 import BillTableLine from "./Row";
 import { useI18n } from "@/i18n";
 import type { BillOverviewRouteQueryParams } from "@/routes";
@@ -10,7 +10,7 @@ import { Button, Checkbox } from "@billycraft/ui";
 import { ArrowDownOnSquareIcon } from "@heroicons/react/24/solid";
 
 type BillListProps = {
-	data: Bill[];
+	data: BillResponse[];
 	selectedStatus?: BillOverviewRouteQueryParams["fromTab"];
 };
 
@@ -18,7 +18,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 	const { t } = useI18n();
 	const customers = useCustomers();
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [selected, setSelected] = useState<Bill[]>([]);
+	const [selected, setSelected] = useState<BillResponse[]>([]);
 
 	useEffect(() => {
 		if (data) {

@@ -1,5 +1,5 @@
 import { Button, Input } from "@billycraft/ui";
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import {
 	ArrowsUpDownIcon,
@@ -12,22 +12,21 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useI18n } from "@/i18n";
-import { BillFormValues } from "../types";
+import type { BillFormValues } from "../types";
 import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
 import { AddProductModal } from "@/pages/Products/modals/AddProductModal";
 import { SelectField } from "@/components/form/SelectField";
 import { InputField } from "@/components/form/InputField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
-import Product from "@/models/Product";
+import {ProductTypeSchema, type ProductResponse} from "@/sdk";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
-import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
 
 type BillLineTableLineProps = {
 	deleteLine: () => void;
 	index: number;
 	id: string;
-	product?: Product;
+	product?: ProductResponse;
 	reloadProducts: () => Promise<void>;
 };
 const BillLineTableLine = ({
@@ -66,7 +65,7 @@ const BillLineTableLine = ({
 	}, [itPrice, quantity]);
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] =
-		Object.values(PRODUCT_TYPES).map((type) => ({
+		Object.values(ProductTypeSchema.enum).map((type) => ({
 			value: type,
 			label: <ProductTypeLabel type={type} />,
 			render: <ProductTypeLabel type={type} short />,
@@ -136,7 +135,6 @@ const BillLineTableLine = ({
 			className="border rounded-md shadow-xl flex items-start gap-2 p-2 bg-background"
 			ref={setNodeRef}
 			style={style}
-			role="listitem"
 		>
 			<div className="self-center">
 				<Button variant="ghost" size="icon" {...listeners}>

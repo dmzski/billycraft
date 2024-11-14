@@ -1,8 +1,10 @@
-import { CustomerApi } from "@/api/CustomerApi";
-import Customer from "@/models/Customer";
+import { type CustomerResponse, CustomersService } from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
-export default (): Customer[] => {
-	const { data } = useDataLoader("customers", () => CustomerApi.findAll());
+export default (): CustomerResponse[] => {
+	const { data } = useDataLoader("customers", () =>
+		CustomersService.getCustomers().then(({ data }) => data),
+	);
+
 	return data ?? [];
 };

@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useFormatDate } from "@/hooks/useFormatDate";
-import { ReportOutgoingResponse, ReportResponse } from "@/models/Report";
+import type { ReportOutgoingResponse, ReportResponse } from "@/sdk";
 import { OUTGOING_ROUTES } from "@/pages/Accountings/Outgoings/constants";
-import { ReactNode, useCallback } from "react";
+import { type ReactNode, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/i18n";
 

@@ -26,8 +26,8 @@ const MyCompagnyForm = ({ company, onSubmitSuccess }: MyCompagnyFormProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const uploadLogoState = useLoadingState();
 	const methods = useForm({
-		mode: "onBlur",
-		defaultValues: company,
+		mode: "onChange",
+		defaultValues: company as OrganizationRequest,
 	});
 	const { setValue, reset } = methods;
 

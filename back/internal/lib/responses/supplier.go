@@ -3,12 +3,12 @@ package responses
 import "back/internal/lib/models"
 
 type SupplierResponse struct {
-	ID        string  `json:"id"`
-	Name      string  `json:"name"`
+  ID        string  `json:"id" validate:"required"`
+  Name      string  `json:"name" validate:"required"`
 	Color     *string `json:"color"`
-	CompanyID string  `json:"companyId"`
-	Vat       float32 `json:"vat"`
-	CreatedBy string  `json:"createdBy"`
+  CompanyID string  `json:"companyId" validate:"required"`
+  Vat       float32 `json:"vat" validate:"required"`
+  CreatedBy string  `json:"createdBy" validate:"required"`
 }//@name SupplierResponse
 
 func CreateSupplierResponse(supplier models.Supplier) SupplierResponse {

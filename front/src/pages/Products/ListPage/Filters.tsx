@@ -1,10 +1,10 @@
 import { useI18n } from "@/i18n";
 import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
 import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { ProductFilters } from "@/utils/products";
+import type { ProductFilters } from "@/utils/products";
 import { Button, Collapsible, Input, Select, Switch } from "@billycraft/ui";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { ChangeEvent, ComponentProps, useMemo, useReducer } from "react";
+import { type ChangeEvent, type ComponentProps, useMemo, useReducer } from "react";
 
 type FiltersProps = {
 	filters: ProductFilters;

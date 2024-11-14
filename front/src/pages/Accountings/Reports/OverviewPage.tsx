@@ -3,10 +3,12 @@ import ReportTable from "./components/ReportTable";
 import { useI18n } from "@/i18n";
 import { useReportByYearQuery } from "@/queries/useReportByYearQuery";
 import { useReportByMonthQuery } from "@/queries/useReportByMonthQuery";
+import { useFormatDate } from "@/hooks/useFormatDate";
 
 const OverviewPage = () => {
 	const { t } = useI18n();
-	const currentDate = useMemo(() => Date.now(), []);
+	const { toRFC3339 } = useFormatDate();
+	const currentDate = useMemo(() => toRFC3339(Date.now()), [toRFC3339]);
 	const { data: monthData } = useReportByMonthQuery(currentDate);
 	const { data: yearData } = useReportByYearQuery(currentDate);
 

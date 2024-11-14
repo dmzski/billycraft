@@ -1,7 +1,5 @@
-import { BillApi } from "@/api/BillApi";
 import { useI18n } from "@/i18n";
-import type Bill from "@/models/Bill";
-import type { BillStatus } from "@/models/Bill";
+import { type BillResponse, BillsService, type BillStatus } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
 import {
 	EnvelopeIcon,
@@ -11,7 +9,7 @@ import {
 import { useState } from "react";
 
 type ActionsProps = {
-	bill: Bill;
+	bill: BillResponse;
 	reloadBill: () => Promise<void>;
 };
 
@@ -24,7 +22,14 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 		setIsSubmitting(true);
 		try {
 			if (bill) {
-				await BillApi.updateStatus({ id: bill.id, status });
+				await BillsService.patchBillsById({
+					path: { id: bill.id },
+					body: {
+						status,
+						lines: bill.lines,
+						title: bill.title,
+					},
+				});
 				toast.show(t("bills.form.submit.edit.success"));
 				await reloadBill();
 			}

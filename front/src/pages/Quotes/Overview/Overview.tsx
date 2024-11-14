@@ -1,8 +1,8 @@
 import { useI18n } from "@/i18n";
 import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery";
 import {
-	QuoteOverviewRouteQueryParams,
-	QuoteRouteProps,
+	type QuoteOverviewRouteQueryParams,
+	type QuoteRouteProps,
 	ROUTES,
 } from "@/routes";
 import { isQuoteMinimumAccepted } from "@/utils/quote";
@@ -15,14 +15,13 @@ import {
 } from "@heroicons/react/24/solid";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
-import { PdfApi } from "@/api/PdfApi";
-import { QuoteApi } from "@/api/QuoteApi";
 import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { RRLink } from "@/components/RRLink";
 import { QuoteLabel } from "@/components/labels/QuoteLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
+import { PdFsService, QuotesService } from "@/sdk";
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n();
@@ -46,7 +45,12 @@ export const Overview = () => {
 		try {
 			if (quote?.id && !isDownloadingPDF) {
 				toggleIsDownloadingPDF();
-				const blob = await PdfApi.getQuotePdf(quote.id);
+				const blob = await PdFsService.getPdfsQuoteById({
+					path: { id: quote.id },
+				}).then(({ data }) => data);
+				if (!blob) {
+					throw new Error("Unreadable PDF object");
+				}
 				const link = document.createElement("a");
 				link.download = quote.name;
 				link.href = URL.createObjectURL(blob);
@@ -65,9 +69,11 @@ export const Overview = () => {
 		if (quote && !isCreatingBill) {
 			try {
 				toggleIsCreatingBill();
-				const data = await QuoteApi.createBill({ id: quote.id });
+				const data = await QuotesService.postQuotesByIdBill({
+					path: { id: quote.id },
+				}).then(({ data }) => data);
 				toast.show(t("quotes.form.createBill"));
-				if (data.id) {
+				if (data?.id) {
 					push(ROUTES.BILL_OVERVIEW.path({ id: data.id }));
 				} else {
 					push(ROUTES.BILLS.path());

@@ -1,6 +1,6 @@
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
-import { InvitationResponse } from "@/models/dtos/Invitation";
+import type { InvitationResponse } from "@/sdk";
 import { Button } from "@billycraft/ui";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { DeleteInvitationModal } from "./modals/DeleteInvitationModal";

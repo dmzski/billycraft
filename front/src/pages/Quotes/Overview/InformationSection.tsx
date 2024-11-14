@@ -1,9 +1,9 @@
 import { RRLink } from "@/components/RRLink";
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import Quote from "@/models/Quote";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
+import type { QuoteResponse } from "@/sdk";
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
@@ -12,7 +12,7 @@ import {
 } from "@/utils/price";
 
 type InformationSectionProps = {
-	quote: Quote;
+	quote: QuoteResponse;
 };
 
 export const InformationSection = ({ quote }: InformationSectionProps) => {

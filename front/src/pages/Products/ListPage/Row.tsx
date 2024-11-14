@@ -1,5 +1,14 @@
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency";
+import { useI18n } from "@/i18n";
+import type {
+	ProductGroupResponse,
+	ProductResponse,
+	SupplierResponse,
+} from "@/sdk";
+import { isUndefinedOrNull } from "@/utils/isUndefinedOrNull";
+import { calculatePriceTTC } from "@/utils/price";
 import { Badge, Button, Checkbox, Collapsible } from "@billycraft/ui";
-import Product from "@/models/Product";
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
@@ -7,24 +16,17 @@ import {
 	TagIcon,
 	TrashIcon,
 } from "@heroicons/react/24/solid";
-import { EditProductModal } from "../modals/EditProductModal";
+import { type ComponentProps, useMemo, useReducer } from "react";
 import { DeleteProductModal } from "../modals/DeleteProductModal";
-import Supplier from "@/models/Supplier";
-import { calculatePriceTTC } from "@/utils/price";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
-import { useI18n } from "@/i18n";
-import { ComponentProps, useMemo, useReducer } from "react";
-import { ProductGroup } from "@/models/ProductGroup";
-import { isUndefinedOrNull } from "@/utils/isUndefinedOrNull";
+import { EditProductModal } from "../modals/EditProductModal";
 
 type ProductTableLineProps = {
-	product: Product;
-	supplier?: Supplier;
+	product: ProductResponse;
+	supplier?: SupplierResponse;
 	reloadProducts: () => Promise<void>;
-	groupName?: ProductGroup["name"];
-	selected: Product[];
-	setSelected: (newSelected: Product[]) => void;
+	groupName?: ProductGroupResponse["name"];
+	selected: ProductResponse[];
+	setSelected: (newSelected: ProductResponse[]) => void;
 };
 
 const ProductTableLine = ({
@@ -66,9 +68,8 @@ const ProductTableLine = ({
 					<div className="relative flex flex-row gap-4 justify-between items-center md:h-16 px-4 py-2 md:py-0">
 						<div className="flex flex-row gap-4 items-center overflow-hidden flex-grow">
 							<div
-								onClick={(event) => {
-									event.stopPropagation();
-								}}
+								onKeyDown={(event) => event.stopPropagation()}
+								onClick={(event) => event.stopPropagation()}
 							>
 								<Checkbox
 									checked={!!selected.find(({ id }) => id === product.id)}
@@ -127,6 +128,7 @@ const ProductTableLine = ({
 			>
 				<div
 					onClick={(e) => e.stopPropagation()}
+					onKeyDown={(e) => e.stopPropagation()}
 					className="border-t grid grid-cols-1 gap-8 p-4 w-full"
 				>
 					{product.description ? (
@@ -138,7 +140,7 @@ const ProductTableLine = ({
 					<div className="grid grid-cols-2 gap-4">
 						<dl>
 							<dt className="font-bold">{pageT("etPrice")}</dt>
-							<dd>{formatCurrency(product.price)}</dd>
+							<dd>{product.price ? formatCurrency(product.price) : "-"}</dd>
 						</dl>
 						<dl>
 							<dt className="font-bold">{pageT("itPrice")}</dt>

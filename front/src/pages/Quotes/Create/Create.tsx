@@ -1,6 +1,5 @@
 import { useToast } from "@billycraft/ui";
 import { useHistory } from "react-router-dom";
-import { QuoteApi } from "@/api/QuoteApi";
 import { ROUTES } from "@/routes";
 import {
 	QuoteFormContent,
@@ -9,13 +8,13 @@ import {
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
 import { useForm } from "react-hook-form";
-import { QuoteCreateRequest } from "@/models/dtos/QuoteCreateRequest";
 import { RRLink } from "@/components/RRLink";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
 import { useUser } from "@/providers/UserProvider";
 import { useMemo } from "react";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { type CreateQuoteRequest, QuotesService } from "@/sdk";
 
 const defaultQuote = {
 	lines: [],
@@ -45,19 +44,27 @@ export const Create = () => {
 	});
 
 	const onSubmit = async (data: QuoteFormValues) => {
-		const tmp: QuoteCreateRequest = {
+		const tmp: CreateQuoteRequest = {
 			...data,
 			lines: data.lines.map((line, index: number) => ({
 				...line,
+				productId: line.productId ? line.productId : undefined,
+				description: line.description ? line.description : undefined,
 				line: index + 1,
-				price: line.price ? Number(`${line.price}`) : null,
-				quantity: line.quantity ? Number(`${line.quantity}`) : null,
+				price: line.price ? Number(`${line.price}`) : undefined,
+				quantity: line.quantity ? Number(`${line.quantity}`) : undefined,
 			})),
 		};
 		try {
-			const { id } = await QuoteApi.create(tmp);
+			const newQuote = await QuotesService.postQuotes({ body: tmp }).then(
+				({ data }) => data,
+			);
 			toast.show(t("quotes.form.submit.success"));
-			push(ROUTES.QUOTE_OVERVIEW.path({ id }));
+			push(
+				newQuote?.id
+					? ROUTES.QUOTE_OVERVIEW.path({ id: newQuote.id })
+					: ROUTES.QUOTES.path(),
+			);
 		} catch {
 			toast.destructive(t("genericFormError"));
 		}

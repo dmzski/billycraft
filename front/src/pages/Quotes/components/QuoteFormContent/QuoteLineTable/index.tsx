@@ -1,13 +1,13 @@
 import { Button, Select } from "@billycraft/ui";
-import { ComponentProps, useMemo, useRef, useState } from "react";
-import { Control, useFieldArray, useWatch } from "react-hook-form";
+import { type ComponentProps, useMemo, useRef, useState } from "react";
+import { type Control, useFieldArray, useWatch } from "react-hook-form";
 import QuoteLineTableLine from "./Row";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { useI18n } from "@/i18n";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import { QuoteFormValues } from "../types";
+import type { QuoteFormValues } from "../types";
 import { calculatePriceTTC } from "@/utils/price";
 import { ProductLabel } from "@/components/labels/ProductLabel";
 
@@ -19,7 +19,6 @@ const defaultLine: QuoteFormValues["lines"][number] = {
 	quantity: 0,
 	type: "TEXT",
 	line: 0,
-	quoteId: "",
 	productId: null,
 };
 
@@ -64,7 +63,7 @@ const QuoteLineTable = ({
 
 	const addLine = (newLine = defaultLine) => {
 		append(
-			{ ...newLine, quoteId: "", line: fields.length },
+			{ ...newLine, line: fields.length },
 			{ shouldFocus: false },
 		);
 	};
@@ -95,7 +94,6 @@ const QuoteLineTable = ({
 					price: productFound.price,
 					itPrice: calculatePriceTTC(productFound.price, tva),
 					quantity: 0,
-					quoteId: "",
 					line: 0,
 					description: productFound.description ?? null,
 					productId: productFound.id,

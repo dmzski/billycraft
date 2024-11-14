@@ -1,6 +1,6 @@
 import { Alert, Button, Loader } from "@billycraft/ui";
 import { useFormatDate } from "@/hooks/useFormatDate";
-import { ReportRequest } from "@/models/Report";
+import type { ReportRequest } from "@/sdk";
 import { Link, useHistory, useParams } from "react-router-dom";
 import ReportOutgoingTable from "./components/ReportOutgoingTable";
 import ReportPerSupplierTable from "./components/ReportPerSupplierTable";

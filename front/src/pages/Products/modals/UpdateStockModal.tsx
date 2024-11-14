@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { Button, Input, Modal, Select, useToast } from "@billycraft/ui";
+import { Button, Input, Modal, useToast } from "@billycraft/ui";
 import {
 	Controller,
 	FormProvider,
@@ -14,13 +14,13 @@ import {
 	TrashIcon,
 } from "@heroicons/react/24/solid";
 import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import { type IDetectedBarcode } from "@yudiel/react-qr-scanner";
+import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
 import { Submit } from "@/components/form/Submit";
 import { SelectField } from "@/components/form/SelectField";
 import { InputField } from "@/components/form/InputField";
 import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal";
+import { ProductsService } from "@/sdk";
 
 type UpdateStockModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
@@ -62,9 +62,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 		name: "inMovements",
 		rules: {
 			validate: (values, allValues) =>
-				values.length !== 0 || allValues.outMovements.length !== 0
-					? true
-					: false,
+				values.length !== 0 || allValues.outMovements.length !== 0,
 		},
 	});
 	const outMovementsFieldArray = useFieldArray({
@@ -72,17 +70,17 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 		name: "outMovements",
 		rules: {
 			validate: (values, allValues) =>
-				values.length !== 0 || allValues.inMovements.length !== 0
-					? true
-					: false,
+				values.length !== 0 || allValues.inMovements.length !== 0,
 		},
 	});
 
 	const onSubmit = async (values: UpdateStockFormValues) => {
 		try {
-			await ProductApi.updateStocks({
-				in: values.inMovements,
-				out: values.outMovements,
+			await ProductsService.postProductsUpdateStocks({
+				body: {
+					in: values.inMovements,
+					out: values.outMovements,
+				},
 			});
 			close();
 			toast.show(pageT("submit.success"));
@@ -94,7 +92,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 	};
 
 	const productOptions = useMemo(
-		(): ComponentProps<typeof Select>["options"] =>
+		(): ComponentProps<typeof SelectField>["options"] =>
 			products
 				?.filter(({ type }) => type === "ARTICLE")
 				.map((product) => ({

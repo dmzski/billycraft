@@ -1,9 +1,9 @@
 import { Input } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import {
-	FieldPath,
-	FieldValues,
-	UseControllerProps,
+	type FieldPath,
+	type FieldValues,
+	type UseControllerProps,
 	useController,
 } from "react-hook-form";
 

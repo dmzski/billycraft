@@ -7,36 +7,36 @@ import (
 )
 
 type BillResponse struct {
-	ID         string             `json:"id"`
-	Title      string             `json:"title"`
-	Name       string             `json:"name"`
+  ID         string             `json:"id" validate:"required"`
+  Title      string             `json:"title" validate:"required"`
+  Name       string             `json:"name" validate:"required"`
 	Tva        *float32           `json:"tva"`
-	CreatedAt  time.Time          `json:"createdAt"`
+	CreatedAt  time.Time          `json:"createdAt" validate:"required"`
 	UpdatedAt  *time.Time         `json:"updatedAt"`
 	PaidAt     *time.Time         `json:"paidAt"`
 	SentAt     *time.Time         `json:"sentAt"`
-	Status     enums.BillStatus   `json:"status"`
-	CreatedBy  string             `json:"createdBy"`
-	CompanyID  string             `json:"companyId"`
+  Status     enums.BillStatus   `json:"status" validate:"required"`
+  CreatedBy  string             `json:"createdBy" validate:"required"`
+  CompanyID  string             `json:"companyId" validate:"required"`
 	CustomerID *string            `json:"customerId"`
 	FileName   *string            `json:"fileName"`
-	Lines      []BillLineResponse `json:"lines"`
+  Lines      []BillLineResponse `json:"lines" validate:"required"`
 }//@name BillResponse
 
 type BillLineResponse struct {
-	BillID      string            `json:"billId"`
-	Line        int               `json:"line"`
-	Quantity    float64           `json:"quantity"`
-	Price       float64           `json:"price"`
-	Name        string            `json:"name"`
+  BillID      string            `json:"billId" validate:"required"`
+  Line        int               `json:"line" validate:"required"`
+  Quantity    float64           `json:"quantity" validate:"required"`
+  Price       float64           `json:"price" validate:"required"`
+  Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
-	Type        enums.ProductType `json:"type"`
+  Type        enums.ProductType `json:"type" validate:"required"`
 	ProductID   *string           `json:"productId"`
 }//@name BillLineResponse
 
 type BillResponseList struct {
-	Bills      []BillResponse `json:"bills"`
-	TotalCount int            `json:"totalCount"`
+  Bills      []BillResponse `json:"bills" validate:"required"`
+  TotalCount int            `json:"totalCount" validate:"required"`
 }//@name BillResponseList
 
 func createBillLineResponse(line models.BillLine) BillLineResponse {

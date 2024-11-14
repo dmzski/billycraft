@@ -1,5 +1,5 @@
 import { Tab } from "@billycraft/ui";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
 type RRTabProps = ComponentPropsWithoutRef<typeof Tab> & {

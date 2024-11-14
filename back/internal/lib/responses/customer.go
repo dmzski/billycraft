@@ -6,18 +6,18 @@ import (
 )
 
 type CustomerResponse struct {
-	ID          string     `json:"id"`
-	Name        string     `json:"name"`
-	Contact     string     `json:"contact"`
-	PhoneNumber string     `json:"phoneNumber"`
-	City        string     `json:"city"`
-	PostalCode  string     `json:"postalCode"`
-	Address     string     `json:"address"`
-	Email       string     `json:"email"`
-	CreatedAt   time.Time  `json:"createdAt"`
+  ID          string     `json:"id" validate:"required"`
+  Name        string     `json:"name" validate:"required"`
+  Contact     string     `json:"contact" validate:"required"`
+  PhoneNumber string     `json:"phoneNumber" validate:"required"`
+  City        string     `json:"city" validate:"required"`
+  PostalCode  string     `json:"postalCode" validate:"required"`
+  Address     string     `json:"address" validate:"required"`
+  Email       string     `json:"email" validate:"required"`
+  CreatedAt   time.Time  `json:"createdAt" validate:"required"`
 	UpdatedAt   *time.Time `json:"updatedAt"`
-	Deleted     bool       `json:"deleted"`
-	CompanyID   string     `json:"companyId"`
+  Deleted     bool       `json:"deleted" validate:"required"`
+  CompanyID   string     `json:"companyId" validate:"required"`
 }//@name CustomerResponse
 
 func CreateCustomerResponse(c models.Customer) CustomerResponse {

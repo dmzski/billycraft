@@ -1,5 +1,5 @@
 import { Button, Input } from "@billycraft/ui";
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import {
 	ArrowsUpDownIcon,
@@ -12,15 +12,14 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useI18n } from "@/i18n";
-import { QuoteFormValues } from "../types";
+import type { QuoteFormValues } from "../types";
 import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
 import { AddProductModal } from "@/pages/Products/modals/AddProductModal";
 import { InputField } from "@/components/form/InputField";
 import { SelectField } from "@/components/form/SelectField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
-import Product from "@/models/Product";
-import { PRODUCT_TYPES } from "@/models/LineTypeEnum";
+import { ProductTypeSchema, type ProductResponse } from "@/sdk";
 import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
 
 type QuoteLineTableLineProps = {
@@ -28,7 +27,7 @@ type QuoteLineTableLineProps = {
 	disabled?: boolean;
 	index: number;
 	id: string;
-	product?: Product;
+	product?: ProductResponse;
 	reloadProducts: () => Promise<void>;
 };
 const QuoteLineTableLine = ({
@@ -68,7 +67,7 @@ const QuoteLineTableLine = ({
 	}, [itPrice, quantity]);
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] =
-		Object.values(PRODUCT_TYPES).map((type) => ({
+		Object.values(ProductTypeSchema.enum).map((type) => ({
 			value: type,
 			label: <ProductTypeLabel type={type} />,
 			render: <ProductTypeLabel type={type} short />,

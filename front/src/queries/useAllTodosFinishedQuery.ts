@@ -1,11 +1,17 @@
-import { TodoApi } from "@/api/TodoApi";
-import { Todo } from "@/models/Todo";
-import { UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
+import { type TodoResponse, TodosService } from "@/sdk";
+import { type UseDataLoaderConfig, useDataLoader } from "@scaleway/use-dataloader";
 
 export const useAllTodosFinishedQuery = (
-	config?: UseDataLoaderConfig<Todo[], Error>,
+	config?: UseDataLoaderConfig<TodoResponse[], Error>,
 ) => {
 	const key = ["todos", "all", "finished"];
 
-	return useDataLoader(key, () => TodoApi.findAllFinished(), config);
+	return useDataLoader(
+		key,
+		() =>
+			TodosService.getTodos({ query: { status: "done" } }).then(
+				({ data }) => data,
+			),
+		config,
+	);
 };

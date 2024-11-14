@@ -9,16 +9,16 @@ type OutgoingRequest struct {
 	Name      *string               `json:"name"`
 	StartDate *time.Time            `json:"startDate"`
 	EndDate   *time.Time            `json:"endDate"`
-	Lines     []OutgoingLineRequest `json:"lines"`
+  Lines     []OutgoingLineRequest `json:"lines" validate:"required"`
 }//@name OutgoingRequest
 
 type OutgoingLineRequest struct {
-	Line                  int     `json:"line"`
+  Line                  int     `json:"line" validate:"required"`
 	SupplierID            *string `json:"supplierId"`
 	SupplierBillReference *string `json:"supplierBillReference"`
 	BillID                *string `json:"billId"`
-	TotalHT               float64 `json:"totalHT"`
-	VAT                   float32 `json:"vat"`
+  TotalHT               float64 `json:"totalHT" validate:"required"`
+  VAT                   float32 `json:"vat" validate:"required"`
 }//@name OutgoingLineRequest
 
 func MarshalOutgoingRequest(r OutgoingRequest) models.Outgoing {

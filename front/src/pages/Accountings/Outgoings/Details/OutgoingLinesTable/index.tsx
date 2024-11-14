@@ -1,4 +1,4 @@
-import { OutgoingLineResponse } from "@/models/Outgoing";
+import type { OutgoingLineResponse } from "@/sdk";
 import Row from "./Row";
 import { useI18n } from "@/i18n";
 

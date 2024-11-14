@@ -1,11 +1,11 @@
 import useCustomers from "@/hooks/useCustomers";
-import type Quote from "@/models/Quote";
+import type { QuoteResponse } from "@/sdk";
 import QuoteTableLine from "./Row";
 import { useI18n } from "@/i18n";
 import type { QuoteRouteQueryParams } from "@/routes";
 
 type QuoteListProps = {
-	data: Quote[];
+	data: QuoteResponse[];
 	selectedStatus: QuoteRouteQueryParams["tab"];
 	reload: () => Promise<void>;
 };

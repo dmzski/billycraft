@@ -1,5 +1,5 @@
 import { Button } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { useFormState } from "react-hook-form";
 
 type SubmitProps = ComponentProps<typeof Button>;

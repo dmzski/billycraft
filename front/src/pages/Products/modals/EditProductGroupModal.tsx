@@ -1,17 +1,16 @@
-import { ProductGroupApi } from "@/api/ProductGroupApi";
 import { InputField } from "@/components/form/InputField";
 import { Submit } from "@/components/form/Submit";
 import { useI18n } from "@/i18n";
-import { ProductGroup } from "@/models/ProductGroup";
+import { type ProductGroupResponse, ProductGroupsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Button, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps, useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 type EditProductGroupModalProps = {
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
 	onSubmitSuccess: () => Promise<void>;
-	group: ProductGroup;
+	group: ProductGroupResponse;
 };
 
 type EditProductGroupFormProps = Omit<
@@ -48,7 +47,10 @@ const EditProductGroupForm = ({
 
 	const handleSubmit = async ({ name }: EditProductGroupFormValues) => {
 		try {
-			await ProductGroupApi.update({ name, id: group.id });
+			await ProductGroupsService.patchProductGroupsById({
+				path: { id: group.id },
+				body: { name },
+			});
 			toast.show(pageT("submit.success"));
 			await onSubmitSuccess();
 			close();

@@ -7,11 +7,11 @@ import (
 )
 
 type UserResponse struct {
-	Email     string         `json:"email"`
-	FirstName string         `json:"firstName"`
-	LastName  string         `json:"lastName"`
+  Email     string         `json:"email" validate:"required"`
+  FirstName string         `json:"firstName" validate:"required"`
+  LastName  string         `json:"lastName" validate:"required"`
 	CompanyID *string        `json:"companyId"`
-	Role      enums.RoleEnum `json:"role"`
+  Role      enums.RoleEnum `json:"role" validate:"required"`
 }//@name UserResponse
 
 func CreateUserResponse(u models.User) UserResponse {

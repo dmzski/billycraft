@@ -1,18 +1,17 @@
 import { useI18n } from "@/i18n";
 import { Alert, Button, Modal, useToast } from "@billycraft/ui";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ProductApi } from "@/api/ProductApi";
-import Product from "@/models/Product";
 import { Submit } from "@/components/form/Submit";
 import { InputField } from "@/components/form/InputField";
 import { Form } from "@/components/form/Form";
+import { type ProductResponse, ProductsService } from "@/sdk";
 
 type MultiDeleteProductModalProps = {
 	onSubmitSuccess: () => Promise<void>;
 	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	productIds: Product["id"][];
+	productIds: ProductResponse["id"][];
 };
 
 type MultiDeleteProductFormProps = Omit<
@@ -47,7 +46,9 @@ const MultiDeleteProductForm = ({
 		try {
 			await productIds.reduce(
 				(promise, productId) =>
-					promise.then(() => ProductApi.delete(productId)),
+					promise.then(() =>
+						ProductsService.deleteProductsById({ path: { id: productId } }),
+					),
 				Promise.resolve(),
 			);
 			toast.show(pageT("submit.success"));

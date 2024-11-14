@@ -11,20 +11,20 @@ type InvitationFindAllParams struct {
 }//@name InvitationFindAllParams
 
 type InvitationRequest struct {
-	Email string         `json:"email"`
-	Role  enums.RoleEnum `json:"role"`
+	Email string         `json:"email" validate:"required"`
+	Role  enums.RoleEnum `json:"role" validate:"required"`
 }//@name InvitationRequest
 
 type AcceptInvitationRequest struct {
-	CompanyID string `json:"companyId"`
+	CompanyID string `json:"companyId" validate:"required"`
 }//@name AcceptInvitationRequest
 
 type RefuseInvitationRequest struct {
-	CompanyID string `json:"companyId"`
+	CompanyID string `json:"companyId" validate:"required"`
 }//@name RefuseInvitationRequest
 
 type DeleteInvitationRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" validate:"required"`
 }//@name DeleteInvitationRequest
 
 func MarshalInvitationRequest(req InvitationRequest) models.Invitation {

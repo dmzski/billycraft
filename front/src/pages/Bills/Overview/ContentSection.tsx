@@ -1,6 +1,6 @@
 import { useFormatCurrency } from "@/hooks/useFormatCurrency";
 import { useI18n } from "@/i18n";
-import Bill from "@/models/Bill";
+import type { BillResponse } from "@/sdk";
 import {
 	calculatePriceTTC,
 	getBillOrQuoteTotal,
@@ -8,7 +8,7 @@ import {
 } from "@/utils/price";
 
 type ContentSectionProps = {
-	bill: Bill;
+	bill: BillResponse;
 };
 
 export const ContentSection = ({ bill }: ContentSectionProps) => {
