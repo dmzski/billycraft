@@ -36,12 +36,14 @@ export function calculatePriceETFromIT(
 	return roundTwoDecimals(typedPrice / (1 + computedVat));
 }
 
-export function getBillOrQuoteTotal(billOrQuote: BillResponse | QuoteResponse): number {
+export function getBillOrQuoteTotal(
+	billOrQuote: BillResponse | QuoteResponse,
+): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
 		.map(
 			(line) =>
-				calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0),
+				roundTwoDecimals(calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0)),
 		);
 
 	if (array && array.length > 0) {
@@ -53,10 +55,12 @@ export function getBillOrQuoteTotal(billOrQuote: BillResponse | QuoteResponse): 
 	return 0;
 }
 
-export function getBillOrQuoteTotalEt(billOrQuote: BillResponse | QuoteResponse): number {
+export function getBillOrQuoteTotalEt(
+	billOrQuote: BillResponse | QuoteResponse,
+): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity)
-		.map((line) => calculatePriceET(line.price) * (line.quantity ?? 0));
+		.map((line) => roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ?? 0)));
 
 	if (array && array.length > 0) {
 		return array.reduce(
@@ -75,7 +79,7 @@ export function getBillOrQuoteTotalETForLineType(
 		.filter((line) => line.price && line.quantity && line.type === type)
 		.map(
 			(line) =>
-				calculatePriceET(line.price) * (line.quantity ? line.quantity : 0),
+				roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ? line.quantity : 0)),
 		);
 
 	if (array && array.length > 0) {
@@ -93,10 +97,11 @@ export function getBillOrQuoteTotalForLineType(
 ): number {
 	const array = billOrQuote.lines
 		.filter((line) => line.price && line.quantity && line.type === type)
-		.map(
-			(line) =>
+		.map((line) =>
+			roundTwoDecimals(
 				calculatePriceTTC(line.price, billOrQuote.tva) *
-				(line.quantity ? line.quantity : 0),
+					(line.quantity ? line.quantity : 0),
+			),
 		);
 
 	if (array && array.length > 0) {

@@ -1,5 +1,6 @@
 export default {
 	// Menu
+	"heads.account": "Mon compte",
 	"heads.login": "Se connecter",
 	"heads.register": "S'inscrire",
 	"heads.bills": "Factures",
@@ -151,7 +152,8 @@ export default {
 	"register.success": "Compte crée avec succès",
 	"register.fields.email.label": "Email",
 	"register.fields.password.label": "Mot de passe",
-	"register.fields.name.label": "Nom complet",
+	"register.fields.firstName.label": "Prénom",
+	"register.fields.lastName.label": "Nom",
 	"register.fields.tos.label":
 		"J'accepte les Conditions Générales d'Utilisation",
 
@@ -900,12 +902,14 @@ export default {
 		"Une erreur est survenue durant la génération du ZIP",
 
 	// My settings
-	"mySettings.title": "Mon compte",
-	"mySettings.fields.name.label": "Nom complet",
-	"mySettings.fields.oldPassword.label": "Mot de passe actuel",
-	"mySettings.fields.newPassword.label": "Nouveau mot de passe",
-	"mySettings.submit": "Enregistrer",
-	"mySettings.submit.success": "Vos informations ont été mise à jour",
-	"mySettings.submit.error":
+	"account.title": "Mon compte",
+	"account.updateMyInformation": "Mettre à jour mes informations",
+	"account.fields.firstName.label": "Prénom",
+	"account.fields.lastName.label": "Nom",
+	"account.fields.oldPassword.label": "Mot de passe actuel",
+	"account.fields.newPassword.label": "Nouveau mot de passe",
+	"account.submit": "Enregistrer",
+	"account.submit.success": "Vos informations ont été mise à jour",
+	"account.submit.error":
 		"Une erreur est survenue lors de la mise à jour de vos informations",
 } as const;

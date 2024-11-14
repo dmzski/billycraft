@@ -16,6 +16,8 @@ import {
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useUser } from "@/providers/UserProvider";
 import { SUPPORT_EMAIL } from "@/constants/global";
+import { ROUTES } from "@/routes";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 type LayoutProps = {
 	children: ReactNode;
@@ -46,12 +48,19 @@ const Layout = ({ children }: LayoutProps) => {
 									</Button>
 								}
 							>
-								<Dropdown.Content className="w-full">
-									<Dropdown.Button variant="destructive" onClick={logout}>
-										<ArrowRightStartOnRectangleIcon />
-										<span>{t("logout")}</span>
-									</Dropdown.Button>
-								</Dropdown.Content>
+								{({ close }) => (
+									<Dropdown.Content className="w-full">
+										<Dropdown.Button asChild>
+											<ReactRouterLink onClick={close} to={ROUTES.ACCOUNT.path()}>
+												<span>{t("heads.account")}</span>
+											</ReactRouterLink>
+										</Dropdown.Button>
+										<Dropdown.Button variant="destructive" onClick={logout}>
+											<ArrowRightStartOnRectangleIcon />
+											<span>{t("logout")}</span>
+										</Dropdown.Button>
+									</Dropdown.Content>
+								)}
 							</Dropdown>
 							<ThemeToggle />
 						</div>

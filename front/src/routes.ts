@@ -168,6 +168,11 @@ export const ROUTES = {
 		id: "quotes.add",
 		path: () => "/quotes/create",
 	},
+  ACCOUNT: {
+    id: "account",
+    exact: true,
+    path: () => "/account",
+  },
 	SETTINGS: {
 		id: "settings",
 		exact: false,

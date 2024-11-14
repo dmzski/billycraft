@@ -21,7 +21,7 @@ type CustomerResponse struct {
 }//@name CustomerResponse
 
 func CreateCustomerResponse(c models.Customer) CustomerResponse {
-	return CustomerResponse{
+  customer := CustomerResponse{
 		ID:          c.ID,
 		Name:        c.Name,
 		Contact:     c.Contact,
@@ -33,6 +33,10 @@ func CreateCustomerResponse(c models.Customer) CustomerResponse {
 		CreatedAt:   c.CreatedAt,
 		UpdatedAt:   c.UpdatedAt,
 		CompanyID:   c.CompanyID,
-		Deleted:     c.DeletedAt.Valid,
 	}
+  if (c.DeletedAt != nil) {
+    customer.Deleted = true
+  }
+
+  return customer
 }

@@ -33,10 +33,10 @@ type AuthContextType = {
 
 type AuthProviderProps = {
 	children: ReactNode;
-	onLoginSuccess?: () => Promise<void>;
-	onLogoutSuccess?: () => Promise<void>;
-	onRefreshSuccess?: () => Promise<void>;
-	onRegisterSuccess?: () => Promise<void>;
+	onLoginSuccess?: () => Promise<void> | void;
+	onLogoutSuccess?: () => Promise<void> | void;
+	onRefreshSuccess?: () => Promise<void> | void;
+	onRegisterSuccess?: () => Promise<void> | void;
 	useAuthorizationHeader?: boolean;
 };
 
@@ -204,6 +204,7 @@ export const AuthProvider = ({
 				const res = await fetch(`${AUTH_API_URL}/auth/update`, {
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_KEY)}`,
+            "Content-Type": "application/json",
 					},
 					method: "PATCH",
 					body: JSON.stringify({
@@ -220,6 +221,9 @@ export const AuthProvider = ({
 				const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
 					credentials: "include",
 					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+					},
 					body: JSON.stringify({
 						name,
 						password,

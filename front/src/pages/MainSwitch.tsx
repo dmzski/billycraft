@@ -17,6 +17,7 @@ import SupplierSwitch from "./Suppliers/SupplierSwitch";
 import { Login } from "./Auth/Login";
 import { Register } from "./Auth/Register";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Account } from "./Account/Account";
 
 type PathComponentTuple = [string, () => JSX.Element];
 
@@ -39,6 +40,7 @@ const APP_ROUTES: PathComponentTuple[] = [
 	[ROUTES.PRODUCTS.path(), ProductsSwitch],
 	[ROUTES.SETTINGS.path(), Settings],
 	[ROUTES.HISTORY.path(), History],
+	[ROUTES.ACCOUNT.path(), Account],
 ];
 
 export const MainSwitch = () => {

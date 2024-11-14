@@ -33,9 +33,9 @@ func roundTwoDecimals(num float64) float64 {
 }
 
 func getLinePrice(price float64, quantity float64, tva float32) float64 {
-	return quantity * getTTCPrice(price, tva)
+	return roundTwoDecimals(quantity * getTTCPrice(price, tva))
 }
 
 func getTTCPrice(price float64, tva float32) float64 {
-	return price * (1 + float64(tva))
+	return roundTwoDecimals(price * (1 + float64(tva)))
 }

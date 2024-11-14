@@ -10,26 +10,31 @@ import { UserProvider } from "./UserProvider";
 type MainProviderProps = {
 	children: ReactNode;
 };
-const MainProvider = ({ children }: MainProviderProps) => (
-	<ThemeProvider storageKey="cocoerp-theme" defaultTheme="system">
-		<I18nProvider locale="fr">
-			<DataLoaderProvider
-				onError={(err) => {
-					sendErrorToSentry(err);
-				}}
-			>
-				<AuthProvider
-					useAuthorizationHeader={window.location.hostname.includes(
-						"localhost",
-					)}
+const MainProvider = ({ children }: MainProviderProps) => {
+	return (
+		<ThemeProvider storageKey="cocoerp-theme" defaultTheme="system">
+			<I18nProvider locale="fr">
+				<DataLoaderProvider
+					onError={(err) => {
+						sendErrorToSentry(err);
+					}}
 				>
-					<ToastProvider>
-						<UserProvider>{children}</UserProvider>
-					</ToastProvider>
-				</AuthProvider>
-			</DataLoaderProvider>
-		</I18nProvider>
-	</ThemeProvider>
-);
+					<AuthProvider
+						useAuthorizationHeader={window.location.hostname.includes(
+							"localhost",
+						)}
+						onLogoutSuccess={() => {
+							window.location.reload();
+						}}
+					>
+						<ToastProvider>
+							<UserProvider>{children}</UserProvider>
+						</ToastProvider>
+					</AuthProvider>
+				</DataLoaderProvider>
+			</I18nProvider>
+		</ThemeProvider>
+	);
+};
 
 export default MainProvider;

@@ -1,4 +1,4 @@
-import { Button } from "@billycraft/ui";
+import { Button, Loader } from "@billycraft/ui";
 import type { ComponentProps } from "react";
 import { useFormState } from "react-hook-form";
 
@@ -13,6 +13,7 @@ export const Submit = ({ disabled, children, ...rest }: SubmitProps) => {
 			disabled={disabled || !isValid || isValidating || isSubmitting}
 			type="submit"
 		>
+			{isSubmitting ? <Loader /> : null}
 			{children}
 		</Button>
 	);

@@ -17,7 +17,7 @@ Sentry.init({
 	tracesSampleRate: 1.0,
 });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLDivElement).render(
 	<StrictMode>
 		<App />
 		{import.meta.env.MODE === "staging" ? (
