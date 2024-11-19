@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.54.0
+
+### Minor Changes
+
+- 6cfa077: Fix Bill/Quote update, check status change, get logo for my orga and some client sdk configuration
+
 ## 2.53.0
 
 ### Minor Changes

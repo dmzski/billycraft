@@ -1,5 +1,11 @@
 # back
 
+## 1.32.0
+
+### Minor Changes
+
+- 6cfa077: Fix Bill/Quote update, check status change, get logo for my orga and some client sdk configuration
+
 ## 1.31.0
 
 ### Minor Changes
