@@ -71,27 +71,6 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 					</Button>
 				</>
 			) : null}
-			{quote.status === "REFUSED" ? (
-				<>
-					<Button
-						disabled={isSubmitting}
-						type="button"
-						onClick={updateQuoteStatus("DRAFT")}
-						variant="outline"
-					>
-						{t("quotes.form.actions.backToDraft")}
-					</Button>
-					<Button
-						disabled={isSubmitting}
-						type="button"
-						variant="destructive"
-						onClick={updateQuoteStatus("ARCHIVED")}
-					>
-						<InboxArrowDownIcon />
-						{t("quotes.form.actions.archive")}
-					</Button>
-				</>
-			) : null}
 			{quote.status === "ACCEPTED" ? (
 				<Button
 					disabled={isSubmitting}

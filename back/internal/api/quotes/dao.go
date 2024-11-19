@@ -90,6 +90,11 @@ func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuot
 			panic("Invalid status change")
 		}
 	}
+  
+  if !quote.Status.IsEditable() {
+    return quote
+  }
+
 	if changes.Lines != nil {
 		for _, x := range changes.Lines {
 			newLine := requests.MarshalQuoteLineRequest(x)

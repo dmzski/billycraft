@@ -104,6 +104,10 @@ func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest
 		}
 	}
 
+  if !bill.Status.IsEditable() {
+    return bill
+  }
+
 	tx.Model(&bill).Updates(&models.Bill{
 		CustomerID: changes.CustomerID,
 		Title:      changes.Title,

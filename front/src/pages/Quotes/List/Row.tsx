@@ -52,10 +52,9 @@ const QuoteTableLine = ({
 		switch (quote.status) {
 			case "SENT":
 				return ["ACCEPTED", "REFUSED", "ARCHIVED"];
-			case "REFUSED":
-				return ["DRAFT", "ARCHIVED"];
 			case "ACCEPTED":
 				return ["ARCHIVED"];
+			case "REFUSED":
 			case "ARCHIVED":
 				return [];
 			default:
