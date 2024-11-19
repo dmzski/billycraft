@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.53.0
+
+### Minor Changes
+
+- 6f69d03: Fix: asNumber price on quote form
+
 ## 2.52.0
 
 ### Minor Changes
