@@ -241,6 +241,7 @@ const QuoteLineTableLine = ({
 									)}
 									type="number"
 									step={0.01}
+									asNumber
 									onBlur={(event) => {
 										const newPrice = Number(event.target.value) || 0;
 										setValue(
@@ -253,6 +254,8 @@ const QuoteLineTableLine = ({
 							</div>
 							<div>
 								<InputField
+									asNumber
+									step={0.01}
 									control={control}
 									name={`lines.${index}.itPrice`}
 									label={t("quotes.form.lines.fields.totalItPrice.label")}
