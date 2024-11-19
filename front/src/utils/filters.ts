@@ -6,14 +6,14 @@ type FilterKey = "name" | "status" | "createdAt" | "title" | "customer";
 export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 	array: T[],
 	filters: Record<FilterKey, string>,
-	customers: CustomerResponse[],
+	customers?: CustomerResponse[],
 ): T[] {
 	if (!array) return [];
 	if (!filters) return array;
 	const arrayFiltered = [...array];
 	return arrayFiltered.filter((item: T) => {
 		let takeIt = true;
-		const customer = customers.find((c) => c.id === item.customerId);
+		const customer = customers?.find((c) => c.id === item.customerId);
 		if (
 			filters.name &&
 			!item.name.trim().includes(filters.name.toUpperCase().trim())

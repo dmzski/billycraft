@@ -66,6 +66,12 @@ const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
 	});
 };
 
+client.setConfig({
+	baseUrl: API_URL,
+	credentials: "include",
+	throwOnError: true,
+});
+
 export const AuthProvider = ({
 	children,
 	onLoginSuccess,
@@ -178,6 +184,7 @@ export const AuthProvider = ({
 					credentials: "include",
 				});
 				if (res.ok) {
+					configureClient("", false);
 					if (!isAuthenticated) {
 						setIsAuthenticated(true);
 					}
