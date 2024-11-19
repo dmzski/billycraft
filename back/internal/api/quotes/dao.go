@@ -31,7 +31,7 @@ func (dao QuoteDao) FindAllByTenantByStatusIs(tenant string, status string) (quo
 	}
 	return
 }
-func (dao QuoteDao) FindAllByTenantByStatusIn(tenant string, statuses []string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusIn(tenant string, statuses []enums.QuoteStatus) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status IN ?", tenant, statuses).Find(&quotes).Order("created_at desc").Error; err != nil {
@@ -39,7 +39,7 @@ func (dao QuoteDao) FindAllByTenantByStatusIn(tenant string, statuses []string) 
 	}
 	return
 }
-func (dao QuoteDao) FindAllByTenantByStatusNotIn(tenant string, statuses []string) (quotes []models.Quote) {
+func (dao QuoteDao) FindAllByTenantByStatusNotIn(tenant string, statuses []enums.QuoteStatus) (quotes []models.Quote) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_quote_line.line asc")
 	}).Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&quotes).Error; err != nil {
@@ -67,26 +67,41 @@ func (dao QuoteDao) FindOneByIdAndTenant(id string, tenant string) (quote models
 }
 
 func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuoteRequest) (quote models.Quote) {
+	now := time.Now()
+	var lines []models.QuoteLine
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&quote)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
-	if changes.Status != enums.QuoteStatusDraft {
-		if quote.SentAt == nil {
-			now := time.Now()
+	if changes.Status != nil && *changes.Status != enums.QuoteStatusDraft {
+		if *changes.Status == enums.QuoteStatusSent && quote.Status.CanBeSent() {
 			tx.Model(&quote).Updates(map[string]interface{}{
 				"sent_at": &now,
+				"status":  enums.QuoteStatusSent,
 			})
-		}
-	} else {
-		if quote.SentAt != nil {
-			tx.Model(&quote).Updates(map[string]interface{}{
-				"sent_at": gorm.Expr("NULL"),
-			})
+		} else if *changes.Status == enums.QuoteStatusAccepted && quote.Status.CanBeAccepted() {
+			tx.Model(&quote).Update("status", enums.QuoteStatusAccepted)
+		} else if *changes.Status == enums.QuoteStatusRefused && quote.Status.CanBeRefused() {
+			tx.Model(&quote).Update("status", enums.QuoteStatusRefused)
+		} else if *changes.Status == enums.QuoteStatusArchived && quote.Status.CanBeArchived() {
+			tx.Model(&quote).Update("status", enums.QuoteStatusArchived)
+		} else {
+			panic("Invalid status change")
 		}
 	}
-	tx.Model(&quote).Updates(changes)
+	if changes.Lines != nil {
+		for _, x := range changes.Lines {
+			newLine := requests.MarshalQuoteLineRequest(x)
+			newLine.QuoteID = quote.ID
+			lines = append(lines, newLine)
+		}
+	}
+	tx.Model(&quote).Updates(&models.Quote{
+		Tva:        changes.Tva,
+		Title:      changes.Title,
+		CustomerID: changes.CustomerID,
+	})
 	if tx.Error != nil {
 		tx.Rollback()
 		panic(tx.Error)
@@ -94,12 +109,6 @@ func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuot
 
 	// Delete quote lines and add the new ones (Set)
 	if changes.Lines != nil {
-		var lines []models.QuoteLine
-		for _, x := range changes.Lines {
-			newLine := requests.MarshalQuoteLineRequest(x)
-			newLine.QuoteID = quote.ID
-			lines = append(lines, newLine)
-		}
 		tx.Where("quote_id = ?", quote.ID).Delete(models.QuoteLine{})
 		if tx.Error != nil {
 			tx.Rollback()

@@ -106,8 +106,6 @@ export type CreateProductRequest = {
 export type CreateQuoteRequest = {
     customerId?: string;
     lines: Array<QuoteLineRequest>;
-    name?: string;
-    status?: QuoteStatus;
     title: string;
     tva?: number;
 };
@@ -469,7 +467,6 @@ export type UpdateProductRequest = {
 export type UpdateQuoteRequest = {
     customerId?: string;
     lines: Array<QuoteLineRequest>;
-    name?: string;
     status?: QuoteStatus;
     title: string;
     tva?: number;

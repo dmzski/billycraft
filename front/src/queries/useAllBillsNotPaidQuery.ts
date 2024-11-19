@@ -5,8 +5,8 @@ export const useAllBillsNotPaidQuery = () => {
 	const key = ["bills", "not-paid"];
 
 	return useDataLoader(key, () =>
-		BillsService.getBills({ query: { status: ["SENT"] } }).then(
-			({ data }) => data,
-		),
+		BillsService.getBills({
+			query: { status: ["SENT"] },
+		}).then(({ data }) => data),
 	);
 };

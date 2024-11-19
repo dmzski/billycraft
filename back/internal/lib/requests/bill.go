@@ -14,10 +14,15 @@ type BillRequest struct {
 
 type BillLineRequest struct {
 	Line        int               `json:"line" validate:"required"`
-	Quantity    float64          `json:"quantity"`
-	Price       float64          `json:"price"`
+	Quantity    float64           `json:"quantity"`
+	Price       float64           `json:"price"`
 	Name        string            `json:"name" validate:"required"`
 	Description *string           `json:"description"`
 	Type        enums.ProductType `json:"type" validate:"required"`
 	ProductID   *string           `json:"productId"`
 } //@name BillLineRequest
+
+type ListBillsParams struct {
+	Status    []enums.BillStatus `query:"status"`
+	NotStatus []enums.BillStatus `query:"not_status"`
+}//@name ListBillsParams

@@ -40,7 +40,7 @@ func (dao BillDao) FindAllByTenantByStatusIsNot(tenant string, status string) (b
 	return
 }
 
-func (dao BillDao) FindAllByTenantByStatusIn(tenant string, statuses []string) (bills []models.Bill) {
+func (dao BillDao) FindAllByTenantByStatusIn(tenant string, statuses []enums.BillStatus) (bills []models.Bill) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_bill_line.line asc")
 	}).Where("company_id = ? AND status IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
@@ -48,7 +48,7 @@ func (dao BillDao) FindAllByTenantByStatusIn(tenant string, statuses []string) (
 	}
 	return
 }
-func (dao BillDao) FindAllByTenantByStatusNotIn(tenant string, statuses []string) (bills []models.Bill) {
+func (dao BillDao) FindAllByTenantByStatusNotIn(tenant string, statuses []enums.BillStatus) (bills []models.Bill) {
 	if err := database.DBConn.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_bill_line.line asc")
 	}).Where("company_id = ? AND status NOT IN ?", tenant, statuses).Order("created_at desc").Find(&bills).Error; err != nil {
@@ -76,6 +76,7 @@ func (dao BillDao) FindOneByIdAndTenant(id string, tenant string) (bill models.B
 }
 
 func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest) (bill models.Bill) {
+	now := time.Now()
 	tx := database.DBConn.Begin()
 	tx.Where("company_id = ? AND id= ?", tenant, id).First(&bill)
 	if tx.Error != nil {
@@ -83,34 +84,31 @@ func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest
 		tx.Rollback()
 		panic(err)
 	}
-	if changes.Status != nil {
-		if *changes.Status == enums.BillStatusDraft {
+	if changes.Status != nil && *changes.Status != enums.BillStatusDraft {
+		if *changes.Status == enums.BillStatusSent && bill.Status.CanBeSent() {
 			tx.Model(&bill).Updates(map[string]interface{}{
-				"sent_at": gorm.Expr("NULL"),
-				"paid_at": gorm.Expr("NULL"),
+				"sent_at": &now,
+				"status":  enums.BillStatusSent,
 			})
+		} else if *changes.Status == enums.BillStatusPaid && bill.Status.CanBePaid() {
+			tx.Model(&bill).Updates(map[string]interface{}{
+				"paid_at": &now,
+				"status":  enums.BillStatusPaid,
+			})
+		} else if *changes.Status == enums.BillStatusArchived && bill.Status.CanBeArchived() {
+			tx.Model(&bill).Update("status", enums.BillStatusArchived)
+		} else if *changes.Status == enums.BillStatusRefused && bill.Status.CanBeRefused() {
+			tx.Model(&bill).Update("status", enums.BillStatusRefused)
 		} else {
-			if bill.SentAt == nil {
-				now := time.Now()
-				tx.Model(&bill).Updates(map[string]interface{}{
-					"paid_at": &now,
-				})
-			}
-			if *changes.Status == enums.BillStatusSent && bill.PaidAt != nil {
-				tx.Model(&bill).Updates(map[string]interface{}{
-					"paid_at": gorm.Expr("NULL"),
-				})
-			} else {
-				if *changes.Status == enums.BillStatusArchived && bill.PaidAt == nil {
-					now := time.Now()
-					tx.Model(&bill).Updates(map[string]interface{}{
-						"paid_at": &now,
-					})
-				}
-			}
+			panic("Invalid status update")
 		}
 	}
-	tx.Model(&bill).Updates(changes)
+
+	tx.Model(&bill).Updates(&models.Bill{
+		CustomerID: changes.CustomerID,
+		Title:      changes.Title,
+		Tva:        changes.Tva,
+	})
 
 	if tx.Error != nil {
 		err := tx.Error
@@ -151,6 +149,7 @@ func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest
 	tx.Preload("Lines", func(db *gorm.DB) *gorm.DB {
 		return db.Order("com_bill_line.line asc")
 	}).Where("company_id = ? AND id= ?", tenant, id).First(&bill)
+
 	if tx.Error != nil {
 		err := tx.Error
 		tx.Rollback()

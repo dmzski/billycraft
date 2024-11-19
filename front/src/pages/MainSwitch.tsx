@@ -48,7 +48,13 @@ export const MainSwitch = () => {
 	const { isAuthenticated, isInitializing } = useAuth();
 
 	if (isInitializing) {
-		return null;
+		return (
+			<div className="flex justify-center items-center h-screen w-screen">
+				<div className="w-1/2">
+					<PageLoader />
+				</div>
+			</div>
+    )
 	}
 
 	if (!isAuthenticated) {

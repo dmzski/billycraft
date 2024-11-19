@@ -65,7 +65,7 @@ export const AppSidebar = ({
 }: React.ComponentProps<typeof Sidebar>) => {
 	const { t } = useI18n();
 	const { organization } = useUser();
-	const { data: logo } = useOrganizationLogoQuery(organization?.logo ?? "", {
+	const { data: logo } = useOrganizationLogoQuery(organization?.id ?? "", {
 		enabled: !!organization?.logo,
 	});
 

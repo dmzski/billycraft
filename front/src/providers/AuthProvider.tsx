@@ -58,7 +58,7 @@ const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
 		baseUrl: API_URL,
 		credentials: "include",
 		throwOnError: true,
-		headers: needAuthorizationHeader
+		headers: needAuthorizationHeader && token.length > 0
 			? {
 					Authorization: `Bearer ${token}`,
 				}
@@ -247,7 +247,7 @@ export const AuthProvider = ({
 	);
 
 	useEffect(() => {
-		if (!isAuthenticated) {
+		if (isAuthenticated === undefined) {
 			refreshSession().catch(() => null);
 		}
 	}, [refreshSession, isAuthenticated]);

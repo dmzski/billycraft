@@ -308,12 +308,6 @@ export const CreateQuoteRequestSchema = {
                 '$ref': '#/definitions/QuoteLineRequest'
             }
         },
-        name: {
-            type: 'string'
-        },
-        status: {
-            '$ref': '#/definitions/QuoteStatus'
-        },
         title: {
             type: 'string'
         },
@@ -1347,9 +1341,6 @@ export const UpdateQuoteRequestSchema = {
             items: {
                 '$ref': '#/definitions/QuoteLineRequest'
             }
-        },
-        name: {
-            type: 'string'
         },
         status: {
             '$ref': '#/definitions/QuoteStatus'

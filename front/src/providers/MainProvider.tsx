@@ -1,6 +1,6 @@
-import { I18nProvider } from "@/i18n";
+import { I18nProvider, useI18n } from "@/i18n";
 import { sendErrorToSentry } from "@/utils/errors";
-import { ToastProvider } from "@billycraft/ui";
+import { ToastProvider, useToast } from "@billycraft/ui";
 import { DataLoaderProvider } from "@scaleway/use-dataloader";
 import type { ReactNode } from "react";
 import { AuthProvider } from "./AuthProvider";
@@ -10,29 +10,38 @@ import { UserProvider } from "./UserProvider";
 type MainProviderProps = {
 	children: ReactNode;
 };
+
+const InternalDataLoaderProvider = ({ children }: MainProviderProps) => {
+	const { t } = useI18n();
+	const toast = useToast();
+
+	return (
+		<DataLoaderProvider
+			onError={(err) => {
+				sendErrorToSentry(err);
+				toast.destructive(t("dataloaderError"));
+			}}
+		>
+			<AuthProvider
+				useAuthorizationHeader={window.location.hostname.includes("localhost")}
+				onLogoutSuccess={() => {
+					window.location.reload();
+				}}
+			>
+				<UserProvider>{children}</UserProvider>
+			</AuthProvider>
+		</DataLoaderProvider>
+	);
+};
+
 const MainProvider = ({ children }: MainProviderProps) => {
 	return (
-		<ThemeProvider storageKey="cocoerp-theme" defaultTheme="system">
-			<I18nProvider locale="fr">
-				<DataLoaderProvider
-					onError={(err) => {
-						sendErrorToSentry(err);
-					}}
-				>
-					<AuthProvider
-						useAuthorizationHeader={window.location.hostname.includes(
-							"localhost",
-						)}
-						onLogoutSuccess={() => {
-							window.location.reload();
-						}}
-					>
-						<ToastProvider>
-							<UserProvider>{children}</UserProvider>
-						</ToastProvider>
-					</AuthProvider>
-				</DataLoaderProvider>
-			</I18nProvider>
+		<ThemeProvider storageKey="theme" defaultTheme="system">
+			<ToastProvider>
+				<I18nProvider locale="fr">
+					<InternalDataLoaderProvider>{children}</InternalDataLoaderProvider>
+				</I18nProvider>
+			</ToastProvider>
 		</ThemeProvider>
 	);
 };

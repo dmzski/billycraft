@@ -3988,12 +3988,6 @@
                         "$ref": "#/definitions/QuoteLineRequest"
                     }
                 },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/QuoteStatus"
-                },
                 "title": {
                     "type": "string"
                 },
@@ -5240,9 +5234,6 @@
                     "items": {
                         "$ref": "#/definitions/QuoteLineRequest"
                     }
-                },
-                "name": {
-                    "type": "string"
                 },
                 "status": {
                     "$ref": "#/definitions/QuoteStatus"

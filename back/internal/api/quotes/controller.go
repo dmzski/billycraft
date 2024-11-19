@@ -6,7 +6,6 @@ import (
 	"back/internal/lib/models"
 	"back/internal/lib/requests"
 	"back/internal/lib/responses"
-	"encoding/json"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -34,21 +33,15 @@ func InitRoutes(api fiber.Router) {
 // @Router /quotes [get]
 func findAll(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
-	status := c.Query("status")
-	not_status := c.Query("not_status")
-	if status != "" {
-		var arr []string
-		if err := json.Unmarshal([]byte(status), &arr); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
-		}
-		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusIn(*user.CompanyID, arr)).Quotes)
+  params := requests.ListQuotesParams{}
+  if err := c.QueryParser(&params) ; err != nil {
+    return fiber.NewError(fiber.StatusBadRequest, "Bad request")
+  }
+	if len(params.Status) > 0 {
+		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusIn(*user.CompanyID, params.Status)).Quotes)
 	}
-	if not_status != "" {
-		var arr []string
-		if err := json.Unmarshal([]byte(not_status), &arr); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Bad request")
-		}
-		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, arr)).Quotes)
+	if len(params.NotStatus) > 0 {
+		return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenantByStatusNotIn(*user.CompanyID, params.NotStatus)).Quotes)
 	}
 
 	return c.JSON(responses.CreateQuoteResponseList(DAO.FindAllByTenant(*user.CompanyID)).Quotes)

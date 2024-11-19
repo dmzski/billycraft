@@ -133,7 +133,8 @@ func uploadLogo(c *fiber.Ctx) error {
 // @Router /company/{id}/logo [get]
 func getLogo(c *fiber.Ctx) error {
 	organizationId := c.Params("id")
-	if organizationId == "" {
+	user := c.Locals("user").(models.User)
+	if user.CompanyID == nil || organizationId == "" || organizationId != *user.CompanyID {
 		return c.Status(400).JSON(&responses.ErrorResponse{
 			Code:    400,
 			Message: "No id specified",
