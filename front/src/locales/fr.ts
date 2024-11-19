@@ -492,6 +492,12 @@ export default {
 
 	// Quotes > Details
 	"quotes.details.backTo": "Retourner à la liste des devis",
+	"quotes.details.duplicateSuccess": "Devis dupliqué",
+  "quotes.details.downloadPdfButton": "Télécharger le PDF",
+	"quotes.details.duplicateError": "Une erreur est survenue lors de la duplication du devis",
+  "quotes.details.createBill": "Créer la facture",
+  "quotes.details.createBillSuccess": "Facture créée",
+  "quotes.details.duplicate": "Dupliquer",
 	"quotes.details.sections.information.title": "Informations",
 	"quotes.details.sections.information.id": "Référence",
 	"quotes.details.sections.information.status": "État",
@@ -516,8 +522,6 @@ export default {
 	"quotes.form.createBillError": "Erreur lors de la création de la facture",
 	"quotes.form.title.new": "Nouveau devis",
 	"quotes.form.title.edit": "Modification de devis",
-	"quotes.form.downloadPdfButton": "Télécharger le PDF",
-	"quotes.form.createBill": "Créer la facture",
 	"quotes.form.exitWarning":
 		"Attention ! Certaines modifications ne sont pas enregistrées",
 	"quotes.form.fields.title.label": "Titre",

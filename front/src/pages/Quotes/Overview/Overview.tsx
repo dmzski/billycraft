@@ -22,6 +22,7 @@ import { QuoteLabel } from "@/components/labels/QuoteLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
 import { PdFsService, QuotesService } from "@/sdk";
+import { sendErrorToSentry } from "@/utils/errors";
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n();
@@ -31,6 +32,10 @@ export const Overview = () => {
 	const { data: quote, isLoading, reload } = useQuoteByIdQuery(id);
 	const { push } = useHistory();
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
+		(state) => !state,
+		false,
+	);
+	const [isDuplicating, toggleIsDuplicating] = useReducer(
 		(state) => !state,
 		false,
 	);
@@ -72,7 +77,7 @@ export const Overview = () => {
 				const data = await QuotesService.postQuotesByIdBill({
 					path: { id: quote.id },
 				}).then(({ data }) => data);
-				toast.show(t("quotes.form.createBill"));
+				toast.show(t("quotes.details.createBillSuccess"));
 				if (data?.id) {
 					push(ROUTES.BILL_OVERVIEW.path({ id: data.id }));
 				} else {
@@ -81,6 +86,28 @@ export const Overview = () => {
 			} catch {
 				toast.destructive(t("quotes.form.createBillError"));
 				toggleIsCreatingBill();
+			}
+		}
+	};
+
+	const duplicate = async () => {
+		if (quote?.id && !isDuplicating) {
+			toggleIsDuplicating();
+			try {
+				const newQuote = await QuotesService.postQuotesByIdDuplicate({
+					path: { id: quote.id },
+				}).then(({ data }) => data);
+				toast.show(t("quotes.details.duplicateSuccess"));
+				push(
+					newQuote?.id
+						? ROUTES.QUOTE_OVERVIEW.path({ id: newQuote.id })
+						: ROUTES.QUOTES.path(),
+				);
+			} catch (error) {
+				sendErrorToSentry(error);
+				toast.destructive(t("quotes.details.duplicateError"));
+			} finally {
+				toggleIsDuplicating();
 			}
 		}
 	};
@@ -117,7 +144,7 @@ export const Overview = () => {
 						variant="secondary"
 					>
 						<DocumentArrowDownIcon />
-						{t("quotes.form.downloadPdfButton")}
+						{t("quotes.details.downloadPdfButton")}
 					</Button>
 					{quote.status === "DRAFT" ? (
 						<Button asChild>
@@ -126,14 +153,26 @@ export const Overview = () => {
 								<span>{t("edit")}</span>
 							</Link>
 						</Button>
-					) : null}
-					<Button
-						onClick={createBill}
-						disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
-					>
-						<PlusIcon />
-						{t("quotes.form.createBill")}
-					</Button>
+					) : (
+						<div className="flex gap-4 md:flex-row flex-col">
+							<Button
+                variant="outline"
+								onClick={duplicate}
+								disabled={
+									(quote.status !== "REFUSED" && quote.status !== "ARCHIVED") || isDuplicating
+								}
+							>
+								{t("quotes.details.duplicate")}
+							</Button>
+              <Button
+                onClick={createBill}
+                disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
+              >
+                <PlusIcon />
+                {t("quotes.details.createBill")}
+              </Button>
+						</div>
+					)}
 				</div>
 			</div>
 			<InformationSection quote={quote} />
