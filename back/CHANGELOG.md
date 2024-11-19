@@ -1,5 +1,11 @@
 # back
 
+## 1.33.0
+
+### Minor Changes
+
+- 68ac135: Disallow modification after DRAFT and remove useless status change in quotes
+
 ## 1.32.0
 
 ### Minor Changes
