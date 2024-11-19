@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.56.0
+
+### Minor Changes
+
+- 9cd8320: Users can duplicate their quote
+
 ## 2.55.0
 
 ### Minor Changes
