@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { AuthProvider } from "./AuthProvider";
 import { ThemeProvider } from "./ThemeProvider";
 import { UserProvider } from "./UserProvider";
+import { OrganizationProvider } from "./OrganizationProvider";
 
 type MainProviderProps = {
 	children: ReactNode;
@@ -28,7 +29,9 @@ const InternalDataLoaderProvider = ({ children }: MainProviderProps) => {
 					window.location.reload();
 				}}
 			>
-				<UserProvider>{children}</UserProvider>
+				<UserProvider>
+					<OrganizationProvider>{children}</OrganizationProvider>
+				</UserProvider>
 			</AuthProvider>
 		</DataLoaderProvider>
 	);

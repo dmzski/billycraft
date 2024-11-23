@@ -14,12 +14,12 @@ import {
 	Dropdown,
 	Button,
 } from "@billycraft/ui";
-import { useUser } from "@/providers/UserProvider";
 import { ROUTES, type RouteId } from "@/routes";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useI18n } from "@/i18n";
 import { useOrganizationLogoQuery } from "@/queries/useOrganizationLogoQuery";
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 const menuRoutes = [
 	ROUTES.DASHBOARD,
@@ -64,7 +64,7 @@ export const AppSidebar = ({
 	...props
 }: React.ComponentProps<typeof Sidebar>) => {
 	const { t } = useI18n();
-	const { organization } = useUser();
+	const { organization } = useOrganization();
 	const { data: logo } = useOrganizationLogoQuery(organization?.id ?? "", {
 		enabled: !!organization?.logo,
 	});
@@ -144,7 +144,7 @@ export const AppSidebar = ({
 						"routes" in route ? (
 							<SidebarGroup key={route.id}>
 								<SidebarGroupLabel>{t(`heads.${route.id}`)}</SidebarGroupLabel>
-								<SidebarGroupContent className="pl-1">
+								<SidebarGroupContent className="pl-2">
 									<SidebarMenu>
 										{Object.values(route.routes).map((subRoute) => (
 											<AppSidebarMenuItem

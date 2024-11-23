@@ -8,12 +8,14 @@ import { useUser } from "@/providers/UserProvider";
 import { InvitationsService } from "@/sdk";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 export const JoinOrganization = () => {
 	const { scopedT, t } = useI18n();
 	const pageT = scopedT("onboarding.join");
 	const { data, isLoading } = useAllMyInvitationsQuery();
-	const { reload } = useUser();
+	const { reload: reloadUser } = useUser();
+	const { reload: reloadOrganization } = useOrganization();
 
 	const toast = useToast();
 	const methods = useForm();
@@ -27,7 +29,7 @@ export const JoinOrganization = () => {
 					},
 				});
 				toast.show(pageT("success"));
-				await reload();
+				await Promise.all([reloadUser(), reloadOrganization()]);
 			}
 		} catch (err) {
 			sendErrorToSentry(err);

@@ -1,7 +1,6 @@
 import {
 	type ReactNode,
 	createContext,
-	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
@@ -9,7 +8,6 @@ import {
 import * as Sentry from "@sentry/react";
 import { useAuth } from "./AuthProvider";
 import { useMyInformationQuery } from "@/queries/useMyInformationQuery";
-import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery";
 import type { OrganizationResponse, UserResponse } from "@/sdk";
 
 type UserContextType = {
@@ -27,21 +25,13 @@ type UserProviderProps = {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
 	const { isAuthenticated } = useAuth();
-	const { data: user, reload: reloadUser } = useMyInformationQuery({
+	const { data: user, reload } = useMyInformationQuery({
 		enabled: isAuthenticated,
 	});
-	const { data: organization, reload: reloadOrganization } =
-		useMyOrganizationQuery({
-			enabled: !!user?.companyId && isAuthenticated,
-		});
-
-	const fullReload = useCallback(async () => {
-		await Promise.all([reloadUser(), reloadOrganization()]);
-	}, [reloadOrganization, reloadUser]);
 
 	const value = useMemo(
-		() => ({ user, organization, reload: fullReload }),
-		[user, organization, fullReload],
+		() => ({ user, reload }),
+		[user, reload],
 	);
 
 	useEffect(() => {

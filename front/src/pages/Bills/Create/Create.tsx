@@ -7,7 +7,7 @@ import {
 	BillFormContent,
 	type BillFormValues,
 } from "@/pages/Bills/components/BillFormContent";
-import { useUser } from "@/providers/UserProvider";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { ROUTES } from "@/routes";
 import { type BillRequest, BillsService } from "@/sdk";
 import { useToast } from "@billycraft/ui";
@@ -27,7 +27,7 @@ export const Create = () => {
 	const { t } = useI18n();
 	const toast = useToast();
 	const { push } = useHistory();
-	const { organization } = useUser();
+	const { organization } = useOrganization();
 
 	const initialValues = useMemo<BillFormValues>(
 		() => ({

@@ -18,6 +18,7 @@ import { Register } from "./Auth/Register";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Account } from "./Account/Account";
 import { Organization } from "./Organization/Organization";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 type PathComponentTuple = [string, () => JSX.Element];
 
@@ -44,7 +45,8 @@ const APP_ROUTES: PathComponentTuple[] = [
 ];
 
 export const MainSwitch = () => {
-	const { organization, user } = useUser();
+	const { user } = useUser();
+  const { organization } = useOrganization()
 	const { isAuthenticated, isInitializing } = useAuth();
 
 	if (isInitializing) {

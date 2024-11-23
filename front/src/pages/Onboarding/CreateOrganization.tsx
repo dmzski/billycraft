@@ -5,6 +5,7 @@ import { sendErrorToSentry } from "@/utils/errors";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@/providers/UserProvider";
 import { CompanyService, type OrganizationRequest } from "@/sdk";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 type CreateOrganizationFormValues = {
 	articlesTax: number;
@@ -22,7 +23,8 @@ type CreateOrganizationFormValues = {
 export const CreateOrganization = () => {
 	const toast = useToast();
 	const { t } = useI18n();
-	const { reload } = useUser();
+	const { reload: reloadUser } = useUser();
+	const { reload: reloadOrganization } = useOrganization();
 
 	const {
 		control,
@@ -53,7 +55,7 @@ export const CreateOrganization = () => {
 				othersTax: Number(values.othersTax) || 0,
 			} as OrganizationRequest;
 			await CompanyService.postCompany({ body: data });
-			await reload();
+			await Promise.all([reloadUser(), reloadOrganization()]);
 			toast.show(t("onboarding.create.success"));
 		} catch (err) {
 			sendErrorToSentry(err);
