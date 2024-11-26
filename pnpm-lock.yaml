@@ -15,8 +15,8 @@ importers:
         specifier: ^2.27.9
         version: 2.27.9
       '@hey-api/openapi-ts':
-        specifier: ^0.55.2
-        version: 0.55.2(typescript@5.6.3)
+        specifier: ^0.57.0
+        version: 0.57.1(typescript@5.6.3)
 
   auth: {}
 
@@ -40,8 +40,8 @@ importers:
         specifier: ^2.1.5
         version: 2.1.5(react@18.3.1)
       '@hey-api/client-fetch':
-        specifier: ^0.4.3
-        version: 0.4.3
+        specifier: ^0.5.0
+        version: 0.5.0
       '@react-hook/media-query':
         specifier: ^1.1.1
         version: 1.1.1(react@18.3.1)
@@ -638,11 +638,11 @@ packages:
     peerDependencies:
       react: '>= 16'
 
-  '@hey-api/client-fetch@0.4.3':
-    resolution: {integrity: sha512-Y0McgfJED/Iq6Tr8LgewFL+qrOpb87rUBUJkc6mLzxqTkqF52KcexYZPlKyjee0Qb/oUJOupFRpvUEWjH/339w==}
+  '@hey-api/client-fetch@0.5.0':
+    resolution: {integrity: sha512-dAgsc4ypMuA0tYZL+8Gz5Mpc3OE3+daIO8eCmfRDw2Tjt0G6CoNKIGTRxJQxBGro5m8Z3k2np0MUc8gzE9RIFQ==}
 
-  '@hey-api/openapi-ts@0.55.2':
-    resolution: {integrity: sha512-EdVslFxtV27prj8oLWCm4ZOFAx+zGOqRVbDkKOcaYzg6wQQdvQ0j14LMapvhM0PtP2hkffh6PGeh6dt9aJORZQ==}
+  '@hey-api/openapi-ts@0.57.1':
+    resolution: {integrity: sha512-CZ2W1Ma4Z1zPI2M7mR5wfgTvDnxYenv/zAiX4wYgUX3n8GlWWjRkAQ02TgwBiHD3T9isR2zPyub/8rqyZ5yIsA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -3751,9 +3751,9 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@hey-api/client-fetch@0.4.3': {}
+  '@hey-api/client-fetch@0.5.0': {}
 
-  '@hey-api/openapi-ts@0.55.2(typescript@5.6.3)':
+  '@hey-api/openapi-ts@0.57.1(typescript@5.6.3)':
     dependencies:
       '@apidevtools/json-schema-ref-parser': 11.7.2
       c12: 2.0.1

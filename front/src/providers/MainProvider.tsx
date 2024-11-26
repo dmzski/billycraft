@@ -23,16 +23,9 @@ const InternalDataLoaderProvider = ({ children }: MainProviderProps) => {
 				toast.destructive(t("dataloaderError"));
 			}}
 		>
-			<AuthProvider
-				useAuthorizationHeader={window.location.hostname.includes("localhost")}
-				onLogoutSuccess={() => {
-					window.location.reload();
-				}}
-			>
-				<UserProvider>
-					<OrganizationProvider>{children}</OrganizationProvider>
-				</UserProvider>
-			</AuthProvider>
+			<UserProvider>
+				<OrganizationProvider>{children}</OrganizationProvider>
+			</UserProvider>
 		</DataLoaderProvider>
 	);
 };
@@ -42,7 +35,16 @@ const MainProvider = ({ children }: MainProviderProps) => {
 		<ThemeProvider storageKey="theme" defaultTheme="system">
 			<ToastProvider>
 				<I18nProvider locale="fr">
-					<InternalDataLoaderProvider>{children}</InternalDataLoaderProvider>
+					<AuthProvider
+						useAuthorizationHeader={window.location.hostname.includes(
+							"localhost",
+						)}
+						onLogoutSuccess={() => {
+							window.location.reload();
+						}}
+					>
+						<InternalDataLoaderProvider>{children}</InternalDataLoaderProvider>
+					</AuthProvider>
 				</I18nProvider>
 			</ToastProvider>
 		</ThemeProvider>

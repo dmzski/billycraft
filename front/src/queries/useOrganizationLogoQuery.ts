@@ -1,4 +1,4 @@
-import { CompanyService } from "@/sdk";
+import { OrganizationService } from "@/sdk";
 import {
 	type UseDataLoaderConfig,
 	useDataLoader,
@@ -13,7 +13,7 @@ export const useOrganizationLogoQuery = (
 	return useDataLoader(
 		key,
 		async () => {
-			const res = await CompanyService.getCompanyByIdLogo({
+			const res = await OrganizationService.getCompanyByIdLogo({
 				path: { id: organizationId },
 			}).then(({ data }) => data);
 			if (res) {

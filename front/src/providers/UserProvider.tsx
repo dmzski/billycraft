@@ -8,11 +8,10 @@ import {
 import * as Sentry from "@sentry/react";
 import { useAuth } from "./AuthProvider";
 import { useMyInformationQuery } from "@/queries/useMyInformationQuery";
-import type { OrganizationResponse, UserResponse } from "@/sdk";
+import type { UserResponse } from "@/sdk";
 
 type UserContextType = {
 	user?: UserResponse;
-	organization?: OrganizationResponse;
 	reload: () => Promise<void>;
 };
 const UserContext = createContext<UserContextType>({

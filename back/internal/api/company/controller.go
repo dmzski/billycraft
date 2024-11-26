@@ -17,17 +17,18 @@ import (
 
 // InitRoutes initializes the routes for company management
 func InitRoutes(group fiber.Router) {
-	router := group.Group("/company")
+	router := group.Group("/organization")
 	router.Get("/mine", findMine)
 	router.Patch("/mine", auth.RoleRequired(enums.RoleEnumOwner), updateMine)
 	router.Post("/", create)
 	router.Post("/upload-logo", auth.RoleRequired(enums.RoleEnumOwner), uploadLogo)
 	router.Get("/:id/logo", getLogo)
+	router.Post("/:id/leave", leaveOrganization)
 }
 
 // findMine retrieves the organization associated with the authenticated user
 // @Summary Retrieves user's organization
-// @Tags Company
+// @Tags Organization
 // @Produce json
 // @Success 200 {object} responses.OrganizationResponse "User's organization data"
 // @Failure 401 {object} string "Unauthorized"
@@ -39,7 +40,7 @@ func findMine(c *fiber.Ctx) error {
 
 // create creates a new organization for the authenticated user
 // @Summary Creates a new organization
-// @Tags Company
+// @Tags Organization
 // @Accept json
 // @Produce json
 // @Param organization body requests.OrganizationRequest true "New organization data"
@@ -72,7 +73,7 @@ func create(c *fiber.Ctx) error {
 
 // updateMine updates the user's organization information
 // @Summary Updates user's organization
-// @Tags Company
+// @Tags Organization
 // @Accept json
 // @Produce json
 // @Param organization body requests.OrganizationRequest true "Updated organization data"
@@ -93,7 +94,7 @@ func updateMine(c *fiber.Ctx) error {
 
 // uploadLogo uploads a new logo for the user's organization
 // @Summary Uploads a logo for the user's organization
-// @Tags Company
+// @Tags Organization
 // @Accept multipart/form-data
 // @Produce plain
 // @Param logo formData file true "Logo file"
@@ -125,7 +126,7 @@ func uploadLogo(c *fiber.Ctx) error {
 
 // getLogo retrieves the logo for a specific organization
 // @Summary Retrieves organization's logo
-// @Tags Company
+// @Tags Organization
 // @Produce image/png
 // @Param id path string true "Organization ID"
 // @Success 200 {file} file "Organization's logo"
@@ -142,4 +143,36 @@ func getLogo(c *fiber.Ctx) error {
 	}
 
 	return c.SendFile(config.Get().UploadDir + fmt.Sprintf("/%s/logo.png", organizationId))
+}
+
+// leaveOrganization Leave the organization you pass in URL
+// @Summary Leave the organization you pass in URL
+// @Tags Organization
+// @Produce json
+// @Param id path string true "Organization ID"
+// @Success 200 {string} string "Organization left"
+// @Failure 400 {object} string "Bad request"
+// @Router /company/{id}/leave [post]
+func leaveOrganization(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+	role := c.Locals("role").(enums.RoleEnum)
+	organizationId := c.Params("id")
+	if user.CompanyID == nil || organizationId == "" || organizationId != *user.CompanyID {
+		return c.Status(400).JSON(&responses.ErrorResponse{
+			Code:    400,
+			Message: "No id specified",
+		})
+	}
+	if role == enums.RoleEnumOwner {
+		return c.Status(400).JSON(&responses.ErrorResponse{
+			Code:    400,
+			Message: "Owner cant leave the organization you must delete it and transfer ownership",
+		})
+	}
+  err := DAO.LeaveOrganization(user.Email, *user.CompanyID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error occurred during processing your request")
+	}
+
+	return c.Status(fiber.StatusNoContent).SendString("Organization left")
 }

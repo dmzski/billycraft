@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@/providers/UserProvider";
-import { CompanyService, type OrganizationRequest } from "@/sdk";
+import { OrganizationService, type OrganizationRequest } from "@/sdk";
 import { useOrganization } from "@/providers/OrganizationProvider";
 
 type CreateOrganizationFormValues = {
@@ -54,7 +54,7 @@ export const CreateOrganization = () => {
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
 			} as OrganizationRequest;
-			await CompanyService.postCompany({ body: data });
+			await OrganizationService.postCompany({ body: data });
 			await Promise.all([reloadUser(), reloadOrganization()]);
 			toast.show(t("onboarding.create.success"));
 		} catch (err) {

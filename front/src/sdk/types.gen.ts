@@ -697,51 +697,6 @@ export type PostBillsByIdDuplicateResponse = (BillResponse);
 
 export type PostBillsByIdDuplicateError = (string);
 
-export type PostCompanyData = {
-    /**
-     * New organization data
-     */
-    body: OrganizationRequest;
-};
-
-export type PostCompanyResponse = (OrganizationResponse);
-
-export type PostCompanyError = (string);
-
-export type GetCompanyMineResponse = (OrganizationResponse);
-
-export type GetCompanyMineError = (string);
-
-export type PatchCompanyMineData = {
-    /**
-     * Updated organization data
-     */
-    body: OrganizationRequest;
-};
-
-export type PatchCompanyMineResponse = (OrganizationResponse);
-
-export type PatchCompanyMineError = (string);
-
-export type PostCompanyUploadLogoData = unknown;
-
-export type PostCompanyUploadLogoResponse = (string);
-
-export type PostCompanyUploadLogoError = (string);
-
-export type GetCompanyByIdLogoData = {
-    path: {
-        /**
-         * Organization ID
-         */
-        id: string;
-    };
-};
-
-export type GetCompanyByIdLogoResponse = ((Blob | File));
-
-export type GetCompanyByIdLogoError = (ErrorResponse);
-
 export type GetCustomersData = {
     query?: {
         /**
@@ -866,6 +821,64 @@ export type PostInvitationsRefuseData = {
 export type PostInvitationsRefuseResponse = (InvitationResponse);
 
 export type PostInvitationsRefuseError = (string);
+
+export type PostCompanyData = {
+    /**
+     * New organization data
+     */
+    body: OrganizationRequest;
+};
+
+export type PostCompanyResponse = (OrganizationResponse);
+
+export type PostCompanyError = (string);
+
+export type GetCompanyMineResponse = (OrganizationResponse);
+
+export type GetCompanyMineError = (string);
+
+export type PatchCompanyMineData = {
+    /**
+     * Updated organization data
+     */
+    body: OrganizationRequest;
+};
+
+export type PatchCompanyMineResponse = (OrganizationResponse);
+
+export type PatchCompanyMineError = (string);
+
+export type PostCompanyUploadLogoData = unknown;
+
+export type PostCompanyUploadLogoResponse = (string);
+
+export type PostCompanyUploadLogoError = (string);
+
+export type PostCompanyByIdLeaveData = {
+    path: {
+        /**
+         * Organization ID
+         */
+        id: string;
+    };
+};
+
+export type PostCompanyByIdLeaveResponse = (string);
+
+export type PostCompanyByIdLeaveError = (string);
+
+export type GetCompanyByIdLogoData = {
+    path: {
+        /**
+         * Organization ID
+         */
+        id: string;
+    };
+};
+
+export type GetCompanyByIdLogoResponse = ((Blob | File));
+
+export type GetCompanyByIdLogoError = (ErrorResponse);
 
 export type GetOutgoingsResponse = (Array<OutgoingResponse>);
 

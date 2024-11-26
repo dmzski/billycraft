@@ -702,7 +702,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Company"
+                    "Organization"
                 ],
                 "summary": "Creates a new organization",
                 "parameters": [
@@ -750,7 +750,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Company"
+                    "Organization"
                 ],
                 "summary": "Retrieves user's organization",
                 "responses": {
@@ -776,7 +776,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Company"
+                    "Organization"
                 ],
                 "summary": "Updates user's organization",
                 "parameters": [
@@ -821,7 +821,7 @@
                     "text/plain"
                 ],
                 "tags": [
-                    "Company"
+                    "Organization"
                 ],
                 "summary": "Uploads a logo for the user's organization",
                 "parameters": [
@@ -855,13 +855,47 @@
                 }
             }
         },
+        "/company/{id}/leave": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "Leave the organization you pass in URL",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Organization left",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/company/{id}/logo": {
             "get": {
                 "produces": [
                     "image/png"
                 ],
                 "tags": [
-                    "Company"
+                    "Organization"
                 ],
                 "summary": "Retrieves organization's logo",
                 "parameters": [

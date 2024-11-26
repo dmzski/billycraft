@@ -1,4 +1,4 @@
-import { CompanyService, type OrganizationResponse } from "@/sdk";
+import { OrganizationService, type OrganizationResponse } from "@/sdk";
 import { useDataLoader } from "@scaleway/use-dataloader";
 
 type DataLoaderOptions = Parameters<
@@ -10,7 +10,7 @@ export const useMyOrganizationQuery = (options?: DataLoaderOptions) => {
 
 	return useDataLoader(
 		key,
-		() => CompanyService.getCompanyMine().then(({ data }) => data),
+		() => OrganizationService.getCompanyMine().then(({ data }) => data),
 		options,
 	);
 };

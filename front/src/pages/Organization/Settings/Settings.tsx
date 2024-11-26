@@ -7,7 +7,7 @@ import { SwitchField } from "@/components/form/SwitchField";
 import { TextAreaField } from "@/components/form/TextAreaField";
 import useLoadingState from "@/hooks/useLoadingState";
 import { useI18n } from "@/i18n";
-import { CompanyService, type OrganizationRequest } from "@/sdk";
+import { OrganizationService, type OrganizationRequest } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
 import { type ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -34,10 +34,10 @@ export const Settings = () => {
 				vatPercent: Number(values.vatPercent) || 0,
 			};
 			const res = company?.id
-				? await CompanyService.patchCompanyMine({ body: data }).then(
+				? await OrganizationService.patchCompanyMine({ body: data }).then(
 						({ data }) => data,
 					)
-				: await CompanyService.postCompany({ body: data }).then(
+				: await OrganizationService.postCompany({ body: data }).then(
 						({ data }) => data,
 					);
 			if (!res) {
@@ -63,7 +63,7 @@ export const Settings = () => {
 		try {
 			if (!uploadLogoState.isLoading && e.target?.files?.[0]) {
 				uploadLogoState.update("loading");
-				const url = await CompanyService.postCompanyUploadLogo({
+				const url = await OrganizationService.postCompanyUploadLogo({
 					body: e.target.files[0],
 				}).then(({ data }) => data);
 				setValue("logo", url);

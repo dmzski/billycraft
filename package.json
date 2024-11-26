@@ -8,7 +8,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.27.9",
-		"@hey-api/openapi-ts": "^0.55.2"
+		"@hey-api/openapi-ts": "^0.57.0"
 	},
   "scripts": {
     "openapi-ts": "openapi-ts"

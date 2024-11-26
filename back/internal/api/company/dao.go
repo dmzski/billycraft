@@ -63,6 +63,24 @@ func (dao OrganizationDao) Update(id string, dto requests.OrganizationRequest) (
 	return
 }
 
+func (dao OrganizationDao) LeaveOrganization(email string, organizationId string) error {
+	tx := database.DBConn.Begin()
+	tx.Exec("DELETE FROM com_role WHERE email = ? AND company_id = ?", email, organizationId)
+	if tx.Error != nil {
+		tx.Rollback()
+		return tx.Error
+	}
+	tx.Exec("UPDATE com_user SET company_id = ? WHERE email = ?", nil, email)
+	if tx.Error != nil {
+		tx.Rollback()
+		return tx.Error
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
 var (
 	DAO = &OrganizationDao{}
 )

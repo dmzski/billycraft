@@ -12,6 +12,13 @@
 - Rust (auth)
 - Go (back)
 
+
+### Tools
+
+- Swag to generate sdk with:
+  - `go install github.com/swaggo/swag/cmd/swag@latest`
+  - `make generate-sdk` when needed
+
 Add in your host file (/etc/hosts):
 ```
 127.0.0.1       auth.coco-erp.lan api.coco-erp.lan app.coco-erp.lan
