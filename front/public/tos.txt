@@ -2,31 +2,77 @@ Conditions Générales d'Utilisation de Billycraft
 
 Les présentes Conditions Générales d'Utilisation (ci-après dénommées les "CGU") régissent l'utilisation de l'application Billycraft (ci-après dénommée "l'Application") par les utilisateurs (ci-après dénommés les "Utilisateurs"). En utilisant l'Application, vous acceptez d'être lié par ces CGU. Si vous n'acceptez pas ces CGU, veuillez ne pas utiliser l'Application.
 
+
 1. Objet de l'Application
 
-Billycraft est une application de gestion de devis et de factures conçue pour aider les utilisateurs à gérer efficacement leurs transactions commerciales. L'Application permet aux Utilisateurs de créer, stocker et suivre des devis et des factures électroniques.
+Billycraft est une application de gestion de devis, de factures, d'inventaire, de livrets d'achats et de rapports d'activité, conçue pour aider les utilisateurs à gérer efficacement leurs activités professionnelles. L'Application permet aux Utilisateurs de créer, stocker et suivre ces documents, avec la possibilité de générer des fichiers PDF sur demande.
 
 2. Accès à l'Application
 
-L'accès à l'Application est réservé aux Utilisateurs inscrits. Pour accéder à certaines fonctionnalités de l'Application, les Utilisateurs peuvent être tenus de créer un compte et de fournir des informations personnelles. Les Utilisateurs sont responsables de maintenir la confidentialité de leur compte et de leur mot de passe.
+L'accès à l'Application est réservé aux Utilisateurs inscrits. Pour accéder à certaines fonctionnalités, les Utilisateurs doivent créer un compte en fournissant des informations personnelles. Les Utilisateurs sont responsables de maintenir la confidentialité de leur compte et de leur mot de passe, et de signaler immédiatement toute utilisation non autorisée.
 
 3. Utilisation de l'Application
 
-Les Utilisateurs s'engagent à utiliser l'Application conformément à la loi applicable et aux présentes CGU. Ils acceptent de ne pas utiliser l'Application à des fins illicites ou interdites par les présentes CGU.
+Les Utilisateurs s'engagent à :
+
+    Utiliser l'Application conformément à la loi applicable et aux présentes CGU.
+    Ne pas utiliser l'Application à des fins illicites ou interdites par ces CGU.
+    Respecter les droits de propriété intellectuelle liés à l'Application et son contenu.
 
 4. Propriété intellectuelle
 
-Tous les droits de propriété intellectuelle relatifs à l'Application et à son contenu restent la propriété de Billycraft ou de ses concédants de licence. Aucun droit de propriété intellectuelle n'est transféré aux Utilisateurs en vertu des présentes CGU.
+Tous les droits de propriété intellectuelle relatifs à l'Application, y compris son code source, sa structure, ses fonctionnalités et son contenu, restent la propriété de Billycraft ou de ses concédants de licence. Aucun droit de propriété intellectuelle n'est transféré aux Utilisateurs en vertu des présentes CGU.
 
-5. Limitation de responsabilité
+5. Protection des données personnelles et conformité RGPD
 
-Billycraft s'efforce de fournir une application fiable et sécurisée. Cependant, en aucun cas, Billycraft ne pourra être tenu responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application.
+Conformément au Règlement Général sur la Protection des Données (RGPD), Billycraft s'engage à protéger les données personnelles des Utilisateurs.
 
-6. Modifications des CGU
+5.1 Données collectées :
 
-Billycraft se réserve le droit de modifier les présentes CGU à tout moment. Les Utilisateurs seront informés de toute modification par le biais de l'Application. L'utilisation continue de l'Application après la publication des modifications constitue l'acceptation des CGU révisées.
+Lors de l'inscription ou de l'utilisation de l'Application, Billycraft collecte les données suivantes :
 
-7. Droit applicable et juridiction compétente
+    Nom, prénom, adresse e-mail, et autres informations fournies par l'Utilisateur.
+    Données relatives aux documents créés (devis, factures, inventaires, etc.).
 
-Les présentes CGU sont régies par les lois applicables en France. Tout litige découlant des présentes CGU sera soumis à la compétence exclusive des tribunaux français.
+5.2 Utilisation des données :
 
+Les données collectées sont utilisées pour :
+
+    Fournir les services proposés par l'Application.
+    Respecter les obligations légales et réglementaires.
+
+5.3 Conservation des données :
+
+Les données des factures sont conservées pendant 10 ans, conformément à la législation française (article L123-22 du Code de commerce). Les autres données personnelles sont conservées aussi longtemps que nécessaire pour fournir les services ou respecter les obligations légales.
+
+5.4 Droits des Utilisateurs :
+
+Conformément au RGPD, les Utilisateurs disposent des droits suivants :
+
+    Accès : Obtenir une copie des données personnelles vous concernant.
+    Rectification : Corriger des données inexactes ou incomplètes.
+    Suppression : Demander la suppression des données, sauf obligation légale de conservation.
+    Portabilité : Recevoir vos données dans un format structuré.
+    Opposition : Vous opposer à certains traitements.
+
+Pour exercer ces droits, contactez-nous à l’adresse suivante : maliszewskid3@gmail.com.
+
+5.5 Sécurité des données :
+
+Billycraft met en œuvre des mesures techniques et organisationnelles pour protéger vos données contre les accès non autorisés, pertes ou altérations.
+
+5.6 Partage des données :
+
+Billycraft ne partage vos données avec des tiers que dans le cadre d’une obligation légale ou avec votre consentement explicite.
+
+6. Limitation de responsabilité
+
+Billycraft s'efforce de fournir une application fiable et sécurisée. Cependant, en aucun cas, Billycraft ne pourra être tenu responsable des dommages directs, indirects, accessoires ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application, sauf disposition légale contraire.
+
+7. Modifications des CGU
+
+Billycraft se réserve le droit de modifier les présentes CGU à tout moment. Toute modification sera communiquée aux Utilisateurs via l'Application. L'utilisation continue de l'Application après la publication des modifications constitue l'acceptation des CGU révisées.
+
+8. Droit applicable et juridiction compétente
+
+Les présentes CGU sont régies par le droit français. Tout litige lié à ces CGU ou à l'utilisation de l'Application sera soumis à la compétence exclusive des tribunaux français.
