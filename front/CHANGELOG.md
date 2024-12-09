@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.58.0
+
+### Minor Changes
+
+- 6730b75: Fix: useOrganization in create quote instead of useUser
+
 ## 2.57.0
 
 ### Minor Changes
