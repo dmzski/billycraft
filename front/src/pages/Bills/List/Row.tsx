@@ -65,7 +65,9 @@ const BillTableLine = ({
 	const nextStatuses: BillStatus[] = useMemo(() => {
 		switch (bill.status) {
 			case "SENT":
-				return ["REFUSED", "ARCHIVED"];
+				return ["REFUSED", "PAID"];
+			case "PAID":
+				return ["ARCHIVED"];
 			case "ARCHIVED":
 			case "REFUSED":
 				return [];

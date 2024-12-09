@@ -1,13 +1,13 @@
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import { Button } from "components/Button";
 import { Link } from "components/Link";
 import useClickOutsideHandler from "hooks/useClickOutsideHandler";
 import { tw } from "lib/utils";
 import {
-	CSSProperties,
-	ComponentProps,
-	ElementRef,
-	ReactNode,
+	type CSSProperties,
+	type ComponentProps,
+	type ElementRef,
+	type ReactNode,
 	cloneElement,
 	forwardRef,
 	useEffect,
@@ -94,7 +94,7 @@ export const Dropdown = ({
 		if (onClose && openProp !== open) {
 			setOpen(!!openProp);
 		}
-	}, [disclosureRef, openProp, onClose]);
+	}, [open, openProp, onClose]);
 
 	const Component = cloneElement(disclosure, {
 		ref: disclosureRef,
@@ -127,7 +127,7 @@ export const Dropdown = ({
 				<div
 					ref={containerRef}
 					aria-expanded={open ? "true" : "false"}
-					className="z-50 absolute aria-[expanded=false]:sr-only"
+					className="z-50 absolute aria-[expanded=false]:sr-only h-fit"
 					style={styles}
 				>
 					{typeof children === "function" ? children({ close }) : children}
@@ -145,7 +145,6 @@ const DropdownContent = ({
 }: DropdownContentProps) => {
 	return (
 		<ul
-			tabIndex={0}
 			className={tw(dropdownContentVariants({ align }), className)}
 		>
 			{children}

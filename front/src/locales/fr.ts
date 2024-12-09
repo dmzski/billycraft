@@ -369,7 +369,7 @@ export default {
 	"bills.form.submit.success": "Facture enregistrée",
 	"bills.form.submit.edit.success": "État de la facture mis à jour",
 	"bills.form.actions.sent": "Facture envoyée",
-	"bills.form.actions.toDeclare": "A déclarer",
+	"bills.form.actions.paid": "Payée",
 	"bills.form.actions.refused": "Facture refusée",
 	"bills.form.actions.archive": "Archiver la facture",
 	// Bills > Form > LineTable

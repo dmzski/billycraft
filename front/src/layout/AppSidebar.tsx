@@ -85,7 +85,7 @@ export const AppSidebar = ({
 								) : (
 									<Avatar alt="?" />
 								)}
-								<span className="font-semibold">{organization?.name}</span>
+								<span className="font-semibold truncate">{organization?.name}</span>
 								<ChevronUpDownIcon />
 							</Button>
 						}

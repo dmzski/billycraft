@@ -101,7 +101,7 @@ const BillLineTable = () => {
 			<div className="grid md:grid-cols-4 items-end gap-4">
 				<Select
 					ref={selectExistingProductRef}
-					className="md:col-span-3"
+					className="md:col-span-3 truncate"
 					name="existing-product"
 					id="existing-product"
 					options={productOptions}

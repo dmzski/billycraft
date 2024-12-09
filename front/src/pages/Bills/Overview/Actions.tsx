@@ -1,11 +1,7 @@
+import { BillStatusIcon } from "@/components/BillStatusIcon";
 import { useI18n } from "@/i18n";
 import { type BillResponse, BillsService, type BillStatus } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
-import {
-	EnvelopeIcon,
-	InboxArrowDownIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 type ActionsProps = {
@@ -49,7 +45,7 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 					disabled={isSubmitting}
 					className="gap-4 md:col-start-2"
 				>
-					<EnvelopeIcon />
+					<BillStatusIcon status="SENT" />
 					{t("bills.form.actions.sent")}
 				</Button>
 			) : null}
@@ -61,19 +57,30 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 						variant="destructive"
 						disabled={isSubmitting}
 					>
-						<XMarkIcon />
+						<BillStatusIcon status="REFUSED" />
 						{t("bills.form.actions.refused")}
 					</Button>
 					<Button
 						disabled={isSubmitting}
 						className="gap-4 md:col-start-2"
 						type="button"
-						onClick={updateBillStatus("ARCHIVED")}
+						onClick={updateBillStatus("PAID")}
 					>
-						<InboxArrowDownIcon />
-						{t("bills.form.actions.archive")}
+						<BillStatusIcon status="PAID" />
+						{t("bills.form.actions.paid")}
 					</Button>
 				</>
+			) : null}
+			{bill.status === "PAID" ? (
+				<Button
+					type="button"
+					onClick={updateBillStatus("ARCHIVED")}
+					disabled={isSubmitting}
+					className="gap-4 md:col-start-2"
+				>
+					<BillStatusIcon status="ARCHIVED" />
+					{t("bills.form.actions.archive")}
+				</Button>
 			) : null}
 		</section>
 	);

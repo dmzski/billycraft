@@ -20,7 +20,7 @@ import { BillLabel } from "@/components/labels/BillLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
 import { sendErrorToSentry } from "@/utils/errors";
-import { BillsService, PdFsService } from "@/sdk";
+import { BillsService, PdfsService } from "@/sdk";
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n();
@@ -44,7 +44,7 @@ export const Overview = () => {
 		try {
 			if (bill?.id && !isDownloadingPDF) {
 				toggleIsDownloadingPDF();
-				const blob = await PdFsService.getPdfsBillById({
+				const blob = await PdfsService.getPdfsBillById({
 					path: { id: bill.id },
 				}).then(({ data }) => data);
 				if (!blob) {

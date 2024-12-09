@@ -16,9 +16,9 @@ func Secure() func(c *fiber.Ctx) error {
 			return c.Status(403).SendString("Forbidden access")
 		}
 
-		user := users.DAO.FindMe(email)
+		user, err := users.DAO.FindMe(email)
 
-		if user.Email == "" {
+		if user.Email == "" || err != nil {
 			user = models.User{
 				Email:     email,
 				FirstName: "",

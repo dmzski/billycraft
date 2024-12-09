@@ -90,8 +90,14 @@ func (dao QuoteDao) Update(id string, tenant string, changes requests.UpdateQuot
 			panic("Invalid status change")
 		}
 	}
+	if tx.Error != nil {
+		err := tx.Error
+		tx.Rollback()
+		panic(err)
+	}
   
   if !quote.Status.IsEditable() {
+    tx.Commit()
     return quote
   }
 

@@ -3,7 +3,7 @@ import { Submit } from "@/components/form/Submit";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useI18n } from "@/i18n";
 import type { BillResponse } from "@/sdk";
-import { PdFsService } from "@/sdk";
+import { PdfsService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 import { Button, Modal, useToast } from "@billycraft/ui";
 import type { ComponentProps } from "react";
@@ -32,7 +32,7 @@ export const MultiDownloadPdfForm = ({
 	const toast = useToast();
 	const handleSubmit = async () => {
 		try {
-			const blob = await PdFsService.postPdfsMultipleBill({
+			const blob = await PdfsService.postPdfsMultipleBill({
 				body: { billIds },
 			}).then(({ data }) => data);
 			if (!blob) {

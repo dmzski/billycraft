@@ -1,12 +1,7 @@
+import { QuoteStatusIcon } from "@/components/QuoteStatusIcon";
 import { useI18n } from "@/i18n";
 import { type QuoteResponse, QuotesService, type QuoteStatus } from "@/sdk";
 import { Button, useToast } from "@billycraft/ui";
-import {
-	CheckIcon,
-	EnvelopeIcon,
-	InboxArrowDownIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 type ActionsProps = {
@@ -46,7 +41,7 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 					disabled={isSubmitting}
 					className="md:col-start-2"
 				>
-					<EnvelopeIcon />
+					<QuoteStatusIcon status="SENT" />
 					{t("quotes.form.actions.sent")}
 				</Button>
 			) : null}
@@ -55,10 +50,10 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 					<Button
 						type="button"
 						onClick={updateQuoteStatus("REFUSED")}
-						variant="outline"
+						variant="destructive"
 						disabled={isSubmitting}
 					>
-						<XMarkIcon />
+						<QuoteStatusIcon status="REFUSED" />
 						{t("quotes.form.actions.refused")}
 					</Button>
 					<Button
@@ -66,7 +61,7 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 						type="button"
 						onClick={updateQuoteStatus("ACCEPTED")}
 					>
-						<CheckIcon />
+						<QuoteStatusIcon status="ACCEPTED" />
 						{t("quotes.form.actions.accepted")}
 					</Button>
 				</>
@@ -75,10 +70,9 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 				<Button
 					disabled={isSubmitting}
 					type="button"
-					variant="destructive"
 					onClick={updateQuoteStatus("ARCHIVED")}
 				>
-					<InboxArrowDownIcon />
+					<QuoteStatusIcon status="ARCHIVED" />
 					{t("quotes.form.actions.archive")}
 				</Button>
 			) : null}

@@ -35,7 +35,6 @@ const QuoteLineTable = ({
 	const [productIdSelected, setProductIdSelected] = useState<string>();
 
 	const onProductSelectedChange = (option: string) => {
-		console.log(option);
 		setProductIdSelected(option);
 	};
 
@@ -103,12 +102,12 @@ const QuoteLineTable = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-4 border p-4 rounded">
+		<div className="grid gap-4 border p-4 rounded">
 			{!disabled ? (
 				<div className="grid md:grid-cols-4 items-end gap-4">
 					<Select
 						ref={selectExistingProductRef}
-						className="md:col-span-3"
+						className="md:col-span-3 truncate"
 						name="existing-product"
 						id="existing-product"
 						options={productOptions}

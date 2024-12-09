@@ -21,7 +21,7 @@ import { RRLink } from "@/components/RRLink";
 import { QuoteLabel } from "@/components/labels/QuoteLabel";
 import { InformationSection } from "./InformationSection";
 import { ContentSection } from "./ContentSection";
-import { PdFsService, QuotesService } from "@/sdk";
+import { PdfsService, QuotesService } from "@/sdk";
 import { sendErrorToSentry } from "@/utils/errors";
 
 export const Overview = () => {
@@ -50,7 +50,7 @@ export const Overview = () => {
 		try {
 			if (quote?.id && !isDownloadingPDF) {
 				toggleIsDownloadingPDF();
-				const blob = await PdFsService.getPdfsQuoteById({
+				const blob = await PdfsService.getPdfsQuoteById({
 					path: { id: quote.id },
 				}).then(({ data }) => data);
 				if (!blob) {

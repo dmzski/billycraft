@@ -1,6 +1,6 @@
 import { API_URL } from "@/constants/global";
 import { ApiError } from "@/lib/ApiError";
-import { client } from "@/sdk/services.gen";
+import { client } from "@/sdk";
 import {
 	type ReactNode,
 	createContext,

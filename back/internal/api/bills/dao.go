@@ -103,8 +103,14 @@ func (dao BillDao) Update(id string, tenant string, changes requests.BillRequest
 			panic("Invalid status update")
 		}
 	}
+	if tx.Error != nil {
+		err := tx.Error
+		tx.Rollback()
+		panic(err)
+	}
 
   if !bill.Status.IsEditable() {
+    tx.Commit()
     return bill
   }
 

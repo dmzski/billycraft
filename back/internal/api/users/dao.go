@@ -13,10 +13,10 @@ func (dao UserDao) FindByEmail(email string) (user models.User) {
 	return
 }
 
-func (dao UserDao) FindMe(email string) (user models.User) {
+func (dao UserDao) FindMe(email string) (user models.User, err error) {
 	tx := database.DBConn.Preload(clause.Associations).First(&user, "com_user.email = ?", email)
 	if tx.Error != nil {
-		panic(tx.Error)
+		err = tx.Error
 	}
 	return
 }
