@@ -1,11 +1,15 @@
-import { Button, Input, useToast } from "@billycraft/ui";
+import { useToast } from "@billycraft/ui";
 import { useI18n } from "@/i18n";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { sendErrorToSentry } from "@/utils/errors";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@/providers/UserProvider";
 import { OrganizationService, type OrganizationRequest } from "@/sdk";
 import { useOrganization } from "@/providers/OrganizationProvider";
+import { FormErrorAlert } from "@/components/FormErrorAlert";
+import { Form } from "@/components/form/Form";
+import { Submit } from "@/components/form/Submit";
+import { InputField } from "@/components/form/InputField";
 
 type CreateOrganizationFormValues = {
 	articlesTax: number;
@@ -20,30 +24,28 @@ type CreateOrganizationFormValues = {
 	email: string;
 };
 
+const initialValues: CreateOrganizationFormValues = {
+	articlesTax: 0,
+	servicesTax: 0,
+	othersTax: 0,
+	phoneNumber: "",
+	postalCode: "",
+	name: "",
+	city: "",
+	siret: "",
+	address: "",
+	email: "",
+};
+
 export const CreateOrganization = () => {
 	const toast = useToast();
 	const { t } = useI18n();
 	const { reload: reloadUser } = useUser();
 	const { reload: reloadOrganization } = useOrganization();
 
-	const {
-		control,
-		handleSubmit,
-		formState: { isSubmitting, isValid },
-	} = useForm<CreateOrganizationFormValues>({
+	const methods = useForm<CreateOrganizationFormValues>({
 		mode: "onChange",
-		values: {
-			articlesTax: 0,
-			servicesTax: 0,
-			othersTax: 0,
-			phoneNumber: "",
-			postalCode: "",
-			name: "",
-			city: "",
-			siret: "",
-			address: "",
-			email: "",
-		},
+		values: initialValues,
 	});
 
 	const onSubmit = async (values: CreateOrganizationFormValues) => {
@@ -64,203 +66,105 @@ export const CreateOrganization = () => {
 	};
 
 	return (
-		<form
-			className="px-10 flex flex-col md:w-1/2 gap-4"
-			onSubmit={handleSubmit(onSubmit)}
-		>
-			<h2 className="text-3xl font-bold text-center">
-				{t("onboarding.create.title")}
-			</h2>
-			<div className="border rounded px-6 py-4 flex flex-col gap-4">
-				<div className="text-lg font-bold">
-					{t("onboarding.create.sections.information.title")}
-				</div>
-				<div className="grid grid-cols-2 gap-x-4">
-					<Controller
-						name="name"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+		<div className="md:w-1/2">
+			<Form methods={methods} onSubmit={onSubmit}>
+				<div className="px-8 flex flex-col gap-8">
+					<h2 className="text-3xl font-bold text-center">
+						{t("onboarding.create.title")}
+					</h2>
+					<div className="border rounded p-4 flex flex-col gap-4">
+						<div className="text-lg font-bold">
+							{t("onboarding.create.sections.information.title")}
+						</div>
+						<div className="grid grid-cols-2 gap-4">
+							<InputField
+								control={methods.control}
+								name="name"
 								label={t(
 									"onboarding.create.sections.information.fields.name.label",
 								)}
-								placeholder="Coco ERP"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
+								placeholder="Billycraft"
 								required
 							/>
-						)}
-					/>
-					<Controller
-						name="siret"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
-								id="siret"
+							<InputField
+								control={methods.control}
+								name="siret"
 								label={t(
 									"onboarding.create.sections.information.fields.id.label",
 								)}
 								placeholder="SIRET"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 								required
 							/>
-						)}
-					/>
-					<Controller
-						name="address"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
-								id="address"
+							<InputField
+								control={methods.control}
+								name="address"
 								label={t(
 									"onboarding.create.sections.information.fields.address.label",
 								)}
 								placeholder="Adresse"
 								className="col-span-2"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 								required
 							/>
-						)}
-					/>
-
-					<Controller
-						name="postalCode"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
-								id="postal-code"
+							<InputField
+								control={methods.control}
+								name="postalCode"
 								label={t(
 									"onboarding.create.sections.information.fields.postalCode.label",
 								)}
 								placeholder="00000"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 								required
 							/>
-						)}
-					/>
-
-					<Controller
-						name="city"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
-								id="city"
+							<InputField
+								name="city"
+								control={methods.control}
 								label={t(
 									"onboarding.create.sections.information.fields.city.label",
 								)}
 								placeholder="San Francisco"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 								required
 							/>
-						)}
-					/>
-
-					<Controller
-						name="phoneNumber"
-						control={control}
-						rules={{
-							maxLength: 10,
-						}}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+							<InputField
+								name="phoneNumber"
+								control={methods.control}
 								id="phone-number"
 								label={t(
 									"onboarding.create.sections.information.fields.phone.label",
 								)}
 								placeholder="0611223344"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
+								maxLength={10}
 							/>
-						)}
-					/>
 
-					<Controller
-						name="email"
-						control={control}
-						rules={{ required: true }}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+							<InputField
+								name="email"
+								control={methods.control}
 								id="email"
 								label={t(
 									"onboarding.create.sections.information.fields.email.label",
 								)}
 								placeholder="coco@example.com"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 								required
 							/>
-						)}
-					/>
-				</div>
-			</div>
+						</div>
+					</div>
 
-			<div className="flex flex-col gap-4 border rounded py-4 px-6">
-				<div className="text-lg font-bold">
-					{t("onboarding.create.sections.vat.title")}
-				</div>
-				<div className="md:pl-2 grid md:grid-cols-3 gap-4">
-					<Controller
-						name="articlesTax"
-						control={control}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+					<div className="flex flex-col gap-4 border rounded p-4">
+						<div className="text-lg font-bold">
+							{t("onboarding.create.sections.vat.title")}
+						</div>
+						<div className="grid md:grid-cols-3 gap-4">
+							<InputField
+								control={methods.control}
+								name="articlesTax"
 								className="w-full"
 								label={t("onboarding.create.sections.vat.fields.sellVat.label")}
 								type="number"
 								step={0.01}
 								max={100}
 								min={0}
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 							/>
-						)}
-					/>
-					<Controller
-						name="servicesTax"
-						control={control}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+							<InputField
+								control={methods.control}
+								name="servicesTax"
 								className="w-full"
 								label={t(
 									"onboarding.create.sections.vat.fields.serviceVat.label",
@@ -269,20 +173,10 @@ export const CreateOrganization = () => {
 								step={0.01}
 								max={100}
 								min={0}
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 							/>
-						)}
-					/>
-					<Controller
-						name="othersTax"
-						control={control}
-						render={({ field, fieldState: { invalid } }) => (
-							<Input
+							<InputField
+								name="othersTax"
+								control={methods.control}
 								className="w-full"
 								label={t(
 									"onboarding.create.sections.vat.fields.otherVat.label",
@@ -291,25 +185,19 @@ export const CreateOrganization = () => {
 								max={100}
 								min={0}
 								type="number"
-								name={field.name}
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								ref={field.ref}
-								error={invalid}
 							/>
-						)}
-					/>
+						</div>
+					</div>
+					<FormErrorAlert />
+					<div className="flex flex-row gap-2 justify-start items-center">
+						<InformationCircleIcon className="size-5" />
+						<p>{t("onboarding.create.uploadLogoNotice")}</p>
+					</div>
+					<div className="flex justify-end">
+						<Submit>{t("onboarding.create.submit")}</Submit>
+					</div>
 				</div>
-			</div>
-			<div className="alert flex flex-row gap-2 justify-start items-center">
-				<InformationCircleIcon className="size-5" />
-				<p>{t("onboarding.create.uploadLogoNotice")}</p>
-			</div>
-
-			<Button type="submit" disabled={isSubmitting || !isValid}>
-				{t("onboarding.create.submit")}
-			</Button>
-		</form>
+			</Form>
+		</div>
 	);
 };
