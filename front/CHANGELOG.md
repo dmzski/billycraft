@@ -1,5 +1,18 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.57.0
+
+### Minor Changes
+
+- ed01bc1: Fix status updates on bills and truncate some fields
+- 8133218: Users can leave an organization
+- ed01bc1: Update sdk and add icons for status
+
+### Patch Changes
+
+- Updated dependencies [ed01bc1]
+  - @billycraft/ui@1.38.0
+
 ## 2.56.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.38.0
+
+### Minor Changes
+
+- ed01bc1: Improve Drawer Dropdozn and Sidebar
+
 ## 1.37.0
 
 ### Minor Changes

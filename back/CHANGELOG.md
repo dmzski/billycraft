@@ -1,5 +1,12 @@
 # back
 
+## 1.34.0
+
+### Minor Changes
+
+- 8133218: Users can leave an organization
+- ed01bc1: Fix: Commit status change and fix user creation
+
 ## 1.33.0
 
 ### Minor Changes
