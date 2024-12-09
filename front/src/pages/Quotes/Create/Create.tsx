@@ -11,10 +11,10 @@ import { useForm } from "react-hook-form";
 import { RRLink } from "@/components/RRLink";
 import { Form } from "@/components/form/Form";
 import { Submit } from "@/components/form/Submit";
-import { useUser } from "@/providers/UserProvider";
 import { useMemo } from "react";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { type CreateQuoteRequest, QuotesService } from "@/sdk";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 const defaultQuote = {
 	lines: [],
@@ -27,7 +27,7 @@ export const Create = () => {
 	const { t } = useI18n();
 	const toast = useToast();
 	const { push } = useHistory();
-	const { organization } = useUser();
+	const { organization } = useOrganization();
 
 	const initialValues = useMemo<QuoteFormValues>(
 		() => ({
