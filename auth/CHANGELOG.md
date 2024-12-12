@@ -1,5 +1,11 @@
 # @coco/auth
 
+## 1.4.0
+
+### Minor Changes
+
+- 57804a8: Fix organization url in back and front and fix Cargo.lock in auth for new rust version
+
 ## 1.3.0
 
 ### Minor Changes

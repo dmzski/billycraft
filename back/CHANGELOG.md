@@ -1,5 +1,11 @@
 # back
 
+## 1.35.0
+
+### Minor Changes
+
+- 57804a8: Fix organization url in back and front and fix Cargo.lock in auth for new rust version
+
 ## 1.34.0
 
 ### Minor Changes

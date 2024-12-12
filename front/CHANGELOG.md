@@ -1,5 +1,11 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.60.0
+
+### Minor Changes
+
+- 57804a8: Fix organization url in back and front and fix Cargo.lock in auth for new rust version
+
 ## 2.59.0
 
 ### Minor Changes
