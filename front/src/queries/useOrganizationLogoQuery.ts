@@ -13,7 +13,7 @@ export const useOrganizationLogoQuery = (
 	return useDataLoader(
 		key,
 		async () => {
-			const res = await OrganizationService.getCompanyByIdLogo({
+			const res = await OrganizationService.getOrganizationByIdLogo({
 				path: { id: organizationId },
 			}).then(({ data }) => data);
 			if (res) {

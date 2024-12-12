@@ -15,7 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// InitRoutes initializes the routes for company management
+// InitRoutes initializes the routes for organization management
 func InitRoutes(group fiber.Router) {
 	router := group.Group("/organization")
 	router.Get("/mine", findMine)
@@ -32,7 +32,7 @@ func InitRoutes(group fiber.Router) {
 // @Produce json
 // @Success 200 {object} responses.OrganizationResponse "User's organization data"
 // @Failure 401 {object} string "Unauthorized"
-// @Router /company/mine [get]
+// @Router /organization/mine [get]
 func findMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	return c.JSON(responses.CreateOrganizationResponse(DAO.FindOneById(*user.CompanyID)))
@@ -48,7 +48,7 @@ func findMine(c *fiber.Ctx) error {
 // @Failure 400 {object} string "Malformed organization data"
 // @Failure 409 {object} string "Organization already exists"
 // @Failure 500 {object} string "Server error"
-// @Router /company [post]
+// @Router /organization [post]
 func create(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	if user.CompanyID != nil {
@@ -80,7 +80,7 @@ func create(c *fiber.Ctx) error {
 // @Success 200 {object} responses.OrganizationResponse "Updated organization data"
 // @Failure 400 {object} string "Malformed organization data"
 // @Failure 401 {object} string "Unauthorized"
-// @Router /company/mine [patch]
+// @Router /organization/mine [patch]
 func updateMine(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	newOrganization := requests.OrganizationRequest{}
@@ -101,7 +101,7 @@ func updateMine(c *fiber.Ctx) error {
 // @Success 200 {string} string "Logo URL"
 // @Failure 500 {string} string "Error when processing logo file"
 // @Failure 401 {object} string "Unauthorized"
-// @Router /company/upload-logo [post]
+// @Router /organization/upload-logo [post]
 func uploadLogo(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	organization := DAO.FindOneById(*user.CompanyID)
@@ -117,7 +117,7 @@ func uploadLogo(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error when saving logo file : " + err.Error())
 	}
-	newPath := fmt.Sprintf("%s/api/v1/company/%s/logo", c.BaseURL(), *user.CompanyID)
+	newPath := fmt.Sprintf("%s/api/v1/organization/%s/logo", c.BaseURL(), *user.CompanyID)
 	organization = DAO.Update(organization.ID, requests.OrganizationRequest{
 		Logo: &newPath,
 	})
@@ -131,7 +131,7 @@ func uploadLogo(c *fiber.Ctx) error {
 // @Param id path string true "Organization ID"
 // @Success 200 {file} file "Organization's logo"
 // @Failure 400 {object} responses.ErrorResponse "No ID specified"
-// @Router /company/{id}/logo [get]
+// @Router /organization/{id}/logo [get]
 func getLogo(c *fiber.Ctx) error {
 	organizationId := c.Params("id")
 	user := c.Locals("user").(models.User)
@@ -152,7 +152,7 @@ func getLogo(c *fiber.Ctx) error {
 // @Param id path string true "Organization ID"
 // @Success 200 {string} string "Organization left"
 // @Failure 400 {object} string "Bad request"
-// @Router /company/{id}/leave [post]
+// @Router /organization/{id}/leave [post]
 func leaveOrganization(c *fiber.Ctx) error {
 	user := c.Locals("user").(models.User)
 	role := c.Locals("role").(enums.RoleEnum)

@@ -56,7 +56,7 @@ export const CreateOrganization = () => {
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
 			} as OrganizationRequest;
-			await OrganizationService.postCompany({ body: data });
+			await OrganizationService.postOrganization({ body: data });
 			await Promise.all([reloadUser(), reloadOrganization()]);
 			toast.show(t("onboarding.create.success"));
 		} catch (err) {

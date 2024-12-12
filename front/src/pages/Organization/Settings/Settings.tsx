@@ -34,10 +34,10 @@ export const Settings = () => {
 				vatPercent: Number(values.vatPercent) || 0,
 			};
 			const res = company?.id
-				? await OrganizationService.patchCompanyMine({ body: data }).then(
+				? await OrganizationService.patchOrganizationMine({ body: data }).then(
 						({ data }) => data,
 					)
-				: await OrganizationService.postCompany({ body: data }).then(
+				: await OrganizationService.postOrganization({ body: data }).then(
 						({ data }) => data,
 					);
 			if (!res) {
@@ -63,7 +63,7 @@ export const Settings = () => {
 		try {
 			if (!uploadLogoState.isLoading && e.target?.files?.[0]) {
 				uploadLogoState.update("loading");
-				const url = await OrganizationService.postCompanyUploadLogo({
+				const url = await OrganizationService.postOrganizationUploadLogo({
 					body: e.target.files[0],
 				}).then(({ data }) => data);
 				setValue("logo", url);

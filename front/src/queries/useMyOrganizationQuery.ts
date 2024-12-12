@@ -10,7 +10,7 @@ export const useMyOrganizationQuery = (options?: DataLoaderOptions) => {
 
 	return useDataLoader(
 		key,
-		() => OrganizationService.getCompanyMine().then(({ data }) => data),
+		() => OrganizationService.getOrganizationMine().then(({ data }) => data),
 		options,
 	);
 };

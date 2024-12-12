@@ -822,39 +822,39 @@ export type PostInvitationsRefuseResponse = (InvitationResponse);
 
 export type PostInvitationsRefuseError = (string);
 
-export type PostCompanyData = {
+export type PostOrganizationData = {
     /**
      * New organization data
      */
     body: OrganizationRequest;
 };
 
-export type PostCompanyResponse = (OrganizationResponse);
+export type PostOrganizationResponse = (OrganizationResponse);
 
-export type PostCompanyError = (string);
+export type PostOrganizationError = (string);
 
-export type GetCompanyMineResponse = (OrganizationResponse);
+export type GetOrganizationMineResponse = (OrganizationResponse);
 
-export type GetCompanyMineError = (string);
+export type GetOrganizationMineError = (string);
 
-export type PatchCompanyMineData = {
+export type PatchOrganizationMineData = {
     /**
      * Updated organization data
      */
     body: OrganizationRequest;
 };
 
-export type PatchCompanyMineResponse = (OrganizationResponse);
+export type PatchOrganizationMineResponse = (OrganizationResponse);
 
-export type PatchCompanyMineError = (string);
+export type PatchOrganizationMineError = (string);
 
-export type PostCompanyUploadLogoData = unknown;
+export type PostOrganizationUploadLogoData = unknown;
 
-export type PostCompanyUploadLogoResponse = (string);
+export type PostOrganizationUploadLogoResponse = (string);
 
-export type PostCompanyUploadLogoError = (string);
+export type PostOrganizationUploadLogoError = (string);
 
-export type PostCompanyByIdLeaveData = {
+export type PostOrganizationByIdLeaveData = {
     path: {
         /**
          * Organization ID
@@ -863,11 +863,11 @@ export type PostCompanyByIdLeaveData = {
     };
 };
 
-export type PostCompanyByIdLeaveResponse = (string);
+export type PostOrganizationByIdLeaveResponse = (string);
 
-export type PostCompanyByIdLeaveError = (string);
+export type PostOrganizationByIdLeaveError = (string);
 
-export type GetCompanyByIdLogoData = {
+export type GetOrganizationByIdLogoData = {
     path: {
         /**
          * Organization ID
@@ -876,9 +876,9 @@ export type GetCompanyByIdLogoData = {
     };
 };
 
-export type GetCompanyByIdLogoResponse = ((Blob | File));
+export type GetOrganizationByIdLogoResponse = ((Blob | File));
 
-export type GetCompanyByIdLogoError = (ErrorResponse);
+export type GetOrganizationByIdLogoError = (ErrorResponse);
 
 export type GetOutgoingsResponse = (Array<OutgoingResponse>);
 
