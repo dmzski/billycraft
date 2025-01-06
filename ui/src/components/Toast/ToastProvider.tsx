@@ -1,7 +1,7 @@
 import {
-	ComponentProps,
+	type ComponentProps,
+	type ReactNode,
 	createContext,
-	ReactNode,
 	useCallback,
 	useContext,
 	useEffect,

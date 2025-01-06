@@ -7,6 +7,7 @@ import {
 	type CSSProperties,
 	type ComponentProps,
 	type ElementRef,
+	ReactElement,
 	type ReactNode,
 	cloneElement,
 	forwardRef,
@@ -35,8 +36,8 @@ const dropdownContentVariants = cva(dropdownContentClasses, {
 });
 
 export type DropdownProps = {
-	children: ((props: { close: () => void }) => JSX.Element) | ReactNode;
-	disclosure: JSX.Element;
+	children: ((props: { close: () => void }) => ReactElement) | ReactNode;
+	disclosure: ReactElement;
 	onClose?: () => void;
 	open?: boolean;
 };
@@ -97,6 +98,7 @@ export const Dropdown = ({
 	}, [open, openProp, onClose]);
 
 	const Component = cloneElement(disclosure, {
+    // @ts-ignore TODO Improve this
 		ref: disclosureRef,
 	});
 	useEffect(() => {
@@ -144,9 +146,7 @@ const DropdownContent = ({
 	align,
 }: DropdownContentProps) => {
 	return (
-		<ul
-			className={tw(dropdownContentVariants({ align }), className)}
-		>
+		<ul className={tw(dropdownContentVariants({ align }), className)}>
 			{children}
 		</ul>
 	);

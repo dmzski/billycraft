@@ -1,6 +1,6 @@
-import { StoryObj } from "@storybook/react";
-import { Dropdown } from ".";
+import type { StoryObj } from "@storybook/react";
 import { Button } from "components/Button";
+import { Dropdown } from ".";
 
 export default {
 	title: "Components/Dropdown",

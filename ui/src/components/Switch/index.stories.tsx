@@ -1,6 +1,6 @@
-import { StoryObj } from "@storybook/react";
-import { Switch } from ".";
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { Switch } from ".";
 
 export default {
 	title: "Components/Switch",

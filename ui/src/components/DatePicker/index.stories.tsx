@@ -1,6 +1,6 @@
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { DatePicker, DatePickerProps } from ".";
-import { StoryObj } from "@storybook/react";
+import { DatePicker, type DatePickerProps } from ".";
 
 export default {
 	title: "Components/DatePicker",
@@ -42,7 +42,7 @@ export const Disabled: Story = {
 	},
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		label: "Error",

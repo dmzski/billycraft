@@ -1,5 +1,5 @@
-import { ReactNode, SyntheticEvent, useEffect, useRef, useState } from "react";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
+import { type ReactNode, type SyntheticEvent, useEffect, useRef, useState } from "react";
 
 const progressBarVariants = cva("absolute bottom-0 left-0 w-0 h-1 opacity-40", {
 	variants: {
@@ -81,7 +81,7 @@ const Toast = ({ onClose, duration, children, variant, id }: ToastProps) => {
 				clearTimeout(timeout);
 			}
 		};
-	}, [mounted]);
+	}, [mounted, id]);
 
 	if (mounted === "closed") {
 		return null;
@@ -91,6 +91,7 @@ const Toast = ({ onClose, duration, children, variant, id }: ToastProps) => {
 		<div
 			className={toastVariants({ variant })}
 			onClick={handleClose}
+			onKeyUp={handleClose}
 			data-state={mounted.includes("open") ? "open" : "closed"}
 		>
 			{children}

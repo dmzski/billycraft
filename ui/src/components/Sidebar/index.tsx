@@ -1,10 +1,10 @@
-import * as React from "react";
+import { type VariantProps, cva } from "class-variance-authority";
 import Cookie from "js-cookie";
-import { VariantProps, cva } from "class-variance-authority";
+import * as React from "react";
 
-import { Drawer } from "components/Drawer";
-import { Button } from "components/Button";
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import { Button } from "components/Button";
+import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
 import { useIsMobile } from "hooks/useIsMobile";
 import { tw } from "lib/utils";
@@ -120,14 +120,7 @@ const SidebarProvider = React.forwardRef<
 				setOpenMobile,
 				toggleSidebar,
 			}),
-			[
-				state,
-				open,
-				setOpen,
-				isMobile,
-				openMobile,
-				toggleSidebar,
-			],
+			[state, open, setOpen, isMobile, openMobile, toggleSidebar],
 		);
 
 		return (
@@ -539,12 +532,13 @@ const SidebarMenuButton = React.forwardRef<
 	) => {
 		if (asChild && React.isValidElement(props.children)) {
 			return React.cloneElement(props.children, {
+				// @ts-ignore TODO improve
 				...props.children.props,
 				"data-sidebar": "menu-button",
 				"data-size": size,
 				"data-active": isActive,
 				className: tw(sidebarMenuButtonVariants({ variant, size }), className),
-			} as any);
+			});
 		}
 		return (
 			<button
@@ -643,6 +637,7 @@ const SidebarMenuSubButton = React.forwardRef<
 >(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
 	if (asChild && React.isValidElement(props.children)) {
 		return React.cloneElement(props.children, {
+			//@ts-ignore TODO improve
 			...props.children.props,
 			"data-sidebar": "menu-sub-button",
 			"data-size": size,
@@ -655,7 +650,7 @@ const SidebarMenuSubButton = React.forwardRef<
 				"group-data-[collapsible=icon]:hidden",
 				className,
 			),
-		} as any);
+		});
 	}
 
 	return (

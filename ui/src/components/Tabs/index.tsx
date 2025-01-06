@@ -33,12 +33,13 @@ export const Tab = React.forwardRef<
 	) => {
 		if (asChild && React.isValidElement(props.children)) {
 			return React.cloneElement(props.children, {
+        // @ts-ignore TODO improve
 				...props.children.props,
 				className: tw(tabClassNames, className),
 				"data-state": isActive ? "active" : "unactive",
 				"aria-selected": isActive,
 				role,
-			} as any);
+			});
 		}
 
 		return (

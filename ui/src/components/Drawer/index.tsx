@@ -1,8 +1,8 @@
-import { type ReactNode, useEffect, useState } from "react";
 import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon";
-import { createPortal } from "react-dom";
 import { type VariantProps, cva } from "class-variance-authority";
 import { tw } from "lib/utils";
+import { type ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 const backdropClassnames =
 	"fixed inset-0 z-50 bg-black/80 fill-mode-forwards data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0";

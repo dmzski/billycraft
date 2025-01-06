@@ -1,5 +1,5 @@
 import { tw } from "lib/utils";
-import { HTMLAttributes, useEffect, useState } from "react";
+import { type HTMLAttributes, useEffect, useState } from "react";
 
 const classes = {
 	base: "relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full",
@@ -27,13 +27,13 @@ export const Avatar = ({
 
 	return src && displayImg ? (
 		<img
+      {...props}
 			src={src}
-			alt={alt}
+			alt={alt ?? ''}
 			className={tw(classes.base, className)}
 			onError={() => {
 				setDisplayImg(false);
 			}}
-			{...props}
 		/>
 	) : (
 		<div className={tw(classes.base, "border", className)} {...props}>

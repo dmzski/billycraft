@@ -7,9 +7,7 @@
 	"main": "dist/index.js",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
@@ -22,46 +20,46 @@
 		"url": "https://dorianmaliszewski.fr"
 	},
 	"dependencies": {
-		"@heroicons/react": "^2.1.5",
-		"@tanstack/react-table": "^8.20.5",
-		"class-variance-authority": "^0.7.0",
+		"@heroicons/react": "^2.2.0",
+		"@tanstack/react-table": "^8.20.6",
+		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"js-cookie": "^3.0.5",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"tailwind-merge": "^2.5.4",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"tailwind-merge": "^2.6.0",
 		"tailwindcss-animate": "^1.0.7",
-		"typescript": "^5.6.3"
+		"typescript": "^5.7.2"
 	},
 	"devDependencies": {
-		"@chromatic-com/storybook": "^3",
-		"@storybook/addon-a11y": "^8.4.2",
-		"@storybook/addon-actions": "^8.4.2",
-		"@storybook/addon-essentials": "^8.4.2",
-		"@storybook/addon-links": "^8.4.2",
-		"@storybook/addon-mdx-gfm": "^8.4.2",
-		"@storybook/addon-themes": "^8.4.2",
+		"@chromatic-com/storybook": "^3.2.3",
+		"@storybook/addon-a11y": "^8.4.7",
+		"@storybook/addon-actions": "^8.4.7",
+		"@storybook/addon-essentials": "^8.4.7",
+		"@storybook/addon-links": "^8.4.7",
+		"@storybook/addon-mdx-gfm": "^8.4.7",
+		"@storybook/addon-themes": "^8.4.7",
 		"@storybook/addons": "^7.6.17",
-		"@storybook/blocks": "^8.4.2",
-		"@storybook/builder-vite": "^8.4.2",
-		"@storybook/react": "^8.4.2",
-		"@storybook/react-vite": "^8.4.2",
+		"@storybook/blocks": "^8.4.7",
+		"@storybook/builder-vite": "^8.4.7",
+		"@storybook/react": "^8.4.7",
+		"@storybook/react-vite": "^8.4.7",
 		"@storybook/storybook-deployer": "^2.8.16",
-		"@storybook/theming": "^8.4.2",
+		"@storybook/theming": "^8.4.7",
 		"@types/js-cookie": "^3.0.6",
-		"@types/node": "^20.17.6",
-		"@types/react": "^18.3.12",
-		"@types/react-dom": "^18.3.1",
-		"@vitejs/plugin-react-swc": "^3.7.1",
+		"@types/node": "^22.10.5",
+		"@types/react": "^19.0.2",
+		"@types/react-dom": "^19.0.2",
+		"@vitejs/plugin-react-swc": "^3.7.2",
 		"autoprefixer": "^10.4.20",
-		"cssnano": "^6.1.2",
-		"dotenv": "16.4.5",
-		"dotenv-expand": "11.0.6",
-		"postcss": "^8.4.47",
+		"cssnano": "^7.0.6",
+		"dotenv": "16.4.7",
+		"dotenv-expand": "12.0.1",
+		"postcss": "^8.4.49",
 		"read-pkg": "^9.0.1",
-		"storybook": "^8.4.2",
-		"tailwindcss": "^3.4.14",
-		"vite": "^5.4.10"
+		"storybook": "^8.4.7",
+		"tailwindcss": "^3.4.17",
+		"vite": "^6.0.7"
 	},
 	"scripts": {
 		"start": "storybook dev -p 6006",
@@ -74,11 +72,7 @@
 		"format": "pnpm biome format --write"
 	},
 	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
+		"production": [">0.2%", "not dead", "not op_mini all"],
 		"development": [
 			"last 1 chrome version",
 			"last 1 firefox version",

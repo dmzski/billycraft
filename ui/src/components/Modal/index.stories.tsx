@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Modal } from ".";
+import type { StoryObj } from "@storybook/react";
 import { Button } from "components/Button";
-import { StoryObj } from "@storybook/react";
 import { Dropdown } from "components/Dropdown";
 import { Select } from "components/Select";
+import { useState } from "react";
+import { Modal } from ".";
 
 export default {
 	title: "Components/Modal",
@@ -56,7 +56,7 @@ export const Controlled: Story = {
 					withoutPortal={withoutPortal}
 					hideOnClickOutside={hideOnClickOutside}
 				>
-					{<>You can close me</>}
+					You can close me
 				</Modal>
 			</>
 		);

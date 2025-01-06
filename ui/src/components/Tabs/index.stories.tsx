@@ -1,6 +1,6 @@
-import { StoryObj } from "@storybook/react";
-import { Tabs } from ".";
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { Tabs } from ".";
 
 export default {
 	title: "Components/Tabs",
@@ -48,7 +48,8 @@ export const WithLinks: Story = {
 					isActive={selected === "left"}
 					asChild
 				>
-					<a href="#" target="_blank">
+					{/* biome-ignore lint/a11y/useValidAnchor: Just for demo */}
+					<a href="#" target="_blank" rel="noreferrer">
 						Left is link
 					</a>
 				</Tabs.Tab>

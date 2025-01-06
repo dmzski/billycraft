@@ -1,4 +1,4 @@
-import { StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 import { Input } from ".";
 
 export default {
@@ -30,7 +30,7 @@ export const PrefixAndSuffix: Story = {
 	},
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		value: "test",

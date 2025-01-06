@@ -1,5 +1,5 @@
-import Row from ".";
-import { StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
+import { Row } from ".";
 
 export default {
 	title: "Components/Row",

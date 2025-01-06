@@ -1,25 +1,25 @@
 import {
-	forwardRef,
-	useMemo,
-	useState,
-	useCallback,
-	KeyboardEventHandler,
-	useRef,
-	useImperativeHandle,
-	useId,
-	ReactNode,
-	MouseEventHandler,
-} from "react";
-import OptionList from "./OptionList";
-import { VariantProps, cva } from "class-variance-authority";
-import { Label } from "components/Label";
-import { tw } from "lib/utils";
-import {
 	ChevronDownIcon,
 	ChevronUpIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/solid";
+import { type VariantProps, cva } from "class-variance-authority";
 import { Button } from "components/Button";
+import { Label } from "components/Label";
+import { tw } from "lib/utils";
+import {
+	type KeyboardEventHandler,
+	type MouseEventHandler,
+	type ReactNode,
+	forwardRef,
+	useCallback,
+	useId,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import OptionList from "./OptionList";
 
 const selectVariants = cva(
 	"flex justify-between h-10 w-full items-center bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 group-focus-within:ring-2 group-focus-within:ring-ring group-focus-within:ring-offset-2 data-[invalid=true]:border-destructive group-focus-within:data-[invalid=true]:ring-destructive",
@@ -98,13 +98,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 			isSearchable,
 			error,
 			required,
-			autoFocus,
 			placeholderSearchText = "Search",
 			variant,
 		},
 		ref,
 	) => {
 		const clearable = !required;
+		const optionListId = useId();
 		const generatedId = useId();
 		const id = idProp ?? generatedId;
 		const [isOpen, setOpen] = useState(false);
@@ -119,12 +119,12 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 			}
 		}, [disabled, readOnly]);
 
-		const handleClose = (restoreFocus?: boolean) => {
+		const handleClose = useCallback((restoreFocus?: boolean) => {
 			if (restoreFocus) {
 				inputRef.current?.focus();
 			}
 			setOpen(() => false);
-		};
+		}, []);
 
 		// Click an option change the value only
 		const handleClickForMulti = useCallback(
@@ -153,7 +153,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 				onChange?.(option.value);
 				handleClose(true);
 			},
-			[onChange],
+			[onChange, handleClose],
 		);
 
 		const handleClear: MouseEventHandler = useCallback(
@@ -194,14 +194,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 						return optionFound?.render ?? optionFound?.label;
 					})
 					.filter(Boolean)
-					.map((valueNode, index) => (
-						<span
-							key={index}
-							className="bg-background border px-2 text-foreground border rounded-md"
-						>
-							{valueNode}
-						</span>
-					));
+					.map((valueNode) => {
+						const id = useId();
+
+						return (
+							<span
+								key={id}
+								className="bg-background border px-2 text-foreground border rounded-md"
+							>
+								{valueNode}
+							</span>
+						);
+					});
 			}
 			const optionFound = options.find((option) => value === option.value);
 
@@ -238,6 +242,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 						data-invalid={!!error}
 						className={selectVariants({ variant })}
 						aria-expanded={isOpen}
+						aria-controls={optionListId}
+						// biome-ignore lint/a11y/useSemanticElements: Cant use select
 						role="combobox"
 						aria-haspopup="listbox"
 						onClick={handleOpen}
@@ -245,7 +251,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 						defaultValue={value?.toString() ?? ""}
 						aria-disabled={disabled || readOnly}
 						aria-label={ariaLabel ?? name}
-						autoFocus={autoFocus}
 						ref={inputRef}
 					>
 						<span className="flex gap-2 flex-row flex-nowrap truncate">
@@ -273,6 +278,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 					</div>
 					{options?.length > 0 && isOpen ? (
 						<OptionList
+							id={optionListId}
 							close={handleClose}
 							placeholderSearchText={placeholderSearchText}
 							isMulti={isMulti}

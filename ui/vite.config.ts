@@ -1,5 +1,5 @@
-import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import react from "@vitejs/plugin-react-swc";
 import { readPackage } from "read-pkg";
 import { type UserConfig, defineConfig } from "vite";
 

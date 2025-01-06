@@ -1,5 +1,5 @@
+import type { StoryObj } from "@storybook/react";
 import Loader from ".";
-import { StoryObj } from "@storybook/react";
 
 export default {
 	title: "Components/Loader",

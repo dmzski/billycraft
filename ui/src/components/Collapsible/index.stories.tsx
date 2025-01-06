@@ -1,8 +1,8 @@
-import { Meta } from "@storybook/react";
-import { Collapsible } from ".";
+import type { Meta } from "@storybook/react";
 import { Button } from "components/Button";
 import { Dropdown } from "components/Dropdown";
 import { Select } from "components/Select";
+import { Collapsible } from ".";
 
 export default {
 	title: "Components/Collapsible",

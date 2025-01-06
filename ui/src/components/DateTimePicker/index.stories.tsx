@@ -1,6 +1,6 @@
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { DateTimePicker, DateTimePickerProps } from ".";
-import { StoryObj } from "@storybook/react";
+import { DateTimePicker, type DateTimePickerProps } from ".";
 
 export default {
 	title: "Components/DateTimePicker",
@@ -31,7 +31,6 @@ export const Labeled: Story = {
 	render,
 	args: {
 		label: "Labeled",
-		variant: "outside",
 	},
 };
 
@@ -43,7 +42,7 @@ export const Disabled: Story = {
 	},
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		label: "Error",

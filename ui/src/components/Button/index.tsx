@@ -1,5 +1,5 @@
+import { type VariantProps, cva } from "class-variance-authority";
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
 
 import { tw } from "lib/utils";
 
@@ -40,9 +40,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	({ className, variant, size, type = "button", asChild, ...props }, ref) => {
 		if (asChild && React.isValidElement(props.children)) {
 			return React.cloneElement(props.children, {
+				// @ts-ignore Dont check props forwarding here
 				...props.children.props,
 				className: tw(buttonVariants({ variant, size, className })),
-			} as any);
+			});
 		}
 
 		return (

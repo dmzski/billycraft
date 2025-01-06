@@ -1,7 +1,7 @@
-import { StoryObj } from "@storybook/react";
-import { Select, SelectValueType } from ".";
+import type { StoryObj } from "@storybook/react";
 import { Button } from "components/Button";
 import { useState } from "react";
+import { Select, type SelectValueType } from ".";
 
 export default {
 	title: "Components/Select",
@@ -75,7 +75,7 @@ export const NoBorder: Story = {
 	],
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		options: fakeOptions,

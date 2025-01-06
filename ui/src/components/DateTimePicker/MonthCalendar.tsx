@@ -1,10 +1,10 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
-import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from "./helpers";
-import { Button } from "../Button";
 import ArrowLeftIcon from "@heroicons/react/24/outline/ArrowLeftIcon";
 import ArrowRightIcon from "@heroicons/react/24/outline/ArrowRightIcon";
 import { tw } from "lib/utils";
+import { Fragment, useCallback, useMemo, useState } from "react";
+import { Button } from "../Button";
 import TimeCalendar from "./TimeCalendar";
+import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from "./helpers";
 
 type MonthCalendarButtonProps = {
 	date?: Date;
@@ -33,6 +33,7 @@ const MonthCalendarButton = ({
 				}}
 				className={buttonClassNames}
 				aria-selected={isSelected}
+        type='button'
 			>
 				{date.getDate()}
 			</button>

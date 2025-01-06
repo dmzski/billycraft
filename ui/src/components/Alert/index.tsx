@@ -1,6 +1,6 @@
-import { HTMLAttributes, forwardRef, ReactNode } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import { tw } from "lib/utils";
+import { type HTMLAttributes, type ReactNode, forwardRef } from "react";
 
 const alertVariants = cva(
 	"relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",

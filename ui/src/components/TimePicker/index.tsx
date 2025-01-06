@@ -1,5 +1,5 @@
-import { Select, SelectOptionType } from "../Select";
 import { forwardRef, useMemo } from "react";
+import { Select, type SelectOptionType } from "../Select";
 
 export type TimePickerProps = {
 	value?: string;

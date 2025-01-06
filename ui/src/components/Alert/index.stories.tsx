@@ -1,4 +1,4 @@
-import { StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 import { Alert } from "./index";
 
 export default {

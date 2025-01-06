@@ -1,21 +1,20 @@
-import { ComponentProps } from "react";
-import Toast, { ToastProps } from "./Toast";
-import { ToastProvider } from ".";
-import { useToast } from "./ToastProvider";
-import { StoryFn, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "components/Button";
+import { ToastProvider } from ".";
+import type { ToastProps } from "./Toast";
+import { useToast } from "./ToastProvider";
 
 export default {
 	title: "Components/Toast",
 	component: ToastProvider,
 	decorators: [
-		(ToastStory: StoryFn) => (
+		(ToastStory) => (
 			<ToastProvider>
 				<ToastStory />
 			</ToastProvider>
 		),
 	],
-};
+} as Meta;
 
 type Story = StoryObj<ToastProps>;
 
@@ -45,7 +44,7 @@ export const Variants = {
 		const toast = useToast();
 
 		const showToast =
-			(variant?: ComponentProps<typeof Toast>["variant"]) => () => {
+			(variant?: ToastProps["variant"]) => () => {
 				toast.show(variant ?? "default", { variant });
 			};
 

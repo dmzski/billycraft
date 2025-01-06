@@ -1,8 +1,9 @@
-import { Input } from "../Input";
+import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
+import { tw } from "lib/utils";
 import {
-	FocusEventHandler,
+	type FocusEventHandler,
+	type KeyboardEvent,
 	forwardRef,
-	KeyboardEvent,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -10,9 +11,8 @@ import {
 	useState,
 } from "react";
 import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
+import { Input } from "../Input";
 import MonthCalendar from "./MonthCalendar";
-import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
-import { tw } from "lib/utils";
 
 export type DateTimePickerProps = {
 	name?: string;
@@ -21,7 +21,6 @@ export type DateTimePickerProps = {
 	onBlur?: FocusEventHandler<HTMLInputElement>;
 	className?: string;
 	label?: string;
-	variant?: "inside" | "outside";
 	disabled?: boolean;
 	error?: boolean;
 	required?: boolean;
@@ -37,7 +36,6 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 			onClickOutside,
 			onBlur,
 			label,
-			variant,
 			className,
 			disabled,
 			error,
@@ -111,8 +109,8 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 		const containerClassNames = useMemo(
 			() =>
 				tw({
-					["absolute top-full shadow-lg rounded-md overflow-hidden z-100 bg-background"]: true,
-					["sr-only"]: !open,
+					"absolute top-full shadow-lg rounded-md overflow-hidden z-100 bg-background": true,
+					"sr-only": !open,
 				}),
 			[open],
 		);
@@ -122,7 +120,7 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 				tw("size-4 absolute right-2 bottom-0 mb-3 text-muted-foreground", {
 					"text-destructive": error,
 				}),
-			[error, variant, label, open],
+			[error],
 		);
 
 		return (

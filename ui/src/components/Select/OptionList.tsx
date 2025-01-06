@@ -1,18 +1,18 @@
-import { SelectOptionType, SelectValueType } from ".";
-import Option from "./Option";
+import { Input } from "components/Input";
+import useClickOutsideHandler from "hooks/useClickOutsideHandler";
 import {
-	CSSProperties,
-	ChangeEventHandler,
-	KeyboardEventHandler,
-	RefObject,
+	type CSSProperties,
+	type ChangeEventHandler,
+	type KeyboardEventHandler,
+	type RefObject,
 	useEffect,
 	useMemo,
 	useRef,
 	useState,
 } from "react";
-import { Input } from "components/Input";
 import { createPortal } from "react-dom";
-import useClickOutsideHandler from "hooks/useClickOutsideHandler";
+import type { SelectOptionType, SelectValueType } from ".";
+import Option from "./Option";
 
 const listContainerClasses =
 	"h-auto flex flex-col flex-nowrap overflow-auto shadow-md border bg-popover text-popover-foreground rounded-md w-full min-w-max";
@@ -32,8 +32,9 @@ type OptionListProps = {
 	isMulti?: boolean;
 	isSearchable?: boolean;
 	placeholderSearchText?: string;
-	containerRef: RefObject<HTMLElement>;
+	containerRef: RefObject<HTMLElement | null>;
 	close: (restoreFocus?: boolean) => void;
+	id: string;
 };
 
 const filterOptions = ({
@@ -61,6 +62,7 @@ const OptionList = ({
 	placeholderSearchText,
 	containerRef,
 	close,
+	id,
 }: OptionListProps) => {
 	const listboxRef = useRef<HTMLDivElement>(null);
 	const [search, setSearch] = useState("");
@@ -151,7 +153,7 @@ const OptionList = ({
 		return () => {
 			window.removeEventListener("resize", run);
 		};
-	}, []);
+	}, [containerRef.current]);
 
 	return createPortal(
 		<div
@@ -164,6 +166,8 @@ const OptionList = ({
 			className={"absolute z-50 max-h-48 aria-[hidden=true]:hidden"}
 			ref={listboxRef}
 			style={styles}
+			id={id}
+			aria-expanded
 		>
 			{styles ? (
 				<ul className={listContainerClasses}>
@@ -177,7 +181,9 @@ const OptionList = ({
 								onChange={handleSearchChange}
 								suffix={
 									<div className="px-4">
+										{/* biome-ignore lint/a11y/noSvgWithoutTitle: TODO */}
 										<svg
+											aria-label="search"
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 16 16"
 											fill="currentColor"

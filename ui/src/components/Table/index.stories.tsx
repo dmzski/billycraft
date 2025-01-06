@@ -1,10 +1,9 @@
 import * as React from "react";
-
 import {
-	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
+	type ColumnDef,
+	type ColumnFiltersState,
+	type SortingState,
+	type VisibilityState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -12,7 +11,16 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-
+import {
+	ArrowsUpDownIcon,
+	ChevronDownIcon,
+	EllipsisHorizontalIcon,
+} from "@heroicons/react/24/solid";
+import { Button } from "components/Button";
+import { Checkbox } from "components/Checkbox";
+import { Dropdown } from "components/Dropdown";
+import { Input } from "components/Input";
+import { Label } from "components/Label";
 import {
 	Table,
 	TableBody,
@@ -21,16 +29,6 @@ import {
 	TableHeader,
 	TableRow,
 } from ".";
-import { Checkbox } from "components/Checkbox";
-import { Button } from "components/Button";
-import {
-	ArrowsUpDownIcon,
-	ChevronDownIcon,
-	EllipsisHorizontalIcon,
-} from "@heroicons/react/24/solid";
-import { Dropdown } from "components/Dropdown";
-import { Label } from "components/Label";
-import { Input } from "components/Input";
 
 export default {
 	title: "Components/Table",
@@ -126,7 +124,7 @@ const columns: ColumnDef<Payment>[] = [
 		accessorKey: "amount",
 		header: () => <div className="text-right">Amount</div>,
 		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue("amount"));
+			const amount = Number.parseFloat(row.getValue("amount"));
 
 			// Format the amount as a dollar amount
 			const formatted = new Intl.NumberFormat("en-US", {

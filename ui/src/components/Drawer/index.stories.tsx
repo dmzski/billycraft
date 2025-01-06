@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { Drawer, DrawerProps } from ".";
+import type { StoryObj } from "@storybook/react";
 import { Button } from "components/Button";
+import { useState } from "react";
+import { Drawer, type DrawerProps } from ".";
 
 export default {
 	title: "Components/Drawer",

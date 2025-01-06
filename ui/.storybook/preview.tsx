@@ -1,5 +1,5 @@
 import "../src/index.css";
-import { ComponentType, ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 export const parameters = {
 	controls: {

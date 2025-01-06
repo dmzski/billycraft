@@ -1,8 +1,14 @@
+import MarkXIcon from "@heroicons/react/24/solid/XMarkIcon";
+import { type VariantProps, cva } from "class-variance-authority";
+import clsx from "clsx";
+import { tw } from "lib/utils";
 import {
+	type ComponentProps,
+	type MouseEventHandler,
+	type ReactElement,
+	type ReactNode,
 	cloneElement,
-	ComponentProps,
-	MouseEventHandler,
-	ReactNode,
+	useCallback,
 	useEffect,
 	useId,
 	useMemo,
@@ -11,10 +17,6 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
-import MarkXIcon from "@heroicons/react/24/solid/XMarkIcon";
-import clsx from "clsx";
-import { tw } from "lib/utils";
-import { cva, VariantProps } from "class-variance-authority";
 
 const DELAY_TRANSITION = 200;
 const backdropClassNames = `
@@ -50,8 +52,8 @@ const dialogVariants = cva(dialogClassNames, {
 });
 
 export type ModalProps = {
-	disclosure?: JSX.Element;
-	children: ((props: { close: () => void }) => JSX.Element) | ReactNode;
+	disclosure?: ReactElement;
+	children: ((props: { close: () => void }) => ReactElement) | ReactNode;
 	withoutPortal?: boolean;
 	hideOnClickOutside?: boolean;
 	open?: boolean;
@@ -97,23 +99,25 @@ export const Modal = ({
 		if (onClose && openProp !== open) {
 			setOpen(!!openProp);
 		}
-	}, [disclosureRef, openProp, onClose]);
+	}, [open, openProp, onClose]);
 
 	const Component = disclosure
 		? cloneElement(disclosure, {
+				// @ts-ignore TODO improve
 				ref: disclosureRef,
 				"aria-controls": id,
 			})
 		: undefined;
 
-	const close = () => {
+	const close = useCallback(() => {
 		if (onClose) {
 			onClose();
 		} else {
 			setOpen(false);
 		}
-	};
-	const handleClickOutside: MouseEventHandler<HTMLElement> = (event) => {
+	}, [onClose]);
+
+	const handleClickOutside: MouseEventHandler<HTMLElement> = useCallback((event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		if (hideOnClickOutside) {
@@ -121,7 +125,7 @@ export const Modal = ({
 		}
 
 		return false;
-	};
+	}, [hideOnClickOutside, close]);
 
 	useEffect(() => {
 		let displayContentTimeout: ReturnType<typeof setTimeout>;
@@ -156,6 +160,7 @@ export const Modal = ({
 		() => (
 			<div
 				onClick={handleClickOutside}
+				onKeyUp={undefined}
 				aria-expanded={transitionState !== "closed"}
 				data-state={transitionState.includes("open") ? "open" : "closed"}
 				className={backdropClassNames}
@@ -165,6 +170,9 @@ export const Modal = ({
 						open
 						id={id}
 						onClick={(event) => {
+							event.stopPropagation();
+						}}
+						onKeyDown={(event) => {
 							event.stopPropagation();
 						}}
 						ref={dialogRef}
@@ -187,7 +195,7 @@ export const Modal = ({
 				) : null}
 			</div>
 		),
-		[children, close, transitionState],
+		[children, open, id, close, size, transitionState, handleClickOutside],
 	);
 
 	return (

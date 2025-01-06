@@ -1,3 +1,5 @@
+import { CheckIcon } from "@heroicons/react/24/solid";
+import { tw } from "lib/utils";
 import {
 	KeyboardEventHandler,
 	MouseEventHandler,
@@ -5,8 +7,6 @@ import {
 	useRef,
 } from "react";
 import { SelectOptionType, SelectValueType } from ".";
-import { tw } from "lib/utils";
-import { CheckIcon } from "@heroicons/react/24/solid";
 
 export type RenderSelectOptionProps = {
 	option: SelectOptionType;

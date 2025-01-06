@@ -1,4 +1,4 @@
-import { StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 import { TextArea } from ".";
 
 export default {
@@ -21,7 +21,7 @@ export const WithLabel: Story = {
 	},
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		value: "test",

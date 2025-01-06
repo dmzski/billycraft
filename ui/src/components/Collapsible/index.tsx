@@ -1,5 +1,5 @@
 import {
-	ReactNode,
+	type ReactNode,
 	cloneElement,
 	forwardRef,
 	isValidElement,
@@ -45,14 +45,15 @@ export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
 			if (openProp !== undefined && openProp !== open) {
 				setOpen(!!openProp);
 			}
-		}, [disclosureRef, openProp, onOpenChange]);
+		}, [openProp, open, onOpenChange]);
 
 		const Component =
 			disclosure && isValidElement(disclosure)
 				? cloneElement(disclosure, {
+            // @ts-ignore Dont check props forwarding here
 						ref: disclosureRef,
 						"aria-controls": id,
-					} as any)
+					})
 				: undefined;
 
 		const close = () => {

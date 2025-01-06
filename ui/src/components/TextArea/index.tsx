@@ -1,14 +1,14 @@
 import {
-	ChangeEventHandler,
-	FocusEventHandler,
+	type ChangeEventHandler,
+	type FocusEventHandler,
+	type KeyboardEventHandler,
+	type MouseEventHandler,
 	forwardRef,
-	KeyboardEventHandler,
-	MouseEventHandler,
 	useId,
 } from "react";
 
-import { tw } from "lib/utils";
 import { Label } from "components/Label";
+import { tw } from "lib/utils";
 
 export type TextAreaProps = {
 	label?: string;

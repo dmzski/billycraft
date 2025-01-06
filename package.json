@@ -7,11 +7,11 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@changesets/cli": "^2.27.9",
-		"@hey-api/openapi-ts": "^0.57.0"
+		"@changesets/cli": "^2.27.11",
+		"@hey-api/openapi-ts": "^0.60.1"
 	},
-  "scripts": {
-    "openapi-ts": "openapi-ts"
-  },
+	"scripts": {
+		"openapi-ts": "openapi-ts"
+	},
 	"packageManager": "pnpm@9.15.2"
 }

@@ -1,12 +1,12 @@
 import { Label } from "components/Label";
 import { tw } from "lib/utils";
 import {
-	ChangeEventHandler,
-	FocusEventHandler,
+	type ChangeEventHandler,
+	type FocusEventHandler,
+	type KeyboardEventHandler,
+	type MouseEventHandler,
+	type ReactNode,
 	forwardRef,
-	KeyboardEventHandler,
-	MouseEventHandler,
-	ReactNode,
 	useId,
 } from "react";
 
@@ -103,7 +103,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						{...props}
 						aria-invalid={!!error}
 						onChange={onChange}
-						autoFocus={autoFocus}
 						disabled={disabled}
 						type={type}
 						ref={ref}

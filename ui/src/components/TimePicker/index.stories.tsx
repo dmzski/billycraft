@@ -1,6 +1,6 @@
-import { StoryObj } from "@storybook/react";
-import { TimePicker, TimePickerProps } from ".";
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { TimePicker, type TimePickerProps } from ".";
 
 export default {
 	title: "Components/TimePicker",
@@ -36,7 +36,7 @@ export const Disabled: Story = {
 	},
 };
 
-export const Error: Story = {
+export const WithError: Story = {
 	render,
 	args: {
 		id: "test",

@@ -1,9 +1,9 @@
-import { RefObject, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 
 const useClickOutsideHandler = (
-	ref: RefObject<HTMLElement>,
+	ref: RefObject<HTMLElement | null>,
 	callback: (event: MouseEvent | TouchEvent | FocusEvent) => void,
-	additionalRef?: RefObject<HTMLElement>[],
+	additionalRef?: RefObject<HTMLElement | null>[],
 ): void => {
 	const callbackFnRef = useRef(callback);
 
@@ -11,9 +11,8 @@ const useClickOutsideHandler = (
 		const handler = (event: MouseEvent | TouchEvent | FocusEvent) => {
 			// If a fallback ref that prevent click outside is clicked
 			if (
-				additionalRef?.some(
-					(aRef) =>
-						aRef.current && aRef.current.contains(event.target as HTMLElement),
+				additionalRef?.some((aRef) =>
+					aRef.current?.contains(event.target as HTMLElement),
 				)
 			) {
 				return;
@@ -33,7 +32,7 @@ const useClickOutsideHandler = (
 			document.removeEventListener("mouseup", handler);
 			document.removeEventListener("touchend", handler);
 		};
-	}, [ref]);
+	}, [ref, additionalRef]);
 
 	useEffect(() => {
 		callbackFnRef.current = callback;

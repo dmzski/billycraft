@@ -1,6 +1,6 @@
+import type { StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Checkbox, CheckboxProps } from ".";
-import { StoryObj } from "@storybook/react";
+import { Checkbox, type CheckboxProps } from ".";
 
 export default {
 	title: "Components/Checkbox",

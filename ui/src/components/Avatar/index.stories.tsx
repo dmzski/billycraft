@@ -1,6 +1,6 @@
-import example from "./example.jpeg";
+import type { StoryObj } from "@storybook/react";
 import { Avatar } from ".";
-import { StoryObj } from "@storybook/react";
+import example from "./example.jpeg";
 
 export default {
 	title: "Components/Avatar",

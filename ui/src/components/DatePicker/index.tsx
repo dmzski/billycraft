@@ -1,6 +1,8 @@
-import { Input } from "../Input";
+import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon";
+import clsx from "clsx";
+import { tw } from "lib/utils";
 import {
-	FocusEventHandler,
+	type FocusEventHandler,
 	forwardRef,
 	useCallback,
 	useEffect,
@@ -9,10 +11,8 @@ import {
 	useState,
 } from "react";
 import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
+import { Input } from "../Input";
 import MonthCalendar from "./MonthCalendar";
-import clsx from "clsx";
-import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon";
-import { tw } from "lib/utils";
 
 export type DatePickerProps = {
 	name?: string;

@@ -6,7 +6,9 @@ export type LoaderProps = {
 
 const Loader = ({ className = "" }: LoaderProps) => {
 	return (
+		// biome-ignore lint/a11y/noSvgWithoutTitle: TODO improve
 		<svg
+			aria-label="loader"
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="none"
