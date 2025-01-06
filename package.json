@@ -13,5 +13,5 @@
   "scripts": {
     "openapi-ts": "openapi-ts"
   },
-	"packageManager": "pnpm@9.12.0"
+	"packageManager": "pnpm@9.15.2"
 }
