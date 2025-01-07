@@ -176,7 +176,6 @@ const OptionList = ({
 							<Input
 								placeholder={placeholderSearchText}
 								autoComplete="off"
-								autoFocus
 								value={search}
 								onChange={handleSearchChange}
 								suffix={
