@@ -1,5 +1,5 @@
 import clsx from "clsx";
-  import { type HTMLAttributes, type ReactNode, forwardRef } from "react";
+import { type HTMLAttributes, type ReactNode, forwardRef } from "react";
 
 export type RowProps = HTMLAttributes<HTMLDivElement> & {
 	template?: string;

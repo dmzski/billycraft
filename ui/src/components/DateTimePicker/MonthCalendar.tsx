@@ -33,7 +33,7 @@ const MonthCalendarButton = ({
 				}}
 				className={buttonClassNames}
 				aria-selected={isSelected}
-        type='button'
+				type="button"
 			>
 				{date.getDate()}
 			</button>

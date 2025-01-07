@@ -46,7 +46,7 @@ const APP_ROUTES: PathComponentTuple[] = [
 
 export const MainSwitch = () => {
 	const { user } = useUser();
-  const { organization } = useOrganization()
+	const { organization } = useOrganization();
 	const { isAuthenticated, isInitializing } = useAuth();
 
 	if (isInitializing) {
@@ -56,7 +56,7 @@ export const MainSwitch = () => {
 					<PageLoader />
 				</div>
 			</div>
-    )
+		);
 	}
 
 	if (!isAuthenticated) {

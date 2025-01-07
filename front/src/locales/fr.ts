@@ -57,7 +57,8 @@ export default {
 	"forms.confirmation.delete.pattern": "^SUPPRIMER$",
 	"forms.confirmation.leave.pattern": "QUITTER",
 	"forms.confirmation.delete.label": "Ecrire SUPPRIMER pour confirmer",
-	"forms.confirmation.confirmation.label": "Ecrire {confirmationStr} pour confirmer",
+	"forms.confirmation.confirmation.label":
+		"Ecrire {confirmationStr} pour confirmer",
 	appName: "Billycraft",
 	underDevelopment: "Fonctionnalité en cours de développment",
 	contactSupport: "Contactez le support",
@@ -496,11 +497,12 @@ export default {
 	// Quotes > Details
 	"quotes.details.backTo": "Retourner à la liste des devis",
 	"quotes.details.duplicateSuccess": "Devis dupliqué",
-  "quotes.details.downloadPdfButton": "Télécharger le PDF",
-	"quotes.details.duplicateError": "Une erreur est survenue lors de la duplication du devis",
-  "quotes.details.createBill": "Créer la facture",
-  "quotes.details.createBillSuccess": "Facture créée",
-  "quotes.details.duplicate": "Dupliquer",
+	"quotes.details.downloadPdfButton": "Télécharger le PDF",
+	"quotes.details.duplicateError":
+		"Une erreur est survenue lors de la duplication du devis",
+	"quotes.details.createBill": "Créer la facture",
+	"quotes.details.createBillSuccess": "Facture créée",
+	"quotes.details.duplicate": "Dupliquer",
 	"quotes.details.sections.information.title": "Informations",
 	"quotes.details.sections.information.id": "Référence",
 	"quotes.details.sections.information.status": "État",
@@ -921,13 +923,16 @@ export default {
 	"account.submit.success": "Vos informations ont été mise à jour",
 	"account.submit.error":
 		"Une erreur est survenue lors de la mise à jour de vos informations",
-	"account.sections.leaveOrganization.title":"Quitter l'entreprise",
-	"account.sections.leaveOrganization.description":"Quittez l'entreprise pour ne plus faire parti de cet espace. Vous pourrez par la suite en rejoindre un autre ou creer le votre",
-	"account.sections.leaveOrganization.button":"Quitter l'entreprise",
-	"account.modals.leaveOrganization.title":"Quitter l'entreprise",
-	"account.modals.leaveOrganization.warning":"En quittant l'entreprise vous ne pourrez plus y avoir accès, il faudra vous reinviter pour en refaire parti.",
-	"account.modals.leaveOrganization.submit":"Quitter",
-	"account.modals.leaveOrganization.submit.success":"Entreprise quittée avec succès",
+	"account.sections.leaveOrganization.title": "Quitter l'entreprise",
+	"account.sections.leaveOrganization.description":
+		"Quittez l'entreprise pour ne plus faire parti de cet espace. Vous pourrez par la suite en rejoindre un autre ou creer le votre",
+	"account.sections.leaveOrganization.button": "Quitter l'entreprise",
+	"account.modals.leaveOrganization.title": "Quitter l'entreprise",
+	"account.modals.leaveOrganization.warning":
+		"En quittant l'entreprise vous ne pourrez plus y avoir accès, il faudra vous reinviter pour en refaire parti.",
+	"account.modals.leaveOrganization.submit": "Quitter",
+	"account.modals.leaveOrganization.submit.success":
+		"Entreprise quittée avec succès",
 
 	// Organization > Customization
 	"organization.customization.title": "Personnalisation",

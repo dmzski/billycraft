@@ -98,7 +98,7 @@ export const Dropdown = ({
 	}, [open, openProp, onClose]);
 
 	const Component = cloneElement(disclosure, {
-    // @ts-ignore TODO Improve this
+		// @ts-ignore TODO Improve this
 		ref: disclosureRef,
 	});
 	useEffect(() => {

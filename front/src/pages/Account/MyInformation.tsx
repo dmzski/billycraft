@@ -60,49 +60,47 @@ export const MyInformation = () => {
 		toast.show(pageT("submit.success"));
 	};
 
-  return (
-			<div>
-				<h2 className="text-xl font-semibold">
-					{pageT("updateMyInformation")}
-				</h2>
-				<Form methods={methods} onSubmit={onSubmit}>
-					<div className="flex flex-col gap-8 border p-4 rounded-md">
-						<div className="grid md:grid-cols-2 gap-8">
-							<InputField
-								label={pageT("fields.firstName.label")}
-								control={methods.control}
-								name="firstName"
-								required
-								minLength={3}
-							/>
-							<InputField
-								label={pageT("fields.lastName.label")}
-								control={methods.control}
-								name="lastName"
-								required
-								minLength={3}
-							/>
-							<InputField
-								label={pageT("fields.oldPassword.label")}
-								control={methods.control}
-								name="oldPassword"
-								type="password"
-								autoComplete="password"
-							/>
-							<InputField
-								label={pageT("fields.newPassword.label")}
-								control={methods.control}
-								name="password"
-								type="password"
-								autoComplete="new-password"
-							/>
-						</div>
-						<FormErrorAlert />
-						<div className="flex justify-end">
-							<Submit>{pageT("submit")}</Submit>
-						</div>
+	return (
+		<div>
+			<h2 className="text-xl font-semibold">{pageT("updateMyInformation")}</h2>
+			<Form methods={methods} onSubmit={onSubmit}>
+				<div className="flex flex-col gap-8 border p-4 rounded-md">
+					<div className="grid md:grid-cols-2 gap-8">
+						<InputField
+							label={pageT("fields.firstName.label")}
+							control={methods.control}
+							name="firstName"
+							required
+							minLength={3}
+						/>
+						<InputField
+							label={pageT("fields.lastName.label")}
+							control={methods.control}
+							name="lastName"
+							required
+							minLength={3}
+						/>
+						<InputField
+							label={pageT("fields.oldPassword.label")}
+							control={methods.control}
+							name="oldPassword"
+							type="password"
+							autoComplete="password"
+						/>
+						<InputField
+							label={pageT("fields.newPassword.label")}
+							control={methods.control}
+							name="password"
+							type="password"
+							autoComplete="new-password"
+						/>
 					</div>
-				</Form>
-			</div>
-  )
-}
+					<FormErrorAlert />
+					<div className="flex justify-end">
+						<Submit>{pageT("submit")}</Submit>
+					</div>
+				</div>
+			</Form>
+		</div>
+	);
+};

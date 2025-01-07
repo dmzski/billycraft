@@ -156,21 +156,22 @@ export const Overview = () => {
 					) : (
 						<div className="flex gap-4 md:flex-row flex-col">
 							<Button
-                variant="outline"
+								variant="outline"
 								onClick={duplicate}
 								disabled={
-									(quote.status !== "REFUSED" && quote.status !== "ARCHIVED") || isDuplicating
+									(quote.status !== "REFUSED" && quote.status !== "ARCHIVED") ||
+									isDuplicating
 								}
 							>
 								{t("quotes.details.duplicate")}
 							</Button>
-              <Button
-                onClick={createBill}
-                disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
-              >
-                <PlusIcon />
-                {t("quotes.details.createBill")}
-              </Button>
+							<Button
+								onClick={createBill}
+								disabled={isCreatingBill || !isQuoteMinimumAccepted(quote)}
+							>
+								<PlusIcon />
+								{t("quotes.details.createBill")}
+							</Button>
 						</div>
 					)}
 				</div>

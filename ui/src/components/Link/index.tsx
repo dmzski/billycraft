@@ -27,7 +27,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 	({ className, children, variant, asChild, ...props }, ref) => {
 		if (asChild && isValidElement(children)) {
 			return cloneElement(children, {
-        // @ts-ignore TODO improve
+				// @ts-ignore TODO improve
 				...children.props,
 				className: tw(linkVariants({ variant, className })),
 			});

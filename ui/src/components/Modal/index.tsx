@@ -117,15 +117,18 @@ export const Modal = ({
 		}
 	}, [onClose]);
 
-	const handleClickOutside: MouseEventHandler<HTMLElement> = useCallback((event) => {
-		event.preventDefault();
-		event.stopPropagation();
-		if (hideOnClickOutside) {
-			close();
-		}
+	const handleClickOutside: MouseEventHandler<HTMLElement> = useCallback(
+		(event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			if (hideOnClickOutside) {
+				close();
+			}
 
-		return false;
-	}, [hideOnClickOutside, close]);
+			return false;
+		},
+		[hideOnClickOutside, close],
+	);
 
 	useEffect(() => {
 		let displayContentTimeout: ReturnType<typeof setTimeout>;

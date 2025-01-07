@@ -50,7 +50,7 @@ export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
 		const Component =
 			disclosure && isValidElement(disclosure)
 				? cloneElement(disclosure, {
-            // @ts-ignore Dont check props forwarding here
+						// @ts-ignore Dont check props forwarding here
 						ref: disclosureRef,
 						"aria-controls": id,
 					})

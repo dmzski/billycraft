@@ -28,10 +28,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 		enabled: isAuthenticated,
 	});
 
-	const value = useMemo(
-		() => ({ user, reload }),
-		[user, reload],
-	);
+	const value = useMemo(() => ({ user, reload }), [user, reload]);
 
 	useEffect(() => {
 		if (user) {

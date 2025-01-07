@@ -48,13 +48,11 @@ export type InputProps = {
 	readOnly?: boolean;
 	prefix?: ReactNode;
 	suffix?: ReactNode;
-	autoFocus?: boolean;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
 	(
 		{
-			autoFocus,
 			label,
 			id: idProp,
 			className,

@@ -1,5 +1,11 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import { type ReactNode, type SyntheticEvent, useEffect, useRef, useState } from "react";
+import {
+	type ReactNode,
+	type SyntheticEvent,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 const progressBarVariants = cva("absolute bottom-0 left-0 w-0 h-1 opacity-40", {
 	variants: {

@@ -27,9 +27,9 @@ export const Avatar = ({
 
 	return src && displayImg ? (
 		<img
-      {...props}
+			{...props}
 			src={src}
-			alt={alt ?? ''}
+			alt={alt ?? ""}
 			className={tw(classes.base, className)}
 			onError={() => {
 				setDisplayImg(false);

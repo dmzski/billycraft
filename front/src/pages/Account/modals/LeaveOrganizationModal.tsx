@@ -48,7 +48,9 @@ const LeaveOrganizationForm = ({
 	}
 
 	const onSubmit = async () => {
-		await OrganizationService.postOrganizationByIdLeave({ path: { id: organization.id } });
+		await OrganizationService.postOrganizationByIdLeave({
+			path: { id: organization.id },
+		});
 		toast.show(pageT("submit.success"));
 		onClose();
 		await onSubmitSuccess();

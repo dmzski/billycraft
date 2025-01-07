@@ -43,10 +43,9 @@ export const Variants = {
 	render: () => {
 		const toast = useToast();
 
-		const showToast =
-			(variant?: ToastProps["variant"]) => () => {
-				toast.show(variant ?? "default", { variant });
-			};
+		const showToast = (variant?: ToastProps["variant"]) => () => {
+			toast.show(variant ?? "default", { variant });
+		};
 
 		return (
 			<div className="flex flex-col gap-1">
