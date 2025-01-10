@@ -1,8 +1,8 @@
-import { tw } from "lib/utils";
+import { tw } from "lib/utils"
 
 export type LoaderProps = {
-	className?: string;
-};
+	className?: string
+}
 
 const Loader = ({ className = "" }: LoaderProps) => {
 	return (
@@ -20,7 +20,7 @@ const Loader = ({ className = "" }: LoaderProps) => {
 		>
 			<path d="M21 12a9 9 0 1 1-6.219-8.56" />
 		</svg>
-	);
-};
+	)
+}
 
-export default Loader;
+export default Loader

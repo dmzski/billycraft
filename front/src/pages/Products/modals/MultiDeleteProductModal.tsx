@@ -1,46 +1,46 @@
-import { useI18n } from "@/i18n";
-import { Alert, Button, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Submit } from "@/components/form/Submit";
-import { InputField } from "@/components/form/InputField";
-import { Form } from "@/components/form/Form";
-import { type ProductResponse, ProductsService } from "@/sdk";
+import { useI18n } from "@/i18n"
+import { Alert, Button, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { useForm } from "react-hook-form"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Submit } from "@/components/form/Submit"
+import { InputField } from "@/components/form/InputField"
+import { Form } from "@/components/form/Form"
+import { type ProductResponse, ProductsService } from "@/sdk"
 
 type MultiDeleteProductModalProps = {
-	onSubmitSuccess: () => Promise<void>;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	productIds: ProductResponse["id"][];
-};
+	onSubmitSuccess: () => Promise<void>
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	productIds: ProductResponse["id"][]
+}
 
 type MultiDeleteProductFormProps = Omit<
 	MultiDeleteProductModalProps,
 	"disclosure"
 > & {
-	close: () => void;
-};
+	close: () => void
+}
 
 type ConfirmValues = {
-	confirm: string;
-};
+	confirm: string
+}
 
 const MultiDeleteProductForm = ({
 	productIds,
 	onSubmitSuccess,
 	close,
 }: MultiDeleteProductFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.multiDelete");
-	const confirmationString = t("forms.confirmation.delete.pattern");
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const pageT = scopedT("products.modals.multiDelete")
+	const confirmationString = t("forms.confirmation.delete.pattern")
 
 	const methods = useForm<ConfirmValues>({
 		mode: "onChange",
 		defaultValues: {
 			confirm: "",
 		},
-	});
+	})
 
 	const onSubmit = async () => {
 		try {
@@ -50,15 +50,15 @@ const MultiDeleteProductForm = ({
 						ProductsService.deleteProductsById({ path: { id: productId } }),
 					),
 				Promise.resolve(),
-			);
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
-			close();
+			)
+			toast.show(pageT("submit.success"))
+			await onSubmitSuccess()
+			close()
 		} catch (err) {
-			sendErrorToSentry(err);
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(err)
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
@@ -84,8 +84,8 @@ const MultiDeleteProductForm = ({
 				</Modal.Actions>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const MultiDeleteProductModal = ({
 	productIds,
@@ -101,4 +101,4 @@ export const MultiDeleteProductModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

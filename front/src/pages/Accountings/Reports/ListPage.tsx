@@ -1,12 +1,12 @@
-import { Button } from "@billycraft/ui";
-import List from "./components/List";
-import CreateReportModal from "./modals/CreateReportModal";
-import { useI18n } from "@/i18n";
-import { useAllReportsQuery } from "@/queries/useAllReportsQuery";
+import { Button } from "@billycraft/ui"
+import List from "./components/List"
+import CreateReportModal from "./modals/CreateReportModal"
+import { useI18n } from "@/i18n"
+import { useAllReportsQuery } from "@/queries/useAllReportsQuery"
 
 const ListPage = () => {
-	const { t } = useI18n();
-	const { data, reload } = useAllReportsQuery();
+	const { t } = useI18n()
+	const { data, reload } = useAllReportsQuery()
 
 	return (
 		<div className="flex flex-col gap-5">
@@ -25,7 +25,7 @@ const ListPage = () => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default ListPage;
+export default ListPage

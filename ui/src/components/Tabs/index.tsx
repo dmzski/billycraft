@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import { tw } from "lib/utils";
+import { tw } from "lib/utils"
 
 const Tabs = React.forwardRef<
 	HTMLUListElement,
@@ -14,17 +14,17 @@ const Tabs = React.forwardRef<
 		)}
 		{...props}
 	/>
-));
-Tabs.displayName = "Tabs";
+))
+Tabs.displayName = "Tabs"
 
 const tabClassNames =
-	"inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm";
+	"inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
 
 export const Tab = React.forwardRef<
 	HTMLButtonElement,
 	React.ComponentPropsWithoutRef<"button"> & {
-		asChild?: boolean;
-		isActive?: boolean;
+		asChild?: boolean
+		isActive?: boolean
 	}
 >(
 	(
@@ -39,7 +39,7 @@ export const Tab = React.forwardRef<
 				"data-state": isActive ? "active" : "unactive",
 				"aria-selected": isActive,
 				role,
-			});
+			})
 		}
 
 		return (
@@ -52,13 +52,13 @@ export const Tab = React.forwardRef<
 				aria-selected={isActive}
 				{...props}
 			/>
-		);
+		)
 	},
-);
-Tab.displayName = "Tab";
+)
+Tab.displayName = "Tab"
 
 const Exported = {
 	...Tabs,
 	Tab,
-} as typeof Tabs & { Tab: typeof Tab };
-export { Exported as Tabs };
+} as typeof Tabs & { Tab: typeof Tab }
+export { Exported as Tabs }

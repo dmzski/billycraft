@@ -1,42 +1,42 @@
-import { BottomActionBar } from "@/components/BottomActionBar";
-import ProductTableLine from "./Row";
-import type { ProductResponse } from "@/sdk";
-import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { useEffect, useRef, useState } from "react";
-import { MultiEditProductGroupModal } from "../modals/MultiEditProductGroupModal";
-import { Button, Checkbox } from "@billycraft/ui";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { MultiDeleteProductModal } from "../modals/MultiDeleteProductModal";
-import { useI18n } from "@/i18n";
+import { BottomActionBar } from "@/components/BottomActionBar"
+import ProductTableLine from "./Row"
+import type { ProductResponse } from "@/sdk"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { useEffect, useRef, useState } from "react"
+import { MultiEditProductGroupModal } from "../modals/MultiEditProductGroupModal"
+import { Button, Checkbox } from "@billycraft/ui"
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { MultiDeleteProductModal } from "../modals/MultiDeleteProductModal"
+import { useI18n } from "@/i18n"
 
 type ProductTableProps = {
-	products: ProductResponse[];
-	reloadProducts: () => Promise<void>;
-};
+	products: ProductResponse[]
+	reloadProducts: () => Promise<void>
+}
 
 const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
-	const { t } = useI18n();
-	const { data: suppliers } = useAllSuppliersQuery();
-	const { data: groups } = useAllProductGroupsQuery();
-	const divRef = useRef<HTMLDivElement>(null);
+	const { t } = useI18n()
+	const { data: suppliers } = useAllSuppliersQuery()
+	const { data: groups } = useAllProductGroupsQuery()
+	const divRef = useRef<HTMLDivElement>(null)
 
-	const [selected, setSelected] = useState<ProductResponse[]>([]);
+	const [selected, setSelected] = useState<ProductResponse[]>([])
 	const getSupplier = (product: ProductResponse) =>
 		product.supplierId
 			? suppliers?.find(({ id }) => id === product.supplierId)
-			: undefined;
+			: undefined
 
 	const getGroupName = (product: ProductResponse) =>
 		product.groupId
 			? groups?.find(({ id }) => id === product.groupId)?.name
-			: undefined;
+			: undefined
 
 	useEffect(() => {
 		if (products) {
-			setSelected([]);
+			setSelected([])
 		}
-	}, [products]);
+	}, [products])
 
 	return (
 		<div ref={divRef} className="relative flex flex-col gap-2">
@@ -51,7 +51,7 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
 									: "unchecked"
 						}
 						onCheckedChange={(newState) => {
-							setSelected(() => (newState ? [...products] : []));
+							setSelected(() => (newState ? [...products] : []))
 						}}
 						value="all"
 						label={t("selectAll")}
@@ -100,7 +100,7 @@ const ProductTable = ({ products, reloadProducts }: ProductTableProps) => {
 				</BottomActionBar>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default ProductTable;
+export default ProductTable

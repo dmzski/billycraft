@@ -1,13 +1,13 @@
-import { Scanner } from "@yudiel/react-qr-scanner";
-import type { ComponentProps } from "react";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Modal } from "@billycraft/ui";
-import { SCANNER_COMPONENTS, SCANNER_FORMATS } from "@/constants/scanner";
+import { Scanner } from "@yudiel/react-qr-scanner"
+import type { ComponentProps } from "react"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Modal } from "@billycraft/ui"
+import { SCANNER_COMPONENTS, SCANNER_FORMATS } from "@/constants/scanner"
 
 type ScanArticleCodeModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onScan: ComponentProps<typeof Scanner>["onScan"];
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onScan: ComponentProps<typeof Scanner>["onScan"]
+}
 
 export const ScanArticleCodeModal = ({
 	disclosure,
@@ -18,8 +18,8 @@ export const ScanArticleCodeModal = ({
 			<div className="pt-8">
 				<Scanner
 					onScan={(codes) => {
-						onScan(codes);
-						close();
+						onScan(codes)
+						close()
 					}}
 					classNames={{
 						container: "scanner",
@@ -29,10 +29,10 @@ export const ScanArticleCodeModal = ({
 					scanDelay={500}
 					allowMultiple
 					onError={(err) => {
-						sendErrorToSentry(err);
+						sendErrorToSentry(err)
 					}}
 				/>
 			</div>
 		)}
 	</Modal>
-);
+)

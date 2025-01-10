@@ -1,20 +1,20 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import type { BillResponse } from "@/sdk";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import type { BillResponse } from "@/sdk"
 import {
 	calculatePriceTTC,
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalEt,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type ContentSectionProps = {
-	bill: BillResponse;
-};
+	bill: BillResponse
+}
 
 export const ContentSection = ({ bill }: ContentSectionProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("bills.details");
-	const formatCurrency = useFormatCurrency();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("bills.details")
+	const formatCurrency = useFormatCurrency()
 
 	return (
 		<section>
@@ -92,5 +92,5 @@ export const ContentSection = ({ bill }: ContentSectionProps) => {
 				</div>
 			</div>
 		</section>
-	);
-};
+	)
+}

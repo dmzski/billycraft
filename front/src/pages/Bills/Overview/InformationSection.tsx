@@ -1,29 +1,29 @@
-import { RRLink } from "@/components/RRLink";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useFormatDate } from "@/hooks/useFormatDate";
-import { useI18n } from "@/i18n";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
-import { ROUTES } from "@/routes";
-import type { BillResponse } from "@/sdk";
+import { RRLink } from "@/components/RRLink"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useFormatDate } from "@/hooks/useFormatDate"
+import { useI18n } from "@/i18n"
+import { useCustomerQuery } from "@/queries/useCustomerQuery"
+import { ROUTES } from "@/routes"
+import type { BillResponse } from "@/sdk"
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
 	getBillOrQuoteTotalEt,
 	getBillOrQuoteTotalForLineType,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type InformationSectionProps = {
-	bill: BillResponse;
-};
+	bill: BillResponse
+}
 
 export const InformationSection = ({ bill }: InformationSectionProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("bills.details");
-	const formatCurrency = useFormatCurrency();
-	const { toISO9075 } = useFormatDate();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("bills.details")
+	const formatCurrency = useFormatCurrency()
+	const { toISO9075 } = useFormatDate()
 	const { data: customer } = useCustomerQuery(bill?.customerId ?? "", {
 		enabled: !!bill?.customerId,
-	});
+	})
 	return (
 		<section>
 			<h2 className="font-semibold text-xl">
@@ -145,5 +145,5 @@ export const InformationSection = ({ bill }: InformationSectionProps) => {
 				</div>
 			</div>
 		</section>
-	);
-};
+	)
+}

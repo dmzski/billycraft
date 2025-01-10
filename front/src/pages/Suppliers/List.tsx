@@ -1,17 +1,17 @@
-import { Button } from "@billycraft/ui";
-import type { SupplierResponse } from "@/sdk";
-import SupplierModalForm from "./modals/SupplierModalForm";
-import { PencilIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { SupplierLabel } from "@/components/labels/SupplierLabel";
+import { Button } from "@billycraft/ui"
+import type { SupplierResponse } from "@/sdk"
+import SupplierModalForm from "./modals/SupplierModalForm"
+import { PencilIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { SupplierLabel } from "@/components/labels/SupplierLabel"
 
 type ListProps = {
-	data: SupplierResponse[];
-	reloadData: () => Promise<void>;
-};
+	data: SupplierResponse[]
+	reloadData: () => Promise<void>
+}
 const List = ({ data, reloadData }: ListProps) => {
-	const { scopedT } = useI18n();
-	const pageT = scopedT("suppliers.list");
+	const { scopedT } = useI18n()
+	const pageT = scopedT("suppliers.list")
 	return (
 		<div className="flex flex-col gap-2">
 			{data.map((supplier) => (
@@ -48,7 +48,7 @@ const List = ({ data, reloadData }: ListProps) => {
 				</div>
 			))}
 		</div>
-	);
-};
+	)
+}
 
-export default List;
+export default List

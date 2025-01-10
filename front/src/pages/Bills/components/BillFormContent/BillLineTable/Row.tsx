@@ -1,6 +1,6 @@
-import { Button, Input } from "@billycraft/ui";
-import { type ComponentProps, useMemo } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { Button, Input } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import {
 	ArrowsUpDownIcon,
 	CloudArrowDownIcon,
@@ -8,27 +8,27 @@ import {
 	PencilIcon,
 	PlusIcon,
 	TrashIcon,
-} from "@heroicons/react/24/solid";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { useI18n } from "@/i18n";
-import type { BillFormValues } from "../types";
-import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
-import { AddProductModal } from "@/pages/Products/modals/AddProductModal";
-import { SelectField } from "@/components/form/SelectField";
-import { InputField } from "@/components/form/InputField";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import { EditProductModal } from "@/pages/Products/modals/EditProductModal";
-import { ProductTypeSchema, type ProductResponse } from "@/sdk";
-import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
+} from "@heroicons/react/24/solid"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { useI18n } from "@/i18n"
+import type { BillFormValues } from "../types"
+import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price"
+import { AddProductModal } from "@/pages/Products/modals/AddProductModal"
+import { SelectField } from "@/components/form/SelectField"
+import { InputField } from "@/components/form/InputField"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { EditProductModal } from "@/pages/Products/modals/EditProductModal"
+import { ProductTypeSchema, type ProductResponse } from "@/sdk"
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel"
 
 type BillLineTableLineProps = {
-	deleteLine: () => void;
-	index: number;
-	id: string;
-	product?: ProductResponse;
-	reloadProducts: () => Promise<void>;
-};
+	deleteLine: () => void
+	index: number
+	id: string
+	product?: ProductResponse
+	reloadProducts: () => Promise<void>
+}
 const BillLineTableLine = ({
 	deleteLine,
 	index,
@@ -36,42 +36,42 @@ const BillLineTableLine = ({
 	product,
 	reloadProducts,
 }: BillLineTableLineProps) => {
-	const { control, setValue } = useFormContext<BillFormValues>();
-	const { t } = useI18n();
+	const { control, setValue } = useFormContext<BillFormValues>()
+	const { t } = useI18n()
 	const { listeners, setNodeRef, transform, transition, isDragging } =
 		useSortable({
 			id,
 			data: {
 				lineIndex: index,
 			},
-		});
+		})
 	const style = {
 		transform: CSS.Translate.toString(transform),
 		transition,
 		zIndex: isDragging ? 10 : undefined,
-	};
+	}
 
 	const [tva, quantity = 0, itPrice = 0] = useWatch({
 		control,
 		name: ["tva", `lines.${index}.quantity`, `lines.${index}.itPrice`],
-	});
+	})
 
 	const totalTTC = useMemo(() => {
 		if (Number.isNaN(quantity) || !quantity) {
-			return 0;
+			return 0
 		}
 
-		return quantity * itPrice;
-	}, [itPrice, quantity]);
+		return quantity * itPrice
+	}, [itPrice, quantity])
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] =
 		Object.values(ProductTypeSchema.enum).map((type) => ({
 			value: type,
 			label: <ProductTypeLabel type={type} />,
 			render: <ProductTypeLabel type={type} short />,
-		}));
+		}))
 
-	const lineValue = useWatch({ control, name: `lines.${index}` });
+	const lineValue = useWatch({ control, name: `lines.${index}` })
 
 	const inputSuffix = useMemo(() => {
 		if (!lineValue.productId && lineValue.name) {
@@ -89,11 +89,11 @@ const BillLineTableLine = ({
 						</Button>
 					}
 					onSubmitSuccess={async (newId) => {
-						await reloadProducts();
-						setValue(`lines.${index}.productId`, newId);
+						await reloadProducts()
+						setValue(`lines.${index}.productId`, newId)
 					}}
 				/>
-			);
+			)
 		}
 		if (lineValue.productId && product) {
 			return (
@@ -110,7 +110,7 @@ const BillLineTableLine = ({
 						</Button>
 					}
 					onSubmitSuccess={async (newProduct) => {
-						await reloadProducts();
+						await reloadProducts()
 						setValue(
 							`lines.${index}`,
 							{
@@ -121,14 +121,14 @@ const BillLineTableLine = ({
 								itPrice: calculatePriceTTC(newProduct.price, tva) ?? null,
 							},
 							{ shouldValidate: true },
-						);
+						)
 					}}
 				/>
-			);
+			)
 		}
 
-		return undefined;
-	}, [lineValue, index, setValue, product, tva, reloadProducts]);
+		return undefined
+	}, [lineValue, index, setValue, product, tva, reloadProducts])
 
 	return (
 		<div
@@ -154,9 +154,9 @@ const BillLineTableLine = ({
 								required
 								onChange={(type) => {
 									if (type === "TEXT") {
-										setValue(`lines.${index}.price`, 0);
-										setValue(`lines.${index}.itPrice`, 0);
-										setValue(`lines.${index}.quantity`, 0);
+										setValue(`lines.${index}.price`, 0)
+										setValue(`lines.${index}.itPrice`, 0)
+										setValue(`lines.${index}.quantity`, 0)
 									}
 								}}
 								options={typeOptions}
@@ -184,7 +184,7 @@ const BillLineTableLine = ({
 								<Button
 									variant="link"
 									onClick={() => {
-										setValue(`lines.${index}.description`, null);
+										setValue(`lines.${index}.description`, null)
 									}}
 									size="sm"
 								>
@@ -197,7 +197,7 @@ const BillLineTableLine = ({
 								<Button
 									variant="link"
 									onClick={() => {
-										setValue(`lines.${index}.description`, "");
+										setValue(`lines.${index}.description`, "")
 									}}
 									size="sm"
 								>
@@ -233,11 +233,11 @@ const BillLineTableLine = ({
 									type="number"
 									step={0.01}
 									onBlur={(event) => {
-										const newPrice = Number(event.target.value) || 0;
+										const newPrice = Number(event.target.value) || 0
 										setValue(
 											`lines.${index}.itPrice`,
 											calculatePriceTTC(newPrice, tva),
-										);
+										)
 									}}
 									suffix={<span className="px-2">€</span>}
 								/>
@@ -248,9 +248,9 @@ const BillLineTableLine = ({
 									name={`lines.${index}.itPrice`}
 									label={t("bills.form.lines.fields.totalItPrice.label")}
 									onBlur={(event) => {
-										const newPrice = Number(event.target.value) || 0;
-										const newEtPrice = calculatePriceETFromIT(newPrice, tva);
-										setValue(`lines.${index}.price`, newEtPrice);
+										const newPrice = Number(event.target.value) || 0
+										const newEtPrice = calculatePriceETFromIT(newPrice, tva)
+										setValue(`lines.${index}.price`, newEtPrice)
 									}}
 									suffix={<span className="px-2">€</span>}
 								/>
@@ -275,7 +275,7 @@ const BillLineTableLine = ({
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default BillLineTableLine;
+export default BillLineTableLine

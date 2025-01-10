@@ -1,20 +1,20 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import type { QuoteResponse } from "@/sdk";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import type { QuoteResponse } from "@/sdk"
 import {
 	calculatePriceTTC,
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalEt,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type ContentSectionProps = {
-	quote: QuoteResponse;
-};
+	quote: QuoteResponse
+}
 
 export const ContentSection = ({ quote }: ContentSectionProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("quotes.details");
-	const formatCurrency = useFormatCurrency();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("quotes.details")
+	const formatCurrency = useFormatCurrency()
 
 	return (
 		<section>
@@ -92,5 +92,5 @@ export const ContentSection = ({ quote }: ContentSectionProps) => {
 				</div>
 			</div>
 		</section>
-	);
-};
+	)
+}

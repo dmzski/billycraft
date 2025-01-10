@@ -1,10 +1,10 @@
-import { Link } from "@billycraft/ui";
-import { Link as ReactRouterLink } from "react-router-dom";
-import { type ComponentProps, forwardRef } from "react";
+import { Link } from "@billycraft/ui"
+import { Link as ReactRouterLink } from "react-router-dom"
+import { type ComponentProps, forwardRef } from "react"
 
 type RRLinkProps = {
-	variant?: ComponentProps<typeof Link>["variant"];
-} & ComponentProps<typeof ReactRouterLink>;
+	variant?: ComponentProps<typeof Link>["variant"]
+} & ComponentProps<typeof ReactRouterLink>
 
 export const RRLink = forwardRef<HTMLAnchorElement, RRLinkProps>(
 	({ variant, children, to, className, ...props }, ref) => {
@@ -14,8 +14,8 @@ export const RRLink = forwardRef<HTMLAnchorElement, RRLinkProps>(
 					{children}
 				</ReactRouterLink>
 			</Link>
-		);
+		)
 	},
-);
+)
 
-RRLink.displayName = "RouterLink";
+RRLink.displayName = "RouterLink"

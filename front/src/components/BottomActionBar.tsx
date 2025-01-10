@@ -4,34 +4,34 @@ import {
 	type RefObject,
 	useEffect,
 	useState,
-} from "react";
+} from "react"
 
 type BottomActionBarProps = {
-	containerRef: MutableRefObject<HTMLElement> | RefObject<HTMLElement>;
-	children: ReactNode;
-};
+	containerRef: MutableRefObject<HTMLElement> | RefObject<HTMLElement>
+	children: ReactNode
+}
 export const BottomActionBar = ({
 	containerRef,
 	children,
 }: BottomActionBarProps) => {
-	const initialRect = containerRef.current?.getBoundingClientRect();
+	const initialRect = containerRef.current?.getBoundingClientRect()
 	const [x, setX] = useState(
 		initialRect ? initialRect?.left + (initialRect?.width ?? 0) / 2 : -9999,
-	);
+	)
 
 	useEffect(() => {
 		const observer = new ResizeObserver((entries) => {
-			const divRects = entries[0]?.target.getBoundingClientRect();
-			setX(divRects ? divRects?.left + (divRects?.width ?? 0) / 2 : -9999);
-		});
+			const divRects = entries[0]?.target.getBoundingClientRect()
+			setX(divRects ? divRects?.left + (divRects?.width ?? 0) / 2 : -9999)
+		})
 		if (containerRef.current) {
-			observer.observe(containerRef.current);
+			observer.observe(containerRef.current)
 		}
 
 		return () => {
-			observer.disconnect();
-		};
-	}, [containerRef]);
+			observer.disconnect()
+		}
+	}, [containerRef])
 
 	return (
 		<div
@@ -42,5 +42,5 @@ export const BottomActionBar = ({
 		>
 			{children}
 		</div>
-	);
-};
+	)
+}

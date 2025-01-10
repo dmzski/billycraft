@@ -1,23 +1,23 @@
-import { useI18n } from "@/i18n";
-import { useAllUsersQuery } from "@/queries/useAllUsersQuery";
-import { Alert, Loader } from "@billycraft/ui";
-import { UsersList } from "./UsersList";
+import { useI18n } from "@/i18n"
+import { useAllUsersQuery } from "@/queries/useAllUsersQuery"
+import { Alert, Loader } from "@billycraft/ui"
+import { UsersList } from "./UsersList"
 
 export const Users = () => {
-	const { scopedT, t } = useI18n();
-	const pageT = scopedT("settings.users.users");
-	const { data, isLoading, reload } = useAllUsersQuery();
+	const { scopedT, t } = useI18n()
+	const pageT = scopedT("settings.users.users")
+	const { data, isLoading, reload } = useAllUsersQuery()
 
 	if (!data && isLoading) {
 		return (
 			<div className="flex justify-center items-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!data) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -26,5 +26,5 @@ export const Users = () => {
 			<p>{pageT("description")}</p>
 			<UsersList users={data} reload={reload} />
 		</div>
-	);
-};
+	)
+}

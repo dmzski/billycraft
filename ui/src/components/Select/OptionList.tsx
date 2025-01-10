@@ -1,5 +1,5 @@
-import { Input } from "components/Input";
-import useClickOutsideHandler from "hooks/useClickOutsideHandler";
+import { Input } from "components/Input"
+import useClickOutsideHandler from "hooks/useClickOutsideHandler"
 import {
 	type CSSProperties,
 	type ChangeEventHandler,
@@ -9,13 +9,13 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import { createPortal } from "react-dom";
-import type { SelectOptionType, SelectValueType } from ".";
-import Option from "./Option";
+} from "react"
+import { createPortal } from "react-dom"
+import type { SelectOptionType, SelectValueType } from "."
+import Option from "./Option"
 
 const listContainerClasses =
-	"h-auto flex flex-col flex-nowrap overflow-auto shadow-md border bg-popover text-popover-foreground rounded-md w-full min-w-max";
+	"h-auto flex flex-col flex-nowrap overflow-auto shadow-md border bg-popover text-popover-foreground rounded-md w-full min-w-max"
 
 const KEYS = {
 	ArrowDown: "ArrowDown",
@@ -23,19 +23,19 @@ const KEYS = {
 	Tab: "Tab",
 	Escape: "Escape",
 	Enter: "Enter",
-};
+}
 
 type OptionListProps = {
-	options: SelectOptionType[];
-	onOptionClick: (option: SelectOptionType) => void;
-	value?: SelectValueType;
-	isMulti?: boolean;
-	isSearchable?: boolean;
-	placeholderSearchText?: string;
-	containerRef: RefObject<HTMLElement | null>;
-	close: (restoreFocus?: boolean) => void;
-	id: string;
-};
+	options: SelectOptionType[]
+	onOptionClick: (option: SelectOptionType) => void
+	value?: SelectValueType
+	isMulti?: boolean
+	isSearchable?: boolean
+	placeholderSearchText?: string
+	containerRef: RefObject<HTMLElement | null>
+	close: (restoreFocus?: boolean) => void
+	id: string
+}
 
 const filterOptions = ({
 	options,
@@ -44,14 +44,14 @@ const filterOptions = ({
 	search.length > 0
 		? options.filter((option) => {
 				if (option.searchText) {
-					return option.searchText.toLowerCase().includes(search.toLowerCase());
+					return option.searchText.toLowerCase().includes(search.toLowerCase())
 				}
 				if (typeof option.label === "string") {
-					return option.label.toLowerCase().includes(search.toLowerCase());
+					return option.label.toLowerCase().includes(search.toLowerCase())
 				}
-				return true;
+				return true
 			})
-		: options;
+		: options
 
 const OptionList = ({
 	options,
@@ -64,77 +64,77 @@ const OptionList = ({
 	close,
 	id,
 }: OptionListProps) => {
-	const listboxRef = useRef<HTMLDivElement>(null);
-	const [search, setSearch] = useState("");
-	const [styles, setStyles] = useState<CSSProperties | undefined>(undefined);
+	const listboxRef = useRef<HTMLDivElement>(null)
+	const [search, setSearch] = useState("")
+	const [styles, setStyles] = useState<CSSProperties | undefined>(undefined)
 
 	const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		setSearch(event.target.value);
-	};
+		setSearch(event.target.value)
+	}
 
 	useClickOutsideHandler(
 		listboxRef,
 		() => {
-			close(false);
+			close(false)
 		},
 		[containerRef],
-	);
+	)
 
 	const filteredOptions = useMemo(
 		() => filterOptions({ options, search }),
 		[options, search],
-	);
+	)
 
 	const handleKeyDown: KeyboardEventHandler = (event) => {
 		if (event.key === KEYS.Tab) {
-			event.preventDefault();
-			close(true);
+			event.preventDefault()
+			close(true)
 		}
 		if (event.key === KEYS.ArrowDown || event.key === KEYS.ArrowUp) {
-			event.preventDefault();
+			event.preventDefault()
 			if (listboxRef.current && Object.values(KEYS).includes(event.key)) {
-				const activeElement = document.activeElement;
+				const activeElement = document.activeElement
 				const focusables = listboxRef.current.querySelectorAll<HTMLElement>(
 					"button:not(disabled), input:not(disabled)",
-				);
+				)
 				if (event.key === KEYS.ArrowDown) {
 					if (activeElement && listboxRef.current.contains(activeElement)) {
 						const index = [...focusables].findIndex(
 							(aButton) => aButton === activeElement,
-						);
-						focusables[index + 1]?.focus();
+						)
+						focusables[index + 1]?.focus()
 					} else {
-						focusables[0]?.focus();
+						focusables[0]?.focus()
 					}
 				}
 				if (event.key === KEYS.ArrowUp) {
 					if (activeElement && listboxRef.current.contains(activeElement)) {
 						const index = [...focusables].findIndex(
 							(aButton) => aButton === activeElement,
-						);
-						focusables[index - 1]?.focus();
+						)
+						focusables[index - 1]?.focus()
 					} else {
-						focusables[0]?.focus();
+						focusables[0]?.focus()
 					}
 				}
 			}
 		}
-	};
+	}
 
 	const handleInputKeyUp: KeyboardEventHandler = (event) => {
 		if ([KEYS.Enter].includes(event.key)) {
-			event.preventDefault();
-			event.stopPropagation();
+			event.preventDefault()
+			event.stopPropagation()
 		}
-	};
+	}
 
 	useEffect(() => {
 		const run = () => {
-			const getRect = () => containerRef.current?.getBoundingClientRect();
-			const rect = getRect();
+			const getRect = () => containerRef.current?.getBoundingClientRect()
+			const rect = getRect()
 			const getScrollTop = () =>
-				(window.scrollY || document.body.scrollTop) - document.body.clientTop;
-			const scrollTop = getScrollTop();
+				(window.scrollY || document.body.scrollTop) - document.body.clientTop
+			const scrollTop = getScrollTop()
 
 			setStyles(
 				rect
@@ -145,22 +145,22 @@ const OptionList = ({
 							bottom: 0,
 						}
 					: undefined,
-			);
-		};
-		window.addEventListener("resize", run);
-		run();
+			)
+		}
+		window.addEventListener("resize", run)
+		run()
 
 		return () => {
-			window.removeEventListener("resize", run);
-		};
-	}, [containerRef.current]);
+			window.removeEventListener("resize", run)
+		}
+	}, [containerRef.current])
 
 	return createPortal(
 		<div
 			onKeyUp={handleInputKeyUp}
 			onKeyDown={handleKeyDown}
 			onClick={(e) => {
-				e.stopPropagation();
+				e.stopPropagation()
 			}}
 			aria-hidden={styles === undefined}
 			className={"absolute z-50 max-h-48 aria-[hidden=true]:hidden"}
@@ -213,7 +213,7 @@ const OptionList = ({
 			) : null}
 		</div>,
 		document.body,
-	);
-};
+	)
+}
 
-export default OptionList;
+export default OptionList

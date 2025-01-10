@@ -1,27 +1,24 @@
-import { Badge } from "@billycraft/ui";
-import TodoList from "./TodoList";
-import { ListBulletIcon } from "@heroicons/react/24/solid";
-import { useAllTodosFinishedAfter } from "@/queries/useAllTodosFinishedAfter";
-import { useI18n } from "@/i18n";
-import { BillsOverdueSection } from "./BillsOverdueSection";
-import { useMemo } from "react";
-import { StockStatusSection } from "./StockStatusSection";
-import { useFormatDate } from "@/hooks/useFormatDate";
+import { Badge } from "@billycraft/ui"
+import TodoList from "./TodoList"
+import { ListBulletIcon } from "@heroicons/react/24/solid"
+import { useAllTodosFinishedAfter } from "@/queries/useAllTodosFinishedAfter"
+import { useI18n } from "@/i18n"
+import { BillsOverdueSection } from "./BillsOverdueSection"
+import { useMemo } from "react"
+import { StockStatusSection } from "./StockStatusSection"
+import { useFormatDate } from "@/hooks/useFormatDate"
 
-const DATE_OFFSET_TODOS = 24 * 60 * 60 * 1000 * 1; // 1 days
+const DATE_OFFSET_TODOS = 24 * 60 * 60 * 1000 * 1 // 1 days
 
 const Dashboard = () => {
-	const { t } = useI18n();
-	const dateOffset = useMemo(
-		() => new Date(Date.now() - DATE_OFFSET_TODOS),
-		[],
-	);
-	const { toRFC3339 } = useFormatDate();
+	const { t } = useI18n()
+	const dateOffset = useMemo(() => new Date(Date.now() - DATE_OFFSET_TODOS), [])
+	const { toRFC3339 } = useFormatDate()
 	const { data: todos, reload } = useAllTodosFinishedAfter(
 		toRFC3339(dateOffset),
-	);
+	)
 
-	const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0;
+	const todoCount = todos?.filter(({ doneAt }) => !doneAt).length ?? 0
 
 	return (
 		<div className="flex flex-col gap-12">
@@ -48,7 +45,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default Dashboard;
+export default Dashboard

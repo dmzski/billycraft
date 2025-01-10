@@ -1,17 +1,17 @@
-import { Select } from "@billycraft/ui";
-import type { ComponentProps } from "react";
+import { Select } from "@billycraft/ui"
+import type { ComponentProps } from "react"
 import {
 	type FieldPath,
 	type FieldValues,
 	type UseControllerProps,
 	useController,
-} from "react-hook-form";
+} from "react-hook-form"
 
 type SelectFieldProps<
 	TFieldValues extends FieldValues,
 	TName extends FieldPath<TFieldValues>,
 > = Omit<ComponentProps<typeof Select>, "value" | "name"> &
-	UseControllerProps<TFieldValues, TName>;
+	UseControllerProps<TFieldValues, TName>
 
 export const SelectField = <
 	TFieldValues extends FieldValues = FieldValues,
@@ -29,7 +29,7 @@ export const SelectField = <
 			required: props.required,
 			...props.rules,
 		},
-	});
+	})
 
 	return (
 		<Select
@@ -37,12 +37,12 @@ export const SelectField = <
 			error={props.error || fieldState.invalid}
 			name={field.name}
 			onChange={(event) => {
-				field.onChange(event);
-				props.onChange?.(event);
+				field.onChange(event)
+				props.onChange?.(event)
 			}}
 			ref={field.ref}
 			disabled={field.disabled || props.disabled}
 			value={field.value}
 		/>
-	);
-};
+	)
+}

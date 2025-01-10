@@ -1,28 +1,28 @@
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { useI18n } from "@/i18n";
-import { useAuth } from "@/providers/AuthProvider";
-import { useUser } from "@/providers/UserProvider";
-import { UsersService } from "@/sdk";
-import { useToast } from "@billycraft/ui";
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { useI18n } from "@/i18n"
+import { useAuth } from "@/providers/AuthProvider"
+import { useUser } from "@/providers/UserProvider"
+import { UsersService } from "@/sdk"
+import { useToast } from "@billycraft/ui"
+import { useMemo } from "react"
+import { useForm } from "react-hook-form"
 
 type AccountFormValues = {
-	firstName: string;
-	lastName: string;
-	oldPassword: string;
-	password: string;
-};
+	firstName: string
+	lastName: string
+	oldPassword: string
+	password: string
+}
 
 export const MyInformation = () => {
-	const { scopedT } = useI18n();
-	const { user } = useUser();
-	const { updateUser } = useAuth();
-	const toast = useToast();
-	const pageT = scopedT("account");
+	const { scopedT } = useI18n()
+	const { user } = useUser()
+	const { updateUser } = useAuth()
+	const toast = useToast()
+	const pageT = scopedT("account")
 	const initialValues = useMemo<AccountFormValues>(
 		() => ({
 			firstName: user?.firstName ?? "",
@@ -31,11 +31,11 @@ export const MyInformation = () => {
 			oldPassword: "",
 		}),
 		[user],
-	);
+	)
 	const methods = useForm({
 		mode: "onChange",
 		values: initialValues,
-	});
+	})
 
 	const onSubmit = async ({
 		firstName,
@@ -47,7 +47,7 @@ export const MyInformation = () => {
 			name: `${firstName} ${lastName}`,
 			oldPassword: oldPassword.length > 0 ? oldPassword : undefined,
 			password: password.length > 0 ? password : undefined,
-		});
+		})
 		if (user) {
 			await UsersService.patchUsersMe({
 				body: {
@@ -55,10 +55,10 @@ export const MyInformation = () => {
 					lastName,
 					firstName,
 				},
-			});
+			})
 		}
-		toast.show(pageT("submit.success"));
-	};
+		toast.show(pageT("submit.success"))
+	}
 
 	return (
 		<div>
@@ -102,5 +102,5 @@ export const MyInformation = () => {
 				</div>
 			</Form>
 		</div>
-	);
-};
+	)
+}

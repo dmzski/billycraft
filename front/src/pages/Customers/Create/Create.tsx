@@ -1,11 +1,11 @@
-import { Button, Input, TextArea, useToast } from "@billycraft/ui";
-import { useController, useForm } from "react-hook-form";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { ROUTES } from "@/routes";
-import { RRLink } from "@/components/RRLink";
-import { type CustomerRequest, CustomersService } from "@/sdk";
-import { useNavigate } from "react-router-dom";
+import { Button, Input, TextArea, useToast } from "@billycraft/ui"
+import { useController, useForm } from "react-hook-form"
+import { ChevronLeftIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { ROUTES } from "@/routes"
+import { RRLink } from "@/components/RRLink"
+import { type CustomerRequest, CustomersService } from "@/sdk"
+import { useNavigate } from "react-router-dom"
 
 const defaultCustomer = {
 	address: "",
@@ -15,12 +15,12 @@ const defaultCustomer = {
 	contact: "",
 	email: "",
 	postalCode: "",
-} as CustomerRequest;
+} as CustomerRequest
 
 export const Create = () => {
-	const { t } = useI18n();
-	const navigate = useNavigate();
-	const toast = useToast();
+	const { t } = useI18n()
+	const navigate = useNavigate()
+	const toast = useToast()
 	const {
 		handleSubmit,
 		control,
@@ -28,65 +28,68 @@ export const Create = () => {
 	} = useForm<CustomerRequest>({
 		mode: "onChange",
 		values: defaultCustomer,
-	});
+	})
 
 	const onSubmit = async (data: CustomerRequest) => {
 		try {
 			const customer = await CustomersService.postCustomers({
 				body: data,
-			}).then(({ data }) => data);
+			}).then(({ data }) => data)
 			if (customer) {
-				navigate(ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer?.id }));
+				navigate(ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer?.id }))
 			} else {
-				navigate(ROUTES.CUSTOMERS.routes.INDEX.path());
+				navigate(ROUTES.CUSTOMERS.routes.INDEX.path())
 			}
-			toast.show(t("customers.form.submit.success"));
+			toast.show(t("customers.form.submit.success"))
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const { field: nameField, fieldState: nameFieldState } = useController({
 		control,
 		name: "name",
 		rules: { required: true, maxLength: 100 },
-	});
+	})
 	const { field: addressField, fieldState: addressFieldState } = useController({
 		control,
 		name: "address",
 		rules: { required: true, maxLength: 255 },
-	});
+	})
 	const { field: emailField, fieldState: emailFieldState } = useController({
 		control,
 		name: "email",
 		rules: { maxLength: 100 },
-	});
+	})
 	const { field: phoneNumberField, fieldState: phoneNumberFieldState } =
 		useController({
 			control,
 			name: "phoneNumber",
 			rules: { maxLength: 10 },
-		});
+		})
 	const { field: cityField, fieldState: cityFieldState } = useController({
 		control,
 		name: "city",
 		rules: { required: true, maxLength: 100 },
-	});
+	})
 	const { field: postalCodeField, fieldState: postalCodeFieldState } =
 		useController({
 			control,
 			name: "postalCode",
 			rules: { maxLength: 10, required: true },
-		});
+		})
 	const { field: contactField, fieldState: contactFieldState } = useController({
 		control,
 		name: "contact",
 		rules: { maxLength: 100 },
-	});
+	})
 
 	return (
 		<div className="flex flex-col w-full gap-5">
-			<RRLink to={ROUTES.CUSTOMERS.routes.INDEX.path()} className="flex gap-2 items-center">
+			<RRLink
+				to={ROUTES.CUSTOMERS.routes.INDEX.path()}
+				className="flex gap-2 items-center"
+			>
 				<ChevronLeftIcon className="size-5" />
 				{t("customers.form.backToList")}
 			</RRLink>
@@ -184,5 +187,5 @@ export const Create = () => {
 				</Button>
 			</form>
 		</div>
-	);
-};
+	)
+}

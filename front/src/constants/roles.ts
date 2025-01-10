@@ -1,4 +1,4 @@
-import type { RoleEnum } from "@/sdk";
+import type { RoleEnum } from "@/sdk"
 
 export const ROLES: RoleEnum[] = [
 	"OWNER",
@@ -6,4 +6,4 @@ export const ROLES: RoleEnum[] = [
 	"EDITOR",
 	"VIEWER",
 	"BILLING",
-];
+]

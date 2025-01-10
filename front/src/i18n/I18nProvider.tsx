@@ -1,20 +1,20 @@
-import { createT } from "@/i18n/create-t";
-import { locales } from "@/locales";
-import type { GlobalLocale } from "@/locales/types";
-import type { Scopes } from "international-types";
-import { type ReactNode, createContext, useCallback, useMemo } from "react";
+import { createT } from "@/i18n/create-t"
+import { locales } from "@/locales"
+import type { GlobalLocale } from "@/locales/types"
+import type { Scopes } from "international-types"
+import { type ReactNode, createContext, useCallback, useMemo } from "react"
 
 type I18nProviderProps = {
-	locale: string;
-	children: ReactNode;
-};
+	locale: string
+	children: ReactNode
+}
 
 type I18nContextValue = {
-	t: ReturnType<typeof createT<GlobalLocale, undefined>>;
+	t: ReturnType<typeof createT<GlobalLocale, undefined>>
 	scopedT: <Scope extends Scopes<GlobalLocale>>(
 		scope: Scope,
-	) => ReturnType<typeof createT<GlobalLocale, Scope>>;
-};
+	) => ReturnType<typeof createT<GlobalLocale, Scope>>
+}
 
 export const I18nContext = createContext<I18nContextValue>({
 	t: createT(
@@ -34,7 +34,7 @@ export const I18nContext = createContext<I18nContextValue>({
 			},
 			undefined,
 		),
-});
+})
 
 export const I18nProvider = ({ locale, children }: I18nProviderProps) => {
 	const t = useMemo(
@@ -48,7 +48,7 @@ export const I18nProvider = ({ locale, children }: I18nProviderProps) => {
 				undefined,
 			),
 		[locale],
-	);
+	)
 
 	const scopedT = useCallback(
 		<Scope extends Scopes<GlobalLocale>>(scope: Scope) => {
@@ -59,10 +59,10 @@ export const I18nProvider = ({ locale, children }: I18nProviderProps) => {
 					localeContent: locales.fr,
 				},
 				scope,
-			);
+			)
 		},
 		[locale],
-	);
+	)
 
 	const value = useMemo(
 		() => ({
@@ -70,7 +70,7 @@ export const I18nProvider = ({ locale, children }: I18nProviderProps) => {
 			scopedT,
 		}),
 		[t, scopedT],
-	);
+	)
 
-	return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
-};
+	return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
+}

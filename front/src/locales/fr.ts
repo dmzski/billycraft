@@ -938,4 +938,4 @@ export default {
 	"organization.customization.title": "Personnalisation",
 	"organization.customization.tabs.bill": "Factures",
 	"organization.customization.tabs.quote": "Devis",
-} as const;
+} as const

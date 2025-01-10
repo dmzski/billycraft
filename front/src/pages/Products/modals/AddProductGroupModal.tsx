@@ -1,53 +1,53 @@
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { useI18n } from "@/i18n";
-import { ProductGroupsService } from "@/sdk";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { useI18n } from "@/i18n"
+import { ProductGroupsService } from "@/sdk"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Button, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 
 type AddProductGroupModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onSubmitSuccess: () => Promise<void>;
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onSubmitSuccess: () => Promise<void>
+}
 
 type AddProductGroupFormProps = Omit<
 	AddProductGroupModalProps,
 	"disclosure"
 > & {
-	close: () => void;
-};
+	close: () => void
+}
 
 type AddProductGroupFormValues = {
-	name: string;
-};
+	name: string
+}
 
 const AddProductGroupForm = ({
 	close,
 	onSubmitSuccess,
 }: AddProductGroupFormProps) => {
-	const { scopedT, t } = useI18n();
-	const pageT = scopedT("products.modals.addGroup");
-	const toast = useToast();
+	const { scopedT, t } = useI18n()
+	const pageT = scopedT("products.modals.addGroup")
+	const toast = useToast()
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: {
 			name: "",
 		},
-	});
+	})
 
 	const handleSubmit = async ({ name }: AddProductGroupFormValues) => {
 		try {
-			await ProductGroupsService.postProductGroups({ body: { name } });
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
-			close();
+			await ProductGroupsService.postProductGroups({ body: { name } })
+			toast.show(pageT("submit.success"))
+			await onSubmitSuccess()
+			close()
 		} catch (error) {
-			sendErrorToSentry(error);
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(error)
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<FormProvider {...methods}>
@@ -72,8 +72,8 @@ const AddProductGroupForm = ({
 				</Modal.Actions>
 			</form>
 		</FormProvider>
-	);
-};
+	)
+}
 
 export const AddProductGroupModal = ({
 	onSubmitSuccess,
@@ -84,4 +84,4 @@ export const AddProductGroupModal = ({
 			<AddProductGroupForm close={close} onSubmitSuccess={onSubmitSuccess} />
 		)}
 	</Modal>
-);
+)

@@ -1,2 +1,2 @@
-export { QuoteFormContent } from "./QuoteFormContent";
-export type { QuoteFormValues } from "./types";
+export { QuoteFormContent } from "./QuoteFormContent"
+export type { QuoteFormValues } from "./types"

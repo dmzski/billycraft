@@ -1,16 +1,16 @@
-import type { StoryObj } from "@storybook/react";
-import { useState } from "react";
-import { TimePicker, type TimePickerProps } from ".";
+import type { StoryObj } from "@storybook/react"
+import { useState } from "react"
+import { TimePicker, type TimePickerProps } from "."
 
 export default {
 	title: "Components/TimePicker",
 	component: TimePicker,
-};
+}
 
-type Story = StoryObj<typeof TimePicker>;
+type Story = StoryObj<typeof TimePicker>
 
 const render: Story["render"] = ({ ...args }: TimePickerProps) => {
-	const [value, setValue] = useState("");
+	const [value, setValue] = useState("")
 
 	return (
 		<TimePicker
@@ -18,15 +18,15 @@ const render: Story["render"] = ({ ...args }: TimePickerProps) => {
 			value={value}
 			onChange={(newValue) => setValue(newValue)}
 		/>
-	);
-};
+	)
+}
 
 export const Basic: Story = {
 	render,
 	args: {
 		id: "test",
 	},
-};
+}
 
 export const Disabled: Story = {
 	render,
@@ -34,7 +34,7 @@ export const Disabled: Story = {
 		id: "test",
 		disabled: true,
 	},
-};
+}
 
 export const WithError: Story = {
 	render,
@@ -42,4 +42,4 @@ export const WithError: Story = {
 		id: "test",
 		error: true,
 	},
-};
+}

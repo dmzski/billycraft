@@ -1,21 +1,21 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import { useAllBillsNotPaidQuery } from "@/queries/useAllBillsNotPaidQuery";
-import { ROUTES } from "@/routes";
-import { getBillOrQuoteTotal } from "@/utils/price";
-import { Badge, Button, Loader } from "@billycraft/ui";
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import { useAllBillsNotPaidQuery } from "@/queries/useAllBillsNotPaidQuery"
+import { ROUTES } from "@/routes"
+import { getBillOrQuoteTotal } from "@/utils/price"
+import { Badge, Button, Loader } from "@billycraft/ui"
+import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
+import { Link } from "react-router-dom"
 
 export const BillsOverdueSection = () => {
-	const { t } = useI18n();
-	const formatCurrency = useFormatCurrency();
-	const { data: notPaid, isLoading } = useAllBillsNotPaidQuery();
+	const { t } = useI18n()
+	const formatCurrency = useFormatCurrency()
+	const { data: notPaid, isLoading } = useAllBillsNotPaidQuery()
 
 	const totalNotPaid =
 		notPaid && Array.isArray(notPaid)
 			? notPaid.reduce((acc, bill) => acc + getBillOrQuoteTotal(bill), 0)
-			: 0;
+			: 0
 
 	return (
 		<section className="flex flex-col gap-4 border rounded-md p-4 justify-between">
@@ -53,5 +53,5 @@ export const BillsOverdueSection = () => {
 				</Link>
 			</Button>
 		</section>
-	);
-};
+	)
+}

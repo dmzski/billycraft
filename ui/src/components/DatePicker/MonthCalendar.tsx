@@ -1,34 +1,34 @@
-import ArrowLeftIcon from "@heroicons/react/24/outline/ArrowLeftIcon";
-import ArrowRightIcon from "@heroicons/react/24/outline/ArrowRightIcon";
-import { tw } from "lib/utils";
-import { Fragment, useCallback, useMemo, useState } from "react";
-import { Button } from "../Button";
-import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from "./helpers";
+import ArrowLeftIcon from "@heroicons/react/24/outline/ArrowLeftIcon"
+import ArrowRightIcon from "@heroicons/react/24/outline/ArrowRightIcon"
+import { tw } from "lib/utils"
+import { Fragment, useCallback, useMemo, useState } from "react"
+import { Button } from "../Button"
+import { datesAreOnSameDay, datesOfMonthAndYear, daysOfWeek } from "./helpers"
 
 type MonthCalendarButtonProps = {
-	date?: Date;
-	onDateClick?: (newDate: Date) => void;
-	selected?: Date;
-};
+	date?: Date
+	onDateClick?: (newDate: Date) => void
+	selected?: Date
+}
 
 const buttonClassNames = tw(
 	"user-select-none appearance-none text-sm rounded-md size-10",
 	"hover:bg-primary hover:text-primary-foreground",
 	"aria-[selected=true]:bg-primary aria-[selected=true]:text-primary-foreground",
-);
+)
 const MonthCalendarButton = ({
 	date,
 	selected,
 	onDateClick,
 }: MonthCalendarButtonProps) => {
 	const isSelected =
-		selected && date ? datesAreOnSameDay(selected, date) : false;
+		selected && date ? datesAreOnSameDay(selected, date) : false
 
 	if (date)
 		return (
 			<button
 				onClick={() => {
-					onDateClick?.(date);
+					onDateClick?.(date)
 				}}
 				className={buttonClassNames}
 				aria-selected={isSelected}
@@ -36,41 +36,41 @@ const MonthCalendarButton = ({
 			>
 				{date.getDate()}
 			</button>
-		);
+		)
 
-	return <div className="size-10" />;
-};
+	return <div className="size-10" />
+}
 
 type MonthCalendarProps = {
-	selected?: Date;
-	onDateClick?: (newDate: Date) => void;
-};
+	selected?: Date
+	onDateClick?: (newDate: Date) => void
+}
 
 const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
-	const [dateView, setDateView] = useState(selected ?? new Date());
+	const [dateView, setDateView] = useState(selected ?? new Date())
 
 	const goPrevious = useCallback(() => {
 		setDateView((current) => {
-			current.setMonth(current.getMonth() - 1);
-			return new Date(current);
-		});
-	}, []);
+			current.setMonth(current.getMonth() - 1)
+			return new Date(current)
+		})
+	}, [])
 
 	const goNext = useCallback(() => {
 		setDateView((current) => {
-			current.setMonth(current.getMonth() + 1);
-			return new Date(current);
-		});
-	}, []);
+			current.setMonth(current.getMonth() + 1)
+			return new Date(current)
+		})
+	}, [])
 
 	const selectToday = useCallback(() => {
-		onDateClick?.(new Date());
-		setDateView(new Date());
-	}, [onDateClick]);
+		onDateClick?.(new Date())
+		setDateView(new Date())
+	}, [onDateClick])
 
-	const dates = useMemo(() => datesOfMonthAndYear(dateView), [dateView]);
+	const dates = useMemo(() => datesOfMonthAndYear(dateView), [dateView])
 
-	const daysOfWeekStrings = useMemo(() => daysOfWeek(undefined), []);
+	const daysOfWeekStrings = useMemo(() => daysOfWeek(undefined), [])
 
 	return (
 		<div className="w-70 flex flex-col gap-2">
@@ -130,7 +130,7 @@ const MonthCalendar = ({ selected, onDateClick }: MonthCalendarProps) => {
 				</Button>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default MonthCalendar;
+export default MonthCalendar

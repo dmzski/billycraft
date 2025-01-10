@@ -1,16 +1,16 @@
-import type { StoryObj } from "@storybook/react";
-import { Button } from "components/Button";
-import { Dropdown } from "components/Dropdown";
-import { Select } from "components/Select";
-import { useState } from "react";
-import { Modal } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Button } from "components/Button"
+import { Dropdown } from "components/Dropdown"
+import { Select } from "components/Select"
+import { useState } from "react"
+import { Modal } from "."
 
 export default {
 	title: "Components/Modal",
 	component: Modal,
-};
+}
 
-type Story = StoryObj<typeof Modal>;
+type Story = StoryObj<typeof Modal>
 
 export const Basic: Story = {
 	render: ({ withoutPortal, hideOnClickOutside, size }) => (
@@ -35,17 +35,17 @@ export const Basic: Story = {
 		withoutPortal: false,
 		hideOnClickOutside: true,
 	},
-};
+}
 
 export const Controlled: Story = {
 	render: ({ withoutPortal, hideOnClickOutside }) => {
-		const [open, setOpen] = useState(false);
+		const [open, setOpen] = useState(false)
 
 		return (
 			<>
 				<Button
 					onClick={() => {
-						setOpen(true);
+						setOpen(true)
 					}}
 				>
 					Open controlled modal
@@ -59,13 +59,13 @@ export const Controlled: Story = {
 					You can close me
 				</Modal>
 			</>
-		);
+		)
 	},
 	args: {
 		withoutPortal: false,
 		hideOnClickOutside: true,
 	},
-};
+}
 
 export const WithScroll: Story = {
 	render: ({ withoutPortal, hideOnClickOutside }) => (
@@ -108,7 +108,7 @@ export const WithScroll: Story = {
 		withoutPortal: false,
 		hideOnClickOutside: true,
 	},
-};
+}
 
 export const WithSelectDropdown: Story = {
 	render: ({ withoutPortal, hideOnClickOutside, size }) => (
@@ -156,7 +156,7 @@ export const WithSelectDropdown: Story = {
 		withoutPortal: false,
 		hideOnClickOutside: true,
 	},
-};
+}
 
 export const StackedDropdown: Story = {
 	render: ({ withoutPortal, hideOnClickOutside, size }) => (
@@ -193,4 +193,4 @@ export const StackedDropdown: Story = {
 		withoutPortal: false,
 		hideOnClickOutside: true,
 	},
-};
+}

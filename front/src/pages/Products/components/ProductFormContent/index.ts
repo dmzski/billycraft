@@ -1,2 +1,2 @@
-export { ProductFormContent } from "./ProductFormContent";
-export type { ProductFormValues } from "./types";
+export { ProductFormContent } from "./ProductFormContent"
+export type { ProductFormValues } from "./types"

@@ -1,13 +1,13 @@
-import type { Meta } from "@storybook/react";
-import { Button } from "components/Button";
-import { Dropdown } from "components/Dropdown";
-import { Select } from "components/Select";
-import { Collapsible } from ".";
+import type { Meta } from "@storybook/react"
+import { Button } from "components/Button"
+import { Dropdown } from "components/Dropdown"
+import { Select } from "components/Select"
+import { Collapsible } from "."
 
 export default {
 	title: "Components/Collapsible",
 	component: Collapsible,
-} as Meta<typeof Collapsible>;
+} as Meta<typeof Collapsible>
 
 export const Basic = () => (
 	<Collapsible open disclosure={<Button>Toggle collapsible</Button>}>
@@ -28,4 +28,4 @@ export const Basic = () => (
 			/>
 		</div>
 	</Collapsible>
-);
+)

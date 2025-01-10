@@ -1,34 +1,34 @@
-import { useI18n } from "@/i18n";
-import { ReportsService } from "@/sdk";
-import { Alert, Button, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
+import { useI18n } from "@/i18n"
+import { ReportsService } from "@/sdk"
+import { Alert, Button, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { useForm } from "react-hook-form"
 
 type DeleteModalProps = {
-	onSubmitSuccess?: () => void | Promise<void>;
-	disclosure?: ComponentProps<typeof Modal>["disclosure"];
-	id: string;
-};
+	onSubmitSuccess?: () => void | Promise<void>
+	disclosure?: ComponentProps<typeof Modal>["disclosure"]
+	id: string
+}
 
-type ReportDeleteFormProps = Omit<DeleteModalProps, "disclosure">;
+type ReportDeleteFormProps = Omit<DeleteModalProps, "disclosure">
 
 const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const {
 		handleSubmit,
 		formState: { isSubmitting },
-	} = useForm();
-	const toast = useToast();
+	} = useForm()
+	const toast = useToast()
 
 	const onSubmit = async () => {
 		try {
-			await ReportsService.deleteReportsById({ path: { id } });
-			toast.show(t("accounting.reports.modals.delete.submit.success"));
-			await onSubmitSuccess?.();
+			await ReportsService.deleteReportsById({ path: { id } })
+			toast.show(t("accounting.reports.modals.delete.submit.success"))
+			await onSubmitSuccess?.()
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
@@ -50,8 +50,8 @@ const ReportDeleteForm = ({ onSubmitSuccess, id }: ReportDeleteFormProps) => {
 				{t("accounting.reports.modals.delete.submit")}
 			</Button>
 		</form>
-	);
-};
+	)
+}
 
 const DeleteModal = ({ id, onSubmitSuccess, disclosure }: DeleteModalProps) => {
 	return (
@@ -60,13 +60,13 @@ const DeleteModal = ({ id, onSubmitSuccess, disclosure }: DeleteModalProps) => {
 				<ReportDeleteForm
 					id={id}
 					onSubmitSuccess={async () => {
-						await onSubmitSuccess?.();
-						close();
+						await onSubmitSuccess?.()
+						close()
 					}}
 				/>
 			)}
 		</Modal>
-	);
-};
+	)
+}
 
-export default DeleteModal;
+export default DeleteModal

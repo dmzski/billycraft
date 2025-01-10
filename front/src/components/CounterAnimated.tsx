@@ -1,42 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 
 const CounterAnimated = ({
 	value,
 	format,
 }: {
-	value: number;
-	format?: (value: number) => string;
+	value: number
+	format?: (value: number) => string
 }) => {
-	const [counter, setCounter] = useState(0);
+	const [counter, setCounter] = useState(0)
 
 	useEffect(() => {
-		setCounter(0);
-		let initialCounter = 0;
+		setCounter(0)
+		let initialCounter = 0
 		const interval = setInterval(() => {
-			let speed = 1;
+			let speed = 1
 			if (value > 1000) {
-				speed = 10;
+				speed = 10
 				if (value > 10000) {
-					speed = 30;
+					speed = 30
 				}
 				if (value > 100000) {
-					speed = 60;
+					speed = 60
 				}
 			}
-			initialCounter += Math.log(initialCounter + 2) * speed;
-			setCounter(initialCounter);
+			initialCounter += Math.log(initialCounter + 2) * speed
+			setCounter(initialCounter)
 			if (initialCounter >= value) {
-				setCounter(value);
-				clearInterval(interval);
+				setCounter(value)
+				clearInterval(interval)
 			}
-		}, 1);
+		}, 1)
 
 		return () => {
-			clearInterval(interval);
-		};
-	}, [value]);
+			clearInterval(interval)
+		}
+	}, [value])
 
-	return <span>{format ? format(counter) : counter}</span>;
-};
+	return <span>{format ? format(counter) : counter}</span>
+}
 
-export default CounterAnimated;
+export default CounterAnimated

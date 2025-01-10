@@ -1,24 +1,24 @@
-import { Button, Loader } from "@billycraft/ui";
-import { Link, Navigate, useParams } from "react-router-dom";
-import { OUTGOING_ROUTES } from "../constants";
-import OutgoingDetail from "./OutgoingDetail";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useOutgoingByIdQuery } from "@/queries/useOutgoingByIdQuery";
-import { useI18n } from "@/i18n";
-import { ROUTES } from "@/routes";
-import { RRLink } from "@/components/RRLink";
+import { Button, Loader } from "@billycraft/ui"
+import { Link, Navigate, useParams } from "react-router-dom"
+import { OUTGOING_ROUTES } from "../constants"
+import OutgoingDetail from "./OutgoingDetail"
+import { ChevronLeftIcon } from "@heroicons/react/24/solid"
+import { useOutgoingByIdQuery } from "@/queries/useOutgoingByIdQuery"
+import { useI18n } from "@/i18n"
+import { ROUTES } from "@/routes"
+import { RRLink } from "@/components/RRLink"
 
 const Details = () => {
-	const { t } = useI18n();
-	const { id } = useParams<{ id: string }>();
-	const { data: outgoing, isLoading } = useOutgoingByIdQuery(id ?? '', {
+	const { t } = useI18n()
+	const { id } = useParams<{ id: string }>()
+	const { data: outgoing, isLoading } = useOutgoingByIdQuery(id ?? "", {
 		enabled: !!id,
-	});
+	})
 
 	if (!outgoing && !isLoading) {
 		return (
 			<Navigate to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path()} />
-		);
+		)
 	}
 
 	return (
@@ -57,7 +57,7 @@ const Details = () => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default Details;
+export default Details

@@ -1,4 +1,4 @@
-import { defineConfig } from "@hey-api/openapi-ts";
+import { defineConfig } from "@hey-api/openapi-ts"
 
 export default defineConfig({
 	client: "@hey-api/client-fetch",
@@ -17,4 +17,4 @@ export default defineConfig({
 			name: "@hey-api/sdk",
 		},
 	],
-});
+})

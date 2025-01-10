@@ -1,24 +1,24 @@
-import clsx from "clsx";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useFormatDate } from "@/hooks/useFormatDate";
-import type { ReportOutgoingResponse, ReportResponse } from "@/sdk";
-import { OUTGOING_ROUTES } from "@/pages/Accountings/Outgoings/constants";
-import { type ReactNode, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useI18n } from "@/i18n";
+import clsx from "clsx"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useFormatDate } from "@/hooks/useFormatDate"
+import type { ReportOutgoingResponse, ReportResponse } from "@/sdk"
+import { OUTGOING_ROUTES } from "@/pages/Accountings/Outgoings/constants"
+import { type ReactNode, useCallback } from "react"
+import { Link } from "react-router-dom"
+import { useI18n } from "@/i18n"
 
 type ReportOutgoingTableProps = {
-	report: ReportResponse;
-};
+	report: ReportResponse
+}
 
 type OnlyChildrenProps = {
-	children: ReactNode;
-	noBorder?: boolean;
-};
+	children: ReactNode
+	noBorder?: boolean
+}
 
 const DetailsTableRow = ({ children }: { children: ReactNode }) => (
 	<dl className="grid md:grid-cols-12">{children}</dl>
-);
+)
 
 const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
 	<dt
@@ -29,18 +29,18 @@ const DetailsTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
 	>
 		{children}
 	</dt>
-);
+)
 
 const DetailsTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
 	<dd className={clsx("md:col-span-6 p-2", noBorder ? "" : "border-b")}>
 		{children}
 	</dd>
-);
+)
 
 const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
-	const { t } = useI18n();
-	const formatCurrency = useFormatCurrency();
-	const { toISO9075 } = useFormatDate();
+	const { t } = useI18n()
+	const formatCurrency = useFormatCurrency()
+	const { toISO9075 } = useFormatDate()
 
 	const getTotal = useCallback(
 		(outgoing: ReportOutgoingResponse) =>
@@ -51,7 +51,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
 					)
 				: 0,
 		[],
-	);
+	)
 	return (
 		<div className="flex flex-col gap-4">
 			{report.outgoings.map((outgoing) => (
@@ -105,7 +105,7 @@ const ReportOutgoingTable = ({ report }: ReportOutgoingTableProps) => {
 				</article>
 			))}
 		</div>
-	);
-};
+	)
+}
 
-export default ReportOutgoingTable;
+export default ReportOutgoingTable

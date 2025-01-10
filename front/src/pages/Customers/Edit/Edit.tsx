@@ -5,15 +5,15 @@ import {
 	Loader,
 	TextArea,
 	useToast,
-} from "@billycraft/ui";
-import { useController, useForm } from "react-hook-form";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { useNavigate, useParams } from "react-router-dom";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
-import { ROUTES } from "@/routes";
-import { RRLink } from "@/components/RRLink";
-import { type CustomerRequest, CustomersService } from "@/sdk";
+} from "@billycraft/ui"
+import { useController, useForm } from "react-hook-form"
+import { ChevronLeftIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { useNavigate, useParams } from "react-router-dom"
+import { useCustomerQuery } from "@/queries/useCustomerQuery"
+import { ROUTES } from "@/routes"
+import { RRLink } from "@/components/RRLink"
+import { type CustomerRequest, CustomersService } from "@/sdk"
 
 const defaultCustomer = {
 	address: "",
@@ -23,14 +23,16 @@ const defaultCustomer = {
 	contact: "",
 	email: "",
 	postalCode: "",
-} as CustomerRequest;
+} as CustomerRequest
 
 export const Edit = () => {
-	const { id } = useParams<{ id: string }>();
-	const { data: customer, isLoading } = useCustomerQuery(id ?? '', { enabled: !!id });
-	const { t } = useI18n();
-	const navigate = useNavigate();
-	const toast = useToast();
+	const { id } = useParams<{ id: string }>()
+	const { data: customer, isLoading } = useCustomerQuery(id ?? "", {
+		enabled: !!id,
+	})
+	const { t } = useI18n()
+	const navigate = useNavigate()
+	const toast = useToast()
 	const {
 		handleSubmit,
 		control,
@@ -38,7 +40,7 @@ export const Edit = () => {
 	} = useForm<CustomerRequest>({
 		mode: "onChange",
 		values: customer ?? defaultCustomer,
-	});
+	})
 
 	const onSubmit = async (data: CustomerRequest) => {
 		try {
@@ -46,65 +48,69 @@ export const Edit = () => {
 				await CustomersService.patchCustomersById({
 					body: data,
 					path: { id: customer.id },
-				});
-				navigate(ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer.id.toString() }));
-				toast.show(t("customers.form.submit.success"));
+				})
+				navigate(
+					ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer.id.toString() }),
+				)
+				toast.show(t("customers.form.submit.success"))
 			}
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const { field: nameField, fieldState: nameFieldState } = useController({
 		control,
 		name: "name",
 		rules: { required: true, maxLength: 100 },
-	});
+	})
 	const { field: addressField, fieldState: addressFieldState } = useController({
 		control,
 		name: "address",
 		rules: { required: true, maxLength: 255 },
-	});
+	})
 	const { field: emailField, fieldState: emailFieldState } = useController({
 		control,
 		name: "email",
 		rules: { maxLength: 100 },
-	});
+	})
 	const { field: phoneNumberField, fieldState: phoneNumberFieldState } =
 		useController({
 			control,
 			name: "phoneNumber",
 			rules: { maxLength: 10 },
-		});
+		})
 	const { field: cityField, fieldState: cityFieldState } = useController({
 		control,
 		name: "city",
 		rules: { required: true, maxLength: 100 },
-	});
+	})
 	const { field: postalCodeField, fieldState: postalCodeFieldState } =
 		useController({
 			control,
 			name: "postalCode",
 			rules: { maxLength: 10, required: true },
-		});
+		})
 	const { field: contactField, fieldState: contactFieldState } = useController({
 		control,
 		name: "contact",
 		rules: { maxLength: 100 },
-	});
+	})
 
 	if (!customer && isLoading) {
-		return <Loader />;
+		return <Loader />
 	}
 
 	if (!customer) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
 		<div className="flex flex-col w-full gap-5">
 			<RRLink
-				to={ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer.id.toString() })}
+				to={ROUTES.CUSTOMERS.routes.OVERVIEW.path({
+					id: customer.id.toString(),
+				})}
 				className="flex gap-2 items-center"
 			>
 				<ChevronLeftIcon className="w-5" />
@@ -204,5 +210,5 @@ export const Edit = () => {
 				</Button>
 			</form>
 		</div>
-	);
-};
+	)
+}

@@ -1,11 +1,11 @@
-import type { BillStatus } from "@/sdk";
+import type { BillStatus } from "@/sdk"
 import {
 	CheckIcon,
 	DocumentIcon,
 	EnvelopeIcon,
 	InboxArrowDownIcon,
 	XMarkIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/solid"
 
 export const BILL_STATUS_ICONS: Record<BillStatus, typeof EnvelopeIcon> = {
 	DRAFT: DocumentIcon,
@@ -13,4 +13,4 @@ export const BILL_STATUS_ICONS: Record<BillStatus, typeof EnvelopeIcon> = {
 	PAID: CheckIcon,
 	REFUSED: XMarkIcon,
 	ARCHIVED: InboxArrowDownIcon,
-};
+}

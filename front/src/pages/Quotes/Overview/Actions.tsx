@@ -1,36 +1,36 @@
-import { QuoteStatusIcon } from "@/components/QuoteStatusIcon";
-import { useI18n } from "@/i18n";
-import { type QuoteResponse, QuotesService, type QuoteStatus } from "@/sdk";
-import { Button, useToast } from "@billycraft/ui";
-import { useState } from "react";
+import { QuoteStatusIcon } from "@/components/QuoteStatusIcon"
+import { useI18n } from "@/i18n"
+import { type QuoteResponse, QuotesService, type QuoteStatus } from "@/sdk"
+import { Button, useToast } from "@billycraft/ui"
+import { useState } from "react"
 
 type ActionsProps = {
-	quote: QuoteResponse;
-	reloadQuote: () => Promise<void>;
-};
+	quote: QuoteResponse
+	reloadQuote: () => Promise<void>
+}
 
 export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
-	const { t } = useI18n();
-	const toast = useToast();
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { t } = useI18n()
+	const toast = useToast()
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	const updateQuoteStatus = (status: QuoteStatus) => async () => {
-		setIsSubmitting(true);
+		setIsSubmitting(true)
 		try {
 			if (quote) {
 				await QuotesService.patchQuotesById({
 					path: { id: quote.id },
 					body: { ...quote, status },
-				});
-				toast.show(t("quotes.form.submit.edit.success"));
-				await reloadQuote();
+				})
+				toast.show(t("quotes.form.submit.edit.success"))
+				await reloadQuote()
 			}
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		} finally {
-			setIsSubmitting(false);
+			setIsSubmitting(false)
 		}
-	};
+	}
 
 	return (
 		<section className="flex flex-col md:flex-row gap-4 justify-end">
@@ -77,5 +77,5 @@ export const Actions = ({ quote, reloadQuote }: ActionsProps) => {
 				</Button>
 			) : null}
 		</section>
-	);
-};
+	)
+}

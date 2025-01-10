@@ -2,11 +2,11 @@ import {
 	ChevronDownIcon,
 	ChevronUpIcon,
 	XMarkIcon,
-} from "@heroicons/react/24/solid";
-import { type VariantProps, cva } from "class-variance-authority";
-import { Button } from "components/Button";
-import { Label } from "components/Label";
-import { tw } from "lib/utils";
+} from "@heroicons/react/24/solid"
+import { type VariantProps, cva } from "class-variance-authority"
+import { Button } from "components/Button"
+import { Label } from "components/Label"
+import { tw } from "lib/utils"
 import {
 	type KeyboardEventHandler,
 	type MouseEventHandler,
@@ -18,8 +18,8 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import OptionList from "./OptionList";
+} from "react"
+import OptionList from "./OptionList"
 
 const selectVariants = cva(
 	"flex justify-between h-10 w-full items-center bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 group-focus-within:ring-2 group-focus-within:ring-ring group-focus-within:ring-offset-2 data-[invalid=true]:border-destructive group-focus-within:data-[invalid=true]:ring-destructive",
@@ -34,42 +34,42 @@ const selectVariants = cva(
 			variant: "default",
 		},
 	},
-);
+)
 
-export type OptionValue = string | number;
+export type OptionValue = string | number
 export type SelectOptionType = {
-	value: OptionValue;
-	label: ReactNode;
-	render?: ReactNode;
-	searchText?: string;
-};
+	value: OptionValue
+	label: ReactNode
+	render?: ReactNode
+	searchText?: string
+}
 
 export type SelectValueType =
 	| OptionValue
 	| Array<OptionValue>
 	| undefined
-	| null;
+	| null
 
 export type SelectProps = {
-	autoFocus?: boolean;
-	disabled?: boolean;
-	placeholder?: string;
-	className?: string;
-	required?: boolean;
-	id?: string;
-	"aria-label"?: string;
-	name?: string;
-	options: SelectOptionType[];
-	label?: string;
-	onChange?: (result: SelectValueType) => unknown;
-	onBlur?: () => void;
-	value: SelectValueType;
-	readOnly?: boolean;
-	isSearchable?: boolean;
-	isMulti?: boolean;
-	error?: boolean | string;
-	placeholderSearchText?: string;
-} & VariantProps<typeof selectVariants>;
+	autoFocus?: boolean
+	disabled?: boolean
+	placeholder?: string
+	className?: string
+	required?: boolean
+	id?: string
+	"aria-label"?: string
+	name?: string
+	options: SelectOptionType[]
+	label?: string
+	onChange?: (result: SelectValueType) => unknown
+	onBlur?: () => void
+	value: SelectValueType
+	readOnly?: boolean
+	isSearchable?: boolean
+	isMulti?: boolean
+	error?: boolean | string
+	placeholderSearchText?: string
+} & VariantProps<typeof selectVariants>
 
 const KEYS = {
 	ArrowDown: "ArrowDown",
@@ -77,7 +77,7 @@ const KEYS = {
 	Tab: "Tab",
 	Escape: "Escape",
 	Enter: "Enter",
-};
+}
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(
 	(
@@ -103,99 +103,99 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 		},
 		ref,
 	) => {
-		const clearable = !required;
-		const optionListId = useId();
-		const generatedId = useId();
-		const id = idProp ?? generatedId;
-		const [isOpen, setOpen] = useState(false);
-		const containerRef = useRef<HTMLDivElement>(null);
-		const inputRef = useRef<HTMLDivElement>(null);
+		const clearable = !required
+		const optionListId = useId()
+		const generatedId = useId()
+		const id = idProp ?? generatedId
+		const [isOpen, setOpen] = useState(false)
+		const containerRef = useRef<HTMLDivElement>(null)
+		const inputRef = useRef<HTMLDivElement>(null)
 
-		useImperativeHandle(ref, () => inputRef.current as HTMLDivElement);
+		useImperativeHandle(ref, () => inputRef.current as HTMLDivElement)
 
 		const handleOpen = useCallback(() => {
 			if (!disabled && !readOnly) {
-				setOpen(() => true);
+				setOpen(() => true)
 			}
-		}, [disabled, readOnly]);
+		}, [disabled, readOnly])
 
 		const handleClose = useCallback((restoreFocus?: boolean) => {
 			if (restoreFocus) {
-				inputRef.current?.focus();
+				inputRef.current?.focus()
 			}
-			setOpen(() => false);
-		}, []);
+			setOpen(() => false)
+		}, [])
 
 		// Click an option change the value only
 		const handleClickForMulti = useCallback(
 			(option: SelectOptionType) => {
 				if (!value || !Array.isArray(value)) {
-					onChange?.([option.value]);
-					return;
+					onChange?.([option.value])
+					return
 				}
-				const index = value.findIndex((v) => v === option.value);
+				const index = value.findIndex((v) => v === option.value)
 
 				// Handle if we click on an option which is already in value
 				if (index > -1) {
-					const tmp = [...value];
-					tmp.splice(index, 1);
-					onChange?.([...tmp]);
+					const tmp = [...value]
+					tmp.splice(index, 1)
+					onChange?.([...tmp])
 				} else {
-					onChange?.([...value, option.value]);
+					onChange?.([...value, option.value])
 				}
 			},
 			[onChange, value],
-		);
+		)
 
 		// Click an option change search and value then close the options
 		const handleClickForSingle = useCallback(
 			(option: SelectOptionType) => {
-				onChange?.(option.value);
-				handleClose(true);
+				onChange?.(option.value)
+				handleClose(true)
 			},
 			[onChange, handleClose],
-		);
+		)
 
 		const handleClear: MouseEventHandler = useCallback(
 			(event) => {
-				event.stopPropagation();
+				event.stopPropagation()
 				if (isMulti) {
-					onChange?.([]);
+					onChange?.([])
 				} else {
-					onChange?.(null);
+					onChange?.(null)
 				}
 			},
 			[onChange, isMulti],
-		);
+		)
 
 		const handleKeyDown: KeyboardEventHandler = useCallback(
 			(event) => {
 				if (!isOpen) {
 					if (event.key === KEYS.ArrowDown) {
-						event.preventDefault();
-						handleOpen();
+						event.preventDefault()
+						handleOpen()
 					}
 				}
 			},
 			[isOpen, handleOpen],
-		);
+		)
 
 		const valueRender = useMemo(() => {
 			if (!value || (Array.isArray(value) && value.length === 0)) {
-				return <span className="text-muted-foreground">{placeholder}</span>;
+				return <span className="text-muted-foreground">{placeholder}</span>
 			}
 			if (Array.isArray(value)) {
 				return value
 					.map((aValue) => {
 						const optionFound = options.find(
 							({ value: optionValue }) => optionValue === aValue,
-						);
+						)
 
-						return optionFound?.render ?? optionFound?.label;
+						return optionFound?.render ?? optionFound?.label
 					})
 					.filter(Boolean)
 					.map((valueNode) => {
-						const id = useId();
+						const id = useId()
 
 						return (
 							<span
@@ -204,13 +204,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 							>
 								{valueNode}
 							</span>
-						);
-					});
+						)
+					})
 			}
-			const optionFound = options.find((option) => value === option.value);
+			const optionFound = options.find((option) => value === option.value)
 
-			return optionFound?.render ?? optionFound?.label;
-		}, [options, value, placeholder]);
+			return optionFound?.render ?? optionFound?.label
+		}, [options, value, placeholder])
 
 		const displayClearable =
 			clearable &&
@@ -219,7 +219,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 				typeof value === "string" &&
 				value !== "") ||
 				(typeof value === "number" && value !== null && value !== undefined) ||
-				(Array.isArray(value) && value.length > 0));
+				(Array.isArray(value) && value.length > 0))
 
 		return (
 			<div
@@ -289,14 +289,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 							onOptionClick={(option: SelectOptionType) => {
 								isMulti
 									? handleClickForMulti(option)
-									: handleClickForSingle(option);
+									: handleClickForSingle(option)
 							}}
 						/>
 					) : null}
 				</div>
 			</div>
-		);
+		)
 	},
-);
+)
 
-Select.displayName = "Select";
+Select.displayName = "Select"

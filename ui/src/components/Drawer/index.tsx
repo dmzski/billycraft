@@ -1,11 +1,11 @@
-import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon";
-import { type VariantProps, cva } from "class-variance-authority";
-import { tw } from "lib/utils";
-import { type ReactNode, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon"
+import { type VariantProps, cva } from "class-variance-authority"
+import { tw } from "lib/utils"
+import { type ReactNode, useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 const backdropClassnames =
-	"fixed inset-0 z-50 bg-black/80 fill-mode-forwards data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0";
+	"fixed inset-0 z-50 bg-black/80 fill-mode-forwards data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
 
 const drawerVariants = cva(
 	"overflow-hidden overflow-y-auto fixed z-50 gap-4 bg-background fill-mode-forwards shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
@@ -24,22 +24,22 @@ const drawerVariants = cva(
 			side: "right",
 		},
 	},
-);
+)
 
 const closeButtonClassNames = `absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary
-`;
+`
 
-const DELAY_TRANSITION = 300;
+const DELAY_TRANSITION = 300
 
 export type DrawerProps = {
-	open: boolean;
-	onClose?: () => void;
-	children?: ReactNode;
-	noBackdrop?: boolean;
-	hasCloseButton?: boolean;
-	withoutPortal?: boolean;
-	className?: string;
-} & VariantProps<typeof drawerVariants>;
+	open: boolean
+	onClose?: () => void
+	children?: ReactNode
+	noBackdrop?: boolean
+	hasCloseButton?: boolean
+	withoutPortal?: boolean
+	className?: string
+} & VariantProps<typeof drawerVariants>
 
 export const Drawer = ({
 	children,
@@ -51,41 +51,41 @@ export const Drawer = ({
 	side,
 	className,
 }: DrawerProps) => {
-	const [open, setOpen] = useState(openProp && onClose ? openProp : false);
+	const [open, setOpen] = useState(openProp && onClose ? openProp : false)
 	const [transitionState, setTransitionState] = useState<
 		"opening" | "closing" | "open" | "closed"
-	>("closed");
+	>("closed")
 
 	useEffect(() => {
 		if (onClose && openProp !== open) {
-			setOpen(!!openProp);
+			setOpen(!!openProp)
 		}
-	}, [openProp, onClose, open]);
+	}, [openProp, onClose, open])
 
 	useEffect(() => {
-		let displayContentTimeout: ReturnType<typeof setTimeout>;
+		let displayContentTimeout: ReturnType<typeof setTimeout>
 		if (open) {
 			setTransitionState((originalState) =>
 				originalState !== "open" ? "opening" : "open",
-			);
+			)
 			displayContentTimeout = setTimeout(() => {
-				setTransitionState("open");
-			}, DELAY_TRANSITION);
+				setTransitionState("open")
+			}, DELAY_TRANSITION)
 		} else {
 			setTransitionState((originalState) =>
 				originalState !== "closed" ? "closing" : "closed",
-			);
+			)
 			displayContentTimeout = setTimeout(() => {
-				setTransitionState("closed");
-			}, DELAY_TRANSITION);
+				setTransitionState("closed")
+			}, DELAY_TRANSITION)
 		}
 
 		return () => {
 			if (displayContentTimeout) {
-				clearTimeout(displayContentTimeout);
+				clearTimeout(displayContentTimeout)
 			}
-		};
-	}, [open]);
+		}
+	}, [open])
 
 	const modalRendered = (
 		<div
@@ -123,9 +123,9 @@ export const Drawer = ({
 				</>
 			) : null}
 		</div>
-	);
+	)
 
 	return withoutPortal
 		? modalRendered
-		: createPortal(modalRendered, document.body);
-};
+		: createPortal(modalRendered, document.body)
+}

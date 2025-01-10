@@ -1,23 +1,23 @@
-import { Button, Input, useToast } from "@billycraft/ui";
-import { endOfMonth, format, formatRFC3339 } from "date-fns";
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import OutgoingLinesTable from "./OutgoingLinesTable";
-import { useI18n } from "@/i18n";
+import { Button, Input, useToast } from "@billycraft/ui"
+import { endOfMonth, format, formatRFC3339 } from "date-fns"
+import { useEffect } from "react"
+import { Controller, useForm } from "react-hook-form"
+import OutgoingLinesTable from "./OutgoingLinesTable"
+import { useI18n } from "@/i18n"
 import {
 	type OutgoingRequest,
 	type OutgoingResponse,
 	OutgoingsService,
-} from "@/sdk";
+} from "@/sdk"
 
 type FormProps = {
-	outgoing?: OutgoingResponse;
-	onSubmitSuccess?: (res: OutgoingResponse) => void | Promise<void>;
-	disabledFields?: string[];
-};
+	outgoing?: OutgoingResponse
+	onSubmitSuccess?: (res: OutgoingResponse) => void | Promise<void>
+	disabledFields?: string[]
+}
 const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
-	const { t } = useI18n();
-	const toast = useToast();
+	const { t } = useI18n()
+	const toast = useToast()
 	const {
 		handleSubmit,
 		control,
@@ -25,7 +25,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 		reset,
 	} = useForm<OutgoingRequest>({
 		mode: "onChange",
-	});
+	})
 
 	const onSubmit = async ({ name, lines, startDate }: OutgoingRequest) => {
 		const values = {
@@ -40,7 +40,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 			endDate: formatRFC3339(
 				endOfMonth(startDate ? Date.parse(startDate) : Date.now()),
 			),
-		} as OutgoingRequest;
+		} as OutgoingRequest
 		try {
 			const res = outgoing?.id
 				? await OutgoingsService.patchOutgoingsById({
@@ -49,21 +49,21 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 					}).then(({ data }) => data)
 				: await OutgoingsService.postOutgoings({ body: values }).then(
 						({ data }) => data,
-					);
+					)
 			toast.show(
 				t(
 					outgoing?.id
 						? "accounting.outgoings.forms.add.submit.edit.success"
 						: "accounting.outgoings.forms.add.submit.new.success",
 				),
-			);
+			)
 			if (res) {
-				onSubmitSuccess?.(res);
+				onSubmitSuccess?.(res)
 			}
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	useEffect(() => {
 		if (reset && outgoing) {
@@ -72,9 +72,9 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 				startDate: outgoing.startDate
 					? format(Date.parse(outgoing.startDate), "yyyy-MM")
 					: undefined,
-			});
+			})
 		}
-	}, [reset, outgoing]);
+	}, [reset, outgoing])
 
 	return (
 		<form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -100,14 +100,14 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 				rules={{
 					required: true,
 					validate: async (value) => {
-						if (disabledFields?.includes("startDate")) return undefined;
+						if (disabledFields?.includes("startDate")) return undefined
 
-						const date = formatRFC3339(value ? Date.parse(value) : Date.now());
+						const date = formatRFC3339(value ? Date.parse(value) : Date.now())
 						try {
-							await OutgoingsService.getOutgoingsFirst({ path: { date } });
-							return t("accounting.outgoings.forms.add.error.alreadyExist");
+							await OutgoingsService.getOutgoingsFirst({ path: { date } })
+							return t("accounting.outgoings.forms.add.error.alreadyExist")
 						} catch {
-							return undefined;
+							return undefined
 						}
 					},
 				}}
@@ -140,7 +140,7 @@ const Form = ({ outgoing, onSubmitSuccess, disabledFields }: FormProps) => {
 				{t("save")}
 			</Button>
 		</form>
-	);
-};
+	)
+}
 
-export default Form;
+export default Form

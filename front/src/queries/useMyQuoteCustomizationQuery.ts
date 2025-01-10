@@ -1,16 +1,16 @@
 import {
 	type QuoteCustomizationResponse,
 	QuoteCustomizationService,
-} from "@/sdk";
+} from "@/sdk"
 import {
 	type UseDataLoaderConfig,
 	useDataLoader,
-} from "@scaleway/use-dataloader";
+} from "@scaleway/use-dataloader"
 
 export const useMyQuoteCustomizationQuery = (
 	options?: UseDataLoaderConfig<QuoteCustomizationResponse, Error>,
 ) => {
-	const key = ["quote-customization", "mine"];
+	const key = ["quote-customization", "mine"]
 
 	return useDataLoader(
 		key,
@@ -19,5 +19,5 @@ export const useMyQuoteCustomizationQuery = (
 				({ data }) => data,
 			),
 		options,
-	);
-};
+	)
+}

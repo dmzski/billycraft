@@ -1,76 +1,76 @@
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { useI18n } from "@/i18n";
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { useI18n } from "@/i18n"
 import {
 	type SupplierRequest,
 	type SupplierResponse,
 	SuppliersService,
-} from "@/sdk";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import { TrashIcon } from "@heroicons/react/24/solid";
-import { useController, useForm } from "react-hook-form";
+} from "@/sdk"
+import { Button, Modal, useToast } from "@billycraft/ui"
+import { TrashIcon } from "@heroicons/react/24/solid"
+import { useController, useForm } from "react-hook-form"
 
 type SupplierModalFormProps = {
-	supplier?: SupplierResponse;
-	onSubmitSuccess?: () => void | Promise<void>;
-	disclosure: JSX.Element;
-};
+	supplier?: SupplierResponse
+	onSubmitSuccess?: () => void | Promise<void>
+	disclosure: JSX.Element
+}
 
 const defaultSupplier = {
 	name: "",
 	color: "#000000",
 	vat: 0,
-} as SupplierRequest;
+} as SupplierRequest
 
-type SupplierFormProps = Omit<SupplierModalFormProps, "disclosure">;
+type SupplierFormProps = Omit<SupplierModalFormProps, "disclosure">
 
 const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
-	const { t } = useI18n();
-	const toast = useToast();
+	const { t } = useI18n()
+	const toast = useToast()
 	const methods = useForm<SupplierRequest>({
 		mode: "onChange",
 		defaultValues: supplier ?? defaultSupplier,
-	});
+	})
 
 	const onSubmit = async (values: SupplierRequest) => {
 		const data = {
 			...values,
 			vat: Number(values.vat) || 0,
-		};
+		}
 		try {
 			await (supplier?.id
 				? SuppliersService.patchSuppliersById({
 						path: { id: supplier.id },
 						body: data,
 					})
-				: SuppliersService.postSuppliers({ body: data }));
-			toast.show(t("suppliers.modals.form.submit.success"));
-			await onSubmitSuccess?.();
+				: SuppliersService.postSuppliers({ body: data }))
+			toast.show(t("suppliers.modals.form.submit.success"))
+			await onSubmitSuccess?.()
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const handleDelete = async () => {
 		if (supplier?.id) {
 			try {
 				await SuppliersService.deleteSuppliersById({
 					path: { id: supplier.id },
-				});
-				toast.show(t("suppliers.modals.form.delete.success"));
-				onSubmitSuccess?.();
+				})
+				toast.show(t("suppliers.modals.form.delete.success"))
+				onSubmitSuccess?.()
 			} catch {
-				toast.destructive(t("genericFormError"));
+				toast.destructive(t("genericFormError"))
 			}
 		}
-	};
+	}
 
 	const { field: colorField } = useController({
 		control: methods.control,
 		name: "color",
 		rules: { required: true },
-	});
+	})
 
 	return (
 		<div className="w-full pb-2 flex flex-col gap-4">
@@ -131,8 +131,8 @@ const SupplierForm = ({ supplier, onSubmitSuccess }: SupplierFormProps) => {
 				</div>
 			</Form>
 		</div>
-	);
-};
+	)
+}
 const SupplierModalForm = ({
 	disclosure,
 	supplier,
@@ -143,12 +143,12 @@ const SupplierModalForm = ({
 			<SupplierForm
 				supplier={supplier}
 				onSubmitSuccess={async () => {
-					await onSubmitSuccess?.();
-					close();
+					await onSubmitSuccess?.()
+					close()
 				}}
 			/>
 		)}
 	</Modal>
-);
+)
 
-export default SupplierModalForm;
+export default SupplierModalForm

@@ -1,5 +1,5 @@
-import { Label } from "components/Label";
-import { tw } from "lib/utils";
+import { Label } from "components/Label"
+import { tw } from "lib/utils"
 import {
 	type ChangeEventHandler,
 	type FocusEventHandler,
@@ -8,27 +8,27 @@ import {
 	type ReactNode,
 	forwardRef,
 	useId,
-} from "react";
+} from "react"
 
 export type InputProps = {
-	label?: string;
-	error?: string | boolean;
-	type?: string;
-	required?: boolean;
-	disabled?: boolean;
-	name?: string;
-	id?: string;
-	onFocus?: FocusEventHandler<HTMLInputElement>;
-	onBlur?: FocusEventHandler<HTMLInputElement>;
-	onChange?: ChangeEventHandler<HTMLInputElement>;
-	onClick?: MouseEventHandler<HTMLInputElement>;
-	className?: string;
-	onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
-	onKeyUp?: KeyboardEventHandler<HTMLInputElement>;
-	placeholder?: string;
-	value?: string | number;
-	autoComplete?: string;
-	autoCorrect?: string;
+	label?: string
+	error?: string | boolean
+	type?: string
+	required?: boolean
+	disabled?: boolean
+	name?: string
+	id?: string
+	onFocus?: FocusEventHandler<HTMLInputElement>
+	onBlur?: FocusEventHandler<HTMLInputElement>
+	onChange?: ChangeEventHandler<HTMLInputElement>
+	onClick?: MouseEventHandler<HTMLInputElement>
+	className?: string
+	onKeyDown?: KeyboardEventHandler<HTMLInputElement>
+	onKeyUp?: KeyboardEventHandler<HTMLInputElement>
+	placeholder?: string
+	value?: string | number
+	autoComplete?: string
+	autoCorrect?: string
 	inputMode?:
 		| "text"
 		| "none"
@@ -37,18 +37,18 @@ export type InputProps = {
 		| "tel"
 		| "numeric"
 		| "decimal"
-		| "url";
-	pattern?: string;
-	autoCapitalize?: string;
-	min?: number;
-	max?: number;
-	maxLength?: number;
-	minLength?: number;
-	step?: number;
-	readOnly?: boolean;
-	prefix?: ReactNode;
-	suffix?: ReactNode;
-};
+		| "url"
+	pattern?: string
+	autoCapitalize?: string
+	min?: number
+	max?: number
+	maxLength?: number
+	minLength?: number
+	step?: number
+	readOnly?: boolean
+	prefix?: ReactNode
+	suffix?: ReactNode
+}
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
 	(
@@ -67,8 +67,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		},
 		ref,
 	) => {
-		const generatedId = useId();
-		const id = idProp ?? generatedId;
+		const generatedId = useId()
+		const id = idProp ?? generatedId
 
 		return (
 			<div className={tw("grid w-full gap-1", className)}>
@@ -116,8 +116,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 					<span className="text-xs text-destructive">{error}</span>
 				) : null}
 			</div>
-		);
+		)
 	},
-);
+)
 
-Input.displayName = "Input";
+Input.displayName = "Input"

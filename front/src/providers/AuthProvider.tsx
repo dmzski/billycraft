@@ -1,6 +1,6 @@
-import { API_URL } from "@/constants/global";
-import { ApiError } from "@/lib/ApiError";
-import { client } from "@/sdk";
+import { API_URL } from "@/constants/global"
+import { ApiError } from "@/lib/ApiError"
+import { client } from "@/sdk"
 import {
 	type ReactNode,
 	createContext,
@@ -9,36 +9,36 @@ import {
 	useEffect,
 	useMemo,
 	useState,
-} from "react";
+} from "react"
 
 type UpdateUserParams = {
-	name?: string;
-	oldPassword?: string;
-	password?: string;
-};
+	name?: string
+	oldPassword?: string
+	password?: string
+}
 
 type AuthContextType = {
-	login: (params: { email: string; password: string }) => Promise<void>;
-	logout: () => Promise<void>;
-	updateUser: (params: UpdateUserParams) => Promise<void>;
+	login: (params: { email: string; password: string }) => Promise<void>
+	logout: () => Promise<void>
+	updateUser: (params: UpdateUserParams) => Promise<void>
 	register: (params: {
-		email: string;
-		password: string;
-		name: string;
-	}) => Promise<void>;
-	refreshSession: () => Promise<void>;
-	isAuthenticated: boolean;
-	isInitializing: boolean;
-};
+		email: string
+		password: string
+		name: string
+	}) => Promise<void>
+	refreshSession: () => Promise<void>
+	isAuthenticated: boolean
+	isInitializing: boolean
+}
 
 type AuthProviderProps = {
-	children: ReactNode;
-	onLoginSuccess?: () => Promise<void> | void;
-	onLogoutSuccess?: () => Promise<void> | void;
-	onRefreshSuccess?: () => Promise<void> | void;
-	onRegisterSuccess?: () => Promise<void> | void;
-	useAuthorizationHeader?: boolean;
-};
+	children: ReactNode
+	onLoginSuccess?: () => Promise<void> | void
+	onLogoutSuccess?: () => Promise<void> | void
+	onRefreshSuccess?: () => Promise<void> | void
+	onRegisterSuccess?: () => Promise<void> | void
+	useAuthorizationHeader?: boolean
+}
 
 const AuthContext = createContext<AuthContextType>({
 	isAuthenticated: false,
@@ -48,10 +48,10 @@ const AuthContext = createContext<AuthContextType>({
 	register: () => Promise.resolve(),
 	updateUser: () => Promise.resolve(),
 	refreshSession: () => Promise.resolve(),
-});
+})
 
-const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL ?? "";
-const LOCAL_STORAGE_KEY = "coco_at";
+const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
+const LOCAL_STORAGE_KEY = "coco_at"
 
 const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
 	client.setConfig({
@@ -64,14 +64,14 @@ const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
 						Authorization: `Bearer ${token}`,
 					}
 				: undefined,
-	});
-};
+	})
+}
 
 client.setConfig({
 	baseUrl: API_URL,
 	credentials: "include",
 	throwOnError: true,
-});
+})
 
 export const AuthProvider = ({
 	children,
@@ -83,7 +83,7 @@ export const AuthProvider = ({
 }: AuthProviderProps) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
 		undefined,
-	);
+	)
 
 	const login: AuthContextType["login"] = useCallback(
 		async ({ email, password }) => {
@@ -97,22 +97,22 @@ export const AuthProvider = ({
 				headers: {
 					"Content-Type": "application/json",
 				},
-			});
+			})
 			if (res.ok) {
-				const { token } = await res.json();
+				const { token } = await res.json()
 				if (useAuthorizationHeader) {
-					localStorage.setItem(LOCAL_STORAGE_KEY, token);
+					localStorage.setItem(LOCAL_STORAGE_KEY, token)
 				}
-				configureClient(token, useAuthorizationHeader);
-				setIsAuthenticated(true);
-				await onLoginSuccess?.();
+				configureClient(token, useAuthorizationHeader)
+				setIsAuthenticated(true)
+				await onLoginSuccess?.()
 			} else {
-				const { message } = await res.json();
-				throw new ApiError(res.status, message);
+				const { message } = await res.json()
+				throw new ApiError(res.status, message)
 			}
 		},
 		[onLoginSuccess, useAuthorizationHeader],
-	);
+	)
 
 	const register: AuthContextType["register"] = useCallback(
 		async ({ email, password, name }) => {
@@ -126,36 +126,36 @@ export const AuthProvider = ({
 				headers: {
 					"Content-Type": "application/json",
 				},
-			});
+			})
 			if (res.ok) {
-				await onRegisterSuccess?.();
+				await onRegisterSuccess?.()
 			} else {
-				const { message } = await res.json();
-				throw new ApiError(res.status, message);
+				const { message } = await res.json()
+				throw new ApiError(res.status, message)
 			}
 		},
 		[onRegisterSuccess],
-	);
+	)
 
 	const logout = useCallback(async () => {
 		if (useAuthorizationHeader) {
-			localStorage.removeItem(LOCAL_STORAGE_KEY);
-			await onLogoutSuccess?.();
+			localStorage.removeItem(LOCAL_STORAGE_KEY)
+			await onLogoutSuccess?.()
 
-			return;
+			return
 		}
 		const res = await fetch(`${AUTH_API_URL}/auth/logout`, {
 			method: "GET",
 			credentials: "include",
-		});
+		})
 		if (res.ok) {
-			await onLogoutSuccess?.();
+			await onLogoutSuccess?.()
 		} else {
-			const { message } = await res.json();
-			throw new ApiError(res.status, message);
+			const { message } = await res.json()
+			throw new ApiError(res.status, message)
 		}
-		setIsAuthenticated(false);
-	}, [onLogoutSuccess, useAuthorizationHeader]);
+		setIsAuthenticated(false)
+	}, [onLogoutSuccess, useAuthorizationHeader])
 
 	const refreshSession = useCallback(async () => {
 		try {
@@ -164,47 +164,47 @@ export const AuthProvider = ({
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_KEY)}`,
 					},
-				});
+				})
 				if (res.ok) {
-					const { token } = await res.json();
-					configureClient(token, useAuthorizationHeader);
-					localStorage.setItem(LOCAL_STORAGE_KEY, token);
+					const { token } = await res.json()
+					configureClient(token, useAuthorizationHeader)
+					localStorage.setItem(LOCAL_STORAGE_KEY, token)
 					if (!isAuthenticated) {
-						setIsAuthenticated(true);
+						setIsAuthenticated(true)
 					}
-					await onRefreshSuccess?.();
+					await onRefreshSuccess?.()
 				} else {
 					if (isAuthenticated || isAuthenticated === undefined) {
-						setIsAuthenticated(false);
+						setIsAuthenticated(false)
 					}
-					const { message } = await res.json();
-					throw new ApiError(res.status, message);
+					const { message } = await res.json()
+					throw new ApiError(res.status, message)
 				}
 			} else {
 				const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
 					credentials: "include",
-				});
+				})
 				if (res.ok) {
-					configureClient("", false);
+					configureClient("", false)
 					if (!isAuthenticated) {
-						setIsAuthenticated(true);
+						setIsAuthenticated(true)
 					}
-					await onRefreshSuccess?.();
+					await onRefreshSuccess?.()
 				} else {
 					if (isAuthenticated || isAuthenticated === undefined) {
-						setIsAuthenticated(false);
+						setIsAuthenticated(false)
 					}
-					const { message } = await res.json();
-					throw new ApiError(res.status, message);
+					const { message } = await res.json()
+					throw new ApiError(res.status, message)
 				}
 			}
 		} catch (err) {
 			if (isAuthenticated || isAuthenticated === undefined) {
-				setIsAuthenticated(false);
+				setIsAuthenticated(false)
 			}
-			throw err;
+			throw err
 		}
-	}, [useAuthorizationHeader, onRefreshSuccess, isAuthenticated]);
+	}, [useAuthorizationHeader, onRefreshSuccess, isAuthenticated])
 
 	const updateUser = useCallback(
 		async ({ name, password, oldPassword }: UpdateUserParams) => {
@@ -220,10 +220,10 @@ export const AuthProvider = ({
 						password,
 						oldPassword,
 					}),
-				});
+				})
 				if (!res.ok) {
-					const { message } = await res.json();
-					throw new ApiError(res.status, message);
+					const { message } = await res.json()
+					throw new ApiError(res.status, message)
 				}
 			} else {
 				const res = await fetch(`${AUTH_API_URL}/auth/refresh`, {
@@ -237,21 +237,21 @@ export const AuthProvider = ({
 						password,
 						oldPassword,
 					}),
-				});
+				})
 				if (!res.ok) {
-					const { message } = await res.json();
-					throw new ApiError(res.status, message);
+					const { message } = await res.json()
+					throw new ApiError(res.status, message)
 				}
 			}
 		},
 		[useAuthorizationHeader],
-	);
+	)
 
 	useEffect(() => {
 		if (isAuthenticated === undefined) {
-			refreshSession().catch(() => null);
+			refreshSession().catch(() => null)
 		}
-	}, [refreshSession, isAuthenticated]);
+	}, [refreshSession, isAuthenticated])
 
 	const value = useMemo(
 		() =>
@@ -265,22 +265,22 @@ export const AuthProvider = ({
 				login,
 			}) as AuthContextType,
 		[isAuthenticated, refreshSession, register, logout, login, updateUser],
-	);
+	)
 
 	if (!AUTH_API_URL || AUTH_API_URL.endsWith("/")) {
-		throw new Error("VITE_AUTH_API_URL need to be set with no trailing slash");
+		throw new Error("VITE_AUTH_API_URL need to be set with no trailing slash")
 	}
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
-	const context = useContext(AuthContext);
+	const context = useContext(AuthContext)
 
 	if (!context) {
-		throw new Error("useAuth must be used inside AuthContext");
+		throw new Error("useAuth must be used inside AuthContext")
 	}
 
-	return context;
-};
+	return context
+}

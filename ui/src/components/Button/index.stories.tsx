@@ -1,18 +1,18 @@
-import type { StoryObj } from "@storybook/react";
-import { Button } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Button } from "."
 
 export default {
 	title: "Components/Button",
 	component: Button,
-};
-type Story = StoryObj<typeof Button>;
+}
+type Story = StoryObj<typeof Button>
 
 export const Basic: Story = {
 	args: {
 		children: "Basic",
 		size: "default",
 	},
-};
+}
 
 export const Variants = () => (
 	<div style={{ display: "flex", gap: 4 }}>
@@ -23,7 +23,7 @@ export const Variants = () => (
 		<Button variant="ghost">ghost</Button>
 		<Button variant="outline">outline</Button>
 	</div>
-);
+)
 
 export const Sizes = () => (
 	<div style={{ display: "flex", gap: 4 }}>
@@ -32,7 +32,7 @@ export const Sizes = () => (
 		<Button size="lg">lg</Button>
 		<Button size="icon">icon</Button>
 	</div>
-);
+)
 
 export const Disabled = () => (
 	<div style={{ display: "flex", gap: 4 }}>
@@ -55,4 +55,4 @@ export const Disabled = () => (
 			outline
 		</Button>
 	</div>
-);
+)

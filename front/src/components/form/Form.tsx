@@ -1,19 +1,19 @@
-import { sendErrorToSentry } from "@/utils/errors";
-import type { ReactNode } from "react";
+import { sendErrorToSentry } from "@/utils/errors"
+import type { ReactNode } from "react"
 import {
 	type FieldValues,
 	FormProvider,
 	type UseFormReturn,
-} from "react-hook-form";
+} from "react-hook-form"
 
 // biome-ignore lint/suspicious/noConfusingVoidType: We need void for no return
-type OnSubmitReturn = string | null | undefined | void;
+type OnSubmitReturn = string | null | undefined | void
 
 type FormProps<TFieldValues extends FieldValues> = {
-	methods: UseFormReturn<TFieldValues>;
-	onSubmit: (values: TFieldValues) => OnSubmitReturn | Promise<OnSubmitReturn>;
-	children: ReactNode;
-};
+	methods: UseFormReturn<TFieldValues>
+	onSubmit: (values: TFieldValues) => OnSubmitReturn | Promise<OnSubmitReturn>
+	children: ReactNode
+}
 
 export const Form = <TFieldValues extends FieldValues>({
 	onSubmit,
@@ -22,41 +22,41 @@ export const Form = <TFieldValues extends FieldValues>({
 }: FormProps<TFieldValues>) => {
 	const handleSubmit = methods.handleSubmit(async (values) => {
 		try {
-			const result = await onSubmit(values);
+			const result = await onSubmit(values)
 
 			if (result) {
 				methods.setError("root.submit", {
 					type: "custom",
 					message: result,
-				});
+				})
 			}
 		} catch (error) {
-			sendErrorToSentry(error);
+			sendErrorToSentry(error)
 			if (error instanceof Error) {
 				methods.setError("root.submit", {
 					type: "custom",
 					message: error.message,
-				});
+				})
 			} else {
 				methods.setError("root.submit", {
 					type: "custom",
 					message: "An error occured",
-				});
+				})
 			}
 		}
-	});
+	})
 
 	return (
 		<FormProvider {...methods}>
 			<form
 				onSubmit={async (event) => {
-					event.preventDefault();
-					event.stopPropagation();
-					await handleSubmit(event);
+					event.preventDefault()
+					event.stopPropagation()
+					await handleSubmit(event)
 				}}
 			>
 				{children}
 			</form>
 		</FormProvider>
-	);
-};
+	)
+}

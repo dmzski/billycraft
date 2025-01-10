@@ -1,30 +1,30 @@
-import { useI18n } from "@/i18n";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
+import { useI18n } from "@/i18n"
+import { Button, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { useForm } from "react-hook-form"
 import {
 	ProductFormContent,
 	type ProductFormValues,
-} from "../components/ProductFormContent";
-import { sendErrorToSentry } from "@/utils/errors";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { Submit } from "@/components/form/Submit";
-import { Form } from "@/components/form/Form";
+} from "../components/ProductFormContent"
+import { sendErrorToSentry } from "@/utils/errors"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { Submit } from "@/components/form/Submit"
+import { Form } from "@/components/form/Form"
 import {
 	type CreateProductRequest,
 	type ProductResponse,
 	ProductsService,
-} from "@/sdk";
+} from "@/sdk"
 
 type AddProductModalProps = {
-	onSubmitSuccess: (newId: ProductResponse["id"]) => Promise<void> | void;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	initialValues?: Partial<ProductFormValues>;
-};
+	onSubmitSuccess: (newId: ProductResponse["id"]) => Promise<void> | void
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	initialValues?: Partial<ProductFormValues>
+}
 
 type AddProductFormProps = Omit<AddProductModalProps, "disclosure"> & {
-	close: () => void;
-};
+	close: () => void
+}
 
 const defaultValues: ProductFormValues = {
 	type: "ARTICLE",
@@ -38,43 +38,43 @@ const defaultValues: ProductFormValues = {
 	groupId: null,
 	lowStock: null,
 	stockAlert: true,
-};
+}
 
 const AddProductForm = ({
 	onSubmitSuccess,
 	close,
 	initialValues,
 }: AddProductFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.add");
-	const { data: suppliers } = useAllSuppliersQuery();
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const pageT = scopedT("products.modals.add")
+	const { data: suppliers } = useAllSuppliersQuery()
 
 	const methods = useForm<ProductFormValues>({
 		mode: "onChange",
 		values: { ...defaultValues, ...initialValues },
-	});
+	})
 
 	const onSubmit = async (values: ProductFormValues) => {
 		try {
 			if (values.type !== "ARTICLE") {
-				values.stock = null;
-				values.lowStock = null;
-				values.code = null;
+				values.stock = null
+				values.lowStock = null
+				values.code = null
 			}
 			const res = await ProductsService.postProducts({
 				body: values as CreateProductRequest,
-			}).then(({ data }) => data);
-			toast.show(pageT("submit.success"));
+			}).then(({ data }) => data)
+			toast.show(pageT("submit.success"))
 			if (res) {
-				await onSubmitSuccess(res.id);
+				await onSubmitSuccess(res.id)
 			}
-			close();
+			close()
 		} catch (err) {
-			sendErrorToSentry(err, { data: values });
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(err, { data: values })
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
@@ -90,8 +90,8 @@ const AddProductForm = ({
 				</Modal.Actions>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const AddProductModal = ({
 	onSubmitSuccess,
@@ -107,4 +107,4 @@ export const AddProductModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

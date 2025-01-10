@@ -13,13 +13,13 @@ import {
 	Avatar,
 	Dropdown,
 	Button,
-} from "@billycraft/ui";
-import { ROUTES, type RouteId } from "@/routes";
-import { Link, useMatch } from "react-router-dom";
-import { useI18n } from "@/i18n";
-import { useOrganizationLogoQuery } from "@/queries/useOrganizationLogoQuery";
-import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
-import { useOrganization } from "@/providers/OrganizationProvider";
+} from "@billycraft/ui"
+import { ROUTES, type RouteId } from "@/routes"
+import { Link, useMatch } from "react-router-dom"
+import { useI18n } from "@/i18n"
+import { useOrganizationLogoQuery } from "@/queries/useOrganizationLogoQuery"
+import { ChevronUpDownIcon } from "@heroicons/react/24/solid"
+import { useOrganization } from "@/providers/OrganizationProvider"
 
 const menuRoutes = [
 	ROUTES.DASHBOARD,
@@ -30,26 +30,26 @@ const menuRoutes = [
 	ROUTES.PRODUCTS,
 	ROUTES.ACCOUNTINGS,
 	ROUTES.HISTORY,
-] as const;
+] as const
 
 type AppSidebarMenuItemsProps = {
-	path: string;
-	id: RouteId;
-	exact: boolean;
-};
+	path: string
+	id: RouteId
+	exact: boolean
+}
 const AppSidebarMenuItem = ({ path, id, exact }: AppSidebarMenuItemsProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const match = useMatch({
 		path,
 		end: exact,
-	});
-	const { isMobile, setOpenMobile } = useSidebar();
+	})
+	const { isMobile, setOpenMobile } = useSidebar()
 
 	const onClickHandler = () => {
 		if (isMobile) {
-			setOpenMobile(false);
+			setOpenMobile(false)
 		}
-	};
+	}
 
 	return (
 		<SidebarMenuItem>
@@ -57,17 +57,17 @@ const AppSidebarMenuItem = ({ path, id, exact }: AppSidebarMenuItemsProps) => {
 				<Link to={path}>{t(`heads.${id}`)}</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
-	);
-};
+	)
+}
 
 export const AppSidebar = ({
 	...props
 }: React.ComponentProps<typeof Sidebar>) => {
-	const { t } = useI18n();
-	const { organization } = useOrganization();
+	const { t } = useI18n()
+	const { organization } = useOrganization()
 	const { data: logo } = useOrganizationLogoQuery(organization?.id ?? "", {
 		enabled: !!organization?.logo,
-	});
+	})
 
 	return (
 		<Sidebar side="left" variant="floating" {...props}>
@@ -128,7 +128,11 @@ export const AppSidebar = ({
 				<SidebarGroup key="main">
 					<SidebarGroupContent>
 						{menuRoutes
-							.filter((route) => ("routes" in route && "INDEX" in route.routes) || !("routes" in route))
+							.filter(
+								(route) =>
+									("routes" in route && "INDEX" in route.routes) ||
+									!("routes" in route),
+							)
 							.map((route) => (
 								<SidebarMenu key={route.id}>
 									<AppSidebarMenuItem
@@ -164,5 +168,5 @@ export const AppSidebar = ({
 			</SidebarContent>
 			<SidebarRail />
 		</Sidebar>
-	);
-};
+	)
+}

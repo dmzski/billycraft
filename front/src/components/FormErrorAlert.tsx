@@ -1,18 +1,18 @@
-import { Alert } from "@billycraft/ui";
-import { useFormContext } from "react-hook-form";
+import { Alert } from "@billycraft/ui"
+import { useFormContext } from "react-hook-form"
 
 export const FormErrorAlert = () => {
 	const {
 		formState: { errors },
-	} = useFormContext();
+	} = useFormContext()
 
 	if (errors.root?.message) {
-		return <Alert variant="destructive">{errors.root.message}</Alert>;
+		return <Alert variant="destructive">{errors.root.message}</Alert>
 	}
 
 	if (errors.root?.submit?.message) {
-		return <Alert variant="destructive">{errors.root.submit.message}</Alert>;
+		return <Alert variant="destructive">{errors.root.submit.message}</Alert>
 	}
 
-	return null;
-};
+	return null
+}

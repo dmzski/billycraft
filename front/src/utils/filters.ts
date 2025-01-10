@@ -1,31 +1,31 @@
-import type { BillResponse, CustomerResponse, QuoteResponse } from "@/sdk";
-import { formatISO9075, parseJSON } from "date-fns";
+import type { BillResponse, CustomerResponse, QuoteResponse } from "@/sdk"
+import { formatISO9075, parseJSON } from "date-fns"
 
-type FilterKey = "name" | "status" | "createdAt" | "title" | "customer";
+type FilterKey = "name" | "status" | "createdAt" | "title" | "customer"
 
 export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 	array: T[],
 	filters: Record<FilterKey, string>,
 	customers?: CustomerResponse[],
 ): T[] {
-	if (!array) return [];
-	if (!filters) return array;
-	const arrayFiltered = [...array];
+	if (!array) return []
+	if (!filters) return array
+	const arrayFiltered = [...array]
 	return arrayFiltered.filter((item: T) => {
-		let takeIt = true;
-		const customer = customers?.find((c) => c.id === item.customerId);
+		let takeIt = true
+		const customer = customers?.find((c) => c.id === item.customerId)
 		if (
 			filters.name &&
 			!item.name.trim().includes(filters.name.toUpperCase().trim())
 		) {
-			takeIt = false;
+			takeIt = false
 		}
 		if (
 			filters.status &&
 			filters.status !== "all" &&
 			item.status !== filters.status
 		) {
-			takeIt = false;
+			takeIt = false
 		}
 		if (
 			filters.customer &&
@@ -34,7 +34,7 @@ export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 				.trim()
 				.includes(filters.customer.toLowerCase().trim())
 		) {
-			takeIt = false;
+			takeIt = false
 		}
 		if (
 			filters.title &&
@@ -43,7 +43,7 @@ export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 				.trim()
 				.includes(filters.title.toLowerCase().trim())
 		) {
-			takeIt = false;
+			takeIt = false
 		}
 
 		if (
@@ -51,8 +51,8 @@ export function filterBillsOrQuotes<T extends QuoteResponse | BillResponse>(
 			item.createdAt &&
 			!formatISO9075(parseJSON(item.createdAt)).includes(filters.createdAt)
 		) {
-			takeIt = false;
+			takeIt = false
 		}
-		return takeIt;
-	});
+		return takeIt
+	})
 }

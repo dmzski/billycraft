@@ -1,15 +1,15 @@
-import type { StoryObj } from "@storybook/react";
-import { useState } from "react";
-import { Tabs } from ".";
+import type { StoryObj } from "@storybook/react"
+import { useState } from "react"
+import { Tabs } from "."
 
 export default {
 	title: "Components/Tabs",
 	component: Tabs,
-};
+}
 
-type Story = StoryObj<typeof Tabs>;
+type Story = StoryObj<typeof Tabs>
 const render: Story["render"] = (props) => {
-	const [selected, setSelected] = useState("left");
+	const [selected, setSelected] = useState("left")
 
 	return (
 		<Tabs {...props}>
@@ -28,18 +28,18 @@ const render: Story["render"] = (props) => {
 				Right
 			</Tabs.Tab>
 		</Tabs>
-	);
-};
+	)
+}
 
 export const Basic: Story = {
 	render,
 	args: {},
-};
+}
 
 export const WithLinks: Story = {
 	args: {},
 	render: (props) => {
-		const [selected, setSelected] = useState("left");
+		const [selected, setSelected] = useState("left")
 
 		return (
 			<Tabs {...props}>
@@ -61,6 +61,6 @@ export const WithLinks: Story = {
 					Right is button
 				</Tabs.Tab>
 			</Tabs>
-		);
+		)
 	},
-};
+}

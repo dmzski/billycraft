@@ -1,48 +1,48 @@
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { useI18n } from "@/i18n";
-import { UsersService } from "@/sdk";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { FormProvider, useController, useForm } from "react-hook-form";
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { useI18n } from "@/i18n"
+import { UsersService } from "@/sdk"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Alert, Button, Input, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { FormProvider, useController, useForm } from "react-hook-form"
 
 type RemoveUserModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onSubmitSuccess: () => Promise<void>;
-	email: string;
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onSubmitSuccess: () => Promise<void>
+	email: string
+}
 
-type RemoveUserFormProps = Omit<RemoveUserModalProps, "disclosure">;
+type RemoveUserFormProps = Omit<RemoveUserModalProps, "disclosure">
 
 const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const confirmationString = t("forms.confirmation.delete.pattern");
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const confirmationString = t("forms.confirmation.delete.pattern")
 
-	const pageT = scopedT("settings.users.users.modals.remove");
+	const pageT = scopedT("settings.users.users.modals.remove")
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: {
 			confirm: "",
 		},
-	});
+	})
 
 	const { field: nameField, fieldState: nameFieldState } = useController({
 		control: methods.control,
 		name: "confirm",
 		rules: { required: true, pattern: new RegExp(confirmationString, "i") },
-	});
+	})
 
 	const onSubmit = async () => {
 		try {
-			await UsersService.deleteUsersRemoveUser({ body: { email } });
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
+			await UsersService.deleteUsersRemoveUser({ body: { email } })
+			toast.show(pageT("submit.success"))
+			await onSubmitSuccess()
 		} catch (err) {
-			sendErrorToSentry(err);
-			methods.setError("root", { message: t("genericFormError") });
+			sendErrorToSentry(err)
+			methods.setError("root", { message: t("genericFormError") })
 		}
-	};
+	}
 
 	return (
 		<FormProvider {...methods}>
@@ -75,8 +75,8 @@ const RemoveUserForm = ({ email, onSubmitSuccess }: RemoveUserFormProps) => {
 				</Button>
 			</form>
 		</FormProvider>
-	);
-};
+	)
+}
 
 export const RemoveUserModal = ({
 	email,
@@ -87,11 +87,11 @@ export const RemoveUserModal = ({
 		{({ close }) => (
 			<RemoveUserForm
 				onSubmitSuccess={async () => {
-					await onSubmitSuccess();
-					close();
+					await onSubmitSuccess()
+					close()
 				}}
 				email={email}
 			/>
 		)}
 	</Modal>
-);
+)

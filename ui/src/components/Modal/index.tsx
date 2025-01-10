@@ -1,7 +1,7 @@
-import MarkXIcon from "@heroicons/react/24/solid/XMarkIcon";
-import { type VariantProps, cva } from "class-variance-authority";
-import clsx from "clsx";
-import { tw } from "lib/utils";
+import MarkXIcon from "@heroicons/react/24/solid/XMarkIcon"
+import { type VariantProps, cva } from "class-variance-authority"
+import clsx from "clsx"
+import { tw } from "lib/utils"
 import {
 	type ComponentProps,
 	type MouseEventHandler,
@@ -14,18 +14,18 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import { createPortal } from "react-dom";
-import { Button } from "../Button";
+} from "react"
+import { createPortal } from "react-dom"
+import { Button } from "../Button"
 
-const DELAY_TRANSITION = 200;
+const DELAY_TRANSITION = 200
 const backdropClassNames = `
 z-50
 max-h-svh
 fixed inset-0 aria-[expanded=false]:sr-only bg-black/80
 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
 fill-mode-forwards
-`;
+`
 const dialogClassNames = `
 duration-200 w-full h-auto max-h-full m-2 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]
 gap-4 border bg-background p-6 shadow-lg sm:rounded-lg
@@ -36,7 +36,7 @@ grid sm:rounded-lg
 fill-mode-forwards
 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[50%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[50%]
-`;
+`
 
 const dialogVariants = cva(dialogClassNames, {
 	variants: {
@@ -49,18 +49,18 @@ const dialogVariants = cva(dialogClassNames, {
 	defaultVariants: {
 		size: "md",
 	},
-});
+})
 
 export type ModalProps = {
-	disclosure?: ReactElement;
-	children: ((props: { close: () => void }) => ReactElement) | ReactNode;
-	withoutPortal?: boolean;
-	hideOnClickOutside?: boolean;
-	open?: boolean;
-	onClose?: () => void;
-} & VariantProps<typeof dialogVariants>;
+	disclosure?: ReactElement
+	children: ((props: { close: () => void }) => ReactElement) | ReactNode
+	withoutPortal?: boolean
+	hideOnClickOutside?: boolean
+	open?: boolean
+	onClose?: () => void
+} & VariantProps<typeof dialogVariants>
 
-type ModalTitleProps = ComponentProps<"h2">;
+type ModalTitleProps = ComponentProps<"h2">
 
 export const Modal = ({
 	disclosure,
@@ -71,35 +71,35 @@ export const Modal = ({
 	onClose,
 	size = "md",
 }: ModalProps) => {
-	const id = useId();
-	const [open, setOpen] = useState(openProp && onClose ? openProp : false);
+	const id = useId()
+	const [open, setOpen] = useState(openProp && onClose ? openProp : false)
 	const [transitionState, setTransitionState] = useState<
 		"opening" | "closing" | "open" | "closed"
-	>(open ? "opening" : "closed");
-	const disclosureRef = useRef<HTMLElement>(null);
-	const dialogRef = useRef<HTMLDialogElement>(null);
-	const previousOverflow = useRef(document.body.style.overflow);
+	>(open ? "opening" : "closed")
+	const disclosureRef = useRef<HTMLElement>(null)
+	const dialogRef = useRef<HTMLDialogElement>(null)
+	const previousOverflow = useRef(document.body.style.overflow)
 
 	useEffect(() => {
 		if (!openProp && !onClose) {
 			const handleClick = () => {
-				setOpen(true);
-			};
+				setOpen(true)
+			}
 			if (disclosureRef.current) {
-				disclosureRef.current.addEventListener("click", handleClick);
+				disclosureRef.current.addEventListener("click", handleClick)
 			}
 
 			return () => {
 				if (disclosureRef.current) {
-					disclosureRef.current.removeEventListener("click", handleClick);
+					disclosureRef.current.removeEventListener("click", handleClick)
 				}
-			};
+			}
 		}
 
 		if (onClose && openProp !== open) {
-			setOpen(!!openProp);
+			setOpen(!!openProp)
 		}
-	}, [open, openProp, onClose]);
+	}, [open, openProp, onClose])
 
 	const Component = disclosure
 		? cloneElement(disclosure, {
@@ -107,57 +107,57 @@ export const Modal = ({
 				ref: disclosureRef,
 				"aria-controls": id,
 			})
-		: undefined;
+		: undefined
 
 	const close = useCallback(() => {
 		if (onClose) {
-			onClose();
+			onClose()
 		} else {
-			setOpen(false);
+			setOpen(false)
 		}
-	}, [onClose]);
+	}, [onClose])
 
 	const handleClickOutside: MouseEventHandler<HTMLElement> = useCallback(
 		(event) => {
-			event.preventDefault();
-			event.stopPropagation();
+			event.preventDefault()
+			event.stopPropagation()
 			if (hideOnClickOutside) {
-				close();
+				close()
 			}
 
-			return false;
+			return false
 		},
 		[hideOnClickOutside, close],
-	);
+	)
 
 	useEffect(() => {
-		let displayContentTimeout: ReturnType<typeof setTimeout>;
+		let displayContentTimeout: ReturnType<typeof setTimeout>
 		if (open) {
 			if (previousOverflow.current !== "hidden") {
-				document.body.style.overflow = "hidden";
+				document.body.style.overflow = "hidden"
 			}
 			setTransitionState((original) =>
 				original !== "open" ? "opening" : "open",
-			);
+			)
 			displayContentTimeout = setTimeout(() => {
-				setTransitionState("open");
-			}, DELAY_TRANSITION);
+				setTransitionState("open")
+			}, DELAY_TRANSITION)
 		} else {
 			setTransitionState((original) =>
 				original !== "closed" ? "closing" : "closed",
-			);
+			)
 			displayContentTimeout = setTimeout(() => {
-				document.body.style.overflow = previousOverflow.current;
-				setTransitionState("closed");
-			}, DELAY_TRANSITION);
+				document.body.style.overflow = previousOverflow.current
+				setTransitionState("closed")
+			}, DELAY_TRANSITION)
 		}
 
 		return () => {
 			if (displayContentTimeout) {
-				clearTimeout(displayContentTimeout);
+				clearTimeout(displayContentTimeout)
 			}
-		};
-	}, [open]);
+		}
+	}, [open])
 
 	const modalContentRendered = useMemo(
 		() => (
@@ -173,10 +173,10 @@ export const Modal = ({
 						open
 						id={id}
 						onClick={(event) => {
-							event.stopPropagation();
+							event.stopPropagation()
 						}}
 						onKeyDown={(event) => {
-							event.stopPropagation();
+							event.stopPropagation()
 						}}
 						ref={dialogRef}
 						className={tw(dialogVariants({ size }))}
@@ -199,7 +199,7 @@ export const Modal = ({
 			</div>
 		),
 		[children, open, id, close, size, transitionState, handleClickOutside],
-	);
+	)
 
 	return (
 		<>
@@ -208,18 +208,18 @@ export const Modal = ({
 				? modalContentRendered
 				: createPortal(modalContentRendered, document.body)}
 		</>
-	);
-};
+	)
+}
 
 const ModalActions = ({ children }: { children: ReactNode }) => {
-	return <div className="flex items-center gap-2 justify-end">{children}</div>;
-};
+	return <div className="flex items-center gap-2 justify-end">{children}</div>
+}
 
 const ModalTitle = ({ children, className, ...props }: ModalTitleProps) => (
 	<h2 className={clsx("text-lg font-bold", className)} {...props}>
 		{children}
 	</h2>
-);
+)
 
-Modal.Actions = ModalActions;
-Modal.Title = ModalTitle;
+Modal.Actions = ModalActions
+Modal.Title = ModalTitle

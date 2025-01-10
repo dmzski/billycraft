@@ -1,29 +1,29 @@
-import { Alert, Button, Loader } from "@billycraft/ui";
-import SupplierList from "./List";
-import SupplierModalForm from "./modals/SupplierModalForm";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { useI18n } from "@/i18n";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { Alert, Button, Loader } from "@billycraft/ui"
+import SupplierList from "./List"
+import SupplierModalForm from "./modals/SupplierModalForm"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { useI18n } from "@/i18n"
+import { PlusIcon } from "@heroicons/react/24/solid"
 
 const Suppliers = () => {
-	const { data, isLoading, reload } = useAllSuppliersQuery();
-	const { scopedT, t } = useI18n();
-	const pageT = scopedT("suppliers.list");
+	const { data, isLoading, reload } = useAllSuppliersQuery()
+	const { scopedT, t } = useI18n()
+	const pageT = scopedT("suppliers.list")
 
 	const reloadData = async () => {
-		await reload();
-	};
+		await reload()
+	}
 
 	if (isLoading && !data) {
 		return (
 			<div className="flex justify-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!data) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -42,7 +42,7 @@ const Suppliers = () => {
 			</div>
 			<SupplierList reloadData={reloadData} data={data} />
 		</div>
-	);
-};
+	)
+}
 
-export default Suppliers;
+export default Suppliers

@@ -2,11 +2,11 @@ import {
 	type GetInvitationsData,
 	type InvitationResponse,
 	InvitationsService,
-} from "@/sdk";
+} from "@/sdk"
 import {
 	type UseDataLoaderConfig,
 	useDataLoader,
-} from "@scaleway/use-dataloader";
+} from "@scaleway/use-dataloader"
 
 export const useAllInvitationsQuery = (
 	params?: GetInvitationsData["query"],
@@ -16,7 +16,7 @@ export const useAllInvitationsQuery = (
 		"invitations",
 		"all",
 		Object.entries(params ?? {}).flat(2),
-	].flat();
+	].flat()
 
 	return useDataLoader(
 		key,
@@ -25,5 +25,5 @@ export const useAllInvitationsQuery = (
 				({ data }) => data,
 			),
 		config,
-	);
-};
+	)
+}

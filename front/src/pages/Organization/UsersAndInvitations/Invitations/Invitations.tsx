@@ -1,27 +1,27 @@
-import { useI18n } from "@/i18n";
-import { useAllInvitationsQuery } from "@/queries/useAllInvitationsQuery";
-import { Alert, Button, Loader } from "@billycraft/ui";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { InvitationsList } from "./InvitationsList";
-import { InviteUserModal } from "./modals/InviteUserModal";
+import { useI18n } from "@/i18n"
+import { useAllInvitationsQuery } from "@/queries/useAllInvitationsQuery"
+import { Alert, Button, Loader } from "@billycraft/ui"
+import { PlusIcon } from "@heroicons/react/24/solid"
+import { InvitationsList } from "./InvitationsList"
+import { InviteUserModal } from "./modals/InviteUserModal"
 
 export const Invitations = () => {
-	const { scopedT, t } = useI18n();
-	const pageT = scopedT("settings.users.invitations");
+	const { scopedT, t } = useI18n()
+	const pageT = scopedT("settings.users.invitations")
 	const { data, isLoading, reload } = useAllInvitationsQuery({
 		status: "PENDING",
-	});
+	})
 
 	if (!data && isLoading) {
 		return (
 			<div className="flex items-center justify-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!data) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -43,5 +43,5 @@ export const Invitations = () => {
 			</div>
 			<InvitationsList invitations={data} reload={reload} />
 		</div>
-	);
-};
+	)
+}

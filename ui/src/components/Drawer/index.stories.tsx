@@ -1,25 +1,25 @@
-import type { StoryObj } from "@storybook/react";
-import { Button } from "components/Button";
-import { useState } from "react";
-import { Drawer, type DrawerProps } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Button } from "components/Button"
+import { useState } from "react"
+import { Drawer, type DrawerProps } from "."
 
 export default {
 	title: "Components/Drawer",
 	component: Drawer,
-};
+}
 
-type Story = StoryObj<typeof Drawer>;
+type Story = StoryObj<typeof Drawer>
 
 export const Basic: Story = {
 	render: ({ open, ...props }: DrawerProps) => {
-		const [isOpen, setIsOpen] = useState(open);
+		const [isOpen, setIsOpen] = useState(open)
 
 		return (
 			<>
 				<Button onClick={() => setIsOpen(true)}>Open drawer</Button>
 				<Drawer {...props} open={isOpen} onClose={() => setIsOpen(false)} />
 			</>
-		);
+		)
 	},
 	args: {
 		children: "Basic",
@@ -27,11 +27,11 @@ export const Basic: Story = {
 		noBackdrop: true,
 		withoutPortal: true,
 	},
-};
+}
 
 export const Position: Story = {
 	render: () => {
-		const [state, setState] = useState("");
+		const [state, setState] = useState("")
 
 		return (
 			<>
@@ -74,6 +74,6 @@ export const Position: Story = {
 					{state}
 				</Drawer>
 			</>
-		);
+		)
 	},
-};
+}

@@ -1,5 +1,5 @@
-import type { Scanner } from "@yudiel/react-qr-scanner";
-import type { ComponentProps } from "react";
+import type { Scanner } from "@yudiel/react-qr-scanner"
+import type { ComponentProps } from "react"
 
 export const SCANNER_FORMATS: ComponentProps<typeof Scanner>["formats"] = [
 	"qr_code",
@@ -23,7 +23,7 @@ export const SCANNER_FORMATS: ComponentProps<typeof Scanner>["formats"] = [
 	"linear_codes",
 	"upc_a",
 	"upc_e",
-];
+]
 
 export const SCANNER_COMPONENTS = {
 	audio: false,
@@ -31,4 +31,4 @@ export const SCANNER_COMPONENTS = {
 	torch: true,
 	zoom: true,
 	finder: false,
-};
+}

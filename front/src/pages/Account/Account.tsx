@@ -1,10 +1,10 @@
-import { useI18n } from "@/i18n";
-import { MyInformation } from "./MyInformation";
-import { LeaveOrganization } from "./LeaveOrganization";
+import { useI18n } from "@/i18n"
+import { MyInformation } from "./MyInformation"
+import { LeaveOrganization } from "./LeaveOrganization"
 
 export const Account = () => {
-	const { scopedT } = useI18n();
-	const pageT = scopedT("account");
+	const { scopedT } = useI18n()
+	const pageT = scopedT("account")
 
 	return (
 		<div className="flex flex-col gap-12">
@@ -12,5 +12,5 @@ export const Account = () => {
 			<MyInformation />
 			<LeaveOrganization />
 		</div>
-	);
-};
+	)
+}

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -10,17 +10,17 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
 import {
 	ArrowsUpDownIcon,
 	ChevronDownIcon,
 	EllipsisHorizontalIcon,
-} from "@heroicons/react/24/solid";
-import { Button } from "components/Button";
-import { Checkbox } from "components/Checkbox";
-import { Dropdown } from "components/Dropdown";
-import { Input } from "components/Input";
-import { Label } from "components/Label";
+} from "@heroicons/react/24/solid"
+import { Button } from "components/Button"
+import { Checkbox } from "components/Checkbox"
+import { Dropdown } from "components/Dropdown"
+import { Input } from "components/Input"
+import { Label } from "components/Label"
 import {
 	Table,
 	TableBody,
@@ -28,12 +28,12 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from ".";
+} from "."
 
 export default {
 	title: "Components/Table",
 	component: Table,
-};
+}
 
 const data: Payment[] = [
 	{
@@ -66,14 +66,14 @@ const data: Payment[] = [
 		status: "failed",
 		email: "carmella@hotmail.com",
 	},
-];
+]
 
 export type Payment = {
-	id: string;
-	amount: number;
-	status: "pending" | "processing" | "success" | "failed";
-	email: string;
-};
+	id: string
+	amount: number
+	status: "pending" | "processing" | "success" | "failed"
+	email: string
+}
 
 const columns: ColumnDef<Payment>[] = [
 	{
@@ -116,7 +116,7 @@ const columns: ColumnDef<Payment>[] = [
 					Email
 					<ArrowsUpDownIcon className="ml-2 h-4 w-4" />
 				</Button>
-			);
+			)
 		},
 		cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
 	},
@@ -124,22 +124,22 @@ const columns: ColumnDef<Payment>[] = [
 		accessorKey: "amount",
 		header: () => <div className="text-right">Amount</div>,
 		cell: ({ row }) => {
-			const amount = Number.parseFloat(row.getValue("amount"));
+			const amount = Number.parseFloat(row.getValue("amount"))
 
 			// Format the amount as a dollar amount
 			const formatted = new Intl.NumberFormat("en-US", {
 				style: "currency",
 				currency: "USD",
-			}).format(amount);
+			}).format(amount)
 
-			return <div className="text-right font-medium">{formatted}</div>;
+			return <div className="text-right font-medium">{formatted}</div>
 		},
 	},
 	{
 		id: "actions",
 		enableHiding: false,
 		cell: ({ row }) => {
-			const payment = row.original;
+			const payment = row.original
 
 			return (
 				<Dropdown
@@ -162,19 +162,19 @@ const columns: ColumnDef<Payment>[] = [
 						<Dropdown.Link>View payment details</Dropdown.Link>
 					</div>
 				</Dropdown>
-			);
+			)
 		},
 	},
-];
+]
 
 export const Basic = () => {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
-	);
+	)
 	const [columnVisibility, setColumnVisibility] =
-		React.useState<VisibilityState>({});
-	const [rowSelection, setRowSelection] = React.useState({});
+		React.useState<VisibilityState>({})
+	const [rowSelection, setRowSelection] = React.useState({})
 
 	const table = useReactTable({
 		data,
@@ -193,7 +193,7 @@ export const Basic = () => {
 			columnVisibility,
 			rowSelection,
 		},
-	});
+	})
 
 	return (
 		<div className="w-full">
@@ -227,7 +227,7 @@ export const Basic = () => {
 									>
 										{column.id}
 									</Dropdown.Button>
-								);
+								)
 							})}
 					</div>
 				</Dropdown>
@@ -247,7 +247,7 @@ export const Basic = () => {
 														header.getContext(),
 													)}
 										</TableHead>
-									);
+									)
 								})}
 							</TableRow>
 						))}
@@ -307,5 +307,5 @@ export const Basic = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}

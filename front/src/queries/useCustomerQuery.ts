@@ -1,14 +1,14 @@
-import { type CustomerResponse, CustomersService } from "@/sdk";
+import { type CustomerResponse, CustomersService } from "@/sdk"
 import {
 	type UseDataLoaderConfig,
 	useDataLoader,
-} from "@scaleway/use-dataloader";
+} from "@scaleway/use-dataloader"
 
 export const useCustomerQuery = (
 	id: CustomerResponse["id"],
 	config?: UseDataLoaderConfig<CustomerResponse, Error>,
 ) => {
-	const key = ["customers", "by-id", id];
+	const key = ["customers", "by-id", id]
 
 	return useDataLoader(
 		key,
@@ -19,5 +19,5 @@ export const useCustomerQuery = (
 				},
 			}).then(({ data }) => data),
 		config,
-	);
-};
+	)
+}

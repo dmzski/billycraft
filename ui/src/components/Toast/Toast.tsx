@@ -1,11 +1,11 @@
-import { type VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority"
 import {
 	type ReactNode,
 	type SyntheticEvent,
 	useEffect,
 	useRef,
 	useState,
-} from "react";
+} from "react"
 
 const progressBarVariants = cva("absolute bottom-0 left-0 w-0 h-1 opacity-40", {
 	variants: {
@@ -17,7 +17,7 @@ const progressBarVariants = cva("absolute bottom-0 left-0 w-0 h-1 opacity-40", {
 	defaultVariants: {
 		variant: "default",
 	},
-});
+})
 const toastVariants = cva(
 	"data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full overflow-hidden cursor-pointer relative w-full rounded-md border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
 	{
@@ -32,65 +32,65 @@ const toastVariants = cva(
 			variant: "default",
 		},
 	},
-);
+)
 
-const ANIMATION_DURATION = 150;
+const ANIMATION_DURATION = 150
 export type ToastProps = {
-	onClose: (index: number) => void;
-	duration: number;
-	children?: ReactNode;
-	id: number;
-} & VariantProps<typeof toastVariants>;
+	onClose: (index: number) => void
+	duration: number
+	children?: ReactNode
+	id: number
+} & VariantProps<typeof toastVariants>
 
 const Toast = ({ onClose, duration, children, variant, id }: ToastProps) => {
 	const [mounted, setMounted] = useState<
 		"opening" | "opened" | "closing" | "closed"
-	>("opening");
-	const onCloseRef = useRef(onClose);
+	>("opening")
+	const onCloseRef = useRef(onClose)
 	const handleClose = (_event?: SyntheticEvent, reason?: string) => {
 		if (reason === "clickaway") {
-			return;
+			return
 		}
-		setMounted("closing");
-	};
+		setMounted("closing")
+	}
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			setMounted("closing");
-		}, duration - ANIMATION_DURATION);
+			setMounted("closing")
+		}, duration - ANIMATION_DURATION)
 
 		return () => {
-			clearTimeout(timeout);
-		};
-	}, [duration]);
+			clearTimeout(timeout)
+		}
+	}, [duration])
 
 	useEffect(() => {
-		onCloseRef.current = onClose;
-	}, [onClose]);
+		onCloseRef.current = onClose
+	}, [onClose])
 
 	useEffect(() => {
-		let timeout: ReturnType<typeof setTimeout>;
+		let timeout: ReturnType<typeof setTimeout>
 		if (mounted === "closing") {
 			timeout = setTimeout(() => {
-				setMounted("closed");
-				onCloseRef.current(id);
-			}, ANIMATION_DURATION);
+				setMounted("closed")
+				onCloseRef.current(id)
+			}, ANIMATION_DURATION)
 		}
 		if (mounted === "opening") {
 			timeout = setTimeout(() => {
-				setMounted("opened");
-			}, ANIMATION_DURATION);
+				setMounted("opened")
+			}, ANIMATION_DURATION)
 		}
 
 		return () => {
 			if (timeout) {
-				clearTimeout(timeout);
+				clearTimeout(timeout)
 			}
-		};
-	}, [mounted, id]);
+		}
+	}, [mounted, id])
 
 	if (mounted === "closed") {
-		return null;
+		return null
 	}
 
 	return (
@@ -110,7 +110,7 @@ const Toast = ({ onClose, duration, children, variant, id }: ToastProps) => {
 				}}
 			/>
 		</div>
-	);
-};
+	)
+}
 
-export default Toast;
+export default Toast

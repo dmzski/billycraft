@@ -8,44 +8,44 @@ import {
 	useImperativeHandle,
 	useRef,
 	useState,
-} from "react";
+} from "react"
 
 type CollapsibleProps = {
-	disclosure: ReactNode;
-	children: ReactNode | ((params: { close: () => void }) => ReactNode);
-	open?: boolean;
-	onOpenChange?: (newState: boolean) => void;
-};
+	disclosure: ReactNode
+	children: ReactNode | ((params: { close: () => void }) => ReactNode)
+	open?: boolean
+	onOpenChange?: (newState: boolean) => void
+}
 export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
 	({ open: openProp, onOpenChange, disclosure, children }, ref) => {
-		const id = useId();
+		const id = useId()
 		const [open, setOpen] = useState(
 			openProp && onOpenChange ? openProp : false,
-		);
-		const disclosureRef = useRef<HTMLElement>(null);
-		const containerRef = useRef<HTMLDivElement>(null);
-		useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+		)
+		const disclosureRef = useRef<HTMLElement>(null)
+		const containerRef = useRef<HTMLDivElement>(null)
+		useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
 		useEffect(() => {
 			if (openProp === undefined && !onOpenChange) {
 				const handleClick = () => {
-					setOpen((current) => !current);
-				};
+					setOpen((current) => !current)
+				}
 				if (disclosureRef.current) {
-					disclosureRef.current.addEventListener("click", handleClick);
+					disclosureRef.current.addEventListener("click", handleClick)
 				}
 
 				return () => {
 					if (disclosureRef.current) {
-						disclosureRef.current.removeEventListener("click", handleClick);
+						disclosureRef.current.removeEventListener("click", handleClick)
 					}
-				};
+				}
 			}
 
 			if (openProp !== undefined && openProp !== open) {
-				setOpen(!!openProp);
+				setOpen(!!openProp)
 			}
-		}, [openProp, open, onOpenChange]);
+		}, [openProp, open, onOpenChange])
 
 		const Component =
 			disclosure && isValidElement(disclosure)
@@ -54,15 +54,15 @@ export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
 						ref: disclosureRef,
 						"aria-controls": id,
 					})
-				: undefined;
+				: undefined
 
 		const close = () => {
 			if (onOpenChange) {
-				onOpenChange(false);
+				onOpenChange(false)
 			} else {
-				setOpen(false);
+				setOpen(false)
 			}
-		};
+		}
 
 		return (
 			<>
@@ -78,6 +78,6 @@ export const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
 					</div>
 				</div>
 			</>
-		);
+		)
 	},
-);
+)

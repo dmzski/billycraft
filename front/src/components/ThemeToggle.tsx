@@ -1,11 +1,11 @@
-import { useI18n } from "@/i18n";
-import { useTheme } from "@/providers/ThemeProvider";
-import { Button, Dropdown } from "@billycraft/ui";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import { useI18n } from "@/i18n"
+import { useTheme } from "@/providers/ThemeProvider"
+import { Button, Dropdown } from "@billycraft/ui"
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid"
 
 export function ThemeToggle() {
-	const { t } = useI18n();
-	const { setTheme } = useTheme();
+	const { t } = useI18n()
+	const { setTheme } = useTheme()
 
 	return (
 		<Dropdown
@@ -29,5 +29,5 @@ export function ThemeToggle() {
 				</Dropdown.Button>
 			</Dropdown.Content>
 		</Dropdown>
-	);
+	)
 }

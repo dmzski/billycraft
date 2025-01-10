@@ -1,21 +1,21 @@
-import Loader from "@/components/Loader";
-import ProductGroupList from "./List";
-import { useI18n } from "@/i18n";
-import { useMemo } from "react";
-import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { Button } from "@billycraft/ui";
-import { AddProductGroupModal } from "../modals/AddProductGroupModal";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import Loader from "@/components/Loader"
+import ProductGroupList from "./List"
+import { useI18n } from "@/i18n"
+import { useMemo } from "react"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
+import { Button } from "@billycraft/ui"
+import { AddProductGroupModal } from "../modals/AddProductGroupModal"
+import { PlusIcon } from "@heroicons/react/24/solid"
 
 const ProductsPage = () => {
-	const { scopedT } = useI18n();
-	const pageT = scopedT("products.groups");
-	const { data, isLoading, reload } = useAllProductGroupsQuery();
+	const { scopedT } = useI18n()
+	const pageT = scopedT("products.groups")
+	const { data, isLoading, reload } = useAllProductGroupsQuery()
 
 	const enhancedData = useMemo(
 		() => data?.sort((a, b) => a.name.localeCompare(b.name)) ?? [],
 		[data],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -47,7 +47,7 @@ const ProductsPage = () => {
 				) : null}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default ProductsPage;
+export default ProductsPage

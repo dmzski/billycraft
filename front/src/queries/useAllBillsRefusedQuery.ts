@@ -1,13 +1,13 @@
-import { type BillResponse, BillsService } from "@/sdk";
+import { type BillResponse, BillsService } from "@/sdk"
 import {
 	type UseDataLoaderConfig,
 	useDataLoader,
-} from "@scaleway/use-dataloader";
+} from "@scaleway/use-dataloader"
 
 export const useAllBillsRefusedQuery = (
 	config?: UseDataLoaderConfig<BillResponse[], Error>,
 ) => {
-	const key = ["bills", "all", "refused"];
+	const key = ["bills", "all", "refused"]
 
 	return useDataLoader(
 		key,
@@ -16,5 +16,5 @@ export const useAllBillsRefusedQuery = (
 				({ data }) => data,
 			),
 		config,
-	);
-};
+	)
+}

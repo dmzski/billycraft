@@ -1,16 +1,16 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react"
 
 type HourButtonProps = {
-	selected?: Date;
-	hour: number;
-	onHourClick?: (hour: number) => void;
-};
+	selected?: Date
+	hour: number
+	onHourClick?: (hour: number) => void
+}
 
 const HourButton = ({ selected, hour, onHourClick }: HourButtonProps) => {
 	const isSelected = useMemo(
 		() => selected?.getHours() === hour,
 		[selected, hour],
-	);
+	)
 
 	return (
 		<button
@@ -25,14 +25,14 @@ const HourButton = ({ selected, hour, onHourClick }: HourButtonProps) => {
 		>
 			{`${hour}`.padStart(2, "0")}
 		</button>
-	);
-};
+	)
+}
 
 type MinuteButtonProps = {
-	selected?: Date;
-	minute: number;
-	onMinuteClick?: (minute: number) => void;
-};
+	selected?: Date
+	minute: number
+	onMinuteClick?: (minute: number) => void
+}
 
 const MinuteButton = ({
 	selected,
@@ -42,7 +42,7 @@ const MinuteButton = ({
 	const isSelected = useMemo(
 		() => selected?.getMinutes() === minute,
 		[selected, minute],
-	);
+	)
 
 	return (
 		<button
@@ -57,13 +57,13 @@ const MinuteButton = ({
 		>
 			{`${minute}`.padStart(2, "0")}
 		</button>
-	);
-};
+	)
+}
 
 type TimeCalendarProps = {
-	selected?: Date;
-	onTimeClick: (hours: number, minutes: number) => void;
-};
+	selected?: Date
+	onTimeClick: (hours: number, minutes: number) => void
+}
 const TimeCalendar = ({ selected, onTimeClick }: TimeCalendarProps) => {
 	const options = useMemo(
 		() => ({
@@ -71,21 +71,21 @@ const TimeCalendar = ({ selected, onTimeClick }: TimeCalendarProps) => {
 			minutes: [0, 30],
 		}),
 		[],
-	);
+	)
 
 	const handleHourClick = useCallback(
 		(hour: number) => {
-			onTimeClick(hour, selected?.getMinutes() ?? 0);
+			onTimeClick(hour, selected?.getMinutes() ?? 0)
 		},
 		[onTimeClick, selected],
-	);
+	)
 
 	const handleMinuteClick = useCallback(
 		(minute: number) => {
-			onTimeClick(selected?.getHours() ?? 0, minute);
+			onTimeClick(selected?.getHours() ?? 0, minute)
 		},
 		[onTimeClick, selected],
-	);
+	)
 
 	return (
 		<div className="w-96 max-w-screen overflow-hidden">
@@ -118,7 +118,7 @@ const TimeCalendar = ({ selected, onTimeClick }: TimeCalendarProps) => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default TimeCalendar;
+export default TimeCalendar

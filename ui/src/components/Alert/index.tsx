@@ -1,6 +1,6 @@
-import { type VariantProps, cva } from "class-variance-authority";
-import { tw } from "lib/utils";
-import { type HTMLAttributes, type ReactNode, forwardRef } from "react";
+import { type VariantProps, cva } from "class-variance-authority"
+import { tw } from "lib/utils"
+import { type HTMLAttributes, type ReactNode, forwardRef } from "react"
 
 const alertVariants = cva(
 	"relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
@@ -16,7 +16,7 @@ const alertVariants = cva(
 			variant: "default",
 		},
 	},
-);
+)
 
 const AlertTitle = forwardRef<
 	HTMLParagraphElement,
@@ -27,8 +27,8 @@ const AlertTitle = forwardRef<
 		className={tw("mb-1 font-medium leading-none tracking-tight", className)}
 		{...props}
 	/>
-));
-AlertTitle.displayName = "AlertTitle";
+))
+AlertTitle.displayName = "AlertTitle"
 
 const AlertDescription = forwardRef<
 	HTMLParagraphElement,
@@ -39,15 +39,15 @@ const AlertDescription = forwardRef<
 		className={tw("text-sm [&_p]:leading-relaxed", className)}
 		{...props}
 	/>
-));
-AlertDescription.displayName = "AlertDescription";
+))
+AlertDescription.displayName = "AlertDescription"
 
 export type AlertProps = HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof alertVariants> & {
-		title?: ReactNode;
-		icon?: ReactNode;
-		description?: ReactNode;
-	};
+		title?: ReactNode
+		icon?: ReactNode
+		description?: ReactNode
+	}
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
 	({ className, variant, children, title, icon, ...props }, ref) => (
@@ -62,5 +62,5 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
 			{children ? <AlertDescription>{children}</AlertDescription> : null}
 		</div>
 	),
-);
-Alert.displayName = "Alert";
+)
+Alert.displayName = "Alert"

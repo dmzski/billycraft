@@ -1,21 +1,21 @@
-import clsx from "clsx";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import type { ReportResponse } from "@/sdk";
-import { type ReactNode, useMemo } from "react";
-import { useI18n } from "@/i18n";
+import clsx from "clsx"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import type { ReportResponse } from "@/sdk"
+import { type ReactNode, useMemo } from "react"
+import { useI18n } from "@/i18n"
 
 type ReportTableProps = {
-	report: ReportResponse;
-};
+	report: ReportResponse
+}
 
 type OnlyChildrenProps = {
-	children: ReactNode;
-	noBorder?: boolean;
-};
+	children: ReactNode
+	noBorder?: boolean
+}
 
 const ReportTableRow = ({ children }: { children: ReactNode }) => (
 	<dl className="grid md:grid-cols-12">{children}</dl>
-);
+)
 
 const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
 	<dt
@@ -23,21 +23,21 @@ const ReportTableLeft = ({ children, noBorder }: OnlyChildrenProps) => (
 	>
 		{children}
 	</dt>
-);
+)
 
 const ReportTableRight = ({ children, noBorder }: OnlyChildrenProps) => (
 	<dd className={clsx("md:col-span-6 p-2", noBorder ? "" : "border-b")}>
 		{children}
 	</dd>
-);
+)
 const ReportTable = ({ report }: ReportTableProps) => {
-	const formatCurrency = useFormatCurrency();
-	const { t } = useI18n();
+	const formatCurrency = useFormatCurrency()
+	const { t } = useI18n()
 
 	const allTaxes = useMemo(
 		() => report.serviceTaxes + report.articleTaxes + report.otherTaxes,
 		[report],
-	);
+	)
 	return (
 		<div className="flex flex-col gap-2 md:gap-0 border rounded">
 			<ReportTableRow>
@@ -99,7 +99,7 @@ const ReportTable = ({ report }: ReportTableProps) => {
 				</ReportTableRight>
 			</ReportTableRow>
 		</div>
-	);
-};
+	)
+}
 
-export default ReportTable;
+export default ReportTable

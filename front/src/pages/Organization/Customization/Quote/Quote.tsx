@@ -1,29 +1,29 @@
-import { Loader, useToast } from "@billycraft/ui";
-import { useI18n } from "@/i18n";
+import { Loader, useToast } from "@billycraft/ui"
+import { useI18n } from "@/i18n"
 import {
 	type QuoteCustomizationRequest,
 	QuoteCustomizationService,
-} from "@/sdk";
-import { useMyQuoteCustomizationQuery } from "@/queries/useMyQuoteCustomizationQuery";
-import { Form } from "@/components/form/Form";
-import { useController, useForm } from "react-hook-form";
-import { InputField } from "@/components/form/InputField";
-import { SwitchField } from "@/components/form/SwitchField";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import { Submit } from "@/components/form/Submit";
+} from "@/sdk"
+import { useMyQuoteCustomizationQuery } from "@/queries/useMyQuoteCustomizationQuery"
+import { Form } from "@/components/form/Form"
+import { useController, useForm } from "react-hook-form"
+import { InputField } from "@/components/form/InputField"
+import { SwitchField } from "@/components/form/SwitchField"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { Submit } from "@/components/form/Submit"
 
 export const Quote = () => {
 	const {
 		data: quoteCustomization,
 		isLoading,
 		reload,
-	} = useMyQuoteCustomizationQuery();
-	const { t } = useI18n();
-	const toast = useToast();
+	} = useMyQuoteCustomizationQuery()
+	const { t } = useI18n()
+	const toast = useToast()
 	const methods = useForm({
 		mode: "onChange",
 		values: quoteCustomization as QuoteCustomizationRequest,
-	});
+	})
 
 	const onSubmit = async (values: QuoteCustomizationRequest) => {
 		if (quoteCustomization) {
@@ -35,20 +35,20 @@ export const Quote = () => {
 				: await QuoteCustomizationService.patchQuoteCustomizationById({
 						path: { id: quoteCustomization.id },
 						body: values,
-					});
-			toast.show(t("settings.forms.quoteCustomization.submit.success"));
-			await reload();
+					})
+			toast.show(t("settings.forms.quoteCustomization.submit.success"))
+			await reload()
 		}
-	};
+	}
 
 	const { field: colorField } = useController({
 		name: "mainColor",
 		control: methods.control,
 		rules: { required: true },
-	});
+	})
 
 	if (!quoteCustomization && isLoading) {
-		return <Loader />;
+		return <Loader />
 	}
 
 	return (
@@ -130,5 +130,5 @@ export const Quote = () => {
 				</div>
 			</div>
 		</Form>
-	);
-};
+	)
+}

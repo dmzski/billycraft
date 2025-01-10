@@ -1,21 +1,21 @@
-import { BillStatusIcon } from "@/components/BillStatusIcon";
-import { useI18n } from "@/i18n";
-import { type BillResponse, BillsService, type BillStatus } from "@/sdk";
-import { Button, useToast } from "@billycraft/ui";
-import { useState } from "react";
+import { BillStatusIcon } from "@/components/BillStatusIcon"
+import { useI18n } from "@/i18n"
+import { type BillResponse, BillsService, type BillStatus } from "@/sdk"
+import { Button, useToast } from "@billycraft/ui"
+import { useState } from "react"
 
 type ActionsProps = {
-	bill: BillResponse;
-	reloadBill: () => Promise<void>;
-};
+	bill: BillResponse
+	reloadBill: () => Promise<void>
+}
 
 export const Actions = ({ bill, reloadBill }: ActionsProps) => {
-	const { t } = useI18n();
-	const toast = useToast();
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { t } = useI18n()
+	const toast = useToast()
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	const updateBillStatus = (status: BillStatus) => async () => {
-		setIsSubmitting(true);
+		setIsSubmitting(true)
 		try {
 			if (bill) {
 				await BillsService.patchBillsById({
@@ -25,16 +25,16 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 						lines: bill.lines,
 						title: bill.title,
 					},
-				});
-				toast.show(t("bills.form.submit.edit.success"));
-				await reloadBill();
+				})
+				toast.show(t("bills.form.submit.edit.success"))
+				await reloadBill()
 			}
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		} finally {
-			setIsSubmitting(false);
+			setIsSubmitting(false)
 		}
-	};
+	}
 
 	return (
 		<section className="flex md:flex-row flex-col gap-4 justify-end">
@@ -83,5 +83,5 @@ export const Actions = ({ bill, reloadBill }: ActionsProps) => {
 				</Button>
 			) : null}
 		</section>
-	);
-};
+	)
+}

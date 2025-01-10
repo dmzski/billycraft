@@ -1,27 +1,27 @@
-import CounterAnimated from "@/components/CounterAnimated";
-import { type ComponentType, type ReactNode, useMemo } from "react";
-import clsx from "clsx";
-import type { ReportResponse } from "@/sdk";
+import CounterAnimated from "@/components/CounterAnimated"
+import { type ComponentType, type ReactNode, useMemo } from "react"
+import clsx from "clsx"
+import type { ReportResponse } from "@/sdk"
 import {
 	BanknotesIcon,
 	CubeIcon,
 	HandRaisedIcon,
 	QuestionMarkCircleIcon,
-} from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
+} from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
 
 const ReportCardVariants = {
 	default: "text-foreground",
 	secondary: "text-secondary",
 	destrucitve: "text-destructive",
-} as const;
+} as const
 
 type ReportCardProps = {
-	icon: ComponentType<{ className?: string }>;
-	title: string;
-	children?: ReactNode;
-	variant?: keyof typeof ReportCardVariants;
-};
+	icon: ComponentType<{ className?: string }>
+	title: string
+	children?: ReactNode
+	variant?: keyof typeof ReportCardVariants
+}
 
 const ReportCard = ({
 	icon: IconComponent,
@@ -43,16 +43,16 @@ const ReportCard = ({
 			{children}
 		</div>
 	</div>
-);
+)
 
 const ReportCards = ({ report }: { report: ReportResponse }) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const formatter = useMemo(
 		() =>
 			new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR" })
 				.format,
 		[],
-	);
+	)
 	return (
 		<div className="flex flex-wrap justify-between w-full items-center">
 			<ReportCard
@@ -100,7 +100,7 @@ const ReportCards = ({ report }: { report: ReportResponse }) => {
 				</span>
 			</ReportCard>
 		</div>
-	);
-};
+	)
+}
 
-export default ReportCards;
+export default ReportCards

@@ -1,8 +1,8 @@
-import { type VariantProps, cva } from "class-variance-authority";
-import { Button } from "components/Button";
-import { Link } from "components/Link";
-import useClickOutsideHandler from "hooks/useClickOutsideHandler";
-import { tw } from "lib/utils";
+import { type VariantProps, cva } from "class-variance-authority"
+import { Button } from "components/Button"
+import { Link } from "components/Link"
+import useClickOutsideHandler from "hooks/useClickOutsideHandler"
+import { tw } from "lib/utils"
 import {
 	type CSSProperties,
 	type ComponentProps,
@@ -14,14 +14,14 @@ import {
 	useEffect,
 	useRef,
 	useState,
-} from "react";
-import { createPortal } from "react-dom";
+} from "react"
+import { createPortal } from "react-dom"
 
 const dropdownContentClasses = `z-50 overflow-y-auto max-h-full w-full max-w-screen min-w-[8rem] rounded-md border bg-popover p-1 text-popover-foreground shadow-md
 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0
 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2
-data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2`;
+data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2`
 
 const dropdownContentVariants = cva(dropdownContentClasses, {
 	variants: {
@@ -33,19 +33,19 @@ const dropdownContentVariants = cva(dropdownContentClasses, {
 	defaultVariants: {
 		align: "start",
 	},
-});
+})
 
 export type DropdownProps = {
-	children: ((props: { close: () => void }) => ReactElement) | ReactNode;
-	disclosure: ReactElement;
-	onClose?: () => void;
-	open?: boolean;
-};
+	children: ((props: { close: () => void }) => ReactElement) | ReactNode
+	disclosure: ReactElement
+	onClose?: () => void
+	open?: boolean
+}
 type DropdownContentProps = {
-	children: ReactNode;
-	className?: string;
-} & VariantProps<typeof dropdownContentVariants>;
-type DropdownLinkItemProps = ComponentProps<typeof Link>;
+	children: ReactNode
+	className?: string
+} & VariantProps<typeof dropdownContentVariants>
+type DropdownLinkItemProps = ComponentProps<typeof Link>
 
 export const Dropdown = ({
 	open: openProp,
@@ -53,59 +53,59 @@ export const Dropdown = ({
 	disclosure,
 	onClose,
 }: DropdownProps) => {
-	const [open, setOpen] = useState(openProp && onClose ? openProp : false);
-	const disclosureRef = useRef<HTMLElement>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
+	const [open, setOpen] = useState(openProp && onClose ? openProp : false)
+	const disclosureRef = useRef<HTMLElement>(null)
+	const containerRef = useRef<HTMLDivElement>(null)
 	const [styles, setStyles] = useState<CSSProperties>({
 		width: 0,
 		left: -9999,
 		top: -9999,
-	});
+	})
 
 	const close = () => {
 		if (onClose) {
-			onClose();
+			onClose()
 		} else {
-			setOpen(false);
+			setOpen(false)
 		}
-	};
+	}
 	const handleClickOutside = (event: Event) => {
-		event.stopPropagation();
-		close();
-	};
+		event.stopPropagation()
+		close()
+	}
 
-	useClickOutsideHandler(containerRef, handleClickOutside);
+	useClickOutsideHandler(containerRef, handleClickOutside)
 
 	useEffect(() => {
 		if (!openProp && !onClose) {
 			const handleClick = () => {
-				setOpen(true);
-			};
+				setOpen(true)
+			}
 			if (disclosureRef.current) {
-				disclosureRef.current.addEventListener("click", handleClick);
+				disclosureRef.current.addEventListener("click", handleClick)
 			}
 
 			return () => {
 				if (disclosureRef.current) {
-					disclosureRef.current.removeEventListener("click", handleClick);
+					disclosureRef.current.removeEventListener("click", handleClick)
 				}
-			};
+			}
 		}
 
 		if (onClose && openProp !== open) {
-			setOpen(!!openProp);
+			setOpen(!!openProp)
 		}
-	}, [open, openProp, onClose]);
+	}, [open, openProp, onClose])
 
 	const Component = cloneElement(disclosure, {
 		// @ts-ignore TODO Improve this
 		ref: disclosureRef,
-	});
+	})
 	useEffect(() => {
 		if (open) {
-			const rect = disclosureRef.current?.getBoundingClientRect();
+			const rect = disclosureRef.current?.getBoundingClientRect()
 			const scrollTop =
-				(window.scrollY || document.body.scrollTop) - document.body.clientTop;
+				(window.scrollY || document.body.scrollTop) - document.body.clientTop
 			setStyles(
 				rect
 					? {
@@ -118,9 +118,9 @@ export const Dropdown = ({
 							left: -9999,
 							top: -9999,
 						},
-			);
+			)
 		}
-	}, [open]);
+	}, [open])
 
 	return (
 		<>
@@ -137,8 +137,8 @@ export const Dropdown = ({
 				document.body,
 			)}
 		</>
-	);
-};
+	)
+}
 
 const DropdownContent = ({
 	children,
@@ -149,8 +149,8 @@ const DropdownContent = ({
 		<ul className={tw(dropdownContentVariants({ align }), className)}>
 			{children}
 		</ul>
-	);
-};
+	)
+}
 
 const DropdownLink = ({ className, ...props }: DropdownLinkItemProps) => (
 	<li className="grid">
@@ -162,7 +162,7 @@ const DropdownLink = ({ className, ...props }: DropdownLinkItemProps) => (
 			{props.children}
 		</Link>
 	</li>
-);
+)
 
 const DropdownButton = forwardRef<
 	ElementRef<typeof Button>,
@@ -179,13 +179,13 @@ const DropdownButton = forwardRef<
 			{props.children}
 		</Button>
 	</li>
-));
+))
 
-DropdownContent.displayName = "Dropdown.Content";
-DropdownButton.displayName = "Dropdown.Button";
-DropdownContent.displayName = "Dropdown.Content";
-DropdownLink.displayName = "Dropdown.Link";
+DropdownContent.displayName = "Dropdown.Content"
+DropdownButton.displayName = "Dropdown.Button"
+DropdownContent.displayName = "Dropdown.Content"
+DropdownLink.displayName = "Dropdown.Link"
 
-Dropdown.Content = DropdownContent;
-Dropdown.Link = DropdownLink;
-Dropdown.Button = DropdownButton;
+Dropdown.Content = DropdownContent
+Dropdown.Link = DropdownLink
+Dropdown.Button = DropdownButton

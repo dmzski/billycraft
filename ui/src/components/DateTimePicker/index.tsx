@@ -1,5 +1,5 @@
-import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
-import { tw } from "lib/utils";
+import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon"
+import { tw } from "lib/utils"
 import {
 	type FocusEventHandler,
 	type KeyboardEvent,
@@ -9,23 +9,23 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
-import { Input } from "../Input";
-import MonthCalendar from "./MonthCalendar";
+} from "react"
+import useClickOutsideHandler from "../../hooks/useClickOutsideHandler"
+import { Input } from "../Input"
+import MonthCalendar from "./MonthCalendar"
 
 export type DateTimePickerProps = {
-	name?: string;
-	value?: Date;
-	onChange?: (newValue: Date) => void;
-	onBlur?: FocusEventHandler<HTMLInputElement>;
-	className?: string;
-	label?: string;
-	disabled?: boolean;
-	error?: boolean;
-	required?: boolean;
-	onClickOutside?: () => void | Promise<void>;
-};
+	name?: string
+	value?: Date
+	onChange?: (newValue: Date) => void
+	onBlur?: FocusEventHandler<HTMLInputElement>
+	className?: string
+	label?: string
+	disabled?: boolean
+	error?: boolean
+	required?: boolean
+	onClickOutside?: () => void | Promise<void>
+}
 
 export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 	(
@@ -46,65 +46,65 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 		if (value && !(value instanceof Date && !Number.isNaN(value))) {
 			throw new Error(
 				"DateTimePicker : value should be a Date instance or undefined",
-			);
+			)
 		}
-		const [inputValue, setInputValue] = useState(value);
-		const [open, setOpen] = useState(false);
-		const containerRef = useRef<HTMLDivElement>(null);
+		const [inputValue, setInputValue] = useState(value)
+		const [open, setOpen] = useState(false)
+		const containerRef = useRef<HTMLDivElement>(null)
 
 		useClickOutsideHandler(containerRef, () => {
-			setOpen(false);
-			onClickOutside?.();
-		});
+			setOpen(false)
+			onClickOutside?.()
+		})
 
 		useEffect(() => {
 			if (value) {
 				if (!(value instanceof Date && !Number.isNaN(value))) {
 					throw new Error(
 						"DateTimePicker : value should be a Date instance or undefined",
-					);
+					)
 				}
-				setInputValue(value);
+				setInputValue(value)
 			}
-		}, [value]);
+		}, [value])
 
 		const handleFocus = useCallback(() => {
-			if (!disabled) setOpen(true);
-		}, [disabled]);
+			if (!disabled) setOpen(true)
+		}, [disabled])
 
 		const handleClick = useCallback(() => {
-			if (!disabled) setOpen(true);
-		}, [disabled]);
+			if (!disabled) setOpen(true)
+		}, [disabled])
 
 		const handleKeyDown = useCallback(
 			(event: KeyboardEvent<HTMLDivElement>) => {
 				if (event.key === "Escape") {
-					setOpen(false);
+					setOpen(false)
 				}
 			},
 			[],
-		);
+		)
 
 		const handleDateClick = useCallback(
 			(newDate: Date) => {
-				onChange?.(newDate);
+				onChange?.(newDate)
 			},
 			[onChange],
-		);
+		)
 
 		const handleTimeClick = useCallback(
 			(hours: number, minutes: number) => {
 				if (value) {
-					const newValue = new Date(value);
-					newValue.setHours(hours);
-					newValue.setMinutes(minutes);
-					onChange?.(newValue);
+					const newValue = new Date(value)
+					newValue.setHours(hours)
+					newValue.setMinutes(minutes)
+					onChange?.(newValue)
 				} else {
-					onChange?.(new Date(0, 0, 0, hours, minutes));
+					onChange?.(new Date(0, 0, 0, hours, minutes))
 				}
 			},
 			[onChange, value],
-		);
+		)
 
 		const containerClassNames = useMemo(
 			() =>
@@ -113,7 +113,7 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 					"sr-only": !open,
 				}),
 			[open],
-		);
+		)
 
 		const iconClassNames = useMemo(
 			() =>
@@ -121,7 +121,7 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 					"text-destructive": error,
 				}),
 			[error],
-		);
+		)
 
 		return (
 			<div onKeyDown={handleKeyDown} ref={containerRef} className="relative">
@@ -157,8 +157,8 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
 					</>
 				) : null}
 			</div>
-		);
+		)
 	},
-);
+)
 
-DateTimePicker.displayName = "DateTimePicker";
+DateTimePicker.displayName = "DateTimePicker"

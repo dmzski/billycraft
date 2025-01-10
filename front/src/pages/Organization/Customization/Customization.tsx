@@ -1,15 +1,15 @@
-import { useI18n } from "@/i18n";
-import { ROUTES } from "@/routes";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Tabs } from "@billycraft/ui";
-import { RRTab } from "@/components/RRTab";
-import { Bill } from "./Bill/Bill";
-import { Quote } from "./Quote/Quote";
+import { useI18n } from "@/i18n"
+import { ROUTES } from "@/routes"
+import { Routes, Route, Navigate } from "react-router-dom"
+import { Tabs } from "@billycraft/ui"
+import { RRTab } from "@/components/RRTab"
+import { Bill } from "./Bill/Bill"
+import { Quote } from "./Quote/Quote"
 
 export const Customization = () => {
-	const { scopedT } = useI18n();
+	const { scopedT } = useI18n()
 
-	const pageT = scopedT("organization.customization");
+	const pageT = scopedT("organization.customization")
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -38,14 +38,14 @@ export const Customization = () => {
 					element={<Quote />}
 				/>
 				<Route
-        path="*"
-					element={(
+					path="*"
+					element={
 						<Navigate
 							to={ROUTES.ORGANIZATION.routes.CUSTOMIZATION.routes.BILL.path()}
 						/>
-					)}
+					}
 				/>
 			</Routes>
 		</div>
-	);
-};
+	)
+}

@@ -1,41 +1,41 @@
-import { useI18n } from "@/i18n";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import { type ComponentProps, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useI18n } from "@/i18n"
+import { Button, Modal, useToast } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useForm } from "react-hook-form"
 import {
 	ProductFormContent,
 	type ProductFormValues,
-} from "../components/ProductFormContent";
-import { sendErrorToSentry } from "@/utils/errors";
-import { calculatePriceTTC } from "@/utils/price";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { Submit } from "@/components/form/Submit";
-import { Form } from "@/components/form/Form";
+} from "../components/ProductFormContent"
+import { sendErrorToSentry } from "@/utils/errors"
+import { calculatePriceTTC } from "@/utils/price"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { Submit } from "@/components/form/Submit"
+import { Form } from "@/components/form/Form"
 import {
 	type ProductResponse,
 	ProductsService,
 	type UpdateProductRequest,
-} from "@/sdk";
+} from "@/sdk"
 
 type EditProductModalProps = {
-	onSubmitSuccess: (newProduct: ProductResponse) => Promise<void> | void;
-	product: ProductResponse;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-};
+	onSubmitSuccess: (newProduct: ProductResponse) => Promise<void> | void
+	product: ProductResponse
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+}
 
 type EditProductFormProps = Omit<EditProductModalProps, "disclosure"> & {
-	close: () => void;
-};
+	close: () => void
+}
 
 const EditProductForm = ({
 	product,
 	onSubmitSuccess,
 	close,
 }: EditProductFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.edit");
-	const { data: suppliers } = useAllSuppliersQuery();
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const pageT = scopedT("products.modals.edit")
+	const { data: suppliers } = useAllSuppliersQuery()
 
 	const initialValues = useMemo<ProductFormValues>(
 		() => ({
@@ -57,34 +57,34 @@ const EditProductForm = ({
 			lowStock: product.lowStock ?? null,
 		}),
 		[product, suppliers],
-	);
+	)
 
 	const methods = useForm<ProductFormValues>({
 		mode: "onChange",
 		values: initialValues,
-	});
+	})
 
 	const onSubmit = async (values: ProductFormValues) => {
 		try {
 			if (values.type !== "ARTICLE") {
-				values.stock = null;
-				values.lowStock = null;
-				values.code = null;
+				values.stock = null
+				values.lowStock = null
+				values.code = null
 			}
 			const newProduct = await ProductsService.patchProductsById({
 				path: { id: product.id },
 				body: values as UpdateProductRequest,
-			}).then(({ data }) => data);
-			toast.show(pageT("submit.success"));
+			}).then(({ data }) => data)
+			toast.show(pageT("submit.success"))
 			if (newProduct) {
-				await onSubmitSuccess(newProduct);
+				await onSubmitSuccess(newProduct)
 			}
-			close();
+			close()
 		} catch (err) {
-			sendErrorToSentry(err, { data: values });
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(err, { data: values })
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
@@ -99,8 +99,8 @@ const EditProductForm = ({
 				</Modal.Actions>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const EditProductModal = ({
 	product,
@@ -116,4 +116,4 @@ export const EditProductModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

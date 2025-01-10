@@ -1,55 +1,55 @@
-import { useI18n } from "@/i18n";
-import { Alert, Modal, useToast } from "@billycraft/ui";
-import type { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Submit } from "@/components/form/Submit";
-import { InputField } from "@/components/form/InputField";
-import { Form } from "@/components/form/Form";
-import { type ProductResponse, ProductsService } from "@/sdk";
+import { useI18n } from "@/i18n"
+import { Alert, Modal, useToast } from "@billycraft/ui"
+import type { ComponentProps } from "react"
+import { useForm } from "react-hook-form"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Submit } from "@/components/form/Submit"
+import { InputField } from "@/components/form/InputField"
+import { Form } from "@/components/form/Form"
+import { type ProductResponse, ProductsService } from "@/sdk"
 
 type DeleteProductModalProps = {
-	onSubmitSuccess: () => Promise<void>;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	product: ProductResponse;
-};
+	onSubmitSuccess: () => Promise<void>
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	product: ProductResponse
+}
 
 type DeleteProductFormProps = Omit<DeleteProductModalProps, "disclosure"> & {
-	close: () => void;
-};
+	close: () => void
+}
 
 type ConfirmValues = {
-	confirm: string;
-};
+	confirm: string
+}
 
 const DeleteProductForm = ({
 	product,
 	onSubmitSuccess,
 	close,
 }: DeleteProductFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.delete");
-	const confirmationString = t("forms.confirmation.delete.pattern");
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const pageT = scopedT("products.modals.delete")
+	const confirmationString = t("forms.confirmation.delete.pattern")
 
 	const methods = useForm<ConfirmValues>({
 		mode: "onChange",
 		defaultValues: {
 			confirm: "",
 		},
-	});
+	})
 
 	const onSubmit = async () => {
 		try {
-			await ProductsService.deleteProductsById({ path: { id: product.id } });
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
-			close();
+			await ProductsService.deleteProductsById({ path: { id: product.id } })
+			toast.show(pageT("submit.success"))
+			await onSubmitSuccess()
+			close()
 		} catch (err) {
-			sendErrorToSentry(err, { data: product.id });
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(err, { data: product.id })
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<Form onSubmit={onSubmit} methods={methods}>
@@ -72,8 +72,8 @@ const DeleteProductForm = ({
 				</Modal.Actions>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const DeleteProductModal = ({
 	product,
@@ -89,4 +89,4 @@ export const DeleteProductModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

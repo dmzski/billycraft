@@ -1,6 +1,6 @@
-import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon";
-import clsx from "clsx";
-import { tw } from "lib/utils";
+import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon"
+import clsx from "clsx"
+import { tw } from "lib/utils"
 import {
 	type FocusEventHandler,
 	forwardRef,
@@ -9,22 +9,22 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import useClickOutsideHandler from "../../hooks/useClickOutsideHandler";
-import { Input } from "../Input";
-import MonthCalendar from "./MonthCalendar";
+} from "react"
+import useClickOutsideHandler from "../../hooks/useClickOutsideHandler"
+import { Input } from "../Input"
+import MonthCalendar from "./MonthCalendar"
 
 export type DatePickerProps = {
-	name?: string;
-	value?: Date;
-	onChange?: (newValue: Date) => void;
-	onBlur?: FocusEventHandler<HTMLInputElement>;
-	className?: string;
-	label?: string;
-	disabled?: boolean;
-	error?: boolean;
-	required?: boolean;
-};
+	name?: string
+	value?: Date
+	onChange?: (newValue: Date) => void
+	onBlur?: FocusEventHandler<HTMLInputElement>
+	className?: string
+	label?: string
+	disabled?: boolean
+	error?: boolean
+	required?: boolean
+}
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 	(
@@ -44,38 +44,38 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 		if (value && !(value instanceof Date && !Number.isNaN(value))) {
 			throw new Error(
 				"DatePicker : value should be a Date instance or undefined",
-			);
+			)
 		}
-		const [inputValue, setInputValue] = useState(value?.toLocaleDateString());
-		const [open, setOpen] = useState(false);
-		const containerRef = useRef<HTMLDivElement>(null);
+		const [inputValue, setInputValue] = useState(value?.toLocaleDateString())
+		const [open, setOpen] = useState(false)
+		const containerRef = useRef<HTMLDivElement>(null)
 
 		useClickOutsideHandler(containerRef, () => {
-			setOpen(false);
-		});
+			setOpen(false)
+		})
 
 		useEffect(() => {
 			if (value) {
 				if (!(value instanceof Date && !Number.isNaN(value))) {
 					throw new Error(
 						"DatePicker : value should be a Date instance or undefined",
-					);
+					)
 				}
-				setInputValue(value.toLocaleDateString());
+				setInputValue(value.toLocaleDateString())
 			}
-		}, [value]);
+		}, [value])
 
 		const handleFocus = useCallback(() => {
-			if (!disabled) setOpen(true);
-		}, [disabled]);
+			if (!disabled) setOpen(true)
+		}, [disabled])
 
 		const handleDateClick = useCallback(
 			(newDate: Date) => {
-				onChange?.(newDate);
-				setOpen(false);
+				onChange?.(newDate)
+				setOpen(false)
 			},
 			[onChange],
-		);
+		)
 
 		const containerClassNames = useMemo(
 			() =>
@@ -84,7 +84,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 					["sr-only"]: !open,
 				}),
 			[open],
-		);
+		)
 
 		const iconClassNames = useMemo(
 			() =>
@@ -93,7 +93,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 					"bottom-0": label,
 				}),
 			[error, label, open],
-		);
+		)
 
 		return (
 			<div ref={containerRef} className="relative">
@@ -118,8 +118,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 					</>
 				) : null}
 			</div>
-		);
+		)
 	},
-);
+)
 
-DatePicker.displayName = "DatePicker";
+DatePicker.displayName = "DatePicker"

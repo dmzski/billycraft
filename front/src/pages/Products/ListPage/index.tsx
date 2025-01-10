@@ -1,18 +1,18 @@
-import Loader from "@/components/Loader";
-import ProductTable from "./List";
-import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import { useI18n } from "@/i18n";
-import { AddProductModal } from "../modals/AddProductModal";
-import { Button, Tabs } from "@billycraft/ui";
-import { Filters } from "./Filters";
-import { useMemo, useState } from "react";
-import { type ProductFilters, filterProducts } from "@/utils/products";
-import { ArrowPathIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { UpdateStockModal } from "../modals/UpdateStockModal";
-import { ProductTypeSchema, type ProductType } from "@/sdk";
+import Loader from "@/components/Loader"
+import ProductTable from "./List"
+import { useAllProductsQuery } from "@/queries/useAllProductsQuery"
+import { useI18n } from "@/i18n"
+import { AddProductModal } from "../modals/AddProductModal"
+import { Button, Tabs } from "@billycraft/ui"
+import { Filters } from "./Filters"
+import { useMemo, useState } from "react"
+import { type ProductFilters, filterProducts } from "@/utils/products"
+import { ArrowPathIcon, PlusIcon } from "@heroicons/react/24/solid"
+import { UpdateStockModal } from "../modals/UpdateStockModal"
+import { ProductTypeSchema, type ProductType } from "@/sdk"
 
 const ProductsPage = () => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const [filters, setFilters] = useState<ProductFilters>({
 		type: "",
 		name: "",
@@ -20,9 +20,9 @@ const ProductsPage = () => {
 		groupId: "",
 		lowStockOnly: false,
 		noStockOnly: false,
-	});
-	const { data, isLoading, reload } = useAllProductsQuery();
-	const [tab, setTab] = useState<"all" | ProductType>("all");
+	})
+	const { data, isLoading, reload } = useAllProductsQuery()
+	const [tab, setTab] = useState<"all" | ProductType>("all")
 
 	const enhancedData = useMemo(
 		() =>
@@ -31,7 +31,7 @@ const ProductsPage = () => {
 				type: tab !== "all" && ProductTypeSchema.enum.includes(tab) ? tab : "",
 			}),
 		[data, filters, tab],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -93,7 +93,7 @@ const ProductsPage = () => {
 				) : null}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default ProductsPage;
+export default ProductsPage

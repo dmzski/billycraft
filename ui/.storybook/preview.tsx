@@ -1,5 +1,5 @@
-import "../src/index.css";
-import type { ComponentType, ReactNode } from "react";
+import "../src/index.css"
+import type { ComponentType, ReactNode } from "react"
 
 export const parameters = {
 	controls: {
@@ -18,15 +18,15 @@ export const parameters = {
 	backgrounds: {
 		disable: true,
 	},
-};
+}
 
 const Root = ({ children }: { children: ReactNode }) => {
-	const firstHtml = document.querySelector("html");
+	const firstHtml = document.querySelector("html")
 
-	if (firstHtml) firstHtml.setAttribute("data-theme", "light");
+	if (firstHtml) firstHtml.setAttribute("data-theme", "light")
 
-	return children;
-};
+	return children
+}
 
 export const decorators = [
 	(Story: ComponentType) => (
@@ -34,5 +34,5 @@ export const decorators = [
 			<Story />
 		</Root>
 	),
-];
-export const tags = ["autodocs"];
+]
+export const tags = ["autodocs"]

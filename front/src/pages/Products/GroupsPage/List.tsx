@@ -1,10 +1,10 @@
-import type { ProductGroupResponse } from "@/sdk";
-import ProductGroupRow from "./Row";
+import type { ProductGroupResponse } from "@/sdk"
+import ProductGroupRow from "./Row"
 
 type ProductGroupListProps = {
-	groups: ProductGroupResponse[];
-	reloadGroups: () => Promise<void>;
-};
+	groups: ProductGroupResponse[]
+	reloadGroups: () => Promise<void>
+}
 
 const ProductGroupList = ({ groups, reloadGroups }: ProductGroupListProps) => (
 	<div className="flex flex-col gap-2">
@@ -16,6 +16,6 @@ const ProductGroupList = ({ groups, reloadGroups }: ProductGroupListProps) => (
 			/>
 		))}
 	</div>
-);
+)
 
-export default ProductGroupList;
+export default ProductGroupList

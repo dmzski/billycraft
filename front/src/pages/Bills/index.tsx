@@ -1,23 +1,23 @@
-import { useMemo, useState } from "react";
-import { Button, Loader, Tabs } from "@billycraft/ui";
-import useCustomers from "@/hooks/useCustomers";
-import { Link } from "react-router-dom";
-import { type BillRouteQueryParams, ROUTES } from "@/routes";
-import BillFilterContainer from "./Filters";
-import BillTable from "./List";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { filterBillsOrQuotes } from "@/utils/filters";
-import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { BillStatusSchema } from "@/sdk";
+import { useMemo, useState } from "react"
+import { Button, Loader, Tabs } from "@billycraft/ui"
+import useCustomers from "@/hooks/useCustomers"
+import { Link } from "react-router-dom"
+import { type BillRouteQueryParams, ROUTES } from "@/routes"
+import BillFilterContainer from "./Filters"
+import BillTable from "./List"
+import { PlusIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { filterBillsOrQuotes } from "@/utils/filters"
+import { useAllBillsQuery } from "@/queries/useAllBillsQuery"
+import { useQueryParams } from "@/hooks/useQueryParams"
+import { BillStatusSchema } from "@/sdk"
 
 const BillPage = () => {
-	const customers = useCustomers();
-	const { tab } = useQueryParams<BillRouteQueryParams>();
+	const customers = useCustomers()
+	const { tab } = useQueryParams<BillRouteQueryParams>()
 	const [selectedStatus, setSelectedStatus] = useState<
 		BillRouteQueryParams["tab"]
-	>(tab && tab !== "all" && BillStatusSchema.enum.includes(tab) ? tab : "all");
+	>(tab && tab !== "all" && BillStatusSchema.enum.includes(tab) ? tab : "all")
 
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
@@ -27,9 +27,9 @@ const BillPage = () => {
 		status: "",
 		customer: "",
 		createdAt: "",
-	});
-	const { data, isLoading } = useAllBillsQuery();
-	const { t } = useI18n();
+	})
+	const { data, isLoading } = useAllBillsQuery()
+	const { t } = useI18n()
 
 	const billSorted = useMemo(
 		() =>
@@ -39,7 +39,7 @@ const BillPage = () => {
 				customers,
 			),
 		[customers, data, filters, selectedStatus],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -81,7 +81,7 @@ const BillPage = () => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default BillPage;
+export default BillPage

@@ -1,15 +1,15 @@
-import { formatRFC3339 } from "date-fns";
-import type { OutgoingResponse } from "@/sdk";
-import { useMemo } from "react";
-import OutgoingForm from "../Form";
-import { useI18n } from "@/i18n";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useOutgoingCurrentQuery } from "@/queries/useOutgoingCurrentQuery";
+import { formatRFC3339 } from "date-fns"
+import type { OutgoingResponse } from "@/sdk"
+import { useMemo } from "react"
+import OutgoingForm from "../Form"
+import { useI18n } from "@/i18n"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useOutgoingCurrentQuery } from "@/queries/useOutgoingCurrentQuery"
 
 const Overview = () => {
-	const { t } = useI18n();
-	const formatCurrency = useFormatCurrency();
-	const { data, reload } = useOutgoingCurrentQuery({ onError: () => {} });
+	const { t } = useI18n()
+	const formatCurrency = useFormatCurrency()
+	const { data, reload } = useOutgoingCurrentQuery({ onError: () => {} })
 
 	const currentMonth = useMemo(
 		() =>
@@ -17,7 +17,7 @@ const Overview = () => {
 				.format(Date.now())
 				.toLocaleUpperCase(),
 		[],
-	);
+	)
 
 	const defaultOutgoingOverview = useMemo(
 		() =>
@@ -26,7 +26,7 @@ const Overview = () => {
 				startDate: formatRFC3339(Date.now()),
 			}) as OutgoingResponse,
 		[currentMonth],
-	);
+	)
 
 	const total = useMemo(
 		() =>
@@ -40,7 +40,7 @@ const Overview = () => {
 					)
 				: formatCurrency(0),
 		[data, formatCurrency],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -56,13 +56,13 @@ const Overview = () => {
 			</div>
 			<OutgoingForm
 				onSubmitSuccess={() => {
-					reload();
+					reload()
 				}}
 				disabledFields={["startDate"]}
 				outgoing={data ?? defaultOutgoingOverview}
 			/>
 		</div>
-	);
-};
+	)
+}
 
-export default Overview;
+export default Overview

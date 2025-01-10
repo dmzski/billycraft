@@ -1,28 +1,28 @@
-import { Button, Loader } from "@billycraft/ui";
-import { useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { ROUTES } from "@/routes";
-import type { OutgoingResponse } from "@/sdk";
-import OutgoingForm from "./Form";
-import { useI18n } from "@/i18n";
-import { useOutgoingByIdQuery } from "@/queries/useOutgoingByIdQuery";
+import { Button, Loader } from "@billycraft/ui"
+import { useCallback } from "react"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { ROUTES } from "@/routes"
+import type { OutgoingResponse } from "@/sdk"
+import OutgoingForm from "./Form"
+import { useI18n } from "@/i18n"
+import { useOutgoingByIdQuery } from "@/queries/useOutgoingByIdQuery"
 
-const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
+const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const FormPage = () => {
-	const { id } = useParams<{ id: string }>();
-	const { t } = useI18n();
-	const navigate = useNavigate();
-	const { data, isLoading } = useOutgoingByIdQuery(id ?? '', {
+	const { id } = useParams<{ id: string }>()
+	const { t } = useI18n()
+	const navigate = useNavigate()
+	const { data, isLoading } = useOutgoingByIdQuery(id ?? "", {
 		enabled: id !== "new",
-	});
+	})
 
 	const onSubmitSuccess = useCallback(
 		(res: OutgoingResponse) => {
-			navigate(routes.DETAILS.path({ id: res.id }));
+			navigate(routes.DETAILS.path({ id: res.id }))
 		},
 		[navigate],
-	);
+	)
 
 	return (
 		<div>
@@ -52,7 +52,7 @@ const FormPage = () => {
 				/>
 			)}
 		</div>
-	);
-};
+	)
+}
 
-export default FormPage;
+export default FormPage

@@ -1,19 +1,19 @@
-import { useI18n } from "@/i18n";
-import type { UserResponse } from "@/sdk";
-import { Button } from "@billycraft/ui";
-import { TrashIcon } from "@heroicons/react/24/solid";
-import { RemoveUserModal } from "./modals/RemoveUserModal";
-import clsx from "clsx";
-import { useUser } from "@/providers/UserProvider";
+import { useI18n } from "@/i18n"
+import type { UserResponse } from "@/sdk"
+import { Button } from "@billycraft/ui"
+import { TrashIcon } from "@heroicons/react/24/solid"
+import { RemoveUserModal } from "./modals/RemoveUserModal"
+import clsx from "clsx"
+import { useUser } from "@/providers/UserProvider"
 
 type UsersListProps = {
-	users: UserResponse[];
-	reload: () => Promise<void>;
-};
+	users: UserResponse[]
+	reload: () => Promise<void>
+}
 export const UsersList = ({ users, reload }: UsersListProps) => {
-	const { scopedT, t } = useI18n();
-	const { user } = useUser();
-	const pageT = scopedT("settings.users.users.list");
+	const { scopedT, t } = useI18n()
+	const { user } = useUser()
+	const pageT = scopedT("settings.users.users.list")
 
 	return (
 		<table className="flex flex-col gap-2">
@@ -63,5 +63,5 @@ export const UsersList = ({ users, reload }: UsersListProps) => {
 				</tbody>
 			)}
 		</table>
-	);
-};
+	)
+}

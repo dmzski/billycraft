@@ -1,30 +1,30 @@
-import useCustomers from "@/hooks/useCustomers";
-import type { BillResponse } from "@/sdk";
-import BillTableLine from "./Row";
-import { useI18n } from "@/i18n";
-import type { BillOverviewRouteQueryParams } from "@/routes";
-import { useEffect, useRef, useState } from "react";
-import { BottomActionBar } from "@/components/BottomActionBar";
-import { MultiDownloadPdfModal } from "../modals/MultiDownloadPdfModal";
-import { Button, Checkbox } from "@billycraft/ui";
-import { ArrowDownOnSquareIcon } from "@heroicons/react/24/solid";
+import useCustomers from "@/hooks/useCustomers"
+import type { BillResponse } from "@/sdk"
+import BillTableLine from "./Row"
+import { useI18n } from "@/i18n"
+import type { BillOverviewRouteQueryParams } from "@/routes"
+import { useEffect, useRef, useState } from "react"
+import { BottomActionBar } from "@/components/BottomActionBar"
+import { MultiDownloadPdfModal } from "../modals/MultiDownloadPdfModal"
+import { Button, Checkbox } from "@billycraft/ui"
+import { ArrowDownOnSquareIcon } from "@heroicons/react/24/solid"
 
 type BillListProps = {
-	data: BillResponse[];
-	selectedStatus?: BillOverviewRouteQueryParams["fromTab"];
-};
+	data: BillResponse[]
+	selectedStatus?: BillOverviewRouteQueryParams["fromTab"]
+}
 
 const BillList = ({ data, selectedStatus }: BillListProps) => {
-	const { t } = useI18n();
-	const customers = useCustomers();
-	const containerRef = useRef<HTMLDivElement>(null);
-	const [selected, setSelected] = useState<BillResponse[]>([]);
+	const { t } = useI18n()
+	const customers = useCustomers()
+	const containerRef = useRef<HTMLDivElement>(null)
+	const [selected, setSelected] = useState<BillResponse[]>([])
 
 	useEffect(() => {
 		if (data) {
-			setSelected([]);
+			setSelected([])
 		}
-	}, [data]);
+	}, [data])
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -40,7 +40,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 								: "unchecked"
 						}
 						onCheckedChange={(newState) => {
-							setSelected(() => (newState ? [...data] : []));
+							setSelected(() => (newState ? [...data] : []))
 						}}
 						value="all"
 						label={t("selectAll")}
@@ -63,11 +63,11 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 						checked={!!selected.find(({ id }) => id === bill.id)}
 						onCheckedChange={(newState) => {
 							if (newState) {
-								setSelected((current) => [...current, bill]);
+								setSelected((current) => [...current, bill])
 							} else {
 								setSelected((current) =>
 									current.filter(({ id }) => id !== bill.id),
-								);
+								)
 							}
 						}}
 					/>
@@ -94,7 +94,7 @@ const BillList = ({ data, selectedStatus }: BillListProps) => {
 				</BottomActionBar>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default BillList;
+export default BillList

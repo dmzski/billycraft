@@ -1,127 +1,131 @@
-import { useI18n } from "@/i18n";
-import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery";
+import { useI18n } from "@/i18n"
+import { useQuoteByIdQuery } from "@/queries/useQuoteByIdQuery"
 import {
 	type QuoteOverviewRouteQueryParams,
 	type QuoteRouteProps,
 	ROUTES,
-} from "@/routes";
-import { isQuoteMinimumAccepted } from "@/utils/quote";
-import { Alert, Button, Loader, useToast } from "@billycraft/ui";
+} from "@/routes"
+import { isQuoteMinimumAccepted } from "@/utils/quote"
+import { Alert, Button, Loader, useToast } from "@billycraft/ui"
 import {
 	ChevronLeftIcon,
 	DocumentArrowDownIcon,
 	PencilIcon,
 	PlusIcon,
-} from "@heroicons/react/24/solid";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Actions } from "./Actions";
-import { useReducer } from "react";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { RRLink } from "@/components/RRLink";
-import { QuoteLabel } from "@/components/labels/QuoteLabel";
-import { InformationSection } from "./InformationSection";
-import { ContentSection } from "./ContentSection";
-import { PdfsService, QuotesService } from "@/sdk";
-import { sendErrorToSentry } from "@/utils/errors";
+} from "@heroicons/react/24/solid"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { Actions } from "./Actions"
+import { useReducer } from "react"
+import { useQueryParams } from "@/hooks/useQueryParams"
+import { RRLink } from "@/components/RRLink"
+import { QuoteLabel } from "@/components/labels/QuoteLabel"
+import { InformationSection } from "./InformationSection"
+import { ContentSection } from "./ContentSection"
+import { PdfsService, QuotesService } from "@/sdk"
+import { sendErrorToSentry } from "@/utils/errors"
 
 export const Overview = () => {
-	const { t, scopedT } = useI18n();
-	const toast = useToast();
-	const { id } = useParams<QuoteRouteProps>();
-	const { fromTab } = useQueryParams<QuoteOverviewRouteQueryParams>();
-	const { data: quote, isLoading, reload } = useQuoteByIdQuery(id ?? '', {enabled: !!id});
-	const navigate = useNavigate();
+	const { t, scopedT } = useI18n()
+	const toast = useToast()
+	const { id } = useParams<QuoteRouteProps>()
+	const { fromTab } = useQueryParams<QuoteOverviewRouteQueryParams>()
+	const {
+		data: quote,
+		isLoading,
+		reload,
+	} = useQuoteByIdQuery(id ?? "", { enabled: !!id })
+	const navigate = useNavigate()
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
 		(state) => !state,
 		false,
-	);
+	)
 	const [isDuplicating, toggleIsDuplicating] = useReducer(
 		(state) => !state,
 		false,
-	);
+	)
 	const [isCreatingBill, toggleIsCreatingBill] = useReducer(
 		(state) => !state,
 		false,
-	);
+	)
 
-	const pageT = scopedT("quotes.details");
+	const pageT = scopedT("quotes.details")
 
 	const downloadPdf = async () => {
 		try {
 			if (quote?.id && !isDownloadingPDF) {
-				toggleIsDownloadingPDF();
+				toggleIsDownloadingPDF()
 				const blob = await PdfsService.getPdfsQuoteById({
 					path: { id: quote.id },
-				}).then(({ data }) => data);
+				}).then(({ data }) => data)
 				if (!blob) {
-					throw new Error("Unreadable PDF object");
+					throw new Error("Unreadable PDF object")
 				}
-				const link = document.createElement("a");
-				link.download = quote.name;
-				link.href = URL.createObjectURL(blob);
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-				toggleIsDownloadingPDF();
+				const link = document.createElement("a")
+				link.download = quote.name
+				link.href = URL.createObjectURL(blob)
+				document.body.appendChild(link)
+				link.click()
+				document.body.removeChild(link)
+				toggleIsDownloadingPDF()
 			}
 		} catch {
-			toast.destructive(t("quotes.form.pdfError"));
-			toggleIsDownloadingPDF();
+			toast.destructive(t("quotes.form.pdfError"))
+			toggleIsDownloadingPDF()
 		}
-	};
+	}
 
 	const createBill = async () => {
 		if (quote && !isCreatingBill) {
 			try {
-				toggleIsCreatingBill();
+				toggleIsCreatingBill()
 				const data = await QuotesService.postQuotesByIdBill({
 					path: { id: quote.id },
-				}).then(({ data }) => data);
-				toast.show(t("quotes.details.createBillSuccess"));
+				}).then(({ data }) => data)
+				toast.show(t("quotes.details.createBillSuccess"))
 				if (data?.id) {
-					navigate(ROUTES.BILLS.routes.OVERVIEW.path({ id: data.id }));
+					navigate(ROUTES.BILLS.routes.OVERVIEW.path({ id: data.id }))
 				} else {
-					navigate(ROUTES.BILLS.routes.INDEX.path());
+					navigate(ROUTES.BILLS.routes.INDEX.path())
 				}
 			} catch {
-				toast.destructive(t("quotes.form.createBillError"));
-				toggleIsCreatingBill();
+				toast.destructive(t("quotes.form.createBillError"))
+				toggleIsCreatingBill()
 			}
 		}
-	};
+	}
 
 	const duplicate = async () => {
 		if (quote?.id && !isDuplicating) {
-			toggleIsDuplicating();
+			toggleIsDuplicating()
 			try {
 				const newQuote = await QuotesService.postQuotesByIdDuplicate({
 					path: { id: quote.id },
-				}).then(({ data }) => data);
-				toast.show(t("quotes.details.duplicateSuccess"));
+				}).then(({ data }) => data)
+				toast.show(t("quotes.details.duplicateSuccess"))
 				navigate(
 					newQuote?.id
 						? ROUTES.QUOTES.routes.OVERVIEW.path({ id: newQuote.id })
 						: ROUTES.QUOTES.path(),
-				);
+				)
 			} catch (error) {
-				sendErrorToSentry(error);
-				toast.destructive(t("quotes.details.duplicateError"));
+				sendErrorToSentry(error)
+				toast.destructive(t("quotes.details.duplicateError"))
 			} finally {
-				toggleIsDuplicating();
+				toggleIsDuplicating()
 			}
 		}
-	};
+	}
 
 	if (!quote && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!quote) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -180,5 +184,5 @@ export const Overview = () => {
 			<ContentSection quote={quote} />
 			<Actions quote={quote} reloadQuote={reload} />
 		</div>
-	);
-};
+	)
+}

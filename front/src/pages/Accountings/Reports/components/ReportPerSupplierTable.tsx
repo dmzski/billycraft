@@ -1,16 +1,16 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import type { ReportResponse, SupplierResponse } from "@/sdk";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { useMemo } from "react";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import type { ReportResponse, SupplierResponse } from "@/sdk"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { useMemo } from "react"
 
 type SupplierDetailRowProps = {
-	value: number;
-	supplier?: SupplierResponse;
-};
+	value: number
+	supplier?: SupplierResponse
+}
 const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
-	const formatCurrency = useFormatCurrency();
-	const { t } = useI18n();
+	const formatCurrency = useFormatCurrency()
+	const { t } = useI18n()
 
 	return (
 		<dl
@@ -23,16 +23,16 @@ const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 			</dt>
 			<dd className="md:col-span-6">{formatCurrency(value ?? 0)}</dd>
 		</dl>
-	);
-};
+	)
+}
 
 type ReportPerSupplierTableProps = {
-	report: ReportResponse;
-};
+	report: ReportResponse
+}
 
 const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
-	const { t } = useI18n();
-	const { data: suppliers } = useAllSuppliersQuery();
+	const { t } = useI18n()
+	const { data: suppliers } = useAllSuppliersQuery()
 
 	const groupBySuppliers = useMemo(
 		() =>
@@ -49,14 +49,14 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 										(Number(acc[line.supplierId]) || 0) +
 										line.totalHT * (1 - line.vat),
 									supplier: acc[line.supplierId].supplier,
-								};
+								}
 
-								return acc;
+								return acc
 							}
 
 							const supplier = suppliers?.find(
 								({ id: supplierId }) => supplierId === line.supplierId,
-							);
+							)
 
 							if (supplier && line.supplierId) {
 								acc[line.supplierId] = {
@@ -64,16 +64,16 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 										(Number(acc[supplier.id]) || 0) +
 										line.totalHT * (1 - line.vat),
 									supplier,
-								};
+								}
 							}
 
-							return acc;
+							return acc
 						},
 						{} as Record<
 							string,
 							{
-								total: number;
-								supplier: SupplierResponse;
+								total: number
+								supplier: SupplierResponse
 							}
 						>,
 					),
@@ -81,7 +81,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 				supplierA.name.localeCompare(supplerB.name),
 			),
 		[report.outgoings, suppliers],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -107,7 +107,7 @@ const ReportPerSupplierTable = ({ report }: ReportPerSupplierTableProps) => {
 				<div>{t("accounting.reports.components.perSupplier.emptyText")}</div>
 			)}
 		</div>
-	);
-};
+	)
+}
 
-export default ReportPerSupplierTable;
+export default ReportPerSupplierTable

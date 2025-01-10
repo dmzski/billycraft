@@ -1,28 +1,28 @@
-import { useToast } from "@billycraft/ui";
-import { useI18n } from "@/i18n";
-import { useForm } from "react-hook-form";
-import { sendErrorToSentry } from "@/utils/errors";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import { useUser } from "@/providers/UserProvider";
-import { OrganizationService, type OrganizationRequest } from "@/sdk";
-import { useOrganization } from "@/providers/OrganizationProvider";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { Form } from "@/components/form/Form";
-import { Submit } from "@/components/form/Submit";
-import { InputField } from "@/components/form/InputField";
+import { useToast } from "@billycraft/ui"
+import { useI18n } from "@/i18n"
+import { useForm } from "react-hook-form"
+import { sendErrorToSentry } from "@/utils/errors"
+import { InformationCircleIcon } from "@heroicons/react/24/solid"
+import { useUser } from "@/providers/UserProvider"
+import { OrganizationService, type OrganizationRequest } from "@/sdk"
+import { useOrganization } from "@/providers/OrganizationProvider"
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { Form } from "@/components/form/Form"
+import { Submit } from "@/components/form/Submit"
+import { InputField } from "@/components/form/InputField"
 
 type CreateOrganizationFormValues = {
-	articlesTax: number;
-	servicesTax: number;
-	othersTax: number;
-	name: string;
-	siret: string;
-	address: string;
-	postalCode: string;
-	phoneNumber: string;
-	city: string;
-	email: string;
-};
+	articlesTax: number
+	servicesTax: number
+	othersTax: number
+	name: string
+	siret: string
+	address: string
+	postalCode: string
+	phoneNumber: string
+	city: string
+	email: string
+}
 
 const initialValues: CreateOrganizationFormValues = {
 	articlesTax: 0,
@@ -35,18 +35,18 @@ const initialValues: CreateOrganizationFormValues = {
 	siret: "",
 	address: "",
 	email: "",
-};
+}
 
 export const CreateOrganization = () => {
-	const toast = useToast();
-	const { t } = useI18n();
-	const { reload: reloadUser } = useUser();
-	const { reload: reloadOrganization } = useOrganization();
+	const toast = useToast()
+	const { t } = useI18n()
+	const { reload: reloadUser } = useUser()
+	const { reload: reloadOrganization } = useOrganization()
 
 	const methods = useForm<CreateOrganizationFormValues>({
 		mode: "onChange",
 		values: initialValues,
-	});
+	})
 
 	const onSubmit = async (values: CreateOrganizationFormValues) => {
 		try {
@@ -55,15 +55,15 @@ export const CreateOrganization = () => {
 				articlesTax: Number(values.articlesTax) || 0,
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
-			} as OrganizationRequest;
-			await OrganizationService.postOrganization({ body: data });
-			await Promise.all([reloadUser(), reloadOrganization()]);
-			toast.show(t("onboarding.create.success"));
+			} as OrganizationRequest
+			await OrganizationService.postOrganization({ body: data })
+			await Promise.all([reloadUser(), reloadOrganization()])
+			toast.show(t("onboarding.create.success"))
 		} catch (err) {
-			sendErrorToSentry(err);
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(err)
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<div className="md:w-1/2">
@@ -199,5 +199,5 @@ export const CreateOrganization = () => {
 				</div>
 			</Form>
 		</div>
-	);
-};
+	)
+}

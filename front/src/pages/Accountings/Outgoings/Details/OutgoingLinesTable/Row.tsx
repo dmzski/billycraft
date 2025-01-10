@@ -1,22 +1,22 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import type { OutgoingLineResponse } from "@/sdk";
-import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import { useMemo } from "react";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import type { OutgoingLineResponse } from "@/sdk"
+import { useAllBillsQuery } from "@/queries/useAllBillsQuery"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import { useMemo } from "react"
 
-const DEFAULT_LINE_COLOR = "initial";
+const DEFAULT_LINE_COLOR = "initial"
 
 type RowProps = {
-	line: OutgoingLineResponse;
-};
+	line: OutgoingLineResponse
+}
 const Row = ({
 	line: { totalHT, vat, billId, supplierBillReference, supplierId },
 }: RowProps) => {
-	const formatCurrency = useFormatCurrency();
-	const { data: bills } = useAllBillsQuery();
-	const { data: suppliers } = useAllSuppliersQuery();
-	const { t } = useI18n();
+	const formatCurrency = useFormatCurrency()
+	const { data: bills } = useAllBillsQuery()
+	const { data: suppliers } = useAllSuppliersQuery()
+	const { t } = useI18n()
 
 	const totalTTC = useMemo(
 		() =>
@@ -24,30 +24,30 @@ const Row = ({
 				? formatCurrency(Number(totalHT * (1 + vat / 100)) || 0)
 				: "",
 		[totalHT, vat, formatCurrency],
-	);
+	)
 
 	const bill = useMemo(() => {
-		if (bills) return bills.find(({ id }) => id === billId);
+		if (bills) return bills.find(({ id }) => id === billId)
 
-		return undefined;
-	}, [billId, bills]);
+		return undefined
+	}, [billId, bills])
 
 	const supplier = useMemo(() => {
-		if (suppliers) return suppliers?.find(({ id }) => id === supplierId);
+		if (suppliers) return suppliers?.find(({ id }) => id === supplierId)
 
-		return undefined;
-	}, [supplierId, suppliers]);
+		return undefined
+	}, [supplierId, suppliers])
 
 	const lineColor = useMemo(() => {
 		if (supplierId && suppliers) {
 			return (
 				suppliers.find(({ id }) => id === supplierId)?.color ??
 				DEFAULT_LINE_COLOR
-			);
+			)
 		}
 
-		return DEFAULT_LINE_COLOR;
-	}, [supplierId, suppliers]);
+		return DEFAULT_LINE_COLOR
+	}, [supplierId, suppliers])
 
 	return (
 		<div
@@ -64,7 +64,7 @@ const Row = ({
 			<div className="md:col-span-2">{vat}%</div>
 			<div className="md:col-span-2 flex justify-between">{totalTTC}</div>
 		</div>
-	);
-};
+	)
+}
 
-export default Row;
+export default Row

@@ -1,12 +1,12 @@
-import type { OutgoingLineResponse } from "@/sdk";
-import Row from "./Row";
-import { useI18n } from "@/i18n";
+import type { OutgoingLineResponse } from "@/sdk"
+import Row from "./Row"
+import { useI18n } from "@/i18n"
 
 type OutgoingTableProps = {
-	lines: OutgoingLineResponse[];
-};
+	lines: OutgoingLineResponse[]
+}
 const OutgoingLinesTable = ({ lines }: OutgoingTableProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	return (
 		<div className="border rounded">
@@ -30,7 +30,7 @@ const OutgoingLinesTable = ({ lines }: OutgoingTableProps) => {
 				))}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default OutgoingLinesTable;
+export default OutgoingLinesTable

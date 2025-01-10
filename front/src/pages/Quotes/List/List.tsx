@@ -1,17 +1,17 @@
-import useCustomers from "@/hooks/useCustomers";
-import type { QuoteResponse } from "@/sdk";
-import QuoteTableLine from "./Row";
-import { useI18n } from "@/i18n";
-import type { QuoteRouteQueryParams } from "@/routes";
+import useCustomers from "@/hooks/useCustomers"
+import type { QuoteResponse } from "@/sdk"
+import QuoteTableLine from "./Row"
+import { useI18n } from "@/i18n"
+import type { QuoteRouteQueryParams } from "@/routes"
 
 type QuoteListProps = {
-	data: QuoteResponse[];
-	selectedStatus: QuoteRouteQueryParams["tab"];
-	reload: () => Promise<void>;
-};
+	data: QuoteResponse[]
+	selectedStatus: QuoteRouteQueryParams["tab"]
+	reload: () => Promise<void>
+}
 const QuoteList = ({ data, selectedStatus, reload }: QuoteListProps) => {
-	const { t } = useI18n();
-	const customers = useCustomers();
+	const { t } = useI18n()
+	const customers = useCustomers()
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -33,7 +33,7 @@ const QuoteList = ({ data, selectedStatus, reload }: QuoteListProps) => {
 				))}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default QuoteList;
+export default QuoteList

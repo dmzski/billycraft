@@ -1,16 +1,16 @@
-import { useI18n } from "@/i18n";
-import { Link, Route, Routes } from "react-router-dom";
-import { ROUTES } from "@/routes";
-import { CreateOrganization } from "./CreateOrganization";
-import { JoinOrganization } from "./JoinOrganization";
-import { Button } from "@billycraft/ui";
-import { useAuth } from "@/providers/AuthProvider";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid";
-import { SUPPORT_EMAIL } from "@/constants/global";
+import { useI18n } from "@/i18n"
+import { Link, Route, Routes } from "react-router-dom"
+import { ROUTES } from "@/routes"
+import { CreateOrganization } from "./CreateOrganization"
+import { JoinOrganization } from "./JoinOrganization"
+import { Button } from "@billycraft/ui"
+import { useAuth } from "@/providers/AuthProvider"
+import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid"
+import { SUPPORT_EMAIL } from "@/constants/global"
 
 export const Onboarding = () => {
-	const { t } = useI18n();
-	const { logout } = useAuth();
+	const { t } = useI18n()
+	const { logout } = useAuth()
 
 	return (
 		<div className="flex flex-col gap-6 min-h-screen">
@@ -57,7 +57,7 @@ export const Onboarding = () => {
 				</Button>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default Onboarding;
+export default Onboarding

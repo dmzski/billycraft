@@ -1,17 +1,17 @@
-import { TextArea } from "@billycraft/ui";
-import type { ComponentProps } from "react";
+import { TextArea } from "@billycraft/ui"
+import type { ComponentProps } from "react"
 import {
 	type FieldPath,
 	type FieldValues,
 	type UseControllerProps,
 	useController,
-} from "react-hook-form";
+} from "react-hook-form"
 
 type TextAreaFieldProps<
 	TFieldValues extends FieldValues,
 	TName extends FieldPath<TFieldValues>,
 > = Omit<ComponentProps<typeof TextArea>, "value" | "name"> &
-	UseControllerProps<TFieldValues, TName>;
+	UseControllerProps<TFieldValues, TName>
 
 export const TextAreaField = <
 	TFieldValues extends FieldValues = FieldValues,
@@ -32,7 +32,7 @@ export const TextAreaField = <
 			required: props.required,
 			...rules,
 		},
-	});
+	})
 
 	return (
 		<TextArea
@@ -40,16 +40,16 @@ export const TextAreaField = <
 			error={props.error || fieldState.invalid}
 			name={field.name}
 			onChange={(event) => {
-				field.onChange(event);
-				props.onChange?.(event);
+				field.onChange(event)
+				props.onChange?.(event)
 			}}
 			onBlur={(event) => {
-				field.onBlur();
-				props.onBlur?.(event);
+				field.onBlur()
+				props.onBlur?.(event)
 			}}
 			ref={field.ref}
 			disabled={field.disabled || props.disabled}
 			value={field.value}
 		/>
-	);
-};
+	)
+}

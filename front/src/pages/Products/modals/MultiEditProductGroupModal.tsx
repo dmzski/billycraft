@@ -1,51 +1,51 @@
-import { Form } from "@/components/form/Form";
-import { useI18n } from "@/i18n";
-import { Button, Modal, useToast } from "@billycraft/ui";
-import { type ComponentProps, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { Submit } from "@/components/form/Submit";
-import { sendErrorToSentry } from "@/utils/errors";
-import { SelectField } from "@/components/form/SelectField";
-import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
+import { Form } from "@/components/form/Form"
+import { useI18n } from "@/i18n"
+import { Button, Modal, useToast } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useForm } from "react-hook-form"
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { Submit } from "@/components/form/Submit"
+import { sendErrorToSentry } from "@/utils/errors"
+import { SelectField } from "@/components/form/SelectField"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
 import {
 	type ProductResponse,
 	ProductsService,
 	type UpdateProductRequest,
-} from "@/sdk";
+} from "@/sdk"
 
 type MultiEditProductGroupModalProps = {
-	products: ProductResponse[];
-	onSubmitSuccess: () => Promise<void>;
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-};
+	products: ProductResponse[]
+	onSubmitSuccess: () => Promise<void>
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+}
 
 type MultiEditProductGroupFormProps = Omit<
 	MultiEditProductGroupModalProps,
 	"disclosure"
 > & {
-	close: () => void;
-};
+	close: () => void
+}
 
 type MultiEditProductGroupFormValues = {
-	groupId: string | null;
-};
+	groupId: string | null
+}
 
 export const MultiEditProductGroupForm = ({
 	products,
 	close,
 	onSubmitSuccess,
 }: MultiEditProductGroupFormProps) => {
-	const { data: groups } = useAllProductGroupsQuery();
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
-	const pageT = scopedT("products.modals.multiEditProductGroup");
+	const { data: groups } = useAllProductGroupsQuery()
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
+	const pageT = scopedT("products.modals.multiEditProductGroup")
 	const methods = useForm<MultiEditProductGroupFormValues>({
 		mode: "onChange",
 		defaultValues: {
 			groupId: null,
 		},
-	});
+	})
 
 	const options = useMemo<ComponentProps<typeof SelectField>["options"]>(
 		() =>
@@ -54,16 +54,16 @@ export const MultiEditProductGroupForm = ({
 				label: name,
 			})) ?? [],
 		[groups],
-	);
+	)
 
 	const handleSubmit = async ({ groupId }: MultiEditProductGroupFormValues) => {
-		let hasError = false;
+		let hasError = false
 		try {
 			const finalPromise = products.reduce(
 				(promise, product) =>
 					promise
 						.catch(() => {
-							hasError = true;
+							hasError = true
 						})
 						.then(() =>
 							ProductsService.patchProductsById({
@@ -72,23 +72,23 @@ export const MultiEditProductGroupForm = ({
 							}),
 						),
 				Promise.resolve(),
-			);
+			)
 
-			await finalPromise;
+			await finalPromise
 
 			if (hasError) {
-				toast.destructive(pageT("submit.error"));
+				toast.destructive(pageT("submit.error"))
 			} else {
-				toast.show(pageT("submit.success"));
+				toast.show(pageT("submit.success"))
 			}
-			await onSubmitSuccess();
-			close();
+			await onSubmitSuccess()
+			close()
 		} catch (error) {
-			sendErrorToSentry(error);
+			sendErrorToSentry(error)
 
-			return t("genericFormError");
+			return t("genericFormError")
 		}
-	};
+	}
 
 	return (
 		<Form methods={methods} onSubmit={handleSubmit}>
@@ -112,8 +112,8 @@ export const MultiEditProductGroupForm = ({
 				</Modal.Actions>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 export const MultiEditProductGroupModal = ({
 	disclosure,
 	products,
@@ -128,4 +128,4 @@ export const MultiEditProductGroupModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

@@ -1,25 +1,25 @@
-import { type ComponentProps, useMemo } from "react";
-import { useFormContext } from "react-hook-form";
-import useCustomers from "@/hooks/useCustomers";
-import QuoteLineTable from "./QuoteLineTable";
-import { useI18n } from "@/i18n";
-import type { QuoteFormValues } from "./types";
-import { calculatePriceTTC } from "@/utils/price";
-import { InputField } from "@/components/form/InputField";
-import { SelectField } from "@/components/form/SelectField";
+import { type ComponentProps, useMemo } from "react"
+import { useFormContext } from "react-hook-form"
+import useCustomers from "@/hooks/useCustomers"
+import QuoteLineTable from "./QuoteLineTable"
+import { useI18n } from "@/i18n"
+import type { QuoteFormValues } from "./types"
+import { calculatePriceTTC } from "@/utils/price"
+import { InputField } from "@/components/form/InputField"
+import { SelectField } from "@/components/form/SelectField"
 
 export const QuoteFormContent = () => {
-	const { t } = useI18n();
-	const customers = useCustomers();
+	const { t } = useI18n()
+	const customers = useCustomers()
 	const {
 		control,
 		formState: { isDirty, isSubmitting, disabled },
 		getValues,
 		setValue,
-	} = useFormContext<QuoteFormValues>();
+	} = useFormContext<QuoteFormValues>()
 
 	const customerOptions = useMemo(() => {
-		const array: ComponentProps<typeof SelectField>["options"] = [];
+		const array: ComponentProps<typeof SelectField>["options"] = []
 		if (customers) {
 			array.push(
 				...customers
@@ -28,10 +28,10 @@ export const QuoteFormContent = () => {
 						value: customer.id,
 						label: customer.name,
 					})),
-			);
+			)
 		}
-		return array;
-	}, [customers]);
+		return array
+	}, [customers])
 
 	return (
 		<div className="flex flex-col gap-12">
@@ -75,7 +75,7 @@ export const QuoteFormContent = () => {
 					type="number"
 					rules={{
 						onBlur: (event) => {
-							const values = getValues();
+							const values = getValues()
 							setValue(
 								"lines",
 								values.lines.map(({ price, ...restLine }) => ({
@@ -83,12 +83,12 @@ export const QuoteFormContent = () => {
 									price,
 									itPrice: calculatePriceTTC(price, Number(event.target.value)),
 								})),
-							);
+							)
 						},
 					}}
 				/>
 			</div>
 			<QuoteLineTable control={control} disabled={disabled} />
 		</div>
-	);
-};
+	)
+}

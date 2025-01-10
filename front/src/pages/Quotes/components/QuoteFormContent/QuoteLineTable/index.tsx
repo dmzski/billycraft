@@ -1,15 +1,15 @@
-import { Button, Select } from "@billycraft/ui";
-import { type ComponentProps, useMemo, useRef, useState } from "react";
-import { type Control, useFieldArray, useWatch } from "react-hook-form";
-import QuoteLineTableLine from "./Row";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { DndContext } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
-import { useI18n } from "@/i18n";
-import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import type { QuoteFormValues } from "../types";
-import { calculatePriceTTC } from "@/utils/price";
-import { ProductLabel } from "@/components/labels/ProductLabel";
+import { Button, Select } from "@billycraft/ui"
+import { type ComponentProps, useMemo, useRef, useState } from "react"
+import { type Control, useFieldArray, useWatch } from "react-hook-form"
+import QuoteLineTableLine from "./Row"
+import { PlusIcon } from "@heroicons/react/24/solid"
+import { DndContext } from "@dnd-kit/core"
+import { SortableContext } from "@dnd-kit/sortable"
+import { useI18n } from "@/i18n"
+import { useAllProductsQuery } from "@/queries/useAllProductsQuery"
+import type { QuoteFormValues } from "../types"
+import { calculatePriceTTC } from "@/utils/price"
+import { ProductLabel } from "@/components/labels/ProductLabel"
 
 const defaultLine: QuoteFormValues["lines"][number] = {
 	description: null,
@@ -20,29 +20,29 @@ const defaultLine: QuoteFormValues["lines"][number] = {
 	type: "TEXT",
 	line: 0,
 	productId: null,
-};
+}
 
 const QuoteLineTable = ({
 	disabled,
 	control,
 }: {
-	disabled?: boolean;
-	control: Control<QuoteFormValues>;
+	disabled?: boolean
+	control: Control<QuoteFormValues>
 }) => {
-	const { t } = useI18n();
-	const selectExistingProductRef = useRef<HTMLInputElement>(null);
-	const { data: allProducts, reload: reloadProducts } = useAllProductsQuery();
-	const [productIdSelected, setProductIdSelected] = useState<string>();
+	const { t } = useI18n()
+	const selectExistingProductRef = useRef<HTMLInputElement>(null)
+	const { data: allProducts, reload: reloadProducts } = useAllProductsQuery()
+	const [productIdSelected, setProductIdSelected] = useState<string>()
 
 	const onProductSelectedChange = (option: string) => {
-		setProductIdSelected(option);
-	};
+		setProductIdSelected(option)
+	}
 
-	const tva = useWatch({ control, name: "tva" });
+	const tva = useWatch({ control, name: "tva" })
 	const { fields, append, remove, move } = useFieldArray({
 		control,
 		name: "lines",
-	});
+	})
 
 	const onDragEnd: ComponentProps<typeof DndContext>["onDragEnd"] = (event) => {
 		if (
@@ -54,15 +54,15 @@ const QuoteLineTable = ({
 			move(
 				event.active.data.current.lineIndex,
 				event.over.data.current.lineIndex,
-			);
+			)
 		}
 
-		return;
-	};
+		return
+	}
 
 	const addLine = (newLine = defaultLine) => {
-		append({ ...newLine, line: fields.length }, { shouldFocus: false });
-	};
+		append({ ...newLine, line: fields.length }, { shouldFocus: false })
+	}
 	const productOptions: ComponentProps<typeof Select>["options"] =
 		useMemo(() => {
 			if (allProducts) {
@@ -71,18 +71,18 @@ const QuoteLineTable = ({
 						value: product.id,
 						searchText: product.name,
 						label: <ProductLabel product={product} />,
-					};
-				});
+					}
+				})
 			}
 
-			return [];
-		}, [allProducts]);
+			return []
+		}, [allProducts])
 
 	const addExistingProductSelected = () => {
 		if (productIdSelected && allProducts) {
 			const productFound = allProducts.find(
 				(product) => product.id === productIdSelected,
-			);
+			)
 			if (productFound) {
 				const newLine: QuoteFormValues["lines"][number] = {
 					name: productFound.name,
@@ -93,13 +93,13 @@ const QuoteLineTable = ({
 					line: 0,
 					description: productFound.description ?? null,
 					productId: productFound.id,
-				};
-				addLine(newLine);
-				setProductIdSelected(undefined);
-				selectExistingProductRef.current?.focus();
+				}
+				addLine(newLine)
+				setProductIdSelected(undefined)
+				selectExistingProductRef.current?.focus()
 			}
 		}
-	};
+	}
 
 	return (
 		<div className="grid gap-4 border p-4 rounded">
@@ -158,7 +158,7 @@ const QuoteLineTable = ({
 				) : null}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default QuoteLineTable;
+export default QuoteLineTable

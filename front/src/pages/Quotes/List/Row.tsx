@@ -1,66 +1,66 @@
-import { Button, Collapsible, Dropdown, useToast } from "@billycraft/ui";
-import { formatISO9075, parseJSON } from "date-fns";
-import { type MouseEvent, useMemo, useReducer } from "react";
-import { type QuoteRouteQueryParams, ROUTES } from "@/routes";
-import { useI18n } from "@/i18n";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { QuoteLabel } from "@/components/labels/QuoteLabel";
-import { RowContent } from "./RowContent";
+import { Button, Collapsible, Dropdown, useToast } from "@billycraft/ui"
+import { formatISO9075, parseJSON } from "date-fns"
+import { type MouseEvent, useMemo, useReducer } from "react"
+import { type QuoteRouteQueryParams, ROUTES } from "@/routes"
+import { useI18n } from "@/i18n"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
+import { QuoteLabel } from "@/components/labels/QuoteLabel"
+import { RowContent } from "./RowContent"
 import {
 	QuotesService,
 	type CustomerResponse,
 	type QuoteResponse,
 	type QuoteStatus,
-} from "@/sdk";
+} from "@/sdk"
 
 type QuoteTableLineProps = {
-	quote: QuoteResponse;
-	customer?: CustomerResponse;
-	reload: () => Promise<void>;
-	selectedStatus: QuoteRouteQueryParams["tab"];
-};
+	quote: QuoteResponse
+	customer?: CustomerResponse
+	reload: () => Promise<void>
+	selectedStatus: QuoteRouteQueryParams["tab"]
+}
 const QuoteTableLine = ({
 	quote,
 	customer,
 	selectedStatus,
 	reload,
 }: QuoteTableLineProps) => {
-	const { t } = useI18n();
-	const [open, toggleOpen] = useReducer((state) => !state, false);
-	const toast = useToast();
+	const { t } = useI18n()
+	const [open, toggleOpen] = useReducer((state) => !state, false)
+	const toast = useToast()
 
 	const updateQuoteStatus =
 		(status: QuoteStatus) => (e: MouseEvent<HTMLButtonElement>) => {
-			e.stopPropagation();
+			e.stopPropagation()
 			const updateStatus = async () => {
 				try {
 					if (quote.id)
 						await QuotesService.patchQuotesById({
 							path: { id: quote.id },
 							body: { ...quote, status },
-						});
-					toast.show(t("quotes.list.statusUpdated"));
-					reload();
+						})
+					toast.show(t("quotes.list.statusUpdated"))
+					reload()
 				} catch {
-					toast.destructive(t("genericFormError"));
+					toast.destructive(t("genericFormError"))
 				}
-			};
-			updateStatus();
-		};
+			}
+			updateStatus()
+		}
 
 	const nextStatuses = useMemo<QuoteStatus[]>(() => {
 		switch (quote.status) {
 			case "SENT":
-				return ["ACCEPTED", "REFUSED", "ARCHIVED"];
+				return ["ACCEPTED", "REFUSED", "ARCHIVED"]
 			case "ACCEPTED":
-				return ["ARCHIVED"];
+				return ["ARCHIVED"]
 			case "REFUSED":
 			case "ARCHIVED":
-				return [];
+				return []
 			default:
-				return ["SENT"];
+				return ["SENT"]
 		}
-	}, [quote]);
+	}, [quote])
 
 	return (
 		<div className="border rounded-md">
@@ -107,7 +107,7 @@ const QuoteTableLine = ({
 				<RowContent quote={quote} customer={customer} />
 			</Collapsible>
 		</div>
-	);
-};
+	)
+}
 
-export default QuoteTableLine;
+export default QuoteTableLine

@@ -1,33 +1,33 @@
-import { useI18n } from "@/i18n";
-import { type ReportRequest, ReportsService } from "@/sdk";
-import { Button, Input, Modal, useToast } from "@billycraft/ui";
-import { endOfMonth, formatRFC3339 } from "date-fns";
-import type { ComponentProps } from "react";
-import { useController, useForm } from "react-hook-form";
+import { useI18n } from "@/i18n"
+import { type ReportRequest, ReportsService } from "@/sdk"
+import { Button, Input, Modal, useToast } from "@billycraft/ui"
+import { endOfMonth, formatRFC3339 } from "date-fns"
+import type { ComponentProps } from "react"
+import { useController, useForm } from "react-hook-form"
 
 type CreateReportModalProps = {
-	onSubmitSuccess?: () => void | Promise<void>;
-	disclosure?: ComponentProps<typeof Modal>["disclosure"];
-};
+	onSubmitSuccess?: () => void | Promise<void>
+	disclosure?: ComponentProps<typeof Modal>["disclosure"]
+}
 
-type CreateReportFormProps = Omit<CreateReportModalProps, "disclosure">;
+type CreateReportFormProps = Omit<CreateReportModalProps, "disclosure">
 
 type CreateReportFormValues = {
-	startDate: string;
-	endDate: string;
-	name: string;
-};
+	startDate: string
+	endDate: string
+	name: string
+}
 
 const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const {
 		control,
 		handleSubmit,
 		formState: { isValid, isSubmitting },
 	} = useForm<CreateReportFormValues>({
 		mode: "onChange",
-	});
-	const toast = useToast();
+	})
+	const toast = useToast()
 
 	const onSubmit = async ({
 		startDate,
@@ -39,31 +39,31 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
 				name,
 				startDate: formatRFC3339(Date.parse(startDate)),
 				endDate: formatRFC3339(endOfMonth(Date.parse(endDate))),
-			} as ReportRequest;
-			await ReportsService.postReports({ body: data });
-			toast.show(t("accounting.reports.modals.create.fields.submit.success"));
-			await onSubmitSuccess?.();
+			} as ReportRequest
+			await ReportsService.postReports({ body: data })
+			toast.show(t("accounting.reports.modals.create.fields.submit.success"))
+			await onSubmitSuccess?.()
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const { field: nameField, fieldState: nameFieldState } = useController({
 		control,
 		name: "name",
 		rules: { required: true, minLength: 3 },
-	});
+	})
 	const { field: startDateField, fieldState: startDateFieldState } =
 		useController({
 			control,
 			name: "startDate",
 			rules: { required: true },
-		});
+		})
 	const { field: endDateField, fieldState: endDateFieldState } = useController({
 		control,
 		name: "endDate",
 		rules: { required: true },
-	});
+	})
 
 	return (
 		<form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
@@ -102,8 +102,8 @@ const CreateReportForm = ({ onSubmitSuccess }: CreateReportFormProps) => {
 				{t("accounting.reports.modals.create.fields.submit")}
 			</Button>
 		</form>
-	);
-};
+	)
+}
 const CreateReportModal = ({
 	onSubmitSuccess,
 	disclosure,
@@ -112,12 +112,12 @@ const CreateReportModal = ({
 		{({ close }) => (
 			<CreateReportForm
 				onSubmitSuccess={async () => {
-					await onSubmitSuccess?.();
-					close();
+					await onSubmitSuccess?.()
+					close()
 				}}
 			/>
 		)}
 	</Modal>
-);
+)
 
-export default CreateReportModal;
+export default CreateReportModal

@@ -1,25 +1,25 @@
-import { CheckIcon, MinusIcon } from "@heroicons/react/24/solid";
-import clsx from "clsx";
-import { Label } from "components/Label";
-import { tw } from "lib/utils";
-import { type FocusEventHandler, forwardRef, useId, useMemo } from "react";
+import { CheckIcon, MinusIcon } from "@heroicons/react/24/solid"
+import clsx from "clsx"
+import { Label } from "components/Label"
+import { tw } from "lib/utils"
+import { type FocusEventHandler, forwardRef, useId, useMemo } from "react"
 
 export type CheckboxProps = {
-	label?: string;
-	labelPosition?: "left" | "right";
-	checked: boolean | ("checked" | "unchecked" | "indeterminate");
-	error?: boolean;
-	"aria-label"?: string;
-	"aria-labelledby"?: string;
-	value?: string;
-	onCheckedChange?: (newState: boolean) => void;
-	onBlur?: FocusEventHandler<HTMLButtonElement>;
-	disabled?: boolean;
-	name?: string;
-	id?: string;
-	className?: string;
-	required?: boolean;
-};
+	label?: string
+	labelPosition?: "left" | "right"
+	checked: boolean | ("checked" | "unchecked" | "indeterminate")
+	error?: boolean
+	"aria-label"?: string
+	"aria-labelledby"?: string
+	value?: string
+	onCheckedChange?: (newState: boolean) => void
+	onBlur?: FocusEventHandler<HTMLButtonElement>
+	disabled?: boolean
+	name?: string
+	id?: string
+	className?: string
+	required?: boolean
+}
 
 export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 	(
@@ -41,20 +41,20 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 		},
 		ref,
 	) => {
-		const generatedId = useId();
-		const id = idProp ?? generatedId;
+		const generatedId = useId()
+		const id = idProp ?? generatedId
 
 		const checked = useMemo(() => {
 			if (checkedProp === undefined || checkedProp === null) {
-				return false;
+				return false
 			}
 
 			if (typeof checkedProp === "boolean") {
-				return checkedProp;
+				return checkedProp
 			}
 
-			return checkedProp !== "unchecked";
-		}, [checkedProp]);
+			return checkedProp !== "unchecked"
+		}, [checkedProp])
 
 		if (!label) {
 			return (
@@ -77,7 +77,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 					aria-invalid={!!error}
 					value={value}
 					onClick={() => {
-						onCheckedChange?.(!checked);
+						onCheckedChange?.(!checked)
 					}}
 					aria-required={required}
 				>
@@ -93,7 +93,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 						</span>
 					) : null}
 				</button>
-			);
+			)
 		}
 
 		return (
@@ -116,7 +116,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 					aria-invalid={!!error}
 					value={value}
 					onClick={() => {
-						onCheckedChange?.(!checked);
+						onCheckedChange?.(!checked)
 					}}
 				>
 					{checked ? (
@@ -133,7 +133,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 				</button>
 				{labelPosition === "right" ? <Label htmlFor={id}>{label}</Label> : null}
 			</div>
-		);
+		)
 	},
-);
-Checkbox.displayName = "Checkbox";
+)
+Checkbox.displayName = "Checkbox"

@@ -1,17 +1,17 @@
-import { Checkbox } from "@billycraft/ui";
-import type { ComponentProps } from "react";
+import { Checkbox } from "@billycraft/ui"
+import type { ComponentProps } from "react"
 import {
 	type FieldPath,
 	type FieldValues,
 	type UseControllerProps,
 	useController,
-} from "react-hook-form";
+} from "react-hook-form"
 
 type CheckboxFieldProps<
 	TFieldValues extends FieldValues,
 	TName extends FieldPath<TFieldValues>,
 > = Omit<ComponentProps<typeof Checkbox>, "value" | "name" | "checked"> &
-	UseControllerProps<TFieldValues, TName>;
+	UseControllerProps<TFieldValues, TName>
 
 export const CheckboxField = <
 	TFieldValues extends FieldValues = FieldValues,
@@ -34,7 +34,7 @@ export const CheckboxField = <
 			required: props.required,
 			...rules,
 		},
-	});
+	})
 
 	return (
 		<Checkbox
@@ -43,13 +43,13 @@ export const CheckboxField = <
 			name={field.name}
 			onCheckedChange={field.onChange}
 			onBlur={(event) => {
-				field.onBlur();
-				props.onBlur?.(event);
+				field.onBlur()
+				props.onBlur?.(event)
 			}}
 			ref={field.ref}
 			disabled={field.disabled || props.disabled}
 			value={field.value ? "on" : "off"}
 			checked={field.value}
 		/>
-	);
-};
+	)
+}

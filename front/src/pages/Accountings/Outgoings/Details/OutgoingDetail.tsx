@@ -1,37 +1,37 @@
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { type ReactNode, useMemo } from "react";
-import OutgoingLinesTable from "./OutgoingLinesTable";
-import { useI18n } from "@/i18n";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { type ReactNode, useMemo } from "react"
+import OutgoingLinesTable from "./OutgoingLinesTable"
+import { useI18n } from "@/i18n"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
 import type {
 	OutgoingResponse,
 	ReportOutgoingResponse,
 	SupplierResponse,
-} from "@/sdk";
+} from "@/sdk"
 
 type OnlyChildrenProps = {
-	children: ReactNode;
-};
+	children: ReactNode
+}
 
 const DetailsTableRow = ({ children }: OnlyChildrenProps) => (
 	<dl className="grid md:grid-cols-12">{children}</dl>
-);
+)
 
 const DetailsTableLeft = ({ children }: OnlyChildrenProps) => (
 	<dt className="md:col-span-6 border-b p-4 font-semibold">{children}</dt>
-);
+)
 
 const DetailsTableRight = ({ children }: OnlyChildrenProps) => (
 	<dd className="md:col-span-6 p-4 border-b">{children}</dd>
-);
+)
 
 type SupplierDetailRowProps = {
-	value: number;
-	supplier?: SupplierResponse;
-};
+	value: number
+	supplier?: SupplierResponse
+}
 const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
-	const formatCurrency = useFormatCurrency();
-	const { t } = useI18n();
+	const formatCurrency = useFormatCurrency()
+	const { t } = useI18n()
 
 	return (
 		<dl
@@ -44,16 +44,16 @@ const SupplierDetailRow = ({ value, supplier }: SupplierDetailRowProps) => {
 			</dt>
 			<dd className="md:col-span-6">{formatCurrency(value ?? 0)}</dd>
 		</dl>
-	);
-};
+	)
+}
 
 type OutgoingDetailProps = {
-	outgoing: OutgoingResponse | ReportOutgoingResponse;
-};
+	outgoing: OutgoingResponse | ReportOutgoingResponse
+}
 const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
-	const { t } = useI18n();
-	const { data: suppliers } = useAllSuppliersQuery();
-	const formatCurrency = useFormatCurrency();
+	const { t } = useI18n()
+	const { data: suppliers } = useAllSuppliersQuery()
+	const formatCurrency = useFormatCurrency()
 
 	const total = useMemo(
 		() =>
@@ -64,7 +64,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
 					)
 				: 0,
 		[outgoing],
-	);
+	)
 
 	const groupBySuppliers = useMemo(
 		() =>
@@ -74,16 +74,16 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
 							if (line.supplierId) {
 								acc[line.supplierId] =
 									(Number(acc[line.supplierId]) || 0) +
-									line.totalHT * (1 + line.vat / 100);
+									line.totalHT * (1 + line.vat / 100)
 							}
 
-							return acc;
+							return acc
 						},
 						{} as Record<string, number>,
 					)
 				: ({} as Record<string, number>),
 		[outgoing],
-	);
+	)
 
 	return (
 		<div>
@@ -154,7 +154,7 @@ const OutgoingDetail = ({ outgoing }: OutgoingDetailProps) => {
 				</section>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default OutgoingDetail;
+export default OutgoingDetail

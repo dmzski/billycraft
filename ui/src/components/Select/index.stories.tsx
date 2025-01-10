@@ -1,12 +1,12 @@
-import type { StoryObj } from "@storybook/react";
-import { Button } from "components/Button";
-import { useState } from "react";
-import { Select, type SelectValueType } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Button } from "components/Button"
+import { useState } from "react"
+import { Select, type SelectValueType } from "."
 
 export default {
 	title: "Components/Select",
 	component: Select,
-};
+}
 
 const fakeOptions = [
 	{ label: "Option 1", value: 1 },
@@ -17,12 +17,12 @@ const fakeOptions = [
 		label: "Option 5 is a very very very very very very very very long string",
 		value: 5,
 	},
-];
+]
 
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<typeof Select>
 
 const render: Story["render"] = (props) => {
-	const [value, setValue] = useState<SelectValueType>();
+	const [value, setValue] = useState<SelectValueType>()
 
 	return (
 		<div className="min-h-44 flex gap-2 flex-row justify-start">
@@ -33,8 +33,8 @@ const render: Story["render"] = (props) => {
 			/>
 			<div className="w-32 flex pt-3">Value is : {value}</div>
 		</div>
-	);
-};
+	)
+}
 
 export const Basic: Story = {
 	render,
@@ -42,7 +42,7 @@ export const Basic: Story = {
 		options: fakeOptions,
 	},
 	decorators: [(Component) => <Component />],
-};
+}
 
 export const Searchable: Story = {
 	render,
@@ -57,7 +57,7 @@ export const Searchable: Story = {
 			</>
 		),
 	],
-};
+}
 
 export const NoBorder: Story = {
 	render,
@@ -73,7 +73,7 @@ export const NoBorder: Story = {
 			</>
 		),
 	],
-};
+}
 
 export const WithError: Story = {
 	render,
@@ -83,7 +83,7 @@ export const WithError: Story = {
 		required: true,
 	},
 	decorators: [(Component) => <Component />],
-};
+}
 
 export const Labeled: Story = {
 	render,
@@ -91,7 +91,7 @@ export const Labeled: Story = {
 		label: "My awesome label",
 		options: fakeOptions,
 	},
-};
+}
 
 export const Multi: Story = {
 	render,
@@ -100,7 +100,7 @@ export const Multi: Story = {
 		options: fakeOptions,
 		isMulti: true,
 	},
-};
+}
 
 export const CustomRender: Story = {
 	render,
@@ -119,15 +119,15 @@ export const CustomRender: Story = {
 			},
 		],
 	},
-};
+}
 
 export const Controlled: Story = {
 	render: (props) => {
-		const [value, setValue] = useState<number | undefined>(1);
+		const [value, setValue] = useState<number | undefined>(1)
 
 		const handleReset = () => {
-			setValue(undefined);
-		};
+			setValue(undefined)
+		}
 		return (
 			<div className="w-full flex items-center gap-2">
 				<Button className="m-2" onClick={handleReset}>
@@ -141,10 +141,10 @@ export const Controlled: Story = {
 				/>
 				<p>Value is {JSON.stringify(value)}</p>
 			</div>
-		);
+		)
 	},
 	args: {
 		"aria-label": "My awesome label",
 		options: fakeOptions,
 	},
-};
+}

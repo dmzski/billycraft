@@ -12,8 +12,8 @@
 	},
 	"scripts": {
 		"openapi-ts": "openapi-ts",
-    "format": "biome format --write .",
-    "lint": "pnpm -w lint"
+		"format": "biome format --write .",
+		"lint": "pnpm -w lint"
 	},
 	"packageManager": "pnpm@9.15.2"
 }

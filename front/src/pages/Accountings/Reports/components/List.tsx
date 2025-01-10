@@ -1,14 +1,14 @@
-import { useFormatDate } from "@/hooks/useFormatDate";
-import type { ReportResponse } from "@/sdk";
-import { REPORT_ROUTES } from "../constants";
-import { useI18n } from "@/i18n";
-import { RRLink } from "@/components/RRLink";
+import { useFormatDate } from "@/hooks/useFormatDate"
+import type { ReportResponse } from "@/sdk"
+import { REPORT_ROUTES } from "../constants"
+import { useI18n } from "@/i18n"
+import { RRLink } from "@/components/RRLink"
 
 type ReportRowProps = {
-	report: ReportResponse;
-};
+	report: ReportResponse
+}
 const ReportRow = ({ report }: ReportRowProps) => {
-	const { toISO9075 } = useFormatDate();
+	const { toISO9075 } = useFormatDate()
 	return (
 		<div className="grid md:grid-cols-12 p-2 border-t">
 			<div className="md:col-span-3">
@@ -20,14 +20,14 @@ const ReportRow = ({ report }: ReportRowProps) => {
 			<div className="md:col-span-3">{toISO9075(report.endDate)}</div>
 			<div className="md:col-span-3">{toISO9075(report.createdAt)}</div>
 		</div>
-	);
-};
+	)
+}
 
 type ListProps = {
-	reports: ReportResponse[];
-};
+	reports: ReportResponse[]
+}
 const List = ({ reports }: ListProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	return (
 		<div className="flex flex-col border rounded">
@@ -49,7 +49,7 @@ const List = ({ reports }: ListProps) => {
 				<ReportRow key={report.id} report={report} />
 			))}
 		</div>
-	);
-};
+	)
+}
 
-export default List;
+export default List

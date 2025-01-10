@@ -1,40 +1,40 @@
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { Form } from "@/components/form/Form";
-import { Submit } from "@/components/form/Submit";
-import { ROLES } from "@/constants/roles";
-import { useI18n } from "@/i18n";
-import { InvitationsService, type RoleEnum } from "@/sdk";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Input, Modal, Select, useToast } from "@billycraft/ui";
-import { type ComponentProps, useMemo } from "react";
-import { useController, useForm } from "react-hook-form";
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { Form } from "@/components/form/Form"
+import { Submit } from "@/components/form/Submit"
+import { ROLES } from "@/constants/roles"
+import { useI18n } from "@/i18n"
+import { InvitationsService, type RoleEnum } from "@/sdk"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Input, Modal, Select, useToast } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useController, useForm } from "react-hook-form"
 
 type InviteUserModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onSubmitSuccess: () => Promise<void>;
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onSubmitSuccess: () => Promise<void>
+}
 
-type InviteUserFormProps = Omit<InviteUserModalProps, "disclosure">;
+type InviteUserFormProps = Omit<InviteUserModalProps, "disclosure">
 
 type InviteUserFormValues = {
-	email: string;
-	role: RoleEnum;
-};
+	email: string
+	role: RoleEnum
+}
 
 const initValues: InviteUserFormValues = {
 	email: "",
 	role: "VIEWER",
-};
+}
 
 const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
-	const { scopedT, t } = useI18n();
-	const toast = useToast();
+	const { scopedT, t } = useI18n()
+	const toast = useToast()
 
-	const pageT = scopedT("settings.users.invitations.modals.invite");
+	const pageT = scopedT("settings.users.invitations.modals.invite")
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: initValues,
-	});
+	})
 
 	const roleOptions: ComponentProps<typeof Select>["options"] = useMemo(
 		() =>
@@ -43,7 +43,7 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 				label: t(`roles.${aRole}`),
 			})),
 		[t],
-	);
+	)
 
 	const { field: emailField, fieldState: emailFieldState } = useController({
 		control: methods.control,
@@ -51,14 +51,14 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 		rules: {
 			required: true,
 		},
-	});
+	})
 	const { field: roleField, fieldState: roleFieldState } = useController({
 		control: methods.control,
 		name: "role",
 		rules: {
 			required: true,
 		},
-	});
+	})
 
 	const onSubmit = async ({ email, role }: InviteUserFormValues) => {
 		try {
@@ -67,14 +67,14 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 					role,
 					email,
 				},
-			});
-			toast.show(pageT("submit.success"));
-			await onSubmitSuccess();
+			})
+			toast.show(pageT("submit.success"))
+			await onSubmitSuccess()
 		} catch (err) {
-			sendErrorToSentry(err);
-			methods.setError("root", { message: t("genericFormError") });
+			sendErrorToSentry(err)
+			methods.setError("root", { message: t("genericFormError") })
 		}
-	};
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
@@ -103,8 +103,8 @@ const InviteUserForm = ({ onSubmitSuccess }: InviteUserFormProps) => {
 				<Submit>{pageT("submit")}</Submit>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const InviteUserModal = ({
 	disclosure,
@@ -114,10 +114,10 @@ export const InviteUserModal = ({
 		{({ close }) => (
 			<InviteUserForm
 				onSubmitSuccess={async () => {
-					await onSubmitSuccess();
-					close();
+					await onSubmitSuccess()
+					close()
 				}}
 			/>
 		)}
 	</Modal>
-);
+)

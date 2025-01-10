@@ -1,9 +1,9 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { ROUTES } from "@/routes";
-import Customer from ".";
-import { Overview } from "./Overview/Overview";
-import { Create } from "./Create/Create";
-import { Edit } from "./Edit/Edit";
+import { Routes, Route, Navigate } from "react-router-dom"
+import { ROUTES } from "@/routes"
+import Customer from "."
+import { Overview } from "./Overview/Overview"
+import { Create } from "./Create/Create"
+import { Edit } from "./Edit/Edit"
 
 const CustomerSwitch = () => (
 	<Routes>
@@ -19,6 +19,6 @@ const CustomerSwitch = () => (
 			element={<Navigate to={ROUTES.CUSTOMERS.routes.INDEX.path()} replace />}
 		/>
 	</Routes>
-);
+)
 
-export default CustomerSwitch;
+export default CustomerSwitch

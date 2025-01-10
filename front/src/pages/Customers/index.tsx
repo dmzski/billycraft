@@ -1,14 +1,14 @@
-import { Button, Loader } from "@billycraft/ui";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { useAllCustomersNotDeleted } from "@/queries/useAllCustomersNotDeleted";
-import { useI18n } from "@/i18n";
-import { Link } from "react-router-dom";
-import { ROUTES } from "@/routes";
-import { List } from "./List";
+import { Button, Loader } from "@billycraft/ui"
+import { PlusIcon } from "@heroicons/react/24/solid"
+import { useAllCustomersNotDeleted } from "@/queries/useAllCustomersNotDeleted"
+import { useI18n } from "@/i18n"
+import { Link } from "react-router-dom"
+import { ROUTES } from "@/routes"
+import { List } from "./List"
 
 const CustomerPage = () => {
-	const { t } = useI18n();
-	const { data, isLoading } = useAllCustomersNotDeleted();
+	const { t } = useI18n()
+	const { data, isLoading } = useAllCustomersNotDeleted()
 
 	return (
 		<div className="flex flex-col gap-12">
@@ -33,7 +33,7 @@ const CustomerPage = () => {
 				)}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default CustomerPage;
+export default CustomerPage

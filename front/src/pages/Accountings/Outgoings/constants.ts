@@ -1,3 +1,3 @@
-import { ROUTES } from "@/routes";
+import { ROUTES } from "@/routes"
 
-export const OUTGOING_ROUTES = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
+export const OUTGOING_ROUTES = ROUTES.ACCOUNTINGS.routes.OUTGOINGS

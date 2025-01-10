@@ -1,27 +1,27 @@
-import { useMyBillCustomizationQuery } from "@/queries/useMyBillCustomizationQuery";
-import { Loader } from "@billycraft/ui";
-import { useToast } from "@billycraft/ui";
-import { useI18n } from "@/i18n";
-import { type BillCustomizationRequest, BillCustomizationService } from "@/sdk";
-import { useController, useForm } from "react-hook-form";
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { SwitchField } from "@/components/form/SwitchField";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import { Submit } from "@/components/form/Submit";
+import { useMyBillCustomizationQuery } from "@/queries/useMyBillCustomizationQuery"
+import { Loader } from "@billycraft/ui"
+import { useToast } from "@billycraft/ui"
+import { useI18n } from "@/i18n"
+import { type BillCustomizationRequest, BillCustomizationService } from "@/sdk"
+import { useController, useForm } from "react-hook-form"
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { SwitchField } from "@/components/form/SwitchField"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { Submit } from "@/components/form/Submit"
 
 export const Bill = () => {
 	const {
 		data: billCustomization,
 		isLoading,
 		reload,
-	} = useMyBillCustomizationQuery();
-	const { t } = useI18n();
-	const toast = useToast();
+	} = useMyBillCustomizationQuery()
+	const { t } = useI18n()
+	const toast = useToast()
 	const methods = useForm({
 		mode: "onChange",
 		values: (billCustomization ?? {}) as BillCustomizationRequest,
-	});
+	})
 
 	const onSubmit = async (values: BillCustomizationRequest) => {
 		if (billCustomization) {
@@ -32,24 +32,24 @@ export const Bill = () => {
 					})
 				: await BillCustomizationService.postBillCustomization({
 						body: values,
-					});
-			toast.show(t("settings.forms.billCustomization.submit.success"));
-			await reload();
+					})
+			toast.show(t("settings.forms.billCustomization.submit.success"))
+			await reload()
 		}
-	};
+	}
 
 	const { field: colorField } = useController({
 		name: "mainColor",
 		control: methods.control,
 		rules: { required: true },
-	});
+	})
 
 	if (isLoading && !billCustomization) {
 		return (
 			<div className="flex items-center justify-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	return (
@@ -131,5 +131,5 @@ export const Bill = () => {
 				</div>
 			</div>
 		</Form>
-	);
-};
+	)
+}

@@ -1,13 +1,13 @@
-import type { CustomerResponse } from "@/sdk";
-import { useI18n } from "@/i18n";
-import { ListRow } from "./ListRow";
+import type { CustomerResponse } from "@/sdk"
+import { useI18n } from "@/i18n"
+import { ListRow } from "./ListRow"
 
 type ListProps = {
-	data?: CustomerResponse[];
-};
+	data?: CustomerResponse[]
+}
 
 export const List = ({ data = [] }: ListProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -29,5 +29,5 @@ export const List = ({ data = [] }: ListProps) => {
 				))}
 			</div>
 		</div>
-	);
-};
+	)
+}

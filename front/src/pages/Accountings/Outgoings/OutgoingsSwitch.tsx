@@ -1,22 +1,22 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { ROUTES } from "@/routes";
-import FormPage from "./FormPage";
-import Details from "./Details";
-import ListPage from "./ListPage";
-import Overview from "./Overview";
-import { useI18n } from "@/i18n";
-import type { ReactNode } from "react";
-import { Tabs } from "@billycraft/ui";
-import { RRTab } from "@/components/RRTab";
+import { Route, Routes, Navigate } from "react-router-dom"
+import { ROUTES } from "@/routes"
+import FormPage from "./FormPage"
+import Details from "./Details"
+import ListPage from "./ListPage"
+import Overview from "./Overview"
+import { useI18n } from "@/i18n"
+import type { ReactNode } from "react"
+import { Tabs } from "@billycraft/ui"
+import { RRTab } from "@/components/RRTab"
 
-const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
+const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 type OutgoingLayoutProps = {
-	children: ReactNode;
-};
+	children: ReactNode
+}
 
 const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -35,8 +35,8 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
 			</div>
 			{children}
 		</div>
-	);
-};
+	)
+}
 const OutgoingsSwitch = () => (
 	<Routes>
 		<Route
@@ -62,6 +62,6 @@ const OutgoingsSwitch = () => (
 			element={<Navigate to={routes.OVERVIEW.path()} replace />}
 		/>
 	</Routes>
-);
+)
 
-export default OutgoingsSwitch;
+export default OutgoingsSwitch

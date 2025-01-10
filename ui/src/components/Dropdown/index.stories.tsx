@@ -1,13 +1,13 @@
-import type { StoryObj } from "@storybook/react";
-import { Button } from "components/Button";
-import { Dropdown } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Button } from "components/Button"
+import { Dropdown } from "."
 
 export default {
 	title: "Components/Dropdown",
 	component: Dropdown,
-};
+}
 
-type Story = StoryObj<typeof Dropdown>;
+type Story = StoryObj<typeof Dropdown>
 
 export const Basic: Story = {
 	render: (args) => {
@@ -28,9 +28,9 @@ export const Basic: Story = {
 					</Dropdown.Content>
 				)}
 			</Dropdown>
-		);
+		)
 	},
-};
+}
 
 export const Align: Story = {
 	render: (args) => {
@@ -51,9 +51,9 @@ export const Align: Story = {
 					</Dropdown.Content>
 				)}
 			</Dropdown>
-		);
+		)
 	},
-};
+}
 
 export const CustomStyles: Story = {
 	render: (args) => {
@@ -69,6 +69,6 @@ export const CustomStyles: Story = {
 					</Dropdown.Button>
 				</Dropdown.Content>
 			</Dropdown>
-		);
+		)
 	},
-};
+}

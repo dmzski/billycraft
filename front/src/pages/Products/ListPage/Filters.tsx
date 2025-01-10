@@ -1,27 +1,27 @@
-import { useI18n } from "@/i18n";
-import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery";
-import type { ProductFilters } from "@/utils/products";
-import { Button, Collapsible, Input, Select, Switch } from "@billycraft/ui";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { useI18n } from "@/i18n"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
+import { useAllSuppliersQuery } from "@/queries/useAllSuppliersQuery"
+import type { ProductFilters } from "@/utils/products"
+import { Button, Collapsible, Input, Select, Switch } from "@billycraft/ui"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import {
 	type ChangeEvent,
 	type ComponentProps,
 	useMemo,
 	useReducer,
-} from "react";
+} from "react"
 
 type FiltersProps = {
-	filters: ProductFilters;
-	onChangeFilters: (newFilters: ProductFilters) => void;
-};
+	filters: ProductFilters
+	onChangeFilters: (newFilters: ProductFilters) => void
+}
 
 export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
-	const { scopedT, t } = useI18n();
-	const [openFilters, toggleOpenFilters] = useReducer((state) => !state, true);
-	const { data: suppliers } = useAllSuppliersQuery();
-	const { data: groups } = useAllProductGroupsQuery();
-	const pageT = scopedT("products.list.filters");
+	const { scopedT, t } = useI18n()
+	const [openFilters, toggleOpenFilters] = useReducer((state) => !state, true)
+	const { data: suppliers } = useAllSuppliersQuery()
+	const { data: groups } = useAllProductGroupsQuery()
+	const pageT = scopedT("products.list.filters")
 
 	const handleInputChange = (
 		field: keyof ProductFilters,
@@ -30,8 +30,8 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 		onChangeFilters({
 			...filters,
 			[field]: event.target.value ?? "",
-		});
-	};
+		})
+	}
 
 	const handleSelectChange = (
 		field: keyof ProductFilters,
@@ -40,8 +40,8 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 		onChangeFilters({
 			...filters,
 			[field]: newValue ?? "",
-		});
-	};
+		})
+	}
 
 	const supplierOptions: ComponentProps<typeof Select>["options"] = useMemo(
 		() => [
@@ -52,7 +52,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 			})) ?? []),
 		],
 		[suppliers, t],
-	);
+	)
 
 	const productGroupOptions = useMemo(
 		(): ComponentProps<typeof Select>["options"] => [
@@ -63,7 +63,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 			})) ?? []),
 		],
 		[groups, t],
-	);
+	)
 
 	return (
 		<Collapsible
@@ -93,7 +93,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 					placeholder={t("select")}
 					onChange={(e) => {
 						if (typeof e === "string") {
-							handleSelectChange("groupId", e);
+							handleSelectChange("groupId", e)
 						}
 					}}
 					isSearchable
@@ -106,7 +106,7 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 					placeholder={t("select")}
 					onChange={(e) => {
 						if (typeof e === "string") {
-							handleSelectChange("supplierId", e);
+							handleSelectChange("supplierId", e)
 						}
 					}}
 					isSearchable
@@ -131,5 +131,5 @@ export const Filters = ({ filters, onChangeFilters }: FiltersProps) => {
 				</div>
 			</div>
 		</Collapsible>
-	);
-};
+	)
+}

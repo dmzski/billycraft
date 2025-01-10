@@ -1,34 +1,34 @@
-import { useFormContext, useWatch } from "react-hook-form";
-import type { ProductFormValues } from "./types";
-import { Button, useToast } from "@billycraft/ui";
-import { type ComponentProps, useMemo } from "react";
-import { useI18n } from "@/i18n";
-import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
-import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price";
-import { ProductTypeSchema, type SupplierResponse } from "@/sdk";
-import { QrCodeIcon } from "@heroicons/react/24/solid";
-import { InputField } from "@/components/form/InputField";
-import { SelectField } from "@/components/form/SelectField";
-import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery";
-import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import { SwitchField } from "@/components/form/SwitchField";
+import { useFormContext, useWatch } from "react-hook-form"
+import type { ProductFormValues } from "./types"
+import { Button, useToast } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useI18n } from "@/i18n"
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel"
+import { calculatePriceETFromIT, calculatePriceTTC } from "@/utils/price"
+import { ProductTypeSchema, type SupplierResponse } from "@/sdk"
+import { QrCodeIcon } from "@heroicons/react/24/solid"
+import { InputField } from "@/components/form/InputField"
+import { SelectField } from "@/components/form/SelectField"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
+import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { SwitchField } from "@/components/form/SwitchField"
 
 type ProductFormContentProps = {
-	suppliers: SupplierResponse[];
-};
+	suppliers: SupplierResponse[]
+}
 
 export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
-	const toast = useToast();
-	const { scopedT } = useI18n();
-	const pageT = scopedT("products.components.formContent");
-	const { control, setValue } = useFormContext<ProductFormValues>();
-	const { data: productGroups } = useAllProductGroupsQuery();
+	const toast = useToast()
+	const { scopedT } = useI18n()
+	const pageT = scopedT("products.components.formContent")
+	const { control, setValue } = useFormContext<ProductFormValues>()
+	const { data: productGroups } = useAllProductGroupsQuery()
 
 	const [supplierId, selectedType, description] = useWatch({
 		control,
 		name: ["supplierId", "type", "description"],
-	});
+	})
 
 	const typeOptions: ComponentProps<typeof SelectField>["options"] = useMemo(
 		() =>
@@ -37,7 +37,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 				label: <ProductTypeLabel type={type} />,
 			})),
 		[],
-	);
+	)
 
 	const supplierOptions: ComponentProps<typeof SelectField>["options"] =
 		useMemo(
@@ -47,7 +47,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 					label: name,
 				})) ?? [],
 			[suppliers],
-		);
+		)
 
 	const productGroupOptions = useMemo(
 		(): ComponentProps<typeof SelectField>["options"] =>
@@ -56,11 +56,11 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 				label: name,
 			})) ?? [],
 		[productGroups],
-	);
+	)
 
 	const selectedSupplier = supplierId
 		? suppliers.find(({ id }) => id === supplierId)
-		: undefined;
+		: undefined
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -104,7 +104,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 								variant="link"
 								size="sm"
 								onClick={() => {
-									setValue("description", null);
+									setValue("description", null)
 								}}
 							>
 								{pageT("fields.description.remove")}
@@ -117,7 +117,7 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							variant="link"
 							size="sm"
 							onClick={() => {
-								setValue("description", "");
+								setValue("description", "")
 							}}
 						>
 							{pageT("fields.description.add")}
@@ -173,9 +173,9 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 								if (result[0]) {
 									setValue("code", result[0].rawValue, {
 										shouldValidate: true,
-									});
+									})
 								} else {
-									toast.destructive(pageT("fields.code.errors.scan"));
+									toast.destructive(pageT("fields.code.errors.scan"))
 								}
 							}}
 						/>
@@ -197,14 +197,14 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							control={control}
 							name="price"
 							onBlur={(event) => {
-								const newPrice = Number(event.target.value) || 0;
+								const newPrice = Number(event.target.value) || 0
 								setValue(
 									"itPrice",
 									calculatePriceTTC(newPrice, selectedSupplier?.vat ?? 0),
 									{
 										shouldValidate: true,
 									},
-								);
+								)
 							}}
 							asNumber
 							label={pageT("fields.price.label")}
@@ -220,12 +220,12 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 							name="itPrice"
 							asNumber
 							onBlur={(event) => {
-								const newPrice = Number(event.target.value) || 0;
+								const newPrice = Number(event.target.value) || 0
 								const newEtPrice = calculatePriceETFromIT(
 									newPrice,
 									selectedSupplier?.vat ?? 0,
-								);
-								setValue("price", newEtPrice, { shouldValidate: true });
+								)
+								setValue("price", newEtPrice, { shouldValidate: true })
 							}}
 							label={pageT("fields.itPrice.label")}
 							placeholder="0"
@@ -239,5 +239,5 @@ export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}

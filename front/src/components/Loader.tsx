@@ -1,5 +1,5 @@
-import { Loader as CocoLoader } from "@billycraft/ui";
+import { Loader as CocoLoader } from "@billycraft/ui"
 
-const Loader = () => <CocoLoader />;
+const Loader = () => <CocoLoader />
 
-export default Loader;
+export default Loader

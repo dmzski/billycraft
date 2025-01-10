@@ -1,19 +1,19 @@
-import { forwardRef, useMemo } from "react";
-import { Select, type SelectOptionType } from "../Select";
+import { forwardRef, useMemo } from "react"
+import { Select, type SelectOptionType } from "../Select"
 
 export type TimePickerProps = {
-	value?: string;
-	className?: string;
-	disabled?: boolean;
-	id?: string;
-	error?: boolean;
-	step?: number;
-	onChange?: (value: string) => void;
-	label?: string;
-	variant?: "inside" | "outside";
-	locales?: string;
-	required?: boolean;
-};
+	value?: string
+	className?: string
+	disabled?: boolean
+	id?: string
+	error?: boolean
+	step?: number
+	onChange?: (value: string) => void
+	label?: string
+	variant?: "inside" | "outside"
+	locales?: string
+	required?: boolean
+}
 
 export const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 	(
@@ -32,41 +32,41 @@ export const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 		ref,
 	) => {
 		const options = useMemo(() => {
-			const array: SelectOptionType[] = [];
-			const base = new Date();
-			base.setHours(0);
-			base.setMinutes(0);
-			const end = new Date();
-			end.setHours(23);
-			end.setMinutes(59);
+			const array: SelectOptionType[] = []
+			const base = new Date()
+			base.setHours(0)
+			base.setMinutes(0)
+			const end = new Date()
+			end.setHours(23)
+			end.setMinutes(59)
 			while (base < end) {
-				let str = "";
+				let str = ""
 				try {
 					str = `${new Intl.DateTimeFormat(locales, {
 						hour: "2-digit",
 						minute: "2-digit",
-					}).format(base)}`;
+					}).format(base)}`
 				} catch {
 					str = `${new Intl.DateTimeFormat(undefined, {
 						hour: "2-digit",
 						minute: "2-digit",
-					}).format(base)}`;
+					}).format(base)}`
 				}
 				array.push({
 					label: str,
 					value: str,
-				});
-				base.setMinutes(base.getMinutes() + step);
+				})
+				base.setMinutes(base.getMinutes() + step)
 			}
 
-			return array;
-		}, [step, locales]);
+			return array
+		}, [step, locales])
 		return (
 			<Select
 				options={options}
 				value={value}
 				onChange={(value) => {
-					onChange?.(value as string);
+					onChange?.(value as string)
 				}}
 				disabled={disabled}
 				id={id}
@@ -76,8 +76,8 @@ export const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 				ref={ref}
 				required={required}
 			/>
-		);
+		)
 	},
-);
+)
 
-TimePicker.displayName = "TimePicker";
+TimePicker.displayName = "TimePicker"

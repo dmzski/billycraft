@@ -1,21 +1,21 @@
-import { useFormatDate } from "@/hooks/useFormatDate";
-import { useI18n } from "@/i18n";
-import type { InvitationResponse } from "@/sdk";
-import { Button } from "@billycraft/ui";
-import { TrashIcon } from "@heroicons/react/24/solid";
-import { DeleteInvitationModal } from "./modals/DeleteInvitationModal";
+import { useFormatDate } from "@/hooks/useFormatDate"
+import { useI18n } from "@/i18n"
+import type { InvitationResponse } from "@/sdk"
+import { Button } from "@billycraft/ui"
+import { TrashIcon } from "@heroicons/react/24/solid"
+import { DeleteInvitationModal } from "./modals/DeleteInvitationModal"
 
 type InvitationsListProps = {
-	invitations?: InvitationResponse[];
-	reload: () => Promise<void>;
-};
+	invitations?: InvitationResponse[]
+	reload: () => Promise<void>
+}
 export const InvitationsList = ({
 	invitations,
 	reload,
 }: InvitationsListProps) => {
-	const { scopedT, t } = useI18n();
-	const { toISO9075 } = useFormatDate();
-	const pageT = scopedT("settings.users.invitations.list");
+	const { scopedT, t } = useI18n()
+	const { toISO9075 } = useFormatDate()
+	const pageT = scopedT("settings.users.invitations.list")
 
 	return (
 		<table className="flex flex-col gap-2">
@@ -67,5 +67,5 @@ export const InvitationsList = ({
 				</tbody>
 			)}
 		</table>
-	);
-};
+	)
+}

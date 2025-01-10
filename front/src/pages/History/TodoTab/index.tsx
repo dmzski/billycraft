@@ -1,11 +1,11 @@
-import Loader from "@/components/Loader";
-import TodoList from "./List";
-import { useAllTodosFinishedQuery } from "@/queries/useAllTodosFinishedQuery";
-import { useI18n } from "@/i18n";
+import Loader from "@/components/Loader"
+import TodoList from "./List"
+import { useAllTodosFinishedQuery } from "@/queries/useAllTodosFinishedQuery"
+import { useI18n } from "@/i18n"
 
 const TodoTab = () => {
-	const { t } = useI18n();
-	const { data, isLoading } = useAllTodosFinishedQuery();
+	const { t } = useI18n()
+	const { data, isLoading } = useAllTodosFinishedQuery()
 
 	return (
 		<>
@@ -17,7 +17,7 @@ const TodoTab = () => {
 				</div>
 			) : null}
 		</>
-	);
-};
+	)
+}
 
-export default TodoTab;
+export default TodoTab

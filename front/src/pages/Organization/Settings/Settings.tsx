@@ -1,28 +1,28 @@
-import { Alert, Loader } from "@billycraft/ui";
-import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery";
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { SwitchField } from "@/components/form/SwitchField";
-import { TextAreaField } from "@/components/form/TextAreaField";
-import useLoadingState from "@/hooks/useLoadingState";
-import { useI18n } from "@/i18n";
-import { OrganizationService, type OrganizationRequest } from "@/sdk";
-import { Button, useToast } from "@billycraft/ui";
-import { type ChangeEvent, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { Alert, Loader } from "@billycraft/ui"
+import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery"
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { SwitchField } from "@/components/form/SwitchField"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import useLoadingState from "@/hooks/useLoadingState"
+import { useI18n } from "@/i18n"
+import { OrganizationService, type OrganizationRequest } from "@/sdk"
+import { Button, useToast } from "@billycraft/ui"
+import { type ChangeEvent, useRef } from "react"
+import { useForm } from "react-hook-form"
 
 export const Settings = () => {
-	const { data: company, reload, isLoading } = useMyOrganizationQuery();
-	const { t } = useI18n();
-	const toast = useToast();
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const uploadLogoState = useLoadingState();
+	const { data: company, reload, isLoading } = useMyOrganizationQuery()
+	const { t } = useI18n()
+	const toast = useToast()
+	const fileInputRef = useRef<HTMLInputElement>(null)
+	const uploadLogoState = useLoadingState()
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: company as OrganizationRequest,
-	});
-	const { setValue } = methods;
+	})
+	const { setValue } = methods
 
 	const onSubmit = async (values: OrganizationRequest) => {
 		try {
@@ -32,58 +32,56 @@ export const Settings = () => {
 				servicesTax: Number(values.servicesTax) || 0,
 				othersTax: Number(values.othersTax) || 0,
 				vatPercent: Number(values.vatPercent) || 0,
-			};
+			}
 			const res = company?.id
 				? await OrganizationService.patchOrganizationMine({ body: data }).then(
 						({ data }) => data,
 					)
 				: await OrganizationService.postOrganization({ body: data }).then(
 						({ data }) => data,
-					);
+					)
 			if (!res) {
-				toast.destructive(t("genericFormError"));
-				await reload();
+				toast.destructive(t("genericFormError"))
+				await reload()
 			} else {
-				await reload();
-				toast.show(t("settings.forms.myCompagnyForm.submit.success"));
+				await reload()
+				toast.show(t("settings.forms.myCompagnyForm.submit.success"))
 			}
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const selectFileToUpload = () => {
 		if (fileInputRef.current) {
-			fileInputRef.current.click();
+			fileInputRef.current.click()
 		}
-	};
+	}
 
 	const uploadLogo = async (e: ChangeEvent<HTMLInputElement>) => {
-		e.preventDefault();
+		e.preventDefault()
 		try {
 			if (!uploadLogoState.isLoading && e.target?.files?.[0]) {
-				uploadLogoState.update("loading");
+				uploadLogoState.update("loading")
 				const url = await OrganizationService.postOrganizationUploadLogo({
 					body: e.target.files[0],
-				}).then(({ data }) => data);
-				setValue("logo", url);
-				uploadLogoState.update("idle");
-				toast.show(
-					"Logo téléchargé avec succes. Enregistrer les modifications",
-				);
+				}).then(({ data }) => data)
+				setValue("logo", url)
+				uploadLogoState.update("idle")
+				toast.show("Logo téléchargé avec succes. Enregistrer les modifications")
 			}
 		} catch {
-			toast.destructive("Erreur lors de l'upload de l'image");
-			uploadLogoState.update("idle");
+			toast.destructive("Erreur lors de l'upload de l'image")
+			uploadLogoState.update("idle")
 		}
-	};
+	}
 
 	if (!company && isLoading) {
-		return <Loader />;
+		return <Loader />
 	}
 
 	if (!company) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -258,5 +256,5 @@ export const Settings = () => {
 				</div>
 			</div>
 		</Form>
-	);
-};
+	)
+}

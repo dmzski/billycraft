@@ -1,9 +1,9 @@
-import { useI18n } from "@/i18n";
-import type { CustomerResponse } from "@/sdk";
-import { Badge } from "@billycraft/ui";
-import { IdentificationIcon } from "@heroicons/react/24/solid";
-import { type VariantProps, cva } from "class-variance-authority";
-import { RRLink } from "../RRLink";
+import { useI18n } from "@/i18n"
+import type { CustomerResponse } from "@/sdk"
+import { Badge } from "@billycraft/ui"
+import { IdentificationIcon } from "@heroicons/react/24/solid"
+import { type VariantProps, cva } from "class-variance-authority"
+import { RRLink } from "../RRLink"
 
 const labelVariants = cva(
 	"inline-flex items-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg overflow-hidden",
@@ -18,19 +18,19 @@ const labelVariants = cva(
 			size: "md",
 		},
 	},
-);
+)
 
 type CustomerLabelProps = {
-	customer: CustomerResponse;
-	to?: string;
-} & VariantProps<typeof labelVariants>;
+	customer: CustomerResponse
+	to?: string
+} & VariantProps<typeof labelVariants>
 
 export const CustomerLabel = ({
 	customer,
 	to,
 	size = "md",
 }: CustomerLabelProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	if (to) {
 		return (
@@ -43,7 +43,7 @@ export const CustomerLabel = ({
 					<Badge variant="destructive">{t("deleted")}</Badge>
 				) : null}
 			</p>
-		);
+		)
 	}
 
 	return (
@@ -54,5 +54,5 @@ export const CustomerLabel = ({
 				<Badge variant="destructive">{t("deleted")}</Badge>
 			) : null}
 		</p>
-	);
-};
+	)
+}

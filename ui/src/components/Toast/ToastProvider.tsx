@@ -8,82 +8,82 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
-import Toast from "./Toast";
+} from "react"
+import Toast from "./Toast"
 
 type ToastOptions = {
-	variant: ComponentProps<typeof Toast>["variant"];
-	callback?: () => void;
-	duration?: number;
-};
+	variant: ComponentProps<typeof Toast>["variant"]
+	callback?: () => void
+	duration?: number
+}
 type ToastInfo = {
-	render: ReactNode;
-	id: number;
-	closed: boolean;
-} & ToastOptions;
+	render: ReactNode
+	id: number
+	closed: boolean
+} & ToastOptions
 
 export type ToastProviderProps = {
-	children: ReactNode;
-	duration?: number;
-	maxConcurrent?: number;
-};
+	children: ReactNode
+	duration?: number
+	maxConcurrent?: number
+}
 
 type ToastContextType = {
-	show: (render: ReactNode, info?: ToastOptions) => void;
-	destructive: (render: ReactNode, info?: ToastOptions) => void;
-};
-const ToastContext = createContext<ToastContextType>({} as ToastContextType);
+	show: (render: ReactNode, info?: ToastOptions) => void
+	destructive: (render: ReactNode, info?: ToastOptions) => void
+}
+const ToastContext = createContext<ToastContextType>({} as ToastContextType)
 
 export const ToastProvider = ({
 	children,
 	duration = 3000,
 	maxConcurrent = 5,
 }: ToastProviderProps) => {
-	const counterRef = useRef(0);
-	const [toasts, setToasts] = useState<ToastInfo[]>([]);
+	const counterRef = useRef(0)
+	const [toasts, setToasts] = useState<ToastInfo[]>([])
 
 	const show = useCallback(
 		(render: ReactNode, info: ToastOptions = { variant: "default" }) => {
-			const newToast = {} as ToastInfo;
-			newToast.id = counterRef.current;
-			counterRef.current += 1;
-			newToast.callback = info.callback;
-			newToast.render = render;
-			newToast.closed = false;
-			newToast.variant = info.variant;
-			newToast.duration = info.duration ?? duration;
-			setToasts((current) => [...current, newToast]);
+			const newToast = {} as ToastInfo
+			newToast.id = counterRef.current
+			counterRef.current += 1
+			newToast.callback = info.callback
+			newToast.render = render
+			newToast.closed = false
+			newToast.variant = info.variant
+			newToast.duration = info.duration ?? duration
+			setToasts((current) => [...current, newToast])
 		},
 		[duration],
-	);
+	)
 
 	const destructive = useCallback(
 		(render: ReactNode, info?: ToastOptions) => {
-			show(render, { ...info, variant: "destructive" });
+			show(render, { ...info, variant: "destructive" })
 		},
 		[show],
-	);
+	)
 
 	const onCloseToast = useCallback(
 		(toastId: number) => {
-			const index = toasts.findIndex(({ id }) => id === toastId);
+			const index = toasts.findIndex(({ id }) => id === toastId)
 			if (index > -1) {
-				toasts[index]?.callback?.();
-				const tmp = [...toasts];
-				tmp[index].closed = true;
-				setToasts(tmp);
+				toasts[index]?.callback?.()
+				const tmp = [...toasts]
+				tmp[index].closed = true
+				setToasts(tmp)
 			}
 		},
 		[toasts],
-	);
+	)
 
 	useEffect(() => {
 		if (toasts.length && toasts.every(({ closed }) => closed)) {
-			setToasts([]);
+			setToasts([])
 		}
-	}, [toasts]);
+	}, [toasts])
 
-	const value = useMemo(() => ({ show, destructive }), [show, destructive]);
+	const value = useMemo(() => ({ show, destructive }), [show, destructive])
 
 	return (
 		<ToastContext.Provider value={value}>
@@ -107,15 +107,15 @@ export const ToastProvider = ({
 				</div>
 			) : null}
 		</ToastContext.Provider>
-	);
-};
+	)
+}
 
 export const useToast = () => {
-	const context = useContext(ToastContext);
+	const context = useContext(ToastContext)
 
 	if (!context) {
-		throw new Error("useToast must be used inside ToastProvider");
+		throw new Error("useToast must be used inside ToastProvider")
 	}
 
-	return context;
-};
+	return context
+}

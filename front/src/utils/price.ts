@@ -1,7 +1,7 @@
-import type { BillResponse, ProductType, QuoteResponse } from "@/sdk";
+import type { BillResponse, ProductType, QuoteResponse } from "@/sdk"
 
 export function roundTwoDecimals(aPrice: number): number {
-	return Math.round(aPrice * 100) / 100;
+	return Math.round(aPrice * 100) / 100
 }
 
 export function calculatePriceTTC(
@@ -9,18 +9,18 @@ export function calculatePriceTTC(
 	tva = 0,
 ): number {
 	if (!price) {
-		return 0;
+		return 0
 	}
-	const typedPrice = Number.parseFloat(`${price}`);
-	const computedVat = tva / 100;
-	return roundTwoDecimals(typedPrice * (1 + computedVat));
+	const typedPrice = Number.parseFloat(`${price}`)
+	const computedVat = tva / 100
+	return roundTwoDecimals(typedPrice * (1 + computedVat))
 }
 
 export function calculatePriceET(price?: number | string | null): number {
 	if (!price) {
-		return 0;
+		return 0
 	}
-	return roundTwoDecimals(Number(price));
+	return roundTwoDecimals(Number(price))
 }
 
 export function calculatePriceETFromIT(
@@ -28,12 +28,12 @@ export function calculatePriceETFromIT(
 	tva = 0,
 ): number {
 	if (!price) {
-		return 0;
+		return 0
 	}
-	const typedPrice = Number.parseFloat(`${price}`);
-	const computedVat = tva / 100;
+	const typedPrice = Number.parseFloat(`${price}`)
+	const computedVat = tva / 100
 
-	return roundTwoDecimals(typedPrice / (1 + computedVat));
+	return roundTwoDecimals(typedPrice / (1 + computedVat))
 }
 
 export function getBillOrQuoteTotal(
@@ -45,15 +45,15 @@ export function getBillOrQuoteTotal(
 			roundTwoDecimals(
 				calculatePriceTTC(line.price, billOrQuote.tva) * (line.quantity ?? 0),
 			),
-		);
+		)
 
 	if (array && array.length > 0) {
 		return array.reduce(
 			(previousValue: number, currentValue: number) =>
 				previousValue + currentValue,
-		);
+		)
 	}
-	return 0;
+	return 0
 }
 
 export function getBillOrQuoteTotalEt(
@@ -63,15 +63,15 @@ export function getBillOrQuoteTotalEt(
 		.filter((line) => line.price && line.quantity)
 		.map((line) =>
 			roundTwoDecimals(calculatePriceET(line.price) * (line.quantity ?? 0)),
-		);
+		)
 
 	if (array && array.length > 0) {
 		return array.reduce(
 			(previousValue: number, currentValue: number) =>
 				previousValue + currentValue,
-		);
+		)
 	}
-	return 0;
+	return 0
 }
 
 export function getBillOrQuoteTotalETForLineType(
@@ -84,15 +84,15 @@ export function getBillOrQuoteTotalETForLineType(
 			roundTwoDecimals(
 				calculatePriceET(line.price) * (line.quantity ? line.quantity : 0),
 			),
-		);
+		)
 
 	if (array && array.length > 0) {
 		return array.reduce(
 			(previousValue, currentValue) => previousValue + currentValue,
 			0,
-		);
+		)
 	}
-	return 0;
+	return 0
 }
 
 export function getBillOrQuoteTotalForLineType(
@@ -106,13 +106,13 @@ export function getBillOrQuoteTotalForLineType(
 				calculatePriceTTC(line.price, billOrQuote.tva) *
 					(line.quantity ? line.quantity : 0),
 			),
-		);
+		)
 
 	if (array && array.length > 0) {
 		return array.reduce(
 			(previousValue, currentValue) => previousValue + currentValue,
 			0,
-		);
+		)
 	}
-	return 0;
+	return 0
 }

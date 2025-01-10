@@ -1,15 +1,15 @@
-import { Button, Loader } from "@billycraft/ui";
-import { ROUTES } from "@/routes";
-import { Link } from "react-router-dom";
-import OutgoingList from "../List";
-import { useI18n } from "@/i18n";
-import { useAllOutgoingsQuery } from "@/queries/useAllOutgoingsQuery";
+import { Button, Loader } from "@billycraft/ui"
+import { ROUTES } from "@/routes"
+import { Link } from "react-router-dom"
+import OutgoingList from "../List"
+import { useI18n } from "@/i18n"
+import { useAllOutgoingsQuery } from "@/queries/useAllOutgoingsQuery"
 
-const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
+const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS
 
 const ListPage = () => {
-	const { t } = useI18n();
-	const { data, isLoading } = useAllOutgoingsQuery();
+	const { t } = useI18n()
+	const { data, isLoading } = useAllOutgoingsQuery()
 
 	return (
 		<div>
@@ -30,7 +30,7 @@ const ListPage = () => {
 			) : null}
 			{data ? <OutgoingList data={data} /> : null}
 		</div>
-	);
-};
+	)
+}
 
-export default ListPage;
+export default ListPage

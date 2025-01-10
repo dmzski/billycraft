@@ -1,42 +1,42 @@
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { useI18n } from "@/i18n";
-import { useOrganization } from "@/providers/OrganizationProvider";
-import { OrganizationService } from "@/sdk";
-import { Alert, Button, Modal, useToast } from "@billycraft/ui";
-import { BellAlertIcon } from "@heroicons/react/24/solid";
-import type { ComponentProps } from "react";
-import { useForm } from "react-hook-form";
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { useI18n } from "@/i18n"
+import { useOrganization } from "@/providers/OrganizationProvider"
+import { OrganizationService } from "@/sdk"
+import { Alert, Button, Modal, useToast } from "@billycraft/ui"
+import { BellAlertIcon } from "@heroicons/react/24/solid"
+import type { ComponentProps } from "react"
+import { useForm } from "react-hook-form"
 
 type LeaveOrganizationModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onSubmitSuccess: () => Promise<void>;
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onSubmitSuccess: () => Promise<void>
+}
 
 type LeaveOrganizationFormProps = Omit<
 	LeaveOrganizationModalProps,
 	"disclosure"
 > & {
-	onClose: () => void;
-};
+	onClose: () => void
+}
 
 const LeaveOrganizationForm = ({
 	onClose,
 	onSubmitSuccess,
 }: LeaveOrganizationFormProps) => {
-	const { t, scopedT } = useI18n();
-	const { organization } = useOrganization();
-	const pageT = scopedT("account.modals.leaveOrganization");
+	const { t, scopedT } = useI18n()
+	const { organization } = useOrganization()
+	const pageT = scopedT("account.modals.leaveOrganization")
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: {
 			confirm: "",
 		},
-	});
-	const toast = useToast();
-	const confirmationString = t("forms.confirmation.leave.pattern");
+	})
+	const toast = useToast()
+	const confirmationString = t("forms.confirmation.leave.pattern")
 
 	if (!organization) {
 		return (
@@ -44,17 +44,17 @@ const LeaveOrganizationForm = ({
 				<BellAlertIcon />
 				<p>{t("dataloaderError")}</p>
 			</Alert>
-		);
+		)
 	}
 
 	const onSubmit = async () => {
 		await OrganizationService.postOrganizationByIdLeave({
 			path: { id: organization.id },
-		});
-		toast.show(pageT("submit.success"));
-		onClose();
-		await onSubmitSuccess();
-	};
+		})
+		toast.show(pageT("submit.success"))
+		onClose()
+		await onSubmitSuccess()
+	}
 
 	return (
 		<Form methods={methods} onSubmit={onSubmit}>
@@ -85,8 +85,8 @@ const LeaveOrganizationForm = ({
 				</div>
 			</div>
 		</Form>
-	);
-};
+	)
+}
 
 export const LeaveOrganizationModal = ({
 	disclosure,
@@ -100,4 +100,4 @@ export const LeaveOrganizationModal = ({
 			/>
 		)}
 	</Modal>
-);
+)

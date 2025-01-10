@@ -1,101 +1,105 @@
-import { useI18n } from "@/i18n";
-import { useBillByIdQuery } from "@/queries/useBillByIdQuery";
+import { useI18n } from "@/i18n"
+import { useBillByIdQuery } from "@/queries/useBillByIdQuery"
 import {
 	type BillRouteProps,
 	type BillOverviewRouteQueryParams,
 	ROUTES,
-} from "@/routes";
-import { Alert, Button, Loader, useToast } from "@billycraft/ui";
+} from "@/routes"
+import { Alert, Button, Loader, useToast } from "@billycraft/ui"
 import {
 	ChevronLeftIcon,
 	DocumentArrowDownIcon,
 	PencilIcon,
-} from "@heroicons/react/24/solid";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Actions } from "./Actions";
-import { useReducer } from "react";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { RRLink } from "@/components/RRLink";
-import { BillLabel } from "@/components/labels/BillLabel";
-import { InformationSection } from "./InformationSection";
-import { ContentSection } from "./ContentSection";
-import { sendErrorToSentry } from "@/utils/errors";
-import { BillsService, PdfsService } from "@/sdk";
+} from "@heroicons/react/24/solid"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { Actions } from "./Actions"
+import { useReducer } from "react"
+import { useQueryParams } from "@/hooks/useQueryParams"
+import { RRLink } from "@/components/RRLink"
+import { BillLabel } from "@/components/labels/BillLabel"
+import { InformationSection } from "./InformationSection"
+import { ContentSection } from "./ContentSection"
+import { sendErrorToSentry } from "@/utils/errors"
+import { BillsService, PdfsService } from "@/sdk"
 
 export const Overview = () => {
-	const { t, scopedT } = useI18n();
-	const toast = useToast();
-	const { id } = useParams<BillRouteProps>();
-	const navigate = useNavigate();
-	const { fromTab } = useQueryParams<BillOverviewRouteQueryParams>();
-	const { data: bill, isLoading, reload } = useBillByIdQuery(id ?? '', {enabled: !!id});
+	const { t, scopedT } = useI18n()
+	const toast = useToast()
+	const { id } = useParams<BillRouteProps>()
+	const navigate = useNavigate()
+	const { fromTab } = useQueryParams<BillOverviewRouteQueryParams>()
+	const {
+		data: bill,
+		isLoading,
+		reload,
+	} = useBillByIdQuery(id ?? "", { enabled: !!id })
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
 		(state) => !state,
 		false,
-	);
+	)
 	const [isDuplicating, toggleIsDuplicating] = useReducer(
 		(state) => !state,
 		false,
-	);
+	)
 
-	const pageT = scopedT("bills.details");
+	const pageT = scopedT("bills.details")
 
 	const downloadPdf = async () => {
 		try {
 			if (bill?.id && !isDownloadingPDF) {
-				toggleIsDownloadingPDF();
+				toggleIsDownloadingPDF()
 				const blob = await PdfsService.getPdfsBillById({
 					path: { id: bill.id },
-				}).then(({ data }) => data);
+				}).then(({ data }) => data)
 				if (!blob) {
-					throw new Error("Invalid Bill PDF");
+					throw new Error("Invalid Bill PDF")
 				}
-				const link = document.createElement("a");
-				link.download = bill.name;
-				link.href = URL.createObjectURL(blob);
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-				toggleIsDownloadingPDF();
+				const link = document.createElement("a")
+				link.download = bill.name
+				link.href = URL.createObjectURL(blob)
+				document.body.appendChild(link)
+				link.click()
+				document.body.removeChild(link)
+				toggleIsDownloadingPDF()
 			}
 		} catch {
-			toast.destructive(t("bills.form.pdfError"));
-			toggleIsDownloadingPDF();
+			toast.destructive(t("bills.form.pdfError"))
+			toggleIsDownloadingPDF()
 		}
-	};
+	}
 
 	const duplicate = async () => {
 		if (bill?.id && !isDuplicating) {
-			toggleIsDuplicating();
+			toggleIsDuplicating()
 			try {
 				const newBill = await BillsService.postBillsByIdDuplicate({
 					path: { id: bill.id },
-				}).then(({ data }) => data);
-				toast.show(t("bills.form.duplicateSuccess"));
+				}).then(({ data }) => data)
+				toast.show(t("bills.form.duplicateSuccess"))
 				navigate(
 					newBill?.id
 						? ROUTES.BILLS.routes.OVERVIEW.path({ id: newBill.id })
 						: ROUTES.BILLS.routes.INDEX.path(),
-				);
+				)
 			} catch (error) {
-				sendErrorToSentry(error);
-				toast.destructive(t("bills.form.duplicateError"));
+				sendErrorToSentry(error)
+				toast.destructive(t("bills.form.duplicateError"))
 			} finally {
-				toggleIsDuplicating();
+				toggleIsDuplicating()
 			}
 		}
-	};
+	}
 
 	if (!bill && isLoading) {
 		return (
 			<div className="flex items-center jusitfy-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!bill) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -144,5 +148,5 @@ export const Overview = () => {
 			<ContentSection bill={bill} />
 			<Actions bill={bill} reloadBill={reload} />
 		</div>
-	);
-};
+	)
+}

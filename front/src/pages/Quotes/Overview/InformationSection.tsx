@@ -1,27 +1,27 @@
-import { RRLink } from "@/components/RRLink";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
-import { ROUTES } from "@/routes";
-import type { QuoteResponse } from "@/sdk";
+import { RRLink } from "@/components/RRLink"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import { useCustomerQuery } from "@/queries/useCustomerQuery"
+import { ROUTES } from "@/routes"
+import type { QuoteResponse } from "@/sdk"
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
 	getBillOrQuoteTotalEt,
 	getBillOrQuoteTotalForLineType,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type InformationSectionProps = {
-	quote: QuoteResponse;
-};
+	quote: QuoteResponse
+}
 
 export const InformationSection = ({ quote }: InformationSectionProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("quotes.details");
-	const formatCurrency = useFormatCurrency();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("quotes.details")
+	const formatCurrency = useFormatCurrency()
 	const { data: customer } = useCustomerQuery(quote?.customerId ?? "", {
 		enabled: !!quote?.customerId,
-	});
+	})
 	return (
 		<section>
 			<h2 className="font-semibold text-xl">
@@ -125,5 +125,5 @@ export const InformationSection = ({ quote }: InformationSectionProps) => {
 				</div>
 			</div>
 		</section>
-	);
-};
+	)
+}

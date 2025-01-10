@@ -1,7 +1,7 @@
-import { CreditCardIcon } from "@heroicons/react/24/solid";
-import { RRLink } from "../RRLink";
-import { type VariantProps, cva } from "class-variance-authority";
-import type { BillResponse } from "@/sdk";
+import { CreditCardIcon } from "@heroicons/react/24/solid"
+import { RRLink } from "../RRLink"
+import { type VariantProps, cva } from "class-variance-authority"
+import type { BillResponse } from "@/sdk"
 
 const labelVariants = cva(
 	"inline-flex items-center justify-center whitespace-nowrap font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-accent-foreground [&_svg]:bg-accent [&_svg]:rounded-lg",
@@ -16,12 +16,12 @@ const labelVariants = cva(
 			size: "md",
 		},
 	},
-);
+)
 
 type BillLabelProps = {
-	bill: BillResponse;
-	to?: string;
-} & VariantProps<typeof labelVariants>;
+	bill: BillResponse
+	to?: string
+} & VariantProps<typeof labelVariants>
 
 export const BillLabel = ({ bill, to, size = "md" }: BillLabelProps) => {
 	if (to) {
@@ -30,7 +30,7 @@ export const BillLabel = ({ bill, to, size = "md" }: BillLabelProps) => {
 				<CreditCardIcon />
 				<RRLink to={to}>{bill.name}</RRLink>
 			</p>
-		);
+		)
 	}
 
 	return (
@@ -38,5 +38,5 @@ export const BillLabel = ({ bill, to, size = "md" }: BillLabelProps) => {
 			<CreditCardIcon />
 			<span>{bill.name}</span>
 		</p>
-	);
-};
+	)
+}

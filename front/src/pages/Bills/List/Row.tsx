@@ -4,29 +4,29 @@ import {
 	Collapsible,
 	Dropdown,
 	useToast,
-} from "@billycraft/ui";
-import { formatISO9075, parseJSON } from "date-fns";
-import { useMemo, type MouseEvent, useReducer } from "react";
-import { type BillOverviewRouteQueryParams, ROUTES } from "@/routes";
-import { useI18n } from "@/i18n";
-import { BillLabel } from "@/components/labels/BillLabel";
-import { RowContent } from "./RowContent";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { useAllBillsQuery } from "@/queries/useAllBillsQuery";
+} from "@billycraft/ui"
+import { formatISO9075, parseJSON } from "date-fns"
+import { useMemo, type MouseEvent, useReducer } from "react"
+import { type BillOverviewRouteQueryParams, ROUTES } from "@/routes"
+import { useI18n } from "@/i18n"
+import { BillLabel } from "@/components/labels/BillLabel"
+import { RowContent } from "./RowContent"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
+import { useAllBillsQuery } from "@/queries/useAllBillsQuery"
 import {
 	BillsService,
 	type BillResponse,
 	type BillStatus,
 	type CustomerResponse,
-} from "@/sdk";
+} from "@/sdk"
 
 type BillTableLineProps = {
-	bill: BillResponse;
-	customer?: CustomerResponse;
-	selectedStatus: BillOverviewRouteQueryParams["fromTab"];
-	checked: boolean;
-	onCheckedChange: (newState: boolean) => void;
-};
+	bill: BillResponse
+	customer?: CustomerResponse
+	selectedStatus: BillOverviewRouteQueryParams["fromTab"]
+	checked: boolean
+	onCheckedChange: (newState: boolean) => void
+}
 const BillTableLine = ({
 	bill,
 	customer,
@@ -34,13 +34,13 @@ const BillTableLine = ({
 	checked,
 	onCheckedChange,
 }: BillTableLineProps) => {
-	const [open, toggleOpen] = useReducer((state) => !state, false);
-	const { reload } = useAllBillsQuery({ enabled: false });
-	const toast = useToast();
-	const { t } = useI18n();
+	const [open, toggleOpen] = useReducer((state) => !state, false)
+	const { reload } = useAllBillsQuery({ enabled: false })
+	const toast = useToast()
+	const { t } = useI18n()
 
 	const updateBillStatus = (status: BillStatus) => (e: MouseEvent) => {
-		e.stopPropagation();
+		e.stopPropagation()
 		const updateStatus = async () => {
 			try {
 				if (bill.id)
@@ -52,29 +52,29 @@ const BillTableLine = ({
 							title: bill.title,
 							customerId: bill.customerId,
 						},
-					});
-				toast.show(t("bills.list.statusUpdated"));
-				reload();
+					})
+				toast.show(t("bills.list.statusUpdated"))
+				reload()
 			} catch {
-				toast.destructive(t("genericFormError"));
+				toast.destructive(t("genericFormError"))
 			}
-		};
-		updateStatus();
-	};
+		}
+		updateStatus()
+	}
 
 	const nextStatuses: BillStatus[] = useMemo(() => {
 		switch (bill.status) {
 			case "SENT":
-				return ["REFUSED", "PAID"];
+				return ["REFUSED", "PAID"]
 			case "PAID":
-				return ["ARCHIVED"];
+				return ["ARCHIVED"]
 			case "ARCHIVED":
 			case "REFUSED":
-				return [];
+				return []
 			default:
-				return ["SENT"];
+				return ["SENT"]
 		}
-	}, [bill.status]);
+	}, [bill.status])
 
 	return (
 		<div className="border rounded-md">
@@ -130,7 +130,7 @@ const BillTableLine = ({
 				<RowContent bill={bill} customer={customer} />
 			</Collapsible>
 		</div>
-	);
-};
+	)
+}
 
-export default BillTableLine;
+export default BillTableLine

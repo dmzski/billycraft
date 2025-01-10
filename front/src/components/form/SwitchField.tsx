@@ -1,17 +1,17 @@
-import { Switch } from "@billycraft/ui";
-import type { ComponentProps } from "react";
+import { Switch } from "@billycraft/ui"
+import type { ComponentProps } from "react"
 import {
 	type FieldPath,
 	type FieldValues,
 	type UseControllerProps,
 	useController,
-} from "react-hook-form";
+} from "react-hook-form"
 
 type SwitchFieldProps<
 	TFieldValues extends FieldValues,
 	TName extends FieldPath<TFieldValues>,
 > = Omit<ComponentProps<typeof Switch>, "value" | "name"> &
-	UseControllerProps<TFieldValues, TName>;
+	UseControllerProps<TFieldValues, TName>
 
 export const SwitchField = <
 	TFieldValues extends FieldValues = FieldValues,
@@ -29,7 +29,7 @@ export const SwitchField = <
 		defaultValue: props.defaultValue,
 		shouldUnregister,
 		rules: rules,
-	});
+	})
 
 	return (
 		<Switch
@@ -37,13 +37,13 @@ export const SwitchField = <
 			name={field.name}
 			onCheckedChange={field.onChange}
 			onBlur={(event) => {
-				field.onBlur();
-				props.onBlur?.(event);
+				field.onBlur()
+				props.onBlur?.(event)
 			}}
 			ref={field.ref}
 			disabled={field.disabled || props.disabled}
 			value={field.value ? "on" : "off"}
 			checked={field.value}
 		/>
-	);
-};
+	)
+}

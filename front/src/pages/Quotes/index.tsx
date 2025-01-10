@@ -1,24 +1,24 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, Loader, Tabs } from "@billycraft/ui";
-import { type QuoteRouteQueryParams, ROUTES } from "@/routes";
-import useCustomers from "@/hooks/useCustomers";
-import QuoteFilterContainer from "./Filters";
-import QuoteList from "./List/List";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { filterBillsOrQuotes } from "@/utils/filters";
-import { useAllQuotesQuery } from "@/queries/useAllQuotesQuery";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { QuoteStatusSchema } from "@/sdk";
+import { useMemo, useState } from "react"
+import { Link } from "react-router-dom"
+import { Button, Loader, Tabs } from "@billycraft/ui"
+import { type QuoteRouteQueryParams, ROUTES } from "@/routes"
+import useCustomers from "@/hooks/useCustomers"
+import QuoteFilterContainer from "./Filters"
+import QuoteList from "./List/List"
+import { PlusIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { filterBillsOrQuotes } from "@/utils/filters"
+import { useAllQuotesQuery } from "@/queries/useAllQuotesQuery"
+import { useQueryParams } from "@/hooks/useQueryParams"
+import { QuoteStatusSchema } from "@/sdk"
 
 const QuotePage = () => {
-	const { t } = useI18n();
-	const customers = useCustomers();
-	const { tab } = useQueryParams<QuoteRouteQueryParams>();
+	const { t } = useI18n()
+	const customers = useCustomers()
+	const { tab } = useQueryParams<QuoteRouteQueryParams>()
 	const [selectedStatus, setSelectedStatus] = useState<
 		QuoteRouteQueryParams["tab"]
-	>(tab && tab !== "all" && QuoteStatusSchema.enum.includes(tab) ? tab : "all");
+	>(tab && tab !== "all" && QuoteStatusSchema.enum.includes(tab) ? tab : "all")
 	const [filters, setFilters] = useState<
 		Parameters<typeof filterBillsOrQuotes>[1]
 	>({
@@ -27,9 +27,9 @@ const QuotePage = () => {
 		createdAt: "",
 		status: "",
 		title: "",
-	});
+	})
 
-	const { isLoading, data, reload } = useAllQuotesQuery();
+	const { isLoading, data, reload } = useAllQuotesQuery()
 
 	const quoteSorted = useMemo(
 		() =>
@@ -39,7 +39,7 @@ const QuotePage = () => {
 				customers,
 			),
 		[customers, filters, data, selectedStatus],
-	);
+	)
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -85,7 +85,7 @@ const QuotePage = () => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default QuotePage;
+export default QuotePage

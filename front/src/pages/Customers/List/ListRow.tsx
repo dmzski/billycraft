@@ -1,23 +1,23 @@
-import { CustomerLabel } from "@/components/labels/CustomerLabel";
-import { useI18n } from "@/i18n";
-import type { CustomerResponse } from "@/sdk";
-import { ROUTES } from "@/routes";
-import { Button, Collapsible } from "@billycraft/ui";
+import { CustomerLabel } from "@/components/labels/CustomerLabel"
+import { useI18n } from "@/i18n"
+import type { CustomerResponse } from "@/sdk"
+import { ROUTES } from "@/routes"
+import { Button, Collapsible } from "@billycraft/ui"
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
 	ClipboardIcon,
-} from "@heroicons/react/24/solid";
-import { useReducer } from "react";
+} from "@heroicons/react/24/solid"
+import { useReducer } from "react"
 
 type ListRowProps = {
-	customer: CustomerResponse;
-};
+	customer: CustomerResponse
+}
 
 export const ListRow = ({ customer }: ListRowProps) => {
-	const [open, toggleOpen] = useReducer((state) => !state, false);
-	const { scopedT } = useI18n();
-	const pageT = scopedT("customers.details");
+	const [open, toggleOpen] = useReducer((state) => !state, false)
+	const { scopedT } = useI18n()
+	const pageT = scopedT("customers.details")
 
 	return (
 		<div className="border rounded-md">
@@ -52,7 +52,7 @@ export const ListRow = ({ customer }: ListRowProps) => {
 									onClick={() => {
 										navigator.clipboard
 											.writeText(customer.email)
-											.catch(() => null);
+											.catch(() => null)
 									}}
 									title="Copy"
 									variant="ghost"
@@ -82,7 +82,7 @@ export const ListRow = ({ customer }: ListRowProps) => {
 								onClick={() => {
 									navigator.clipboard
 										.writeText(customer.email)
-										.catch(() => null);
+										.catch(() => null)
 								}}
 								title="Copy"
 								variant="ghost"
@@ -111,5 +111,5 @@ export const ListRow = ({ customer }: ListRowProps) => {
 				</div>
 			</Collapsible>
 		</div>
-	);
-};
+	)
+}

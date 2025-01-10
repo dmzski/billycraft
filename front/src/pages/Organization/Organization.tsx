@@ -1,8 +1,8 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { UsersAndInvitations } from "./UsersAndInvitations/UsersAndInvitations";
-import { ROUTES } from "@/routes";
-import { Customization } from "./Customization/Customization";
-import { Settings } from "./Settings/Settings";
+import { Routes, Route, Navigate } from "react-router-dom"
+import { UsersAndInvitations } from "./UsersAndInvitations/UsersAndInvitations"
+import { ROUTES } from "@/routes"
+import { Customization } from "./Customization/Customization"
+import { Settings } from "./Settings/Settings"
 
 export const Organization = () => (
 	<Routes>
@@ -25,4 +25,4 @@ export const Organization = () => (
 			}
 		/>
 	</Routes>
-);
+)

@@ -1,33 +1,33 @@
-import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
 import type {
 	ProductGroupResponse,
 	ProductResponse,
 	SupplierResponse,
-} from "@/sdk";
-import { isUndefinedOrNull } from "@/utils/isUndefinedOrNull";
-import { calculatePriceTTC } from "@/utils/price";
-import { Badge, Button, Checkbox, Collapsible } from "@billycraft/ui";
+} from "@/sdk"
+import { isUndefinedOrNull } from "@/utils/isUndefinedOrNull"
+import { calculatePriceTTC } from "@/utils/price"
+import { Badge, Button, Checkbox, Collapsible } from "@billycraft/ui"
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
 	PencilIcon,
 	TagIcon,
 	TrashIcon,
-} from "@heroicons/react/24/solid";
-import { type ComponentProps, useMemo, useReducer } from "react";
-import { DeleteProductModal } from "../modals/DeleteProductModal";
-import { EditProductModal } from "../modals/EditProductModal";
+} from "@heroicons/react/24/solid"
+import { type ComponentProps, useMemo, useReducer } from "react"
+import { DeleteProductModal } from "../modals/DeleteProductModal"
+import { EditProductModal } from "../modals/EditProductModal"
 
 type ProductTableLineProps = {
-	product: ProductResponse;
-	supplier?: SupplierResponse;
-	reloadProducts: () => Promise<void>;
-	groupName?: ProductGroupResponse["name"];
-	selected: ProductResponse[];
-	setSelected: (newSelected: ProductResponse[]) => void;
-};
+	product: ProductResponse
+	supplier?: SupplierResponse
+	reloadProducts: () => Promise<void>
+	groupName?: ProductGroupResponse["name"]
+	selected: ProductResponse[]
+	setSelected: (newSelected: ProductResponse[]) => void
+}
 
 const ProductTableLine = ({
 	product,
@@ -37,28 +37,28 @@ const ProductTableLine = ({
 	selected,
 	setSelected,
 }: ProductTableLineProps) => {
-	const formatCurrency = useFormatCurrency();
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("products.list.headers");
-	const [open, toggleOpen] = useReducer((current) => !current, false);
+	const formatCurrency = useFormatCurrency()
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("products.list.headers")
+	const [open, toggleOpen] = useReducer((current) => !current, false)
 
 	const stockBadgeVariant = useMemo<
 		ComponentProps<typeof Badge>["variant"]
 	>(() => {
 		if (product.stockAlert && !isUndefinedOrNull(product.stock)) {
 			if (product.stock === 0) {
-				return "destructive";
+				return "destructive"
 			}
 			if (
 				!isUndefinedOrNull(product.lowStock) &&
 				product.lowStock >= product.stock
 			) {
-				return "default";
+				return "default"
 			}
 		}
 
-		return "outline";
-	}, [product.stockAlert, product.stock, product.lowStock]);
+		return "outline"
+	}, [product.stockAlert, product.stock, product.lowStock])
 
 	return (
 		<div className="border rounded-lg">
@@ -76,11 +76,11 @@ const ProductTableLine = ({
 									name={`${product.id}-checkbox`}
 									onCheckedChange={(newState) => {
 										if (newState) {
-											setSelected([...selected, product]);
+											setSelected([...selected, product])
 										} else {
 											setSelected(
 												selected.filter((value) => value.id !== product.id),
-											);
+											)
 										}
 									}}
 								/>
@@ -156,7 +156,7 @@ const ProductTableLine = ({
 							disclosure={
 								<Button
 									onClick={(e) => {
-										e.stopPropagation();
+										e.stopPropagation()
 									}}
 									type="button"
 								>
@@ -171,7 +171,7 @@ const ProductTableLine = ({
 							disclosure={
 								<Button
 									onClick={(e) => {
-										e.stopPropagation();
+										e.stopPropagation()
 									}}
 									type="button"
 									variant="destructive"
@@ -187,7 +187,7 @@ const ProductTableLine = ({
 				</div>
 			</Collapsible>
 		</div>
-	);
-};
+	)
+}
 
-export default ProductTableLine;
+export default ProductTableLine

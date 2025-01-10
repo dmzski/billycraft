@@ -1,11 +1,11 @@
-import { type VariantProps, cva } from "class-variance-authority";
-import { tw } from "lib/utils";
+import { type VariantProps, cva } from "class-variance-authority"
+import { tw } from "lib/utils"
 import {
 	type ComponentPropsWithoutRef,
 	cloneElement,
 	forwardRef,
 	isValidElement,
-} from "react";
+} from "react"
 
 const linkVariants = cva("cursor-pointer", {
 	variants: {
@@ -18,10 +18,10 @@ const linkVariants = cva("cursor-pointer", {
 	defaultVariants: {
 		variant: "default",
 	},
-});
+})
 
 type LinkProps = ComponentPropsWithoutRef<"a"> &
-	VariantProps<typeof linkVariants> & { asChild?: boolean };
+	VariantProps<typeof linkVariants> & { asChild?: boolean }
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 	({ className, children, variant, asChild, ...props }, ref) => {
@@ -30,7 +30,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 				// @ts-ignore TODO improve
 				...children.props,
 				className: tw(linkVariants({ variant, className })),
-			});
+			})
 		}
 
 		return (
@@ -41,7 +41,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			>
 				{children}
 			</a>
-		);
+		)
 	},
-);
-Link.displayName = "Link";
+)
+Link.displayName = "Link"

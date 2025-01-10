@@ -1,50 +1,50 @@
-import type { BillStatus, QuoteStatus } from "./sdk";
+import type { BillStatus, QuoteStatus } from "./sdk"
 
 export type QuoteRouteProps = {
-	id: string;
-};
+	id: string
+}
 export type QuoteRouteQueryParams = {
-	tab?: QuoteStatus | "all";
-};
+	tab?: QuoteStatus | "all"
+}
 
 export type QuoteOverviewRouteQueryParams = {
-	fromTab?: QuoteRouteQueryParams["tab"];
-};
+	fromTab?: QuoteRouteQueryParams["tab"]
+}
 
 export type BillRouteProps = {
-	id: string;
-};
+	id: string
+}
 
 export type BillRouteQueryParams = {
-	tab?: BillStatus | "all";
-};
+	tab?: BillStatus | "all"
+}
 
 export type BillOverviewRouteQueryParams = {
-	fromTab?: BillRouteQueryParams["tab"];
-};
+	fromTab?: BillRouteQueryParams["tab"]
+}
 
 export type CustomerRouteProps = {
-	id: string;
-};
+	id: string
+}
 
 export type SupplierRouteProps = {
-	id: string;
-};
+	id: string
+}
 
 export type OutgoingRouteProps = {
-	id: string;
-};
+	id: string
+}
 
 export type ReportRouteProps = {
-	id: string;
-};
+	id: string
+}
 
-const DEFAULT_QUOTE_ROUTE_PARAMS: QuoteRouteProps = { id: ":id" };
-const DEFAULT_BILL_ROUTE_PARAMS: BillRouteProps = { id: ":id" };
-const DEFAULT_CUSTOMER_ROUTE_PARAMS: CustomerRouteProps = { id: ":id" };
-const DEFAULT_SUPPLIER_ROUTE_PARAMS: SupplierRouteProps = { id: ":id" };
-const DEFAULT_OUTGOING_ROUTE_PARAMS: OutgoingRouteProps = { id: ":id" };
-const DEFAULT_REPORT_ROUTE_PARAMS: ReportRouteProps = { id: ":id" };
+const DEFAULT_QUOTE_ROUTE_PARAMS: QuoteRouteProps = { id: ":id" }
+const DEFAULT_BILL_ROUTE_PARAMS: BillRouteProps = { id: ":id" }
+const DEFAULT_CUSTOMER_ROUTE_PARAMS: CustomerRouteProps = { id: ":id" }
+const DEFAULT_SUPPLIER_ROUTE_PARAMS: SupplierRouteProps = { id: ":id" }
+const DEFAULT_OUTGOING_ROUTE_PARAMS: OutgoingRouteProps = { id: ":id" }
+const DEFAULT_REPORT_ROUTE_PARAMS: ReportRouteProps = { id: ":id" }
 
 export const ROUTES = {
 	LOGIN: {
@@ -336,6 +336,6 @@ export const ROUTES = {
 			},
 		},
 	},
-} as const;
+} as const
 
-export type RouteId = (typeof ROUTES)[keyof typeof ROUTES]["id"];
+export type RouteId = (typeof ROUTES)[keyof typeof ROUTES]["id"]

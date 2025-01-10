@@ -1,54 +1,54 @@
-import { Form } from "@/components/form/Form";
-import { InputField } from "@/components/form/InputField";
-import { Submit } from "@/components/form/Submit";
-import { useI18n } from "@/i18n";
-import { type TodoResponse, TodosService } from "@/sdk";
-import { Checkbox, useToast } from "@billycraft/ui";
-import { formatRelative } from "date-fns";
-import { fr } from "date-fns/locale";
-import { useForm } from "react-hook-form";
+import { Form } from "@/components/form/Form"
+import { InputField } from "@/components/form/InputField"
+import { Submit } from "@/components/form/Submit"
+import { useI18n } from "@/i18n"
+import { type TodoResponse, TodosService } from "@/sdk"
+import { Checkbox, useToast } from "@billycraft/ui"
+import { formatRelative } from "date-fns"
+import { fr } from "date-fns/locale"
+import { useForm } from "react-hook-form"
 
-type TodoFormValues = { description: string };
+type TodoFormValues = { description: string }
 
 type TodoListProps = {
-	data?: TodoResponse[];
-	onSubmitSuccess?: () => Promise<void>;
-};
+	data?: TodoResponse[]
+	onSubmitSuccess?: () => Promise<void>
+}
 const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
-	const { t } = useI18n();
-	const toast = useToast();
+	const { t } = useI18n()
+	const toast = useToast()
 
 	const methods = useForm<TodoFormValues>({
 		mode: "onChange",
 		values: {
 			description: "",
 		},
-	});
+	})
 
 	const handleDoneUndo = async (id: string, newState: boolean) => {
 		try {
 			if (newState) {
-				await TodosService.postTodosByIdDone({ path: { id } });
+				await TodosService.postTodosByIdDone({ path: { id } })
 			} else {
-				await TodosService.postTodosByIdUndo({ path: { id } });
+				await TodosService.postTodosByIdUndo({ path: { id } })
 			}
-			await onSubmitSuccess?.();
-			toast.show(t("dashboard.todos.form.submit.edit.success"));
+			await onSubmitSuccess?.()
+			toast.show(t("dashboard.todos.form.submit.edit.success"))
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const onSubmit = async (values: TodoFormValues) => {
 		try {
-			await TodosService.postTodos({ body: values });
-			await onSubmitSuccess?.();
-			methods.reset({ description: "" });
-			toast.show(t("dashboard.todos.form.submit.success"));
+			await TodosService.postTodos({ body: values })
+			await onSubmitSuccess?.()
+			methods.reset({ description: "" })
+			toast.show(t("dashboard.todos.form.submit.success"))
 		} catch {
-			toast.destructive(t("genericFormError"));
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	return (
 		<div className="flex flex-col">
@@ -101,7 +101,7 @@ const TodoList = ({ data, onSubmitSuccess }: TodoListProps) => {
 				</div>
 			) : null}
 		</div>
-	);
-};
+	)
+}
 
-export default TodoList;
+export default TodoList

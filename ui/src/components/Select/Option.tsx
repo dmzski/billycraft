@@ -1,25 +1,20 @@
-import { CheckIcon } from "@heroicons/react/24/solid";
-import { tw } from "lib/utils";
-import {
-	KeyboardEventHandler,
-	MouseEventHandler,
-	useMemo,
-	useRef,
-} from "react";
-import { SelectOptionType, SelectValueType } from ".";
+import { CheckIcon } from "@heroicons/react/24/solid"
+import { tw } from "lib/utils"
+import { KeyboardEventHandler, MouseEventHandler, useMemo, useRef } from "react"
+import { SelectOptionType, SelectValueType } from "."
 
 export type RenderSelectOptionProps = {
-	option: SelectOptionType;
-	isSelected?: boolean;
-};
+	option: SelectOptionType
+	isSelected?: boolean
+}
 
 type OptionProps = {
-	isMulti?: boolean;
-	value?: SelectValueType;
-	option: SelectOptionType;
-	onOptionClick: (option: SelectOptionType) => void;
-	autoFocus?: boolean;
-};
+	isMulti?: boolean
+	value?: SelectValueType
+	option: SelectOptionType
+	onOptionClick: (option: SelectOptionType) => void
+	autoFocus?: boolean
+}
 
 const Option = ({
 	autoFocus,
@@ -31,25 +26,25 @@ const Option = ({
 	const isSelected = useMemo(() => {
 		return isMulti && Array.isArray(value)
 			? value.includes(option.value)
-			: option.value === value;
-	}, [value, option, isMulti]);
+			: option.value === value
+	}, [value, option, isMulti])
 
-	const optionRef = useRef<HTMLButtonElement>(null);
+	const optionRef = useRef<HTMLButtonElement>(null)
 
 	const handleSelectOptionClick: MouseEventHandler<HTMLButtonElement> = (
 		event,
 	) => {
-		event.preventDefault();
-		onOptionClick(option);
-	};
+		event.preventDefault()
+		onOptionClick(option)
+	}
 	const handleSelectOptionEnter: KeyboardEventHandler<HTMLButtonElement> = (
 		event,
 	) => {
 		if (event.key === "Enter") {
-			event.preventDefault();
-			onOptionClick(option);
+			event.preventDefault()
+			onOptionClick(option)
 		}
-	};
+	}
 
 	return (
 		<button
@@ -69,7 +64,7 @@ const Option = ({
 			{isSelected ? <CheckIcon className="size-4" /> : null}
 			{option.label}
 		</button>
-	);
-};
+	)
+}
 
-export default Option;
+export default Option

@@ -1,22 +1,22 @@
-import { Alert, Button, Loader } from "@billycraft/ui";
-import { useFormatDate } from "@/hooks/useFormatDate";
-import type { ReportRequest } from "@/sdk";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import ReportOutgoingTable from "./components/ReportOutgoingTable";
-import ReportPerSupplierTable from "./components/ReportPerSupplierTable";
-import ReportTable from "./components/ReportTable";
-import { REPORT_ROUTES } from "./constants";
-import DeleteModal from "./modals/DeleteModal";
-import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { useI18n } from "@/i18n";
-import { useReportByIdQuery } from "@/queries/useReportByIdQuery";
+import { Alert, Button, Loader } from "@billycraft/ui"
+import { useFormatDate } from "@/hooks/useFormatDate"
+import type { ReportRequest } from "@/sdk"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import ReportOutgoingTable from "./components/ReportOutgoingTable"
+import ReportPerSupplierTable from "./components/ReportPerSupplierTable"
+import ReportTable from "./components/ReportTable"
+import { REPORT_ROUTES } from "./constants"
+import DeleteModal from "./modals/DeleteModal"
+import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { useI18n } from "@/i18n"
+import { useReportByIdQuery } from "@/queries/useReportByIdQuery"
 
 type DetailTableProps = {
-	report: ReportRequest;
-};
+	report: ReportRequest
+}
 const DetailTable = ({ report }: DetailTableProps) => {
-	const { toISO9075 } = useFormatDate();
-	const { t } = useI18n();
+	const { toISO9075 } = useFormatDate()
+	const { t } = useI18n()
 	return (
 		<div className="flex flex-col gap-2 md:gap-0 border rounded">
 			<dl className="grid md:grid-cols-12">
@@ -40,30 +40,30 @@ const DetailTable = ({ report }: DetailTableProps) => {
 				<dd className="md:col-span-10 p-2">{toISO9075(report.endDate)}</dd>
 			</dl>
 		</div>
-	);
-};
+	)
+}
 const DetailsPage = () => {
-	const navigate = useNavigate();
-	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate()
+	const { id } = useParams<{ id: string }>()
 	const { data: report, isLoading } = useReportByIdQuery(id ?? "", {
 		enabled: !!id,
-	});
-	const { t } = useI18n();
+	})
+	const { t } = useI18n()
 
 	const onSubmitSuccess = async () => {
-		navigate(REPORT_ROUTES.routes.LIST.path());
-	};
+		navigate(REPORT_ROUTES.routes.LIST.path())
+	}
 
 	if (isLoading && !report) {
 		return (
 			<div className="flex h-full justify-center items-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!report) {
-		return <Alert variant="destructive">{t("dataloaderError")}</Alert>;
+		return <Alert variant="destructive">{t("dataloaderError")}</Alert>
 	}
 
 	return (
@@ -76,7 +76,7 @@ const DetailsPage = () => {
 					</Button>
 				</Link>
 				<DeleteModal
-					id={id ?? ''}
+					id={id ?? ""}
 					disclosure={
 						<Button variant="destructive">
 							<TrashIcon />
@@ -116,7 +116,7 @@ const DetailsPage = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default DetailsPage;
+export default DetailsPage

@@ -1,29 +1,29 @@
-import { Button, Collapsible, Input } from "@billycraft/ui";
+import { Button, Collapsible, Input } from "@billycraft/ui"
 import {
 	type ChangeEventHandler,
 	type Dispatch,
 	type SetStateAction,
 	useReducer,
-} from "react";
-import { useI18n } from "@/i18n";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+} from "react"
+import { useI18n } from "@/i18n"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 
 type BillFilterContainerProps = {
-	filters: Record<string, string>;
-	setFilters: Dispatch<SetStateAction<Record<string, string>>>;
-};
+	filters: Record<string, string>
+	setFilters: Dispatch<SetStateAction<Record<string, string>>>
+}
 const BillFilterContainer = ({
 	filters,
 	setFilters,
 }: BillFilterContainerProps) => {
-	const { t } = useI18n();
-	const [open, toggleOpen] = useReducer((state) => !state, false);
+	const { t } = useI18n()
+	const [open, toggleOpen] = useReducer((state) => !state, false)
 
 	const handleChange =
 		(field: keyof typeof filters): ChangeEventHandler<HTMLInputElement> =>
 		(e) => {
-			setFilters({ ...filters, [field]: e.target.value });
-		};
+			setFilters({ ...filters, [field]: e.target.value })
+		}
 
 	return (
 		<Collapsible
@@ -58,7 +58,7 @@ const BillFilterContainer = ({
 				/>
 			</div>
 		</Collapsible>
-	);
-};
+	)
+}
 
-export default BillFilterContainer;
+export default BillFilterContainer

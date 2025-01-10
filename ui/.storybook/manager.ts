@@ -1,5 +1,5 @@
-import { addons } from "@storybook/addons";
-import theme from "./theme";
+import { addons } from "@storybook/addons"
+import theme from "./theme"
 
 addons.setConfig({
 	isFullscreen: false,
@@ -15,4 +15,4 @@ addons.setConfig({
 		showRoots: true,
 		collapsedRoots: [""],
 	},
-});
+})

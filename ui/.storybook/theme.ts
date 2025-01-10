@@ -1,4 +1,4 @@
-import { create } from "@storybook/theming";
+import { create } from "@storybook/theming"
 
 export default create({
 	base: "light",
@@ -7,4 +7,4 @@ export default create({
 
 	colorPrimary: "#8B5CF6",
 	colorSecondary: "#F97316",
-});
+})

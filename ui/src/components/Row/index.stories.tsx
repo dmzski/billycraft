@@ -1,12 +1,12 @@
-import type { StoryObj } from "@storybook/react";
-import { Row } from ".";
+import type { StoryObj } from "@storybook/react"
+import { Row } from "."
 
 export default {
 	title: "Components/Row",
 	component: Row,
-};
+}
 
-type Story = StoryObj<typeof Row>;
+type Story = StoryObj<typeof Row>
 
 const render: Story["render"] = (args) => (
 	<Row {...args}>
@@ -29,11 +29,11 @@ const render: Story["render"] = (args) => (
 			6
 		</div>
 	</Row>
-);
+)
 
 export const Basic: Story = {
 	render,
 	args: {
 		template: "repeat(6, 1fr)",
 	},
-};
+}

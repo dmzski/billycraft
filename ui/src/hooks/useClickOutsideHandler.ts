@@ -1,11 +1,11 @@
-import { type RefObject, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react"
 
 const useClickOutsideHandler = (
 	ref: RefObject<HTMLElement | null>,
 	callback: (event: MouseEvent | TouchEvent | FocusEvent) => void,
 	additionalRef?: RefObject<HTMLElement | null>[],
 ): void => {
-	const callbackFnRef = useRef(callback);
+	const callbackFnRef = useRef(callback)
 
 	useEffect(() => {
 		const handler = (event: MouseEvent | TouchEvent | FocusEvent) => {
@@ -15,28 +15,28 @@ const useClickOutsideHandler = (
 					aRef.current?.contains(event.target as HTMLElement),
 				)
 			) {
-				return;
+				return
 			}
 			if (ref.current && !ref.current.contains(event.target as HTMLElement)) {
-				callbackFnRef.current?.(event);
+				callbackFnRef.current?.(event)
 			}
-		};
+		}
 
 		// Bind the event listener
-		document.addEventListener("mouseup", handler);
-		document.addEventListener("blur", handler);
-		document.addEventListener("touchend", handler);
+		document.addEventListener("mouseup", handler)
+		document.addEventListener("blur", handler)
+		document.addEventListener("touchend", handler)
 		return () => {
 			// Unbind the event listener on clean up
-			document.addEventListener("blur", handler);
-			document.removeEventListener("mouseup", handler);
-			document.removeEventListener("touchend", handler);
-		};
-	}, [ref, additionalRef]);
+			document.addEventListener("blur", handler)
+			document.removeEventListener("mouseup", handler)
+			document.removeEventListener("touchend", handler)
+		}
+	}, [ref, additionalRef])
 
 	useEffect(() => {
-		callbackFnRef.current = callback;
-	}, [callback]);
-};
+		callbackFnRef.current = callback
+	}, [callback])
+}
 
-export default useClickOutsideHandler;
+export default useClickOutsideHandler

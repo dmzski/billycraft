@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+const { fontFamily } = require("tailwindcss/defaultTheme")
 
 module.exports = {
 	content: [
@@ -91,4 +91,4 @@ module.exports = {
 		},
 	},
 	plugins: [require("tailwindcss-animate")],
-};
+}

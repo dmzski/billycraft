@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from "react"
 
 export const useFormatCurrency = () => {
 	const formatter = useCallback(
@@ -10,6 +10,6 @@ export const useFormatCurrency = () => {
 				notation: "standard",
 			}).format(Number.isNaN(value) ? 0 : value),
 		[],
-	);
-	return formatter;
-};
+	)
+	return formatter
+}

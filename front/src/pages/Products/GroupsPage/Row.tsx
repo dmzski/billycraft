@@ -1,13 +1,13 @@
-import type { ProductGroupResponse } from "@/sdk";
-import { EditProductGroupModal } from "../modals/EditProductGroupModal";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { Button } from "@billycraft/ui";
-import { DeleteProductGroupModal } from "../modals/DeleteProductGroupModal";
+import type { ProductGroupResponse } from "@/sdk"
+import { EditProductGroupModal } from "../modals/EditProductGroupModal"
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { Button } from "@billycraft/ui"
+import { DeleteProductGroupModal } from "../modals/DeleteProductGroupModal"
 
 type ProductGroupRowProps = {
-	group: ProductGroupResponse;
-	reloadGroups: () => Promise<void>;
-};
+	group: ProductGroupResponse
+	reloadGroups: () => Promise<void>
+}
 
 const ProductGroupRow = ({ group, reloadGroups }: ProductGroupRowProps) => {
 	return (
@@ -34,7 +34,7 @@ const ProductGroupRow = ({ group, reloadGroups }: ProductGroupRowProps) => {
 				/>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default ProductGroupRow;
+export default ProductGroupRow

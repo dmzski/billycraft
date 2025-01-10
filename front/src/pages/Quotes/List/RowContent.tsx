@@ -1,24 +1,24 @@
-import { RRLink } from "@/components/RRLink";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useI18n } from "@/i18n";
-import { ROUTES } from "@/routes";
-import type { CustomerResponse, QuoteResponse } from "@/sdk";
+import { RRLink } from "@/components/RRLink"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useI18n } from "@/i18n"
+import { ROUTES } from "@/routes"
+import type { CustomerResponse, QuoteResponse } from "@/sdk"
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
 	getBillOrQuoteTotalEt,
 	getBillOrQuoteTotalForLineType,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type RowContentProps = {
-	quote: QuoteResponse;
-	customer?: CustomerResponse;
-};
+	quote: QuoteResponse
+	customer?: CustomerResponse
+}
 
 export const RowContent = ({ quote, customer }: RowContentProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("quotes.details");
-	const formatCurrency = useFormatCurrency();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("quotes.details")
+	const formatCurrency = useFormatCurrency()
 
 	return (
 		<div className="border-t">
@@ -118,5 +118,5 @@ export const RowContent = ({ quote, customer }: RowContentProps) => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}

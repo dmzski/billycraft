@@ -1,26 +1,26 @@
-import { RRLink } from "@/components/RRLink";
-import { useFormatCurrency } from "@/hooks/useFormatCurrency";
-import { useFormatDate } from "@/hooks/useFormatDate";
-import { useI18n } from "@/i18n";
-import { ROUTES } from "@/routes";
-import type { BillResponse, CustomerResponse } from "@/sdk";
+import { RRLink } from "@/components/RRLink"
+import { useFormatCurrency } from "@/hooks/useFormatCurrency"
+import { useFormatDate } from "@/hooks/useFormatDate"
+import { useI18n } from "@/i18n"
+import { ROUTES } from "@/routes"
+import type { BillResponse, CustomerResponse } from "@/sdk"
 import {
 	getBillOrQuoteTotal,
 	getBillOrQuoteTotalETForLineType,
 	getBillOrQuoteTotalEt,
 	getBillOrQuoteTotalForLineType,
-} from "@/utils/price";
+} from "@/utils/price"
 
 type RowContentProps = {
-	bill: BillResponse;
-	customer?: CustomerResponse;
-};
+	bill: BillResponse
+	customer?: CustomerResponse
+}
 
 export const RowContent = ({ bill, customer }: RowContentProps) => {
-	const { t, scopedT } = useI18n();
-	const pageT = scopedT("bills.details");
-	const formatCurrency = useFormatCurrency();
-	const { toISO9075 } = useFormatDate();
+	const { t, scopedT } = useI18n()
+	const pageT = scopedT("bills.details")
+	const formatCurrency = useFormatCurrency()
+	const { toISO9075 } = useFormatDate()
 
 	return (
 		<div className="border-t">
@@ -138,5 +138,5 @@ export const RowContent = ({ bill, customer }: RowContentProps) => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}

@@ -1,26 +1,26 @@
-import type { StoryObj } from "@storybook/react";
-import { useState } from "react";
-import { Switch } from ".";
+import type { StoryObj } from "@storybook/react"
+import { useState } from "react"
+import { Switch } from "."
 
 export default {
 	title: "Components/Switch",
 	component: Switch,
-};
+}
 
-type Story = StoryObj<typeof Switch>;
+type Story = StoryObj<typeof Switch>
 const render: Story["render"] = ({ checked, onCheckedChange, ...props }) => {
-	const [isChecked, setIsChecked] = useState(checked);
+	const [isChecked, setIsChecked] = useState(checked)
 	return (
 		<Switch
 			checked={isChecked}
 			onCheckedChange={(newValue) => {
-				setIsChecked(newValue);
-				onCheckedChange?.(newValue);
+				setIsChecked(newValue)
+				onCheckedChange?.(newValue)
 			}}
 			{...props}
 		/>
-	);
-};
+	)
+}
 
 export const Basic: Story = {
 	render,
@@ -28,7 +28,7 @@ export const Basic: Story = {
 		id: "test",
 		value: "on",
 	},
-};
+}
 
 export const WithLabel: Story = {
 	render,
@@ -37,7 +37,7 @@ export const WithLabel: Story = {
 		id: "test",
 		value: "on",
 	},
-};
+}
 
 export const Disabled: Story = {
 	render,
@@ -47,4 +47,4 @@ export const Disabled: Story = {
 		value: "on",
 		disabled: true,
 	},
-};
+}

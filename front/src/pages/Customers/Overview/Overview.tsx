@@ -1,41 +1,41 @@
-import { useI18n } from "@/i18n";
-import { useCustomerQuery } from "@/queries/useCustomerQuery";
-import { type CustomerRouteProps, ROUTES } from "@/routes";
-import { Alert, Button, Loader } from "@billycraft/ui";
+import { useI18n } from "@/i18n"
+import { useCustomerQuery } from "@/queries/useCustomerQuery"
+import { type CustomerRouteProps, ROUTES } from "@/routes"
+import { Alert, Button, Loader } from "@billycraft/ui"
 import {
 	ChevronLeftIcon,
 	ClipboardIcon,
 	PencilIcon,
-} from "@heroicons/react/24/solid";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { DeleteCustomerModal } from "../modals/DeleteCustomerModal";
-import { RRLink } from "@/components/RRLink";
-import { CustomerLabel } from "@/components/labels/CustomerLabel";
+} from "@heroicons/react/24/solid"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { DeleteCustomerModal } from "../modals/DeleteCustomerModal"
+import { RRLink } from "@/components/RRLink"
+import { CustomerLabel } from "@/components/labels/CustomerLabel"
 
 export const Overview = () => {
-	const { scopedT, t } = useI18n();
-	const { id } = useParams<CustomerRouteProps>();
-	const { data: customer, isLoading } = useCustomerQuery(id ?? '', {
+	const { scopedT, t } = useI18n()
+	const { id } = useParams<CustomerRouteProps>()
+	const { data: customer, isLoading } = useCustomerQuery(id ?? "", {
 		enabled: !!id,
-	});
-	const navigate = useNavigate();
+	})
+	const navigate = useNavigate()
 
-	const pageT = scopedT("customers.details");
+	const pageT = scopedT("customers.details")
 
 	const onSubmitSuccess = async () => {
-		navigate(ROUTES.CUSTOMERS.routes.INDEX.path());
-	};
+		navigate(ROUTES.CUSTOMERS.routes.INDEX.path())
+	}
 
 	if (isLoading && !customer) {
 		return (
 			<div className="flex items-center justify-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!customer) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return (
@@ -54,7 +54,11 @@ export const Overview = () => {
 					<CustomerLabel size="lg" customer={customer} />
 				</div>
 				<Button asChild>
-					<Link to={ROUTES.CUSTOMERS.routes.EDIT.path({ id: customer.id.toString() })}>
+					<Link
+						to={ROUTES.CUSTOMERS.routes.EDIT.path({
+							id: customer.id.toString(),
+						})}
+					>
 						<PencilIcon />
 						<span>{t("edit")}</span>
 					</Link>
@@ -82,7 +86,7 @@ export const Overview = () => {
 									onClick={() => {
 										navigator.clipboard
 											.writeText(customer.email)
-											.catch(() => null);
+											.catch(() => null)
 									}}
 									title="Copy"
 									variant="ghost"
@@ -135,5 +139,5 @@ export const Overview = () => {
 				</section>
 			) : null}
 		</div>
-	);
-};
+	)
+}

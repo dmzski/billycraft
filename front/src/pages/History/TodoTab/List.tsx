@@ -1,13 +1,13 @@
-import { formatISO9075 } from "date-fns";
-import { useI18n } from "@/i18n";
-import type { TodoResponse } from "@/sdk";
+import { formatISO9075 } from "date-fns"
+import { useI18n } from "@/i18n"
+import type { TodoResponse } from "@/sdk"
 
 type TodoListProps = {
-	data: TodoResponse[];
-};
+	data: TodoResponse[]
+}
 
 const List = ({ data }: TodoListProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 
 	return (
 		<div className="flex flex-col border rounded-t-lg">
@@ -33,7 +33,7 @@ const List = ({ data }: TodoListProps) => {
 				))}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default List;
+export default List

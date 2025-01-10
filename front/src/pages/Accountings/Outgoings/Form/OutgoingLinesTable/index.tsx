@@ -1,28 +1,28 @@
-import { Button, Loader } from "@billycraft/ui";
-import { type Control, useFieldArray } from "react-hook-form";
-import Row from "./Row";
-import { useI18n } from "@/i18n";
-import type { OutgoingRequest } from "@/sdk";
+import { Button, Loader } from "@billycraft/ui"
+import { type Control, useFieldArray } from "react-hook-form"
+import Row from "./Row"
+import { useI18n } from "@/i18n"
+import type { OutgoingRequest } from "@/sdk"
 
 type OutgoingTableProps = {
-	isLoading?: boolean;
-	control: Control<OutgoingRequest>;
-};
+	isLoading?: boolean
+	control: Control<OutgoingRequest>
+}
 const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
-	const { t } = useI18n();
+	const { t } = useI18n()
 	const { fields, append, remove } = useFieldArray({
 		name: "lines",
 		control,
 		keyName: "line",
-	});
+	})
 
 	const addLine = () => {
 		append({
 			vat: 0,
 			totalHT: 0,
 			line: fields.length + 1,
-		});
-	};
+		})
+	}
 
 	return (
 		<div className="border rounded">
@@ -66,7 +66,7 @@ const OutgoingLinesTable = ({ isLoading, control }: OutgoingTableProps) => {
 				</div>
 			)}
 		</div>
-	);
-};
+	)
+}
 
-export default OutgoingLinesTable;
+export default OutgoingLinesTable

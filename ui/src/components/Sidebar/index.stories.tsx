@@ -1,4 +1,4 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react"
 import {
 	Sidebar,
 	SidebarContent,
@@ -12,7 +12,7 @@ import {
 	SidebarProvider,
 	SidebarRail,
 	SidebarTrigger,
-} from "./index";
+} from "./index"
 
 export default {
 	title: "Components/Sidebar",
@@ -21,7 +21,7 @@ export default {
 		side: "left",
 		variant: "floating",
 	},
-} as Meta<typeof Sidebar>;
+} as Meta<typeof Sidebar>
 
 // This is sample data.
 const data = {
@@ -153,7 +153,7 @@ const data = {
 			],
 		},
 	],
-};
+}
 
 export const Basic = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 	return (
@@ -185,5 +185,5 @@ export const Basic = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 				<SidebarTrigger />
 			</main>
 		</SidebarProvider>
-	);
-};
+	)
+}

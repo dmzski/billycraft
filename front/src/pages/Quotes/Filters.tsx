@@ -1,30 +1,30 @@
-import { useI18n } from "@/i18n";
-import { Button, Collapsible, Input } from "@billycraft/ui";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { useI18n } from "@/i18n"
+import { Button, Collapsible, Input } from "@billycraft/ui"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 import {
 	type ChangeEventHandler,
 	type Dispatch,
 	type SetStateAction,
 	useReducer,
-} from "react";
+} from "react"
 
 type QuoteFilterContainerProps = {
-	filters: Record<string, string>;
-	setFilters: Dispatch<SetStateAction<Record<string, string>>>;
-};
+	filters: Record<string, string>
+	setFilters: Dispatch<SetStateAction<Record<string, string>>>
+}
 
 const QuoteFilterContainer = ({
 	filters,
 	setFilters,
 }: QuoteFilterContainerProps) => {
-	const { t } = useI18n();
-	const [open, toggleOpen] = useReducer((state) => !state, false);
+	const { t } = useI18n()
+	const [open, toggleOpen] = useReducer((state) => !state, false)
 
 	const handleChange =
 		(field: keyof typeof filters): ChangeEventHandler<HTMLInputElement> =>
 		(e) => {
-			setFilters({ ...filters, [field]: e.target.value });
-		};
+			setFilters({ ...filters, [field]: e.target.value })
+		}
 
 	return (
 		<Collapsible
@@ -59,7 +59,7 @@ const QuoteFilterContainer = ({
 				/>
 			</div>
 		</Collapsible>
-	);
-};
+	)
+}
 
-export default QuoteFilterContainer;
+export default QuoteFilterContainer

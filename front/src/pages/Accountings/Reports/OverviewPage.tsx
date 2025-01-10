@@ -1,16 +1,19 @@
-import { useMemo } from "react";
-import ReportTable from "./components/ReportTable";
-import { useI18n } from "@/i18n";
-import { useReportByYearQuery } from "@/queries/useReportByYearQuery";
-import { useReportByMonthQuery } from "@/queries/useReportByMonthQuery";
-import { useFormatDate } from "@/hooks/useFormatDate";
+import { useMemo } from "react"
+import ReportTable from "./components/ReportTable"
+import { useI18n } from "@/i18n"
+import { useReportByYearQuery } from "@/queries/useReportByYearQuery"
+import { useReportByMonthQuery } from "@/queries/useReportByMonthQuery"
+import { useFormatDate } from "@/hooks/useFormatDate"
 
 const OverviewPage = () => {
-	const { t } = useI18n();
-	const { toRFC3339 } = useFormatDate();
-	const currentDate = useMemo(() => toRFC3339(new Date(Date.now())), [toRFC3339]);
-	const { data: monthData } = useReportByMonthQuery(currentDate);
-	const { data: yearData } = useReportByYearQuery(currentDate);
+	const { t } = useI18n()
+	const { toRFC3339 } = useFormatDate()
+	const currentDate = useMemo(
+		() => toRFC3339(new Date(Date.now())),
+		[toRFC3339],
+	)
+	const { data: monthData } = useReportByMonthQuery(currentDate)
+	const { data: yearData } = useReportByYearQuery(currentDate)
 
 	const currentMonth = useMemo(
 		() =>
@@ -18,7 +21,7 @@ const OverviewPage = () => {
 				.format(Date.now())
 				.toLocaleUpperCase(),
 		[],
-	);
+	)
 
 	return (
 		<div>
@@ -36,7 +39,7 @@ const OverviewPage = () => {
 			</div>
 			{yearData ? <ReportTable report={yearData} /> : null}
 		</div>
-	);
-};
+	)
+}
 
-export default OverviewPage;
+export default OverviewPage

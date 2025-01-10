@@ -1,24 +1,24 @@
-import { Alert, Loader, useToast } from "@billycraft/ui";
-import { useI18n } from "@/i18n";
-import { useForm } from "react-hook-form";
-import { FormErrorAlert } from "@/components/FormErrorAlert";
-import { useAllMyInvitationsQuery } from "@/queries/useAllMyInvitationsQuery";
-import { sendErrorToSentry } from "@/utils/errors";
-import { useUser } from "@/providers/UserProvider";
-import { InvitationsService } from "@/sdk";
-import { Form } from "@/components/form/Form";
-import { Submit } from "@/components/form/Submit";
-import { useOrganization } from "@/providers/OrganizationProvider";
+import { Alert, Loader, useToast } from "@billycraft/ui"
+import { useI18n } from "@/i18n"
+import { useForm } from "react-hook-form"
+import { FormErrorAlert } from "@/components/FormErrorAlert"
+import { useAllMyInvitationsQuery } from "@/queries/useAllMyInvitationsQuery"
+import { sendErrorToSentry } from "@/utils/errors"
+import { useUser } from "@/providers/UserProvider"
+import { InvitationsService } from "@/sdk"
+import { Form } from "@/components/form/Form"
+import { Submit } from "@/components/form/Submit"
+import { useOrganization } from "@/providers/OrganizationProvider"
 
 export const JoinOrganization = () => {
-	const { scopedT, t } = useI18n();
-	const pageT = scopedT("onboarding.join");
-	const { data, isLoading } = useAllMyInvitationsQuery();
-	const { reload: reloadUser } = useUser();
-	const { reload: reloadOrganization } = useOrganization();
+	const { scopedT, t } = useI18n()
+	const pageT = scopedT("onboarding.join")
+	const { data, isLoading } = useAllMyInvitationsQuery()
+	const { reload: reloadUser } = useUser()
+	const { reload: reloadOrganization } = useOrganization()
 
-	const toast = useToast();
-	const methods = useForm();
+	const toast = useToast()
+	const methods = useForm()
 
 	const onSubmit = async () => {
 		try {
@@ -27,26 +27,26 @@ export const JoinOrganization = () => {
 					body: {
 						companyId: data[0].companyId,
 					},
-				});
-				toast.show(pageT("success"));
-				await Promise.all([reloadUser(), reloadOrganization()]);
+				})
+				toast.show(pageT("success"))
+				await Promise.all([reloadUser(), reloadOrganization()])
 			}
 		} catch (err) {
-			sendErrorToSentry(err);
-			methods.setError("root", { message: t("genericFormError") });
+			sendErrorToSentry(err)
+			methods.setError("root", { message: t("genericFormError") })
 		}
-	};
+	}
 
 	if (isLoading && !data) {
 		return (
 			<div className="flex justify-center items-center">
 				<Loader />
 			</div>
-		);
+		)
 	}
 
 	if (!data) {
-		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>;
+		return <Alert variant="destructive">{t("genericDataLoadError")}</Alert>
 	}
 
 	return data.length === 0 ? (
@@ -72,5 +72,5 @@ export const JoinOrganization = () => {
 				<Submit>{pageT("submit")}</Submit>
 			</div>
 		</Form>
-	);
-};
+	)
+}

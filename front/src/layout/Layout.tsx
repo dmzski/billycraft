@@ -1,32 +1,32 @@
-import type { ReactNode } from "react";
-import { AppSidebar } from "./AppSidebar";
-import { useAuth } from "@/providers/AuthProvider";
-import { useI18n } from "@/i18n";
+import type { ReactNode } from "react"
+import { AppSidebar } from "./AppSidebar"
+import { useAuth } from "@/providers/AuthProvider"
+import { useI18n } from "@/i18n"
 import {
 	ArrowRightStartOnRectangleIcon,
 	ChevronDownIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/solid"
 import {
 	Button,
 	Dropdown,
 	Link,
 	SidebarProvider,
 	SidebarTrigger,
-} from "@billycraft/ui";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { useUser } from "@/providers/UserProvider";
-import { SUPPORT_EMAIL } from "@/constants/global";
-import { ROUTES } from "@/routes";
-import { Link as ReactRouterLink } from "react-router-dom";
+} from "@billycraft/ui"
+import { ThemeToggle } from "@/components/ThemeToggle"
+import { useUser } from "@/providers/UserProvider"
+import { SUPPORT_EMAIL } from "@/constants/global"
+import { ROUTES } from "@/routes"
+import { Link as ReactRouterLink } from "react-router-dom"
 
 type LayoutProps = {
-	children: ReactNode;
-};
+	children: ReactNode
+}
 
 const Layout = ({ children }: LayoutProps) => {
-	const { logout } = useAuth();
-	const { user } = useUser();
-	const { t } = useI18n();
+	const { logout } = useAuth()
+	const { user } = useUser()
+	const { t } = useI18n()
 
 	return (
 		<SidebarProvider>
@@ -79,7 +79,7 @@ const Layout = ({ children }: LayoutProps) => {
 				</main>
 			</div>
 		</SidebarProvider>
-	);
-};
+	)
+}
 
-export default Layout;
+export default Layout

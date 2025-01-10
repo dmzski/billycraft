@@ -1,20 +1,20 @@
-import { useI18n } from "@/i18n";
-import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import { ROUTES } from "@/routes";
-import { Button } from "@billycraft/ui";
-import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { useI18n } from "@/i18n"
+import { useAllProductsQuery } from "@/queries/useAllProductsQuery"
+import { ROUTES } from "@/routes"
+import { Button } from "@billycraft/ui"
+import { ShoppingBagIcon } from "@heroicons/react/24/solid"
+import { Link } from "react-router-dom"
 
 export const StockStatusSection = () => {
-	const { data: products } = useAllProductsQuery();
-	const { scopedT } = useI18n();
-	const pageT = scopedT("dashboard.productStockAlert");
+	const { data: products } = useAllProductsQuery()
+	const { scopedT } = useI18n()
+	const pageT = scopedT("dashboard.productStockAlert")
 
 	const noStockCount =
 		products?.filter(
 			({ stock, stockAlert }) =>
 				stockAlert && typeof stock === "number" && stock === 0,
-		).length ?? 0;
+		).length ?? 0
 
 	return (
 		<section className="border rounded-md p-4 flex flex-col gap-4 flex-1">
@@ -53,5 +53,5 @@ export const StockStatusSection = () => {
 				</Button>
 			</div>
 		</section>
-	);
-};
+	)
+}

@@ -1,14 +1,14 @@
-import clsx from "clsx";
-import { type HTMLAttributes, type ReactNode, forwardRef } from "react";
+import clsx from "clsx"
+import { type HTMLAttributes, type ReactNode, forwardRef } from "react"
 
 export type RowProps = HTMLAttributes<HTMLDivElement> & {
-	template?: string;
-	children?: ReactNode;
-};
+	template?: string
+	children?: ReactNode
+}
 
 export const Row = forwardRef<HTMLDivElement, RowProps>(
 	({ template, children, className, ...props }: RowProps) => {
-		const finalClasses = clsx("grid", className);
+		const finalClasses = clsx("grid", className)
 
 		return (
 			<div
@@ -18,8 +18,8 @@ export const Row = forwardRef<HTMLDivElement, RowProps>(
 			>
 				{children}
 			</div>
-		);
+		)
 	},
-);
+)
 
-Row.displayName = "Row";
+Row.displayName = "Row"

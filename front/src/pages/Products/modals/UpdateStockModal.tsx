@@ -1,53 +1,53 @@
-import { useI18n } from "@/i18n";
-import { Button, Input, Modal, useToast } from "@billycraft/ui";
+import { useI18n } from "@/i18n"
+import { Button, Input, Modal, useToast } from "@billycraft/ui"
 import {
 	Controller,
 	FormProvider,
 	useFieldArray,
 	useForm,
-} from "react-hook-form";
-import { useMemo, type ComponentProps } from "react";
+} from "react-hook-form"
+import { useMemo, type ComponentProps } from "react"
 import {
 	ArrowDownOnSquareIcon,
 	ArrowUpOnSquareIcon,
 	QrCodeIcon,
 	TrashIcon,
-} from "@heroicons/react/24/solid";
-import { useAllProductsQuery } from "@/queries/useAllProductsQuery";
-import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
-import { sendErrorToSentry } from "@/utils/errors";
-import { Submit } from "@/components/form/Submit";
-import { SelectField } from "@/components/form/SelectField";
-import { InputField } from "@/components/form/InputField";
-import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal";
-import { ProductsService } from "@/sdk";
+} from "@heroicons/react/24/solid"
+import { useAllProductsQuery } from "@/queries/useAllProductsQuery"
+import type { IDetectedBarcode } from "@yudiel/react-qr-scanner"
+import { sendErrorToSentry } from "@/utils/errors"
+import { Submit } from "@/components/form/Submit"
+import { SelectField } from "@/components/form/SelectField"
+import { InputField } from "@/components/form/InputField"
+import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal"
+import { ProductsService } from "@/sdk"
 
 type UpdateStockModalProps = {
-	disclosure: ComponentProps<typeof Modal>["disclosure"];
-	onSubmitSuccess: () => Promise<void>;
-};
+	disclosure: ComponentProps<typeof Modal>["disclosure"]
+	onSubmitSuccess: () => Promise<void>
+}
 
 type UpdateStockFormProps = Omit<UpdateStockModalProps, "disclosure"> & {
-	close: () => void;
-};
+	close: () => void
+}
 
 type UpdateStockFormValues = {
 	inMovements: {
-		productId: string;
-		quantity: number;
-	}[];
+		productId: string
+		quantity: number
+	}[]
 	outMovements: {
-		productId: string;
-		quantity: number;
-	}[];
-};
+		productId: string
+		quantity: number
+	}[]
+}
 
 const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
-	const toast = useToast();
-	const { scopedT, t } = useI18n();
+	const toast = useToast()
+	const { scopedT, t } = useI18n()
 
-	const pageT = scopedT("products.modals.updateStocks");
-	const { data: products } = useAllProductsQuery();
+	const pageT = scopedT("products.modals.updateStocks")
+	const { data: products } = useAllProductsQuery()
 
 	const methods = useForm<UpdateStockFormValues>({
 		mode: "onChange",
@@ -55,7 +55,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 			inMovements: [],
 			outMovements: [],
 		},
-	});
+	})
 
 	const inMovementsFieldArray = useFieldArray({
 		control: methods.control,
@@ -64,7 +64,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 			validate: (values, allValues) =>
 				values.length !== 0 || allValues.outMovements.length !== 0,
 		},
-	});
+	})
 	const outMovementsFieldArray = useFieldArray({
 		control: methods.control,
 		name: "outMovements",
@@ -72,7 +72,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 			validate: (values, allValues) =>
 				values.length !== 0 || allValues.inMovements.length !== 0,
 		},
-	});
+	})
 
 	const onSubmit = async (values: UpdateStockFormValues) => {
 		try {
@@ -81,15 +81,15 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 					in: values.inMovements,
 					out: values.outMovements,
 				},
-			});
-			close();
-			toast.show(pageT("submit.success"));
-			onSubmitSuccess();
+			})
+			close()
+			toast.show(pageT("submit.success"))
+			onSubmitSuccess()
 		} catch (error) {
-			sendErrorToSentry(error);
-			toast.destructive(t("genericFormError"));
+			sendErrorToSentry(error)
+			toast.destructive(t("genericFormError"))
 		}
-	};
+	}
 
 	const productOptions = useMemo(
 		(): ComponentProps<typeof SelectField>["options"] =>
@@ -101,17 +101,17 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 					searchText: product.name,
 				})) ?? [],
 		[products],
-	);
+	)
 
 	const onScannedBarCode = (
 		barcodes: IDetectedBarcode[],
 		direction: "in" | "out",
 	) => {
 		if (products) {
-			const codes = barcodes.map(({ rawValue }) => rawValue);
+			const codes = barcodes.map(({ rawValue }) => rawValue)
 			const productFound = products
 				.filter(({ code }) => !!code)
-				.find(({ code }) => (code ? codes.includes(code) : false));
+				.find(({ code }) => (code ? codes.includes(code) : false))
 			if (productFound) {
 				direction === "in"
 					? inMovementsFieldArray.append(
@@ -127,20 +127,20 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 								quantity: 1,
 							},
 							{ shouldFocus: false },
-						);
+						)
 			} else {
-				toast.destructive(pageT("errors.noMatchingProduct"));
+				toast.destructive(pageT("errors.noMatchingProduct"))
 			}
 		}
-	};
+	}
 
 	return (
 		<FormProvider {...methods}>
 			<form
 				onSubmit={(event) => {
-					event.preventDefault();
-					event.stopPropagation();
-					methods.handleSubmit(onSubmit)(event);
+					event.preventDefault()
+					event.stopPropagation()
+					methods.handleSubmit(onSubmit)(event)
 				}}
 				className="flex flex-col gap-12"
 			>
@@ -182,7 +182,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 											className="md:grid-cols-2"
 											size="icon"
 											onClick={() => {
-												inMovementsFieldArray.remove(index);
+												inMovementsFieldArray.remove(index)
 											}}
 										>
 											<TrashIcon />
@@ -202,7 +202,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 									</Button>
 								}
 								onScan={(result) => {
-									onScannedBarCode(result, "in");
+									onScannedBarCode(result, "in")
 								}}
 							/>
 							<Button
@@ -210,7 +210,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 									inMovementsFieldArray.append({
 										productId: "",
 										quantity: 1,
-									});
+									})
 								}}
 								variant="ghost"
 							>
@@ -256,8 +256,8 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 													value={field.value}
 													onChange={field.onChange}
 													onBlur={(event) => {
-														const newStock = Number(event.target.value) || 1;
-														field.onChange(newStock);
+														const newStock = Number(event.target.value) || 1
+														field.onChange(newStock)
 													}}
 													ref={field.ref}
 												/>
@@ -268,7 +268,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 											size="icon"
 											className="md:col-span-2"
 											onClick={() => {
-												outMovementsFieldArray.remove(index);
+												outMovementsFieldArray.remove(index)
 											}}
 										>
 											<TrashIcon />
@@ -288,7 +288,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 									</Button>
 								}
 								onScan={(result) => {
-									onScannedBarCode(result, "out");
+									onScannedBarCode(result, "out")
 								}}
 							/>
 							<Button
@@ -299,7 +299,7 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 											quantity: 1,
 										},
 										{ shouldFocus: false },
-									);
+									)
 								}}
 								variant="ghost"
 							>
@@ -318,8 +318,8 @@ const UpdateStockForm = ({ close, onSubmitSuccess }: UpdateStockFormProps) => {
 				</Modal.Actions>
 			</form>
 		</FormProvider>
-	);
-};
+	)
+}
 
 export const UpdateStockModal = ({
 	onSubmitSuccess,
@@ -330,4 +330,4 @@ export const UpdateStockModal = ({
 			<UpdateStockForm onSubmitSuccess={onSubmitSuccess} close={close} />
 		)}
 	</Modal>
-);
+)
