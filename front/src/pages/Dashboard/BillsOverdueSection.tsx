@@ -48,7 +48,7 @@ export const BillsOverdueSection = () => {
 				<div className="p-4">{t("dashboard.noNotPaidBills")}</div>
 			)}
 			<Button asChild>
-				<Link to={ROUTES.BILLS.path({ tab: "SENT" })}>
+				<Link to={ROUTES.BILLS.routes.INDEX.path({ tab: "SENT" })}>
 					{t("dashboard.notPaidBills.seeMore")}
 				</Link>
 			</Button>

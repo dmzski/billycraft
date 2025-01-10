@@ -9,7 +9,7 @@ import { useOutgoingCurrentQuery } from "@/queries/useOutgoingCurrentQuery";
 const Overview = () => {
 	const { t } = useI18n();
 	const formatCurrency = useFormatCurrency();
-	const { data, reload } = useOutgoingCurrentQuery();
+	const { data, reload } = useOutgoingCurrentQuery({ onError: () => {} });
 
 	const currentMonth = useMemo(
 		() =>

@@ -1,18 +1,19 @@
-import { Link, useToast } from "@billycraft/ui";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Button, Link, useToast } from "@billycraft/ui";
 import { SUPPORT_EMAIL } from "@/constants/global";
 import { useI18n } from "@/i18n";
 import { ApiError } from "@/lib/ApiError";
 import { useAuth } from "@/providers/AuthProvider";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { sendErrorToSentry } from "@/utils/errors";
-import { RRLink } from "@/components/RRLink";
 import { Form } from "@/components/form/Form";
 import { InputField } from "@/components/form/InputField";
 import { Submit } from "@/components/form/Submit";
 import { CheckboxField } from "@/components/form/CheckboxField";
+import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type RegisterFormValues = {
 	email: string;
@@ -26,7 +27,7 @@ export const Register = () => {
 	const { t } = useI18n();
 	const { register } = useAuth();
 	const toast = useToast();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 
 	const initialValues = useMemo(
 		() =>
@@ -52,7 +53,7 @@ export const Register = () => {
 				name: `${params.firstName} ${params.lastName}`,
 			});
 			toast.show(t("register.success"));
-			push(ROUTES.LOGIN.path());
+			navigate(ROUTES.LOGIN.path());
 		} catch (err) {
 			if (!(err instanceof ApiError) || err.code === 500) {
 				sendErrorToSentry(err);
@@ -109,23 +110,23 @@ export const Register = () => {
 								name="lastName"
 								placeholder="Doe"
 							/>
+              <div className="flex items-center gap-2">
+                <CheckboxField
+                  required
+                  control={methods.control}
+                  labelPosition="right"
+                  name="tos"
+                />
+                <Link href="/tos.txt" target="_blank">
+                  {t("register.fields.tos.label")}
+                </Link>
+              </div>
 						</div>
-						<div className="flex flex-col gap-1">
-							<div className="flex items-center gap-2">
-								<CheckboxField
-									required
-									control={methods.control}
-									labelPosition="right"
-									name="tos"
-								/>
-								<Link href="/tos.txt" target="_blank">
-									{t("register.fields.tos.label")}
-								</Link>
-							</div>
+						<div className="flex flex-col gap-2">
 							<Submit>{t("register.submit")}</Submit>
-							<div className="flex justify-center">
-								<RRLink to={ROUTES.LOGIN.path}>{t("login.title")}</RRLink>
-							</div>
+							<Button asChild variant="outline">
+								<ReactRouterLink to={ROUTES.LOGIN.path()}>{t("login.title")}</ReactRouterLink>
+							</Button>
 						</div>
 						<small className="text-xs">
 							{t("supportPrefix")}
@@ -134,6 +135,7 @@ export const Register = () => {
 					</div>
 				</Form>
 			</div>
+							<ThemeToggle />
 		</div>
 	);
 };

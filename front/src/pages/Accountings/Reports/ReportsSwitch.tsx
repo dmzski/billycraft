@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import DetailsPage from "./DetailsPage";
 import ListPage from "./ListPage";
@@ -36,25 +36,34 @@ const ReportLayout = ({ children }: ReportLayoutProps) => {
 	);
 };
 
+
 const ReportsSwitch = () => (
-	<Switch>
-		<Route path={routes.OVERVIEW.path()}>
-			<ReportLayout>
-				<OverviewPage />
-			</ReportLayout>
-		</Route>
-		<Route path={routes.LIST.path()} exact={routes.LIST.exact}>
-			<ReportLayout>
-				<ListPage />
-			</ReportLayout>
-		</Route>
-		<Route path={routes.DETAILS.path()}>
-			<DetailsPage />
-		</Route>
-		<Route>
-			<Redirect to={routes.OVERVIEW.path()} />
-		</Route>
-	</Switch>
+  <Routes>
+    <Route
+      path={routes.OVERVIEW.route}
+      element={
+        <ReportLayout>
+          <OverviewPage />
+        </ReportLayout>
+      }
+    />
+    <Route
+      path={routes.LIST.route}
+      element={
+        <ReportLayout>
+          <ListPage />
+        </ReportLayout>
+      }
+    />
+    <Route
+      path={routes.DETAILS.route}
+      element={<DetailsPage />}
+    />
+    <Route
+      path="*"
+      element={<Navigate to={routes.OVERVIEW.path()} replace />}
+    />
+  </Routes>
 );
 
 export default ReportsSwitch;

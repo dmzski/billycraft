@@ -1,5 +1,5 @@
 import { Button, Loader } from "@billycraft/ui";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { OUTGOING_ROUTES } from "../constants";
 import OutgoingDetail from "./OutgoingDetail";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -11,13 +11,13 @@ import { RRLink } from "@/components/RRLink";
 const Details = () => {
 	const { t } = useI18n();
 	const { id } = useParams<{ id: string }>();
-	const { data: outgoing, isLoading } = useOutgoingByIdQuery(id, {
+	const { data: outgoing, isLoading } = useOutgoingByIdQuery(id ?? '', {
 		enabled: !!id,
 	});
 
 	if (!outgoing && !isLoading) {
 		return (
-			<Redirect to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path()} />
+			<Navigate to={ROUTES.ACCOUNTINGS.routes.OUTGOINGS.routes.LIST.path()} />
 		);
 	}
 
@@ -27,7 +27,7 @@ const Details = () => {
 				<div>
 					<RRLink
 						className="inline-flex gap-1 items-center"
-						to={OUTGOING_ROUTES.routes.LIST.path}
+						to={OUTGOING_ROUTES.routes.LIST.path()}
 					>
 						<ChevronLeftIcon className="size-5" />
 						{t("accounting.outgoings.details.backTo")}

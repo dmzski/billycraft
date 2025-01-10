@@ -1,5 +1,5 @@
 import { Loader, useToast } from "@billycraft/ui";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { BillFormContent } from "@/pages/Bills/components/BillFormContent";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -26,9 +26,9 @@ const defaultBill = {
 export const Edit = () => {
 	const { t } = useI18n();
 	const toast = useToast();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
-	const { data: bill, isLoading } = useBillByIdQuery(id, {
+	const { data: bill, isLoading } = useBillByIdQuery(id ?? '', {
 		enabled: !!id,
 	});
 
@@ -47,9 +47,9 @@ export const Edit = () => {
 		};
 		try {
 			if (bill?.id) {
-				await BillsService.patchBillsById({ path: { id }, body: tmp });
+				await BillsService.patchBillsById({ path: { id: id ?? '' }, body: tmp });
 				toast.show(t("bills.form.submit.success"));
-				push(ROUTES.BILL_OVERVIEW.path({ id: bill.id }));
+				navigate(ROUTES.BILLS.routes.OVERVIEW.path({ id: bill.id }));
 			}
 		} catch {
 			toast.destructive(t("genericFormError"));
@@ -86,14 +86,14 @@ export const Edit = () => {
 	}
 
 	if (bill.status !== "DRAFT") {
-		return <Redirect to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })} />;
+		return <Navigate to={ROUTES.BILLS.routes.OVERVIEW.path({ id: bill.id })} />;
 	}
 
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
 				className="gap-2 flex items-center"
-				to={ROUTES.BILL_OVERVIEW.path({ id: bill.id })}
+				to={ROUTES.BILLS.routes.OVERVIEW.path({ id: bill.id })}
 			>
 				<ChevronLeftIcon className="size-5" /> {t("bills.form.edit.backTo")}
 			</RRLink>

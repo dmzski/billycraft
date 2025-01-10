@@ -1,6 +1,6 @@
 import { Tab } from "@billycraft/ui";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 
 type RRTabProps = ComponentPropsWithoutRef<typeof Tab> & {
 	to: string;
@@ -9,9 +9,9 @@ type RRTabProps = ComponentPropsWithoutRef<typeof Tab> & {
 
 export const RRTab = forwardRef<HTMLAnchorElement, RRTabProps>(
 	({ to, exact, children, ...props }, ref) => {
-		const match = useRouteMatch({
+		const match = useMatch({
 			path: to,
-			exact,
+			end: exact,
 		});
 
 		return (

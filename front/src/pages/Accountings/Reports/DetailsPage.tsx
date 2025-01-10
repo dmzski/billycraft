@@ -1,7 +1,7 @@
 import { Alert, Button, Loader } from "@billycraft/ui";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import type { ReportRequest } from "@/sdk";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ReportOutgoingTable from "./components/ReportOutgoingTable";
 import ReportPerSupplierTable from "./components/ReportPerSupplierTable";
 import ReportTable from "./components/ReportTable";
@@ -43,13 +43,15 @@ const DetailTable = ({ report }: DetailTableProps) => {
 	);
 };
 const DetailsPage = () => {
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
-	const { data: report, isLoading } = useReportByIdQuery(id);
+	const { data: report, isLoading } = useReportByIdQuery(id ?? "", {
+		enabled: !!id,
+	});
 	const { t } = useI18n();
 
 	const onSubmitSuccess = async () => {
-		push(REPORT_ROUTES.routes.LIST.path());
+		navigate(REPORT_ROUTES.routes.LIST.path());
 	};
 
 	if (isLoading && !report) {
@@ -67,14 +69,14 @@ const DetailsPage = () => {
 	return (
 		<div className="flex flex-col gap-10">
 			<div className="flex md:justify-between flex-col gap-5 md:flex-row">
-				<Link to={REPORT_ROUTES.routes.LIST.path}>
+				<Link to={REPORT_ROUTES.routes.LIST.path()}>
 					<Button type="button" variant="ghost">
 						<ArrowLeftIcon />
 						{t("accounting.reports.details.backTo")}
 					</Button>
 				</Link>
 				<DeleteModal
-					id={id}
+					id={id ?? ''}
 					disclosure={
 						<Button variant="destructive">
 							<TrashIcon />

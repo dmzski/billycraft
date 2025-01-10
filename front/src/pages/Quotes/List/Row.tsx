@@ -74,7 +74,7 @@ const QuoteTableLine = ({
 							</Button>
 							<QuoteLabel
 								quote={quote}
-								to={ROUTES.QUOTE_OVERVIEW.path(
+								to={ROUTES.QUOTES.routes.OVERVIEW.path(
 									{ id: quote.id },
 									{ fromTab: selectedStatus },
 								)}

@@ -46,7 +46,7 @@ const BillPage = () => {
 			<div className="flex justify-between">
 				<h1 className="text-3xl">{t("bills.list.title")}</h1>
 				<Button asChild>
-					<Link to={ROUTES.BILL_ADD.path()}>
+					<Link to={ROUTES.BILLS.routes.ADD.path()}>
 						<PlusIcon />
 						<span>{t("bills.list.add")}</span>
 					</Link>

@@ -8,7 +8,7 @@ import { useFormatDate } from "@/hooks/useFormatDate";
 const OverviewPage = () => {
 	const { t } = useI18n();
 	const { toRFC3339 } = useFormatDate();
-	const currentDate = useMemo(() => toRFC3339(Date.now()), [toRFC3339]);
+	const currentDate = useMemo(() => toRFC3339(new Date(Date.now())), [toRFC3339]);
 	const { data: monthData } = useReportByMonthQuery(currentDate);
 	const { data: yearData } = useReportByYearQuery(currentDate);
 

@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { useUser } from "@/providers/UserProvider";
 import { useAuth } from "@/providers/AuthProvider";
@@ -19,29 +19,30 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Account } from "./Account/Account";
 import { Organization } from "./Organization/Organization";
 import { useOrganization } from "@/providers/OrganizationProvider";
+import type { ReactElement } from "react";
 
-type PathComponentTuple = [string, () => JSX.Element];
+type PathComponentTuple = [string, () => ReactElement];
 
 const UNAUTHENTIFIED_ROUTES: PathComponentTuple[] = [
-	[ROUTES.LOGIN.path(), Login],
-	[ROUTES.REGISTER.path(), Register],
+	[ROUTES.LOGIN.route, Login],
+	[ROUTES.REGISTER.route, Register],
 ];
 
 const ONBOARDING_ROUTES: PathComponentTuple[] = [
-	[ROUTES.ONBOARDING.path(), Onboarding],
+	[ROUTES.ONBOARDING.route, Onboarding],
 ];
 
 const APP_ROUTES: PathComponentTuple[] = [
-	[ROUTES.ACCOUNTINGS.path(), AccountingSwitch],
-	[ROUTES.QUOTES.path(), QuoteSwitch],
-	[ROUTES.BILLS.path(), BillSwitch],
-	[ROUTES.CUSTOMERS.path(), CustomerSwitch],
-	[ROUTES.SUPPLIERS.path(), SupplierSwitch],
-	[ROUTES.DASHBOARD.path(), Dashboard],
-	[ROUTES.PRODUCTS.path(), ProductsSwitch],
-	[ROUTES.ORGANIZATION.path(), Organization],
-	[ROUTES.HISTORY.path(), History],
-	[ROUTES.ACCOUNT.path(), Account],
+	[ROUTES.ACCOUNTINGS.route, AccountingSwitch],
+	[ROUTES.QUOTES.route, QuoteSwitch],
+	[ROUTES.BILLS.route, BillSwitch],
+	[ROUTES.CUSTOMERS.route, CustomerSwitch],
+	[ROUTES.SUPPLIERS.route, SupplierSwitch],
+	[ROUTES.DASHBOARD.route, Dashboard],
+	[ROUTES.PRODUCTS.route, ProductsSwitch],
+	[ROUTES.ORGANIZATION.route, Organization],
+	[ROUTES.HISTORY.route, History],
+	[ROUTES.ACCOUNT.route, Account],
 ];
 
 export const MainSwitch = () => {
@@ -61,20 +62,20 @@ export const MainSwitch = () => {
 
 	if (!isAuthenticated) {
 		return (
-			<Switch>
+			<Routes>
 				{UNAUTHENTIFIED_ROUTES.map(([path, RouteComponent]) => (
 					<Route
 						key={path}
 						path={path}
-						render={() => (
+						element={
 							<ErrorBoundary>
 								<RouteComponent />
 							</ErrorBoundary>
-						)}
+						}
 					/>
 				))}
-				<Route render={() => <Redirect to={ROUTES.LOGIN.path()} />} />
-			</Switch>
+				<Route path="*" element={<Navigate to={ROUTES.LOGIN.path()} />} />
+			</Routes>
 		);
 	}
 
@@ -90,31 +91,31 @@ export const MainSwitch = () => {
 
 	if (user && user.companyId === null) {
 		return (
-			<Switch>
+			<Routes>
 				{ONBOARDING_ROUTES.map(([path, RouteComponent]) => (
 					<Route
 						key={path}
 						path={path}
-						render={() => (
+						element={
 							<ErrorBoundary>
 								<RouteComponent />
 							</ErrorBoundary>
-						)}
+						}
 					/>
 				))}
-				<Route render={() => <Redirect to={ROUTES.ONBOARDING.path()} />} />
-			</Switch>
+				<Route path="*" element={<Navigate to={ROUTES.ONBOARDING.path()} />} />
+			</Routes>
 		);
 	}
 	return (
 		<Layout>
 			<ErrorBoundary>
-				<Switch>
+				<Routes>
 					{APP_ROUTES.map(([path, RouteComponent]) => (
-						<Route key={path} path={path} render={() => <RouteComponent />} />
+						<Route key={path} path={path} element={<RouteComponent />} />
 					))}
-					<Route render={() => <Redirect to={ROUTES.DASHBOARD.path()} />} />
-				</Switch>
+					<Route element={<Navigate to={ROUTES.DASHBOARD.path()} />} />
+				</Routes>
 			</ErrorBoundary>
 		</Layout>
 	);

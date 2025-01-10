@@ -1,5 +1,5 @@
 import { Loader, useToast } from "@billycraft/ui";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { type QuoteRouteProps, ROUTES } from "@/routes";
 import { QuoteFormContent } from "@/pages/Quotes/components/QuoteFormContent";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -26,9 +26,9 @@ const defaultQuote = {
 export const Edit = () => {
 	const { t } = useI18n();
 	const toast = useToast();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { id } = useParams<QuoteRouteProps>();
-	const { data: quote, isLoading } = useQuoteByIdQuery(id, {
+	const { data: quote, isLoading } = useQuoteByIdQuery(id ?? '', {
 		enabled: !!id,
 	});
 
@@ -52,7 +52,7 @@ export const Edit = () => {
 					body: tmp,
 				});
 				toast.show(t("quotes.form.submit.success"));
-				push(ROUTES.QUOTE_OVERVIEW.path({ id: quote.id }));
+				navigate(ROUTES.QUOTES.routes.OVERVIEW.path({ id: quote.id }));
 			}
 		} catch {
 			toast.destructive(t("genericFormError"));
@@ -91,14 +91,14 @@ export const Edit = () => {
 	}
 
 	if (quote.status !== "DRAFT") {
-		return <Redirect to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })} />;
+		return <Navigate to={ROUTES.QUOTES.routes.OVERVIEW.path({ id: quote.id })} />;
 	}
 
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
 				className="gap-2 inline-flex items-center"
-				to={ROUTES.QUOTE_OVERVIEW.path({ id: quote.id })}
+				to={ROUTES.QUOTES.routes.OVERVIEW.path({ id: quote.id })}
 			>
 				<ChevronLeftIcon className="size-5" /> {t("quotes.form.backTo.edit")}
 			</RRLink>

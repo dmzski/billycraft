@@ -34,7 +34,7 @@ export const ListRow = ({ customer }: ListRowProps) => {
 							</div>
 							<CustomerLabel
 								customer={customer}
-								to={ROUTES.CUSTOMER_OVERVIEW.path({
+								to={ROUTES.CUSTOMERS.routes.OVERVIEW.path({
 									id: customer.id.toString(),
 								})}
 							/>

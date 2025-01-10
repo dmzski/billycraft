@@ -1,7 +1,6 @@
 import type { Select } from "@billycraft/ui";
 import { type ComponentProps, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import { Prompt } from "react-router-dom";
 import useCustomers from "@/hooks/useCustomers";
 import BillLineTable from "./BillLineTable";
 import { useI18n } from "@/i18n";
@@ -51,10 +50,10 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
 
 	return (
 		<div className="flex flex-col gap-12">
-			<Prompt
-				when={isDirty && !isSubmitting}
-				message={t("bills.form.exitWarning")}
-			/>
+			{/* <Prompt */}
+			{/* 	when={isDirty && !isSubmitting} */}
+			{/* 	message={t("bills.form.exitWarning")} */}
+			{/* /> */}
 			<div className="grid md:grid-cols-12 gap-4">
 				<SelectField
 					control={control}

@@ -11,7 +11,7 @@ import {
 	DocumentArrowDownIcon,
 	PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
 import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -26,9 +26,9 @@ export const Overview = () => {
 	const { t, scopedT } = useI18n();
 	const toast = useToast();
 	const { id } = useParams<BillRouteProps>();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { fromTab } = useQueryParams<BillOverviewRouteQueryParams>();
-	const { data: bill, isLoading, reload } = useBillByIdQuery(id);
+	const { data: bill, isLoading, reload } = useBillByIdQuery(id ?? '', {enabled: !!id});
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
 		(state) => !state,
 		false,
@@ -72,10 +72,10 @@ export const Overview = () => {
 					path: { id: bill.id },
 				}).then(({ data }) => data);
 				toast.show(t("bills.form.duplicateSuccess"));
-				push(
+				navigate(
 					newBill?.id
-						? ROUTES.BILL_OVERVIEW.path({ id: newBill.id })
-						: ROUTES.BILLS.path(),
+						? ROUTES.BILLS.routes.OVERVIEW.path({ id: newBill.id })
+						: ROUTES.BILLS.routes.INDEX.path(),
 				);
 			} catch (error) {
 				sendErrorToSentry(error);
@@ -101,7 +101,7 @@ export const Overview = () => {
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
-				to={ROUTES.BILLS.path({ tab: fromTab })}
+				to={ROUTES.BILLS.routes.INDEX.path({ tab: fromTab })}
 				className="inline-flex items-center gap-1"
 			>
 				<ChevronLeftIcon className="size-4" />
@@ -132,7 +132,7 @@ export const Overview = () => {
 					) : null}
 					{bill.status === "DRAFT" ? (
 						<Button asChild>
-							<Link to={ROUTES.BILL_EDIT.path({ id: bill.id })}>
+							<Link to={ROUTES.BILLS.routes.EDIT.path({ id: bill.id })}>
 								<PencilIcon />
 								<span>{t("edit")}</span>
 							</Link>

@@ -13,7 +13,7 @@ import {
 	PencilIcon,
 	PlusIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Actions } from "./Actions";
 import { useReducer } from "react";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -29,8 +29,8 @@ export const Overview = () => {
 	const toast = useToast();
 	const { id } = useParams<QuoteRouteProps>();
 	const { fromTab } = useQueryParams<QuoteOverviewRouteQueryParams>();
-	const { data: quote, isLoading, reload } = useQuoteByIdQuery(id);
-	const { push } = useHistory();
+	const { data: quote, isLoading, reload } = useQuoteByIdQuery(id ?? '', {enabled: !!id});
+	const navigate = useNavigate();
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
 		(state) => !state,
 		false,
@@ -79,9 +79,9 @@ export const Overview = () => {
 				}).then(({ data }) => data);
 				toast.show(t("quotes.details.createBillSuccess"));
 				if (data?.id) {
-					push(ROUTES.BILL_OVERVIEW.path({ id: data.id }));
+					navigate(ROUTES.BILLS.routes.OVERVIEW.path({ id: data.id }));
 				} else {
-					push(ROUTES.BILLS.path());
+					navigate(ROUTES.BILLS.routes.INDEX.path());
 				}
 			} catch {
 				toast.destructive(t("quotes.form.createBillError"));
@@ -98,9 +98,9 @@ export const Overview = () => {
 					path: { id: quote.id },
 				}).then(({ data }) => data);
 				toast.show(t("quotes.details.duplicateSuccess"));
-				push(
+				navigate(
 					newQuote?.id
-						? ROUTES.QUOTE_OVERVIEW.path({ id: newQuote.id })
+						? ROUTES.QUOTES.routes.OVERVIEW.path({ id: newQuote.id })
 						: ROUTES.QUOTES.path(),
 				);
 			} catch (error) {
@@ -127,7 +127,7 @@ export const Overview = () => {
 	return (
 		<div className="flex flex-col gap-12">
 			<RRLink
-				to={ROUTES.QUOTES.path({ tab: fromTab })}
+				to={ROUTES.QUOTES.routes.INDEX.path({ tab: fromTab })}
 				className="inline-flex items-center gap-1"
 			>
 				<ChevronLeftIcon className="size-4" />
@@ -148,7 +148,7 @@ export const Overview = () => {
 					</Button>
 					{quote.status === "DRAFT" ? (
 						<Button asChild>
-							<Link to={ROUTES.QUOTE_EDIT.path({ id: quote.id })}>
+							<Link to={ROUTES.QUOTES.routes.EDIT.path({ id: quote.id })}>
 								<PencilIcon />
 								<span>{t("edit")}</span>
 							</Link>

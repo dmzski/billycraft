@@ -7,7 +7,7 @@ import {
 	ClipboardIcon,
 	PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { DeleteCustomerModal } from "../modals/DeleteCustomerModal";
 import { RRLink } from "@/components/RRLink";
 import { CustomerLabel } from "@/components/labels/CustomerLabel";
@@ -15,15 +15,15 @@ import { CustomerLabel } from "@/components/labels/CustomerLabel";
 export const Overview = () => {
 	const { scopedT, t } = useI18n();
 	const { id } = useParams<CustomerRouteProps>();
-	const { data: customer, isLoading } = useCustomerQuery(id, {
+	const { data: customer, isLoading } = useCustomerQuery(id ?? '', {
 		enabled: !!id,
 	});
-	const { push } = useHistory();
+	const navigate = useNavigate();
 
 	const pageT = scopedT("customers.details");
 
 	const onSubmitSuccess = async () => {
-		push(ROUTES.CUSTOMERS.path());
+		navigate(ROUTES.CUSTOMERS.routes.INDEX.path());
 	};
 
 	if (isLoading && !customer) {
@@ -43,7 +43,7 @@ export const Overview = () => {
 			<div>
 				<RRLink
 					className="inline-flex gap-2 items-center"
-					to={ROUTES.CUSTOMERS.path()}
+					to={ROUTES.CUSTOMERS.routes.INDEX.path()}
 				>
 					<ChevronLeftIcon className="size-4" />
 					{pageT("goBack")}
@@ -54,7 +54,7 @@ export const Overview = () => {
 					<CustomerLabel size="lg" customer={customer} />
 				</div>
 				<Button asChild>
-					<Link to={ROUTES.CUSTOMER_EDIT.path({ id: customer.id.toString() })}>
+					<Link to={ROUTES.CUSTOMERS.routes.EDIT.path({ id: customer.id.toString() })}>
 						<PencilIcon />
 						<span>{t("edit")}</span>
 					</Link>

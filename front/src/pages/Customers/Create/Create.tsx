@@ -2,10 +2,10 @@ import { Button, Input, TextArea, useToast } from "@billycraft/ui";
 import { useController, useForm } from "react-hook-form";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
-import { useHistory } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { RRLink } from "@/components/RRLink";
 import { type CustomerRequest, CustomersService } from "@/sdk";
+import { useNavigate } from "react-router-dom";
 
 const defaultCustomer = {
 	address: "",
@@ -19,7 +19,7 @@ const defaultCustomer = {
 
 export const Create = () => {
 	const { t } = useI18n();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const toast = useToast();
 	const {
 		handleSubmit,
@@ -32,8 +32,14 @@ export const Create = () => {
 
 	const onSubmit = async (data: CustomerRequest) => {
 		try {
-			await CustomersService.postCustomers({ body: data });
-			push(ROUTES.CUSTOMERS.path());
+			const customer = await CustomersService.postCustomers({
+				body: data,
+			}).then(({ data }) => data);
+			if (customer) {
+				navigate(ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer?.id }));
+			} else {
+				navigate(ROUTES.CUSTOMERS.routes.INDEX.path());
+			}
 			toast.show(t("customers.form.submit.success"));
 		} catch {
 			toast.destructive(t("genericFormError"));
@@ -80,7 +86,7 @@ export const Create = () => {
 
 	return (
 		<div className="flex flex-col w-full gap-5">
-			<RRLink to={ROUTES.CUSTOMERS.path()} className="flex gap-2 items-center">
+			<RRLink to={ROUTES.CUSTOMERS.routes.INDEX.path()} className="flex gap-2 items-center">
 				<ChevronLeftIcon className="size-5" />
 				{t("customers.form.backToList")}
 			</RRLink>

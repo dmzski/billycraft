@@ -9,7 +9,7 @@ import {
 import { useController, useForm } from "react-hook-form";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useI18n } from "@/i18n";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCustomerQuery } from "@/queries/useCustomerQuery";
 import { ROUTES } from "@/routes";
 import { RRLink } from "@/components/RRLink";
@@ -27,9 +27,9 @@ const defaultCustomer = {
 
 export const Edit = () => {
 	const { id } = useParams<{ id: string }>();
-	const { data: customer, isLoading } = useCustomerQuery(id, { enabled: !!id });
+	const { data: customer, isLoading } = useCustomerQuery(id ?? '', { enabled: !!id });
 	const { t } = useI18n();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const toast = useToast();
 	const {
 		handleSubmit,
@@ -47,7 +47,7 @@ export const Edit = () => {
 					body: data,
 					path: { id: customer.id },
 				});
-				push(ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() }));
+				navigate(ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer.id.toString() }));
 				toast.show(t("customers.form.submit.success"));
 			}
 		} catch {
@@ -104,7 +104,7 @@ export const Edit = () => {
 	return (
 		<div className="flex flex-col w-full gap-5">
 			<RRLink
-				to={ROUTES.CUSTOMER_OVERVIEW.path({ id: customer.id.toString() })}
+				to={ROUTES.CUSTOMERS.routes.OVERVIEW.path({ id: customer.id.toString() })}
 				className="flex gap-2 items-center"
 			>
 				<ChevronLeftIcon className="w-5" />

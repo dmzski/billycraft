@@ -50,170 +50,211 @@ export const ROUTES = {
 	LOGIN: {
 		id: "login",
 		path: () => "/login",
+		route: "/login",
 	},
 	REGISTER: {
 		id: "register",
 		path: () => "/register",
+		route: "/register",
 	},
 	BILLS: {
 		id: "bills",
-		exact: true,
+		route: "/bills/*",
 		path: (query?: BillRouteQueryParams) =>
 			`/bills${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
-	},
-	BILL_FORM: {
-		id: "bills.form",
-		path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/edit/${params.id}`,
-	},
-	BILL_ADD: {
-		id: "bills.form",
-		path: () => "/bills/create",
-	},
-	BILL_EDIT: {
-		id: "bills.form",
-		path: (params = DEFAULT_BILL_ROUTE_PARAMS) => `/bills/edit/${params.id}`,
-	},
-	BILL_OVERVIEW: {
-		id: "bills.form",
-		path: (
-			params = DEFAULT_BILL_ROUTE_PARAMS,
-			query?: BillOverviewRouteQueryParams,
-		) =>
-			`/bills/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
+		routes: {
+			INDEX: {
+				id: "bills",
+				exact: true,
+				path: (query?: BillRouteQueryParams) =>
+					`/bills${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
+				route: "/",
+			},
+			FORM: {
+				id: "bills.form",
+				path: (params: BillRouteProps) => `/bills/edit/${params.id}`,
+				route: `/edit/${DEFAULT_BILL_ROUTE_PARAMS.id}`,
+			},
+			ADD: {
+				id: "bills.form",
+				path: () => "/bills/create",
+				route: "/create",
+			},
+			EDIT: {
+				id: "bills.form",
+				path: (params: BillRouteProps) => `/bills/edit/${params.id}`,
+				route: `/edit/${DEFAULT_BILL_ROUTE_PARAMS.id}`,
+			},
+			OVERVIEW: {
+				id: "bills.form",
+				path: (params: BillRouteProps, query?: BillOverviewRouteQueryParams) =>
+					`/bills/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
+				route: `/overview/${DEFAULT_BILL_ROUTE_PARAMS.id}`,
+			},
+		},
 	},
 	CUSTOMERS: {
 		id: "customers",
-		exact: true,
+		route: "/customers/*",
 		path: () => "/customers",
-	},
-	CUSTOMER_ADD: {
-		id: "customers.add",
-		path: () => "/customers/create",
-	},
-	CUSTOMER_EDIT: {
-		id: "customers.edit",
-		path: (params = DEFAULT_CUSTOMER_ROUTE_PARAMS) =>
-			`/customers/edit/${params.id}`,
-	},
-	CUSTOMER_OVERVIEW: {
-		id: "customers.overview",
-		path: (params = DEFAULT_CUSTOMER_ROUTE_PARAMS) =>
-			`/customers/overview/${params.id}`,
+		routes: {
+			INDEX: {
+				id: "customers",
+				path: () => "/customers",
+				route: "/",
+			},
+			ADD: {
+				id: "customers.add",
+				path: () => "/customers/create",
+				route: "/create",
+			},
+			EDIT: {
+				id: "customers.edit",
+				path: (params: CustomerRouteProps) => `/customers/edit/${params.id}`,
+				route: `/edit/${DEFAULT_CUSTOMER_ROUTE_PARAMS.id}`,
+			},
+			OVERVIEW: {
+				id: "customers.overview",
+				path: (params: CustomerRouteProps) =>
+					`/customers/overview/${params.id}`,
+				route: `/overview/${DEFAULT_CUSTOMER_ROUTE_PARAMS.id}`,
+			},
+		},
 	},
 	DASHBOARD: {
 		id: "dashboard",
 		path: () => "/dashboard",
+		route: "/dashboard",
 	},
 	HISTORY: {
-		exact: false,
 		id: "history",
 		path: () => "/history",
+		route: "/history/*",
 		routes: {
 			TODOS: {
 				id: "history.todos",
-				exact: true,
 				path: () => "/history/todos",
+				route: "/todos",
 			},
 		},
 	},
 	ONBOARDING: {
 		id: "onboarding",
 		path: () => "/onboarding",
-	},
-	ONBOARDING_CREATE: {
-		id: "onboarding.create",
-		path: () => "/onboarding/create-organization",
-	},
-	ONBOARDING_JOIN: {
-		id: "onboarding.join",
-		path: () => "/onboarding/join-organization",
+		route: "/onboarding/*",
+		routes: {
+			INDEX: {
+				id: "onboarding",
+				path: () => "/onboarding",
+				route: "/",
+			},
+			CREATE: {
+				id: "onboarding.create",
+				path: () => "/onboarding/create-organization",
+				route: "/create-organization",
+			},
+			JOIN: {
+				id: "onboarding.join",
+				path: () => "/onboarding/join-organization",
+				route: "/join-organization",
+			},
+		},
 	},
 	PRODUCTS: {
 		id: "products",
-		exact: false,
 		path: () => "/products",
+		route: "/products/*",
 		routes: {
 			LIST: {
-				exact: true,
 				path: () => "/products/list",
+				route: "/list",
 				id: "products.list",
 			},
 			GROUPS: {
-				exact: true,
 				path: () => "/products/groups",
+				route: "/groups",
 				id: "products.groups",
 			},
 		},
 	},
 	QUOTES: {
 		id: "quotes",
-		exact: true,
-		path: (query?: QuoteRouteQueryParams) =>
-			`/quotes${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
-	},
-	QUOTE_OVERVIEW: {
-		id: "quotes.overview",
-		exact: true,
-		path: (
-			params = DEFAULT_QUOTE_ROUTE_PARAMS,
-			query?: QuoteOverviewRouteQueryParams,
-		) =>
-			`/quotes/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
-	},
-	QUOTE_EDIT: {
-		id: "quotes.edit",
-		path: (params = DEFAULT_QUOTE_ROUTE_PARAMS) => `/quotes/edit/${params.id}`,
-	},
-	QUOTE_ADD: {
-		id: "quotes.add",
-		path: () => "/quotes/create",
+		path: () => "/quotes",
+		route: "/quotes/*",
+		routes: {
+			INDEX: {
+				id: "quotes",
+				path: (query?: QuoteRouteQueryParams) =>
+					`/quotes${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
+				route: "/",
+			},
+			OVERVIEW: {
+				id: "quotes.overview",
+				path: (
+					params: QuoteRouteProps,
+					query?: QuoteOverviewRouteQueryParams,
+				) =>
+					`/quotes/overview/${params.id}${query ? `?${new URLSearchParams(query).toString()}` : ""}`,
+				route: `/overview/${DEFAULT_QUOTE_ROUTE_PARAMS.id}`,
+			},
+			EDIT: {
+				id: "quotes.edit",
+				path: (params: QuoteRouteProps) => `/quotes/edit/${params.id}`,
+				route: `/edit/${DEFAULT_QUOTE_ROUTE_PARAMS.id}`,
+			},
+			ADD: {
+				id: "quotes.add",
+				path: () => "/quotes/create",
+				route: "/create",
+			},
+		},
 	},
 	ACCOUNT: {
 		id: "account",
-		exact: true,
 		path: () => "/account",
+		route: "/account",
 	},
 	ORGANIZATION: {
 		id: "organization",
 		path: () => "/organization/",
-		exact: false,
+		route: "/organization/*",
 		routes: {
 			SETTINGS: {
 				id: "organization.settings",
-				exact: true,
 				path: () => "/organization/settings",
+				route: "/settings",
 			},
 			USERS: {
 				id: "organization.users",
-				exact: false,
 				path: () => "/organization/users",
+				route: "/users/*",
 				routes: {
 					USERS: {
 						id: "organization.users.users",
-						exact: true,
 						path: () => "/organization/users/users",
+						route: "/users",
 					},
 					INVITATIONS: {
 						id: "organization.users.invitations",
-						exact: true,
 						path: () => "/organization/users/invitations",
+						route: "/invitations",
 					},
 				},
 			},
 			CUSTOMIZATION: {
 				id: "organization.customization",
-				exact: false,
 				path: () => "/organization/customization",
+				route: "/customization/*",
 				routes: {
 					BILL: {
 						id: "organization.customization.bill",
-						exact: true,
 						path: () => "/organization/customization/bill",
+						route: "/bill",
 					},
 					QUOTE: {
 						id: "organization.customization.quote",
-						exact: true,
 						path: () => "/organization/customization/quote",
+						route: "/quote",
 					},
 				},
 			},
@@ -221,63 +262,75 @@ export const ROUTES = {
 	},
 	SUPPLIERS: {
 		id: "suppliers",
-		exact: true,
 		path: () => "/suppliers",
-	},
-	SUPPLIERS_FORM: {
-		id: "suppliers.form",
-		path: (params = DEFAULT_SUPPLIER_ROUTE_PARAMS) => `/suppliers/${params.id}`,
+		route: "/suppliers/*",
+		routes: {
+			INDEX: {
+				id: "suppliers",
+				path: () => "/suppliers",
+				route: "/",
+			},
+			FORM: {
+				id: "suppliers.form",
+				path: (params: SupplierRouteProps) => `/suppliers/${params.id}`,
+				route: `/${DEFAULT_SUPPLIER_ROUTE_PARAMS.id}`,
+			},
+		},
 	},
 	ACCOUNTINGS: {
 		id: "accounting",
 		path: () => "/accounting",
+		route: "/accounting/*",
 		routes: {
 			OUTGOINGS: {
 				id: "accounting.outgoings",
-				exact: false,
 				path: () => "/accounting/outgoings",
+				route: "/outgoings/*",
 				routes: {
 					OVERVIEW: {
 						id: "accounting.outgoings.overview",
-						exact: true,
 						path: () => "/accounting/outgoings/overview",
+						route: "/overview",
 					},
 					LIST: {
 						id: "accounting.outgoings.list",
-						exact: true,
 						path: () => "/accounting/outgoings/list",
+						route: "/list",
 					},
 					FORM: {
 						id: "accounting.outgoings.form",
-						path: (params = DEFAULT_OUTGOING_ROUTE_PARAMS) =>
+						path: (params: OutgoingRouteProps) =>
 							`/accounting/outgoings/edit/${params.id}`,
+						route: `/edit/${DEFAULT_OUTGOING_ROUTE_PARAMS.id}`,
 					},
 					DETAILS: {
 						id: "accounting.outgoings.details",
-						path: (params = DEFAULT_OUTGOING_ROUTE_PARAMS) =>
+						path: (params: OutgoingRouteProps) =>
 							`/accounting/outgoings/details/${params.id}`,
+						route: `/details/${DEFAULT_OUTGOING_ROUTE_PARAMS.id}`,
 					},
 				},
 			},
 			REPORTS: {
-				exact: false,
 				id: "accounting.reports",
 				path: () => "/accounting/reports",
+				route: "/reports/*",
 				routes: {
 					OVERVIEW: {
 						id: "accounting.reports.overview",
-						exact: true,
 						path: () => "/accounting/reports/overview",
+						route: "/overview",
 					},
 					DETAILS: {
 						id: "accounting.reports.details",
-						path: (params = DEFAULT_REPORT_ROUTE_PARAMS) =>
+						path: (params: ReportRouteProps) =>
 							`/accounting/reports/details/${params.id}`,
+						route: `/details/${DEFAULT_REPORT_ROUTE_PARAMS.id}`,
 					},
 					LIST: {
-						exact: true,
 						id: "accounting.reports.list",
 						path: () => "/accounting/reports/list",
+						route: "/list",
 					},
 				},
 			},

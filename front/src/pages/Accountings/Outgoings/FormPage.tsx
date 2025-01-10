@@ -1,6 +1,6 @@
 import { Button, Loader } from "@billycraft/ui";
 import { useCallback } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import type { OutgoingResponse } from "@/sdk";
 import OutgoingForm from "./Form";
@@ -12,21 +12,21 @@ const { routes } = ROUTES.ACCOUNTINGS.routes.OUTGOINGS;
 const FormPage = () => {
 	const { id } = useParams<{ id: string }>();
 	const { t } = useI18n();
-	const { push } = useHistory();
-	const { data, isLoading } = useOutgoingByIdQuery(id, {
+	const navigate = useNavigate();
+	const { data, isLoading } = useOutgoingByIdQuery(id ?? '', {
 		enabled: id !== "new",
 	});
 
 	const onSubmitSuccess = useCallback(
 		(res: OutgoingResponse) => {
-			push(routes.DETAILS.path({ id: res.id }));
+			navigate(routes.DETAILS.path({ id: res.id }));
 		},
-		[push],
+		[navigate],
 	);
 
 	return (
 		<div>
-			<Link to={routes.LIST.path}>
+			<Link to={routes.LIST.path()}>
 				<Button type="button" variant="ghost">
 					{t("accounting.outgoings.pages.form.goBack")}
 				</Button>

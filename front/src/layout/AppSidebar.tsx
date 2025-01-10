@@ -15,7 +15,7 @@ import {
 	Button,
 } from "@billycraft/ui";
 import { ROUTES, type RouteId } from "@/routes";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 import { useI18n } from "@/i18n";
 import { useOrganizationLogoQuery } from "@/queries/useOrganizationLogoQuery";
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
@@ -39,9 +39,9 @@ type AppSidebarMenuItemsProps = {
 };
 const AppSidebarMenuItem = ({ path, id, exact }: AppSidebarMenuItemsProps) => {
 	const { t } = useI18n();
-	const match = useRouteMatch({
+	const match = useMatch({
 		path,
-		exact,
+		end: exact,
 	});
 	const { isMobile, setOpenMobile } = useSidebar();
 
@@ -128,7 +128,7 @@ export const AppSidebar = ({
 				<SidebarGroup key="main">
 					<SidebarGroupContent>
 						{menuRoutes
-							.filter((route) => !("routes" in route))
+							.filter((route) => ("routes" in route && "INDEX" in route.routes) || !("routes" in route))
 							.map((route) => (
 								<SidebarMenu key={route.id}>
 									<AppSidebarMenuItem
@@ -141,7 +141,7 @@ export const AppSidebar = ({
 					</SidebarGroupContent>
 				</SidebarGroup>
 				{menuRoutes
-					.filter((route) => "routes" in route)
+					.filter((route) => "routes" in route && !("INDEX" in route.routes))
 					.map((route) =>
 						"routes" in route ? (
 							<SidebarGroup key={route.id}>

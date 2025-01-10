@@ -8,11 +8,11 @@ type UseFormatDateReturn = {
 
 export const useFormatDate = (): UseFormatDateReturn => {
 	const toISO9075 = useCallback(
-		(date: string | number | Date) => formatISO9075(parseJSON(date)),
+		(date: string | Date) => formatISO9075(date instanceof Date ? date : parseJSON(date)),
 		[],
 	);
 	const toRFC3339 = useCallback(
-		(date: string | number | Date) => formatRFC3339(parseJSON(date)),
+		(date: string | Date) => formatRFC3339(date instanceof Date ? date : parseJSON(date)),
 		[],
 	);
 

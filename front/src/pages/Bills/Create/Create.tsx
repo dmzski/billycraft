@@ -14,7 +14,7 @@ import { useToast } from "@billycraft/ui";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const defaultBill = {
 	lines: [],
@@ -26,7 +26,7 @@ const defaultBill = {
 export const Create = () => {
 	const { t } = useI18n();
 	const toast = useToast();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { organization } = useOrganization();
 
 	const initialValues = useMemo<BillFormValues>(
@@ -60,10 +60,10 @@ export const Create = () => {
 				({ data }) => data,
 			);
 			toast.show(t("bills.form.submit.success"));
-			push(
+			navigate(
 				newBill?.id
-					? ROUTES.BILL_OVERVIEW.path({ id: newBill.id })
-					: ROUTES.BILLS.path(),
+					? ROUTES.BILLS.routes.OVERVIEW.path({ id: newBill.id })
+					: ROUTES.BILLS.routes.INDEX.path(),
 			);
 		} catch {
 			toast.destructive(t("genericFormError"));
@@ -72,7 +72,7 @@ export const Create = () => {
 
 	return (
 		<div className="w-full px-4 flex flex-col gap-12">
-			<RRLink className="gap-2 flex items-center" to={ROUTES.BILLS.path()}>
+			<RRLink className="gap-2 flex items-center" to={ROUTES.BILLS.routes.INDEX.path()}>
 				<ChevronLeftIcon className="size-5" />
 				<span>{t("bills.form.backTo")}</span>
 			</RRLink>

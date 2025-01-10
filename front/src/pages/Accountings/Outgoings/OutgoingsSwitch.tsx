@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import FormPage from "./FormPage";
 import Details from "./Details";
@@ -38,30 +38,30 @@ const OutgoingLayout = ({ children }: OutgoingLayoutProps) => {
 	);
 };
 const OutgoingsSwitch = () => (
-	<Switch>
+	<Routes>
 		<Route
-			path={routes.OVERVIEW.path()}
-			render={() => (
+			path={routes.OVERVIEW.route}
+			element={
 				<OutgoingLayout>
 					<Overview />
 				</OutgoingLayout>
-			)}
+			}
 		/>
 		<Route
-			path={routes.LIST.path()}
-			exact={routes.LIST.exact}
-			render={() => (
+			path={routes.LIST.route}
+			element={
 				<OutgoingLayout>
 					<ListPage />
 				</OutgoingLayout>
-			)}
+			}
 		/>
-		<Route path={routes.FORM.path()} component={FormPage} />
-		<Route path={routes.DETAILS.path()} component={Details} />
-		<Route>
-			<Redirect to={routes.OVERVIEW.path()} />
-		</Route>
-	</Switch>
+		<Route path={routes.FORM.route} element={<FormPage />} />
+		<Route path={routes.DETAILS.route} element={<Details />} />
+		<Route
+			path="*"
+			element={<Navigate to={routes.OVERVIEW.path()} replace />}
+		/>
+	</Routes>
 );
 
 export default OutgoingsSwitch;

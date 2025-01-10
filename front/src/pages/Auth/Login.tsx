@@ -1,14 +1,15 @@
+import { Link as ReactRouterLink } from "react-router-dom";
 import { Button, Link, useToast } from "@billycraft/ui";
 import { SUPPORT_EMAIL } from "@/constants/global";
 import { useI18n } from "@/i18n";
 import { ApiError } from "@/lib/ApiError";
 import { useAuth } from "@/providers/AuthProvider";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { sendErrorToSentry } from "@/utils/errors";
 import { InputField } from "@/components/form/InputField";
-import { RRLink } from "@/components/RRLink";
+import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type LoginFormValues = {
 	email: string;
@@ -17,8 +18,8 @@ type LoginFormValues = {
 
 export const Login = () => {
 	const { login } = useAuth();
-	const { push } = useHistory();
 	const toast = useToast();
+	const navigate = useNavigate();
 	const { control, handleSubmit } = useForm<LoginFormValues>({
 		mode: "onChange",
 		values: {
@@ -32,7 +33,7 @@ export const Login = () => {
 		try {
 			await login({ email, password });
 			toast.show(t("login.success"));
-			push(ROUTES.DASHBOARD.path());
+			navigate(ROUTES.DASHBOARD.path());
 		} catch (err) {
 			if (!(err instanceof ApiError) || err.code === 500) {
 				sendErrorToSentry(err);
@@ -74,11 +75,11 @@ export const Login = () => {
 							placeholder="*******"
 						/>
 					</div>
-					<div className="flex flex-col gap-4">
+					<div className="flex flex-col gap-2">
 						<Button type="submit">{t("login.submit")}</Button>
-						<div className="flex justify-center">
-							<RRLink to={ROUTES.REGISTER.path}>{t("login.register")}</RRLink>
-						</div>
+						<Button asChild variant="outline">
+							<ReactRouterLink to={ROUTES.REGISTER.path()}>{t("login.register")}</ReactRouterLink>
+						</Button>
 					</div>
 				</form>
 				<small className="text-xs">
@@ -86,6 +87,7 @@ export const Login = () => {
 					<Link href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</Link>
 				</small>
 			</div>
+      <ThemeToggle />
 		</div>
 	);
 };

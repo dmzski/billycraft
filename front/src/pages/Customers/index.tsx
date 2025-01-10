@@ -17,7 +17,7 @@ const CustomerPage = () => {
 					{t("customers.list.title")}
 				</h1>
 				<Button asChild>
-					<Link to={ROUTES.CUSTOMER_ADD.path()}>
+					<Link to={ROUTES.CUSTOMERS.routes.ADD.path()}>
 						<PlusIcon />
 						<span>{t("customers.list.add")}</span>
 					</Link>

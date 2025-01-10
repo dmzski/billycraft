@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { ROUTES } from "@/routes";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Tabs } from "@billycraft/ui";
 import { RRTab } from "@/components/RRTab";
 import { Bill } from "./Bill/Bill";
@@ -28,23 +28,24 @@ export const Customization = () => {
 					</RRTab>
 				</Tabs>
 			</div>
-			<Switch>
+			<Routes>
 				<Route
 					path={ROUTES.ORGANIZATION.routes.CUSTOMIZATION.routes.BILL.path()}
-					component={Bill}
+					element={<Bill />}
 				/>
 				<Route
 					path={ROUTES.ORGANIZATION.routes.CUSTOMIZATION.routes.QUOTE.path()}
-					component={Quote}
+					element={<Quote />}
 				/>
 				<Route
-					render={() => (
-						<Redirect
+        path="*"
+					element={(
+						<Navigate
 							to={ROUTES.ORGANIZATION.routes.CUSTOMIZATION.routes.BILL.path()}
 						/>
 					)}
 				/>
-			</Switch>
+			</Routes>
 		</div>
 	);
 };

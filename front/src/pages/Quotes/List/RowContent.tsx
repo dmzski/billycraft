@@ -41,7 +41,7 @@ export const RowContent = ({ quote, customer }: RowContentProps) => {
 						<dd>
 							{customer ? (
 								<RRLink
-									to={ROUTES.CUSTOMER_OVERVIEW.path({
+									to={ROUTES.CUSTOMERS.routes.OVERVIEW.path({
 										id: customer.id.toString(),
 									})}
 								>

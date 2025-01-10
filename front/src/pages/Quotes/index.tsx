@@ -46,7 +46,7 @@ const QuotePage = () => {
 			<div className="flex justify-between">
 				<h2 className="text-3xl font-semibold">Devis</h2>
 				<Button asChild>
-					<Link to={ROUTES.QUOTE_ADD.path()}>
+					<Link to={ROUTES.QUOTES.routes.ADD.path()}>
 						<PlusIcon />
 						{t("quotes.list.add")}
 					</Link>

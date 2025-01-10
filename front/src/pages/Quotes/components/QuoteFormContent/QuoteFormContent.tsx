@@ -1,6 +1,5 @@
 import { type ComponentProps, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import { Prompt } from "react-router-dom";
 import useCustomers from "@/hooks/useCustomers";
 import QuoteLineTable from "./QuoteLineTable";
 import { useI18n } from "@/i18n";
@@ -36,10 +35,10 @@ export const QuoteFormContent = () => {
 
 	return (
 		<div className="flex flex-col gap-12">
-			<Prompt
-				when={isDirty && !isSubmitting}
-				message={t("quotes.form.exitWarning")}
-			/>
+			{/* <Prompt */}
+			{/* 	when={isDirty && !isSubmitting} */}
+			{/* 	message={t("quotes.form.exitWarning")} */}
+			{/* /> */}
 			<div className="grid md:grid-cols-12 gap-4">
 				<SelectField
 					className="md:col-span-12"

@@ -95,7 +95,7 @@ const BillTableLine = ({
 							</div>
 							<BillLabel
 								bill={bill}
-								to={ROUTES.BILL_OVERVIEW.path(
+								to={ROUTES.BILLS.routes.OVERVIEW.path(
 									{ id: bill.id },
 									{ fromTab: selectedStatus },
 								)}

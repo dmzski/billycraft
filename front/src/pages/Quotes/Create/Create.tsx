@@ -1,5 +1,4 @@
 import { useToast } from "@billycraft/ui";
-import { useHistory } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import {
 	QuoteFormContent,
@@ -15,6 +14,7 @@ import { useMemo } from "react";
 import { FormErrorAlert } from "@/components/FormErrorAlert";
 import { type CreateQuoteRequest, QuotesService } from "@/sdk";
 import { useOrganization } from "@/providers/OrganizationProvider";
+import { useNavigate } from "react-router-dom";
 
 const defaultQuote = {
 	lines: [],
@@ -26,7 +26,7 @@ const defaultQuote = {
 export const Create = () => {
 	const { t } = useI18n();
 	const toast = useToast();
-	const { push } = useHistory();
+	const navigate = useNavigate();
 	const { organization } = useOrganization();
 
 	const initialValues = useMemo<QuoteFormValues>(
@@ -60,9 +60,9 @@ export const Create = () => {
 				({ data }) => data,
 			);
 			toast.show(t("quotes.form.submit.success"));
-			push(
+			navigate(
 				newQuote?.id
-					? ROUTES.QUOTE_OVERVIEW.path({ id: newQuote.id })
+					? ROUTES.QUOTES.routes.OVERVIEW.path({ id: newQuote.id })
 					: ROUTES.QUOTES.path(),
 			);
 		} catch {
@@ -72,7 +72,7 @@ export const Create = () => {
 
 	return (
 		<div className="w-full px-4 flex flex-col gap-12">
-			<RRLink className="gap-2 flex items-center" to={ROUTES.QUOTES.path()}>
+			<RRLink className="gap-2 flex items-center" to={ROUTES.QUOTES.routes.INDEX.path()}>
 				<ChevronLeftIcon className="size-5" /> {t("quotes.form.backTo")}
 			</RRLink>
 			<div className="flex items-center flex-wrap">
