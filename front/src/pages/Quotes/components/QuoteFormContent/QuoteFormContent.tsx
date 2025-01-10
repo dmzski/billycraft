@@ -13,7 +13,7 @@ export const QuoteFormContent = () => {
 	const customers = useCustomers()
 	const {
 		control,
-		formState: { isDirty, isSubmitting, disabled },
+		formState: { disabled },
 		getValues,
 		setValue,
 	} = useFormContext<QuoteFormValues>()

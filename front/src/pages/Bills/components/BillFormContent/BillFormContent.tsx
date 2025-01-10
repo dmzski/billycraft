@@ -19,7 +19,6 @@ export const BillFormContent = ({ bill }: BillFormProps) => {
 	const customers = useCustomers()
 	const {
 		control,
-		formState: { isDirty, isSubmitting },
 		getValues,
 		setValue,
 	} = useFormContext<BillFormValues>()
