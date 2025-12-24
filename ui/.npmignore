@@ -1,0 +1,6 @@
+/*
+!/dist/**/*.js
+!/dist/**/*.jsx
+!/dist/**/*.tsx
+!/dist/**/*.ts
+*.test.js

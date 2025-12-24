@@ -1,0 +1,10 @@
+node_modules
+build
+.dockerignore
+Dockerfile
+.gitignore
+README.md
+Makefile
+.env.development
+scripts
+CHANGELOG.md

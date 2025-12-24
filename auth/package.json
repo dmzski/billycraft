@@ -1,0 +1,7 @@
+{
+  "name": "@billycraft/auth",
+  "version": "1.4.0",
+  "description": "Auth server for Billycraft",
+  "author": "",
+  "license": "ISC"
+}

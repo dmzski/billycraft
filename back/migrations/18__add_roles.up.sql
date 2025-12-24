@@ -1,0 +1,4 @@
+ALTER TABLE com_user
+ADD COLUMN role VARCHAR(20) DEFAULT 'VIEW';
+UPDATE com_user
+SET role = 'ADMIN';

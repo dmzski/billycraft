@@ -1,0 +1,2 @@
+ALTER TABLE com_supplier
+ADD COLUMN vat INTEGER DEFAULT 0;

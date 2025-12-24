@@ -1,0 +1,209 @@
+import { useFormContext, useWatch } from "react-hook-form"
+import type { ProductFormValues } from "./types"
+import { Button, useToast } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useI18n } from "@/i18n"
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel"
+import type { SupplierResponse } from "@/sdk"
+import { QrCodeIcon } from "@heroicons/react/24/solid"
+import { InputField } from "@/components/form/InputField"
+import { SelectField } from "@/components/form/SelectField"
+import { useAllProductGroupsQuery } from "@/queries/useAllProductGroupsQuery"
+import { ScanArticleCodeModal } from "@/modals/ScanArticleCodeModal"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { SwitchField } from "@/components/form/SwitchField"
+import { ProductTypeSchema } from "@/sdk/schemas.gen"
+
+type ProductFormContentProps = {
+	suppliers: SupplierResponse[]
+}
+
+export const ProductFormContent = ({ suppliers }: ProductFormContentProps) => {
+	const toast = useToast()
+	const { scopedT } = useI18n()
+	const pageT = scopedT("products.components.formContent")
+	const { control, setValue } = useFormContext<ProductFormValues>()
+	const { data: productGroups } = useAllProductGroupsQuery()
+
+	const [selectedType, description] = useWatch({
+		control,
+		name: ["type", "description"],
+	})
+
+	const typeOptions: ComponentProps<typeof SelectField>["options"] = useMemo(
+		() =>
+			Object.values(ProductTypeSchema.enum).map((type) => ({
+				value: type,
+				label: <ProductTypeLabel type={type} />,
+			})),
+		[],
+	)
+
+	const supplierOptions: ComponentProps<typeof SelectField>["options"] =
+		useMemo(
+			() =>
+				suppliers.map(({ id, name }) => ({
+					value: id,
+					label: name,
+				})) ?? [],
+			[suppliers],
+		)
+
+	const productGroupOptions = useMemo(
+		(): ComponentProps<typeof SelectField>["options"] =>
+			productGroups?.map(({ id, name }) => ({
+				value: id,
+				label: name,
+			})) ?? [],
+		[productGroups],
+	)
+
+	return (
+		<div className="flex flex-col gap-4">
+			<div className="grid md:grid-cols-2 gap-4">
+				<SelectField
+					options={productGroupOptions}
+					control={control}
+					name="groupId"
+					label={pageT("fields.groupId.label")}
+					placeholder={pageT("fields.groupId.label")}
+					isSearchable
+				/>
+				<SelectField
+					control={control}
+					options={typeOptions}
+					name="type"
+					label={pageT("fields.type.label")}
+					placeholder={pageT("fields.type.label")}
+					required
+				/>
+			</div>
+			<div className="flex flex-col">
+				<InputField
+					control={control}
+					name="name"
+					required
+					minLength={3}
+					label={pageT("fields.name.label")}
+					placeholder={pageT("fields.name.label")}
+					autoComplete="off"
+				/>
+				{description !== null ? (
+					<div className="flex flex-col mt-1">
+						<TextAreaField
+							control={control}
+							name="description"
+							placeholder={pageT("fields.description.placeholder")}
+						/>
+						<div>
+							<Button
+								variant="link"
+								size="sm"
+								onClick={() => {
+									setValue("description", null)
+								}}
+							>
+								{pageT("fields.description.remove")}
+							</Button>
+						</div>
+					</div>
+				) : (
+					<div>
+						<Button
+							variant="link"
+							size="sm"
+							onClick={() => {
+								setValue("description", "")
+							}}
+						>
+							{pageT("fields.description.add")}
+						</Button>
+					</div>
+				)}
+			</div>
+			{selectedType === "ARTICLE" ? (
+				<div className="flex flex-col gap-4">
+					<div className="grid md:grid-cols-2 gap-4">
+						<InputField
+							control={control}
+							name="stock"
+							asNumber
+							label={pageT("fields.stock.label")}
+							placeholder="0"
+							autoComplete="off"
+							type="number"
+							step={0.01}
+						/>
+
+						<InputField
+							control={control}
+							name="lowStock"
+							label={pageT("fields.lowStock.label")}
+							placeholder="0"
+							step={0.01}
+							asNumber
+							autoComplete="off"
+							type="number"
+						/>
+					</div>
+					<SwitchField
+						control={control}
+						label={pageT("fields.noStockAlert.label")}
+						name="stockAlert"
+					/>
+					<div className="flex flex-row gap-2 items-end">
+						<InputField
+							className="flex-grow"
+							name="code"
+							label={pageT("fields.code.label")}
+							placeholder={pageT("fields.code.label")}
+							autoComplete="off"
+						/>
+						<ScanArticleCodeModal
+							disclosure={
+								<Button type="button" variant="ghost">
+									<QrCodeIcon />
+								</Button>
+							}
+							onScan={(result) => {
+								if (result[0]) {
+									setValue("code", result[0].rawValue, {
+										shouldValidate: true,
+									})
+								} else {
+									toast.destructive(pageT("fields.code.errors.scan"))
+								}
+							}}
+						/>
+					</div>
+				</div>
+			) : null}
+			{selectedType !== "TEXT" ? (
+				<div className="flex flex-col gap-4">
+					<SelectField
+						options={supplierOptions}
+						control={control}
+						name="supplierId"
+						label={pageT("fields.supplierId.label")}
+						placeholder={pageT("fields.supplierId.label")}
+						isSearchable
+					/>
+					<div className="grid md:grid-cols-2 gap-4">
+						<InputField
+							control={control}
+							name="price"
+							asNumber
+							label={pageT("fields.price.label")}
+							placeholder="0"
+							autoComplete="off"
+							type="number"
+							suffix={<span className="px-2">€</span>}
+							step={0.01}
+							required
+						/>
+					</div>
+				</div>
+			) : null}
+		</div>
+	)
+}

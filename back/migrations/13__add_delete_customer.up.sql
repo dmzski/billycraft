@@ -1,0 +1,1 @@
+ALTER TABLE com_customer ADD COLUMN deleted_at timestamp default null;

@@ -1,0 +1,12 @@
+FROM rust:1.83
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y pkg-config libssl-dev && apt-get clean
+
+
+RUN cargo install cargo-watch
+
+ENTRYPOINT ["cargo", "watch" ,"-q" ,"-c" ,"-w" ,"src/" ,"-x" ,"run"]
+VOLUME ["/app"]
+EXPOSE 8080

@@ -1,0 +1,121 @@
+import type {
+	BaseLocale,
+	CreateParams,
+	LocaleKeys,
+	LocaleValue,
+	ParamsObject,
+	ScopedValue,
+	Scopes,
+} from "international-types"
+import type { ReactNode } from "react"
+import { cloneElement, isValidElement } from "react"
+import type { LocaleContext, LocaleMap, ReactParamsObject } from "./types"
+
+export function createT<
+	Locale extends BaseLocale,
+	Scope extends Scopes<Locale> | undefined,
+>(context: LocaleContext<Locale>, scope: Scope | undefined) {
+	const { localeContent, fallbackLocale } = context
+	// If there is no localeContent (e.g. on initial render on the client-side), we use the fallback locale
+	// otherwise, we use the fallback locale as a fallback for missing keys in the current locale
+	const content =
+		fallbackLocale && typeof localeContent === "string"
+			? fallbackLocale
+			: Object.assign(fallbackLocale ?? {}, localeContent)
+
+	const pluralKeys = new Set(
+		Object.keys(content)
+			.filter((key) => key.includes("#"))
+			.map((key) => key.split("#", 1)[0]),
+	)
+
+	const pluralRules = new Intl.PluralRules(context.locale)
+
+	function getPluralKey(count: number) {
+		if (count === 0) return "zero"
+		return pluralRules.select(count)
+	}
+
+	function t<
+		Key extends LocaleKeys<Locale, Scope>,
+		Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
+	>(
+		key: Key,
+		...params: CreateParams<ParamsObject<Value>, Locale, Scope, Key, Value>
+	): string
+	function t<
+		Key extends LocaleKeys<Locale, Scope>,
+		Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
+	>(
+		key: Key,
+		...params: CreateParams<ReactParamsObject<Value>, Locale, Scope, Key, Value>
+	): React.ReactNode
+	function t<
+		Key extends LocaleKeys<Locale, Scope>,
+		Value extends LocaleValue = ScopedValue<Locale, Scope, Key>,
+	>(
+		key: Key,
+		...params: CreateParams<
+			ParamsObject<Value> | ReactParamsObject<Value>,
+			Locale,
+			Scope,
+			Key,
+			Value
+		>
+	) {
+		const paramObject = params[0]
+		let computedKey: Key = key
+		let isPlural = false
+
+		if (paramObject && "count" in paramObject) {
+			const isPluralKey = scope
+				? pluralKeys.has(`${scope}.${computedKey}`)
+				: pluralKeys.has(computedKey)
+
+			if (isPluralKey) {
+				computedKey = `${computedKey}#${getPluralKey(paramObject.count)}` as Key
+				isPlural = true
+			}
+		}
+
+		let value: string = scope
+			? (content[`${scope}.${computedKey}`] as string)
+			: (content[computedKey] as string)
+
+		if (!value && isPlural) {
+			const baseKey = computedKey.split("#", 1)[0] as Key
+			value = (content[`${baseKey}#other`] || computedKey)?.toString()
+		} else {
+			value = (value || computedKey)?.toString()
+		}
+
+		if (!paramObject) {
+			return value
+		}
+
+		let isString = true
+
+		const result = value?.split(/({[^}]*})/).map((part, index) => {
+			const match = part.match(/{(.*)}/)
+
+			if (match) {
+				const param = match[1] as keyof Locale
+				const paramValue = (paramObject as LocaleMap<Locale>)[param]
+
+				if (isValidElement(paramValue)) {
+					isString = false
+					return cloneElement(paramValue, { key: `${String(param)}-${index}` })
+				}
+
+				return paramValue as ReactNode
+			}
+
+			// if there's no match - it's not a variable and just a normal string
+			return part
+		})
+
+		return isString ? result?.join("") : result
+	}
+
+	return t
+}

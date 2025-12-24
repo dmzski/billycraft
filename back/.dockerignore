@@ -1,0 +1,8 @@
+.dockerignore
+.env
+Makefile
+Insomnia.json
+realm-export.json
+package.json
+CHANGELOG.md
+README.md

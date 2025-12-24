@@ -1,0 +1,9 @@
+FROM cosmtrek/air
+
+EXPOSE 8080
+
+WORKDIR /app
+
+RUN mkdir /upload && chmod 777 -R /upload
+
+VOLUME [ "/app", "/upload", "/templates" ]

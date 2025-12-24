@@ -1,0 +1,20 @@
+# build environment
+FROM node:20-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY ./front ./front
+COPY ./ui ./ui
+COPY ./pnpm-lock.yaml ./
+COPY ./pnpm-workspace.yaml ./
+COPY ./package.json ./
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
+RUN cd ./front && pnpm run build:staging
+
+# production environment
+FROM nginx:stable-alpine
+COPY --from=build /app/front/dist /usr/share/nginx/html
+EXPOSE 80
+COPY ./front/nginx.conf /etc/nginx/conf.d/default.conf
+CMD ["nginx", "-g", "daemon off;"]
+

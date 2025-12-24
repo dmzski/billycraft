@@ -1,0 +1,11 @@
+# Visual Studio Code
+.vscode
+.factorypath
+
+# MAC OS
+.DS_Store
+
+node_modules/
+
+upload/
+.env

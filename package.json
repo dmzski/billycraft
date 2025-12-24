@@ -1,0 +1,20 @@
+{
+	"name": "billycraft",
+	"version": "1.0.0",
+	"description": "",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@changesets/cli": "^2.27.11",
+		"@hey-api/openapi-ts": "0.64.12"
+	},
+	"scripts": {
+		"openapi-ts": "openapi-ts",
+    "generate-sdk": "cd back && swag init --ot json,yaml && cd ../ && pnpm run openapi-ts",
+		"format": "biome format --write .",
+		"lint": "pnpm -w lint"
+	},
+	"packageManager": "pnpm@9.15.2"
+}

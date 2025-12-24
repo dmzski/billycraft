@@ -1,0 +1,7 @@
+packages:
+  - auth
+  - sdk
+  - back
+  - front
+  - www
+  - ui

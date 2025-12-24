@@ -1,0 +1,6 @@
+ALTER TABLE com_company
+ADD COLUMN articles_tax DECIMAL DEFAULT 0;
+ALTER TABLE com_company
+ADD COLUMN services_tax DECIMAL DEFAULT 0;
+ALTER TABLE com_company
+ADD COLUMN others_tax DECIMAL DEFAULT 0;

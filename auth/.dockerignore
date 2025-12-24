@@ -1,0 +1,10 @@
+.gitignore
+.env
+Makefile
+Dockerfile
+Dockerfile.dev
+docker.env
+README.md
+CHANGELOG.ms
+package.json
+target/

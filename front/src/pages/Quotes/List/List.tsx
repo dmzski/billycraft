@@ -1,0 +1,39 @@
+import useCustomers from "@/hooks/useCustomers"
+import type { QuoteResponse } from "@/sdk"
+import QuoteTableLine from "./Row"
+import { useI18n } from "@/i18n"
+import type { QuoteRouteQueryParams } from "@/routes"
+
+type QuoteListProps = {
+	data: QuoteResponse[]
+	selectedStatus: QuoteRouteQueryParams["tab"]
+	reload: () => Promise<void>
+}
+const QuoteList = ({ data, selectedStatus, reload }: QuoteListProps) => {
+	const { t } = useI18n()
+	const customers = useCustomers()
+
+	return (
+		<div className="flex flex-col gap-2">
+			<div className="px-4 grid md:grid-cols-4 text-muted-foreground text-sm gap-4">
+				<div className="md:pl-12">{t("bills.list.headers.reference")}</div>
+				<div>{t("bills.list.headers.customer")}</div>
+				<div>{t("bills.list.headers.createdAt")}</div>
+				<div>{t("bills.list.headers.status")}</div>
+			</div>
+			<div className="flex flex-col gap-2">
+				{data.map((quote) => (
+					<QuoteTableLine
+						reload={reload}
+						customer={customers.find((c) => c.id === quote.customerId)}
+						key={quote.id}
+						quote={quote}
+						selectedStatus={selectedStatus}
+					/>
+				))}
+			</div>
+		</div>
+	)
+}
+
+export default QuoteList

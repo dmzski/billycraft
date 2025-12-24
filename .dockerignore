@@ -1,0 +1,13 @@
+.gitignore
+.env
+Makefile
+Dockerfile
+Dockerfile.dev
+docker.env
+README.md
+CHANGELOG.md
+target/
+Insomnia.json
+realm-export.json
+node_modules
+

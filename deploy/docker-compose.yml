@@ -1,0 +1,105 @@
+# DO NOT USE IN PRODUCTION ITS AN EXAMPLE FILE 
+version: "3"
+
+services:
+  front:
+    image: ${REGISTRY_URL}/app:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.front.rule=Host(`${FRONT_DOMAIN}`)"
+      - "traefik.http.routers.front.entrypoints=websecure"
+      - "traefik.http.routers.front.tls.certresolver=coco"
+
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - coco_data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init.sh
+
+  migrate-auth-db:
+    image: ${REGISTRY_URL}/auth-migrator:latest
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      db:
+        condition: service_started
+
+  auth:
+    env_file:
+      - ./.env
+    image: ${REGISTRY_URL}/auth:latest
+    volumes:
+      - ./auth:/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=Host(`${AUTH_DOMAIN}`)"
+      - "traefik.http.routers.auth.entrypoints=websecure"
+      - "traefik.http.routers.auth.tls.certresolver=coco"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
+      - "traefik.http.middlewares.auth.headers.accesscontrolalloworiginlist=${ORIGIN}"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.auth.headers.accesscontrolallowheaders=Origin,X-Requested-With,Content-Type,Accept,Authorization,Cookie"
+      - "traefik.http.middlewares.auth.headers.accesscontrolexposeheaders=*"
+      - "traefik.http.middlewares.auth.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.auth.headers.addvaryheader=true"
+      - "traefik.http.middlewares.auth-ratelimit.ratelimit.average=10"
+      - "traefik.http.routers.auth.middlewares=auth@docker,auth-ratelimit@docker"
+    depends_on:
+      migrate-auth-db:
+        condition: service_completed_successfully
+
+  api:
+    image: ${REGISTRY_URL}/api:latest
+    volumes:
+      - ./upload:/upload
+      - ./.env:/app/app.env
+    links:
+      - "traefik:${AUTH_DOMAIN}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=coco"
+      - "traefik.http.middlewares.api-auth.forwardauth.address=http://auth:8080/api/auth/check"
+      - "traefik.http.middlewares.api-auth.forwardauth.authResponseHeaders=X-Auth-User"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,POST,PATCH,HEAD,DELETE,OPTIONS,PUT"
+      - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=${ORIGIN}"
+      - "traefik.http.middlewares.api.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.api.headers.accesscontrolallowheaders=Origin,X-Requested-With,Content-Type,Accept,Authorization,Cookie"
+      - "traefik.http.middlewares.api.headers.addvaryheader=true"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.average=100"
+      - "traefik.http.routers.api.middlewares=api@docker,api-auth@docker,api-ratelimit@docker"
+    depends_on:
+      db:
+        condition: service_started
+
+  pdf:
+    image: gotenberg/gotenberg:8
+
+
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.coco.acme.tlschallenge=true"
+      - "--certificatesresolvers.coco.acme.email=maliszewskid3@gmail.com"
+      - "--certificatesresolvers.coco.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
+
+networks:
+  default:
+    name: coco_net
+
+volumes:
+  coco_data:

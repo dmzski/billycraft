@@ -1,0 +1,271 @@
+import { Button, Input } from "@billycraft/ui"
+import { type ComponentProps, useMemo } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
+import {
+	ArrowsUpDownIcon,
+	CloudArrowDownIcon,
+	MinusIcon,
+	PencilIcon,
+	PlusIcon,
+	TrashIcon,
+} from "@heroicons/react/24/solid"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { useI18n } from "@/i18n"
+import type { QuoteFormValues } from "../types"
+import { AddProductModal } from "@/pages/Products/modals/AddProductModal"
+import { InputField } from "@/components/form/InputField"
+import { SelectField } from "@/components/form/SelectField"
+import { TextAreaField } from "@/components/form/TextAreaField"
+import { EditProductModal } from "@/pages/Products/modals/EditProductModal"
+import type { ProductResponse } from "@/sdk"
+import { ProductTypeLabel } from "@/components/labels/ProductTypeLabel"
+import { ProductTypeSchema } from "@/sdk/schemas.gen"
+
+type QuoteLineTableLineProps = {
+	deleteLine: () => void
+	disabled?: boolean
+	index: number
+	id: string
+	product?: ProductResponse
+	reloadProducts: () => Promise<void>
+}
+const QuoteLineTableLine = ({
+	deleteLine,
+	disabled,
+	index,
+	id,
+	product,
+	reloadProducts,
+}: QuoteLineTableLineProps) => {
+	const { control, setValue } = useFormContext<QuoteFormValues>()
+	const { t } = useI18n()
+	const { listeners, setNodeRef, transform, transition, isDragging } =
+		useSortable({
+			id,
+			data: {
+				lineIndex: index,
+			},
+		})
+	const style = {
+		transform: CSS.Translate.toString(transform),
+		transition,
+		zIndex: isDragging ? 10 : undefined,
+	}
+
+	const [tva, quantity = 0, price = 0] = useWatch({
+		control,
+		name: ["tva", `lines.${index}.quantity`, `lines.${index}.price`],
+	})
+
+	const totalET = useMemo(() => {
+		if (Number.isNaN(quantity) || !quantity) {
+			return 0
+		}
+
+		return quantity * (price ?? 0)
+	}, [price, quantity])
+
+	const typeOptions: ComponentProps<typeof SelectField>["options"] =
+		Object.values(ProductTypeSchema.enum).map((type) => ({
+			value: type,
+			label: <ProductTypeLabel type={type} />,
+			render: <ProductTypeLabel type={type} short />,
+		}))
+
+	const lineValue = useWatch({ control, name: `lines.${index}` })
+
+	const inputSuffix = useMemo(() => {
+		if (!lineValue.productId && lineValue.name) {
+			return (
+				<AddProductModal
+					initialValues={lineValue}
+					disclosure={
+						<Button
+							size="icon"
+							variant="ghost"
+							type="button"
+							className="rounded-none rounded-r-md"
+						>
+							<CloudArrowDownIcon />
+						</Button>
+					}
+					onSubmitSuccess={async (newId) => {
+						await reloadProducts()
+						setValue(`lines.${index}.productId`, newId)
+					}}
+				/>
+			)
+		}
+		if (lineValue.productId && product) {
+			return (
+				<EditProductModal
+					product={product}
+					disclosure={
+						<Button
+							size="icon"
+							variant="ghost"
+							type="button"
+							className="rounded-none rounded-r-md"
+						>
+							<PencilIcon />
+						</Button>
+					}
+					onSubmitSuccess={async (newProduct) => {
+						await reloadProducts()
+						setValue(
+							`lines.${index}`,
+							{
+								...lineValue,
+								price: newProduct.price,
+								name: newProduct.name,
+								description: newProduct.description ?? null,
+							},
+							{ shouldValidate: true },
+						)
+					}}
+				/>
+			)
+		}
+
+		return undefined
+	}, [lineValue, index, setValue, product, tva, reloadProducts])
+
+	return (
+		<div
+			className="border rounded-md flex gap-2 p-2 bg-background items-start"
+			ref={setNodeRef}
+			style={style}
+		>
+			<div className="self-center">
+				<Button variant="ghost" size="icon" {...listeners}>
+					<ArrowsUpDownIcon />
+				</Button>
+			</div>
+			<div className="flex flex-col flex-grow gap-4">
+				<div className="grid md:grid-cols-[repeat(10,minmax(0,1fr))_minmax(0,auto)] gap-4">
+					<div className="md:col-span-6 flex flex-col gap-2">
+						<div className="flex flex-row items-end gap-2">
+							<SelectField
+								control={control}
+								className="w-auto"
+								name={`lines.${index}.type`}
+								aria-label={t("quotes.form.lines.fields.type.label")}
+								label={t("quotes.form.lines.fields.type.label")}
+								disabled={disabled}
+								required
+								onChange={(type) => {
+									if (type === "TEXT") {
+										setValue(`lines.${index}.price`, 0)
+										setValue(`lines.${index}.quantity`, 0)
+									}
+								}}
+								options={typeOptions}
+							/>
+							<InputField
+								control={control}
+								name={`lines.${index}.name`}
+								label={t("quotes.form.lines.fields.name.label")}
+								required
+								placeholder={t("quotes.form.lines.fields.name.placeholder")}
+								disabled={disabled}
+								suffix={inputSuffix}
+							/>
+						</div>
+						{lineValue.description !== null ? (
+							<div className="flex flex-col items-start">
+								<TextAreaField
+									placeholder={t(
+										"quotes.form.lines.fields.description.placeholder",
+									)}
+									className="md:col-span-6"
+									rows={1}
+									disabled={disabled}
+									control={control}
+									name={`lines.${index}.description`}
+								/>
+								<Button
+									variant="link"
+									onClick={() => {
+										setValue(`lines.${index}.description`, null)
+									}}
+									size="sm"
+								>
+									<MinusIcon />
+									{t("quotes.form.lines.deleteDescription")}
+								</Button>
+							</div>
+						) : (
+							<div className="flex">
+								<Button
+									variant="link"
+									onClick={() => {
+										setValue(`lines.${index}.description`, "")
+									}}
+									size="sm"
+								>
+									<PlusIcon />
+									{t("quotes.form.lines.addDescription")}
+								</Button>
+							</div>
+						)}
+					</div>
+					{lineValue.type !== "TEXT" ? (
+						<>
+							<div>
+								<InputField
+									control={control}
+									name={`lines.${index}.quantity`}
+									asNumber
+									label={t("quotes.form.lines.fields.quantity.label")}
+									disabled={disabled}
+									placeholder={t(
+										"quotes.form.lines.fields.quantity.placeholder",
+									)}
+									type="number"
+									step={0.01}
+									required
+								/>
+							</div>
+							<div>
+								<InputField
+									control={control}
+									name={`lines.${index}.price`}
+									label={t("quotes.form.lines.fields.etPrice.label")}
+									disabled={disabled}
+									required
+									placeholder={t(
+										"quotes.form.lines.fields.etPrice.placeholder",
+									)}
+									type="number"
+									step={0.01}
+									asNumber
+									suffix={<span className="px-1">€</span>}
+								/>
+							</div>
+							<div>
+								<Input
+									label={t("quotes.form.lines.fields.subTotal.label")}
+									readOnly
+									value={totalET}
+									suffix={<span className="px-2">€</span>}
+								/>
+							</div>
+						</>
+					) : (
+						<div className="md:col-span-4" />
+					)}
+					{!disabled ? (
+						<div className="pt-4 flex justify-end">
+							<Button variant="destructive" size="icon" onClick={deleteLine}>
+								<TrashIcon />
+							</Button>
+						</div>
+					) : null}
+				</div>
+			</div>
+		</div>
+	)
+}
+
+export default QuoteLineTableLine

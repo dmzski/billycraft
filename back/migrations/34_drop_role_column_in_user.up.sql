@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE com_user DROP COLUMN role;
+COMMIT;
