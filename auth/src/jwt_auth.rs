@@ -23,7 +23,7 @@ pub async fn auth<B>(
     next: Next<B>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<AppError>)> {
     let token = cookie_jar
-        .get("coco_at")
+        .get("billycraft_at")
         .map(|cookie| cookie.value().to_string())
         .or_else(|| {
             req.headers()

@@ -1,5 +1,19 @@
 ## [1.18.0](https://github.com/DorianMaliszewski/coco-erp/compare/v1.17.1...v1.18.0) (2021-07-08)
 
+## 2.63.0
+
+### Minor Changes
+
+- b2f026d: Patch modal scroll wasnt restaured
+- b2f026d: Add Factur-X export
+
+### Patch Changes
+
+- b2f026d: Patch dev mode
+- Updated dependencies [b2f026d]
+- Updated dependencies [b2f026d]
+  - @billycraft/ui@1.40.0
+
 ## 2.62.0
 
 ### Minor Changes

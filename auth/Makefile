@@ -51,7 +51,7 @@ install:
 	# SQLX-CLI
 	cargo install sqlx-cli
 
-deploy-dockcoco-erper:
+deploy-docker:
 	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t ${REGISTRY}/auth:latest ../ && docker push ${REGISTRY}/auth:latest
 
 deploy-migrator:

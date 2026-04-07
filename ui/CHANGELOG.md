@@ -1,5 +1,15 @@
 ### [1.27.2](https://github.com/DorianMaliszewski/coco-ui/compare/v1.27.1...v1.27.2) (2023-02-23)
 
+## 1.40.0
+
+### Minor Changes
+
+- b2f026d: Patch modal scroll wasnt restaured
+
+### Patch Changes
+
+- b2f026d: Patch dev mode
+
 ## 1.39.0
 
 ### Minor Changes

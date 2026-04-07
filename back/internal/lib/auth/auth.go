@@ -5,6 +5,7 @@ import (
 	"back/internal/lib/enums"
 	"back/internal/lib/models"
 	"io"
+	"log"
 	"net/http"
 	"slices"
 	"strings"
@@ -41,6 +42,9 @@ func Secure() func(c *fiber.Ctx) error {
 
 		client := &http.Client{}
 		resp, err := client.Do(req)
+		if err != nil {
+			log.Printf("Got an auth error %v\n", err)
+		}
 		if err != nil {
 			return c.Status(500).SendString("Internal server error")
 		}

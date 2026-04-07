@@ -1,5 +1,15 @@
 # back
 
+## 1.38.0
+
+### Minor Changes
+
+- b2f026d: Add Factur-X export
+
+### Patch Changes
+
+- b2f026d: Patch dev mode
+
 ## 1.37.0
 
 ### Minor Changes

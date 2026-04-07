@@ -173,8 +173,8 @@ pub async fn logout_handler(
 
 pub async fn check_session(
     Extension(user): Extension<User>,
-) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let mut response = Response::new(json!(user.email).to_string());
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let mut response = Response::new(user.email.to_string());
     response
         .headers_mut()
         .insert("X-Auth-User", user.email.parse().unwrap());

@@ -1,5 +1,11 @@
 # @coco/auth
 
+## 1.4.1
+
+### Patch Changes
+
+- b2f026d: Patch dev mode
+
 ## 1.4.0
 
 ### Minor Changes

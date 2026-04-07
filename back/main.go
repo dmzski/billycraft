@@ -104,11 +104,11 @@ func main() {
 	if config.Profile != "dev" {
 		app.Use(recover.New())
 	} else {
+		app.Use(cors.New(cors.Config{}))
 		app.Use(recover.New(recover.Config{
 			EnableStackTrace: true,
 		}))
 	}
-	app.Use(cors.New(cors.Config{}))
 
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
