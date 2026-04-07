@@ -11,13 +11,14 @@ type OrganizationRequest struct {
 	Logo            *string  `json:"logo"`
 	Siret           string   `json:"siret" validate:"required"`
 	Email           string   `json:"email"`
+	IntraVatNumber  *string  `json:"intraVatNumber"`
 	ArticlesTax     *float32 `json:"articlesTax"`
 	ServicesTax     *float32 `json:"servicesTax"`
 	OthersTax       *float32 `json:"othersTax"`
 	AutoMonthReport *bool    `json:"autoMonthReport"`
 	AutoYearReport  *bool    `json:"autoYearReport"`
 	VatPercent      float32  `json:"vatPercent"`
-}//@name OrganizationRequest
+} //@name OrganizationRequest
 
 func MarshalOrganizationRequest(c OrganizationRequest) models.Organization {
 	return models.Organization{
@@ -29,6 +30,7 @@ func MarshalOrganizationRequest(c OrganizationRequest) models.Organization {
 		Logo:            c.Logo,
 		Siret:           c.Siret,
 		Email:           c.Email,
+		IntraVatNumber:  c.IntraVatNumber,
 		ArticlesTax:     c.ArticlesTax,
 		ServicesTax:     c.ServicesTax,
 		OthersTax:       c.OthersTax,

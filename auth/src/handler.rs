@@ -174,7 +174,7 @@ pub async fn logout_handler(
 pub async fn check_session(
     Extension(user): Extension<User>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let mut response = Response::new(json!("Ok").to_string());
+    let mut response = Response::new(json!(user.email).to_string());
     response
         .headers_mut()
         .insert("X-Auth-User", user.email.parse().unwrap());
@@ -223,8 +223,8 @@ fn filter_user_record(user: &User) -> UserResponse {
 
 fn build_cookie<'a>(data: Arc<AppState>, token: String, duration: time::Duration) -> Cookie<'a> {
     // This is the test domain when developping locally
-    if data.env.domain == "billycraft.lan" {
-    return Cookie::build("billycraft_at", token)
+    if data.env.domain.contains("localhost") {
+        return Cookie::build("billycraft_at", token)
             .domain(data.env.domain.to_string())
             .http_only(true)
             .max_age(duration)
@@ -243,7 +243,6 @@ fn build_cookie<'a>(data: Arc<AppState>, token: String, duration: time::Duration
         .http_only(true)
         .finish();
 }
-
 
 pub async fn update_user_handler(
     State(data): State<Arc<AppState>>,
@@ -287,13 +286,11 @@ pub async fn update_user_handler(
                     )
                 })?
                 .to_string();
-
         } else {
-                let error_response = AppError {
-                    message: "Old password must be provided".to_string(),
-                };
-                return Err((StatusCode::BAD_REQUEST, Json(json!(error_response))));
-
+            let error_response = AppError {
+                message: "Old password must be provided".to_string(),
+            };
+            return Err((StatusCode::BAD_REQUEST, Json(json!(error_response))));
         }
     }
 

@@ -7,9 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	DBConn *gorm.DB
-)
+var DBConn *gorm.DB
 
 func MakeMigrations() (err error) {
 	sql, err := DBConn.DB()
@@ -26,6 +24,6 @@ func MakeMigrations() (err error) {
 	if err != nil {
 		return
 	}
-	err = m.Migrate(38)
+	err = m.Migrate(40)
 	return
 }

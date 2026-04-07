@@ -6,25 +6,26 @@ import (
 )
 
 type OrganizationResponse struct {
-  ID              string     `json:"id" validate:"required"`
-  Name            string     `json:"name" validate:"required"`
-  City            string     `json:"city" validate:"required"`
-  Address         string     `json:"address" validate:"required"`
-  PostalCode      string     `json:"postalCode" validate:"required"`
-  PhoneNumber     string     `json:"phoneNumber" validate:"required"`
+	ID              string     `json:"id" validate:"required"`
+	Name            string     `json:"name" validate:"required"`
+	City            string     `json:"city" validate:"required"`
+	Address         string     `json:"address" validate:"required"`
+	PostalCode      string     `json:"postalCode" validate:"required"`
+	PhoneNumber     string     `json:"phoneNumber" validate:"required"`
 	Logo            *string    `json:"logo"`
-  Siret           string     `json:"siret" validate:"required"`
-  Email           string     `json:"email" validate:"required"`
-  CreatedBy       string     `json:"createdBy" validate:"required"`
-  CreatedAt       time.Time  `json:"createdAt" validate:"required"`
+	Siret           string     `json:"siret" validate:"required"`
+	Email           string     `json:"email" validate:"required"`
+	IntraVatNumber  *string    `json:"intraVatNumber" swaggertype:"string"`
+	CreatedBy       string     `json:"createdBy" validate:"required"`
+	CreatedAt       time.Time  `json:"createdAt" validate:"required"`
 	UpdatedAt       *time.Time `json:"updatedAt"`
 	ArticlesTax     *float32   `json:"articlesTax"`
 	ServicesTax     *float32   `json:"servicesTax"`
 	OthersTax       *float32   `json:"othersTax"`
-  AutoMonthReport bool       `json:"autoMonthReport" validate:"required"`
-  AutoYearReport  bool       `json:"autoYearReport" validate:"required"`
-  VatPercent      float32    `json:"vatPercent" validate:"required"`
-}//@name OrganizationResponse
+	AutoMonthReport bool       `json:"autoMonthReport" validate:"required"`
+	AutoYearReport  bool       `json:"autoYearReport" validate:"required"`
+	VatPercent      float32    `json:"vatPercent" validate:"required"`
+} //@name OrganizationResponse
 
 func CreateOrganizationResponse(c models.Organization) OrganizationResponse {
 	dto := OrganizationResponse{
@@ -37,6 +38,7 @@ func CreateOrganizationResponse(c models.Organization) OrganizationResponse {
 		Logo:            c.Logo,
 		Siret:           c.Siret,
 		Email:           c.Email,
+		IntraVatNumber:  c.IntraVatNumber,
 		CreatedBy:       c.CreatedBy,
 		CreatedAt:       c.CreatedAt,
 		UpdatedAt:       c.UpdatedAt,

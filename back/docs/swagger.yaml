@@ -427,6 +427,8 @@ definitions:
         type: string
       email:
         type: string
+      intraVatNumber:
+        type: string
       logo:
         type: string
       name:
@@ -469,6 +471,8 @@ definitions:
       email:
         type: string
       id:
+        type: string
+      intraVatNumber:
         type: string
       logo:
         type: string
@@ -2259,6 +2263,10 @@ paths:
         name: id
         required: true
         type: string
+      - description: Export format (pdf or factur-x)
+        in: query
+        name: format
+        type: string
       produces:
       - application/octet-stream
       responses:
@@ -2288,6 +2296,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/MultipleBillPdfRequest'
+      - description: Export format (pdf or factur-x)
+        in: query
+        name: format
+        type: string
       produces:
       - application/octet-stream
       responses:

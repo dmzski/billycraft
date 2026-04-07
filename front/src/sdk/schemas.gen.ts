@@ -517,6 +517,9 @@ export const OrganizationRequestSchema = {
         email: {
             type: 'string'
         },
+        intraVatNumber: {
+            type: 'string'
+        },
         logo: {
             type: 'string'
         },
@@ -573,6 +576,9 @@ export const OrganizationResponseSchema = {
             type: 'string'
         },
         id: {
+            type: 'string'
+        },
+        intraVatNumber: {
             type: 'string'
         },
         logo: {

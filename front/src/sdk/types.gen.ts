@@ -181,6 +181,7 @@ export type OrganizationRequest = {
     autoYearReport?: boolean;
     city: string;
     email?: string;
+    intraVatNumber?: string;
     logo?: string;
     name: string;
     othersTax?: number;
@@ -201,6 +202,7 @@ export type OrganizationResponse = {
     createdBy: string;
     email: string;
     id: string;
+    intraVatNumber?: string;
     logo?: string;
     name: string;
     othersTax?: number;
@@ -1788,7 +1790,12 @@ export type GetPdfsBillByIdData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Export format (pdf or factur-x)
+         */
+        format?: string;
+    };
     url: '/pdfs/bill/{id}';
 };
 
@@ -1820,7 +1827,12 @@ export type PostPdfsMultipleBillData = {
      */
     body: MultipleBillPdfRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Export format (pdf or factur-x)
+         */
+        format?: string;
+    };
     url: '/pdfs/multiple/bill';
 };
 

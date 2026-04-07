@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
@@ -41,7 +42,7 @@ var retryCount = 0
 
 //	@schemes	http https
 
-//	@swagger	2.0
+// @swagger	2.0
 func main() {
 	var err error
 
@@ -107,6 +108,7 @@ func main() {
 			EnableStackTrace: true,
 		}))
 	}
+	app.Use(cors.New(cors.Config{}))
 
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
@@ -117,7 +119,6 @@ func main() {
 	api.InitApiRoutes(app)
 
 	log.Fatal(app.Listen(config.ServerAddress))
-
 }
 
 func initDb(config config.Config) {
@@ -129,7 +130,6 @@ func initDb(config config.Config) {
 	database.DBConn, err = gorm.Open(postgres.Open(config.DBSource), &gorm.Config{
 		Logger: dbLogger,
 	})
-
 	if err != nil {
 		log.Fatalln("Failed to connect database")
 		if retryCount == MAX_RETRY_COUNT {

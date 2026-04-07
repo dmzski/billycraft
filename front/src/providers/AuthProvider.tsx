@@ -51,12 +51,12 @@ const AuthContext = createContext<AuthContextType>({
 })
 
 const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL ?? ""
-const LOCAL_STORAGE_KEY = "coco_at"
+const LOCAL_STORAGE_KEY = "billycraft_at"
 
 const configureClient = (token: string, needAuthorizationHeader?: boolean) => {
 	client.setConfig({
 		baseUrl: API_URL,
-		credentials: "include",
+		credentials: needAuthorizationHeader ? undefined : "include",
 		throwOnError: true,
 		headers:
 			needAuthorizationHeader && token.length > 0
@@ -89,7 +89,7 @@ export const AuthProvider = ({
 		async ({ email, password }) => {
 			const res = await fetch(`${AUTH_API_URL}/auth/login`, {
 				method: "POST",
-				credentials: "include",
+				credentials: useAuthorizationHeader ? undefined : "include",
 				body: JSON.stringify({
 					email,
 					password,

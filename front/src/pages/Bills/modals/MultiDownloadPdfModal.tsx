@@ -14,6 +14,10 @@ type MultiDownloadPdfModalProps = {
 	billIds: BillResponse["id"][]
 }
 
+type MultiDownloadPdfFormValues = {
+	format: "pdf" | "factur-x"
+}
+
 type MultiDownloadPdfFormProps = Omit<
 	MultiDownloadPdfModalProps,
 	"disclosure"
@@ -27,19 +31,26 @@ export const MultiDownloadPdfForm = ({
 }: MultiDownloadPdfFormProps) => {
 	const { scopedT, t } = useI18n()
 	const pageT = scopedT("bills.modals.multiDownloadPdf")
-	const methods = useForm()
+	const methods = useForm<MultiDownloadPdfFormValues>({
+		defaultValues: {
+			format: "pdf",
+		},
+	})
 	const { toISO9075 } = useFormatDate()
 	const toast = useToast()
-	const handleSubmit = async () => {
+	const handleSubmit = async (values: MultiDownloadPdfFormValues) => {
 		try {
 			const blob = await PdfsService.postPdfsMultipleBill({
 				body: { billIds },
+				query: {
+					format: values.format,
+				},
 			}).then(({ data }) => data)
 			if (!blob) {
 				throw new Error("Invalid Bill ZIP")
 			}
 			const link = document.createElement("a")
-			link.download = `billycraft_bills_export_${toISO9075(Date.now())}`
+			link.download = `billycraft_bills_export_${toISO9075(Date.now())}${values.format === "factur-x" ? "_factur-x" : ""}`
 			link.href = URL.createObjectURL(blob)
 			document.body.appendChild(link)
 			link.click()
@@ -48,18 +59,33 @@ export const MultiDownloadPdfForm = ({
 			close()
 		} catch (error) {
 			sendErrorToSentry(error)
-      console.log(error)
+			console.log(error)
 			toast.destructive(pageT("submit.error"))
 		}
 	}
 
 	return (
-		<Form methods={methods} onSubmit={handleSubmit}>
+		<Form<MultiDownloadPdfFormValues> methods={methods} onSubmit={handleSubmit}>
 			<div className="flex flex-col gap-12">
 				<Modal.Title className="text-xl font-semibold">
 					{pageT("title")}
 				</Modal.Title>
 				<p>{pageT("description")}</p>
+				<div className="flex items-center gap-2">
+					<input
+						type="checkbox"
+						id="format-factur-x"
+						{...methods.register("format", {
+							setValueAs: (value) =>
+								value === "factur-x" ? "factur-x" : "pdf",
+						})}
+						value="factur-x"
+						className="h-4 w-4"
+					/>
+					<label htmlFor="format-factur-x" className="text-sm">
+						{pageT("format.label")}
+					</label>
+				</div>
 				<Modal.Actions>
 					<Button variant="outline" onClick={close}>
 						{t("cancel")}

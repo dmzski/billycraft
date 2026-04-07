@@ -78,7 +78,8 @@ export const Modal = ({
 	>(open ? "opening" : "closed")
 	const disclosureRef = useRef<HTMLElement>(null)
 	const dialogRef = useRef<HTMLDialogElement>(null)
-	const previousOverflow = useRef(document.body.style.overflow)
+	const previousOverflow = useRef<string | null>(null)
+	const animationFrameRef = useRef<number | null>(null)
 
 	useEffect(() => {
 		if (!openProp && !onClose) {
@@ -133,7 +134,10 @@ export const Modal = ({
 	useEffect(() => {
 		let displayContentTimeout: ReturnType<typeof setTimeout>
 		if (open) {
-			if (previousOverflow.current !== "hidden") {
+			if (previousOverflow.current === null) {
+				previousOverflow.current = document.body.style.overflow
+			}
+			if (document.body.style.overflow !== "hidden") {
 				document.body.style.overflow = "hidden"
 			}
 			setTransitionState((original) =>
@@ -147,7 +151,12 @@ export const Modal = ({
 				original !== "closed" ? "closing" : "closed",
 			)
 			displayContentTimeout = setTimeout(() => {
-				document.body.style.overflow = previousOverflow.current
+				if (previousOverflow.current !== null) {
+					document.body.style.overflow = previousOverflow.current
+					previousOverflow.current = null
+				} else {
+					document.body.style.overflow = ""
+				}
 				setTransitionState("closed")
 			}, DELAY_TRANSITION)
 		}
@@ -155,6 +164,12 @@ export const Modal = ({
 		return () => {
 			if (displayContentTimeout) {
 				clearTimeout(displayContentTimeout)
+			}
+			if (animationFrameRef.current) {
+				cancelAnimationFrame(animationFrameRef.current)
+			}
+			if (previousOverflow.current !== null) {
+				document.body.style.overflow = previousOverflow.current
 			}
 		}
 	}, [open])

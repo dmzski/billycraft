@@ -1,26 +1,26 @@
+import { RRLink } from "@/components/RRLink"
+import { BillLabel } from "@/components/labels/BillLabel"
+import { useQueryParams } from "@/hooks/useQueryParams"
 import { useI18n } from "@/i18n"
 import { useBillByIdQuery } from "@/queries/useBillByIdQuery"
 import {
-	type BillRouteProps,
 	type BillOverviewRouteQueryParams,
+	type BillRouteProps,
 	ROUTES,
 } from "@/routes"
+import { BillsService, PdfsService } from "@/sdk"
+import { sendErrorToSentry } from "@/utils/errors"
 import { Alert, Button, Loader, useToast } from "@billycraft/ui"
 import {
 	ChevronLeftIcon,
 	DocumentArrowDownIcon,
 	PencilIcon,
 } from "@heroicons/react/24/solid"
+import { useReducer } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Actions } from "./Actions"
-import { useReducer } from "react"
-import { useQueryParams } from "@/hooks/useQueryParams"
-import { RRLink } from "@/components/RRLink"
-import { BillLabel } from "@/components/labels/BillLabel"
-import { InformationSection } from "./InformationSection"
 import { ContentSection } from "./ContentSection"
-import { sendErrorToSentry } from "@/utils/errors"
-import { BillsService, PdfsService } from "@/sdk"
+import { InformationSection } from "./InformationSection"
 
 export const Overview = () => {
 	const { t, scopedT } = useI18n()
@@ -34,6 +34,10 @@ export const Overview = () => {
 		reload,
 	} = useBillByIdQuery(id ?? "", { enabled: !!id })
 	const [isDownloadingPDF, toggleIsDownloadingPDF] = useReducer(
+		(state) => !state,
+		false,
+	)
+	const [isDownloadingFacturX, toggleIsDownloadingFacturX] = useReducer(
 		(state) => !state,
 		false,
 	)
@@ -65,6 +69,32 @@ export const Overview = () => {
 		} catch {
 			toast.destructive(t("bills.form.pdfError"))
 			toggleIsDownloadingPDF()
+		}
+	}
+
+	const downloadFacturX = async () => {
+		try {
+			if (bill?.id && !isDownloadingFacturX) {
+				toggleIsDownloadingFacturX()
+				const blob = await PdfsService.getPdfsBillById({
+					path: { id: bill.id },
+					query: { format: "factur-x" },
+				}).then(({ data }) => data)
+				if (!blob) {
+					throw new Error("Invalid Factur-X PDF")
+				}
+				const link = document.createElement("a")
+				link.download = `${bill.name}_factur-x.pdf`
+				link.href = URL.createObjectURL(blob)
+				document.body.appendChild(link)
+				link.click()
+				document.body.removeChild(link)
+				toggleIsDownloadingFacturX()
+			}
+		} catch (error) {
+			sendErrorToSentry(error)
+			toast.destructive(t("bills.form.facturXError"))
+			toggleIsDownloadingFacturX()
 		}
 	}
 
@@ -123,6 +153,14 @@ export const Overview = () => {
 					>
 						<DocumentArrowDownIcon />
 						{t("bills.form.downloadPdfButton")}
+					</Button>
+					<Button
+						disabled={isDownloadingFacturX}
+						onClick={downloadFacturX}
+						variant="outline"
+					>
+						<DocumentArrowDownIcon />
+						{t("bills.form.downloadFacturXButton")}
 					</Button>
 					{bill.status !== "DRAFT" ? (
 						<Button

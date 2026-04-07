@@ -352,6 +352,8 @@ export default {
 	"bills.form.title.new": "Nouvelle facture",
 	"bills.form.title.edit": "Modification de facture",
 	"bills.form.downloadPdfButton": "Télécharger le PDF",
+	"bills.form.downloadFacturXButton": "Télécharger Factur-X",
+	"bills.form.facturXError": "Erreur lors de la génération du fichier Factur-X",
 
 	// Duplicate
 	"bills.form.duplicateButton": "Dupliquer",
@@ -623,6 +625,9 @@ export default {
 	"settings.forms.myCompagnyForm.email.placeholder": "Email",
 	"settings.forms.myCompagnyForm.siret.placeholder": "SIRET",
 	"settings.forms.myCompagnyForm.logo.placeholder": "URL du logo",
+	"settings.forms.myCompagnyForm.intraVatNumber.label":
+		"Numéro TVA Intracommunautaire",
+	"settings.forms.myCompagnyForm.intraVatNumber.placeholder": "FR12345678901",
 
 	// Settings > Forms > QuoteCustomizationForm
 	"settings.forms.quoteCustomization.title": "Personnalisation du devis",
@@ -650,6 +655,7 @@ export default {
 	"settings.forms.myCompagnyForm.email": "Email",
 	"settings.forms.myCompagnyForm.siret": "SIRET",
 	"settings.forms.myCompagnyForm.logo": "URL du logo",
+	"settings.forms.myCompagnyForm.intraVatNumber": "TVA Intracommunautaire",
 	"settings.forms.myCompagnyForm.articlesTax": "Imposition Matériels (%)",
 	"settings.forms.myCompagnyForm.servicesTax": "Imposition Services (%)",
 	"settings.forms.myCompagnyForm.othersTax":
@@ -898,6 +904,8 @@ export default {
 	"bills.modals.multiDownloadPdf.title": "Télécharger les PDFs",
 	"bills.modals.multiDownloadPdf.description":
 		"Cette action vous permet de récupérer plusieurs factures au format PDF dans un fichier ZIP.",
+	"bills.modals.multiDownloadPdf.format.label":
+		"Exporter au format Factur-X (XML embarqué)",
 	"bills.modals.multiDownloadPdf.submit": "Télécharger",
 	"bills.modals.multiDownloadPdf.submit.success":
 		"Téléchargement ZIP généré avec succès",

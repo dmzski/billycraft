@@ -1,7 +1,7 @@
 ##
 ## Build
 ##
-FROM golang:1.22 AS build
+FROM golang:1.26 AS build
 
 WORKDIR /app
 ADD ./back /app

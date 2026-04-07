@@ -11,16 +11,16 @@ prepare:
 	cargo sqlx prepare
 
 build:
-	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.dev -t coco-erp/auth:local ../
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.dev -t billycraft/auth:local ../
 
 build-prod:
-	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t coco-erp/auth:latest ../
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t billycraft/auth:latest ../
 
 build-migrator:
-	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t coco-erp/auth-migrator:local ../
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t billycraft/auth-migrator:local ../
 
 build-migrator-prod:
-	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t coco-erp/auth-migrator:latest ../
+	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile.migrator -t billycraft/auth-migrator:latest ../
 
 migrate-up:
 	sqlx migrate run
@@ -51,7 +51,7 @@ install:
 	# SQLX-CLI
 	cargo install sqlx-cli
 
-deploy-docker:
+deploy-dockcoco-erper:
 	docker build -f ${AUTH_DOCKERFILES_FOLDER}/Dockerfile -t ${REGISTRY}/auth:latest ../ && docker push ${REGISTRY}/auth:latest
 
 deploy-migrator:

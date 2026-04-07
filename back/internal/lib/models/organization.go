@@ -14,6 +14,7 @@ type Organization struct {
 	Logo            *string
 	Siret           string
 	Email           string
+	IntraVatNumber  *string
 	ArticlesTax     *float32
 	ServicesTax     *float32
 	OthersTax       *float32

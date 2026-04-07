@@ -1,5 +1,3 @@
-import { Alert, Loader } from "@billycraft/ui"
-import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery"
 import { Form } from "@/components/form/Form"
 import { InputField } from "@/components/form/InputField"
 import { Submit } from "@/components/form/Submit"
@@ -7,7 +5,9 @@ import { SwitchField } from "@/components/form/SwitchField"
 import { TextAreaField } from "@/components/form/TextAreaField"
 import useLoadingState from "@/hooks/useLoadingState"
 import { useI18n } from "@/i18n"
-import { OrganizationService, type OrganizationRequest } from "@/sdk"
+import { useMyOrganizationQuery } from "@/queries/useMyOrganizationQuery"
+import { type OrganizationRequest, OrganizationService } from "@/sdk"
+import { Alert, Loader } from "@billycraft/ui"
 import { Button, useToast } from "@billycraft/ui"
 import { type ChangeEvent, useRef } from "react"
 import { useForm } from "react-hook-form"
@@ -163,6 +163,16 @@ export const Settings = () => {
 									label={t("settings.forms.myCompagnyForm.siret.label")}
 									placeholder={t(
 										"settings.forms.myCompagnyForm.siret.placeholder",
+									)}
+								/>
+								<InputField
+									name="intraVatNumber"
+									control={methods.control}
+									label={t(
+										"settings.forms.myCompagnyForm.intraVatNumber.label",
+									)}
+									placeholder={t(
+										"settings.forms.myCompagnyForm.intraVatNumber.placeholder",
 									)}
 								/>
 								<div className="flex gap-2 items-end">
