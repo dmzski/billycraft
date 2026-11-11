@@ -4,6 +4,11 @@ version: "3"
 services:
   front:
     image: ${REGISTRY_URL}/app:latest
+    # Optionnel : override des URLs API à la volée (sans rebuild).
+    # Les defaults ci-dessous = URLs du build (aucun changement si non définies).
+    environment:
+      API_URL: ${API_URL:-https://api.billycraft.fr/api/v1}
+      AUTH_API_URL: ${AUTH_API_URL:-https://auth.billycraft.fr/api}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host(`${FRONT_DOMAIN}`)"

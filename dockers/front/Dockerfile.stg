@@ -13,8 +13,21 @@ RUN cd ./front && pnpm run build:staging
 
 # production environment
 FROM nginx:stable-alpine
+
+# URLs BAKED dans le bundle JS au build (doivent matcher front/.env.staging).
+# Ce sont les chaînes que sub_filter va chercher dans le bundle à runtime.
+ARG BAKED_API_URL=https://api.stg.billycraft.fr/api/v1
+ARG BAKED_AUTH_API_URL=https://auth.stg.billycraft.fr/api
+
+# API_URL / AUTH_API_URL = valeurs de remplacement au runtime (override possible
+# avec `docker run -e ...`). Par défaut on retombe sur l'URL du build => no-op.
+ENV BAKED_API_URL=${BAKED_API_URL} \
+    BAKED_AUTH_API_URL=${BAKED_AUTH_API_URL} \
+    API_URL=${BAKED_API_URL} \
+    AUTH_API_URL=${BAKED_AUTH_API_URL}
+
 COPY --from=build /app/front/dist /usr/share/nginx/html
 EXPOSE 80
-COPY ./front/nginx.conf /etc/nginx/conf.d/default.conf
+# Template envsubst automatiquement au boot par l'image officielle nginx
+COPY ./front/nginx.conf.template /etc/nginx/templates/default.conf.template
 CMD ["nginx", "-g", "daemon off;"]
-

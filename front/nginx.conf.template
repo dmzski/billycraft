@@ -1,0 +1,57 @@
+# nginx.conf.template
+# ----------
+# Ce fichier est un TEMPLATE nginx. Au démarrage du conteneur, l'entrée de
+# l'image officielle nginx (docker-entrypoint.d/20-envsubst-on-templates.sh)
+# remplace automatiquement les variables `${...}` par les variables
+# d'environnement, puis écrit le résultat dans /etc/nginx/conf.d/default.conf.
+# Les variables nginx ($uri, $host...) ne sont PAS touchées par cette étape.
+#
+# Pourquoi sub_filter ?
+# Les URLs API sont figées dans le bundle JS au moment du BUILD
+# (import.meta.env.VITE_API_URL / VITE_AUTH_API_URL). Pour pouvoir les changer
+# à la volée SANS rebuild, nginx les réécrit au fil de l'eau dans chaque
+# réponse JS :
+#   - BAKED_API_URL / BAKED_AUTH_API_URL : chaînes à CHERCHER (= URLs du build,
+#     cf. front/.env.production ou front/.env.staging, injectées par le Dockerfile)
+#   - API_URL / AUTH_API_URL             : valeurs de REMPLACEMENT (= env vars
+#     passées au runtime, optionnel)
+#
+# Usage au runtime (aucun changement de code nécessaire) :
+#   docker run -e API_URL=https://api.mon-domaine.fr/api/v1 \
+#              -e AUTH_API_URL=https://auth.mon-domaine.fr/api \
+#              app:latest
+# Si une variable n'est pas renseignée, le Dockerfile la fait retomber sur
+# l'URL du build => sub_filter fait une substitution no-op (rien ne casse).
+
+server {
+    listen       80;
+    server_name  default_server;
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+
+    # ---- Réécriture runtime des URLs API dans le bundle ----
+    sub_filter '${BAKED_API_URL}' '${API_URL}';
+    sub_filter '${BAKED_AUTH_API_URL}' '${AUTH_API_URL}';
+    sub_filter_once off;
+    sub_filter_types text/javascript application/javascript;
+    # ---------------------------------------------------------
+
+    # Cache : le nom des bundles est haché et ne CHANGERA pas quand on change
+    # uniquement les env vars. On sert donc "no-cache" (revalidation à chaque
+    # requête) pour que le corps réécrit par sub_filter soit bien repris.
+    location / {
+        try_files $uri /index.html;
+        add_header Cache-Control "no-cache, must-revalidate";
+    }
+
+    # Les assets JS/CSS contiennent les URLs réécrites : pas de cache long.
+    location ~* \.(?:js|mjs|css)$ {
+        try_files $uri =404;
+        add_header Cache-Control "no-cache, must-revalidate";
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
